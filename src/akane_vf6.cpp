@@ -8,26 +8,26 @@
 
 void CAkane::UpdatePattern()
 {
-    WORD x8;
-    WORD l4;
+    WORD frameCount; // frames in the action's animation
+    WORD duration; // ticks the current frame lasts
 
     if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    EffectDesc l50;
-    l4 = (short)anims[pattern].frames[frame].duration;
-    x8 = anims[pattern].frameCount;
-    InitEffectDesc((EffectDesc*)&l50);
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    duration = (short)anims[pattern].frames[frame].duration;
+    frameCount = anims[pattern].frameCount;
+    InitEffectDesc((EffectDesc*)&effect);
     switch (pattern) {
     default:
         vx = 0.0;
         vy = 0.0;
         m_dashMomentum = 0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -37,10 +37,10 @@ void CAkane::UpdatePattern()
         vx = 0.7;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -50,10 +50,10 @@ void CAkane::UpdatePattern()
         vx = -0.7;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -64,10 +64,10 @@ void CAkane::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -91,10 +91,10 @@ void CAkane::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -127,10 +127,10 @@ void CAkane::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -159,10 +159,10 @@ void CAkane::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -181,10 +181,10 @@ void CAkane::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -196,10 +196,10 @@ void CAkane::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -209,10 +209,10 @@ void CAkane::UpdatePattern()
         vy = vy + ay;
         m_dashMomentum = 0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -229,10 +229,10 @@ void CAkane::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -250,10 +250,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -275,10 +275,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -300,10 +300,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -332,13 +332,13 @@ void CAkane::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -367,10 +367,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -403,10 +403,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -439,10 +439,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -475,10 +475,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -511,10 +511,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -547,10 +547,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -583,10 +583,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -616,10 +616,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -649,10 +649,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -683,10 +683,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -726,10 +726,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -769,10 +769,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -807,10 +807,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -845,10 +845,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -893,10 +893,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -941,10 +941,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -984,10 +984,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1027,10 +1027,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1058,10 +1058,10 @@ void CAkane::UpdatePattern()
             StartPattern();
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1084,10 +1084,10 @@ void CAkane::UpdatePattern()
         vx = m_hitVx;
         vy = m_hitVy;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1114,19 +1114,19 @@ void CAkane::UpdatePattern()
             vy = -2.5;
             ay = 0.025;
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1161,10 +1161,10 @@ void CAkane::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1192,10 +1192,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1217,10 +1217,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1242,10 +1242,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1277,10 +1277,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1315,10 +1315,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1353,10 +1353,10 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1367,12 +1367,12 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1f3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x1e;
             vx = m_hitVx;
             vy = m_hitVy;
@@ -1384,10 +1384,10 @@ void CAkane::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -1426,14 +1426,14 @@ void CAkane::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1451,14 +1451,14 @@ void CAkane::UpdatePattern()
     case kEncased:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1490,10 +1490,10 @@ void CAkane::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1503,14 +1503,14 @@ void CAkane::UpdatePattern()
     case kEncased2:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1542,10 +1542,10 @@ void CAkane::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1555,14 +1555,14 @@ void CAkane::UpdatePattern()
     case kEncasedAir:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1575,10 +1575,10 @@ void CAkane::UpdatePattern()
         }
         vy += 0.04;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1598,14 +1598,14 @@ void CAkane::UpdatePattern()
     case kEncasedSpin:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_patternVar1 == 0) {
@@ -1621,10 +1621,10 @@ void CAkane::UpdatePattern()
         }
         vy += 0.06;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1641,20 +1641,20 @@ void CAkane::UpdatePattern()
         break;
     case kFallInDarkness:
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1ef;
-            l50.x = 60.0;
-            l50.y = 40.0;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.scale = 0;
-            l50.layer = 0;
-            SpawnObject(&l50);
+            effect.type = 0x1ef;
+            effect.x = 60.0;
+            effect.y = 40.0;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.scale = 0;
+            effect.layer = 0;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -1662,13 +1662,13 @@ void CAkane::UpdatePattern()
         break;
     case kWakeUp:
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8 - 1) {
+            if (frame == frameCount - 1) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1682,19 +1682,19 @@ void CAkane::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1705,19 +1705,19 @@ void CAkane::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1730,13 +1730,13 @@ void CAkane::UpdatePattern()
             StartPattern();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kWakeUp;
                 StartPattern();
             }
@@ -1767,13 +1767,13 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1807,13 +1807,13 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1847,13 +1847,13 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1887,13 +1887,13 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1924,13 +1924,13 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1961,13 +1961,13 @@ void CAkane::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1982,10 +1982,10 @@ void CAkane::UpdatePattern()
         vx = -1.2;
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2004,20 +2004,20 @@ void CAkane::UpdatePattern()
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2036,20 +2036,20 @@ void CAkane::UpdatePattern()
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2065,21 +2065,21 @@ void CAkane::UpdatePattern()
     case 0xa1:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
                 ay = 0.035;
@@ -2097,12 +2097,12 @@ void CAkane::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
@@ -2117,13 +2117,13 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0xc) {
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2148,10 +2148,10 @@ void CAkane::UpdatePattern()
         m_dashMomentum = 1;
         timer++;
         m_patternVar1++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 break;
             }
@@ -2191,10 +2191,10 @@ void CAkane::UpdatePattern()
             timer = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 FaceOpponent();
                 pattern = kCrouch;
                 StartPattern();
@@ -2211,10 +2211,10 @@ void CAkane::UpdatePattern()
         }
         timer++;
         m_patternVar1++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2248,10 +2248,10 @@ void CAkane::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2288,27 +2288,27 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2325,21 +2325,21 @@ void CAkane::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -2355,21 +2355,21 @@ void CAkane::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2403,10 +2403,10 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2427,27 +2427,27 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 vx = m_patternVar1 * 0.01;
                 vy = m_patternVar2 * 0.01;
@@ -2475,10 +2475,10 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2503,7 +2503,7 @@ void CAkane::UpdatePattern()
             m_playSound = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 3) {
@@ -2514,7 +2514,7 @@ void CAkane::UpdatePattern()
             if (frame == 0xd) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -2549,13 +2549,13 @@ void CAkane::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2591,13 +2591,13 @@ void CAkane::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2633,13 +2633,13 @@ void CAkane::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2664,7 +2664,7 @@ void CAkane::UpdatePattern()
             m_patternVar1 = 2;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0xa && m_patternVar1 > 0) {
@@ -2674,7 +2674,7 @@ void CAkane::UpdatePattern()
             if (frame < 0xa) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2710,13 +2710,13 @@ void CAkane::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2767,11 +2767,11 @@ void CAkane::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2810,13 +2810,13 @@ void CAkane::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 4) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2853,13 +2853,13 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2892,13 +2892,13 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2931,13 +2931,13 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2965,7 +2965,7 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3001,13 +3001,13 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3021,11 +3021,11 @@ void CAkane::UpdatePattern()
             vy = -2.4;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3036,20 +3036,20 @@ void CAkane::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = 7;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = 7;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3077,21 +3077,21 @@ void CAkane::UpdatePattern()
             (*m_opponent)->StopMoving();
             pattern = kThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x11);
-            l50.y = (double)((int)y - 0x36);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x11);
+            effect.y = (double)((int)y - 0x36);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->x = facing * 5 + x;
             (*m_opponent)->y = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3110,11 +3110,11 @@ void CAkane::UpdatePattern()
             (*m_opponent)->pattern = kHitStandHighLight;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3140,13 +3140,13 @@ void CAkane::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3181,13 +3181,13 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3222,13 +3222,13 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3250,13 +3250,13 @@ void CAkane::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3280,13 +3280,13 @@ void CAkane::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3319,7 +3319,7 @@ void CAkane::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3328,7 +3328,7 @@ void CAkane::UpdatePattern()
                 vy = -1.5;
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3346,17 +3346,17 @@ void CAkane::UpdatePattern()
             ay = 0.035;
             pattern = kAirThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x1d);
-            l50.y = (double)((int)y - 0x27);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x1d);
+            effect.y = (double)((int)y - 0x27);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->x = x;
             (*m_opponent)->y = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
@@ -3365,7 +3365,7 @@ void CAkane::UpdatePattern()
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kJump6C;
                 frame = 1;
             }
@@ -3422,13 +3422,13 @@ void CAkane::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             ShakeScreen(4, 0);
-            l50.type = 3;
-            l50.sound = 7;
-            l50.x = (double)((int)x + facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.sound = 7;
+            effect.x = (double)((int)x + facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->x = facing * 0xf + x;
             (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->m_hitVx = -2.0;
@@ -3441,11 +3441,11 @@ void CAkane::UpdatePattern()
             (*m_opponent)->timer = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3460,20 +3460,20 @@ void CAkane::UpdatePattern()
             m_hitsLeft = 1;
             m_recoilGuardWindow = 0;
             m_freezeTime = 0x3c;
-            l50.type = 0x28;
-            l50.x = (double)((int)x + facing * 0xa);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.sound = 0x13;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x28;
+            effect.x = (double)((int)x + facing * 0xa);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.sound = 0x13;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3490,47 +3490,47 @@ void CAkane::UpdatePattern()
             m_helperState = 1;
             if ((int)(x + (*m_opponent)->x) / 2 > 0x1e0) {
                 m_patternVar3++;
-                l50.shadow = 1;
-                l50.type = 0x19e;
-                l50.x = (double)((facing == 1) * 0x118 + (facing == -1) * 0x2a8);
-                l50.y = -80.0;
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.shadow = 1;
+                effect.type = 0x19e;
+                effect.x = (double)((facing == 1) * 0x118 + (facing == -1) * 0x2a8);
+                effect.y = -80.0;
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
                 m_patternVar3++;
-                l50.shadow = 1;
-                l50.type = 0x19e;
-                l50.x = (double)((facing == 1) * -0x28 + (facing == -1) * 0x168);
-                l50.y = -80.0;
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.shadow = 1;
+                effect.type = 0x19e;
+                effect.x = (double)((facing == 1) * -0x28 + (facing == -1) * 0x168);
+                effect.y = -80.0;
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             if (m_patternVar3 == 0) {
-                l50.type = 0x19e;
-                l50.shadow = 1;
-                l50.x = (x + (*m_opponent)->x) / 2.0 - facing * 0xa0;
-                l50.y = -80.0;
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.type = 0x19e;
+                effect.shadow = 1;
+                effect.x = (x + (*m_opponent)->x) / 2.0 - facing * 0xa0;
+                effect.y = -80.0;
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3547,47 +3547,47 @@ void CAkane::UpdatePattern()
             m_helperState = 1;
             if ((int)(x + (*m_opponent)->x) / 2 > 0x1e0) {
                 m_patternVar3++;
-                l50.shadow = 1;
-                l50.type = 0x19f;
-                l50.x = (double)((facing == 1) * 0x118 + (facing == -1) * 0x2a8);
-                l50.y = 0.0;
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.shadow = 1;
+                effect.type = 0x19f;
+                effect.x = (double)((facing == 1) * 0x118 + (facing == -1) * 0x2a8);
+                effect.y = 0.0;
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
                 m_patternVar3++;
-                l50.shadow = 1;
-                l50.type = 0x19f;
-                l50.x = (double)((facing == 1) * -0x28 + (facing == -1) * 0x168);
-                l50.y = 0.0;
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.shadow = 1;
+                effect.type = 0x19f;
+                effect.x = (double)((facing == 1) * -0x28 + (facing == -1) * 0x168);
+                effect.y = 0.0;
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             if (m_patternVar3 == 0) {
-                l50.shadow = 1;
-                l50.type = 0x19f;
-                l50.x = (x + (*m_opponent)->x) / 2.0 - facing * 0xa0;
-                l50.y = 0.0;
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.shadow = 1;
+                effect.type = 0x19f;
+                effect.x = (x + (*m_opponent)->x) / 2.0 - facing * 0xa0;
+                effect.y = 0.0;
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3603,59 +3603,59 @@ void CAkane::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 0 && timer == 0x1d && m_patternVar1 == 0) {
             m_helperState = 1;
             if ((int)(x + (*m_opponent)->x) / 2 > 0x1e0) {
                 m_patternVar3++;
-                l50.shadow = 1;
-                l50.type = 0x199;
-                l50.x = (double)((facing == -1) * 0x118 + (facing == 1) * 0x2a8);
-                l50.y = 0.0;
-                l50.facing = -facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.shadow = 1;
+                effect.type = 0x199;
+                effect.x = (double)((facing == -1) * 0x118 + (facing == 1) * 0x2a8);
+                effect.y = 0.0;
+                effect.facing = -facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
                 m_patternVar3++;
-                l50.shadow = 1;
-                l50.type = 0x199;
-                l50.x = (double)((facing == -1) * -0x28 + (facing == 1) * 0x168);
-                l50.y = 0.0;
-                l50.facing = -facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.shadow = 1;
+                effect.type = 0x199;
+                effect.x = (double)((facing == -1) * -0x28 + (facing == 1) * 0x168);
+                effect.y = 0.0;
+                effect.facing = -facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             if (m_patternVar3 == 0) {
-                l50.shadow = 1;
-                l50.type = 0x199;
-                l50.x = (x + (*m_opponent)->x) / 2.0 + facing * 0xa0;
-                l50.y = 0.0;
-                l50.facing = -facing;
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.shadow = 1;
+                effect.type = 0x199;
+                effect.x = (x + (*m_opponent)->x) / 2.0 + facing * 0xa0;
+                effect.y = 0.0;
+                effect.facing = -facing;
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3692,7 +3692,7 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3703,7 +3703,7 @@ void CAkane::UpdatePattern()
             if (frame == 0xb) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kCrouch;
                 FaceOpponent();
@@ -3738,7 +3738,7 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
@@ -3758,7 +3758,7 @@ void CAkane::UpdatePattern()
             if (frame == 0xe) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kCrouch;
                 FaceOpponent();
@@ -3773,13 +3773,13 @@ void CAkane::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
             m_hitsLeft = 0x63;
         }
@@ -3805,7 +3805,7 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
@@ -3825,7 +3825,7 @@ void CAkane::UpdatePattern()
             if (frame == 0xe) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kCrouch;
                 FaceOpponent();
@@ -3886,11 +3886,11 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 6;
             }
         }
@@ -3949,11 +3949,11 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 6;
             }
         }
@@ -4012,11 +4012,11 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 6;
             }
         }
@@ -4077,11 +4077,11 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 6;
             }
         }
@@ -4142,11 +4142,11 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 6;
             }
         }
@@ -4207,11 +4207,11 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 6;
             }
         }
@@ -4224,27 +4224,27 @@ void CAkane::UpdatePattern()
             vy = -1.0;
             ay = 0.015;
             m_playVoice = 1;
-            l50.type = 0x190;
-            l50.x = (double)((int)x + facing * 0x28);
-            l50.y = (double)((int)y - 0x2d);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x190;
-            l50.x = (double)((int)x + facing * 0x14);
-            l50.y = (double)((int)y - 0x19);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x190;
-            l50.x = (double)((int)x + facing * 0x36);
-            l50.y = (double)((int)y - 0x18);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + facing * 0x28);
+            effect.y = (double)((int)y - 0x2d);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + facing * 0x14);
+            effect.y = (double)((int)y - 0x19);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + facing * 0x36);
+            effect.y = (double)((int)y - 0x18);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         vy = vy + ay;
         if (y + vy >= 0.0) {
@@ -4258,11 +4258,11 @@ void CAkane::UpdatePattern()
         }
         timer++;
         vy = vy + ay;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4276,27 +4276,27 @@ void CAkane::UpdatePattern()
             vy = -1.0;
             ay = 0.015;
             m_playVoice = 1;
-            l50.type = 0x191;
-            l50.x = (double)((int)x + facing * 0x28);
-            l50.y = (double)((int)y - 0x2d);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x191;
-            l50.x = (double)((int)x + facing * 0x14);
-            l50.y = (double)((int)y - 0x19);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x191;
-            l50.x = (double)((int)x + facing * 0x36);
-            l50.y = (double)((int)y - 0x18);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + facing * 0x28);
+            effect.y = (double)((int)y - 0x2d);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + facing * 0x14);
+            effect.y = (double)((int)y - 0x19);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + facing * 0x36);
+            effect.y = (double)((int)y - 0x18);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         vy = vy + ay;
         if (y + vy >= 0.0) {
@@ -4310,11 +4310,11 @@ void CAkane::UpdatePattern()
         }
         timer++;
         vy = vy + ay;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4327,13 +4327,13 @@ void CAkane::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 3 && timer == 0) {
             FaceOpponent();
@@ -4342,27 +4342,27 @@ void CAkane::UpdatePattern()
             vy = -1.0;
             ay = 0.02;
             m_playVoice = 1;
-            l50.type = 0x192;
-            l50.x = (double)((int)x + facing * 0x28);
-            l50.y = (double)((int)y - 0x2d);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x192;
-            l50.x = (double)((int)x + facing * 0x14);
-            l50.y = (double)((int)y - 0x19);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x192;
-            l50.x = (double)((int)x + facing * 0x36);
-            l50.y = (double)((int)y - 0x18);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x192;
+            effect.x = (double)((int)x + facing * 0x28);
+            effect.y = (double)((int)y - 0x2d);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x192;
+            effect.x = (double)((int)x + facing * 0x14);
+            effect.y = (double)((int)y - 0x19);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x192;
+            effect.x = (double)((int)x + facing * 0x36);
+            effect.y = (double)((int)y - 0x18);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         vy = vy + ay;
         if (y + vy >= 0.0) {
@@ -4376,11 +4376,11 @@ void CAkane::UpdatePattern()
         }
         timer++;
         vy = vy + ay;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4416,11 +4416,11 @@ void CAkane::UpdatePattern()
         }
         timer++;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
                 break;
@@ -4450,14 +4450,14 @@ void CAkane::UpdatePattern()
             m_playSound = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 6) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
                 break;
@@ -4475,12 +4475,12 @@ void CAkane::UpdatePattern()
             ay = 0.035;
             pattern = kLeap4CHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x1d);
-            l50.y = (double)((int)y - 0x27);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x1d);
+            effect.y = (double)((int)y - 0x27);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->x = x;
             (*m_opponent)->y = 0.0;
         }
@@ -4492,7 +4492,7 @@ void CAkane::UpdatePattern()
             timer = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
@@ -4501,7 +4501,7 @@ void CAkane::UpdatePattern()
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4559,13 +4559,13 @@ void CAkane::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             ShakeScreen(4, 0);
-            l50.type = 3;
-            l50.sound = 7;
-            l50.x = (double)((int)x + facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.sound = 7;
+            effect.x = (double)((int)x + facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->x = facing * 0xf + x;
             (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->m_hitVx = -1.0;
@@ -4577,11 +4577,11 @@ void CAkane::UpdatePattern()
             (*m_opponent)->StartPattern();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4597,10 +4597,10 @@ void CAkane::UpdatePattern()
         }
         y = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -4624,11 +4624,11 @@ void CAkane::UpdatePattern()
         }
         y = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -4666,7 +4666,7 @@ void CAkane::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 6 || frame == 7 || frame == 0xa) {
@@ -4679,7 +4679,7 @@ void CAkane::UpdatePattern()
             if (frame == 0xe) {
                 frame = frame - 8;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
                 FaceOpponent();
@@ -4715,7 +4715,7 @@ void CAkane::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 6 || frame == 7 || frame == 0xa) {
@@ -4728,7 +4728,7 @@ void CAkane::UpdatePattern()
             if (frame == 0xe) {
                 frame = frame - 8;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
                 FaceOpponent();
@@ -4742,13 +4742,13 @@ void CAkane::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x63;
             vx = -0.8;
             vy = -1.0;
@@ -4776,7 +4776,7 @@ void CAkane::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4787,7 +4787,7 @@ void CAkane::UpdatePattern()
             if (frame == 0xe) {
                 frame = frame - 8;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
                 FaceOpponent();
@@ -4808,33 +4808,33 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
             FocusCameraY(0x32, 0xa);
         }
         if (frame > 6 && frame < 0x10 && timer == 0 && m_patternVar1 < 2) {
             m_playVoice = 3;
-            l50.type = 0x195;
-            l50.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
-            l50.y = (double)((int)y - 0x8c);
-            l50.scale = 2;
-            l50.layer = 1;
+            effect.type = 0x195;
+            effect.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
+            effect.y = (double)((int)y - 0x8c);
+            effect.scale = 2;
+            effect.layer = 1;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.layer = 0;
+                effect.layer = 0;
             }
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4842,7 +4842,7 @@ void CAkane::UpdatePattern()
                 m_patternVar1++;
                 frame = 7;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4863,33 +4863,33 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
             FocusCameraY(0x32, 0xa);
         }
         if (frame > 6 && frame < 0x10 && timer == 0 && m_patternVar1 < 3) {
             m_playVoice = 3;
-            l50.type = 0x195;
-            l50.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
-            l50.y = (double)((int)y - 0x8c);
-            l50.scale = 2;
-            l50.layer = 1;
+            effect.type = 0x195;
+            effect.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
+            effect.y = (double)((int)y - 0x8c);
+            effect.scale = 2;
+            effect.layer = 1;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.layer = 0;
+                effect.layer = 0;
             }
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4897,7 +4897,7 @@ void CAkane::UpdatePattern()
                 m_patternVar1++;
                 frame = 7;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4918,14 +4918,14 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         m_game->FlashNegative(0xf);
@@ -4934,19 +4934,19 @@ void CAkane::UpdatePattern()
         }
         if (frame > 6 && frame < 0x10 && timer == 0 && m_patternVar1 < 4) {
             m_playVoice = 3;
-            l50.type = 0x195;
-            l50.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
-            l50.y = (double)((int)y - 0x8c);
-            l50.scale = 2;
-            l50.layer = 1;
+            effect.type = 0x195;
+            effect.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
+            effect.y = (double)((int)y - 0x8c);
+            effect.scale = 2;
+            effect.layer = 1;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.layer = 0;
+                effect.layer = 0;
             }
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4954,7 +4954,7 @@ void CAkane::UpdatePattern()
                 m_patternVar1++;
                 frame = 7;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4970,53 +4970,53 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
             FocusCameraY(0x32, 0xa);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5 && m_patternVar1 == 0) {
                 m_playVoice = 2;
-                l50.type = 0x19c;
-                l50.x = (double)(int)x;
-                l50.y = (double)((int)y - 0x32);
-                l50.scale = 2;
-                l50.facing = facing;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
-                l50.type = 8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.facing = facing;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.facing = facing;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x19c;
+                effect.x = (double)(int)x;
+                effect.y = (double)((int)y - 0x32);
+                effect.scale = 2;
+                effect.facing = facing;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
+                effect.type = 8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.facing = facing;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.facing = facing;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             m_attackResult = 0;
             if (frame == 8 && m_patternVar1 < 0) {
                 m_patternVar1++;
                 frame = 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5032,53 +5032,53 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
             FocusCameraY(0x32, 0xa);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5 && m_patternVar1 == 0) {
                 m_playVoice = 2;
-                l50.type = 0x19c;
-                l50.x = (double)((int)x + facing * 0x64);
-                l50.y = (double)((int)y - 0x32);
-                l50.scale = 2;
-                l50.facing = facing;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
-                l50.type = 8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.facing = facing;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.facing = facing;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x19c;
+                effect.x = (double)((int)x + facing * 0x64);
+                effect.y = (double)((int)y - 0x32);
+                effect.scale = 2;
+                effect.facing = facing;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
+                effect.type = 8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.facing = facing;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.facing = facing;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             m_attackResult = 0;
             if (frame == 8 && m_patternVar1 < 0) {
                 m_patternVar1++;
                 frame = 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5094,53 +5094,53 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
             FocusCameraY(0x32, 0xa);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5 && m_patternVar1 == 0) {
                 m_playVoice = 2;
-                l50.type = 0x19c;
-                l50.x = (double)(int)x;
-                l50.y = (double)((int)y - 0x96);
-                l50.scale = 2;
-                l50.facing = facing;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
-                l50.type = 8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.facing = facing;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.facing = facing;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x19c;
+                effect.x = (double)(int)x;
+                effect.y = (double)((int)y - 0x96);
+                effect.scale = 2;
+                effect.facing = facing;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
+                effect.type = 8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.facing = facing;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.facing = facing;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             m_attackResult = 0;
             if (frame == 8 && m_patternVar1 < 0) {
                 m_patternVar1++;
                 frame = 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5161,38 +5161,38 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x1a1;
-            l50.x = (double)(int)(x - facing * 0x140);
-            l50.y = (double)((int)y - 0x140);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.shadow = 1;
-            l50.facing = facing;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x1a1;
+            effect.x = (double)(int)(x - facing * 0x140);
+            effect.y = (double)((int)y - 0x140);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.shadow = 1;
+            effect.facing = facing;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
             m_helperState = 2;
         }
         if (frame < 4) {
             FocusCameraY(0x32, 0xa);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 0xa && m_helperState > 1) {
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5213,38 +5213,38 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x1a2;
-            l50.x = (double)(int)(x - facing * 0x140);
-            l50.y = (double)((int)y - 0x140);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.shadow = 1;
-            l50.facing = facing;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x1a2;
+            effect.x = (double)(int)(x - facing * 0x140);
+            effect.y = (double)((int)y - 0x140);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.shadow = 1;
+            effect.facing = facing;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
             m_helperState = 2;
         }
         if (frame < 4) {
             FocusCameraY(0x32, 0xa);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 0xa && m_helperState > 1) {
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5265,24 +5265,24 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x1a3;
-            l50.x = (double)(int)(x - facing * 0x140);
-            l50.y = (double)((int)y - 0x140);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.shadow = 1;
-            l50.facing = facing;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x1a3;
+            effect.x = (double)(int)(x - facing * 0x140);
+            effect.y = (double)((int)y - 0x140);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.shadow = 1;
+            effect.facing = facing;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
             m_helperState = 2;
             m_playSound = 0x25;
         }
@@ -5290,11 +5290,11 @@ void CAkane::UpdatePattern()
             FocusCameraY(0x32, 0xa);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5309,17 +5309,17 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame < 4) {
             m_game->FlashNegative(0xf);
@@ -5339,12 +5339,12 @@ void CAkane::UpdatePattern()
             StopMoving();
             frame = 3;
             (*m_opponent)->pattern = kThrownStandHigh2;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x11);
-            l50.y = (double)((int)y - 0x36);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x11);
+            effect.y = (double)((int)y - 0x36);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->x = x;
             (*m_opponent)->y = 0.0;
         }
@@ -5354,15 +5354,15 @@ void CAkane::UpdatePattern()
             if (m_patternVar1 == 0) {
                 m_comboHits++;
                 m_shownHits++;
-                l50.type = 0;
-                l50.sound = 2;
-                l50.x = (double)(int)(x + 50.0 - (WORD)Random(0, 0x64));
-                l50.y = (double)((WORD)Random(0, 0x64) - 0x64);
-                l50.facing = facing;
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.sound = 2;
+                effect.x = (double)(int)(x + 50.0 - (WORD)Random(0, 0x64));
+                effect.y = (double)((WORD)Random(0, 0x64) - 0x64);
+                effect.facing = facing;
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             m_patternVar1++;
             if (m_patternVar1 == 0xd) {
@@ -5373,7 +5373,7 @@ void CAkane::UpdatePattern()
             (*m_opponent)->timer = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5) {
@@ -5384,16 +5384,16 @@ void CAkane::UpdatePattern()
                     (*m_opponent)->m_koDelay = 0x7530;
                 }
                 if ((*m_opponent)->m_hp <= 0) {
-                    l50.type = 0x1ac;
-                    l50.x = 0.0;
-                    l50.y = 0.0;
-                    l50.scale = 0;
-                    l50.layer = 0;
-                    l50.keep = 1;
-                    l50.shadow = 0;
-                    l50.facing = 1;
-                    l50.screen = 1;
-                    SpawnObject(&l50);
+                    effect.type = 0x1ac;
+                    effect.x = 0.0;
+                    effect.y = 0.0;
+                    effect.scale = 0;
+                    effect.layer = 0;
+                    effect.keep = 1;
+                    effect.shadow = 0;
+                    effect.facing = 1;
+                    effect.screen = 1;
+                    SpawnObject(&effect);
                     m_playVoice = 4;
                 }
             }
@@ -5417,7 +5417,7 @@ void CAkane::UpdatePattern()
                     StartPattern();
                 }
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5434,14 +5434,14 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 9;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame >= 0) {
             FocusCameraY(0x32, 0xa);
@@ -5464,7 +5464,7 @@ void CAkane::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5) {
@@ -5474,7 +5474,7 @@ void CAkane::UpdatePattern()
                 }
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5513,88 +5513,88 @@ void CAkane::UpdatePattern()
         if (frame == 0xb && timer == 0) {
             m_freezeTime = 0x78;
             FillBackground(0xb0, 3);
-            l50.type = 9;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
         if (frame > 0x10) {
             m_patternVar1++;
         }
         if (m_patternVar1 == 0x5a || m_patternVar1 == 0x12c) {
-            l50.type = 0x1a5;
-            l50.x = (double)((int)(*m_opponent)->x + facing * 0x140);
-            l50.y = (double)(int)(*m_opponent)->y;
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a5;
+            effect.x = (double)((int)(*m_opponent)->x + facing * 0x140);
+            effect.y = (double)(int)(*m_opponent)->y;
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (m_patternVar1 == 0x96 || m_patternVar1 == 0x168) {
-            l50.type = 0x1a6;
-            l50.x = (double)((int)(*m_opponent)->x + facing * 0x140);
-            l50.y = (double)((int)(*m_opponent)->y + 0x40);
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a6;
+            effect.x = (double)((int)(*m_opponent)->x + facing * 0x140);
+            effect.y = (double)((int)(*m_opponent)->y + 0x40);
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (m_patternVar1 == 0xf0 || m_patternVar1 == 0xc8) {
-            l50.type = 0x1a7;
-            l50.x = (double)((int)(*m_opponent)->x + facing * 0x140);
-            l50.y = (double)((int)(*m_opponent)->y + 0x80);
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a7;
+            effect.x = (double)((int)(*m_opponent)->x + facing * 0x140);
+            effect.y = (double)((int)(*m_opponent)->y + 0x80);
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (m_patternVar1 == 0x78 || m_patternVar1 == 0x10e) {
-            l50.type = 0x1a8;
-            l50.x = (double)((int)(*m_opponent)->x - facing * 0x140);
-            l50.y = (double)(int)(*m_opponent)->y;
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a8;
+            effect.x = (double)((int)(*m_opponent)->x - facing * 0x140);
+            effect.y = (double)(int)(*m_opponent)->y;
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (m_patternVar1 == 0xb4 || m_patternVar1 == 0x14a) {
-            l50.type = 0x1a9;
-            l50.x = (double)((int)(*m_opponent)->x - facing * 0x140);
-            l50.y = (double)((int)(*m_opponent)->y + 0x50);
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a9;
+            effect.x = (double)((int)(*m_opponent)->x - facing * 0x140);
+            effect.y = (double)((int)(*m_opponent)->y + 0x50);
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (m_patternVar1 == 0xd2 || m_patternVar1 == 0x186) {
-            l50.type = 0x1aa;
-            l50.x = (double)((int)(*m_opponent)->x - facing * 0x140);
-            l50.y = (double)((int)(*m_opponent)->y + 0x7d);
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1aa;
+            effect.x = (double)((int)(*m_opponent)->x - facing * 0x140);
+            effect.y = (double)((int)(*m_opponent)->y + 0x7d);
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (m_patternVar1 == 0x1f4) {
-            l50.type = 0x1ab;
-            l50.x = (double)(int)(*m_opponent)->x;
-            l50.y = 0.0;
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1ab;
+            effect.x = (double)(int)(*m_opponent)->x;
+            effect.y = 0.0;
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (frame < 0x10) {
             FocusCameraY(0x32, 3);
@@ -5607,14 +5607,14 @@ void CAkane::UpdatePattern()
             frame = 0x14;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0x14) {
                 frame = frame - 3;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5627,18 +5627,18 @@ void CAkane::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0, 0x28);
-            l50.type = 9;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5647,13 +5647,13 @@ void CAkane::UpdatePattern()
                 vy = -2.1;
                 ay = 0.025;
                 m_playVoice = 1;
-                l50.type = 0x192;
-                l50.x = (double)((int)x + facing * 0x1e);
-                l50.y = (double)((int)y - 0x1e);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x192;
+                effect.x = (double)((int)x + facing * 0x1e);
+                effect.y = (double)((int)y - 0x1e);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (y + vy > 0.0) {
                 y = 0.0;
@@ -5664,7 +5664,7 @@ void CAkane::UpdatePattern()
                 pattern = kLand;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 1;
             }
         }

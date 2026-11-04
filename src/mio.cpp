@@ -44,7 +44,7 @@ CMio::CMio(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
 
 void CMio::Reset()
 {
-    int v4;
+    int i;
 
     m_patternVar1 = 0;
     m_patternVar2 = 0.0;
@@ -61,11 +61,11 @@ void CMio::Reset()
     m_pointY[3] = -0x1a;
     m_pointX[4] = 0x21;
     m_pointY[4] = -0x34;
-    v4 = 0;
-    for (; v4 < 0x40; v4++) {
-        m_objectVar1[v4] = 0;
-        m_objectVar2[v4] = 0;
-        m_objectVar3[v4] = 0;
+    i = 0;
+    for (; i < 0x40; i++) {
+        m_objectVar1[i] = 0;
+        m_objectVar2[i] = 0;
+        m_objectVar3[i] = 0;
     }
     CPlayer::Reset();
 }
@@ -78,12 +78,12 @@ void CMio::StartPattern()
     CPlayer::StartPattern();
 }
 
-void CMio::RemoveObject(short p1)
+void CMio::RemoveObject(short slot)
 {
-    m_objectVar1[p1] = 0;
-    m_objectVar2[p1] = 0;
-    m_objectVar3[p1] = 0;
-    CPlayer::RemoveObject(p1);
+    m_objectVar1[slot] = 0;
+    m_objectVar2[slot] = 0;
+    m_objectVar3[slot] = 0;
+    CPlayer::RemoveObject(slot);
 }
 
 void CMio::Move()
@@ -744,29 +744,29 @@ void CMio::StartCommand()
 
 void CMio::DrawGauge()
 {
-    RECT v2c;
-    EffectFrame x1c;
-    RECT v10;
+    RECT src; // the part of the sprite drawn
+    EffectFrame sprite; // the frame drawn
+    RECT dst; // where on the screen
 
     if (m_stance == 0) {
-        x1c = *anims[0x2b].frames;
-        v2c = MakeRect(0, 0, x1c.width, x1c.height);
+        sprite = *anims[0x2b].frames;
+        src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            v10 = MakeRect(0x2d - x1c.x, 0x1f - x1c.y, x1c.width, x1c.height);
+            dst = MakeRect(0x2d - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
         } else {
-            v10 = MakeRect(x1c.x + 0x113 - x1c.width, 0x1f - x1c.y, x1c.width, x1c.height);
+            dst = MakeRect(sprite.x + 0x113 - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
         }
-        m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
+        m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
     if (m_stance == 1) {
-        x1c = *anims[0x2c].frames;
-        v2c = MakeRect(0, 0, x1c.width, x1c.height);
+        sprite = *anims[0x2c].frames;
+        src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            v10 = MakeRect(0x2d - x1c.x, 0x1f - x1c.y, x1c.width, x1c.height);
+            dst = MakeRect(0x2d - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
         } else {
-            v10 = MakeRect(x1c.x + 0x113 - x1c.width, 0x1f - x1c.y, x1c.width, x1c.height);
+            dst = MakeRect(sprite.x + 0x113 - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
         }
-        m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
+        m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
 }
 
@@ -774,365 +774,365 @@ void CMio::PreUpdate()
 {
 }
 
-void CMio::SpawnObject(EffectDesc* p1)
+void CMio::SpawnObject(EffectDesc* desc)
 {
     RemoveObject(m_objectHead);
-    CPlayer::SpawnObject(p1);
+    CPlayer::SpawnObject(desc);
 }
 
 void CMio::ReadCommand()
 {
-    BYTE x6;
-    BYTE v5;
-    int v4;
+    BYTE step; // how much of the motion has been read
+    BYTE input; // its bits: 1 right, 2 left, 4 down, 8 up, 0x10-0x80 A-D
+    int pos; // the entry of m_inputHistory read, oldest first
 
     m_command = kCmdNone;
-    x6 = 0;
-    v4 = m_inputPos + 0x2d;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x20) != 0 && x6 == 5) {
+    step = 0;
+    pos = m_inputPos + 0x2d;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x20) != 0 && step == 5) {
             m_command = kCmdB5A2AB;
             return;
         }
-        if ((v5 & 0x10) != 0 && x6 == 4) {
-            x6 = 5;
+        if ((input & 0x10) != 0 && step == 4) {
+            step = 5;
         }
-        if ((v5 & 0xe0) != 0 && x6 == 4) {
+        if ((input & 0xe0) != 0 && step == 4) {
             break;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xe0) != 0 && x6 == 2) {
+        if ((input & 0xe0) != 0 && step == 2) {
             break;
         }
-        if ((v5 & 0x10) != 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0x10) != 0 && step == 2) {
+            step = 3;
         }
-        if (v5 == 0 && x6 == 1) {
-            x6 = 2;
+        if (input == 0 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xd0) != 0 && x6 == 1) {
+        if ((input & 0xd0) != 0 && step == 1) {
             break;
         }
-        if ((v5 & 0x20) != 0 && x6 == 0 && m_gauge == 0xbb8 && m_stance == 1) {
-            x6 = 1;
+        if ((input & 0x20) != 0 && step == 0 && m_gauge == 0xbb8 && m_stance == 1) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x69;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 4) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd641236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x69;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 4) {
+            m_command = ((input & 0xe0) > 0) + kCmd641236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 3) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd641236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == (facing == -1) + 5 && step == 3) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd641236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 4;
+            step = 4;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 2 - (facing == -1) && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 0 && m_gauge == 0xbb8 && m_stance == 0) {
-            x6 = 1;
+        if ((input & 0xf) == (facing == -1) + 1 && step == 0 && m_gauge == 0xbb8 && m_stance == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x5a;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 6) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd214214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x5a;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 6) {
+            m_command = ((input & 0xe0) > 0) + kCmd214214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 5) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd214214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == 2 - (facing == -1) && step == 5) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd214214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 6;
+            step = 6;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 4) {
-            x6 = 5;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 4) {
+            step = 5;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 2 - (facing == -1) && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && m_gauge >= 0x3e8) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0 && m_gauge >= 0x3e8) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x5a;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 6) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd236236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x5a;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 6) {
+            m_command = ((input & 0xe0) > 0) + kCmd236236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 5) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd236236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == (facing == -1) + 1 && step == 5) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd236236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 6;
+            step = 6;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 4) {
-            x6 = 5;
+        if ((input & 0xf) == (facing == -1) + 5 && step == 4) {
+            step = 5;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == (facing == -1) + 1 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == (facing == -1) + 5 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && m_gauge >= 0x3e8) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0 && m_gauge >= 0x3e8) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x78;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd623A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x78;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 3) {
+            m_command = ((input & 0xe0) > 0) + kCmd623A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd623A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == (facing == -1) + 5 && step == 2) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd623A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 0 && m_stance == 0) {
-            x6 = 1;
+        if ((input & 0xf) == (facing == -1) + 1 && step == 0 && m_stance == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 3) {
+            m_command = ((input & 0xe0) > 0) + kCmd236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == (facing == -1) + 1 && step == 2) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == (facing == -1) + 5 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd412A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 3) {
+            m_command = ((input & 0xe0) > 0) + kCmd412A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 2) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd412A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == 4 && step == 2) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd412A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 0 && m_stance == 1) {
-            x6 = 1;
+        if ((input & 0xf) == 2 - (facing == -1) && step == 0 && m_stance == 1) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 3) {
+            m_command = ((input & 0xe0) > 0) + kCmd214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == 2 - (facing == -1) && step == 2) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0xaf;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 8) != 0 && x6 == 1) {
+    step = 0;
+    pos = m_inputPos + 0xaf;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 8) != 0 && step == 1) {
             m_command = kCmdUp;
             return;
         }
-        if ((v5 & 8) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 8) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x5a;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x80) != 0 && x6 == 4) {
+    step = 0;
+    pos = m_inputPos + 0x5a;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x80) != 0 && step == 4) {
             m_command = kCmd22D;
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0 && pattern == kWakeUp) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0 && pattern == kWakeUp) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x5a;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x40) != 0 && x6 == 4) {
+    step = 0;
+    pos = m_inputPos + 0x5a;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x40) != 0 && step == 4) {
             m_command = kCmd22C;
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x20) != 0 && x6 == 4) {
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x20) != 0 && step == 4) {
             m_command = kCmd22B;
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x10) != 0 && x6 == 4) {
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x10) != 0 && step == 4) {
             m_command = kCmd22A;
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf) == 1 && x6 == 3) {
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf) == 1 && step == 3) {
             m_command = kCmdDashRight;
             return;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 1 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 1 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf) == 2 && x6 == 3) {
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf) == 2 && step == 3) {
             m_command = kCmdDashLeft;
             break;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 2 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 2 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
 }
 
 void CMio::CpuInput()
 {
-    double v10;
-    double x8;
+    double dx; // how far the opponent is in front
+    double dy; // how far the opponent is above or below
 
     m_command = kCmdNone;
     if (m_cpuWalkRight > 0) {
@@ -1167,8 +1167,8 @@ void CMio::CpuInput()
     if ((*m_opponent)->pattern == kWakeUp) {
         return;
     }
-    v10 = ((*m_opponent)->x - x) * facing;
-    x8 = fabs(y - (*m_opponent)->y);
+    dx = ((*m_opponent)->x - x) * facing;
+    dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
         if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
@@ -1176,9 +1176,9 @@ void CMio::CpuInput()
             m_cpuAction = 0;
         }
         m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < x8;
-        m_pressD = (WORD)Random(0, 0x140) < v10;
-        if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
+        m_pressD = (WORD)Random(0, 0xf0) < dy;
+        m_pressD = (WORD)Random(0, 0x140) < dx;
+        if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
         return;
@@ -1191,25 +1191,25 @@ void CMio::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (v10 < 40.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 0) {
+            if (dx < 40.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 0) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 0) {
+            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 0) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (v10 > 40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 0) {
+            if (dx > 40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 0) {
                 m_pressB = 1;
                 m_inputY = 1;
                 m_inputX = 0;
                 return;
             }
-            if (v10 > 60.0 && v10 < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 0) {
+            if (dx > 60.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 0) {
                 m_pressA = 3;
                 m_inputY = 1;
                 return;
@@ -1217,12 +1217,12 @@ void CMio::CpuInput()
         }
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
-        if (v10 < 100.0) {
-            if (v10 < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_stance == 1 && m_gauge == 0xbb8) {
+        if (dx < 100.0) {
+            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_stance == 1 && m_gauge == 0xbb8) {
                 m_command = kCmdB5A2AB;
                 return;
             }
-            if (v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 1 && m_gauge >= 0x7d0) {
+            if (dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_stance == 1 && m_gauge >= 0x7d0) {
                 m_command = (WORD)Random(0, 2) + kCmd236236B;
                 return;
             }
@@ -1239,11 +1239,11 @@ void CMio::CpuInput()
                 return;
             }
         }
-        if (v10 < 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+        if (dx < 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
             m_command = kCmd236C;
             return;
         }
-        if (v10 < 80.0 && v10 > 160.0) {
+        if (dx < 80.0 && dx > 160.0) {
             if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_stance == 0 && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
@@ -1258,7 +1258,7 @@ void CMio::CpuInput()
                 return;
             }
         }
-        if (v10 > 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_stance == 1) {
+        if (dx > 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_stance == 1) {
             m_command = kCmd236A;
             return;
         }
@@ -1268,20 +1268,20 @@ void CMio::CpuInput()
             m_cpuAction = 3;
             return;
         }
-        if (x8 < 50.0 && y > (*m_opponent)->y && v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (dy < 50.0 && y > (*m_opponent)->y && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < 50.0 && x8 < 60.0 && v10 < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < 50.0 && dy < 60.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (x8 < 50.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
             m_command = kCmd623C;
             return;
         }
@@ -1461,12 +1461,12 @@ void CMio::CpuInput()
                 m_inputY = 0;
                 return;
             }
-            if (v10 < 40.0 && m_cpuRoll < 0x190) {
+            if (dx < 40.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
                 if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x1e) {
@@ -1475,7 +1475,7 @@ void CMio::CpuInput()
                 }
                 return;
             }
-            if (v10 < 80.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1f4) {
+            if (dx < 80.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1f4) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
@@ -1522,7 +1522,7 @@ void CMio::CpuInput()
                 m_inputX = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x1a4 && v10 < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x1a4 && dx < 100.0) {
                 m_inputX = facing;
                 m_inputY = -1;
                 if ((WORD)Random(0, 3) == 0) {
@@ -1535,7 +1535,7 @@ void CMio::CpuInput()
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && v10 < 80.0) {
+            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 80.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
@@ -1575,11 +1575,11 @@ void CMio::CpuInput()
                 m_inputX = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x2bc && v10 < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x2bc && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x1c2 && v10 < 110.0) {
+            if (m_cpuRoll < 0x1c2 && dx < 110.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
@@ -1646,12 +1646,12 @@ void CMio::CpuInput()
                 m_inputY = 0;
                 return;
             }
-            if (v10 < 40.0 && m_cpuRoll < 0x190) {
+            if (dx < 40.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
                 if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x1e) {
@@ -1660,7 +1660,7 @@ void CMio::CpuInput()
                 }
                 return;
             }
-            if (v10 < 80.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1f4) {
+            if (dx < 80.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1f4) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
@@ -1711,7 +1711,7 @@ void CMio::CpuInput()
                 m_inputX = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x78 && m_cpuRoll < 0x8c && v10 < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x78 && m_cpuRoll < 0x8c && dx < 100.0) {
                 m_inputX = facing;
                 m_inputY = -1;
                 if ((WORD)Random(0, 3) == 0) {
@@ -1724,7 +1724,7 @@ void CMio::CpuInput()
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x28 && m_cpuRoll < 0x32 && v10 < 80.0) {
+            if (m_cpuRoll > 0x28 && m_cpuRoll < 0x32 && dx < 80.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
@@ -1784,11 +1784,11 @@ void CMio::CpuInput()
                 m_pressB = 1;
                 return;
             }
-            if (v10 < 60.0 && m_cpuRoll < 0x1f4) {
+            if (dx < 60.0 && m_cpuRoll < 0x1f4) {
                 m_pressA = 1;
                 return;
             }
-            if (v10 < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
@@ -1830,7 +1830,7 @@ void CMio::CpuInput()
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && v10 < 90.0 && m_attackResult == 3) {
+            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && dx < 90.0 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
@@ -1861,7 +1861,7 @@ void CMio::CpuInput()
                 m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && v10 < 90.0 && m_attackResult == 3) {
+            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && dx < 90.0 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
@@ -1896,7 +1896,7 @@ void CMio::CpuInput()
                 m_command = (WORD)Random(0, 3) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x15e && v10 < 90.0 && m_attackResult == 3) {
+            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x15e && dx < 90.0 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
@@ -1911,12 +1911,12 @@ void CMio::CpuInput()
                 m_inputY = 0;
                 return;
             }
-            if (v10 < 40.0 && m_cpuRoll < 0x190) {
+            if (dx < 40.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
                 if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x1e) {
@@ -1925,7 +1925,7 @@ void CMio::CpuInput()
                 }
                 return;
             }
-            if (v10 < 80.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1c2) {
+            if (dx < 80.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1c2) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
@@ -1962,7 +1962,7 @@ void CMio::CpuInput()
                 m_inputX = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x1a4 && v10 < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x1a4 && dx < 100.0) {
                 m_inputX = facing;
                 m_inputY = -1;
                 if ((WORD)Random(0, 3) == 0) {
@@ -1970,12 +1970,12 @@ void CMio::CpuInput()
                 }
                 return;
             }
-            if (m_cpuRoll < 0x64 && v10 < 90.0) {
+            if (m_cpuRoll < 0x64 && dx < 90.0) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && v10 < 120.0) {
+            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 120.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
@@ -1988,7 +1988,7 @@ void CMio::CpuInput()
                 m_command = (WORD)Random(0, 2) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && v10 > 100.0) {
+            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && dx > 100.0) {
                 m_command = (WORD)Random(0, 2) + kCmd236A;
                 return;
             }
@@ -2044,12 +2044,12 @@ void CMio::CpuInput()
                 m_inputY = 0;
                 return;
             }
-            if (v10 < 40.0 && m_cpuRoll < 0x190) {
+            if (dx < 40.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
                 if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x1e) {
@@ -2058,7 +2058,7 @@ void CMio::CpuInput()
                 }
                 return;
             }
-            if (v10 < 80.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1c2) {
+            if (dx < 80.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1c2) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
@@ -2095,7 +2095,7 @@ void CMio::CpuInput()
                 m_inputX = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x1a4 && v10 < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x1a4 && dx < 100.0) {
                 m_inputX = facing;
                 m_inputY = -1;
                 if ((WORD)Random(0, 3) == 0) {
@@ -2103,12 +2103,12 @@ void CMio::CpuInput()
                 }
                 return;
             }
-            if (m_cpuRoll < 0x64 && v10 < 90.0) {
+            if (m_cpuRoll < 0x64 && dx < 90.0) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && v10 < 120.0) {
+            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 120.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
@@ -2121,7 +2121,7 @@ void CMio::CpuInput()
                 m_command = (WORD)Random(0, 2) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && v10 > 100.0) {
+            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && dx > 100.0) {
                 m_command = (WORD)Random(0, 2) + kCmd236A;
                 return;
             }
@@ -2180,11 +2180,11 @@ void CMio::CpuInput()
                 m_pressB = 1;
                 return;
             }
-            if (v10 < 60.0 && m_cpuRoll < 0x1f4) {
+            if (dx < 60.0 && m_cpuRoll < 0x1f4) {
                 m_pressA = 1;
                 return;
             }
-            if (v10 < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
@@ -2234,7 +2234,7 @@ void CMio::CpuInput()
                 m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && v10 < 90.0 && m_attackResult == 3) {
+            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && dx < 90.0 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
@@ -2289,7 +2289,7 @@ void CMio::CpuInput()
                 m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && v10 < 90.0 && m_attackResult == 3) {
+            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && dx < 90.0 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
@@ -2336,61 +2336,61 @@ void CMio::CpuInput()
         m_cpuRoll = (WORD)Random(0, 0x3e8);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown && m_stance == 0) {
-                if (v10 < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
+                if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
                     m_pressC = 1;
                     m_inputX = -facing;
                     m_inputY = 0;
                     return;
                 }
-                if (v10 < 45.0 && m_cpuRoll < 0x19) {
+                if (dx < 45.0 && m_cpuRoll < 0x19) {
                     m_pressA = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (v10 < 60.0 && m_cpuRoll < 0x23) {
+                if (dx < 60.0 && m_cpuRoll < 0x23) {
                     m_pressA = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (v10 < 80.0 && v10 > 40.0 && m_cpuRoll < 0x3c && m_cpuRoll > 0x23) {
+                if (dx < 80.0 && dx > 40.0 && m_cpuRoll < 0x3c && m_cpuRoll > 0x23) {
                     m_pressB = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (v10 < 100.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x3c) {
+                if (dx < 100.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x3c) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (v10 < 90.0 && v10 > 50.0 && m_cpuRoll > 0x50 && m_cpuRoll < 0x57) {
+                if (dx < 90.0 && dx > 50.0 && m_cpuRoll > 0x50 && m_cpuRoll < 0x57) {
                     m_cpuAction = 6;
                     return;
                 }
-                if (v10 < 110.0 && v10 > 70.0 && m_cpuRoll > 0x57 && m_cpuRoll < 0x5f) {
+                if (dx < 110.0 && dx > 70.0 && m_cpuRoll > 0x57 && m_cpuRoll < 0x5f) {
                     m_cpuAction = 8;
                     if ((WORD)Random(0, 0x1e) < 0xf) {
                         m_cpuAction = 0xe;
                     }
                     return;
                 }
-                if (v10 > 120.0 && v10 < 190.0 && m_cpuRoll > 0x5f && m_cpuRoll < 0x62) {
+                if (dx > 120.0 && dx < 190.0 && m_cpuRoll > 0x5f && m_cpuRoll < 0x62) {
                     m_cpuAction = 0x10;
                     return;
                 }
-                if (v10 > 80.0 && v10 < 120.0 && m_cpuRoll > 0x64 && m_cpuRoll < 0x67) {
+                if (dx > 80.0 && dx < 120.0 && m_cpuRoll > 0x64 && m_cpuRoll < 0x67) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (v10 < 80.0 && m_cpuRoll < 0x78 && m_cpuRoll > 0x69) {
+                if (dx < 80.0 && m_cpuRoll < 0x78 && m_cpuRoll > 0x69) {
                     m_pressB = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (v10 < 60.0 && m_cpuRoll < 0x7d && m_cpuRoll > 0x78 && (*m_opponent)->pattern > kLastSharedAction && m_rfGauge > 500.0) {
+                if (dx < 60.0 && m_cpuRoll < 0x7d && m_cpuRoll > 0x78 && (*m_opponent)->pattern > kLastSharedAction && m_rfGauge > 500.0) {
                     m_command = kCmd623C;
                     return;
                 }
-                if (v10 < 80.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x7d && (*m_opponent)->pattern > kLastSharedAction && m_gauge >= 0x3e8) {
+                if (dx < 80.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x7d && (*m_opponent)->pattern > kLastSharedAction && m_gauge >= 0x3e8) {
                     m_command = (WORD)Random(0, 3) + kCmd236236A;
                     return;
                 }
@@ -2401,90 +2401,90 @@ void CMio::CpuInput()
                 }
             }
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown && m_stance == 1) {
-                if (v10 < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
+                if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
                     m_pressC = 1;
                     m_inputX = -facing;
                     m_inputY = 0;
                     return;
                 }
-                if (v10 < 55.0 && m_cpuRoll < 0xa) {
+                if (dx < 55.0 && m_cpuRoll < 0xa) {
                     m_pressA = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (v10 < 70.0 && m_cpuRoll < 0xf) {
+                if (dx < 70.0 && m_cpuRoll < 0xf) {
                     m_pressA = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (v10 < 150.0 && v10 > 80.0 && m_cpuRoll < 0x3c && m_cpuRoll > 0x23) {
+                if (dx < 150.0 && dx > 80.0 && m_cpuRoll < 0x3c && m_cpuRoll > 0x23) {
                     m_pressB = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (v10 < 180.0 && v10 > 100.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x3c && (*m_opponent)->m_inputY != 1) {
+                if (dx < 180.0 && dx > 100.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x3c && (*m_opponent)->m_inputY != 1) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (v10 < 100.0 && v10 > 0.0 && m_cpuRoll < 0x5f && m_cpuRoll > 0x50) {
+                if (dx < 100.0 && dx > 0.0 && m_cpuRoll < 0x5f && m_cpuRoll > 0x50) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (v10 < 150.0 && v10 > 120.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x5f) {
+                if (dx < 150.0 && dx > 120.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x5f) {
                     m_pressC = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (v10 > 80.0 && v10 < 130.0 && m_cpuRoll > 0x6e && m_cpuRoll < 0x73) {
+                if (dx > 80.0 && dx < 130.0 && m_cpuRoll > 0x6e && m_cpuRoll < 0x73) {
                     m_cpuAction = 0x10;
                     return;
                 }
-                if (v10 > 100.0 && v10 < 180.0 && m_cpuRoll > 0x73 && m_cpuRoll < 0x7d) {
+                if (dx > 100.0 && dx < 180.0 && m_cpuRoll > 0x73 && m_cpuRoll < 0x7d) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (v10 < 60.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x7d && (*m_opponent)->pattern > kLastSharedAction && m_rfGauge > 500.0) {
+                if (dx < 60.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x7d && (*m_opponent)->pattern > kLastSharedAction && m_rfGauge > 500.0) {
                     m_command = kCmd412C;
                     return;
                 }
-                if (v10 < 80.0 && m_cpuRoll < 0x85 && m_cpuRoll > 0x82 && (*m_opponent)->pattern > kLastSharedAction && m_gauge == 0xbb8) {
+                if (dx < 80.0 && m_cpuRoll < 0x85 && m_cpuRoll > 0x82 && (*m_opponent)->pattern > kLastSharedAction && m_gauge == 0xbb8) {
                     m_command = kCmdB5A2AB;
                     return;
                 }
-                if (v10 > 100.0 && m_cpuRoll < v10 * 0.1 + 140.0 && m_cpuRoll > 0x87) {
+                if (dx > 100.0 && m_cpuRoll < dx * 0.1 + 140.0 && m_cpuRoll > 0x87) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
-                if (v10 > 120.0 && m_cpuRoll < 0xc8 && m_cpuRoll > 0xc1) {
+                if (dx > 120.0 && m_cpuRoll < 0xc8 && m_cpuRoll > 0xc1) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
-                if (v10 > 80.0 && m_cpuRoll < 0xd0 && m_cpuRoll > 0xc8) {
+                if (dx > 80.0 && m_cpuRoll < 0xd0 && m_cpuRoll > 0xc8) {
                     m_command = (WORD)Random(0, 3) + kCmd412A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0 && m_stance == 0) {
-                if ((*m_opponent)->vy < 0.0 && v10 < 80.0 && x8 < 120.0 && m_cpuRoll < 0xa) {
+                if ((*m_opponent)->vy < 0.0 && dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
                     m_inputY = -1;
                     m_inputX = -facing;
                     return;
                 }
                 if ((*m_opponent)->vy > 0.0) {
-                    if (v10 < 60.0 && x8 < 120.0) {
+                    if (dx < 60.0 && dy < 120.0) {
                         if (m_cpuRoll < (m_rfGauge > 500.0 || m_rfBlue > 0) * 5 + 6) {
                             m_command = ((WORD)Random(0, 3) == 0) * 2 + kCmd623A;
                             return;
                         }
                     }
-                    if (v10 < 60.0 && x8 < 120.0 && x8 > 80.0 && m_cpuRoll < 0xf) {
+                    if (dx < 60.0 && dy < 120.0 && dy > 80.0 && m_cpuRoll < 0xf) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (v10 < 80.0 && x8 < 150.0 && x8 > 100.0 && m_cpuRoll < 0x1e) {
+                    if (dx < 80.0 && dy < 150.0 && dy > 100.0 && m_cpuRoll < 0x1e) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
@@ -2493,32 +2493,32 @@ void CMio::CpuInput()
             }
             if ((*m_opponent)->y < 0.0 && m_stance == 1) {
                 if ((*m_opponent)->vy < 0.0) {
-                    if (v10 < 100.0 && x8 < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 100.0 && dy < 120.0 && m_cpuRoll < 0xa) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (v10 < 100.0 && x8 < 120.0 && m_cpuRoll < 0xf && x > 80.0 && x < 560.0) {
+                    if (dx < 100.0 && dy < 120.0 && m_cpuRoll < 0xf && x > 80.0 && x < 560.0) {
                         m_command = facing == -1;
                         return;
                     }
                 }
                 if ((*m_opponent)->vy > 0.0) {
-                    if (v10 < 110.0 && x8 < 210.0 && m_cpuRoll < 0xa) {
+                    if (dx < 110.0 && dy < 210.0 && m_cpuRoll < 0xa) {
                         m_command = (WORD)Random(0, 3) + kCmd214214A;
                         return;
                     }
-                    if (v10 < 100.0 && x8 < 120.0 && m_cpuRoll < 4) {
+                    if (dx < 100.0 && dy < 120.0 && m_cpuRoll < 4) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (v10 < 100.0 && v10 < 180.0 && x8 < 140.0 && m_cpuRoll < 0x14) {
+                    if (dx < 100.0 && dx < 180.0 && dy < 140.0 && m_cpuRoll < 0x14) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (v10 < 100.0 && x8 < 140.0 && x8 > 80.0 && m_cpuRoll < 0x28) {
+                    if (dx < 100.0 && dy < 140.0 && dy > 80.0 && m_cpuRoll < 0x28) {
                         m_pressC = 1;
                         m_inputY = 1;
                         return;
@@ -2528,30 +2528,30 @@ void CMio::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3 && m_stance == 0) {
             if ((*m_opponent)->y == 0.0) {
-                if (v10 < 60.0 && x8 < 70.0 && m_cpuRoll < 0x64) {
+                if (dx < 60.0 && dy < 70.0 && m_cpuRoll < 0x64) {
                     m_pressA = 1;
                     return;
                 }
-                if (v10 < 80.0 && x8 > 50.0 && x8 < 90.0 && m_cpuRoll > 0xc8 && m_cpuRoll < 0x104) {
+                if (dx < 80.0 && dy > 50.0 && dy < 90.0 && m_cpuRoll > 0xc8 && m_cpuRoll < 0x104) {
                     m_pressB = 1;
                     return;
                 }
-                if (v10 < 70.0 && x8 > 60.0 && x8 < 110.0 && m_cpuRoll > 0x104 && m_cpuRoll < 0x11d) {
+                if (dx < 70.0 && dy > 60.0 && dy < 110.0 && m_cpuRoll > 0x104 && m_cpuRoll < 0x11d) {
                     m_pressC = 1;
                     return;
                 }
-                if (x8 + 30.0 > v10 && x8 - 30.0 < v10 && x8 < 110.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x136) {
+                if (dy + 30.0 > dx && dy - 30.0 < dx && dy < 110.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x136) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (v10 < 80.0 && x8 < 80.0 && y > (*m_opponent)->y && m_cpuRoll < 0x136) {
+                if (dx < 80.0 && dy < 80.0 && y > (*m_opponent)->y && m_cpuRoll < 0x136) {
                     m_pressA = 1;
                     return;
                 }
-                if (v10 < 90.0 && x8 < 100.0 && y < (*m_opponent)->y && m_cpuRoll > 0x136 && m_cpuRoll < 0x190) {
+                if (dx < 90.0 && dy < 100.0 && y < (*m_opponent)->y && m_cpuRoll > 0x136 && m_cpuRoll < 0x190) {
                     m_pressB = 1;
                     return;
                 }
@@ -2559,39 +2559,39 @@ void CMio::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3 && m_stance == 1) {
             if ((*m_opponent)->y == 0.0) {
-                if (v10 < 60.0 && x8 < 70.0 && m_cpuRoll < 0x64) {
+                if (dx < 60.0 && dy < 70.0 && m_cpuRoll < 0x64) {
                     m_pressA = 1;
                     return;
                 }
-                if (v10 < 160.0 && v10 > 110.0 && x8 > 20.0 && x8 < 50.0 && m_cpuRoll > 0xc8 && m_cpuRoll < 0x104) {
+                if (dx < 160.0 && dx > 110.0 && dy > 20.0 && dy < 50.0 && m_cpuRoll > 0xc8 && m_cpuRoll < 0x104) {
                     m_pressB = 1;
                     return;
                 }
-                if (v10 < 90.0 && x8 < 150.0 && m_cpuRoll > 0x104) {
-                    if (m_cpuRoll < (x8 > 100.0) * 0x28 + 0x122) {
+                if (dx < 90.0 && dy < 150.0 && m_cpuRoll > 0x104) {
+                    if (m_cpuRoll < (dy > 100.0) * 0x28 + 0x122) {
                         m_pressC = 1;
                         return;
                     }
                 }
-                if (v10 < 130.0 && v10 > 80.0 && x8 < 80.0 && m_cpuRoll > 0x17c && m_cpuRoll < 0x190) {
+                if (dx < 130.0 && dx > 80.0 && dy < 80.0 && m_cpuRoll > 0x17c && m_cpuRoll < 0x190) {
                     m_command = (WORD)Random(0, 3) + kCmd412A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (v10 < 80.0 && v10 > 60.0 && x8 < 60.0 && y > (*m_opponent)->y && m_cpuRoll < 0xd2) {
+                if (dx < 80.0 && dx > 60.0 && dy < 60.0 && y > (*m_opponent)->y && m_cpuRoll < 0xd2) {
                     m_pressA = 1;
                     return;
                 }
-                if (v10 < 180.0 && v10 > 100.0 && x8 < 70.0 && y > (*m_opponent)->y && m_cpuRoll < 0x136) {
+                if (dx < 180.0 && dx > 100.0 && dy < 70.0 && y > (*m_opponent)->y && m_cpuRoll < 0x136) {
                     m_pressA = 1;
                     return;
                 }
-                if (v10 < 90.0 && x8 > 100.0 && x8 < 150.0 && y < (*m_opponent)->y && m_cpuRoll > 0x136 && m_cpuRoll < 0x1c2) {
+                if (dx < 90.0 && dy > 100.0 && dy < 150.0 && y < (*m_opponent)->y && m_cpuRoll > 0x136 && m_cpuRoll < 0x1c2) {
                     m_pressB = 1;
                     return;
                 }
-                if (v10 < 140.0 && v10 > 80.0 && x8 < 80.0 && m_cpuRoll > 0x17c && m_cpuRoll < 0x190) {
+                if (dx < 140.0 && dx > 80.0 && dy < 80.0 && m_cpuRoll > 0x17c && m_cpuRoll < 0x190) {
                     m_command = (WORD)Random(0, 3) + kCmd412A;
                     return;
                 }
@@ -2602,7 +2602,7 @@ void CMio::CpuInput()
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir || (*m_opponent)->pattern < kFirstHitReaction) && y == 0.0 && v10 < 90.0 && (WORD)Random(0, 0x64) < ((m_stance == 1) << 2) * m_cpuSkill) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir || (*m_opponent)->pattern < kFirstHitReaction) && y == 0.0 && dx < 90.0 && (WORD)Random(0, 0x64) < ((m_stance == 1) << 2) * m_cpuSkill) {
         m_command = facing == -1;
         return;
     }
@@ -2616,17 +2616,17 @@ void CMio::CpuInput()
         } else {
             m_cpuAction = 0;
         }
-        if (v10 > 160.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 160.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
         }
-        if (v10 < 100.0 && y == 0.0 && (WORD)Random(0, 0x64) < 1 && (*m_opponent)->pattern < kFirstHitReaction) {
+        if (dx < 100.0 && y == 0.0 && (WORD)Random(0, 0x64) < 1 && (*m_opponent)->pattern < kFirstHitReaction) {
             m_inputX = 0;
             m_inputY = -1;
             return;
         }
-        if (v10 < 170.0 && v10 > 120.0 && y == 0.0) {
+        if (dx < 170.0 && dx > 120.0 && y == 0.0) {
             m_inputX = facing;
             m_inputY = -1;
             return;
@@ -2646,7 +2646,7 @@ void CMio::CpuInput()
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < (m_stance == 1) * 0x1e + 0x28 && v10 < 110.0) {
+    if ((WORD)Random(0, 0x64) < (m_stance == 1) * 0x1e + 0x28 && dx < 110.0) {
         if (facing == 1) {
             m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
         } else {
@@ -2670,1396 +2670,1396 @@ void CMio::CpuInput()
 
 void CMio::UpdateObjects()
 {
-    WORD v58;
-    WORD v54;
-    int v4;
+    WORD frameCount; // frames in the object's animation
+    WORD duration; // ticks the object's current frame lasts
+    int slot; // the object being updated, an index into m_objects
 
     if ((*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    v4 = m_objectTail;
-    EffectDesc l50;
-    while (v4 != m_objectHead) {
-        if (m_objectActive[v4] != 0 && m_objects[v4].hitstop == 0 && (m_freezeTime == 0 || m_freezeTime > 0 && m_objects[v4].movesInFreeze != 0)) {
-            v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
-            v58 = anims[m_objects[v4].pattern].frameCount;
-            InitEffectDesc((EffectDesc*)&l50);
-            switch (m_objects[v4].pattern) {
+    slot = m_objectTail;
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    while (slot != m_objectHead) {
+        if (m_objectActive[slot] != 0 && m_objects[slot].hitstop == 0 && (m_freezeTime == 0 || m_freezeTime > 0 && m_objects[slot].movesInFreeze != 0)) {
+            duration = (short)anims[m_objects[slot].pattern].frames[m_objects[slot].frame].duration;
+            frameCount = anims[m_objects[slot].pattern].frameCount;
+            InitEffectDesc((EffectDesc*)&effect);
+            switch (m_objects[slot].pattern) {
             case kObjUnusedHopper:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vx = 0.5;
-                    m_objects[v4].vy = -2.8;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vx = 0.5;
+                    m_objects[slot].vy = -2.8;
                 }
-                m_objects[v4].vy += 0.05;
-                if (m_objects[v4].y >= 0.0 && m_objects[v4].vy > 0.0 || m_objects[v4].attackResult > 1) {
-                    m_objects[v4].frame = 1;
-                    m_objects[v4].vy = -1.5;
-                    l50.type = 0x191;
-                    l50.x = (double)(int)x;
-                    l50.y = (double)(int)y;
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x192;
-                    SpawnObject(&l50);
-                    l50.type = 0x193;
-                    SpawnObject(&l50);
+                m_objects[slot].vy += 0.05;
+                if (m_objects[slot].y >= 0.0 && m_objects[slot].vy > 0.0 || m_objects[slot].attackResult > 1) {
+                    m_objects[slot].frame = 1;
+                    m_objects[slot].vy = -1.5;
+                    effect.type = 0x191;
+                    effect.x = (double)(int)x;
+                    effect.y = (double)(int)y;
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x192;
+                    SpawnObject(&effect);
+                    effect.type = 0x193;
+                    SpawnObject(&effect);
                     m_playVoice = 2;
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjUnusedHopperPiece1:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = -1.0 - (rand() < 0x3e80) * 0.5 - (rand() < 0x3e80) * 1.0;
-                    m_objects[v4].vy = -1.5;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = -1.0 - (rand() < 0x3e80) * 0.5 - (rand() < 0x3e80) * 1.0;
+                    m_objects[slot].vy = -1.5;
                 }
-                m_objects[v4].vy += 0.05;
-                if (m_objects[v4].y >= 0.0 && m_objects[v4].vy > 0.0) {
-                    RemoveObject(v4);
+                m_objects[slot].vy += 0.05;
+                if (m_objects[slot].y >= 0.0 && m_objects[slot].vy > 0.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjUnusedHopperPiece2:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (rand() < 0x3e80) * 0.5 + 1.0 + (rand() < 0x3e80) * 1.0;
-                    m_objects[v4].vy = -1.1;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (rand() < 0x3e80) * 0.5 + 1.0 + (rand() < 0x3e80) * 1.0;
+                    m_objects[slot].vy = -1.1;
                 }
-                m_objects[v4].vy += 0.05;
-                if (m_objects[v4].y >= 0.0 && m_objects[v4].vy > 0.0) {
-                    RemoveObject(v4);
+                m_objects[slot].vy += 0.05;
+                if (m_objects[slot].y >= 0.0 && m_objects[slot].vy > 0.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjUnusedHopperPiece3:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (rand() < 0x3e80) * 0.5 - (rand() < 0x3e80) * 1.0;
-                    m_objects[v4].vy = -1.3;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (rand() < 0x3e80) * 0.5 - (rand() < 0x3e80) * 1.0;
+                    m_objects[slot].vy = -1.3;
                 }
-                m_objects[v4].vy += 0.05;
-                if (m_objects[v4].y >= 0.0 && m_objects[v4].vy > 0.0) {
-                    RemoveObject(v4);
+                m_objects[slot].vy += 0.05;
+                if (m_objects[slot].y >= 0.0 && m_objects[slot].vy > 0.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjFloat412Throw:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vy = (WORD)Random(0, 0xa) * 0.1 + 1.5;
-                    m_objects[v4].vx = 2.1 - (WORD)Random(0, 5) * 0.1;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + 1.5;
+                    m_objects[slot].vx = 2.1 - (WORD)Random(0, 5) * 0.1;
                 }
-                m_objects[v4].vx -= 0.02;
-                if (m_objects[v4].vx < 0.1) {
-                    m_objects[v4].vx = 0.1;
+                m_objects[slot].vx -= 0.02;
+                if (m_objects[slot].vx < 0.1) {
+                    m_objects[slot].vx = 0.1;
                 }
-                m_objects[v4].vy -= 0.02;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].vy -= 0.02;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjFloat236Shot:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vx = 6.0;
-                    m_objects[v4].vy = 0.0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vx = 6.0;
+                    m_objects[slot].vy = 0.0;
                 }
-                if (m_objects[v4].frame == 1) {
-                    m_objects[v4].vy += 0.04;
+                if (m_objects[slot].frame == 1) {
+                    m_objects[slot].vy += 0.04;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].attackResult == 3 && m_objects[v4].frame == 0) {
-                    m_objects[v4].vx = 0.0;
-                    m_objects[v4].frame = 2;
-                    m_objects[v4].timer = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].attackResult == 3 && m_objects[slot].frame == 0) {
+                    m_objects[slot].vx = 0.0;
+                    m_objects[slot].frame = 2;
+                    m_objects[slot].timer = 0;
                     m_playVoice = 5;
                     (*m_opponent)->m_hitstop = (*m_opponent)->m_hitstop + 0x3c;
-                    m_objects[v4].attackResult = 0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                if (m_objects[v4].attackResult > 1) {
-                    m_objects[v4].vx = -1.0;
-                    m_objects[v4].vy = -2.0;
-                    m_objects[v4].frame = 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult > 1) {
+                    m_objects[slot].vx = -1.0;
+                    m_objects[slot].vy = -2.0;
+                    m_objects[slot].frame = 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].x < -100.0 || m_objects[v4].x > 800.0 || m_objects[v4].y > 30.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x < -100.0 || m_objects[slot].x > 800.0 || m_objects[slot].y > 30.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloat236CShot:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vx = 6.0;
-                    m_objects[v4].vy = 0.0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vx = 6.0;
+                    m_objects[slot].vy = 0.0;
                 }
-                if (m_objects[v4].frame == 0 && (m_objects[v4].x < -960.0 || m_objects[v4].x > 1640.0)) {
-                    m_objects[v4].frame = 1;
-                    m_objects[v4].x = -m_objects[v4].x;
+                if (m_objects[slot].frame == 0 && (m_objects[slot].x < -960.0 || m_objects[slot].x > 1640.0)) {
+                    m_objects[slot].frame = 1;
+                    m_objects[slot].x = -m_objects[slot].x;
                 }
-                if (m_objects[v4].frame == 2) {
-                    m_objects[v4].vy += 0.04;
+                if (m_objects[slot].frame == 2) {
+                    m_objects[slot].vy += 0.04;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].attackResult == 3 && m_objects[v4].frame <= 1) {
-                    m_objects[v4].vx = 0.0;
-                    m_objects[v4].frame = 3;
-                    m_objects[v4].timer = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].attackResult == 3 && m_objects[slot].frame <= 1) {
+                    m_objects[slot].vx = 0.0;
+                    m_objects[slot].frame = 3;
+                    m_objects[slot].timer = 0;
                     m_playVoice = 5;
                     (*m_opponent)->m_hitstop = (*m_opponent)->m_hitstop + 0x3c;
-                    m_objects[v4].attackResult = 0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                if (m_objects[v4].attackResult > 1) {
-                    m_objects[v4].vx = -1.0;
-                    m_objects[v4].vy = -2.0;
-                    m_objects[v4].frame = 2;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult > 1) {
+                    m_objects[slot].vx = -1.0;
+                    m_objects[slot].vy = -2.0;
+                    m_objects[slot].frame = 2;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].frame > 0 && (m_objects[v4].x < -2000.0 || m_objects[v4].x > 2000.0 || m_objects[v4].y > 30.0)) {
-                    RemoveObject(v4);
+                if (m_objects[slot].frame > 0 && (m_objects[slot].x < -2000.0 || m_objects[slot].x > 2000.0 || m_objects[slot].y > 30.0)) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObj236FollowupStrike:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObj236FollowupRiser:
-                m_objects[v4].vx -= 0.05;
-                m_objects[v4].vy -= 0.02;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = m_objects[v4].frame - 2;
+                m_objects[slot].vx -= 0.05;
+                m_objects[slot].vy -= 0.02;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                 }
-                if (m_objects[v4].x < -100.0 || m_objects[v4].x > 800.0 || m_objects[v4].y > 0.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x < -100.0 || m_objects[slot].x > 800.0 || m_objects[slot].y > 0.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloat214ColumnBase:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjFloat214Column:
-                if (m_objects[v4].frame == 2 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    if (m_objects[v4].y < -190.0) {
-                        l50.type = 0x19a;
-                        l50.x = (double)(int)m_objects[v4].x;
-                        l50.y = (double)((int)m_objects[v4].y + 0xa0);
-                        l50.facing = facing;
-                        l50.scale = 2;
-                        l50.layer = 1;
-                        l50.keep = 1;
-                        SpawnObject(&l50);
+                if (m_objects[slot].frame == 2 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    if (m_objects[slot].y < -190.0) {
+                        effect.type = 0x19a;
+                        effect.x = (double)(int)m_objects[slot].x;
+                        effect.y = (double)((int)m_objects[slot].y + 0xa0);
+                        effect.facing = facing;
+                        effect.scale = 2;
+                        effect.layer = 1;
+                        effect.keep = 1;
+                        SpawnObject(&effect);
                     } else {
-                        l50.type = 0x199;
-                        l50.x = (double)(int)m_objects[v4].x;
-                        l50.y = 0.0;
-                        l50.facing = facing;
-                        l50.scale = 2;
-                        l50.layer = 1;
-                        l50.keep = 1;
-                        SpawnObject(&l50);
+                        effect.type = 0x199;
+                        effect.x = (double)(int)m_objects[slot].x;
+                        effect.y = 0.0;
+                        effect.facing = facing;
+                        effect.scale = 2;
+                        effect.layer = 1;
+                        effect.keep = 1;
+                        SpawnObject(&effect);
                     }
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjSuperDrop:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
                 }
-                m_objects[v4].vy += 0.045;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].vy += 0.045;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjSuperDropBounce:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
                 }
-                m_objects[v4].vy += 0.035;
-                if ((m_objects[v4].attackResult > 1 || m_objects[v4].y > 0.0) && m_objectVar1[v4] == 0) {
+                m_objects[slot].vy += 0.035;
+                if ((m_objects[slot].attackResult > 1 || m_objects[slot].y > 0.0) && m_objectVar1[slot] == 0) {
                     m_playVoice = 7;
-                    m_objects[v4].hitsLeft = 0;
-                    m_objectVar1[v4]++;
-                    m_objects[v4].vy = -1.5;
+                    m_objects[slot].hitsLeft = 0;
+                    m_objectVar1[slot]++;
+                    m_objects[slot].vy = -1.5;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjSuperDropBreak:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
                 }
-                m_objects[v4].vy += 0.04;
-                if ((m_objects[v4].attackResult > 1 || m_objects[v4].y > 0.0) && m_objects[v4].frame == 0) {
+                m_objects[slot].vy += 0.04;
+                if ((m_objects[slot].attackResult > 1 || m_objects[slot].y > 0.0) && m_objects[slot].frame == 0) {
                     m_playSound = 1;
-                    m_objects[v4].hitsLeft = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].vy = -1.5;
-                    l50.type = 0x19e;
-                    l50.x = (double)(int)m_objects[v4].x;
-                    l50.y = (double)((int)m_objects[v4].y - 0xf);
-                    l50.facing = facing;
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    SpawnObject(&l50);
-                    l50.type = 0x19f;
-                    l50.x = (double)(int)m_objects[v4].x;
-                    l50.y = (double)((int)m_objects[v4].y + 0xf);
-                    l50.facing = facing;
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    SpawnObject(&l50);
-                    l50.type = 0x1a0;
-                    l50.x = (double)((int)m_objects[v4].x + 0xf);
-                    l50.y = (double)(int)m_objects[v4].y;
-                    l50.facing = facing;
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    SpawnObject(&l50);
-                    l50.type = 0x1a1;
-                    l50.x = (double)((int)m_objects[v4].x - 0xf);
-                    l50.y = (double)(int)m_objects[v4].y;
-                    l50.facing = facing;
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    SpawnObject(&l50);
+                    m_objects[slot].hitsLeft = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].vy = -1.5;
+                    effect.type = 0x19e;
+                    effect.x = (double)(int)m_objects[slot].x;
+                    effect.y = (double)((int)m_objects[slot].y - 0xf);
+                    effect.facing = facing;
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    SpawnObject(&effect);
+                    effect.type = 0x19f;
+                    effect.x = (double)(int)m_objects[slot].x;
+                    effect.y = (double)((int)m_objects[slot].y + 0xf);
+                    effect.facing = facing;
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    SpawnObject(&effect);
+                    effect.type = 0x1a0;
+                    effect.x = (double)((int)m_objects[slot].x + 0xf);
+                    effect.y = (double)(int)m_objects[slot].y;
+                    effect.facing = facing;
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    SpawnObject(&effect);
+                    effect.type = 0x1a1;
+                    effect.x = (double)((int)m_objects[slot].x - 0xf);
+                    effect.y = (double)(int)m_objects[slot].y;
+                    effect.facing = facing;
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    SpawnObject(&effect);
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjSuperDropPiece1:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vy = (WORD)Random(0, 0xa) * 0.1 + -1.0;
-                    m_objects[v4].vx = (WORD)Random(0, 0xa) * 0.1 + 0.5;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + -1.0;
+                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 0.5;
                 }
-                m_objects[v4].vy += 0.04;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].vy += 0.04;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjSuperDropPiece2:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vy = (WORD)Random(0, 0xa) * 0.1 + -1.3;
-                    m_objects[v4].vx = (WORD)Random(0, 0xa) * 0.1 + 0.9;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + -1.3;
+                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 0.9;
                 }
-                m_objects[v4].vy += 0.04;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].vy += 0.04;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjSuperDropPiece3:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vy = (WORD)Random(0, 0xa) * 0.1 + -1.0;
-                    m_objects[v4].vx = (WORD)Random(0, 0xa) * 0.1 + -0.5;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + -1.0;
+                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + -0.5;
                 }
-                m_objects[v4].vy += 0.04;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].vy += 0.04;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjSuperDropPiece4:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vy = (WORD)Random(0, 0xa) * 0.1 + -0.8;
-                    m_objects[v4].vx = (WORD)Random(0, 0xa) * 0.1 + -0.9;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + -0.8;
+                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + -0.9;
                 }
-                m_objects[v4].vy += 0.04;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].vy += 0.04;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloatSuperShotA:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 7;
-                    m_objects[v4].vx = 1.0;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 7;
+                    m_objects[slot].vx = 1.0;
+                    m_objectVar1[slot]++;
                 }
-                m_objects[v4].vx += 0.02;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 2 || m_objects[v4].frame == 5 || m_objects[v4].frame == 8 || m_objects[v4].frame == 0xb || m_objects[v4].frame == 0xe || m_objects[v4].frame == 0x11 || m_objects[v4].frame == 0x14 || m_objects[v4].frame == 0x17) {
-                        m_objects[v4].attackResult = 0;
+                m_objects[slot].vx += 0.02;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 2 || m_objects[slot].frame == 5 || m_objects[slot].frame == 8 || m_objects[slot].frame == 0xb || m_objects[slot].frame == 0xe || m_objects[slot].frame == 0x11 || m_objects[slot].frame == 0x14 || m_objects[slot].frame == 0x17) {
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
-                if (m_objects[v4].x < -100.0 || m_objects[v4].x > 800.0 || m_objects[v4].y > 0.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x < -100.0 || m_objects[slot].x > 800.0 || m_objects[slot].y > 0.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloatSuperShotTrail:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjUnusedShotSlow:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vx = 2.3;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vx = 2.3;
+                    m_objectVar1[slot]++;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
-                if (m_objects[v4].x < -420.0 || m_objects[v4].x > 1060.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x < -420.0 || m_objects[slot].x > 1060.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjUnusedShotMid:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vx = 2.6;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vx = 2.6;
+                    m_objectVar1[slot]++;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
-                if (m_objects[v4].x < -420.0 || m_objects[v4].x > 1060.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x < -420.0 || m_objects[slot].x > 1060.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloat214Summoner:
-                if (m_objects[v4].frame == 3 && m_objects[v4].timer == 0x1e && m_objects[v4].y == 0.0) {
-                    l50.type = 0x19a;
-                    l50.x = (double)((int)m_objects[v4].x - m_objects[v4].facing * 0xf);
-                    l50.y = -556.0;
-                    l50.facing = facing;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.keep = 1;
+                if (m_objects[slot].frame == 3 && m_objects[slot].timer == 0x1e && m_objects[slot].y == 0.0) {
+                    effect.type = 0x19a;
+                    effect.x = (double)((int)m_objects[slot].x - m_objects[slot].facing * 0xf);
+                    effect.y = -556.0;
+                    effect.facing = facing;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.keep = 1;
                     m_playVoice = 6;
-                    SpawnObject(&l50);
+                    SpawnObject(&effect);
                 }
-                if (m_objects[v4].frame == 3 && m_objects[v4].timer == 0x27 && m_objects[v4].y == 0.0) {
-                    l50.type = 0x19a;
-                    l50.x = (double)((int)m_objects[v4].x + m_objects[v4].facing * 6);
-                    l50.y = -564.0;
-                    l50.facing = facing;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.keep = 1;
+                if (m_objects[slot].frame == 3 && m_objects[slot].timer == 0x27 && m_objects[slot].y == 0.0) {
+                    effect.type = 0x19a;
+                    effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 6);
+                    effect.y = -564.0;
+                    effect.facing = facing;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.keep = 1;
                     m_playVoice = 6;
-                    SpawnObject(&l50);
+                    SpawnObject(&effect);
                 }
-                if (m_objects[v4].frame == 3 && m_objects[v4].timer == 0x30 && m_objects[v4].y == 0.0) {
-                    l50.type = 0x19a;
-                    l50.x = (double)((int)m_objects[v4].x - m_objects[v4].facing * 0x24);
-                    l50.y = -560.0;
-                    l50.facing = facing;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.keep = 1;
+                if (m_objects[slot].frame == 3 && m_objects[slot].timer == 0x30 && m_objects[slot].y == 0.0) {
+                    effect.type = 0x19a;
+                    effect.x = (double)((int)m_objects[slot].x - m_objects[slot].facing * 0x24);
+                    effect.y = -560.0;
+                    effect.facing = facing;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.keep = 1;
                     m_playVoice = 6;
-                    SpawnObject(&l50);
+                    SpawnObject(&effect);
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjUnusedShotFast:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vx = 3.0;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vx = 3.0;
+                    m_objectVar1[slot]++;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
-                if (m_objects[v4].x < -420.0 || m_objects[v4].x > 1060.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x < -420.0 || m_objects[slot].x > 1060.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloatSuperShotB:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 7;
-                    m_objects[v4].vx = 1.0;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 7;
+                    m_objects[slot].vx = 1.0;
+                    m_objectVar1[slot]++;
                 }
-                if (m_objectVar2[v4] < 0) {
-                    l50.type = 0x1a3;
-                    l50.x = (double)((int)m_objects[v4].x + m_objects[v4].facing * 0x28);
-                    l50.y = (double)(int)m_objects[v4].y;
-                    l50.facing = facing;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    SpawnObject(&l50);
-                    m_objectVar2[v4] = 0x12;
+                if (m_objectVar2[slot] < 0) {
+                    effect.type = 0x1a3;
+                    effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x28);
+                    effect.y = (double)(int)m_objects[slot].y;
+                    effect.facing = facing;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    SpawnObject(&effect);
+                    m_objectVar2[slot] = 0x12;
                 }
-                m_objectVar2[v4]--;
-                m_objects[v4].vx += 0.03;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 2 || m_objects[v4].frame == 5 || m_objects[v4].frame == 8 || m_objects[v4].frame == 0xb || m_objects[v4].frame == 0xe || m_objects[v4].frame == 0x11 || m_objects[v4].frame == 0x14 || m_objects[v4].frame == 0x17) {
-                        m_objects[v4].attackResult = 0;
+                m_objectVar2[slot]--;
+                m_objects[slot].vx += 0.03;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 2 || m_objects[slot].frame == 5 || m_objects[slot].frame == 8 || m_objects[slot].frame == 0xb || m_objects[slot].frame == 0xe || m_objects[slot].frame == 0x11 || m_objects[slot].frame == 0x14 || m_objects[slot].frame == 0x17) {
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 1;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 1;
                     }
                 }
-                if (m_objects[v4].x < -100.0 || m_objects[v4].x > 800.0 || m_objects[v4].y > 0.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x < -100.0 || m_objects[slot].x > 800.0 || m_objects[slot].y > 0.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloatSuperShotC:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 7;
-                    m_objects[v4].vx = 1.0;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 7;
+                    m_objects[slot].vx = 1.0;
+                    m_objectVar1[slot]++;
                 }
-                l50.type = 0x24;
-                l50.x = (double)((int)m_objects[v4].x + 0x28 - (WORD)Random(0, 0x50));
-                l50.y = (double)((int)m_objects[v4].y + 0x28 - (WORD)Random(0, 0x50));
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                if (m_objectVar2[v4] < 0) {
-                    l50.type = 0x1a3;
-                    l50.x = (double)((int)m_objects[v4].x + m_objects[v4].facing * 0x28);
-                    l50.y = (double)(int)m_objects[v4].y;
-                    l50.facing = facing;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    SpawnObject(&l50);
-                    m_objectVar2[v4] = 6;
-                    if (m_objects[v4].y > -80.0 && m_objectVar3[v4] < 0) {
-                        l50.type = 0x1f;
-                        l50.x = (double)(int)m_objects[v4].x;
-                        l50.y = 0.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.side = m_objects[v4].facing == -1;
-                        m_game->CreateEffect((EffectDesc*)&l50);
-                        m_objectVar3[v4] = 3;
+                effect.type = 0x24;
+                effect.x = (double)((int)m_objects[slot].x + 0x28 - (WORD)Random(0, 0x50));
+                effect.y = (double)((int)m_objects[slot].y + 0x28 - (WORD)Random(0, 0x50));
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                if (m_objectVar2[slot] < 0) {
+                    effect.type = 0x1a3;
+                    effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x28);
+                    effect.y = (double)(int)m_objects[slot].y;
+                    effect.facing = facing;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    SpawnObject(&effect);
+                    m_objectVar2[slot] = 6;
+                    if (m_objects[slot].y > -80.0 && m_objectVar3[slot] < 0) {
+                        effect.type = 0x1f;
+                        effect.x = (double)(int)m_objects[slot].x;
+                        effect.y = 0.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.side = m_objects[slot].facing == -1;
+                        m_game->CreateEffect((EffectDesc*)&effect);
+                        m_objectVar3[slot] = 3;
                     }
-                    m_objectVar3[v4]--;
+                    m_objectVar3[slot]--;
                 }
-                m_objectVar2[v4]--;
-                m_objects[v4].vx += 0.04;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 2 || m_objects[v4].frame == 5 || m_objects[v4].frame == 8 || m_objects[v4].frame == 0xb || m_objects[v4].frame == 0xe || m_objects[v4].frame == 0x11 || m_objects[v4].frame == 0x14 || m_objects[v4].frame == 0x17) {
-                        m_objects[v4].attackResult = 0;
+                m_objectVar2[slot]--;
+                m_objects[slot].vx += 0.04;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 2 || m_objects[slot].frame == 5 || m_objects[slot].frame == 8 || m_objects[slot].frame == 0xb || m_objects[slot].frame == 0xe || m_objects[slot].frame == 0x11 || m_objects[slot].frame == 0x14 || m_objects[slot].frame == 0x17) {
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 1;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 1;
                     }
                 }
-                if (m_objects[v4].x < -100.0 || m_objects[v4].x > 800.0 || m_objects[v4].y > 0.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x < -100.0 || m_objects[slot].x > 800.0 || m_objects[slot].y > 0.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloat214214Shot:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vx = 6.0;
-                    m_objects[v4].vy = -4.5;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vx = 6.0;
+                    m_objects[slot].vy = -4.5;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y < -640.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y < -640.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloatLv4Far1:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Far2:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Far3:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Far4:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Far5:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Far6:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar2 == 1.0) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].pattern = kObjFloatLv4FarRise;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].pattern = kObjFloatLv4FarRise;
                 }
                 break;
             case kObjFloatLv4FarRise:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = 0.0;
-                    m_objects[v4].vy = -15.0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = 0.0;
+                    m_objects[slot].vy = -15.0;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y < -640.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y < -640.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloatLv4Near1:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Near2:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Near3:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Near4:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Near5:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kThrownHidden;
                 }
                 break;
             case kObjFloatLv4Near6:
-                if (m_objects[v4].frame == 1 && m_objects[v4].timer == 0) {
+                if (m_objects[slot].frame == 1 && m_objects[slot].timer == 0) {
                     m_playVoice = 0xa;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        l50.type = 0x1bb;
-                        l50.x = (double)(int)(*m_opponent)->x;
-                        l50.y = 0.0;
-                        l50.facing = facing;
-                        l50.layer = 1;
-                        l50.scale = 2;
-                        SpawnObject(&l50);
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = 0;
-                        m_objects[v4].pattern = kObjFloatLv4NearRise;
-                        m_objects[v4].vy = -15.0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        effect.type = 0x1bb;
+                        effect.x = (double)(int)(*m_opponent)->x;
+                        effect.y = 0.0;
+                        effect.facing = facing;
+                        effect.layer = 1;
+                        effect.scale = 2;
+                        SpawnObject(&effect);
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = 0;
+                        m_objects[slot].pattern = kObjFloatLv4NearRise;
+                        m_objects[slot].vy = -15.0;
                         m_patternVar2 = 1.0;
                         m_playVoice = 8;
                     }
                 }
                 break;
             case kObjFloatLv4NearRise:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y < -640.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y < -640.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloatLv4Floor:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 if (m_patternVar3 == 1.0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                 }
                 break;
             case kObjFloatLv4Lift:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
-                if (m_objects[v4].y < -640.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y < -640.0) {
+                    RemoveObject(slot);
                 }
                 break;
             case kObjThrowHold:
-                m_objects[v4].frame = 0;
+                m_objects[slot].frame = 0;
                 if (frame == 4) {
-                    m_objects[v4].frame = 1;
+                    m_objects[slot].frame = 1;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 if (pattern != kThrowHold || frame > 4) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                 }
                 break;
             case kObjLv4Finish236C:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 2;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 2;
                 }
                 if (pattern != kLv4Finish236C || pattern == kLv4Finish236C && frame > 5) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjFloat412CThrow:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].vy = m_patternVar3;
-                    m_objects[v4].vx = 2.8 - m_patternVar3 / 2.0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].vy = m_patternVar3;
+                    m_objects[slot].vx = 2.8 - m_patternVar3 / 2.0;
                 }
-                m_objects[v4].vx -= 0.02;
-                if (m_objects[v4].vx < 0.1) {
-                    m_objects[v4].vx = 0.1;
+                m_objects[slot].vx -= 0.02;
+                if (m_objects[slot].vx < 0.1) {
+                    m_objects[slot].vx = 0.1;
                 }
-                m_objects[v4].vy -= 0.02;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].vy -= 0.02;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObj623CAura:
-                m_objects[v4].x = x;
-                m_objects[v4].y = y - 50.0;
+                m_objects[slot].x = x;
+                m_objects[slot].y = y - 50.0;
                 if (pattern != k623C || pattern == k623C && frame > 5) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 7;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 7;
                     }
                 }
                 break;
             case kObj214214Strike:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObj214214CHit:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObj236CWallA:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObj236CWallB:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjAirThrowImpact1:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objectVar1[v4]++;
-                    m_objects[v4].vx = 0.5;
-                    m_objects[v4].vy = -1.8;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objectVar1[slot]++;
+                    m_objects[slot].vx = 0.5;
+                    m_objects[slot].vy = -1.8;
                 }
-                m_objects[v4].vy += 0.05;
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                m_objects[slot].vy += 0.05;
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame--;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame--;
                     }
                 }
                 break;
             case kObjAirThrowImpact2:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjAirThrowImpact3:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objectVar1[v4]++;
-                    m_objects[v4].vx = 0.4;
-                    m_objects[v4].vy = -1.7;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objectVar1[slot]++;
+                    m_objects[slot].vx = 0.4;
+                    m_objects[slot].vy = -1.7;
                 }
-                m_objects[v4].vy += 0.05;
-                if (m_objects[v4].y > 100.0) {
-                    RemoveObject(v4);
+                m_objects[slot].vy += 0.05;
+                if (m_objects[slot].y > 100.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame--;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame--;
                     }
                 }
                 break;
             case kObjFloat214Marker:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    l50.type = 0x1a6;
-                    l50.x = (double)(int)m_objects[v4].x;
-                    l50.y = -3.0;
-                    l50.facing = facing;
-                    l50.layer = 0;
-                    l50.scale = 0;
-                    l50.keep = 1;
-                    SpawnObject(&l50);
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    effect.type = 0x1a6;
+                    effect.x = (double)(int)m_objects[slot].x;
+                    effect.y = -3.0;
+                    effect.facing = facing;
+                    effect.layer = 0;
+                    effect.scale = 0;
+                    effect.keep = 1;
+                    SpawnObject(&effect);
                 }
-                if (m_objects[v4].frame == 1 && m_objects[v4].timer == 0) {
-                    l50.type = 0x1a6;
-                    l50.x = (double)((int)m_objects[v4].x + facing * 0x1b);
-                    l50.y = 0.0;
-                    l50.facing = facing;
-                    l50.layer = 0;
-                    l50.scale = 0;
-                    l50.keep = 1;
-                    SpawnObject(&l50);
+                if (m_objects[slot].frame == 1 && m_objects[slot].timer == 0) {
+                    effect.type = 0x1a6;
+                    effect.x = (double)((int)m_objects[slot].x + facing * 0x1b);
+                    effect.y = 0.0;
+                    effect.facing = facing;
+                    effect.layer = 0;
+                    effect.scale = 0;
+                    effect.keep = 1;
+                    SpawnObject(&effect);
                 }
-                if (m_objects[v4].frame == 2 && m_objects[v4].timer == 0) {
-                    l50.type = 0x1a6;
-                    l50.x = (double)((int)m_objects[v4].x + facing * 9);
-                    l50.y = 4.0;
-                    l50.facing = facing;
-                    l50.layer = 0;
-                    l50.scale = 0;
-                    l50.keep = 1;
-                    SpawnObject(&l50);
+                if (m_objects[slot].frame == 2 && m_objects[slot].timer == 0) {
+                    effect.type = 0x1a6;
+                    effect.x = (double)((int)m_objects[slot].x + facing * 9);
+                    effect.y = 4.0;
+                    effect.facing = facing;
+                    effect.layer = 0;
+                    effect.scale = 0;
+                    effect.keep = 1;
+                    SpawnObject(&effect);
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObj236FollowupBSpark:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObj236FollowupBShot:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = 1.5;
-                    m_objectVar1[v4] = 0;
-                    m_objects[v4].hitsLeft = 1;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = 1.5;
+                    m_objectVar1[slot] = 0;
+                    m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[v4].frame == 1 && m_objects[v4].timer == 0) {
-                    l50.type = 0x1c7;
-                    l50.x = (double)((int)m_objects[v4].x + 0x1e - (WORD)Random(0, 0x50));
-                    l50.y = (double)((int)m_objects[v4].y + 0x14 - (WORD)Random(0, 0x28));
-                    l50.facing = facing;
-                    l50.layer = 1;
-                    l50.scale = 2;
-                    SpawnObject(&l50);
+                if (m_objects[slot].frame == 1 && m_objects[slot].timer == 0) {
+                    effect.type = 0x1c7;
+                    effect.x = (double)((int)m_objects[slot].x + 0x1e - (WORD)Random(0, 0x50));
+                    effect.y = (double)((int)m_objects[slot].y + 0x14 - (WORD)Random(0, 0x28));
+                    effect.facing = facing;
+                    effect.layer = 1;
+                    effect.scale = 2;
+                    SpawnObject(&effect);
                     m_playSound = 1;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        if (m_objectVar1[v4] < 6) {
-                            m_objectVar1[v4]++;
-                            m_objects[v4].frame = 1;
-                            m_objects[v4].hitsLeft = 1;
-                            m_objects[v4].attackResult = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        if (m_objectVar1[slot] < 6) {
+                            m_objectVar1[slot]++;
+                            m_objects[slot].frame = 1;
+                            m_objects[slot].hitsLeft = 1;
+                            m_objects[slot].attackResult = 0;
                             break;
                         }
-                        RemoveObject(v4);
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjFallInDarkness:
-                m_objects[v4].vx = -0.02;
-                m_objects[v4].drawnWhileHidden = 0x7530;
-                m_objects[v4].timer++;
+                m_objects[slot].vx = -0.02;
+                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                 }
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
-                    l50.type = 0x1f1;
-                    l50.x = (double)((int)x + facing * 0x17);
-                    l50.y = (double)((int)y - 4);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f1;
-                    l50.x = (double)((int)x - (facing << 2));
-                    l50.y = (double)((int)y - 6);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f1;
-                    l50.x = (double)((int)x - facing * 0xe);
-                    l50.y = (double)((int)y - 0x1a);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f1;
-                    l50.x = (double)(int)x;
-                    l50.y = (double)(int)y;
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f1;
-                    l50.x = (double)((int)x + facing * 0x1e);
-                    l50.y = (double)((int)y - 0x28);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f1;
-                    l50.x = (double)((int)x - facing * 0x19);
-                    l50.y = (double)((int)y - 0x50);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f2;
-                    l50.x = (double)((int)x - facing * 0x23);
-                    l50.y = (double)((int)y - 0x2a);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f2;
-                    l50.x = (double)((int)x - facing * 0x12);
-                    l50.y = (double)((int)y - 0x14);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f2;
-                    l50.x = (double)((int)x + facing * 2);
-                    l50.y = (double)((int)y - 0x41);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = 0x1f2;
-                    l50.x = (double)((int)x + (facing << 4));
-                    l50.y = (double)((int)y - 0x50);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
+                    effect.type = 0x1f1;
+                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.y = (double)((int)y - 4);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f1;
+                    effect.x = (double)((int)x - (facing << 2));
+                    effect.y = (double)((int)y - 6);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f1;
+                    effect.x = (double)((int)x - facing * 0xe);
+                    effect.y = (double)((int)y - 0x1a);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f1;
+                    effect.x = (double)(int)x;
+                    effect.y = (double)(int)y;
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f1;
+                    effect.x = (double)((int)x + facing * 0x1e);
+                    effect.y = (double)((int)y - 0x28);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f1;
+                    effect.x = (double)((int)x - facing * 0x19);
+                    effect.y = (double)((int)y - 0x50);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f2;
+                    effect.x = (double)((int)x - facing * 0x23);
+                    effect.y = (double)((int)y - 0x2a);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f2;
+                    effect.x = (double)((int)x - facing * 0x12);
+                    effect.y = (double)((int)y - 0x14);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f2;
+                    effect.x = (double)((int)x + facing * 2);
+                    effect.y = (double)((int)y - 0x41);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = 0x1f2;
+                    effect.x = (double)((int)x + (facing << 4));
+                    effect.y = (double)((int)y - 0x50);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
                     m_playSound = 0x22;
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjShardSmall:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objectVar2[v4] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
-                    m_objectVar1[v4]++;
-                    m_objects[v4].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[v4].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar1[slot]++;
+                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
                 }
-                m_objects[v4].vy += 0.05;
-                if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
-                    m_objects[v4].vy = -m_objects[v4].vy;
+                m_objects[slot].vy += 0.05;
+                if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
+                    m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[v4] < 0xa) {
-                    m_objects[v4].scale = 1;
+                if (m_objectVar2[slot] < 0xa) {
+                    m_objects[slot].scale = 1;
                 }
-                if (m_objectVar2[v4] < 0) {
-                    RemoveObject(v4);
+                if (m_objectVar2[slot] < 0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                m_objectVar2[v4]--;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                m_objectVar2[slot]--;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjShardLarge:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objectVar2[v4] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
-                    m_objectVar1[v4]++;
-                    m_objects[v4].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[v4].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar1[slot]++;
+                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
                 }
-                m_objects[v4].vy += 0.03;
-                if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
-                    m_objects[v4].vy = -m_objects[v4].vy;
+                m_objects[slot].vy += 0.03;
+                if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
+                    m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[v4] < 0xa) {
-                    m_objects[v4].scale = 1;
+                if (m_objectVar2[slot] < 0xa) {
+                    m_objects[slot].scale = 1;
                 }
-                if (m_objectVar2[v4] < 0) {
-                    RemoveObject(v4);
+                if (m_objectVar2[slot] < 0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                m_objectVar2[v4]--;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                m_objectVar2[slot]--;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjBurnFlames:
-                m_objects[v4].x = x;
-                m_objects[v4].y = y;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].x = x;
+                m_objects[slot].y = y;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
             }
         }
-        v4++;
-        if (v4 >= 0x40) {
-            v4 = 0;
+        slot++;
+        if (slot >= 0x40) {
+            slot = 0;
         }
     }
 }

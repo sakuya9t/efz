@@ -200,7 +200,7 @@ CPlayer::~CPlayer()
 
 void CPlayer::Reset()
 {
-    int v4;
+    int i;
 
     x = m_side * 0xa0 + 0xf0;
     y = 0.0;
@@ -247,9 +247,9 @@ void CPlayer::Reset()
     m_dashBufferedPress = 0;
     m_command = kCmdNone;
     m_inputPos = 0;
-    v4 = 0;
-    for (; v4 < 0xb4; v4++) {
-        m_inputHistory[v4] = 0;
+    i = 0;
+    for (; i < 0xb4; i++) {
+        m_inputHistory[i] = 0;
     }
     m_playVoice = -1;
     m_playSound = -1;

@@ -8,25 +8,25 @@
 
 void CSayuri::UpdatePattern()
 {
-    WORD x8;
-    WORD l4;
+    WORD frameCount; // frames in the action's animation
+    WORD duration; // ticks the current frame lasts
 
     if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    EffectDesc l50;
-    l4 = (short)anims[pattern].frames[frame].duration;
-    x8 = anims[pattern].frameCount;
-    InitEffectDesc((EffectDesc*)&l50);
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    duration = (short)anims[pattern].frames[frame].duration;
+    frameCount = anims[pattern].frameCount;
+    InitEffectDesc((EffectDesc*)&effect);
     switch (pattern) {
     default:
         vx = 0.0;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -36,10 +36,10 @@ void CSayuri::UpdatePattern()
         vx = 0.7;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -49,10 +49,10 @@ void CSayuri::UpdatePattern()
         vx = -0.7;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -62,10 +62,10 @@ void CSayuri::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -87,10 +87,10 @@ void CSayuri::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -121,10 +121,10 @@ void CSayuri::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -151,10 +151,10 @@ void CSayuri::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -172,10 +172,10 @@ void CSayuri::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -186,10 +186,10 @@ void CSayuri::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -198,10 +198,10 @@ void CSayuri::UpdatePattern()
     case kFall:
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -217,10 +217,10 @@ void CSayuri::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -241,10 +241,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -269,10 +269,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -296,10 +296,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -328,13 +328,13 @@ void CSayuri::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -362,10 +362,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -394,10 +394,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -426,10 +426,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -458,10 +458,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -493,10 +493,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -525,10 +525,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -557,10 +557,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -589,10 +589,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -621,10 +621,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -655,10 +655,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -698,10 +698,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -741,10 +741,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -779,10 +779,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -817,10 +817,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -865,10 +865,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -913,10 +913,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -956,10 +956,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -999,10 +999,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1030,10 +1030,10 @@ void CSayuri::UpdatePattern()
             StartPattern();
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1056,10 +1056,10 @@ void CSayuri::UpdatePattern()
         vx = m_hitVx;
         vy = m_hitVy;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1086,19 +1086,19 @@ void CSayuri::UpdatePattern()
             vy = -2.5;
             ay = 0.025;
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1133,10 +1133,10 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1163,10 +1163,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1187,10 +1187,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1211,10 +1211,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1245,10 +1245,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1282,10 +1282,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1319,10 +1319,10 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1333,12 +1333,12 @@ void CSayuri::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1f3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x1e;
             vx = m_hitVx;
             vy = m_hitVy;
@@ -1350,10 +1350,10 @@ void CSayuri::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -1392,14 +1392,14 @@ void CSayuri::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1417,14 +1417,14 @@ void CSayuri::UpdatePattern()
     case kEncased:
         if (frame == 0 && timer == 0) {
             if (m_bounceDebrisOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_bounceDebrisOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1456,10 +1456,10 @@ void CSayuri::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1469,14 +1469,14 @@ void CSayuri::UpdatePattern()
     case kEncased2:
         if (frame == 0 && timer == 0) {
             if (m_bounceDebrisOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_bounceDebrisOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1508,10 +1508,10 @@ void CSayuri::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1521,14 +1521,14 @@ void CSayuri::UpdatePattern()
     case kEncasedAir:
         if (frame == 0 && timer == 0) {
             if (m_bounceDebrisOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_bounceDebrisOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1541,10 +1541,10 @@ void CSayuri::UpdatePattern()
         }
         vy += 0.04;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1564,14 +1564,14 @@ void CSayuri::UpdatePattern()
     case kEncasedSpin:
         if (frame == 0 && timer == 0) {
             if (m_bounceDebrisOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_bounceDebrisOut = 1;
             }
             if (m_patternVar1 == 0) {
@@ -1587,10 +1587,10 @@ void CSayuri::UpdatePattern()
         }
         vy += 0.06;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1607,20 +1607,20 @@ void CSayuri::UpdatePattern()
         break;
     case kFallInDarkness:
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1ef;
-            l50.x = 60.0;
-            l50.y = 40.0;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1ef;
+            effect.x = 60.0;
+            effect.y = 40.0;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -1628,13 +1628,13 @@ void CSayuri::UpdatePattern()
         break;
     case kWakeUp:
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8 - 1) {
+            if (frame == frameCount - 1) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1648,19 +1648,19 @@ void CSayuri::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1671,19 +1671,19 @@ void CSayuri::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1695,13 +1695,13 @@ void CSayuri::UpdatePattern()
             StartPattern();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kWakeUp;
                 StartPattern();
             }
@@ -1720,14 +1720,14 @@ void CSayuri::UpdatePattern()
             vy = 0.0;
             y = 0.0;
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x38);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x38);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
@@ -1748,13 +1748,13 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1776,14 +1776,14 @@ void CSayuri::UpdatePattern()
             vy = 0.0;
             y = 0.0;
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x38);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x38);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
@@ -1804,13 +1804,13 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1832,14 +1832,14 @@ void CSayuri::UpdatePattern()
             vy = 0.0;
             y = 0.0;
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x38);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x38);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
@@ -1860,13 +1860,13 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1888,14 +1888,14 @@ void CSayuri::UpdatePattern()
             vy = 0.0;
             y = 0.0;
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x25);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x25);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
@@ -1916,13 +1916,13 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1941,14 +1941,14 @@ void CSayuri::UpdatePattern()
             vy = 0.0;
             y = 0.0;
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x25);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x25);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
@@ -1969,13 +1969,13 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1994,14 +1994,14 @@ void CSayuri::UpdatePattern()
             vy = 0.0;
             y = 0.0;
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x25);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x25);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
@@ -2022,13 +2022,13 @@ void CSayuri::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2040,24 +2040,24 @@ void CSayuri::UpdatePattern()
             m_gauge = m_gauge + 0xf;
             ay = 0.06;
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x43);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x43);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
         vx = -1.2;
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2075,20 +2075,20 @@ void CSayuri::UpdatePattern()
         ay = 0.045;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2106,20 +2106,20 @@ void CSayuri::UpdatePattern()
         ay = 0.045;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2135,21 +2135,21 @@ void CSayuri::UpdatePattern()
     case 0xa1:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x46);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x46);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
                 ay = 0.035;
@@ -2167,12 +2167,12 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 8 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x46);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x46);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
@@ -2187,13 +2187,13 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0x13) {
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2208,22 +2208,22 @@ void CSayuri::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 3) {
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 vx = 1.5;
                 vy = -1.5;
                 m_playSound = 0x11;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2261,7 +2261,7 @@ void CSayuri::UpdatePattern()
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 3) {
@@ -2272,7 +2272,7 @@ void CSayuri::UpdatePattern()
             if (frame == 5) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 FaceOpponent();
                 pattern = kCrouch;
                 StartPattern();
@@ -2289,10 +2289,10 @@ void CSayuri::UpdatePattern()
         }
         timer++;
         m_patternVar1++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2326,10 +2326,10 @@ void CSayuri::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2365,27 +2365,27 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2401,32 +2401,32 @@ void CSayuri::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x38);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x38);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -2441,32 +2441,32 @@ void CSayuri::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             if (m_guardEffectOut == 0) {
-                l50.type = 0x190;
-                l50.x = (double)((int)x + facing * 0x1c);
-                l50.y = (double)((int)y - 0x25);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x190;
+                effect.x = (double)((int)x + facing * 0x1c);
+                effect.y = (double)((int)y - 0x25);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_guardEffectOut = 1;
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2500,21 +2500,21 @@ void CSayuri::UpdatePattern()
             break;
         }
         if (m_guardEffectOut == 0) {
-            l50.type = 0x190;
-            l50.x = (double)((int)x + facing * 0x1c);
-            l50.y = (double)((int)y - 0x43);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + facing * 0x1c);
+            effect.y = (double)((int)y - 0x43);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_guardEffectOut = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2535,27 +2535,27 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 FaceOpponent();
                 vx = m_patternVar1 * 0.01;
@@ -2584,10 +2584,10 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2612,7 +2612,7 @@ void CSayuri::UpdatePattern()
             m_playSound = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 3) {
@@ -2623,7 +2623,7 @@ void CSayuri::UpdatePattern()
             if (frame == 5) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -2658,13 +2658,13 @@ void CSayuri::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2700,13 +2700,13 @@ void CSayuri::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2730,13 +2730,13 @@ void CSayuri::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2761,13 +2761,13 @@ void CSayuri::UpdatePattern()
             m_patternVar1 = 2;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 8) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2803,13 +2803,13 @@ void CSayuri::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2848,13 +2848,13 @@ void CSayuri::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2893,13 +2893,13 @@ void CSayuri::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2936,13 +2936,13 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2975,13 +2975,13 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3014,13 +3014,13 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3048,7 +3048,7 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3065,11 +3065,11 @@ void CSayuri::UpdatePattern()
             vy = -2.4;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3080,20 +3080,20 @@ void CSayuri::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = 7;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = 7;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3118,16 +3118,16 @@ void CSayuri::UpdatePattern()
             (*m_opponent)->m_hitstop = 0x3c;
             (*m_opponent)->x = facing * 0x28 + x;
             (*m_opponent)->facing = -facing;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x26);
-            l50.y = (double)((int)y - 0x3a);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x26);
+            effect.y = (double)((int)y - 0x3a);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3136,7 +3136,7 @@ void CSayuri::UpdatePattern()
             } else {
                 m_hitsLeft = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3146,7 +3146,7 @@ void CSayuri::UpdatePattern()
     case kThrowHold:
         FocusCameraY(0x32, 3);
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3171,7 +3171,7 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->m_hitVx = -1.5;
                 (*m_opponent)->m_hitVy = -1.0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3193,11 +3193,11 @@ void CSayuri::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3219,11 +3219,11 @@ void CSayuri::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3252,11 +3252,11 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLand;
                 StartPattern();
             }
@@ -3271,17 +3271,17 @@ void CSayuri::UpdatePattern()
             StopMoving();
             pattern = kAirThrowHold;
             (*m_opponent)->pattern = kThrownStandHigh;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x29);
-            l50.y = (double)((int)y - 0x54);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x29);
+            effect.y = (double)((int)y - 0x54);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->x = facing * 0x29 + x;
             (*m_opponent)->y = y - 84.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
@@ -3290,7 +3290,7 @@ void CSayuri::UpdatePattern()
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kJumpC;
                 frame = 2;
             }
@@ -3308,13 +3308,13 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             if (m_patternVar1 == 2) {
-                l50.type = 0x1a6;
-                l50.x = (double)((int)x + facing * 0x29);
-                l50.y = (double)((int)y - 0x54);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a6;
+                effect.x = (double)((int)x + facing * 0x29);
+                effect.y = (double)((int)y - 0x54);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar1 > 2) {
                 m_playVoice = 0xa;
@@ -3346,7 +3346,7 @@ void CSayuri::UpdatePattern()
             ay = 0.035;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3354,7 +3354,7 @@ void CSayuri::UpdatePattern()
                 m_patternVar1++;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -3365,29 +3365,29 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x191;
-            l50.x = facing * 0x23 + x;
-            l50.y = -20.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = facing * 0x23 + x;
+            effect.y = -20.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_shotsOut++;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 8);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 8);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3400,29 +3400,29 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x191;
-            l50.x = facing * 0x23 + x;
-            l50.y = -80.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = facing * 0x23 + x;
+            effect.y = -80.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_shotsOut++;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.side = facing == 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.side = facing == 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3437,58 +3437,58 @@ void CSayuri::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x191;
-            l50.x = facing * 0x23 + x;
-            l50.y = -20.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = facing * 0x23 + x;
+            effect.y = -20.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_shotsOut++;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 8);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 8);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 8 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x191;
-            l50.x = facing * 0x23 + x;
-            l50.y = -80.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = facing * 0x23 + x;
+            effect.y = -80.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_shotsOut++;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.side = facing == 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.side = facing == 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3506,12 +3506,12 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 7 || frame == 8) {
             if (m_patternVar3 <= 0) {
-                l50.type = 0x22;
-                l50.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
-                l50.y = (double)((int)y + 3 - (WORD)Random(0, 6));
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x22;
+                effect.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
+                effect.y = (double)((int)y + 3 - (WORD)Random(0, 6));
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_patternVar3 = 2;
             }
             m_patternVar3--;
@@ -3542,13 +3542,13 @@ void CSayuri::UpdatePattern()
                 DealDamage(0x3b6, 900.0);
                 (*m_opponent)->m_hitstop = 0x5a;
                 ShakeScreen(6, 9);
-                l50.type = 0;
-                l50.x = facing * 0x19 + x;
-                l50.y = -41.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.sound = 0x24;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.x = facing * 0x19 + x;
+                effect.y = -41.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.sound = 0x24;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_playVoice = 0;
                 m_attackResult = 3;
             }
@@ -3571,19 +3571,19 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
                 vx = 1.8;
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0xa);
-                l50.y = (double)((int)y + 4);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0xa);
+                effect.y = (double)((int)y + 4);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             if (frame == 7 && m_patternVar1 < 1) {
                 frame = frame - 2;
@@ -3600,7 +3600,7 @@ void CSayuri::UpdatePattern()
                 vy = -1.5;
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3618,12 +3618,12 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 7 || frame == 8) {
             if (m_patternVar3 <= 0) {
-                l50.type = 0x22;
-                l50.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
-                l50.y = (double)((int)y + 3 - (WORD)Random(0, 6));
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x22;
+                effect.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
+                effect.y = (double)((int)y + 3 - (WORD)Random(0, 6));
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_patternVar3 = 2;
             }
             m_patternVar3--;
@@ -3654,13 +3654,13 @@ void CSayuri::UpdatePattern()
                 DealDamage(0x3b6, 900.0);
                 (*m_opponent)->m_hitstop = 0x5a;
                 ShakeScreen(6, 9);
-                l50.type = 0;
-                l50.x = facing * 0x19 + x;
-                l50.y = -41.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.sound = 0x24;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.x = facing * 0x19 + x;
+                effect.y = -41.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.sound = 0x24;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_playVoice = 0;
                 m_attackResult = 3;
             }
@@ -3683,19 +3683,19 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
                 vx = 1.8;
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0xa);
-                l50.y = (double)((int)y + 4);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0xa);
+                effect.y = (double)((int)y + 4);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             if (frame == 7 && m_patternVar1 < 2) {
                 frame = frame - 2;
@@ -3712,7 +3712,7 @@ void CSayuri::UpdatePattern()
                 vy = -1.5;
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3727,13 +3727,13 @@ void CSayuri::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if ((frame == 5 || frame == 6) && m_attackResult == 3) {
             frame = 7;
@@ -3741,24 +3741,24 @@ void CSayuri::UpdatePattern()
             m_attackResult = 0;
         }
         if ((frame == 5 || frame == 7) && m_patternVar2 <= 0) {
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 4);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 4);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_patternVar2 = 0xf;
         }
         m_patternVar2--;
         if (frame == 7 || frame == 8) {
             if (m_patternVar3 <= 0) {
-                l50.type = 0x22;
-                l50.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
-                l50.y = (double)((int)y + 3 - (WORD)Random(0, 6));
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x22;
+                effect.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
+                effect.y = (double)((int)y + 3 - (WORD)Random(0, 6));
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_patternVar3 = 2;
             }
             m_patternVar3--;
@@ -3789,13 +3789,13 @@ void CSayuri::UpdatePattern()
                 DealDamage(0x546, 750.0);
                 (*m_opponent)->m_hitstop = 0x5a;
                 ShakeScreen(6, 9);
-                l50.type = 0;
-                l50.x = facing * 0x19 + x;
-                l50.y = -41.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.sound = 0x24;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.x = facing * 0x19 + x;
+                effect.y = -41.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.sound = 0x24;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_playVoice = 0;
                 m_attackResult = 3;
             }
@@ -3818,7 +3818,7 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3840,7 +3840,7 @@ void CSayuri::UpdatePattern()
                 vy = -1.5;
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3859,27 +3859,27 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0xa0;
             m_playSound = 3;
             m_playVoice = 2;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0xa);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 9;
-            l50.x = (double)((int)x + facing * 0xa);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0xa);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 9;
+            effect.x = (double)((int)x + facing * 0xa);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->m_noAirRecovery = 1;
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -3909,11 +3909,11 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -3923,7 +3923,7 @@ void CSayuri::UpdatePattern()
     case k214ParryCounter:
         FocusCameraY(0x32, 3);
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3959,7 +3959,7 @@ void CSayuri::UpdatePattern()
             if (frame == 0x13) {
                 m_playSound = 0x1a;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3990,24 +3990,24 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
-                l50.type = 0x1a5;
-                l50.x = x;
-                l50.y = y + 25.0;
-                l50.facing = facing;
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.type = 0x1a5;
+                effect.x = x;
+                effect.y = y + 25.0;
+                effect.facing = facing;
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             m_attackResult = 0;
             if (frame == 0xb) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -4019,24 +4019,24 @@ void CSayuri::UpdatePattern()
             m_playVoice = 8;
             StopMoving();
             m_hitsLeft = 1;
-            l50.type = 0x193;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x193;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (frame == 3 && timer == 0) {
             vx = 1.3;
             vy = 1.3;
-            l50.type = 0x194;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x194;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (y + vy > 0.0 && frame > 3 && frame < 7) {
             StopMoving();
@@ -4047,7 +4047,7 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4058,7 +4058,7 @@ void CSayuri::UpdatePattern()
             if (frame == 7) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -4069,13 +4069,13 @@ void CSayuri::UpdatePattern()
             m_playVoice = 8;
             StopMoving();
             m_hitsLeft = 2;
-            l50.type = 0x193;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x193;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (frame > 2 && m_attackResult == 2) {
             StartPattern();
@@ -4086,13 +4086,13 @@ void CSayuri::UpdatePattern()
         if (frame == 3 && timer == 0) {
             vx = 1.5;
             vy = 1.5;
-            l50.type = 0x194;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x194;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (y + vy > 0.0 && frame > 3 && frame < 7) {
             StopMoving();
@@ -4103,7 +4103,7 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4114,7 +4114,7 @@ void CSayuri::UpdatePattern()
             if (frame == 7) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -4125,35 +4125,35 @@ void CSayuri::UpdatePattern()
             m_playVoice = 9;
             StopMoving();
             m_hitsLeft = 1;
-            l50.type = 0x193;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x193;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             if (m_rfBlue == 0) {
                 m_rfGauge -= 500.0;
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_patternVar2++;
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x194;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x194;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             vx = 1.7;
             vy = 1.7;
             m_hitsLeft = 2;
@@ -4167,7 +4167,7 @@ void CSayuri::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4178,7 +4178,7 @@ void CSayuri::UpdatePattern()
             if (frame == 7) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kCrouch;
             }
@@ -4193,13 +4193,13 @@ void CSayuri::UpdatePattern()
             m_gauge = m_gauge + 0x28;
             m_playVoice = 6;
             vx = 4.0;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 4);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 4);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (vx > 0.0) {
             vx -= 0.14;
@@ -4208,13 +4208,13 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4235,13 +4235,13 @@ void CSayuri::UpdatePattern()
                 vy = -1.5;
                 ay = 0.05;
             }
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 4);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 4);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
         if (frame > 2 && frame < 8) {
@@ -4255,7 +4255,7 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -4264,7 +4264,7 @@ void CSayuri::UpdatePattern()
             if (frame == 7) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -4279,13 +4279,13 @@ void CSayuri::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
             m_playVoice = 6;
@@ -4297,13 +4297,13 @@ void CSayuri::UpdatePattern()
                 vy = -1.5;
                 ay = 0.05;
             }
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 4);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 4);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
         if (frame > 2 && frame < 8) {
@@ -4324,13 +4324,13 @@ void CSayuri::UpdatePattern()
             m_gauge = m_gauge + 0x14;
             m_playSound = 0x15;
             vx = 4.0;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 4);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 4);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (vx > 0.0 && y == 0.0) {
             vx -= 0.14;
@@ -4339,7 +4339,7 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -4351,7 +4351,7 @@ void CSayuri::UpdatePattern()
             if (frame == 0xe) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4368,21 +4368,21 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x192;
-            l50.x = facing * 0x28 + x;
-            l50.y = y - 60.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x192;
+            effect.x = facing * 0x28 + x;
+            effect.y = y - 60.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_shotsOut++;
             vy = -1.4;
             ay = 0.025;
             vx = -0.5;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4407,21 +4407,21 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x1a3;
-            l50.x = facing * 0x28 + x;
-            l50.y = y - 40.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a3;
+            effect.x = facing * 0x28 + x;
+            effect.y = y - 40.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_shotsOut++;
             vy = -1.4;
             ay = 0.025;
             vx = -0.5;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4446,21 +4446,21 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x1a4;
-            l50.x = facing * 0x28 + x;
-            l50.y = y - 40.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a4;
+            effect.x = facing * 0x28 + x;
+            effect.y = y - 40.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_shotsOut++;
             vy = -1.4;
             ay = 0.025;
             vx = -0.5;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4487,11 +4487,11 @@ void CSayuri::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -4510,14 +4510,14 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x + facing * 0xd);
-            l50.y = (double)((int)y - 0x34);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x + facing * 0xd);
+            effect.y = (double)((int)y - 0x34);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
@@ -4530,12 +4530,12 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 7 || frame == 8) {
             if (m_patternVar3 <= 0) {
-                l50.type = 0x22;
-                l50.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
-                l50.y = (double)((int)y + 3 - (WORD)Random(0, 6));
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x22;
+                effect.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
+                effect.y = (double)((int)y + 3 - (WORD)Random(0, 6));
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_patternVar3 = 2;
             }
             m_patternVar3--;
@@ -4566,13 +4566,13 @@ void CSayuri::UpdatePattern()
                 DealDamage(0x8ca, 900.0);
                 (*m_opponent)->m_hitstop = 0x5a;
                 ShakeScreen(0xa, 0xa);
-                l50.type = 0x195;
-                l50.x = x;
-                l50.y = 0.0;
-                l50.scale = 2;
-                l50.layer = 1;
+                effect.type = 0x195;
+                effect.x = x;
+                effect.y = 0.0;
+                effect.scale = 2;
+                effect.layer = 1;
                 m_playSound = 0x16;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
                 m_playVoice = 0;
                 m_attackResult = 3;
             }
@@ -4595,19 +4595,19 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
                 vx = 2.5;
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0xa);
-                l50.y = (double)((int)y + 4);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0xa);
+                effect.y = (double)((int)y + 4);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             if (frame == 7 && m_patternVar1 < 1) {
                 frame = frame - 2;
@@ -4624,7 +4624,7 @@ void CSayuri::UpdatePattern()
                 vy = -1.5;
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -4636,14 +4636,14 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0xd);
-            l50.y = (double)((int)y - 0x34);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0xd);
+            effect.y = (double)((int)y - 0x34);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
@@ -4656,12 +4656,12 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 7 || frame == 8) {
             if (m_patternVar3 <= 0) {
-                l50.type = 0x22;
-                l50.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
-                l50.y = (double)((int)y + 3 - (WORD)Random(0, 6));
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x22;
+                effect.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
+                effect.y = (double)((int)y + 3 - (WORD)Random(0, 6));
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_patternVar3 = 2;
             }
             m_patternVar3--;
@@ -4701,13 +4701,13 @@ void CSayuri::UpdatePattern()
                     (*m_opponent)->m_hitstop = 0x12c;
                 }
                 ShakeScreen(0xa, 0xa);
-                l50.type = 0x195;
-                l50.x = x;
-                l50.y = 0.0;
-                l50.scale = 2;
-                l50.layer = 1;
+                effect.type = 0x195;
+                effect.x = x;
+                effect.y = 0.0;
+                effect.scale = 2;
+                effect.layer = 1;
                 m_playSound = 0x16;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
                 m_playVoice = 0;
                 m_attackResult = 3;
             }
@@ -4737,19 +4737,19 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
                 vx = 3.0;
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0xa);
-                l50.y = (double)((int)y + 4);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0xa);
+                effect.y = (double)((int)y + 4);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             if (frame == 5) {
                 m_invulTime = 9;
@@ -4769,7 +4769,7 @@ void CSayuri::UpdatePattern()
                 vy = -1.5;
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -4781,14 +4781,14 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0xd);
-            l50.y = (double)((int)y - 0x34);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0xd);
+            effect.y = (double)((int)y - 0x34);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 1) {
@@ -4805,12 +4805,12 @@ void CSayuri::UpdatePattern()
         }
         if (frame == 7 || frame == 8) {
             if (m_patternVar3 <= 0) {
-                l50.type = 0x22;
-                l50.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
-                l50.y = (double)((int)y + 3 - (WORD)Random(0, 6));
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x22;
+                effect.x = (double)((int)x + facing * 0xa - (WORD)Random(0, 8));
+                effect.y = (double)((int)y + 3 - (WORD)Random(0, 6));
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_patternVar3 = 2;
             }
             m_patternVar3--;
@@ -4849,13 +4849,13 @@ void CSayuri::UpdatePattern()
                     (*m_opponent)->m_hitstop = 0x12c;
                 }
                 ShakeScreen(0xa, 0xa);
-                l50.type = 0x195;
-                l50.x = x;
-                l50.y = 0.0;
-                l50.scale = 2;
-                l50.layer = 1;
+                effect.type = 0x195;
+                effect.x = x;
+                effect.y = 0.0;
+                effect.scale = 2;
+                effect.layer = 1;
                 m_playSound = 0x16;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
                 m_playVoice = 0;
                 m_attackResult = 3;
             }
@@ -4885,19 +4885,19 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
                 vx = 3.5;
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0xa);
-                l50.y = (double)((int)y + 4);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0xa);
+                effect.y = (double)((int)y + 4);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             if (frame == 5) {
                 m_invulTime = 0x2d;
@@ -4917,7 +4917,7 @@ void CSayuri::UpdatePattern()
                 vy = -1.5;
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -4933,61 +4933,61 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 0x10 && frame < 0x16) {
             m_patternVar2++;
             if (m_patternVar2 == 0x30) {
-                l50.type = 0x198;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)((int)y - 3);
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x198;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)((int)y - 3);
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x4e) {
-                l50.type = 0x19b;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)((int)y + 6);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19b;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)((int)y + 6);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
         }
         if (frame == 0x11 && timer == 0) {
-            l50.type = 0x196;
+            effect.type = 0x196;
             m_playVoice = 3;
-            l50.x = (double)((int)x + facing * 0x72);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.x = (double)((int)x + facing * 0x72);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_patternVar1++;
         }
         if (frame > 1) {
             FocusCameraY(0x32, 3);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 0x16 && m_patternVar1 < 8) {
                 frame = 0x11;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5004,81 +5004,81 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 0x10 && frame < 0x16) {
             m_patternVar2++;
             if (m_patternVar2 == 0x1e) {
-                l50.type = 0x198;
-                l50.x = (double)((int)x + facing * 0x3c);
-                l50.y = (double)((int)y - 1);
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x198;
+                effect.x = (double)((int)x + facing * 0x3c);
+                effect.y = (double)((int)y - 1);
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x37) {
-                l50.type = 0x19b;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)((int)y + 6);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19b;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)((int)y + 6);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x46) {
-                l50.type = 0x199;
-                l50.x = (double)((int)x - facing * 0xa);
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x199;
+                effect.x = (double)((int)x - facing * 0xa);
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x55) {
-                l50.type = 0x19c;
-                l50.x = (double)((int)x - facing * 0x28);
-                l50.y = (double)((int)y + 8);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19c;
+                effect.x = (double)((int)x - facing * 0x28);
+                effect.y = (double)((int)y + 8);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
         }
         if (frame == 0x11 && timer == 0) {
-            l50.type = 0x196;
+            effect.type = 0x196;
             m_playVoice = 3;
-            l50.x = (double)((int)x + facing * 0x72);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.x = (double)((int)x + facing * 0x72);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_patternVar1++;
         }
         if (frame > 1) {
             FocusCameraY(0x32, 3);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 0x16 && m_patternVar1 < 0xc) {
                 frame = 0x11;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5095,14 +5095,14 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 0) {
@@ -5111,89 +5111,89 @@ void CSayuri::UpdatePattern()
         if (frame > 0x10 && frame < 0x16) {
             m_patternVar2++;
             if (m_patternVar2 == 0x1e) {
-                l50.type = 0x198;
-                l50.x = (double)((int)x + facing * 0x50);
-                l50.y = (double)((int)y - 1);
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x198;
+                effect.x = (double)((int)x + facing * 0x50);
+                effect.y = (double)((int)y - 1);
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x37) {
-                l50.type = 0x19b;
-                l50.x = (double)((int)x + facing * 0x64);
-                l50.y = (double)((int)y + 6);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19b;
+                effect.x = (double)((int)x + facing * 0x64);
+                effect.y = (double)((int)y + 6);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x46) {
-                l50.type = 0x199;
-                l50.x = (double)((int)x - facing * 0xa);
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x199;
+                effect.x = (double)((int)x - facing * 0xa);
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x55) {
-                l50.type = 0x19c;
-                l50.x = (double)((int)x - facing * 0x28);
-                l50.y = (double)((int)y + 0xa);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19c;
+                effect.x = (double)((int)x - facing * 0x28);
+                effect.y = (double)((int)y + 0xa);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x64) {
-                l50.type = 0x19a;
-                l50.x = (double)((int)x + facing * 0x37);
-                l50.y = (double)((int)y + 5);
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19a;
+                effect.x = (double)((int)x + facing * 0x37);
+                effect.y = (double)((int)y + 5);
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x73) {
-                l50.type = 0x19d;
-                l50.x = (double)((int)x - facing * 0x46);
-                l50.y = (double)((int)y + 2);
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.shadow = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19d;
+                effect.x = (double)((int)x - facing * 0x46);
+                effect.y = (double)((int)y + 2);
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.shadow = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
         }
         if (frame == 0x11 && timer == 0) {
-            l50.type = 0x196;
+            effect.type = 0x196;
             m_playVoice = 3;
-            l50.x = (double)((int)x + facing * 0x72);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.x = (double)((int)x + facing * 0x72);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_patternVar1++;
         }
         if (frame > 1) {
             FocusCameraY(0x32, 3);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 0x16 && m_patternVar1 < 0x19) {
                 frame = 0x11;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5208,14 +5208,14 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x - facing * 0x18);
-            l50.y = (double)((int)y - 0x35);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x - facing * 0x18);
+            effect.y = (double)((int)y - 0x35);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 5 && m_attackResult == 3) {
             vx = 0.0;
@@ -5229,52 +5229,52 @@ void CSayuri::UpdatePattern()
             (*m_opponent)->x = facing * 0x12 + x;
             (*m_opponent)->y = -87.0;
             (*m_opponent)->facing = -facing;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x12);
-            l50.y = (double)((int)y - 0x57);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x12);
+            effect.y = (double)((int)y - 0x57);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         if (frame > 9 && frame < 0xc) {
             m_patternVar2++;
             if (m_patternVar2 == 0xc) {
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x15) {
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
         }
         if (frame > 1) {
             FocusCameraY(0x32, 3);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5287,7 +5287,7 @@ void CSayuri::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5300,26 +5300,26 @@ void CSayuri::UpdatePattern()
             m_patternVar2++;
             if (m_patternVar2 == 0x1e && m_patternVar1 < 7) {
                 m_patternVar2 = 0;
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + -0x3c + (WORD)Random(0, 0x78));
-                l50.y = (double)(-0xe6 - (WORD)Random(0, 0x14));
-                l50.scale = 2;
-                l50.layer = l50.y > -240.0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0;
-                l50.x = (double)((int)x + facing * 0x12);
-                l50.y = (double)((int)y - 0x57);
-                l50.scale = 2;
-                l50.sound = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + -0x3c + (WORD)Random(0, 0x78));
+                effect.y = (double)(-0xe6 - (WORD)Random(0, 0x14));
+                effect.scale = 2;
+                effect.layer = effect.y > -240.0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0;
+                effect.x = (double)((int)x + facing * 0x12);
+                effect.y = (double)((int)y - 0x57);
+                effect.scale = 2;
+                effect.sound = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_hitstop = 0x1e;
                 ShakeScreen(3, 0);
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5353,43 +5353,43 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->facing = -facing;
                 (*m_opponent)->m_hitVx = -1.5;
                 (*m_opponent)->m_hitVy = -1.0;
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)(int)x;
-                l50.y = -225.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x + facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)(int)x;
+                effect.y = -225.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x + facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 9 && m_patternVar3 < 0xf) {
                 frame = frame - 2;
                 m_patternVar3++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5404,14 +5404,14 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x - facing * 0x18);
-            l50.y = (double)((int)y - 0x35);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x - facing * 0x18);
+            effect.y = (double)((int)y - 0x35);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 5 && m_attackResult == 3) {
             vx = 0.0;
@@ -5425,52 +5425,52 @@ void CSayuri::UpdatePattern()
             (*m_opponent)->x = facing * 0x12 + x;
             (*m_opponent)->y = -87.0;
             (*m_opponent)->facing = -facing;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x12);
-            l50.y = (double)((int)y - 0x57);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x12);
+            effect.y = (double)((int)y - 0x57);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         if (frame > 9 && frame < 0xc) {
             m_patternVar2++;
             if (m_patternVar2 == 0xc) {
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x15) {
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
         }
         if (frame > 1) {
             FocusCameraY(0x32, 3);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5483,7 +5483,7 @@ void CSayuri::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5496,26 +5496,26 @@ void CSayuri::UpdatePattern()
             m_patternVar2++;
             if (m_patternVar2 == 0x1a && m_patternVar1 < 0xf) {
                 m_patternVar2 = 0;
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + -0x50 + (WORD)Random(0, 0xa0));
-                l50.y = (double)(-0xe6 - (WORD)Random(0, 0x14));
-                l50.scale = 2;
-                l50.layer = l50.y > -240.0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0;
-                l50.x = (double)((int)x + facing * 0x12);
-                l50.y = (double)((int)y - 0x57);
-                l50.scale = 2;
-                l50.sound = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + -0x50 + (WORD)Random(0, 0xa0));
+                effect.y = (double)(-0xe6 - (WORD)Random(0, 0x14));
+                effect.scale = 2;
+                effect.layer = effect.y > -240.0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0;
+                effect.x = (double)((int)x + facing * 0x12);
+                effect.y = (double)((int)y - 0x57);
+                effect.scale = 2;
+                effect.sound = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_hitstop = 0x1e;
                 ShakeScreen(3, 0);
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5549,55 +5549,55 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->facing = -facing;
                 (*m_opponent)->m_hitVx = -1.5;
                 (*m_opponent)->m_hitVy = -1.0;
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)(int)x;
-                l50.y = -225.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x + facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x + facing * 0x5a);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x5a);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)(int)x;
+                effect.y = -225.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x + facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x + facing * 0x5a);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x5a);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 9 && m_patternVar3 < 0xf) {
                 frame = frame - 2;
                 m_patternVar3++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5612,14 +5612,14 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x - facing * 0x18);
-            l50.y = (double)((int)y - 0x35);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x - facing * 0x18);
+            effect.y = (double)((int)y - 0x35);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 0) {
@@ -5637,52 +5637,52 @@ void CSayuri::UpdatePattern()
             (*m_opponent)->x = facing * 0x12 + x;
             (*m_opponent)->y = -87.0;
             (*m_opponent)->facing = -facing;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x12);
-            l50.y = (double)((int)y - 0x57);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x12);
+            effect.y = (double)((int)y - 0x57);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         if (frame > 9 && frame < 0xc) {
             m_patternVar2++;
             if (m_patternVar2 == 0xc) {
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (m_patternVar2 == 0x15) {
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
         }
         if (frame > 1) {
             FocusCameraY(0x32, 3);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5695,7 +5695,7 @@ void CSayuri::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5711,26 +5711,26 @@ void CSayuri::UpdatePattern()
             m_patternVar2++;
             if (m_patternVar2 == 0xf && m_patternVar1 < 0x18) {
                 m_patternVar2 = 0;
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + -0x64 + (WORD)Random(0, 0xc8));
-                l50.y = (double)(-0xe6 - (WORD)Random(0, 0x14));
-                l50.scale = 2;
-                l50.layer = l50.y > -240.0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0;
-                l50.x = (double)((int)x + facing * 0x12);
-                l50.y = (double)((int)y - 0x57);
-                l50.scale = 2;
-                l50.sound = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + -0x64 + (WORD)Random(0, 0xc8));
+                effect.y = (double)(-0xe6 - (WORD)Random(0, 0x14));
+                effect.scale = 2;
+                effect.layer = effect.y > -240.0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0;
+                effect.x = (double)((int)x + facing * 0x12);
+                effect.y = (double)((int)y - 0x57);
+                effect.scale = 2;
+                effect.sound = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_hitstop = 0x1e;
                 ShakeScreen(3, 0);
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5764,67 +5764,67 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->facing = -facing;
                 (*m_opponent)->m_hitVx = -1.5;
                 (*m_opponent)->m_hitVy = -1.0;
-                l50.type = 0x1a0;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x32);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)(int)x;
-                l50.y = -225.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x + facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x46);
-                l50.y = -210.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x + facing * 0x5a);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x5a);
-                l50.y = -240.0;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x + facing * 0x64);
-                l50.y = -230.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.x = (double)((int)x - facing * 0x64);
-                l50.y = -230.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x32);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)(int)x;
+                effect.y = -225.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x + facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x46);
+                effect.y = -210.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x + facing * 0x5a);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x5a);
+                effect.y = -240.0;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x + facing * 0x64);
+                effect.y = -230.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.x = (double)((int)x - facing * 0x64);
+                effect.y = -230.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 9 && m_patternVar3 < 0xf) {
                 frame = frame - 2;
                 m_patternVar3++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5839,17 +5839,17 @@ void CSayuri::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x - facing * 0x18);
-            l50.y = (double)((int)y - 0x2b);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x - facing * 0x18);
+            effect.y = (double)((int)y - 0x2b);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
             m_game->FlashNegative(0xf);
@@ -5865,12 +5865,12 @@ void CSayuri::UpdatePattern()
             x = (*m_opponent)->x + ((*m_opponent)->m_pointX[0] + 0xf) * facing;
             y = (*m_opponent)->y + 46.0 + (*m_opponent)->m_pointY[0];
             (*m_opponent)->facing = -facing;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x35);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x35);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         if (frame == 0xb || frame == 0xc) {
@@ -5883,20 +5883,20 @@ void CSayuri::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 0xa) {
                 x = (*m_opponent)->x;
                 y = (*m_opponent)->y - 100.0;
-                l50.type = 0x19e;
-                l50.x = (double)(int)x;
-                l50.y = y - 60.0;
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19e;
+                effect.x = (double)(int)x;
+                effect.y = y - 60.0;
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0xb) {
                 ay = 0.035;
@@ -5910,7 +5910,7 @@ void CSayuri::UpdatePattern()
             if (frame == 0xd) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -5926,7 +5926,7 @@ void CSayuri::UpdatePattern()
         }
         (*m_opponent)->FocusCameraY(0x32, 3);
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5938,34 +5938,34 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->StartPattern();
-                l50.type = 0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.sound = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.sound = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             if (frame == 0xa || frame == 0x10 || frame == 0x16 || frame == 0x19 || frame == 0x1c) {
-                l50.type = 0x19f;
-                l50.x = (double)(int)x;
-                l50.y = 0.0;
-                l50.scale = 2;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x19f;
+                effect.x = (double)(int)x;
+                effect.y = 0.0;
+                effect.scale = 2;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0xa || frame == 0xd || frame == 0x10 || frame == 0x13 || frame == 0x16 || frame == 0x19) {
                 DealDamage(0x64, 998.0);
                 ShakeScreen(2, 0);
                 (*m_opponent)->m_koDelay = 0x4650;
-                l50.type = 0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.sound = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.sound = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_hitstop = 0x1e;
             }
             if (frame == 0xf && m_patternVar1 < 0x16) {
@@ -5976,16 +5976,16 @@ void CSayuri::UpdatePattern()
                 DealDamage(0x32, 999.0);
                 (*m_opponent)->m_koDelay = 0;
                 ShakeScreen(6, 0);
-                l50.type = 0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.sound = 0x24;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.sound = 0x24;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_hitstop = 0x1e;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();

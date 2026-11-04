@@ -8,26 +8,26 @@
 
 void CShiori::UpdatePattern()
 {
-    WORD x8;
-    WORD l4;
+    WORD frameCount; // frames in the action's animation
+    WORD duration; // ticks the current frame lasts
 
     if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    EffectDesc l50;
-    l4 = (short)anims[pattern].frames[frame].duration;
-    x8 = anims[pattern].frameCount;
-    InitEffectDesc((EffectDesc*)&l50);
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    duration = (short)anims[pattern].frames[frame].duration;
+    frameCount = anims[pattern].frameCount;
+    InitEffectDesc((EffectDesc*)&effect);
     switch (pattern) {
     default:
         m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -37,10 +37,10 @@ void CShiori::UpdatePattern()
         vx = 0.7;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -50,10 +50,10 @@ void CShiori::UpdatePattern()
         vx = -0.7;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -64,10 +64,10 @@ void CShiori::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -91,10 +91,10 @@ void CShiori::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -127,10 +127,10 @@ void CShiori::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -159,10 +159,10 @@ void CShiori::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -181,10 +181,10 @@ void CShiori::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -196,10 +196,10 @@ void CShiori::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -209,10 +209,10 @@ void CShiori::UpdatePattern()
         vy = vy + ay;
         m_dashMomentum = 0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -229,10 +229,10 @@ void CShiori::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -254,10 +254,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -283,10 +283,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -311,10 +311,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -343,13 +343,13 @@ void CShiori::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -378,10 +378,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -414,10 +414,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -450,10 +450,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -486,10 +486,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -522,10 +522,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -557,10 +557,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -593,10 +593,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -626,10 +626,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -659,10 +659,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -693,10 +693,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -736,10 +736,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -779,10 +779,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -817,10 +817,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -855,10 +855,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -903,10 +903,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -951,10 +951,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -994,10 +994,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1037,10 +1037,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1068,10 +1068,10 @@ void CShiori::UpdatePattern()
             StartPattern();
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1094,10 +1094,10 @@ void CShiori::UpdatePattern()
         vx = m_hitVx;
         vy = m_hitVy;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1124,19 +1124,19 @@ void CShiori::UpdatePattern()
             vy = -2.5;
             ay = 0.025;
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1171,10 +1171,10 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1202,10 +1202,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1227,10 +1227,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1252,10 +1252,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1287,10 +1287,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1325,10 +1325,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1363,10 +1363,10 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1377,12 +1377,12 @@ void CShiori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1f3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x1e;
             vx = m_hitVx;
             vy = m_hitVy;
@@ -1394,10 +1394,10 @@ void CShiori::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -1436,14 +1436,14 @@ void CShiori::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1461,14 +1461,14 @@ void CShiori::UpdatePattern()
     case kEncased:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1500,10 +1500,10 @@ void CShiori::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1513,14 +1513,14 @@ void CShiori::UpdatePattern()
     case kEncased2:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1552,10 +1552,10 @@ void CShiori::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1565,14 +1565,14 @@ void CShiori::UpdatePattern()
     case kEncasedAir:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1585,10 +1585,10 @@ void CShiori::UpdatePattern()
         }
         vy += 0.04;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1608,14 +1608,14 @@ void CShiori::UpdatePattern()
     case kEncasedSpin:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_patternVar1 == 0) {
@@ -1631,10 +1631,10 @@ void CShiori::UpdatePattern()
         }
         vy += 0.06;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1651,20 +1651,20 @@ void CShiori::UpdatePattern()
         break;
     case kFallInDarkness:
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1ef;
-            l50.x = 60.0;
-            l50.y = 40.0;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1ef;
+            effect.x = 60.0;
+            effect.y = 40.0;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -1672,13 +1672,13 @@ void CShiori::UpdatePattern()
         break;
     case kWakeUp:
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8 - 1) {
+            if (frame == frameCount - 1) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1692,19 +1692,19 @@ void CShiori::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1715,19 +1715,19 @@ void CShiori::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1740,13 +1740,13 @@ void CShiori::UpdatePattern()
             pattern = kWakeUp;
             StartPattern();
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kWakeUp;
                 StartPattern();
             }
@@ -1777,13 +1777,13 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1817,13 +1817,13 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1857,13 +1857,13 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1897,13 +1897,13 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1934,13 +1934,13 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1971,13 +1971,13 @@ void CShiori::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1992,10 +1992,10 @@ void CShiori::UpdatePattern()
         vx = -1.2;
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2013,20 +2013,20 @@ void CShiori::UpdatePattern()
         ay = 0.045;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2044,20 +2044,20 @@ void CShiori::UpdatePattern()
         ay = 0.045;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2073,21 +2073,21 @@ void CShiori::UpdatePattern()
     case 0xa1:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
                 ay = 0.035;
@@ -2105,12 +2105,12 @@ void CShiori::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
@@ -2125,13 +2125,13 @@ void CShiori::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0xf) {
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2161,13 +2161,13 @@ void CShiori::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2207,10 +2207,10 @@ void CShiori::UpdatePattern()
             timer = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 FaceOpponent();
                 pattern = kStand;
                 StartPattern();
@@ -2228,10 +2228,10 @@ void CShiori::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2265,10 +2265,10 @@ void CShiori::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2305,27 +2305,27 @@ void CShiori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2342,21 +2342,21 @@ void CShiori::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -2372,21 +2372,21 @@ void CShiori::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2420,10 +2420,10 @@ void CShiori::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2444,19 +2444,19 @@ void CShiori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 vx = m_patternVar1 * 0.01;
                 vy = m_patternVar2 * 0.01;
@@ -2485,10 +2485,10 @@ void CShiori::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2513,7 +2513,7 @@ void CShiori::UpdatePattern()
             m_playSound = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
@@ -2524,7 +2524,7 @@ void CShiori::UpdatePattern()
             if (frame == 0xa) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -2559,13 +2559,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2601,13 +2601,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 4) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2631,13 +2631,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 6) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2683,17 +2683,17 @@ void CShiori::UpdatePattern()
             m_gauge = m_gauge + 0x23;
             m_playSound = 0x14;
             m_hitsLeft = 1;
-            l50.type = 0x190;
-            l50.x = (double)((int)x + facing * 0x1e);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.sound = 1;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + facing * 0x1e);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.sound = 1;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 6) {
@@ -2706,7 +2706,7 @@ void CShiori::UpdatePattern()
                     m_hitsLeft = 0;
                 }
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2742,13 +2742,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2787,13 +2787,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 4) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2820,13 +2820,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 4) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2863,13 +2863,13 @@ void CShiori::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2902,7 +2902,7 @@ void CShiori::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && m_patternVar1 == 0) {
@@ -2912,7 +2912,7 @@ void CShiori::UpdatePattern()
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2946,7 +2946,7 @@ void CShiori::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 6 && m_patternVar1 < 4) {
@@ -2956,7 +2956,7 @@ void CShiori::UpdatePattern()
             if (m_hitsLeft > 0) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2980,19 +2980,19 @@ void CShiori::UpdatePattern()
             (*m_opponent)->StopMoving();
             pattern = kThrowConnected;
             (*m_opponent)->pattern = kThrownStandHigh2;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x25);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x25);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3021,7 +3021,7 @@ void CShiori::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3029,7 +3029,7 @@ void CShiori::UpdatePattern()
                 m_patternVar3++;
                 frame = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -3051,13 +3051,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3091,13 +3091,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3123,7 +3123,7 @@ void CShiori::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
@@ -3135,7 +3135,7 @@ void CShiori::UpdatePattern()
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3156,13 +3156,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3183,13 +3183,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3211,13 +3211,13 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3231,12 +3231,12 @@ void CShiori::UpdatePattern()
             (*m_opponent)->m_noAirRecovery = 1;
             StopMoving();
             StartPattern();
-            l50.type = 0;
-            l50.x = (double)((int)x + (facing << 5));
-            l50.y = (double)((int)y - 0x39);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + (facing << 5));
+            effect.y = (double)((int)y - 0x39);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             frame = 0;
             timer = 0;
             pattern = kAirThrowConnected;
@@ -3246,7 +3246,7 @@ void CShiori::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
@@ -3255,7 +3255,7 @@ void CShiori::UpdatePattern()
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kJumpC;
                 frame = 2;
             }
@@ -3281,7 +3281,7 @@ void CShiori::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3289,7 +3289,7 @@ void CShiori::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -3302,25 +3302,25 @@ void CShiori::UpdatePattern()
             m_patternVar1 = 5;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 4) {
-                l50.type = 0x191;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x191;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_playVoice = 5;
             }
             if (frame == 7 && m_patternVar1 > 0) {
                 frame = frame - 2;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3334,25 +3334,25 @@ void CShiori::UpdatePattern()
             m_patternVar1 = 3;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 4) {
-                l50.type = 0x191;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x191;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_playVoice = 5;
             }
             if (frame == 7 && m_patternVar1 > 0) {
                 frame = frame - 2;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3370,13 +3370,13 @@ void CShiori::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
@@ -3384,49 +3384,49 @@ void CShiori::UpdatePattern()
             m_patternVar1 = 6;
         }
         if (m_patternVar2 == 0x14) {
-            l50.type = 0x1ab;
-            l50.x = (double)((int)x + facing * 0x2d);
-            l50.y = (double)((int)y - 0x14);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1ab;
+            effect.x = (double)((int)x + facing * 0x2d);
+            effect.y = (double)((int)y - 0x14);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 5;
         }
         if (m_patternVar2 == 0x28) {
-            l50.type = 0x1ab;
-            l50.x = (double)((int)x + facing * 0x2d);
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1ab;
+            effect.x = (double)((int)x + facing * 0x2d);
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 5;
         }
         if (frame > 4) {
             m_patternVar2++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 5) {
-                l50.type = 0x1ab;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.sound = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1ab;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.sound = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_playVoice = 5;
             }
             if (frame == 7 && m_patternVar1 > 0) {
                 frame = frame - 2;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3450,7 +3450,7 @@ void CShiori::UpdatePattern()
             m_gauge = m_gauge + 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (m_hitsLeft > 0) {
@@ -3460,7 +3460,7 @@ void CShiori::UpdatePattern()
                 frame = frame - 4;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3484,7 +3484,7 @@ void CShiori::UpdatePattern()
             m_gauge = m_gauge + 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3492,7 +3492,7 @@ void CShiori::UpdatePattern()
                 frame = frame - 4;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3510,22 +3510,22 @@ void CShiori::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 3 && timer == 0 && m_patternVar1 == 0) {
-            l50.type = 0x1a1;
-            l50.facing = facing;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x30);
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a1;
+            effect.facing = facing;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x30);
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (frame == 4 && timer == 0) {
             m_playSound = 0x14;
@@ -3536,7 +3536,7 @@ void CShiori::UpdatePattern()
             m_gauge = m_gauge + 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (m_hitsLeft > 0) {
@@ -3546,7 +3546,7 @@ void CShiori::UpdatePattern()
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3566,33 +3566,33 @@ void CShiori::UpdatePattern()
         if (y == 0.0 && vy >= 0.0) {
             vy = 0.0;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 ay = 0.01;
                 m_playVoice = 1;
-                l50.type = 0x192;
-                l50.x = (double)((int)x + facing * 0xe);
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 0;
-                SpawnObject(&l50);
-                l50.type = 0x192;
-                l50.x = (double)((int)x + facing * 0x3c);
-                l50.y = (double)((int)y - 0x10);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 0;
-                SpawnObject(&l50);
+                effect.type = 0x192;
+                effect.x = (double)((int)x + facing * 0xe);
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 0;
+                SpawnObject(&effect);
+                effect.type = 0x192;
+                effect.x = (double)((int)x + facing * 0x3c);
+                effect.y = (double)((int)y - 0x10);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 0;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = kFall;
                 ay = 0.028;
@@ -3614,33 +3614,33 @@ void CShiori::UpdatePattern()
         if (y == 0.0 && vy >= 0.0) {
             vy = 0.0;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 ay = 0.01;
                 m_playVoice = 1;
-                l50.type = 0x192;
-                l50.x = (double)((int)x + facing * 0xe);
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 0;
-                SpawnObject(&l50);
-                l50.type = 0x192;
-                l50.x = (double)((int)x + facing * 0x3c);
-                l50.y = (double)((int)y - 0x10);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 0;
-                SpawnObject(&l50);
+                effect.type = 0x192;
+                effect.x = (double)((int)x + facing * 0xe);
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 0;
+                SpawnObject(&effect);
+                effect.type = 0x192;
+                effect.x = (double)((int)x + facing * 0x3c);
+                effect.y = (double)((int)y - 0x10);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 0;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = kFall;
                 ay = 0.028;
@@ -3655,13 +3655,13 @@ void CShiori::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 0 && timer == 0) {
             vx *= 0.25;
@@ -3676,33 +3676,33 @@ void CShiori::UpdatePattern()
         if (y == 0.0 && vy >= 0.0) {
             vy = 0.0;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 ay = 0.01;
                 m_playVoice = 1;
-                l50.type = 0x194;
-                l50.x = (double)((int)x + facing * 0xe);
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 0;
-                SpawnObject(&l50);
-                l50.type = 0x194;
-                l50.x = (double)((int)x + facing * 0x3c);
-                l50.y = (double)((int)y - 0x10);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 0;
-                SpawnObject(&l50);
+                effect.type = 0x194;
+                effect.x = (double)((int)x + facing * 0xe);
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 0;
+                SpawnObject(&effect);
+                effect.type = 0x194;
+                effect.x = (double)((int)x + facing * 0x3c);
+                effect.y = (double)((int)y - 0x10);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 0;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = kFall;
                 ay = 0.028;
@@ -3716,25 +3716,25 @@ void CShiori::UpdatePattern()
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 2) {
-                l50.type = 0x197;
-                l50.x = (double)((int)x - facing * 0x1e);
-                l50.y = (double)((int)y - 0x1e);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x197;
+                effect.x = (double)((int)x - facing * 0x1e);
+                effect.y = (double)((int)y - 0x1e);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 1) {
                 m_patternVar1++;
                 frame = frame - 4;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3747,25 +3747,25 @@ void CShiori::UpdatePattern()
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 2 && timer == 0) {
-                l50.type = 0x19a;
-                l50.x = (double)((int)x - facing * 0x1e);
-                l50.y = (double)((int)y - 0x1e);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x19a;
+                effect.x = (double)((int)x - facing * 0x1e);
+                effect.y = (double)((int)y - 0x1e);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 1) {
                 m_patternVar1++;
                 frame = frame - 4;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3781,34 +3781,34 @@ void CShiori::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 2 && timer == 0) {
-                l50.type = 0x1c4;
-                l50.x = (double)((int)x - facing * 0x1e);
-                l50.y = (double)((int)y - 0x1e);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1c4;
+                effect.x = (double)((int)x - facing * 0x1e);
+                effect.y = (double)((int)y - 0x1e);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 3) {
                 m_patternVar1++;
                 frame = frame - 4;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3825,25 +3825,25 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 4) {
-                l50.type = 0x198;
-                l50.x = (double)((int)x + facing * 0x24);
-                l50.y = (double)((int)y - 0x30);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x198;
+                effect.x = (double)((int)x + facing * 0x24);
+                effect.y = (double)((int)y - 0x30);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_playVoice = 5;
             }
             if (frame == 7 && m_patternVar1 > 0) {
                 frame = frame - 2;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3859,25 +3859,25 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 4) {
-                l50.type = 0x198;
-                l50.x = (double)((int)x + facing * 0x24);
-                l50.y = (double)((int)y - 0x30);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x198;
+                effect.x = (double)((int)x + facing * 0x24);
+                effect.y = (double)((int)y - 0x30);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_playVoice = 5;
             }
             if (frame == 7 && m_patternVar1 > 0) {
                 frame = frame - 2;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3890,13 +3890,13 @@ void CShiori::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_gauge = m_gauge + 0x2d;
             m_patternVar1 = 6;
             vx *= 0.5;
@@ -3906,51 +3906,51 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         if (m_patternVar2 == 0x14) {
-            l50.type = 0x1ac;
-            l50.x = (double)((int)x + facing * 0x24);
-            l50.y = (double)((int)y - 0x26);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
+            effect.type = 0x1ac;
+            effect.x = (double)((int)x + facing * 0x24);
+            effect.y = (double)((int)y - 0x26);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
             m_patternVar3 = 1;
-            SpawnObject(&l50);
+            SpawnObject(&effect);
             m_playVoice = 5;
         }
         if (m_patternVar2 == 0x28) {
-            l50.type = 0x1ac;
-            l50.x = (double)((int)x + facing * 0x24);
-            l50.y = (double)((int)y - 0x48);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
+            effect.type = 0x1ac;
+            effect.x = (double)((int)x + facing * 0x24);
+            effect.y = (double)((int)y - 0x48);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
             m_patternVar3 = 2;
-            SpawnObject(&l50);
+            SpawnObject(&effect);
             m_playVoice = 5;
         }
         if (frame > 4) {
             m_patternVar2++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 5) {
-                l50.type = 0x1ac;
-                l50.x = (double)((int)x + facing * 0x1d);
-                l50.y = (double)((int)y - 0x34);
-                l50.scale = 2;
-                l50.sound = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1ac;
+                effect.x = (double)((int)x + facing * 0x1d);
+                effect.y = (double)((int)y - 0x34);
+                effect.scale = 2;
+                effect.sound = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_playVoice = 5;
             }
             if (frame == 7 && m_patternVar1 > 0) {
                 frame = frame - 2;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3964,26 +3964,26 @@ void CShiori::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_playVoice = 6;
-            l50.type = 0x1a2;
-            l50.x = (double)((int)x + facing * 0x64);
-            l50.y = (double)((int)y - 0x1e0);
-            l50.facing = facing;
-            l50.layer = 1;
-            l50.scale = 2;
-            SpawnObject(&l50);
-            l50.x = (double)((int)x + facing * 0x50);
-            l50.y = (double)((int)y - 0x208);
-            SpawnObject(&l50);
-            l50.x = (double)((int)x + facing * 0x82);
-            l50.y = (double)((int)y - 0x212);
-            SpawnObject(&l50);
+            effect.type = 0x1a2;
+            effect.x = (double)((int)x + facing * 0x64);
+            effect.y = (double)((int)y - 0x1e0);
+            effect.facing = facing;
+            effect.layer = 1;
+            effect.scale = 2;
+            SpawnObject(&effect);
+            effect.x = (double)((int)x + facing * 0x50);
+            effect.y = (double)((int)y - 0x208);
+            SpawnObject(&effect);
+            effect.x = (double)((int)x + facing * 0x82);
+            effect.y = (double)((int)y - 0x212);
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -3998,26 +3998,26 @@ void CShiori::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_playVoice = 6;
-            l50.type = 0x1a2;
-            l50.x = (double)((int)x + facing * 0xb4);
-            l50.y = (double)((int)y - 0x1e0);
-            l50.facing = facing;
-            l50.layer = 1;
-            l50.scale = 2;
-            SpawnObject(&l50);
-            l50.x = (double)((int)x + facing * 0xa0);
-            l50.y = (double)((int)y - 0x208);
-            SpawnObject(&l50);
-            l50.x = (double)((int)x + facing * 0xd2);
-            l50.y = (double)((int)y - 0x212);
-            SpawnObject(&l50);
+            effect.type = 0x1a2;
+            effect.x = (double)((int)x + facing * 0xb4);
+            effect.y = (double)((int)y - 0x1e0);
+            effect.facing = facing;
+            effect.layer = 1;
+            effect.scale = 2;
+            SpawnObject(&effect);
+            effect.x = (double)((int)x + facing * 0xa0);
+            effect.y = (double)((int)y - 0x208);
+            SpawnObject(&effect);
+            effect.x = (double)((int)x + facing * 0xd2);
+            effect.y = (double)((int)y - 0x212);
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -4032,26 +4032,26 @@ void CShiori::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_playVoice = 6;
-            l50.type = 0x1a2;
-            l50.x = (double)((int)x + facing * 0x104);
-            l50.y = (double)((int)y - 0x1e0);
-            l50.facing = facing;
-            l50.layer = 1;
-            l50.scale = 2;
-            SpawnObject(&l50);
-            l50.x = (double)((int)x + facing * 0xf0);
-            l50.y = (double)((int)y - 0x208);
-            SpawnObject(&l50);
-            l50.x = (double)((int)x + facing * 0x122);
-            l50.y = (double)((int)y - 0x212);
-            SpawnObject(&l50);
+            effect.type = 0x1a2;
+            effect.x = (double)((int)x + facing * 0x104);
+            effect.y = (double)((int)y - 0x1e0);
+            effect.facing = facing;
+            effect.layer = 1;
+            effect.scale = 2;
+            SpawnObject(&effect);
+            effect.x = (double)((int)x + facing * 0xf0);
+            effect.y = (double)((int)y - 0x208);
+            SpawnObject(&effect);
+            effect.x = (double)((int)x + facing * 0x122);
+            effect.y = (double)((int)y - 0x212);
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -4068,25 +4068,25 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 2 && timer == 0) {
-                l50.type = 0x197;
-                l50.x = (double)((int)x - facing * 0x1e);
-                l50.y = (double)((int)y - 0x1e);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x197;
+                effect.x = (double)((int)x - facing * 0x1e);
+                effect.y = (double)((int)y - 0x1e);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 3) {
                 m_patternVar1++;
                 frame = frame - 4;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kFall;
                 ay = 0.035;
@@ -4103,25 +4103,25 @@ void CShiori::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 2 && timer == 0) {
-                l50.type = 0x1c2;
-                l50.x = (double)((int)x - facing * 0x1e);
-                l50.y = (double)((int)y - 0x1e);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1c2;
+                effect.x = (double)((int)x - facing * 0x1e);
+                effect.y = (double)((int)y - 0x1e);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 3) {
                 m_patternVar1++;
                 frame = frame - 4;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kFall;
                 ay = 0.035;
@@ -4140,35 +4140,35 @@ void CShiori::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 2 && timer == 0) {
-                l50.type = 0x1c4;
-                l50.x = (double)((int)x - facing * 0x1e);
-                l50.y = (double)((int)y - 0x1e);
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1c4;
+                effect.x = (double)((int)x - facing * 0x1e);
+                effect.y = (double)((int)y - 0x1e);
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 3) {
                 m_patternVar1++;
                 frame = frame - 4;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kFall;
                 ay = 0.035;
@@ -4189,46 +4189,46 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x - facing * 0x19);
-            l50.y = (double)((int)y - 0x3b);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x - facing * 0x19);
+            effect.y = (double)((int)y - 0x3b);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x1a3;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x5f);
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.layer = 1;
-            l50.facing = facing;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x1a3;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x5f);
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.layer = 1;
+            effect.facing = facing;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
         }
         if (frame == 0xa && timer == 0) {
-            l50.keep = 1;
-            l50.type = 0x19a;
-            l50.x = (double)((int)x + facing * 0x47);
-            l50.y = (double)((int)y - 0x36);
-            l50.facing = facing;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x19a;
+            effect.x = (double)((int)x + facing * 0x47);
+            effect.y = (double)((int)y - 0x36);
+            effect.facing = facing;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 8) {
                 x = facing * 0x35 + x;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4240,28 +4240,28 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 5;
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            l50.keep = 1;
-            l50.type = 0x1ad;
-            l50.x = (double)((int)x - facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1ae;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1ad;
+            effect.x = (double)((int)x - facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1ae;
+            SpawnObject(&effect);
         }
         if (frame == 2 && timer == 0) {
             m_playVoice = 4;
@@ -4272,13 +4272,13 @@ void CShiori::UpdatePattern()
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (((WORD)Random(0, 0x1e0) > 0xf0 || frame == 1) && m_hitsLeft > 0) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -4291,14 +4291,14 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0xf;
             StopMoving();
         }
@@ -4311,27 +4311,27 @@ void CShiori::UpdatePattern()
             }
         }
         if (frame > 1 && m_patternVar2 <= 0 && m_patternVar3 < 5) {
-            l50.keep = 1;
-            l50.x = (double)((int)x - facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
+            effect.keep = 1;
+            effect.x = (double)((int)x - facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
             if (m_patternVar3 == 0) {
-                l50.type = 0x1ae;
-                SpawnObject(&l50);
+                effect.type = 0x1ae;
+                SpawnObject(&effect);
             }
-            l50.y = (double)(m_patternVar3 * -0x50);
-            l50.type = 0x1ad;
+            effect.y = (double)(m_patternVar3 * -0x50);
+            effect.type = 0x1ad;
             m_patternVar2 = 0xf;
             m_patternVar3++;
-            SpawnObject(&l50);
+            SpawnObject(&effect);
         }
         m_patternVar2--;
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (m_patternVar1 < 1 && frame == 0xa) {
@@ -4341,7 +4341,7 @@ void CShiori::UpdatePattern()
             if (((WORD)Random(0, 0x1e0) > 0xf0 || frame == 1) && m_hitsLeft > 0) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -4354,14 +4354,14 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x1e;
             m_playSound = 0x25;
             StopMoving();
@@ -4376,30 +4376,30 @@ void CShiori::UpdatePattern()
             }
         }
         if (frame > 1 && m_patternVar2 <= 0 && m_patternVar3 < 5) {
-            l50.keep = 1;
-            l50.type = 0x1ad;
-            l50.x = (double)((int)x - facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
+            effect.keep = 1;
+            effect.type = 0x1ad;
+            effect.x = (double)((int)x - facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
             if (m_patternVar3 == 0) {
-                l50.type = 0x1ae;
-                SpawnObject(&l50);
-                l50.type = 0x1af;
-                SpawnObject(&l50);
+                effect.type = 0x1ae;
+                SpawnObject(&effect);
+                effect.type = 0x1af;
+                SpawnObject(&effect);
             }
-            l50.y = (double)(m_patternVar3 * -0x50);
-            l50.type = 0x1ad;
+            effect.y = (double)(m_patternVar3 * -0x50);
+            effect.type = 0x1ad;
             m_patternVar2 = 0xf;
             m_patternVar3++;
-            SpawnObject(&l50);
+            SpawnObject(&effect);
         }
         m_patternVar2--;
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (m_patternVar1 < 3 && frame == 0xa) {
@@ -4409,7 +4409,7 @@ void CShiori::UpdatePattern()
             if (((WORD)Random(0, 0x1e0) > 0xf0 || frame == 1) && m_hitsLeft > 0) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -4425,30 +4425,30 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x - (facing << 1));
-            l50.y = (double)((int)y - 0x43);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x - (facing << 1));
+            effect.y = (double)((int)y - 0x43);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 && timer == 0 && m_patternVar1 == 0) {
-            l50.keep = 1;
-            l50.type = 0x1b5;
-            l50.x = (double)((int)x + facing * 0x32);
-            l50.y = 0.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1b5;
+            effect.x = (double)((int)x + facing * 0x32);
+            effect.y = 0.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_patternVar1++;
         }
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4456,7 +4456,7 @@ void CShiori::UpdatePattern()
                 m_patternVar2++;
                 frame = frame - 3;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4472,29 +4472,29 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x - (facing << 1));
-            l50.y = (double)((int)y - 0x43);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x - (facing << 1));
+            effect.y = (double)((int)y - 0x43);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 && timer == 0 && m_patternVar2 == 0) {
-            l50.keep = 1;
-            l50.type = 0x1b6;
-            l50.x = (double)((int)x + facing * 0x32);
-            l50.y = 0.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1b6;
+            effect.x = (double)((int)x + facing * 0x32);
+            effect.y = 0.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4502,7 +4502,7 @@ void CShiori::UpdatePattern()
                 m_patternVar2++;
                 frame = frame - 3;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4518,33 +4518,33 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x - (facing << 1));
-            l50.y = (double)((int)y - 0x43);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x - (facing << 1));
+            effect.y = (double)((int)y - 0x43);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 2) {
             m_game->FlashNegative(0xf);
         }
         if (frame == 6 && timer == 0 && m_patternVar2 == 0) {
-            l50.keep = 1;
-            l50.type = 0x1b7;
-            l50.x = (double)((int)x + facing * 0x32);
-            l50.y = 0.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1b7;
+            effect.x = (double)((int)x + facing * 0x32);
+            effect.y = 0.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4552,7 +4552,7 @@ void CShiori::UpdatePattern()
                 m_patternVar2++;
                 frame = frame - 3;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4566,21 +4566,21 @@ void CShiori::UpdatePattern()
         m_dashMomentum = 0;
         if (frame == 5 && timer == 0) {
             m_dObjectTime = 0xe10;
-            l50.keep = 1;
-            l50.type = 0x1a7;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1a7;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -4596,32 +4596,32 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 9;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 5 && timer == 0) {
             m_dObjectTime = 0x12c0;
-            l50.keep = 1;
-            l50.type = 0x1a8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1a8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -4637,14 +4637,14 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 9;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 3) {
@@ -4652,21 +4652,21 @@ void CShiori::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             m_dObjectTime = 0x12c0;
-            l50.keep = 1;
-            l50.type = 0x1a9;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1a9;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -4693,14 +4693,14 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
@@ -4711,18 +4711,18 @@ void CShiori::UpdatePattern()
             m_patternVar3 = 0;
         }
         if (frame > 4 && frame < 8 && m_patternVar1 <= 0 && m_patternVar3 < 0xf) {
-            l50.keep = 0;
-            l50.type = 0x1b3;
-            l50.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
-            l50.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
-            l50.facing = facing;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1b4;
-            l50.facing = facing;
-            l50.scale = 2;
-            SpawnObject(&l50);
+            effect.keep = 0;
+            effect.type = 0x1b3;
+            effect.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
+            effect.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
+            effect.facing = facing;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1b4;
+            effect.facing = facing;
+            effect.scale = 2;
+            SpawnObject(&effect);
             m_patternVar1 = 6;
             m_patternVar3++;
         }
@@ -4738,14 +4738,14 @@ void CShiori::UpdatePattern()
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 8 && m_patternVar2 < 5) {
                 m_patternVar2++;
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -4770,14 +4770,14 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
@@ -4788,18 +4788,18 @@ void CShiori::UpdatePattern()
             m_patternVar3 = 0;
         }
         if (frame > 4 && frame < 8 && m_patternVar1 <= 0 && m_patternVar3 < 0x1b) {
-            l50.keep = 0;
-            l50.type = 0x1b3;
-            l50.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
-            l50.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
-            l50.facing = facing;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1b4;
-            l50.facing = facing;
-            l50.scale = 2;
-            SpawnObject(&l50);
+            effect.keep = 0;
+            effect.type = 0x1b3;
+            effect.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
+            effect.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
+            effect.facing = facing;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1b4;
+            effect.facing = facing;
+            effect.scale = 2;
+            SpawnObject(&effect);
             m_patternVar1 = 6;
             m_patternVar3++;
         }
@@ -4815,14 +4815,14 @@ void CShiori::UpdatePattern()
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 8 && m_patternVar2 < 8) {
                 m_patternVar2++;
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -4841,14 +4841,14 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
             m_playSound = 0x25;
         }
@@ -4869,18 +4869,18 @@ void CShiori::UpdatePattern()
             m_patternVar3 = 0;
         }
         if (frame > 4 && frame < 8 && m_patternVar1 <= 0 && m_patternVar3 < 0x32) {
-            l50.keep = 0;
-            l50.type = 0x1b3;
-            l50.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
-            l50.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
-            l50.facing = facing;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1b4;
-            l50.facing = facing;
-            l50.scale = 2;
-            SpawnObject(&l50);
+            effect.keep = 0;
+            effect.type = 0x1b3;
+            effect.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
+            effect.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
+            effect.facing = facing;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1b4;
+            effect.facing = facing;
+            effect.scale = 2;
+            SpawnObject(&effect);
             m_patternVar1 = 6;
             m_patternVar3++;
         }
@@ -4896,14 +4896,14 @@ void CShiori::UpdatePattern()
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 8 && m_patternVar2 < 0xd) {
                 m_patternVar2++;
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -4914,29 +4914,29 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
         }
         if (frame > 4 && frame < 8 && m_patternVar1 <= 0 && m_patternVar3 < 0xf) {
-            l50.keep = 0;
-            l50.type = 0x1b3;
-            l50.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
-            l50.y = (double)((int)y - 0x16);
-            l50.facing = facing;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1b4;
-            l50.facing = facing;
-            l50.scale = 2;
-            SpawnObject(&l50);
+            effect.keep = 0;
+            effect.type = 0x1b3;
+            effect.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
+            effect.y = (double)((int)y - 0x16);
+            effect.facing = facing;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1b4;
+            effect.facing = facing;
+            effect.scale = 2;
+            SpawnObject(&effect);
             m_patternVar1 = 6;
             m_patternVar3++;
         }
@@ -4944,14 +4944,14 @@ void CShiori::UpdatePattern()
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 8 && m_patternVar2 < 5) {
                 m_patternVar2++;
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4964,29 +4964,29 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
         }
         if (frame > 4 && frame < 8 && m_patternVar1 <= 0 && m_patternVar3 < 0x1b) {
-            l50.keep = 0;
-            l50.type = 0x1b3;
-            l50.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
-            l50.y = (double)((int)y - 0x16);
-            l50.facing = facing;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1b4;
-            l50.facing = facing;
-            l50.scale = 2;
-            SpawnObject(&l50);
+            effect.keep = 0;
+            effect.type = 0x1b3;
+            effect.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
+            effect.y = (double)((int)y - 0x16);
+            effect.facing = facing;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1b4;
+            effect.facing = facing;
+            effect.scale = 2;
+            SpawnObject(&effect);
             m_patternVar1 = 6;
             m_patternVar3++;
         }
@@ -4994,14 +4994,14 @@ void CShiori::UpdatePattern()
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 8 && m_patternVar2 < 8) {
                 m_patternVar2++;
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5014,14 +5014,14 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
             m_playSound = 0x25;
         }
@@ -5029,18 +5029,18 @@ void CShiori::UpdatePattern()
             m_game->FlashNegative(0xf);
         }
         if (frame > 4 && frame < 8 && m_patternVar1 <= 0 && m_patternVar3 < 0x32) {
-            l50.keep = 0;
-            l50.type = 0x1b3;
-            l50.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
-            l50.y = (double)((int)y - 0x16);
-            l50.facing = facing;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1b4;
-            l50.facing = facing;
-            l50.scale = 2;
-            SpawnObject(&l50);
+            effect.keep = 0;
+            effect.type = 0x1b3;
+            effect.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
+            effect.y = (double)((int)y - 0x16);
+            effect.facing = facing;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1b4;
+            effect.facing = facing;
+            effect.scale = 2;
+            SpawnObject(&effect);
             m_patternVar1 = 6;
             m_patternVar3++;
         }
@@ -5048,14 +5048,14 @@ void CShiori::UpdatePattern()
         if (0) {}
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 8 && m_patternVar2 < 0xd) {
                 m_patternVar2++;
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5070,15 +5070,15 @@ void CShiori::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x1a3;
-            l50.x = (double)((int)x + facing * 6);
-            l50.y = (double)((int)y - 0x34);
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.layer = 1;
-            l50.facing = -facing;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a3;
+            effect.x = (double)((int)x + facing * 6);
+            effect.y = (double)((int)y - 0x34);
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.layer = 1;
+            effect.facing = -facing;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
         }
         if (frame > 2) {
             m_game->FlashNegative(3);
@@ -5088,34 +5088,34 @@ void CShiori::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x1c);
-            l50.y = (double)((int)y - 0x33);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x1c);
+            effect.y = (double)((int)y - 0x33);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 0xb && timer == 0) {
-            l50.keep = 1;
-            l50.type = 0x1b8;
-            l50.x = (double)((int)x + facing * 0x14);
-            l50.y = (double)((int)y - 0x34);
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1b8;
+            effect.x = (double)((int)x + facing * 0x14);
+            effect.y = (double)((int)y - 0x34);
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -5146,14 +5146,14 @@ void CShiori::UpdatePattern()
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
             (*m_opponent)->pattern = kThrownHidden;
-            l50.keep = 1;
-            l50.type = 0x1bd;
-            l50.x = (*m_opponent)->x;
-            l50.y = (*m_opponent)->y;
-            l50.facing = facing;
-            l50.scale = 0;
-            l50.layer = 0;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1bd;
+            effect.x = (*m_opponent)->x;
+            effect.y = (*m_opponent)->y;
+            effect.facing = facing;
+            effect.scale = 0;
+            effect.layer = 0;
+            SpawnObject(&effect);
         }
         if (frame == 2) {
             m_patternVar1--;
@@ -5190,11 +5190,11 @@ void CShiori::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }

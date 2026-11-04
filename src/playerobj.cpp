@@ -5,29 +5,29 @@
 #include <string.h>
 #include "efz.h"
 
-void CPlayer::SpawnObject(EffectDesc* p1)
+void CPlayer::SpawnObject(EffectDesc* desc)
 {
     m_objectActive[m_objectHead] = 1;
-    m_objectKeep[m_objectHead] = p1->keep;
-    m_objects[m_objectHead].pattern = p1->type;
+    m_objectKeep[m_objectHead] = desc->keep;
+    m_objects[m_objectHead].pattern = desc->type;
     m_objects[m_objectHead].frame = 0;
     m_objects[m_objectHead].timer = 0;
-    m_objects[m_objectHead].x = p1->x;
-    m_objects[m_objectHead].y = p1->y;
+    m_objects[m_objectHead].x = desc->x;
+    m_objects[m_objectHead].y = desc->y;
     m_objects[m_objectHead].vx = 0.0;
     m_objects[m_objectHead].vy = 0.0;
     m_objects[m_objectHead].ax = 0.0;
     m_objects[m_objectHead].ay = 0.0;
-    m_objects[m_objectHead].facing = (char)p1->facing;
-    m_objects[m_objectHead].side = p1->side;
-    m_objects[m_objectHead].scale = (char)p1->scale;
-    m_objects[m_objectHead].sound = (char)p1->sound;
-    m_objects[m_objectHead].screen = p1->screen;
-    m_objects[m_objectHead].layer = (char)p1->layer;
-    m_objects[m_objectHead].shadow = p1->shadow;
-    m_objects[m_objectHead].movesInFreeze = p1->movesInFreeze;
+    m_objects[m_objectHead].facing = (char)desc->facing;
+    m_objects[m_objectHead].side = desc->side;
+    m_objects[m_objectHead].scale = (char)desc->scale;
+    m_objects[m_objectHead].sound = (char)desc->sound;
+    m_objects[m_objectHead].screen = desc->screen;
+    m_objects[m_objectHead].layer = (char)desc->layer;
+    m_objects[m_objectHead].shadow = desc->shadow;
+    m_objects[m_objectHead].movesInFreeze = desc->movesInFreeze;
     m_objects[m_objectHead].drawnWhileHidden = 0;
-    m_objects[m_objectHead].clip = p1->clip;
+    m_objects[m_objectHead].clip = desc->clip;
     m_objects[m_objectHead].attackResult = 0;
     m_objects[m_objectHead].hitsLeft = 0;
     m_objects[m_objectHead].hitstop = 0;
@@ -36,11 +36,11 @@ void CPlayer::SpawnObject(EffectDesc* p1)
     AdvanceObjectHead();
 }
 
-void CPlayer::RemoveObject(short p1)
+void CPlayer::RemoveObject(short slot)
 {
-    m_objectActive[p1] = 0;
-    m_objectKeep[p1] = 0;
-    if (p1 == m_objectTail) {
+    m_objectActive[slot] = 0;
+    m_objectKeep[slot] = 0;
+    if (slot == m_objectTail) {
         while (m_objectTail != m_objectHead && m_objectActive[m_objectTail] == 0) {
             m_objectTail++;
             if (m_objectTail >= 0x40) {

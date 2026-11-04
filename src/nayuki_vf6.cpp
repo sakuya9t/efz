@@ -8,25 +8,25 @@
 
 void CNayuki::UpdatePattern()
 {
-    WORD x8;
-    WORD l4;
+    WORD frameCount; // frames in the action's animation
+    WORD duration; // ticks the current frame lasts
 
     if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    EffectDesc l50;
-    l4 = (short)anims[pattern].frames[frame].duration;
-    x8 = anims[pattern].frameCount;
-    InitEffectDesc((EffectDesc*)&l50);
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    duration = (short)anims[pattern].frames[frame].duration;
+    frameCount = anims[pattern].frameCount;
+    InitEffectDesc((EffectDesc*)&effect);
     switch (pattern) {
     default:
         vx = 0.0;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -36,10 +36,10 @@ void CNayuki::UpdatePattern()
         vx = m_warmUp * 0.02 + 0.6;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -49,10 +49,10 @@ void CNayuki::UpdatePattern()
         vx = -0.6 - m_warmUp * 0.02;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -62,10 +62,10 @@ void CNayuki::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -87,10 +87,10 @@ void CNayuki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -121,10 +121,10 @@ void CNayuki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -151,10 +151,10 @@ void CNayuki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -172,10 +172,10 @@ void CNayuki::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -186,10 +186,10 @@ void CNayuki::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -198,10 +198,10 @@ void CNayuki::UpdatePattern()
     case kFall:
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -217,10 +217,10 @@ void CNayuki::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -241,10 +241,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -269,10 +269,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -296,10 +296,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -328,13 +328,13 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -362,10 +362,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -397,10 +397,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -432,10 +432,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -467,10 +467,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -502,10 +502,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -537,10 +537,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -572,10 +572,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -604,10 +604,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -636,10 +636,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -670,10 +670,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -713,10 +713,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -756,10 +756,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -794,10 +794,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -832,10 +832,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -880,10 +880,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -928,10 +928,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -971,10 +971,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1014,10 +1014,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1045,10 +1045,10 @@ void CNayuki::UpdatePattern()
             StartPattern();
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1071,10 +1071,10 @@ void CNayuki::UpdatePattern()
         vx = m_hitVx;
         vy = m_hitVy;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1101,19 +1101,19 @@ void CNayuki::UpdatePattern()
             vy = -2.5;
             ay = 0.025;
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1148,10 +1148,10 @@ void CNayuki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1178,10 +1178,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1202,10 +1202,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1226,10 +1226,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1260,10 +1260,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1297,10 +1297,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1334,10 +1334,10 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1348,12 +1348,12 @@ void CNayuki::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1f3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x1e;
             vx = m_hitVx;
             vy = m_hitVy;
@@ -1365,10 +1365,10 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -1407,14 +1407,14 @@ void CNayuki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1432,14 +1432,14 @@ void CNayuki::UpdatePattern()
     case kEncased:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1471,10 +1471,10 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1484,14 +1484,14 @@ void CNayuki::UpdatePattern()
     case kEncased2:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1523,10 +1523,10 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1536,14 +1536,14 @@ void CNayuki::UpdatePattern()
     case kEncasedAir:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1556,10 +1556,10 @@ void CNayuki::UpdatePattern()
         }
         vy += 0.04;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1579,14 +1579,14 @@ void CNayuki::UpdatePattern()
     case kEncasedSpin:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_patternVar1 == 0) {
@@ -1602,10 +1602,10 @@ void CNayuki::UpdatePattern()
         }
         vy += 0.06;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1622,20 +1622,20 @@ void CNayuki::UpdatePattern()
         break;
     case kFallInDarkness:
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1ef;
-            l50.x = 60.0;
-            l50.y = 40.0;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.scale = 0;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1ef;
+            effect.x = 60.0;
+            effect.y = 40.0;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.scale = 0;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -1646,13 +1646,13 @@ void CNayuki::UpdatePattern()
             m_warmUp--;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8 - 1) {
+            if (frame == frameCount - 1) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1666,19 +1666,19 @@ void CNayuki::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1689,19 +1689,19 @@ void CNayuki::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1713,13 +1713,13 @@ void CNayuki::UpdatePattern()
             StartPattern();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kWakeUp;
                 StartPattern();
             }
@@ -1729,10 +1729,10 @@ void CNayuki::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1756,13 +1756,13 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1789,13 +1789,13 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1822,13 +1822,13 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1855,13 +1855,13 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1885,13 +1885,13 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1915,13 +1915,13 @@ void CNayuki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1936,10 +1936,10 @@ void CNayuki::UpdatePattern()
         vx = -1.2;
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -1957,20 +1957,20 @@ void CNayuki::UpdatePattern()
         ay = 0.045;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -1988,20 +1988,20 @@ void CNayuki::UpdatePattern()
         ay = 0.045;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2017,21 +2017,21 @@ void CNayuki::UpdatePattern()
     case 0xa1:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x46);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x46);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
                 ay = 0.035;
@@ -2049,12 +2049,12 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x46);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x46);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
@@ -2069,13 +2069,13 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0xd) {
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2096,7 +2096,7 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5) {
@@ -2107,7 +2107,7 @@ void CNayuki::UpdatePattern()
             if (frame == 0xb) {
                 frame = frame - 4;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
                 break;
@@ -2134,7 +2134,7 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4) {
@@ -2144,7 +2144,7 @@ void CNayuki::UpdatePattern()
             if (frame == 0xb) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kCrouch;
             }
@@ -2158,13 +2158,13 @@ void CNayuki::UpdatePattern()
                 m_hitsLeft = 0;
             }
             StopMoving();
-            l50.type = 0x190;
-            l50.x = (double)((int)x - facing * 0x24);
-            l50.y = (double)((int)y - 0x3e);
-            l50.facing = facing;
-            l50.layer = 0;
-            l50.scale = 0;
-            SpawnObject(&l50);
+            effect.type = 0x190;
+            effect.x = (double)((int)x - facing * 0x24);
+            effect.y = (double)((int)y - 0x3e);
+            effect.facing = facing;
+            effect.layer = 0;
+            effect.scale = 0;
+            SpawnObject(&effect);
         }
         if (m_patternVar1 == 1 && frame == 0) {
             vx = 1.9;
@@ -2185,10 +2185,10 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2201,13 +2201,13 @@ void CNayuki::UpdatePattern()
             } else {
                 m_hitsLeft = 0;
             }
-            l50.type = 0x190;
-            l50.x = (double)((int)x + facing * 0x24);
-            l50.y = (double)((int)y - 0x3e);
-            l50.facing = -facing;
-            l50.layer = 1;
-            l50.scale = 0;
-            SpawnObject(&l50);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + facing * 0x24);
+            effect.y = (double)((int)y - 0x3e);
+            effect.facing = -facing;
+            effect.layer = 1;
+            effect.scale = 0;
+            SpawnObject(&effect);
         }
         if (m_patternVar1 == 1 && frame == 0) {
             vx = -1.9;
@@ -2228,10 +2228,10 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2249,27 +2249,27 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2285,21 +2285,21 @@ void CNayuki::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -2314,21 +2314,21 @@ void CNayuki::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2362,10 +2362,10 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2386,27 +2386,27 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 FaceOpponent();
                 vx = m_patternVar1 * 0.01;
@@ -2435,10 +2435,10 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2450,22 +2450,22 @@ void CNayuki::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8 - 1) {
+            if (frame == frameCount - 1) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2492,7 +2492,7 @@ void CNayuki::UpdatePattern()
             m_playSound = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4) {
@@ -2503,7 +2503,7 @@ void CNayuki::UpdatePattern()
             if (frame == 0xb) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -2538,13 +2538,13 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2580,7 +2580,7 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - 3 && frame == 2 && m_warmUp > 4) {
+        if (timer >= duration || timer >= duration - 3 && frame == 2 && m_warmUp > 4) {
             timer = 0;
             frame++;
             if (frame == 3) {
@@ -2592,7 +2592,7 @@ void CNayuki::UpdatePattern()
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2625,12 +2625,12 @@ void CNayuki::UpdatePattern()
             if (frame < 0xa && frame > 5) {
                 frame = 0xa;
                 ShakeScreen(3, 0);
-                l50.type = 3;
-                l50.x = (double)((int)x + facing * 0x1e);
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 0;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 3;
+                effect.x = (double)((int)x + facing * 0x1e);
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 0;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_playSound = 7;
             }
             vy = 0.0;
@@ -2642,7 +2642,7 @@ void CNayuki::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5) {
@@ -2663,7 +2663,7 @@ void CNayuki::UpdatePattern()
             if (frame == 4 || frame == 5 || frame == 7 || frame == 9 || frame == 0xb) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2706,7 +2706,7 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0xa) {
@@ -2723,7 +2723,7 @@ void CNayuki::UpdatePattern()
                 vx = 0.7;
                 ay = 0.033;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -2757,7 +2757,7 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 3) {
@@ -2769,7 +2769,7 @@ void CNayuki::UpdatePattern()
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2808,7 +2808,7 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 || timer >= 3 && (frame == 1 && m_warmUp > 0 || frame == 2 && m_warmUp > 1 || frame == 3 && m_warmUp > 3 || frame == 4 && m_warmUp > 5)) {
+        if (timer >= duration || timer >= 3 && (frame == 1 && m_warmUp > 0 || frame == 2 && m_warmUp > 1 || frame == 3 && m_warmUp > 3 || frame == 4 && m_warmUp > 5)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -2818,7 +2818,7 @@ void CNayuki::UpdatePattern()
             if (frame == 2) {
                 x = facing * 0xf + x;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -2854,13 +2854,13 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - 3 && frame < m_warmUp - 4 && frame < 4) {
+        if (timer >= duration || timer >= duration - 3 && frame < m_warmUp - 4 && frame < 4) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2897,13 +2897,13 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2936,13 +2936,13 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 6) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2975,13 +2975,13 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - 3 && frame < m_warmUp - 3 && frame < 4) {
+        if (timer >= duration || timer >= duration - 3 && frame < m_warmUp - 3 && frame < 4) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3004,10 +3004,10 @@ void CNayuki::UpdatePattern()
             m_playSound = 0x14;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kCrouch;
                 FaceOpponent();
@@ -3045,11 +3045,11 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3079,26 +3079,26 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame = 5;
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)((int)x + facing * 0x1e);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)((int)x + facing * 0x1e);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
             vx = 0.0;
             vy = 0.0;
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5) {
                 frame--;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 FaceOpponent();
                 StartPattern();
@@ -3122,11 +3122,11 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -3146,11 +3146,11 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StartPattern();
             }
@@ -3180,20 +3180,20 @@ void CNayuki::UpdatePattern()
             pattern = kThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             (*m_opponent)->x = facing * 0xf + x;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x25);
-            l50.y = (double)((int)y - 0x16);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x25);
+            effect.y = (double)((int)y - 0x16);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3212,7 +3212,7 @@ void CNayuki::UpdatePattern()
             (*m_opponent)->x = x;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3225,7 +3225,7 @@ void CNayuki::UpdatePattern()
             if (frame == 3) {
                 (*m_opponent)->x = (*m_opponent)->x - facing;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -3259,13 +3259,13 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3298,13 +3298,13 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 6) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3337,13 +3337,13 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - 3 && frame < m_warmUp - 3 && frame < 4) {
+        if (timer >= duration || timer >= duration - 3 && frame < m_warmUp - 3 && frame < 4) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3358,17 +3358,17 @@ void CNayuki::UpdatePattern()
             StopMoving();
             pattern = kAirThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x21);
-            l50.y = (double)((int)y - 0x33);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x21);
+            effect.y = (double)((int)y - 0x33);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->x = facing * 0x21 + x;
             (*m_opponent)->y = y - 61.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
@@ -3377,7 +3377,7 @@ void CNayuki::UpdatePattern()
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kJumpC;
                 frame = 2;
             }
@@ -3439,14 +3439,14 @@ void CNayuki::UpdatePattern()
             ay = 0.035;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 0xb) {
                 facing = -facing;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -3456,23 +3456,23 @@ void CNayuki::UpdatePattern()
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x191;
-            l50.x = (double)((int)x + facing * 0xe);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 0;
-            l50.shadow = 1;
-            l50.layer = 0;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + facing * 0xe);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 0;
+            effect.shadow = 1;
+            effect.layer = 0;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 0;
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
-        if (timer >= l4 - (frame == 4) * m_warmUp * 3) {
+        if (timer >= duration - (frame == 4) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3483,23 +3483,23 @@ void CNayuki::UpdatePattern()
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x192;
-            l50.x = (double)((int)x + facing * 0xe);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 0;
-            l50.shadow = 1;
-            l50.layer = 0;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x192;
+            effect.x = (double)((int)x + facing * 0xe);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 0;
+            effect.shadow = 1;
+            effect.layer = 0;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 0;
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
-        if (timer >= l4 - (frame == 4) * m_warmUp * 3) {
+        if (timer >= duration - (frame == 4) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3512,35 +3512,35 @@ void CNayuki::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x193;
-            l50.x = (double)((int)x + facing * 0xe);
-            l50.y = (double)((int)y - 0x29);
-            l50.shadow = 1;
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x193;
+            effect.x = (double)((int)x + facing * 0xe);
+            effect.y = (double)((int)y - 0x29);
+            effect.shadow = 1;
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 0;
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
-        if (timer >= l4 - (frame == 4) * m_warmUp * 3) {
+        if (timer >= duration - (frame == 4) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3561,7 +3561,7 @@ void CNayuki::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3572,7 +3572,7 @@ void CNayuki::UpdatePattern()
                 vy = -2.5;
                 ay = 0.03;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kUnused100;
                 if (m_inputY == 1) {
                     pattern = kUnused102;
@@ -3589,7 +3589,7 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3598,15 +3598,15 @@ void CNayuki::UpdatePattern()
                 m_gauge = m_gauge + 0x2d;
                 vx = 1.7;
                 vy = -1.7;
-                l50.type = 0x194;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x194;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kUnused102;
                 StartPattern();
             }
@@ -3624,12 +3624,12 @@ void CNayuki::UpdatePattern()
             ay = 0.035;
             pattern = kRebound;
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_patternVar2++;
             break;
         }
@@ -3644,11 +3644,11 @@ void CNayuki::UpdatePattern()
         if (y == 0.0 && vy >= 0.0) {
             vy = 0.0;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 4;
             }
         }
@@ -3657,11 +3657,11 @@ void CNayuki::UpdatePattern()
         vy = vy + ay;
         ClearBufferedPress();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kFall;
             }
@@ -3684,11 +3684,11 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -3708,11 +3708,11 @@ void CNayuki::UpdatePattern()
             m_warmUp = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStandUp;
             }
@@ -3739,7 +3739,7 @@ void CNayuki::UpdatePattern()
             vx -= 0.025;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_patternVar2++;
@@ -3780,7 +3780,7 @@ void CNayuki::UpdatePattern()
                 ay = 0.035;
                 vx *= 0.3;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StopMoving();
                 StartPattern();
@@ -3805,7 +3805,7 @@ void CNayuki::UpdatePattern()
             frame = 0x10;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_patternVar2++;
@@ -3830,7 +3830,7 @@ void CNayuki::UpdatePattern()
                 }
                 vx *= 0.5;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StopMoving();
                 StartPattern();
@@ -3845,13 +3845,13 @@ void CNayuki::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
@@ -3871,7 +3871,7 @@ void CNayuki::UpdatePattern()
             frame = 0x10;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_patternVar2++;
@@ -3900,7 +3900,7 @@ void CNayuki::UpdatePattern()
             if (frame == 0xf && vy < 0.0) {
                 vy *= 0.5;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StopMoving();
                 StartPattern();
@@ -3935,7 +3935,7 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_patternVar2++;
@@ -3957,7 +3957,7 @@ void CNayuki::UpdatePattern()
             if (frame == 0x10) {
                 frame = 5;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StopMoving();
                 StartPattern();
@@ -3986,7 +3986,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             m_attackResult = 0;
         }
-        if (timer >= l4 || timer >= l4 - m_warmUp * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && m_warmUp > 2 || timer >= l4 - 3 && frame == 2 && m_warmUp > 4) {
+        if (timer >= duration || timer >= duration - m_warmUp * 3 && frame == 0xb || timer >= duration - 3 && frame == 1 && m_warmUp > 2 || timer >= duration - 3 && frame == 2 && m_warmUp > 4) {
             timer = 0;
             frame++;
             if (frame < 0xb) {
@@ -4007,7 +4007,7 @@ void CNayuki::UpdatePattern()
                 frame = 4;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StopMoving();
                 StartPattern();
@@ -4037,7 +4037,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             m_attackResult = 0;
         }
-        if (timer >= l4 || timer >= l4 - m_warmUp * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && m_warmUp > 2 || timer >= l4 - 3 && frame == 2 && m_warmUp > 4) {
+        if (timer >= duration || timer >= duration - m_warmUp * 3 && frame == 0xb || timer >= duration - 3 && frame == 1 && m_warmUp > 2 || timer >= duration - 3 && frame == 2 && m_warmUp > 4) {
             timer = 0;
             frame++;
             if (frame < 0xb) {
@@ -4055,7 +4055,7 @@ void CNayuki::UpdatePattern()
                 frame = 4;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StopMoving();
                 StartPattern();
@@ -4070,13 +4070,13 @@ void CNayuki::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
@@ -4093,7 +4093,7 @@ void CNayuki::UpdatePattern()
             m_playSound = 0x15;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - m_warmUp * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && m_warmUp > 2 || timer >= l4 - 3 && frame == 2 && m_warmUp > 4) {
+        if (timer >= duration || timer >= duration - m_warmUp * 3 && frame == 0xb || timer >= duration - 3 && frame == 1 && m_warmUp > 2 || timer >= duration - 3 && frame == 2 && m_warmUp > 4) {
             timer = 0;
             frame++;
             if (frame < 0xb) {
@@ -4111,7 +4111,7 @@ void CNayuki::UpdatePattern()
                 frame = 4;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StopMoving();
                 StartPattern();
@@ -4126,13 +4126,13 @@ void CNayuki::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
@@ -4148,7 +4148,7 @@ void CNayuki::UpdatePattern()
             m_playSound = 0x15;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 0xb) {
@@ -4166,7 +4166,7 @@ void CNayuki::UpdatePattern()
                 frame = 4;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 StopMoving();
                 StartPattern();
@@ -4272,11 +4272,11 @@ void CNayuki::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_patternVar2++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StopMoving();
                 StartPattern();
@@ -4298,17 +4298,17 @@ void CNayuki::UpdatePattern()
             StopMoving();
             frame = 8;
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)((int)x + facing * 0x1e);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)((int)x + facing * 0x1e);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 3) {
@@ -4320,7 +4320,7 @@ void CNayuki::UpdatePattern()
             if (frame == 8) {
                 frame--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StopMoving();
@@ -4346,7 +4346,7 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5) {
@@ -4364,7 +4364,7 @@ void CNayuki::UpdatePattern()
                 vx = 0.7;
                 ay = 0.033;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -4381,11 +4381,11 @@ void CNayuki::UpdatePattern()
             m_warmUp = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStandUp;
             }
@@ -4446,7 +4446,7 @@ void CNayuki::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4454,7 +4454,7 @@ void CNayuki::UpdatePattern()
                 frame = frame - 4;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214Stance;
                 StopMoving();
                 StartPattern();
@@ -4518,7 +4518,7 @@ void CNayuki::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4526,7 +4526,7 @@ void CNayuki::UpdatePattern()
                 frame = frame - 4;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214Stance;
                 StopMoving();
                 StartPattern();
@@ -4540,29 +4540,29 @@ void CNayuki::UpdatePattern()
             StopMoving();
         }
         timer++;
-        if (timer >= l4 - (frame == 9) * m_warmUp * 3) {
+        if (timer >= duration - (frame == 9) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                l50.type = 0x1ac;
+                effect.type = 0x1ac;
                 if (m_inputX == facing) {
-                    l50.type = 0x1ad;
+                    effect.type = 0x1ad;
                 }
                 if (m_inputX == -facing) {
-                    l50.type = 0x1ab;
+                    effect.type = 0x1ab;
                 }
-                l50.x = (double)((int)x + facing * 0x1e);
-                l50.y = (double)((int)y - 0x32);
-                l50.scale = 0;
-                l50.shadow = 1;
-                l50.layer = 0;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.x = (double)((int)x + facing * 0x1e);
+                effect.y = (double)((int)y - 0x32);
+                effect.scale = 0;
+                effect.shadow = 1;
+                effect.layer = 0;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_playVoice = 0;
                 m_gauge = m_gauge + 0x2d;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4582,17 +4582,17 @@ void CNayuki::UpdatePattern()
             StopMoving();
             frame = 8;
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)((int)x + facing * 0x1e);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)((int)x + facing * 0x1e);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 3) {
@@ -4604,7 +4604,7 @@ void CNayuki::UpdatePattern()
             if (frame == 8) {
                 frame--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StopMoving();
@@ -4630,7 +4630,7 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4 || frame == 1 && timer == 0x27 - m_warmUp * 3) {
+        if (timer >= duration || frame == 1 && timer == 0x27 - m_warmUp * 3) {
             timer = 0;
             frame++;
             if (frame == 5) {
@@ -4648,7 +4648,7 @@ void CNayuki::UpdatePattern()
                 vx = 0.7;
                 ay = 0.033;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -4708,7 +4708,7 @@ void CNayuki::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4716,7 +4716,7 @@ void CNayuki::UpdatePattern()
                 frame = frame - 4;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214Stance;
                 StopMoving();
                 StartPattern();
@@ -4780,7 +4780,7 @@ void CNayuki::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4788,7 +4788,7 @@ void CNayuki::UpdatePattern()
                 frame = frame - 4;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214Stance;
                 StopMoving();
                 StartPattern();
@@ -4810,36 +4810,36 @@ void CNayuki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame >= 2) {
             unkf2 = 0xa;
         }
         if (frame == 4 && timer == 0) {
-            l50.keep = 1;
-            l50.type = 0x196;
-            l50.x = (double)((int)x + facing * 0xe);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.shadow = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x196;
+            effect.x = (double)((int)x + facing * 0xe);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.shadow = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 0;
         }
         timer++;
-        if (timer >= l4 || frame == 5 && timer == l4 - m_warmUp * 6) {
+        if (timer >= duration || frame == 5 && timer == duration - m_warmUp * 6) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4850,23 +4850,23 @@ void CNayuki::UpdatePattern()
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x191;
-            l50.x = (double)((int)x + facing * 0xe);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 0;
-            l50.shadow = 1;
-            l50.layer = 0;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + facing * 0xe);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 0;
+            effect.shadow = 1;
+            effect.layer = 0;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 0;
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
-        if (timer >= l4 - (frame == 4) * m_warmUp * 3) {
+        if (timer >= duration - (frame == 4) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4878,11 +4878,11 @@ void CNayuki::UpdatePattern()
             m_playVoice = 4;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -4905,13 +4905,13 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -4934,36 +4934,36 @@ void CNayuki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame >= 2) {
             unkf2 = 0xa;
         }
         if (frame == 4 && timer == 0) {
-            l50.keep = 1;
-            l50.type = 0x197;
-            l50.x = (double)((int)x + facing * 0xe);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.shadow = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x197;
+            effect.x = (double)((int)x + facing * 0xe);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.shadow = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 0;
         }
         timer++;
-        if (timer >= l4 || frame == 5 && timer == l4 - m_warmUp * 6) {
+        if (timer >= duration || frame == 5 && timer == duration - m_warmUp * 6) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4982,37 +4982,37 @@ void CNayuki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 2) {
             m_game->FlashNegative(0xf);
         }
         if (frame == 4 && timer == 0) {
-            l50.keep = 1;
-            l50.type = 0x198;
-            l50.x = (double)((int)x + facing * 0xe);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.shadow = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x198;
+            effect.x = (double)((int)x + facing * 0xe);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.shadow = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playVoice = 0;
         }
         timer++;
-        if (timer >= l4 || frame == 5 && timer == l4 - m_warmUp * 6) {
+        if (timer >= duration || frame == 5 && timer == duration - m_warmUp * 6) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -5026,14 +5026,14 @@ void CNayuki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 || frame == 7) {
             vx = 0.0;
@@ -5062,22 +5062,22 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 6) {
-                l50.keep = 1;
-                l50.type = 0x19d;
-                l50.x = (double)(int)x;
-                l50.y = (double)((int)y - 0x50);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
-                SpawnObject(&l50);
-                l50.type = 0x19e;
-                l50.y = (double)(int)y;
-                SpawnObject(&l50);
+                effect.keep = 1;
+                effect.type = 0x19d;
+                effect.x = (double)(int)x;
+                effect.y = (double)((int)y - 0x50);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
+                SpawnObject(&effect);
+                effect.type = 0x19e;
+                effect.y = (double)(int)y;
+                SpawnObject(&effect);
             }
             if (frame == 8) {
                 if (m_patternVar1 < 0xe) {
@@ -5090,7 +5090,7 @@ void CNayuki::UpdatePattern()
             if (frame == 0xc) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 FaceOpponent();
                 StartPattern();
@@ -5105,14 +5105,14 @@ void CNayuki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 || frame == 7) {
             vx = 0.0;
@@ -5141,22 +5141,22 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 6) {
-                l50.keep = 1;
-                l50.type = 0x19d;
-                l50.x = (double)(int)x;
-                l50.y = (double)((int)y - 0x50);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
-                SpawnObject(&l50);
-                l50.type = 0x19e;
-                l50.y = (double)(int)y;
-                SpawnObject(&l50);
+                effect.keep = 1;
+                effect.type = 0x19d;
+                effect.x = (double)(int)x;
+                effect.y = (double)((int)y - 0x50);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
+                SpawnObject(&effect);
+                effect.type = 0x19e;
+                effect.y = (double)(int)y;
+                SpawnObject(&effect);
             }
             if (frame == 8) {
                 if (m_patternVar1 < 0x14) {
@@ -5169,7 +5169,7 @@ void CNayuki::UpdatePattern()
             if (frame == 0xc) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 FaceOpponent();
                 StartPattern();
@@ -5184,14 +5184,14 @@ void CNayuki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 3) {
@@ -5224,22 +5224,22 @@ void CNayuki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 6) {
-                l50.keep = 1;
-                l50.type = 0x19d;
-                l50.x = (double)(int)x;
-                l50.y = (double)((int)y - 0x50);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
-                SpawnObject(&l50);
-                l50.type = 0x19e;
-                l50.y = (double)(int)y;
-                SpawnObject(&l50);
+                effect.keep = 1;
+                effect.type = 0x19d;
+                effect.x = (double)(int)x;
+                effect.y = (double)((int)y - 0x50);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
+                SpawnObject(&effect);
+                effect.type = 0x19e;
+                effect.y = (double)(int)y;
+                SpawnObject(&effect);
             }
             if (frame == 8) {
                 if (m_patternVar1 < 0x14) {
@@ -5252,7 +5252,7 @@ void CNayuki::UpdatePattern()
             if (frame == 0xc) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 FaceOpponent();
                 StartPattern();
@@ -5274,17 +5274,17 @@ void CNayuki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 2) {
             m_game->FlashNegative(0xf);
@@ -5299,48 +5299,48 @@ void CNayuki::UpdatePattern()
             pattern = kRebound;
             StartPattern();
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x19b;
-            l50.x = (double)((int)x + facing * 0x32);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x19b;
-            l50.x = (double)((int)x - facing * 0x32);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x19b;
+            effect.x = (double)((int)x + facing * 0x32);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x19b;
+            effect.x = (double)((int)x - facing * 0x32);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             break;
         }
         if (frame == 0xc && timer == 0) {
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 0xf && timer == 0) {
-            l50.type = 0x1f;
-            l50.x = (double)((int)x + facing * 0x14);
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)((int)x + facing * 0x14);
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5349,27 +5349,27 @@ void CNayuki::UpdatePattern()
                     frame = frame - 4;
                     m_patternVar1++;
                 } else {
-                    l50.type = 0x34;
-                    l50.x = (double)(int)x;
-                    l50.y = (double)((int)y - 0x19);
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.sound = 0x16;
-                    m_game->CreateEffect((EffectDesc*)&l50);
+                    effect.type = 0x34;
+                    effect.x = (double)(int)x;
+                    effect.y = (double)((int)y - 0x19);
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.sound = 0x16;
+                    m_game->CreateEffect((EffectDesc*)&effect);
                     vx = 0.5;
                     ShakeScreen(0xf, 0xa);
-                    l50.keep = 1;
-                    l50.type = 0x1a1;
-                    l50.x = (double)(int)x;
-                    l50.y = (double)(int)y;
-                    l50.scale = 0;
-                    l50.layer = 0;
-                    l50.shadow = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
+                    effect.keep = 1;
+                    effect.type = 0x1a1;
+                    effect.x = (double)(int)x;
+                    effect.y = (double)(int)y;
+                    effect.scale = 0;
+                    effect.layer = 0;
+                    effect.shadow = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
                 }
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 4;
             }
         }

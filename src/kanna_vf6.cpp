@@ -8,26 +8,26 @@
 
 void CKanna::UpdatePattern()
 {
-    WORD x8;
-    WORD l4;
+    WORD frameCount; // frames in the action's animation
+    WORD duration; // ticks the current frame lasts
 
     if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    EffectDesc l50;
-    l4 = (short)anims[pattern].frames[frame].duration;
-    x8 = anims[pattern].frameCount;
-    InitEffectDesc((EffectDesc*)&l50);
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    duration = (short)anims[pattern].frames[frame].duration;
+    frameCount = anims[pattern].frameCount;
+    InitEffectDesc((EffectDesc*)&effect);
     switch (pattern) {
     default:
         m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -37,10 +37,10 @@ void CKanna::UpdatePattern()
         vx = 0.8;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -50,10 +50,10 @@ void CKanna::UpdatePattern()
         vx = -0.8;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -64,10 +64,10 @@ void CKanna::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -135,10 +135,10 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -214,10 +214,10 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -293,10 +293,10 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -315,10 +315,10 @@ void CKanna::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -330,10 +330,10 @@ void CKanna::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -390,10 +390,10 @@ void CKanna::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -460,10 +460,10 @@ void CKanna::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -480,10 +480,10 @@ void CKanna::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -555,10 +555,10 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -634,10 +634,10 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -713,10 +713,10 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -792,10 +792,10 @@ void CKanna::UpdatePattern()
             vy += 0.01;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -871,10 +871,10 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -950,10 +950,10 @@ void CKanna::UpdatePattern()
             vy += 0.01;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -1029,10 +1029,10 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -1061,13 +1061,13 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -1096,10 +1096,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1132,10 +1132,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1168,10 +1168,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1204,10 +1204,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1240,10 +1240,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1276,10 +1276,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1312,10 +1312,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1345,10 +1345,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1378,10 +1378,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1412,10 +1412,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1455,10 +1455,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1498,10 +1498,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1536,10 +1536,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1574,10 +1574,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1622,10 +1622,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1670,10 +1670,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1713,10 +1713,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1756,10 +1756,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1787,10 +1787,10 @@ void CKanna::UpdatePattern()
             StartPattern();
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1813,10 +1813,10 @@ void CKanna::UpdatePattern()
         vx = m_hitVx;
         vy = m_hitVy;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1843,19 +1843,19 @@ void CKanna::UpdatePattern()
             vy = -2.5;
             ay = 0.025;
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1890,10 +1890,10 @@ void CKanna::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1921,10 +1921,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1946,10 +1946,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1971,10 +1971,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2006,10 +2006,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2044,10 +2044,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2082,10 +2082,10 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2096,12 +2096,12 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1f3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x1e;
             vx = m_hitVx;
             vy = m_hitVy;
@@ -2113,10 +2113,10 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -2155,14 +2155,14 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2180,14 +2180,14 @@ void CKanna::UpdatePattern()
     case kEncased:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -2219,10 +2219,10 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -2232,14 +2232,14 @@ void CKanna::UpdatePattern()
     case kEncased2:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -2271,10 +2271,10 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -2284,14 +2284,14 @@ void CKanna::UpdatePattern()
     case kEncasedAir:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -2304,10 +2304,10 @@ void CKanna::UpdatePattern()
         }
         vy += 0.04;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -2327,14 +2327,14 @@ void CKanna::UpdatePattern()
     case kEncasedSpin:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_patternVar1 == 0) {
@@ -2350,10 +2350,10 @@ void CKanna::UpdatePattern()
         }
         vy += 0.06;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -2370,20 +2370,20 @@ void CKanna::UpdatePattern()
         break;
     case kFallInDarkness:
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1ef;
-            l50.x = 60.0;
-            l50.y = 40.0;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.scale = 0;
-            l50.layer = 0;
-            SpawnObject(&l50);
+            effect.type = 0x1ef;
+            effect.x = 60.0;
+            effect.y = 40.0;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.scale = 0;
+            effect.layer = 0;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -2391,13 +2391,13 @@ void CKanna::UpdatePattern()
         break;
     case kWakeUp:
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8 - 1) {
+            if (frame == frameCount - 1) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2411,19 +2411,19 @@ void CKanna::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -2434,19 +2434,19 @@ void CKanna::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -2459,13 +2459,13 @@ void CKanna::UpdatePattern()
             m_dashMomentum = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kWakeUp;
                 StartPattern();
             }
@@ -2490,13 +2490,13 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2524,13 +2524,13 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2558,13 +2558,13 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2592,13 +2592,13 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2623,13 +2623,13 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2654,13 +2654,13 @@ void CKanna::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2675,10 +2675,10 @@ void CKanna::UpdatePattern()
         vx = -1.2;
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2697,20 +2697,20 @@ void CKanna::UpdatePattern()
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2729,20 +2729,20 @@ void CKanna::UpdatePattern()
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2783,13 +2783,13 @@ void CKanna::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 7) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2818,10 +2818,10 @@ void CKanna::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 1;
                 break;
             }
@@ -2890,10 +2890,10 @@ void CKanna::UpdatePattern()
             vy += 0.01;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -2969,10 +2969,10 @@ void CKanna::UpdatePattern()
             vy += 0.01;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSuperJump;
                 StartPattern();
             }
@@ -2999,27 +2999,27 @@ void CKanna::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3036,21 +3036,21 @@ void CKanna::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3066,21 +3066,21 @@ void CKanna::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3114,10 +3114,10 @@ void CKanna::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3138,27 +3138,27 @@ void CKanna::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 vx = m_patternVar1 * 0.01;
                 vy = m_patternVar2 * 0.01;
@@ -3187,10 +3187,10 @@ void CKanna::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -3226,13 +3226,13 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3251,14 +3251,14 @@ void CKanna::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 1 && timer == 0) {
-            l50.type = 0x1a4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
             pattern = kJump;
@@ -3278,13 +3278,13 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3308,23 +3308,23 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x1a5;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1a5;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            effect.keep = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3360,23 +3360,23 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 6 && timer == 0) {
-            l50.type = 0x1a8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3412,13 +3412,13 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3457,23 +3457,23 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 1 && timer == 0) {
-            l50.type = 0x1a6;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a6;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3505,11 +3505,11 @@ void CKanna::UpdatePattern()
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3558,13 +3558,13 @@ void CKanna::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3603,14 +3603,14 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x1a7;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a7;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -3619,13 +3619,13 @@ void CKanna::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 4) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3664,14 +3664,14 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 1 && timer == 0) {
-            l50.type = 0x1a9;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a9;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -3680,13 +3680,13 @@ void CKanna::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3716,7 +3716,7 @@ void CKanna::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3727,7 +3727,7 @@ void CKanna::UpdatePattern()
                     y = 0.0;
                 }
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3757,11 +3757,11 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3787,23 +3787,23 @@ void CKanna::UpdatePattern()
             y = 0.0;
             vy = 0.0;
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = 7;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = 7;
+            m_game->CreateEffect((EffectDesc*)&effect);
             pattern = kUnusedJump2CLanding;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -3816,11 +3816,11 @@ void CKanna::UpdatePattern()
             vy = -2.4;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3831,20 +3831,20 @@ void CKanna::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = 7;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = 7;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3871,20 +3871,20 @@ void CKanna::UpdatePattern()
             (*m_opponent)->StartPattern();
             pattern = kUnusedThrowHit;
             (*m_opponent)->m_noAirRecovery = 1;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x25);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x25);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3899,7 +3899,7 @@ void CKanna::UpdatePattern()
             DealDamage(0x4e2, 750.0);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3928,7 +3928,7 @@ void CKanna::UpdatePattern()
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->StartPattern();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3952,13 +3952,13 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3981,13 +3981,13 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4018,13 +4018,13 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4047,13 +4047,13 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -4076,13 +4076,13 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -4117,7 +4117,7 @@ void CKanna::UpdatePattern()
             m_gauge = m_gauge + 0x23;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
@@ -4128,7 +4128,7 @@ void CKanna::UpdatePattern()
                 vy = -1.5;
                 ay = 0.032;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4142,20 +4142,20 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
             m_recoilGuardWindow = 0;
             m_freezeTime = 0x3c;
-            l50.type = 0x28;
-            l50.x = (double)((int)x + facing * 0xa);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.sound = 0x13;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x28;
+            effect.x = (double)((int)x + facing * 0xa);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.sound = 0x13;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4167,35 +4167,35 @@ void CKanna::UpdatePattern()
             StopMoving();
         }
         if (frame == 4 && timer == 0) {
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = -((facing == 1) - 1);
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = -((facing == 1) - 1);
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 1;
         }
         if (frame == 4 && timer == 0) {
-            l50.type = 0x194;
-            l50.x = (double)((int)x - facing * 0x50);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x194;
+            effect.x = (double)((int)x - facing * 0x50);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4210,13 +4210,13 @@ void CKanna::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             vx = 0.0;
             vy = 0.0;
@@ -4227,35 +4227,35 @@ void CKanna::UpdatePattern()
             }
         }
         if (frame == 4 && timer == 0) {
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = -((facing == 1) - 1);
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = -((facing == 1) - 1);
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 1;
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 0x1ab;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1ab;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4276,23 +4276,23 @@ void CKanna::UpdatePattern()
             m_playVoice = 1;
         }
         if (frame == 4 && timer == 0) {
-            l50.type = 0x194;
-            l50.x = (double)((int)x - facing * 0x50);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x194;
+            effect.x = (double)((int)x - facing * 0x50);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -4315,23 +4315,23 @@ void CKanna::UpdatePattern()
         }
         if (0) {}
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 3) {
                 vy = -2.5;
                 ay = 0.045;
-                l50.type = 0x1b9;
-                l50.x = x;
-                l50.y = y;
-                l50.keep = 1;
-                l50.facing = facing;
-                l50.scale = 2;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.type = 0x1b9;
+                effect.x = x;
+                effect.y = y;
+                effect.keep = 1;
+                effect.facing = facing;
+                effect.scale = 2;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -4346,26 +4346,26 @@ void CKanna::UpdatePattern()
                 } else {
                     m_rfGauge -= 250.0;
                 }
-                l50.type = 0x21;
-                l50.sound = 0xb;
-                l50.x = (double)(int)x;
-                l50.y = (double)((int)y - 0x32);
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x21;
+                effect.sound = 0xb;
+                effect.x = (double)(int)x;
+                effect.y = (double)((int)y - 0x32);
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 m_patternVar2++;
             }
             m_hitsLeft = 1;
         }
         if (frame == 1 && timer == 0) {
-            l50.type = 0x1b9;
-            l50.x = x;
-            l50.y = y;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1b9;
+            effect.x = x;
+            effect.y = y;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (y < 0.0) {
             vy = vy + ay;
@@ -4378,7 +4378,7 @@ void CKanna::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4394,7 +4394,7 @@ void CKanna::UpdatePattern()
             if (frame == 9) {
                 m_hitsLeft = 1;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kFall;
             }
@@ -4402,11 +4402,11 @@ void CKanna::UpdatePattern()
         break;
     case k623Landing:
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
@@ -4418,27 +4418,27 @@ void CKanna::UpdatePattern()
             StopMoving();
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x190;
-            l50.x = (double)((int)x + facing * 0x1e);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = -((facing == 1) - 1);
-            l50.facing = facing;
-            l50.shadow = 1;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + facing * 0x1e);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = -((facing == 1) - 1);
+            effect.facing = facing;
+            effect.shadow = 1;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame > 9) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4449,27 +4449,27 @@ void CKanna::UpdatePattern()
             StopMoving();
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x191;
-            l50.x = (double)((int)x + facing * 0x1e);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = -((facing == 1) - 1);
-            l50.facing = facing;
-            l50.shadow = 1;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + facing * 0x1e);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = -((facing == 1) - 1);
+            effect.facing = facing;
+            effect.shadow = 1;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame > 9) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4480,27 +4480,27 @@ void CKanna::UpdatePattern()
             StopMoving();
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x192;
-            l50.x = (double)((int)x + facing * 0x1e);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = -((facing == 1) - 1);
-            l50.facing = facing;
-            l50.shadow = 1;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x192;
+            effect.x = (double)((int)x + facing * 0x1e);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = -((facing == 1) - 1);
+            effect.facing = facing;
+            effect.shadow = 1;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame > 9) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4511,36 +4511,36 @@ void CKanna::UpdatePattern()
             StopMoving();
         }
         if (frame == 7 && timer == 0) {
-            l50.type = 0x195;
-            l50.x = (double)((int)x + facing * 0x23);
-            l50.y = (double)((int)y - 0x3f);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.side = -((facing == 1) - 1);
-            l50.facing = facing;
-            l50.shadow = 0;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x195;
+            effect.x = (double)((int)x + facing * 0x23);
+            effect.y = (double)((int)y - 0x3f);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.side = -((facing == 1) - 1);
+            effect.facing = facing;
+            effect.shadow = 0;
+            effect.keep = 1;
+            SpawnObject(&effect);
         }
         if (frame == 8 && timer == 0) {
-            l50.type = 0x196;
-            l50.x = (double)((int)x + facing * 0x50);
-            l50.y = (double)((int)y - 0x3f);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.side = -((facing == 1) - 1);
-            l50.facing = facing;
-            l50.shadow = 0;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x196;
+            effect.x = (double)((int)x + facing * 0x50);
+            effect.y = (double)((int)y - 0x3f);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.side = -((facing == 1) - 1);
+            effect.facing = facing;
+            effect.shadow = 0;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4555,35 +4555,35 @@ void CKanna::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 7 && timer == 0) {
-            l50.type = 0x1ad;
-            l50.x = (double)((int)x + facing * 0x23);
-            l50.y = (double)((int)y - 0x3f);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.side = -((facing == 1) - 1);
-            l50.facing = facing;
-            l50.shadow = 0;
-            SpawnObject(&l50);
+            effect.type = 0x1ad;
+            effect.x = (double)((int)x + facing * 0x23);
+            effect.y = (double)((int)y - 0x3f);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.side = -((facing == 1) - 1);
+            effect.facing = facing;
+            effect.shadow = 0;
+            SpawnObject(&effect);
         }
         if (frame == 8 && timer == 0) {
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4599,14 +4599,14 @@ void CKanna::UpdatePattern()
             m_freezeTime = 0xc6;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x1d);
-            l50.y = (double)((int)y - 0x3f);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x1d);
+            effect.y = (double)((int)y - 0x3f);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x63;
             m_playSound = 0x25;
         }
@@ -4614,16 +4614,16 @@ void CKanna::UpdatePattern()
             m_game->FlashNegative(0xf);
         }
         if (frame == 7 && timer == 0) {
-            l50.type = 0x19f;
-            l50.x = x - facing * 0x23;
-            l50.y = y - 67.0;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = -1;
-            l50.movesInFreeze = 1;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x19f;
+            effect.x = x - facing * 0x23;
+            effect.y = y - 67.0;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = -1;
+            effect.movesInFreeze = 1;
+            effect.keep = 1;
+            SpawnObject(&effect);
         }
         if (frame > 3) {
             FocusCameraY(0x32, 3);
@@ -4634,22 +4634,22 @@ void CKanna::UpdatePattern()
         if (frame > 0xd && frame < 0x11) {
             m_patternVar2++;
             if ((WORD)Random(0, 0x64) > m_patternVar2 * 0.08 + 60.0) {
-                l50.type = 0x1a1;
-                l50.layer = 1;
-                l50.keep = 1;
+                effect.type = 0x1a1;
+                effect.layer = 1;
+                effect.keep = 1;
                 if ((WORD)Random(0, 0x64) > 0x32) {
-                    l50.type = 0x1a0;
-                    l50.layer = 0;
+                    effect.type = 0x1a0;
+                    effect.layer = 0;
                 }
-                l50.x = x - facing * 0x12c;
-                l50.y = (double)((WORD)Random(0, 0x140) - 0x140);
-                l50.facing = facing;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.x = x - facing * 0x12c;
+                effect.y = (double)((WORD)Random(0, 0x140) - 0x140);
+                effect.facing = facing;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4658,7 +4658,7 @@ void CKanna::UpdatePattern()
                 m_patternVar1++;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 FaceOpponent();
                 StartPattern();
                 pattern = kStand;
@@ -4682,14 +4682,14 @@ void CKanna::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x63;
         }
         if (frame > 6 && frame < 0xc) {
@@ -4697,21 +4697,21 @@ void CKanna::UpdatePattern()
         }
         if (frame == 8 && timer == 0) {
             ShakeScreen(3, 0x14);
-            l50.type = 0x1a2;
-            l50.x = x + 0.0 - 30.0;
-            l50.y = y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            SpawnObject(&l50);
-            l50.x = x - facing * 0x28 - 30.0;
-            l50.facing = -facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a2;
+            effect.x = x + 0.0 - 30.0;
+            effect.y = y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            SpawnObject(&effect);
+            effect.x = x - facing * 0x28 - 30.0;
+            effect.facing = -facing;
+            SpawnObject(&effect);
             m_playSound = 0x12;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4719,7 +4719,7 @@ void CKanna::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4738,34 +4738,34 @@ void CKanna::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 0x21);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 6 && frame < 0xc) {
             FocusCameraY(0x32, 3);
         }
         if (frame == 8 && timer == 0) {
-            l50.type = 0x1aa;
-            l50.x = x;
-            l50.y = y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1aa;
+            effect.x = x;
+            effect.y = y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 FaceOpponent();
                 StartPattern();
@@ -4780,63 +4780,63 @@ void CKanna::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x63;
         }
         if (frame == 5 && timer == 0) {
-            l50.type = 0x1b2;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1b2;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            effect.keep = 1;
+            SpawnObject(&effect);
         }
         if (frame == 0x10 && timer == 0) {
-            l50.type = 0x1b3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1b3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if ((frame == 8 || frame == 0x12) && m_attackResult == 3) {
             (*m_opponent)->m_hitstop = 0x10e;
         }
         if (frame == 0x20 && timer == 0) {
-            l50.type = 0x1b0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1b0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             (*m_opponent)->m_koDelay = 0x7530;
         }
         if (frame == 0x2c && timer == 0) {
             m_freezeTime = 0x23a;
             FillBackground(0xb0, 0xbb8);
-            l50.type = 9;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x63;
             (*m_opponent)->x = x;
             m_playVoice = 0xa;
@@ -4845,36 +4845,36 @@ void CKanna::UpdatePattern()
         if (frame == 0x33 && timer == 0) {
             vy = -7.5;
             ay = 0.035;
-            l50.type = 0x1b4;
-            l50.x = 0.0;
-            l50.y = 0.0;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.keep = 1;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1b5;
-            l50.x = 0.0;
-            l50.y = 0.0;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.keep = 1;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
-            l50.type = 0x1b6;
-            l50.x = 0.0;
-            l50.y = 0.0;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1b4;
+            effect.x = 0.0;
+            effect.y = 0.0;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.keep = 1;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1b5;
+            effect.x = 0.0;
+            effect.y = 0.0;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.keep = 1;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
+            effect.type = 0x1b6;
+            effect.x = 0.0;
+            effect.y = 0.0;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
             m_playVoice = 0xb;
         }
         if (frame == 0x35 && m_attackResult == 3) {
@@ -4885,39 +4885,39 @@ void CKanna::UpdatePattern()
             ay = 0.0;
             FillBackground(0xb0, 3);
             m_playVoice = 0xc;
-            l50.type = 0x1b7;
-            l50.x = x;
-            l50.y = y - 160.0;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = 1;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1b7;
+            effect.x = x;
+            effect.y = y - 160.0;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = 1;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
             (*m_opponent)->m_game->m_hideObjectsTime = 0;
         }
         if (frame == 0x37 && timer == 0) {
             vy = -7.0;
             ay = 0.03;
-            l50.type = 0x1c0;
-            l50.x = x;
-            l50.y = y - 150.0;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.keep = 1;
-            l50.facing = 1;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
-            l50.x = x + 40.0;
-            l50.y = y - 140.0;
-            SpawnObject(&l50);
-            l50.x = x - 50.0;
-            l50.y = y - 150.0;
-            SpawnObject(&l50);
-            l50.type = 0x1b8;
-            l50.x = x;
-            l50.y = y - 150.0;
-            SpawnObject(&l50);
+            effect.type = 0x1c0;
+            effect.x = x;
+            effect.y = y - 150.0;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.keep = 1;
+            effect.facing = 1;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
+            effect.x = x + 40.0;
+            effect.y = y - 140.0;
+            SpawnObject(&effect);
+            effect.x = x - 50.0;
+            effect.y = y - 150.0;
+            SpawnObject(&effect);
+            effect.type = 0x1b8;
+            effect.x = x;
+            effect.y = y - 150.0;
+            SpawnObject(&effect);
         }
         if (frame == 0x37 && m_attackResult == 3) {
             (*m_opponent)->m_koDelay = 0;
@@ -4942,7 +4942,7 @@ void CKanna::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 0x12 || frame == 0x23 || frame > 0x32) {
@@ -4963,15 +4963,15 @@ void CKanna::UpdatePattern()
                 pattern = kLv4Miss;
             }
             if (frame == 0x2b) {
-                l50.type = 0x1b1;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.facing = facing;
-                l50.movesInFreeze = 1;
-                SpawnObject(&l50);
+                effect.type = 0x1b1;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.facing = facing;
+                effect.movesInFreeze = 1;
+                SpawnObject(&effect);
             }
             if (frame == 0x35) {
                 m_playVoice = 9;
@@ -4979,7 +4979,7 @@ void CKanna::UpdatePattern()
             if (frame == 0x36) {
                 frame--;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -4991,11 +4991,11 @@ void CKanna::UpdatePattern()
             ay = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();

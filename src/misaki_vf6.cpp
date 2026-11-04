@@ -8,26 +8,26 @@
 
 void CMisaki::UpdatePattern()
 {
-    WORD x8;
-    WORD l4;
+    WORD frameCount; // frames in the action's animation
+    WORD duration; // ticks the current frame lasts
 
     if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    EffectDesc l50;
-    l4 = (short)anims[pattern].frames[frame].duration;
-    x8 = anims[pattern].frameCount;
-    InitEffectDesc((EffectDesc*)&l50);
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    duration = (short)anims[pattern].frames[frame].duration;
+    frameCount = anims[pattern].frameCount;
+    InitEffectDesc((EffectDesc*)&effect);
     switch (pattern) {
     default:
         m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -37,10 +37,10 @@ void CMisaki::UpdatePattern()
         vx = 0.8;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -50,10 +50,10 @@ void CMisaki::UpdatePattern()
         vx = -0.8;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -64,10 +64,10 @@ void CMisaki::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -91,10 +91,10 @@ void CMisaki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -127,10 +127,10 @@ void CMisaki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -159,10 +159,10 @@ void CMisaki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -181,10 +181,10 @@ void CMisaki::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -196,10 +196,10 @@ void CMisaki::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -209,10 +209,10 @@ void CMisaki::UpdatePattern()
         vy = vy + ay;
         m_dashMomentum = 0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -229,10 +229,10 @@ void CMisaki::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -249,10 +249,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -273,10 +273,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -297,10 +297,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -329,13 +329,13 @@ void CMisaki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -364,10 +364,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -400,10 +400,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -436,10 +436,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -472,10 +472,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -508,10 +508,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -544,10 +544,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -580,10 +580,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -613,10 +613,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -646,10 +646,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -680,10 +680,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -723,10 +723,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -766,10 +766,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -804,10 +804,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -842,10 +842,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -890,10 +890,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -938,10 +938,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -981,10 +981,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1024,10 +1024,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1055,10 +1055,10 @@ void CMisaki::UpdatePattern()
             StartPattern();
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1081,10 +1081,10 @@ void CMisaki::UpdatePattern()
         vx = m_hitVx;
         vy = m_hitVy;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1111,19 +1111,19 @@ void CMisaki::UpdatePattern()
             vy = -2.5;
             ay = 0.025;
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1158,10 +1158,10 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1189,10 +1189,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1214,10 +1214,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1239,10 +1239,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1274,10 +1274,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1312,10 +1312,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1350,10 +1350,10 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1364,12 +1364,12 @@ void CMisaki::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1f3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x1e;
             vx = m_hitVx;
             vy = m_hitVy;
@@ -1381,10 +1381,10 @@ void CMisaki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -1423,14 +1423,14 @@ void CMisaki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1448,14 +1448,14 @@ void CMisaki::UpdatePattern()
     case kEncased:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1487,10 +1487,10 @@ void CMisaki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1500,14 +1500,14 @@ void CMisaki::UpdatePattern()
     case kEncased2:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1539,10 +1539,10 @@ void CMisaki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1552,14 +1552,14 @@ void CMisaki::UpdatePattern()
     case kEncasedAir:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1572,10 +1572,10 @@ void CMisaki::UpdatePattern()
         }
         vy += 0.04;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1595,14 +1595,14 @@ void CMisaki::UpdatePattern()
     case kEncasedSpin:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_patternVar1 == 0) {
@@ -1618,10 +1618,10 @@ void CMisaki::UpdatePattern()
         }
         vy += 0.06;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1638,20 +1638,20 @@ void CMisaki::UpdatePattern()
         break;
     case kFallInDarkness:
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1ef;
-            l50.x = 60.0;
-            l50.y = 40.0;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.scale = 0;
-            l50.layer = 0;
-            SpawnObject(&l50);
+            effect.type = 0x1ef;
+            effect.x = 60.0;
+            effect.y = 40.0;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.scale = 0;
+            effect.layer = 0;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -1659,13 +1659,13 @@ void CMisaki::UpdatePattern()
         break;
     case kWakeUp:
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8 - 1) {
+            if (frame == frameCount - 1) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1679,19 +1679,19 @@ void CMisaki::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1702,19 +1702,19 @@ void CMisaki::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1727,13 +1727,13 @@ void CMisaki::UpdatePattern()
             m_dashMomentum = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kWakeUp;
                 StartPattern();
             }
@@ -1764,13 +1764,13 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1804,13 +1804,13 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1844,13 +1844,13 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1884,13 +1884,13 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1921,13 +1921,13 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1958,13 +1958,13 @@ void CMisaki::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1979,10 +1979,10 @@ void CMisaki::UpdatePattern()
         vx = -1.2;
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2001,20 +2001,20 @@ void CMisaki::UpdatePattern()
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2033,20 +2033,20 @@ void CMisaki::UpdatePattern()
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2062,21 +2062,21 @@ void CMisaki::UpdatePattern()
     case 0xa1:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
                 ay = 0.035;
@@ -2094,12 +2094,12 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
@@ -2114,13 +2114,13 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0x12) {
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2151,13 +2151,13 @@ void CMisaki::UpdatePattern()
         m_dashMomentum = 1;
         m_patternVar1++;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 5) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2193,13 +2193,13 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2 && vx < -2.2) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 2;
             }
         }
@@ -2215,10 +2215,10 @@ void CMisaki::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2252,10 +2252,10 @@ void CMisaki::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2292,27 +2292,27 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2329,21 +2329,21 @@ void CMisaki::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -2359,21 +2359,21 @@ void CMisaki::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2407,10 +2407,10 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2431,27 +2431,27 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 vx = m_patternVar1 * 0.01;
                 vy = m_patternVar2 * 0.01;
@@ -2480,10 +2480,10 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2508,7 +2508,7 @@ void CMisaki::UpdatePattern()
             m_playSound = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 3) {
@@ -2519,7 +2519,7 @@ void CMisaki::UpdatePattern()
             if (frame == 0xa) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -2554,13 +2554,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2596,13 +2596,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2626,13 +2626,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2666,17 +2666,17 @@ void CMisaki::UpdatePattern()
             m_gauge = m_gauge + 0x23;
             m_playSound = 0x12;
             m_hitsLeft = 1;
-            l50.type = 0x190;
-            l50.x = (double)((int)x + facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.sound = 1;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.sound = 1;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
@@ -2686,7 +2686,7 @@ void CMisaki::UpdatePattern()
                 m_patternVar2++;
                 frame = 5;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2722,13 +2722,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2767,13 +2767,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2809,14 +2809,14 @@ void CMisaki::UpdatePattern()
             vx -= 0.08;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 5 && vx > 0.6) {
                 frame = 3;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2853,13 +2853,13 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2892,13 +2892,13 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 4) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2931,13 +2931,13 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2967,7 +2967,7 @@ void CMisaki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -2978,7 +2978,7 @@ void CMisaki::UpdatePattern()
                     y = 0.0;
                 }
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3008,11 +3008,11 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3038,23 +3038,23 @@ void CMisaki::UpdatePattern()
             y = 0.0;
             vy = 0.0;
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = 7;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = 7;
+            m_game->CreateEffect((EffectDesc*)&effect);
             pattern = kUnusedDiveLanding;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -3067,11 +3067,11 @@ void CMisaki::UpdatePattern()
             vy = -2.4;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3082,20 +3082,20 @@ void CMisaki::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = 7;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = 7;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3122,20 +3122,20 @@ void CMisaki::UpdatePattern()
             (*m_opponent)->StartPattern();
             pattern = kThrowHit;
             (*m_opponent)->m_noAirRecovery = 1;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x25);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x25);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3150,7 +3150,7 @@ void CMisaki::UpdatePattern()
             DealDamage(0x4e2, 750.0);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3179,7 +3179,7 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->StartPattern();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3203,13 +3203,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3232,13 +3232,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3269,13 +3269,13 @@ void CMisaki::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3298,13 +3298,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 5) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3327,13 +3327,13 @@ void CMisaki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3368,7 +3368,7 @@ void CMisaki::UpdatePattern()
             m_gauge = m_gauge + 0x23;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
@@ -3379,7 +3379,7 @@ void CMisaki::UpdatePattern()
                 vy = -1.5;
                 ay = 0.032;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3414,7 +3414,7 @@ void CMisaki::UpdatePattern()
             m_gauge = m_gauge + 0x23;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
@@ -3425,7 +3425,7 @@ void CMisaki::UpdatePattern()
                 vy = -1.5;
                 ay = 0.032;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3438,12 +3438,12 @@ void CMisaki::UpdatePattern()
             (*m_opponent)->StartPattern();
             StopMoving();
             (*m_opponent)->m_noAirRecovery = 1;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x36);
-            l50.y = (double)((int)y - 0x54);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x36);
+            effect.y = (double)((int)y - 0x54);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             frame = 0;
             timer = 0;
             pattern = kAirThrowHit;
@@ -3453,7 +3453,7 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
@@ -3462,7 +3462,7 @@ void CMisaki::UpdatePattern()
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kJumpC;
                 frame = 2;
             }
@@ -3471,7 +3471,7 @@ void CMisaki::UpdatePattern()
     case kAirThrowHit:
         m_dashMomentum = 0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3511,7 +3511,7 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->y = y - 69.0;
                 (*m_opponent)->x = x - facing * 0x27;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 facing = -facing;
                 ay = 0.035;
                 pattern = kSpecialLanding;
@@ -3535,23 +3535,23 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             if (y == 0.0) {
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.side = -((facing == 1) - 1);
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.side = -((facing == 1) - 1);
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             m_hitsLeft = 0;
         }
         if (frame == 6 && timer == 0) {
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 1.4;
             vy = -1.5;
             ay = 0.03;
@@ -3576,7 +3576,7 @@ void CMisaki::UpdatePattern()
             m_patternVar1 = 0;
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
@@ -3588,7 +3588,7 @@ void CMisaki::UpdatePattern()
             if (frame == 5 || frame == 0xe) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSpecialLanding;
                 StartPattern();
             }
@@ -3610,23 +3610,23 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             if (y == 0.0) {
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 1;
-                l50.side = -((facing == 1) - 1);
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 1;
+                effect.side = -((facing == 1) - 1);
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             m_hitsLeft = 1;
         }
         if (frame == 6 && timer == 0) {
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 1.4;
             vy = -1.5;
             ay = 0.03;
@@ -3651,7 +3651,7 @@ void CMisaki::UpdatePattern()
             m_patternVar1 = 0;
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
@@ -3660,7 +3660,7 @@ void CMisaki::UpdatePattern()
             if (frame == 5 || frame == 0xe) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSpecialLanding;
                 StartPattern();
             }
@@ -3675,13 +3675,13 @@ void CMisaki::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             vx = 0.0;
             vy = 0.0;
@@ -3692,22 +3692,22 @@ void CMisaki::UpdatePattern()
             }
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 1;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 1;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 && timer == 0) {
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 1.2;
             vy = -2.9;
             ay = 0.035;
@@ -3726,18 +3726,18 @@ void CMisaki::UpdatePattern()
             vx = 0.0;
             vy = -1.8;
             m_playSound = 0x12;
-            l50.type = 0x199;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x14);
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x199;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x14);
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_hitsLeft = 1;
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3750,7 +3750,7 @@ void CMisaki::UpdatePattern()
             if (frame == 5 || frame == 0x11) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSpecialLanding;
                 frame = 0;
                 timer = 0;
@@ -3771,7 +3771,7 @@ void CMisaki::UpdatePattern()
             vy = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3779,7 +3779,7 @@ void CMisaki::UpdatePattern()
                 frame = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3790,18 +3790,18 @@ void CMisaki::UpdatePattern()
         vy = 0.0;
         m_dashMomentum = 0;
         if (frame == 3 && timer == 0) {
-            l50.type = 0x196;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x196;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playSound = 0x12;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -3809,7 +3809,7 @@ void CMisaki::UpdatePattern()
                 m_patternVar1--;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -3821,18 +3821,18 @@ void CMisaki::UpdatePattern()
         vy = 0.0;
         m_dashMomentum = 0;
         if (frame == 3 && timer == 0) {
-            l50.type = 0x197;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x197;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_playSound = 0x12;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -3840,7 +3840,7 @@ void CMisaki::UpdatePattern()
                 m_patternVar1--;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -3858,26 +3858,26 @@ void CMisaki::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 3 && timer == 0) {
-            l50.type = 0x1a1;
-            l50.x = (double)((int)x + facing * 0x14);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a1;
+            effect.x = (double)((int)x + facing * 0x14);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0xf;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -3885,7 +3885,7 @@ void CMisaki::UpdatePattern()
                 m_patternVar1--;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -3913,12 +3913,12 @@ void CMisaki::UpdatePattern()
             (*m_opponent)->StartPattern();
             StopMoving();
             (*m_opponent)->m_noAirRecovery = 1;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x36);
-            l50.y = (double)((int)y - 0x54);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x36);
+            effect.y = (double)((int)y - 0x54);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             frame = 7;
             timer = 0;
             (*m_opponent)->pattern = kThrownStandHigh;
@@ -3933,19 +3933,19 @@ void CMisaki::UpdatePattern()
             break;
         }
         if (frame == 5 && timer == 0 && m_patternVar1 == 0) {
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 1.4;
             vy = -3.0;
             ay = 0.059;
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3994,7 +3994,7 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->y = y - 69.0;
                 (*m_opponent)->x = x - facing * 0x27;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 facing = -facing;
                 ay = 0.035;
                 pattern = kSpecialLanding;
@@ -4010,13 +4010,13 @@ void CMisaki::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StartAfterimages(3);
             m_hitsLeft = 0;
             vx = 0.0;
@@ -4031,18 +4031,18 @@ void CMisaki::UpdatePattern()
             (*m_opponent)->m_noAirRecovery = 1;
             (*m_opponent)->y = -85.0;
             (*m_opponent)->x = facing * 0x27 + x;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x24);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x24);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             pattern = k623CSlam;
             (*m_opponent)->pattern = kThrownDoubledOver;
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && (*m_opponent)->y < 0.0) {
@@ -4051,7 +4051,7 @@ void CMisaki::UpdatePattern()
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4063,7 +4063,7 @@ void CMisaki::UpdatePattern()
             FocusCameraY(0x32, 3);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1) {
@@ -4104,7 +4104,7 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->StartPattern();
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4132,12 +4132,12 @@ void CMisaki::UpdatePattern()
             (*m_opponent)->StartPattern();
             StopMoving();
             (*m_opponent)->m_noAirRecovery = 1;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x36);
-            l50.y = (double)((int)y - 0x54);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x36);
+            effect.y = (double)((int)y - 0x54);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             frame = 7;
             timer = 0;
             (*m_opponent)->pattern = kThrownStandHigh;
@@ -4152,19 +4152,19 @@ void CMisaki::UpdatePattern()
             break;
         }
         if (frame == 5 && timer == 0 && m_patternVar1 == 0) {
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 1.4;
             vy = -4.0;
             ay = 0.059;
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4213,7 +4213,7 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->y = y - 69.0;
                 (*m_opponent)->x = x - facing * 0x27;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 facing = -facing;
                 ay = 0.035;
                 pattern = kSpecialLanding;
@@ -4234,20 +4234,20 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x5a;
             m_playSound = 3;
             pattern = kCounterAttack;
-            l50.type = 0;
-            l50.x = (double)((int)x - (facing << 3));
-            l50.y = (double)((int)y - 0x35);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x - (facing << 3));
+            effect.y = (double)((int)y - 0x35);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4262,23 +4262,23 @@ void CMisaki::UpdatePattern()
             m_gauge = m_gauge + 0xf;
             m_playSound = 0x14;
             m_hitsLeft = 1;
-            l50.type = 0x191;
-            l50.x = (double)((int)x + facing * 0x28);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.facing = facing;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + facing * 0x28);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.facing = facing;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4302,19 +4302,19 @@ void CMisaki::UpdatePattern()
             m_patternVar1 = 0;
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
             if (frame == 4 && timer == 0) {
-                l50.type = 8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 vx = 1.4;
                 vy = -1.5;
                 ay = 0.03;
@@ -4330,7 +4330,7 @@ void CMisaki::UpdatePattern()
             if (frame == 0x13) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4353,19 +4353,19 @@ void CMisaki::UpdatePattern()
             m_patternVar1 = 0;
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
             if (frame == 4 && timer == 0) {
-                l50.type = 8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 vx = 1.4;
                 vy = -1.5;
                 ay = 0.03;
@@ -4377,7 +4377,7 @@ void CMisaki::UpdatePattern()
             if (frame == 0xf) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -4396,20 +4396,20 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x5a;
             m_playSound = 3;
             pattern = kCounterAttack;
-            l50.type = 0;
-            l50.x = (double)((int)x - (facing << 3));
-            l50.y = (double)((int)y - 0x35);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x - (facing << 3));
+            effect.y = (double)((int)y - 0x35);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4428,14 +4428,14 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 7) {
             FocusCameraY(0x32, 3);
@@ -4447,14 +4447,14 @@ void CMisaki::UpdatePattern()
             vy = -1.45;
             ay = 0.02;
             m_playSound = 0x16;
-            l50.keep = 1;
-            l50.type = 0x1a3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1a3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (vx + y >= 0.0) {
             pattern = kLand;
@@ -4463,14 +4463,14 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 0xd && vy < 0.0) {
                 frame = 0xa;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4489,14 +4489,14 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 7) {
             FocusCameraY(0x32, 3);
@@ -4508,14 +4508,14 @@ void CMisaki::UpdatePattern()
             vy = -1.8;
             ay = 0.013;
             m_playSound = 0x16;
-            l50.keep = 1;
-            l50.type = 0x193;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x193;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (vx + y >= 0.0) {
             pattern = kLand;
@@ -4524,14 +4524,14 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 0xd && vy < 0.0) {
                 frame = 0xa;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4550,14 +4550,14 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 6) {
@@ -4573,14 +4573,14 @@ void CMisaki::UpdatePattern()
             vy = -2.5;
             ay = 0.013;
             m_playSound = 0x16;
-            l50.keep = 1;
-            l50.type = 0x1a7;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.scale = 2;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.keep = 1;
+            effect.type = 0x1a7;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.scale = 2;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (vx + y >= 0.0) {
             pattern = kLand;
@@ -4589,14 +4589,14 @@ void CMisaki::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 0xd && vy < 0.0) {
                 frame = 0xa;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4614,50 +4614,50 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             FocusCameraY(0x32, 0x2d);
         }
         if (frame == 9 && timer == 0) {
             m_patternVar1 = 0;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.type = 0x19b;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
+                effect.type = 0x19b;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
                 m_patternVar1++;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
             }
             if ((WORD)Random(0, 0x64) < 0x32 && m_patternVar1 == 0) {
-                l50.type = 0x19d;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
+                effect.type = 0x19d;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
                 m_patternVar1++;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
             }
             if (m_patternVar1 == 0) {
-                l50.type = 0x19f;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.type = 0x19f;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4665,7 +4665,7 @@ void CMisaki::UpdatePattern()
                 frame = 4;
                 m_patternVar2 += 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4683,51 +4683,51 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             FocusCameraY(0x32, 0x2d);
             m_invulTime = 0x87;
         }
         if (frame == 9 && timer == 0) {
             m_patternVar1 = 0;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.type = 0x19b;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
+                effect.type = 0x19b;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
                 m_patternVar1++;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
             }
             if ((WORD)Random(0, 0x64) < 0x32 && m_patternVar1 == 0) {
-                l50.type = 0x19d;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
+                effect.type = 0x19d;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
                 m_patternVar1++;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
             }
             if (m_patternVar1 == 0) {
-                l50.type = 0x19f;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.type = 0x19f;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4735,7 +4735,7 @@ void CMisaki::UpdatePattern()
                 frame = 4;
                 m_patternVar2 += 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4753,14 +4753,14 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             FocusCameraY(0x32, 0x2d);
             m_playSound = 0x25;
             m_invulTime = 0x99;
@@ -4771,37 +4771,37 @@ void CMisaki::UpdatePattern()
         if (frame == 9 && timer == 0) {
             m_patternVar1 = 0;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.type = 0x19b;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
+                effect.type = 0x19b;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
                 m_patternVar1++;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
             }
             if ((WORD)Random(0, 0x64) < 0x32 && m_patternVar1 == 0) {
-                l50.type = 0x19d;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
+                effect.type = 0x19d;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
                 m_patternVar1++;
-                SpawnObject(&l50);
+                SpawnObject(&effect);
             }
             if (m_patternVar1 == 0) {
-                l50.type = 0x19f;
-                l50.x = (double)((int)x + facing * 0x14);
-                l50.y = (double)((int)y - 0x4a);
-                l50.facing = facing;
-                l50.scale = 0;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.type = 0x19f;
+                effect.x = (double)((int)x + facing * 0x14);
+                effect.y = (double)((int)y - 0x4a);
+                effect.facing = facing;
+                effect.scale = 0;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4809,7 +4809,7 @@ void CMisaki::UpdatePattern()
                 frame = 4;
                 m_patternVar2 += 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4823,14 +4823,14 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             FocusCameraY(0x32, 0x2d);
         }
         if (frame > 4 && (*m_opponent)->y == 0.0) {
@@ -4842,13 +4842,13 @@ void CMisaki::UpdatePattern()
             m_patternVar3 = 0xf;
         }
         if (frame == 5 && timer == 0 && (m_patternVar2 == 0 || m_patternVar2 == 3 || m_patternVar2 == 6 || m_patternVar2 == 9 || m_patternVar2 == 0xc || m_patternVar2 == 0xf)) {
-            l50.type = 0x1a2;
-            l50.x = (double)((int)x + facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a2;
+            effect.x = (double)((int)x + facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (frame > 4 && frame < 8) {
             m_patternVar1++;
@@ -4868,13 +4868,13 @@ void CMisaki::UpdatePattern()
             (*m_opponent)->StartPattern();
             StartPattern();
             (*m_opponent)->m_noAirRecovery = 1;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x1d);
-            l50.y = (double)((int)y - 0x53);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x1d);
+            effect.y = (double)((int)y - 0x53);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             pattern = k6321463214AThrow;
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->y = -100.0;
@@ -4883,7 +4883,7 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4894,7 +4894,7 @@ void CMisaki::UpdatePattern()
                 frame = frame - 3;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4908,14 +4908,14 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             FocusCameraY(0x32, 0x2d);
         }
         if (frame > 4 && (*m_opponent)->y == 0.0) {
@@ -4927,13 +4927,13 @@ void CMisaki::UpdatePattern()
             m_patternVar3 = 0xf;
         }
         if (frame == 5 && timer == 0 && (m_patternVar2 == 0 || m_patternVar2 == 3 || m_patternVar2 == 6 || m_patternVar2 == 9 || m_patternVar2 == 0xc || m_patternVar2 == 0xf)) {
-            l50.type = 0x1a2;
-            l50.x = (double)((int)x + facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a2;
+            effect.x = (double)((int)x + facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (frame > 4 && frame < 8) {
             m_patternVar1++;
@@ -4953,13 +4953,13 @@ void CMisaki::UpdatePattern()
             (*m_opponent)->StartPattern();
             StartPattern();
             (*m_opponent)->m_noAirRecovery = 1;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x1d);
-            l50.y = (double)((int)y - 0x53);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x1d);
+            effect.y = (double)((int)y - 0x53);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             pattern = k6321463214BThrow;
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->y = -100.0;
@@ -4968,7 +4968,7 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4979,7 +4979,7 @@ void CMisaki::UpdatePattern()
                 frame = frame - 3;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -4993,14 +4993,14 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             FocusCameraY(0x32, 0x2d);
             m_playSound = 0x25;
         }
@@ -5012,13 +5012,13 @@ void CMisaki::UpdatePattern()
             m_patternVar3 = 0xf;
         }
         if (frame == 5 && timer == 0 && (m_patternVar2 == 0 || m_patternVar2 == 3 || m_patternVar2 == 6 || m_patternVar2 == 9 || m_patternVar2 == 0xc || m_patternVar2 == 0xf)) {
-            l50.type = 0x1a2;
-            l50.x = (double)((int)x + facing * 0xf);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1a2;
+            effect.x = (double)((int)x + facing * 0xf);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (frame > 4 && frame < 8) {
             m_patternVar1 += 2;
@@ -5038,13 +5038,13 @@ void CMisaki::UpdatePattern()
             (*m_opponent)->StartPattern();
             StartPattern();
             (*m_opponent)->m_noAirRecovery = 1;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x1d);
-            l50.y = (double)((int)y - 0x53);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x1d);
+            effect.y = (double)((int)y - 0x53);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             pattern = k6321463214CThrow;
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->y = -100.0;
@@ -5053,7 +5053,7 @@ void CMisaki::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5064,7 +5064,7 @@ void CMisaki::UpdatePattern()
                 frame = frame - 3;
                 m_patternVar2++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5091,22 +5091,22 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->m_koDelay = 0;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kKnockdown;
-                l50.type = 0x190;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x190;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_hitstop = 0xb4;
                 break;
             }
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1) {
@@ -5141,7 +5141,7 @@ void CMisaki::UpdatePattern()
                 ay = 0.15;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5157,7 +5157,7 @@ void CMisaki::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1) {
@@ -5190,13 +5190,13 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->m_noAirRecovery = 1;
-                l50.type = 0;
-                l50.x = (double)((int)x + facing * 0xf);
-                l50.y = (double)((int)y - 5);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.x = (double)((int)x + facing * 0xf);
+                effect.y = (double)((int)y - 5);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->x = facing * 0x11 + x;
@@ -5213,21 +5213,21 @@ void CMisaki::UpdatePattern()
                 vy = -2.0;
                 ay = 0.013;
                 m_playSound = 0x16;
-                l50.keep = 1;
-                l50.type = 0x193;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.scale = 2;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.keep = 1;
+                effect.type = 0x193;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.scale = 2;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             if (frame == 0x20 && m_patternVar3 < 0xb) {
                 frame = frame - 3;
                 m_patternVar3++;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kSpecialLanding;
                 FaceOpponent();
                 StartPattern();
@@ -5247,19 +5247,19 @@ void CMisaki::UpdatePattern()
             FocusCameraY(0, 0);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 3 || frame == 6) {
-                l50.type = 0;
-                l50.sound = 2;
-                l50.x = (double)((int)x + facing * 0xe + (WORD)Random(0, 0x1e));
-                l50.y = (double)((int)y + -0x62 + (WORD)Random(0, 0x1e));
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.sound = 2;
+                effect.x = (double)((int)x + facing * 0xe + (WORD)Random(0, 0x1e));
+                effect.y = (double)((int)y + -0x62 + (WORD)Random(0, 0x1e));
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
             }
             if (frame == 1) {
                 (*m_opponent)->pattern = kThrownDoubledOver;
@@ -5271,14 +5271,14 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
                 m_playSound = 0x16;
-                l50.type = 0x193;
-                l50.x = (double)(int)x;
-                l50.y = (double)((int)y - 0xfa);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.facing = facing;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.type = 0x193;
+                effect.x = (double)(int)x;
+                effect.y = (double)((int)y - 0xfa);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.facing = facing;
+                effect.layer = 1;
+                SpawnObject(&effect);
             }
             if (frame == 3) {
                 ShakeScreen(4, 0);
@@ -5314,25 +5314,25 @@ void CMisaki::UpdatePattern()
                 frame = 2;
             }
             if (frame == 0x10) {
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)((int)y + 4);
-                l50.scale = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                l50.layer = 1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x191;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.facing = facing;
-                l50.keep = 1;
-                l50.layer = 1;
-                SpawnObject(&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)((int)y + 4);
+                effect.scale = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                effect.layer = 1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x191;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.facing = facing;
+                effect.keep = 1;
+                effect.layer = 1;
+                SpawnObject(&effect);
                 ShakeScreen(0xa, 0x3c);
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -5351,53 +5351,53 @@ void CMisaki::UpdatePattern()
             FocusCameraY(0x32, 0x2d);
             m_freezeTime = 0x78;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
             m_freezeTime = 0;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 4);
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x192;
-            l50.x = (double)((int)x + facing * 0x2d);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.facing = facing;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 4);
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x192;
+            effect.x = (double)((int)x + facing * 0x2d);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.facing = facing;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (frame == 8 && timer == 0) {
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y + 4);
-            l50.scale = 0;
-            l50.keep = 1;
-            l50.facing = facing;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x191;
-            l50.x = (double)((int)x + facing * 0x28);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.facing = facing;
-            l50.keep = 1;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y + 4);
+            effect.scale = 0;
+            effect.keep = 1;
+            effect.facing = facing;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + facing * 0x28);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.facing = facing;
+            effect.keep = 1;
+            effect.layer = 1;
+            SpawnObject(&effect);
         }
         if (frame == 2 && m_attackResult == 3) {
             ShakeScreen(6, 0x3c);
@@ -5408,7 +5408,7 @@ void CMisaki::UpdatePattern()
             ShakeScreen(0xa, 0x3c);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (m_attackResult != 3 && frame == 6) {
@@ -5417,7 +5417,7 @@ void CMisaki::UpdatePattern()
             if (frame == 9 || frame == 1) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -5435,17 +5435,17 @@ void CMisaki::UpdatePattern()
             m_freezeTime = 0x78;
             FillBackground(0xb0, 3);
             m_gauge = m_gauge - 0xbb8;
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x17);
-            l50.y = (double)((int)y - 0x1e);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x17);
+            effect.y = (double)((int)y - 0x1e);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (m_attackResult == 6 && frame == 2) {
             StartPattern();
@@ -5453,16 +5453,16 @@ void CMisaki::UpdatePattern()
             m_attackResult = 0;
             m_freezeTime = 0xa0;
             m_playSound = 3;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0xa);
-            l50.y = (double)((int)y - 0x28);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0xa);
+            effect.y = (double)((int)y - 0x28);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5475,7 +5475,7 @@ void CMisaki::UpdatePattern()
                 pattern = kLv4Strike;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();

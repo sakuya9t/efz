@@ -47,7 +47,7 @@ CNayukiB::CNayukiB(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSo
 
 void CNayukiB::Reset()
 {
-    int v4;
+    int i;
 
     m_patternVar1 = 0;
     m_patternVar2 = 0;
@@ -67,11 +67,11 @@ void CNayukiB::Reset()
     m_pointY[3] = -0xb;
     m_pointX[4] = 0x16;
     m_pointY[4] = -0x1e;
-    v4 = 0;
-    for (; v4 < 0x40; v4++) {
-        m_objectVar1[v4] = 0;
-        m_objectVar2[v4] = 0;
-        m_objectVar3[v4] = 0;
+    i = 0;
+    for (; i < 0x40; i++) {
+        m_objectVar1[i] = 0;
+        m_objectVar2[i] = 0;
+        m_objectVar3[i] = 0;
     }
     CPlayer::Reset();
 }
@@ -84,12 +84,12 @@ void CNayukiB::StartPattern()
     CPlayer::StartPattern();
 }
 
-void CNayukiB::RemoveObject(short p1)
+void CNayukiB::RemoveObject(short slot)
 {
-    m_objectVar1[p1] = 0;
-    m_objectVar2[p1] = 0;
-    m_objectVar3[p1] = 0;
-    CPlayer::RemoveObject(p1);
+    m_objectVar1[slot] = 0;
+    m_objectVar2[slot] = 0;
+    m_objectVar3[slot] = 0;
+    CPlayer::RemoveObject(slot);
 }
 
 void CNayukiB::Move()
@@ -449,29 +449,29 @@ void CNayukiB::StartCommand()
 
 void CNayukiB::DrawGauge()
 {
-    RECT v2c;
-    EffectFrame x1c;
-    RECT v10;
+    RECT src; // the part of the sprite drawn
+    EffectFrame sprite; // the frame drawn
+    RECT dst; // where on the screen
 
     if (m_orbitLevel > 0) {
-        x1c = *anims[0x2b].frames;
-        v2c = MakeRect(0, 0, x1c.width, x1c.height);
+        sprite = *anims[0x2b].frames;
+        src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            v10 = MakeRect(0x31 - x1c.x, 0x1f - x1c.y, x1c.width, x1c.height);
+            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
         } else {
-            v10 = MakeRect(x1c.x + 0x10f - x1c.width, 0x1f - x1c.y, x1c.width, x1c.height);
+            dst = MakeRect(sprite.x + 0x10f - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
         }
-        m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
+        m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
     if (m_orbitLevel > 0) {
-        x1c = *anims[0x2c].frames;
-        v2c = MakeRect(0, 0, m_orbitTime * x1c.width / 0xbb8, x1c.height);
+        sprite = *anims[0x2c].frames;
+        src = MakeRect(0, 0, m_orbitTime * sprite.width / 0xbb8, sprite.height);
         if (m_side == 0) {
-            v10 = MakeRect(0x31 - x1c.x, 0x1f - x1c.y, m_orbitTime * x1c.width / 0xbb8, x1c.height);
+            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, m_orbitTime * sprite.width / 0xbb8, sprite.height);
         } else {
-            v10 = MakeRect(x1c.x + 0x10f - m_orbitTime * x1c.width / 0xbb8, 0x1f - x1c.y, m_orbitTime * x1c.width / 0xbb8, x1c.height);
+            dst = MakeRect(sprite.x + 0x10f - m_orbitTime * sprite.width / 0xbb8, 0x1f - sprite.y, m_orbitTime * sprite.width / 0xbb8, sprite.height);
         }
-        m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
+        m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
 }
 
@@ -494,354 +494,354 @@ void CNayukiB::PreUpdate()
     }
 }
 
-void CNayukiB::SpawnObject(EffectDesc* p1)
+void CNayukiB::SpawnObject(EffectDesc* desc)
 {
     RemoveObject(m_objectHead);
-    CPlayer::SpawnObject(p1);
+    CPlayer::SpawnObject(desc);
 }
 
 void CNayukiB::ReadCommand()
 {
-    BYTE x6;
-    BYTE v5;
-    int v4;
+    BYTE step; // how much of the motion has been read
+    BYTE input; // its bits: 1 right, 2 left, 4 down, 8 up, 0x10-0x80 A-D
+    int pos; // the entry of m_inputHistory read, oldest first
 
     m_command = kCmdNone;
-    x6 = 0;
-    v4 = m_inputPos + 0x69;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 4) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd641236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x69;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 4) {
+            m_command = ((input & 0xe0) > 0) + kCmd641236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 3) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd641236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == (facing == -1) + 5 && step == 3) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd641236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 4;
+            step = 4;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 2 - (facing == -1) && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 0 && m_gauge >= 0x3e8) {
-            x6 = 1;
+        if ((input & 0xf) == (facing == -1) + 1 && step == 0 && m_gauge >= 0x3e8) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x5a;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 6) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd214214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x5a;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 6) {
+            m_command = ((input & 0xe0) > 0) + kCmd214214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 5) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd214214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == 2 - (facing == -1) && step == 5) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd214214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 6;
+            step = 6;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 4) {
-            x6 = 5;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 4) {
+            step = 5;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 2 - (facing == -1) && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && m_gauge >= 0x3e8) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0 && m_gauge >= 0x3e8) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x5a;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 6) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd236236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x5a;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 6) {
+            m_command = ((input & 0xe0) > 0) + kCmd236236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 5) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd236236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == (facing == -1) + 1 && step == 5) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd236236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 6;
+            step = 6;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 4) {
-            x6 = 5;
+        if ((input & 0xf) == (facing == -1) + 5 && step == 4) {
+            step = 5;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == (facing == -1) + 1 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == (facing == -1) + 5 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && m_gauge >= 0x3e8) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0 && m_gauge >= 0x3e8) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x78;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd623A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x78;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 3) {
+            m_command = ((input & 0xe0) > 0) + kCmd623A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd623A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == (facing == -1) + 5 && step == 2) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd623A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == (facing == -1) + 1 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 3) {
+            m_command = ((input & 0xe0) > 0) + kCmd236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == (facing == -1) + 1 && step == 2) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == (facing == -1) + 5 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd412A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 3) {
+            m_command = ((input & 0xe0) > 0) + kCmd412A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 2) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd412A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == 4 && step == 2) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd412A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 2 - (facing == -1) && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + kCmd214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf0) != 0 && step == 3) {
+            m_command = ((input & 0xe0) > 0) + kCmd214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
-            if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + kCmd214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+        if ((input & 0xf) == 2 - (facing == -1) && step == 2) {
+            if ((input & 0xf0) != 0) {
+                m_command = ((input & 0xe0) > 0) + kCmd214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x78;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x40) != 0 && x6 == 3) {
+    step = 0;
+    pos = m_inputPos + 0x78;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x40) != 0 && step == 3) {
             m_command = kCmd263C;
             return;
         }
-        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
-            if ((v5 & 0x40) != 0) {
+        if ((input & 0xf) == (facing == -1) + 5 && step == 2) {
+            if ((input & 0x40) != 0) {
                 m_command = kCmd263C;
                 return;
             }
-            x6 = 3;
+            step = 3;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == (facing == -1) + 1 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && m_gauge == 0xbb8) {
-            x6 = 1;
+        if ((input & 0xf) == 4 && step == 0 && m_gauge == 0xbb8) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0xaf;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 8) != 0 && x6 == 1) {
+    step = 0;
+    pos = m_inputPos + 0xaf;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 8) != 0 && step == 1) {
             m_command = kCmdUp;
             return;
         }
-        if ((v5 & 8) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 8) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x5a;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x80) != 0 && x6 == 4) {
+    step = 0;
+    pos = m_inputPos + 0x5a;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x80) != 0 && step == 4) {
             m_command = kCmd22D;
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0 && pattern == kWakeUp) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0 && pattern == kWakeUp) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x5a;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x40) != 0 && x6 == 4) {
+    step = 0;
+    pos = m_inputPos + 0x5a;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x40) != 0 && step == 4) {
             m_command = kCmd22C;
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x20) != 0 && x6 == 4) {
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x20) != 0 && step == 4) {
             m_command = kCmd22B;
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0x10) != 0 && x6 == 4) {
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0x10) != 0 && step == 4) {
             m_command = kCmd22A;
             return;
         }
-        if ((v5 & 0xf) == 4 && x6 == 3) {
-            x6 = 4;
+        if ((input & 0xf) == 4 && step == 3) {
+            step = 4;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 4 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 4 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf) == 1 && x6 == 3) {
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf) == 1 && step == 3) {
             m_command = kCmdDashRight;
             return;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 1 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 1 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
-    x6 = 0;
-    v4 = m_inputPos + 0x87;
-    for (; v4 < m_inputPos + 0xb4; v4++) {
-        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
-        if ((v5 & 0xf) == 2 && x6 == 3) {
+    step = 0;
+    pos = m_inputPos + 0x87;
+    for (; pos < m_inputPos + 0xb4; pos++) {
+        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
+        if ((input & 0xf) == 2 && step == 3) {
             m_command = kCmdDashLeft;
             break;
         }
-        if ((v5 & 0xf) == 0 && x6 == 2) {
-            x6 = 3;
+        if ((input & 0xf) == 0 && step == 2) {
+            step = 3;
         }
-        if ((v5 & 0xf) == 2 && x6 == 1) {
-            x6 = 2;
+        if ((input & 0xf) == 2 && step == 1) {
+            step = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0) {
-            x6 = 1;
+        if ((input & 0xf) == 0 && step == 0) {
+            step = 1;
         }
     }
 }
 
 void CNayukiB::CpuInput()
 {
-    double v10;
-    double x8;
+    double dx; // how far the opponent is in front
+    double dy; // how far the opponent is above or below
 
     m_command = kCmdNone;
     if (m_cpuWalkRight > 0) {
@@ -876,8 +876,8 @@ void CNayukiB::CpuInput()
     if ((*m_opponent)->pattern == kWakeUp) {
         return;
     }
-    v10 = ((*m_opponent)->x - x) * facing;
-    x8 = fabs(y - (*m_opponent)->y);
+    dx = ((*m_opponent)->x - x) * facing;
+    dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
         if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
@@ -885,9 +885,9 @@ void CNayukiB::CpuInput()
             m_cpuAction = 0;
         }
         m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < x8;
-        m_pressD = (WORD)Random(0, 0x140) < v10;
-        if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
+        m_pressD = (WORD)Random(0, 0xf0) < dy;
+        m_pressD = (WORD)Random(0, 0x140) < dx;
+        if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
         return;
@@ -900,18 +900,18 @@ void CNayukiB::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (v10 < 45.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 45.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
-        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && v10 > 60.0 && v10 < 70.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 70.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
             m_pressB = 1;
             m_inputY = 1;
             m_inputX = 0;
@@ -919,7 +919,7 @@ void CNayukiB::CpuInput()
         }
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
-        if (v10 < 100.0) {
+        if (dx < 100.0) {
             if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f && m_rfGauge > 500.0) {
                 m_command = kCmd623A;
                 return;
@@ -932,7 +932,7 @@ void CNayukiB::CpuInput()
                 m_command = kCmd412C;
                 return;
             }
-            if (v10 < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
@@ -942,12 +942,12 @@ void CNayukiB::CpuInput()
                 return;
             }
         }
-        if (v10 < 150.0 && v10 > 100.0) {
+        if (dx < 150.0 && dx > 100.0) {
             if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd412C;
                 return;
             }
-            if (v10 < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 return;
@@ -957,7 +957,7 @@ void CNayukiB::CpuInput()
                 return;
             }
         }
-        if (v10 > 150.0) {
+        if (dx > 150.0) {
             if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = kCmd412C;
                 return;
@@ -969,7 +969,7 @@ void CNayukiB::CpuInput()
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if (y - (*m_opponent)->y < -20.0 && y - (*m_opponent)->y > -80.0 && v10 < 150.0 && (WORD)Random(0, 0xc8) < m_cpuSkill * 5.0f && m_gauge >= 0x3e8) {
+        if (y - (*m_opponent)->y < -20.0 && y - (*m_opponent)->y > -80.0 && dx < 150.0 && (WORD)Random(0, 0xc8) < m_cpuSkill * 5.0f && m_gauge >= 0x3e8) {
             m_command = (WORD)Random(0, 3) + kCmd214214A;
             return;
         }
@@ -977,15 +977,15 @@ void CNayukiB::CpuInput()
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 50.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y < 90.0 && y - (*m_opponent)->y > 20.0 && v10 < 110.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 90.0 && y - (*m_opponent)->y > 20.0 && dx < 110.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
@@ -993,23 +993,23 @@ void CNayukiB::CpuInput()
     }
     if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
         m_cpuRoll = (WORD)Random(0, 0x64);
-        if (m_cpuRoll < 3 && m_rfGauge > 500.0 && v10 < 80.0) {
+        if (m_cpuRoll < 3 && m_rfGauge > 500.0 && dx < 80.0) {
             m_command = kCmd623A;
             return;
         }
-        if (m_cpuRoll < 5 && m_rfGauge > 500.0 && v10 < 80.0) {
+        if (m_cpuRoll < 5 && m_rfGauge > 500.0 && dx < 80.0) {
             m_command = kCmd623C;
             return;
         }
-        if (m_cpuRoll < 0xa && m_cpuRoll > 5 && m_rfGauge > 500.0 && v10 < 100.0) {
+        if (m_cpuRoll < 0xa && m_cpuRoll > 5 && m_rfGauge > 500.0 && dx < 100.0) {
             m_command = kCmd412C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && v10 < 100.0) {
+        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && dx < 100.0) {
             m_command = (WORD)Random(0, 3) + kCmd641236A;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && v10 > 90.0) {
+        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && dx > 90.0) {
             m_command = (WORD)Random(0, 3) + kCmd214214A;
             return;
         }
@@ -1020,7 +1020,7 @@ void CNayukiB::CpuInput()
     }
     if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
         m_cpuRoll = (WORD)Random(0, 0x64);
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && v10 > 50.0) {
+        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && dx > 50.0) {
             m_command = (WORD)Random(0, 3) + kCmd214214A;
             return;
         }
@@ -1166,17 +1166,17 @@ void CNayukiB::CpuInput()
                 m_inputY = 0;
                 return;
             }
-            if (v10 < 45.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 45.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
                 m_pressA = 1;
                 m_inputY = Random(0, 2);
                 return;
             }
-            if (v10 < 80.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 80.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 70.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (dx < 70.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
@@ -1201,7 +1201,7 @@ void CNayukiB::CpuInput()
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 0xe;
                 }
-                if (v10 < 50.0 && (WORD)Random(0, 2) == 0) {
+                if (dx < 50.0 && (WORD)Random(0, 2) == 0) {
                     m_cpuAction = 0x14;
                 }
                 return;
@@ -1234,12 +1234,12 @@ void CNayukiB::CpuInput()
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && v10 < 150.0) {
+            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 150.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258 && v10 < 70.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258 && dx < 70.0) {
                 m_pressC = 1;
                 return;
             }
@@ -1268,14 +1268,14 @@ void CNayukiB::CpuInput()
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 0xe;
                 }
-                if (v10 < 50.0 && (WORD)Random(0, 2) == 0) {
+                if (dx < 50.0 && (WORD)Random(0, 2) == 0) {
                     m_cpuAction = 0x14;
                 }
                 return;
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x96 && m_cpuRoll < 0xc8 && m_gauge >= 0x3e8 && v10 < 120.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x96 && m_cpuRoll < 0xc8 && m_gauge >= 0x3e8 && dx < 120.0) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
@@ -1342,17 +1342,17 @@ void CNayukiB::CpuInput()
                 m_inputY = 0;
                 return;
             }
-            if (v10 < 45.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 45.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
                 m_pressA = 1;
                 m_inputY = Random(0, 2);
                 return;
             }
-            if (v10 < 90.0 && m_cpuRoll > 0 && m_cpuRoll < 0x190) {
+            if (dx < 90.0 && m_cpuRoll > 0 && m_cpuRoll < 0x190) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 100.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (dx < 100.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
@@ -1377,7 +1377,7 @@ void CNayukiB::CpuInput()
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 0xe;
                 }
-                if (v10 < 50.0 && (WORD)Random(0, 2) == 0) {
+                if (dx < 50.0 && (WORD)Random(0, 2) == 0) {
                     m_cpuAction = 0x14;
                 }
                 return;
@@ -1406,12 +1406,12 @@ void CNayukiB::CpuInput()
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x1c2 && v10 < 140.0) {
+            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x1c2 && dx < 140.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258 && v10 < 70.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258 && dx < 70.0) {
                 m_pressC = 1;
                 return;
             }
@@ -1440,7 +1440,7 @@ void CNayukiB::CpuInput()
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 0xe;
                 }
-                if (v10 < 50.0 && (WORD)Random(0, 2) == 0) {
+                if (dx < 50.0 && (WORD)Random(0, 2) == 0) {
                     m_cpuAction = 0x14;
                 }
                 return;
@@ -1473,11 +1473,11 @@ void CNayukiB::CpuInput()
                 m_pressB = 1;
                 return;
             }
-            if (v10 < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 return;
             }
-            if (v10 < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
@@ -1545,7 +1545,7 @@ void CNayukiB::CpuInput()
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 0xe;
                 }
-                if (v10 < 50.0 && (WORD)Random(0, 2) == 0) {
+                if (dx < 50.0 && (WORD)Random(0, 2) == 0) {
                     m_cpuAction = 0x14;
                 }
                 return;
@@ -1578,7 +1578,7 @@ void CNayukiB::CpuInput()
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 0xe;
                 }
-                if (v10 < 50.0 && (WORD)Random(0, 2) == 0) {
+                if (dx < 50.0 && (WORD)Random(0, 2) == 0) {
                     m_cpuAction = 0x14;
                 }
                 return;
@@ -1603,7 +1603,7 @@ void CNayukiB::CpuInput()
         }
         if (pattern == kDash2A && m_cpuRoll > 0x1f4) {
             m_cpuAction = 1;
-            if (v10 < 50.0) {
+            if (dx < 50.0) {
                 m_cpuAction = 0x14;
             }
             return;
@@ -1613,141 +1613,141 @@ void CNayukiB::CpuInput()
         m_cpuRoll = (WORD)Random(0, 0x3e8);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
-                if (v10 < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
+                if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
                     m_pressC = 1;
                     m_inputX = -facing;
                     m_inputY = 0;
                     return;
                 }
-                if (v10 < 60.0) {
+                if (dx < 60.0) {
                     if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x14) {
                         m_pressA = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
-                if (v10 < 45.0) {
+                if (dx < 45.0) {
                     if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x14) {
                         m_pressA = 1;
                         m_inputY = 0;
                         return;
                     }
                 }
-                if (v10 > 50.0 && v10 < 80.0) {
+                if (dx > 50.0 && dx < 80.0) {
                     if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x41 && m_cpuRoll > 0x28) {
                         m_pressB = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
-                if (0x46 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < v10 && v10 < 95.0) {
+                if (0x46 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < dx && dx < 95.0) {
                     if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x14 + 0x50 && m_cpuRoll > 0x46) {
                         m_cpuAction = 0xc;
                         return;
                     }
                 }
-                if (0x50 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < v10 && v10 < 110.0) {
+                if (0x50 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < dx && dx < 110.0) {
                     if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x80 && m_cpuRoll > 0x78) {
                         m_cpuAction = 8;
                         return;
                     }
                 }
-                if (v10 < 180.0 && v10 > 200.0 && m_cpuRoll < 0xfa && m_cpuRoll > 0x96) {
+                if (dx < 180.0 && dx > 200.0 && m_cpuRoll < 0xfa && m_cpuRoll > 0x96) {
                     m_cpuAction = 0x10;
                     return;
                 }
-                if (v10 < 130.0 && v10 > 100.0 && m_cpuRoll < 0xc3 && m_cpuRoll > 0xaa) {
+                if (dx < 130.0 && dx > 100.0 && m_cpuRoll < 0xc3 && m_cpuRoll > 0xaa) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (0x50 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x50 < v10 && v10 < 120.0) {
+                if (0x50 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x50 < dx && dx < 120.0) {
                     if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x19 + 0xb9 && m_cpuRoll > 0xaa) {
                         m_cpuAction = 0xe;
                         return;
                     }
                 }
-                if (0x5a - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x5a < v10 && v10 < 120.0) {
+                if (0x5a - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x5a < dx && dx < 120.0) {
                     if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x19 + 0xe1 && m_cpuRoll > 0xd2) {
                         m_cpuAction = 0xa;
                         return;
                     }
                 }
-                if (v10 > 130.0 && v10 < 170.0 && m_cpuRoll < 0x104 && m_cpuRoll > 0xfa) {
+                if (dx > 130.0 && dx < 170.0 && m_cpuRoll < 0x104 && m_cpuRoll > 0xfa) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (v10 < 80.0 && m_cpuRoll < 0x113 && m_cpuRoll > 0x104 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 0x113 && m_cpuRoll > 0x104 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = kCmd623C;
                     return;
                 }
-                if (v10 < 150.0 && m_cpuRoll < 0x118 && m_cpuRoll > 0x113 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 150.0 && m_cpuRoll < 0x118 && m_cpuRoll > 0x113 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = (WORD)Random(0, 2) + kCmd236236B;
                     return;
                 }
-                if (v10 > 150.0 && m_cpuRoll < 0x11d && m_cpuRoll > 0x118 && m_gauge >= 0xbb8) {
+                if (dx > 150.0 && m_cpuRoll < 0x11d && m_cpuRoll > 0x118 && m_gauge >= 0xbb8) {
                     m_command = kCmd236236D;
                     return;
                 }
-                if (v10 > 160.0 && m_cpuRoll < 0x136 && m_cpuRoll > 0x12c) {
+                if (dx > 160.0 && m_cpuRoll < 0x136 && m_cpuRoll > 0x12c) {
                     m_command = kCmd412A;
                     return;
                 }
-                if (v10 > 100.0 && v10 < 160.0 && m_cpuRoll < 0x140 && m_cpuRoll > 0x136) {
+                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 0x140 && m_cpuRoll > 0x136) {
                     m_command = kCmd412B;
                     return;
                 }
-                if (v10 > 100.0 && v10 < 160.0 && m_cpuRoll < 0x145 && m_cpuRoll > 0x140) {
+                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 0x145 && m_cpuRoll > 0x140) {
                     m_command = kCmd412C;
                     return;
                 }
-                if (v10 > 100.0 && v10 < 160.0 && m_cpuRoll < 0x154 && m_cpuRoll > 0x14a) {
+                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 0x154 && m_cpuRoll > 0x14a) {
                     m_command = kCmd236A;
                     return;
                 }
-                if (v10 > 160.0 && m_cpuRoll < 0x168 && m_cpuRoll > 0x154) {
+                if (dx > 160.0 && m_cpuRoll < 0x168 && m_cpuRoll > 0x154) {
                     m_command = kCmd236B;
                     return;
                 }
-                if (v10 > 40.0 && v10 < 120.0 && m_cpuRoll < 0x168 && m_cpuRoll > 0x154) {
+                if (dx > 40.0 && dx < 120.0 && m_cpuRoll < 0x168 && m_cpuRoll > 0x154) {
                     m_command = kCmd214A;
                     return;
                 }
-                if (v10 > 140.0 && m_cpuRoll < 0x168 && m_cpuRoll > 0x154) {
+                if (dx > 140.0 && m_cpuRoll < 0x168 && m_cpuRoll > 0x154) {
                     m_command = kCmd214B;
                     return;
                 }
-                if (m_cpuRoll < 0x320 && m_cpuRoll > 0x2bc && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir && v10 > 100.0) {
+                if (m_cpuRoll < 0x320 && m_cpuRoll > 0x2bc && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir && dx > 100.0) {
                     m_cpuAction = 5;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
                 if ((*m_opponent)->vy < 0.0) {
-                    if (v10 < 80.0 && x8 < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (v10 < 90.0 && x8 < 140.0 && x8 > 80.0 && m_cpuRoll < 6 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
+                    if (dx < 90.0 && dy < 140.0 && dy > 80.0 && m_cpuRoll < 6 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
                         m_command = kCmd623B;
                         return;
                     }
                 }
                 if ((*m_opponent)->vy > 0.0) {
-                    if (v10 < 90.0 && x8 < 140.0 && x8 > 80.0 && m_cpuRoll < 6 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
+                    if (dx < 90.0 && dy < 140.0 && dy > 80.0 && m_cpuRoll < 6 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
                         m_command = kCmd623C;
                         return;
                     }
-                    if (v10 < 90.0 && x8 < 140.0 && x8 > 80.0 && m_cpuRoll < 0xf) {
+                    if (dx < 90.0 && dy < 140.0 && dy > 80.0 && m_cpuRoll < 0xf) {
                         m_command = kCmd623B;
                         return;
                     }
-                    if (v10 < 160.0 && v10 > 80.0 && x8 < 300.0 && x8 > 160.0 && m_cpuRoll < 0x28 && m_cpuRoll > 0x1e) {
+                    if (dx < 160.0 && dx > 80.0 && dy < 300.0 && dy > 160.0 && m_cpuRoll < 0x28 && m_cpuRoll > 0x1e) {
                         m_command = kCmd236C;
                         return;
                     }
-                    if (v10 < 150.0 && m_cpuRoll < 0xdc && m_cpuRoll > 0xc8 && (*m_opponent)->y < -50.0 && m_gauge >= 0x3e8) {
+                    if (dx < 150.0 && m_cpuRoll < 0xdc && m_cpuRoll > 0xc8 && (*m_opponent)->y < -50.0 && m_gauge >= 0x3e8) {
                         m_command = (WORD)Random(0, 3) + kCmd236236A;
                         return;
                     }
@@ -1756,11 +1756,11 @@ void CNayukiB::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
-                if (v10 < 80.0 && x8 < 100.0 && m_cpuRoll < 0x64) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x64) {
                     m_pressA = 1;
                     return;
                 }
-                if (v10 > 60.0 && v10 < 100.0 && x8 > 60.0 && x8 < 120.0 && m_cpuRoll > 0xb4 && m_cpuRoll < 0xf0) {
+                if (dx > 60.0 && dx < 100.0 && dy > 60.0 && dy < 120.0 && m_cpuRoll > 0xb4 && m_cpuRoll < 0xf0) {
                     m_pressC = 1;
                     return;
                 }
@@ -1772,32 +1772,32 @@ void CNayukiB::CpuInput()
                     m_command = kCmd412A;
                     return;
                 }
-                if (v10 > 150.0 && m_cpuRoll > 0x104 && m_cpuRoll < 0x109 && x8 > 150.0) {
+                if (dx > 150.0 && m_cpuRoll > 0x104 && m_cpuRoll < 0x109 && dy > 150.0) {
                     m_command = (WORD)Random(0, 3) + kCmd214214A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (v10 < 80.0 && x8 < 100.0 && m_cpuRoll < 0x14) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x14) {
                     m_pressA = 1;
                     return;
                 }
-                if (v10 > 20.0 && v10 < 100.0 && x8 > 0.0 && x8 < 90.0 && (*m_opponent)->y < y && m_cpuRoll > 0x14 && m_cpuRoll < 0x3c) {
+                if (dx > 20.0 && dx < 100.0 && dy > 0.0 && dy < 90.0 && (*m_opponent)->y < y && m_cpuRoll > 0x14 && m_cpuRoll < 0x3c) {
                     m_pressB = 1;
                     return;
                 }
-                if (v10 > 50.0 && v10 < 130.0 && x8 > 0.0 && x8 < 90.0 && (*m_opponent)->y < y && m_cpuRoll > 0x3c && m_cpuRoll < 0x64) {
+                if (dx > 50.0 && dx < 130.0 && dy > 0.0 && dy < 90.0 && (*m_opponent)->y < y && m_cpuRoll > 0x3c && m_cpuRoll < 0x64) {
                     m_pressC = 1;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 5.0f * m_cpuSkill && v10 > 120.0) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 5.0f * m_cpuSkill && dx > 120.0) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && v10 > 800.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < 3.0f * m_cpuSkill && x > 150.0 && x < 490.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 800.0 && dx < 80.0 && (WORD)Random(0, 0x64) < 3.0f * m_cpuSkill && x > 150.0 && x < 490.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
@@ -1811,12 +1811,12 @@ void CNayukiB::CpuInput()
         } else {
             m_cpuAction = 0;
         }
-        if (v10 > 180.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
         }
-        if (v10 < 170.0 && v10 > 140.0 && y == 0.0 && (*m_opponent)->pattern < kFirstHitReaction) {
+        if (dx < 170.0 && dx > 140.0 && y == 0.0 && (*m_opponent)->pattern < kFirstHitReaction) {
             m_inputX = facing;
             m_inputY = -1;
             return;
@@ -1836,7 +1836,7 @@ void CNayukiB::CpuInput()
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x32 && v10 < 120.0) {
+    if ((WORD)Random(0, 0x64) < 0x32 && dx < 120.0) {
         if (facing == 1) {
             m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
         } else {
@@ -1860,1946 +1860,1946 @@ void CNayukiB::CpuInput()
 
 void CNayukiB::UpdateObjects()
 {
-    WORD v58;
-    WORD v54;
-    int v4;
+    WORD frameCount; // frames in the object's animation
+    WORD duration; // ticks the object's current frame lasts
+    int slot; // the object being updated, an index into m_objects
 
     if ((*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    v4 = m_objectTail;
-    EffectDesc l50;
-    while (v4 != m_objectHead) {
-        if (m_objectActive[v4] != 0 && m_objects[v4].hitstop == 0 && (m_freezeTime == 0 || m_freezeTime > 0 && m_objects[v4].movesInFreeze != 0)) {
-            v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
-            v58 = anims[m_objects[v4].pattern].frameCount;
-            InitEffectDesc((EffectDesc*)&l50);
-            switch (m_objects[v4].pattern) {
+    slot = m_objectTail;
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    while (slot != m_objectHead) {
+        if (m_objectActive[slot] != 0 && m_objects[slot].hitstop == 0 && (m_freezeTime == 0 || m_freezeTime > 0 && m_objects[slot].movesInFreeze != 0)) {
+            duration = (short)anims[m_objects[slot].pattern].frames[m_objects[slot].frame].duration;
+            frameCount = anims[m_objects[slot].pattern].frameCount;
+            InitEffectDesc((EffectDesc*)&effect);
+            switch (m_objects[slot].pattern) {
             case kObj236236A:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].vx = 1.2;
-                    m_objects[v4].vy = -2.1;
-                    m_objects[v4].hitsLeft = 3;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].vx = 1.2;
+                    m_objects[slot].vy = -2.1;
+                    m_objects[slot].hitsLeft = 3;
+                    m_objectVar1[slot]++;
                 }
-                if (m_objects[v4].y < -600.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y < -600.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
-                    if (m_objects[v4].frame == 0 || m_objects[v4].frame == 0xa) {
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0 || m_objects[slot].frame == 0xa) {
+                        m_objects[slot].attackResult = 0;
                     }
                 }
                 break;
             case kObj236236B:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].vx = 1.2;
-                    m_objects[v4].vy = -2.1;
-                    m_objects[v4].hitsLeft = 6;
-                    m_objectVar1[v4]++;
-                    m_objectVar2[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].vx = 1.2;
+                    m_objects[slot].vy = -2.1;
+                    m_objects[slot].hitsLeft = 6;
+                    m_objectVar1[slot]++;
+                    m_objectVar2[slot] = 0;
                 }
-                m_objectVar2[v4]++;
-                if (m_objectVar2[v4] > 0xa) {
-                    m_objectVar2[v4] = 0;
-                    l50.type = kObj236236Spark;
-                    l50.x = (double)(int)m_objects[v4].x;
-                    l50.y = (double)(int)m_objects[v4].y;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.facing = m_objects[v4].facing;
-                    SpawnObject(&l50);
+                m_objectVar2[slot]++;
+                if (m_objectVar2[slot] > 0xa) {
+                    m_objectVar2[slot] = 0;
+                    effect.type = kObj236236Spark;
+                    effect.x = (double)(int)m_objects[slot].x;
+                    effect.y = (double)(int)m_objects[slot].y;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.facing = m_objects[slot].facing;
+                    SpawnObject(&effect);
                 }
-                if (m_objects[v4].y < -600.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y < -600.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
-                    if (m_objects[v4].frame == 0 || m_objects[v4].frame == 5 || m_objects[v4].frame == 0xa || m_objects[v4].frame == 0xf) {
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0 || m_objects[slot].frame == 5 || m_objects[slot].frame == 0xa || m_objects[slot].frame == 0xf) {
+                        m_objects[slot].attackResult = 0;
                     }
                 }
                 break;
             case kObj236236C:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].vx = 1.2;
-                    m_objects[v4].vy = -2.1;
-                    m_objects[v4].hitsLeft = 0xf;
-                    m_objectVar1[v4]++;
-                    m_objectVar2[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].vx = 1.2;
+                    m_objects[slot].vy = -2.1;
+                    m_objects[slot].hitsLeft = 0xf;
+                    m_objectVar1[slot]++;
+                    m_objectVar2[slot] = 0;
                 }
-                m_objectVar2[v4]++;
-                if (m_objectVar2[v4] > 3) {
-                    m_objectVar2[v4] = 0;
-                    l50.type = kObj236236Spark;
-                    l50.x = (double)(int)m_objects[v4].x;
-                    l50.y = (double)(int)m_objects[v4].y;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.facing = m_objects[v4].facing;
-                    SpawnObject(&l50);
+                m_objectVar2[slot]++;
+                if (m_objectVar2[slot] > 3) {
+                    m_objectVar2[slot] = 0;
+                    effect.type = kObj236236Spark;
+                    effect.x = (double)(int)m_objects[slot].x;
+                    effect.y = (double)(int)m_objects[slot].y;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.facing = m_objects[slot].facing;
+                    SpawnObject(&effect);
                 }
-                if (m_objects[v4].y < -600.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].y < -600.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
-                    if (m_objects[v4].frame == 0 || m_objects[v4].frame == 4 || m_objects[v4].frame == 8 || m_objects[v4].frame == 0xc || m_objects[v4].frame == 0x10) {
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0 || m_objects[slot].frame == 4 || m_objects[slot].frame == 8 || m_objects[slot].frame == 0xc || m_objects[slot].frame == 0x10) {
+                        m_objects[slot].attackResult = 0;
                     }
                 }
                 break;
             case kObj236236Spark:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].vx = 1.0;
-                    m_objects[v4].vy = -2.2;
-                    m_objects[v4].hitsLeft = 0;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].vx = 1.0;
+                    m_objects[slot].vy = -2.2;
+                    m_objects[slot].hitsLeft = 0;
+                    m_objectVar1[slot]++;
 #ifdef EFZ_NATIVE
                     // The original computes the arguments right to left, so the speed draws first.
                     {
                         double speed = (double)((WORD)Random(0, 3) + 2);
-                        m_objects[v4].SetVelocity((double)(WORD)Random(0, 0x168), speed);
+                        m_objects[slot].SetVelocity((double)(WORD)Random(0, 0x168), speed);
                     }
 #else
-                    m_objects[v4].SetVelocity((double)(WORD)Random(0, 0x168), (double)((WORD)Random(0, 3) + 2));
+                    m_objects[slot].SetVelocity((double)(WORD)Random(0, 0x168), (double)((WORD)Random(0, 3) + 2));
 #endif
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 1 && m_objects[v4].timer == 0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 1 && m_objects[slot].timer == 0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjSatellite:
                 if (m_orbitTime <= 0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].facing = facing;
-                m_objects[v4].SetVelocity((double)m_orbitAngle, 50.0);
-                m_objects[v4].x = m_objects[v4].vx * m_orbitDirection + x;
-                m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
-                if (m_objects[v4].vy < 0.0) {
-                    m_objects[v4].layer = 0;
+                m_objects[slot].facing = facing;
+                m_objects[slot].SetVelocity((double)m_orbitAngle, 50.0);
+                m_objects[slot].x = m_objects[slot].vx * m_orbitDirection + x;
+                m_objects[slot].y = y - 50.0 + m_objects[slot].vy * 0.25;
+                if (m_objects[slot].vy < 0.0) {
+                    m_objects[slot].layer = 0;
                 } else {
-                    m_objects[v4].layer = 1;
+                    m_objects[slot].layer = 1;
                 }
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = 0.0;
-                if (m_objects[v4].frame == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].attackResult = 0;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = 0.0;
+                if (m_objects[slot].frame == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].attackResult = 0;
                 }
-                if (m_objects[v4].frame == 1 && m_objects[v4].hitsLeft == 0) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame = 0;
-                    m_objects[v4].pattern = kObjSatelliteSpent;
-                    m_objects[v4].scale = 2;
+                if (m_objects[slot].frame == 1 && m_objects[slot].hitsLeft == 0) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame = 0;
+                    m_objects[slot].pattern = kObjSatelliteSpent;
+                    m_objects[slot].scale = 2;
                     m_orbitTime -= 0x3e8 - m_orbitLevel * 0x15e;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame--;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame--;
                     }
                 }
                 break;
             case kObjSatelliteOpposite:
                 if (m_orbitTime <= 0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].facing = facing;
-                m_objects[v4].SetVelocity((double)(m_orbitAngle + 0xb4), 50.0);
-                m_objects[v4].x = m_objects[v4].vx * m_orbitDirection + x;
-                m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
-                if (m_objects[v4].vy < 0.0) {
-                    m_objects[v4].layer = 0;
+                m_objects[slot].facing = facing;
+                m_objects[slot].SetVelocity((double)(m_orbitAngle + 0xb4), 50.0);
+                m_objects[slot].x = m_objects[slot].vx * m_orbitDirection + x;
+                m_objects[slot].y = y - 50.0 + m_objects[slot].vy * 0.25;
+                if (m_objects[slot].vy < 0.0) {
+                    m_objects[slot].layer = 0;
                 } else {
-                    m_objects[v4].layer = 1;
+                    m_objects[slot].layer = 1;
                 }
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = 0.0;
-                if (m_objects[v4].frame == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].attackResult = 0;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = 0.0;
+                if (m_objects[slot].frame == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].attackResult = 0;
                 }
-                if (m_objects[v4].frame == 1 && m_objects[v4].hitsLeft == 0) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame = 0;
-                    m_objects[v4].pattern = kObjSatelliteOppositeSpent;
-                    m_objects[v4].scale = 2;
+                if (m_objects[slot].frame == 1 && m_objects[slot].hitsLeft == 0) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame = 0;
+                    m_objects[slot].pattern = kObjSatelliteOppositeSpent;
+                    m_objects[slot].scale = 2;
                     m_orbitTime -= 0x3e8 - m_orbitLevel * 0x15e;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame--;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame--;
                     }
                 }
                 break;
             case kObjSatelliteSpent:
                 if (m_orbitTime <= 0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].facing = facing;
-                m_objects[v4].SetVelocity((double)m_orbitAngle, 50.0);
-                m_objects[v4].x = m_objects[v4].vx * m_orbitDirection + x;
-                m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
-                if (m_objects[v4].vy < 0.0) {
-                    m_objects[v4].layer = 0;
+                m_objects[slot].facing = facing;
+                m_objects[slot].SetVelocity((double)m_orbitAngle, 50.0);
+                m_objects[slot].x = m_objects[slot].vx * m_orbitDirection + x;
+                m_objects[slot].y = y - 50.0 + m_objects[slot].vy * 0.25;
+                if (m_objects[slot].vy < 0.0) {
+                    m_objects[slot].layer = 0;
                 } else {
-                    m_objects[v4].layer = 1;
+                    m_objects[slot].layer = 1;
                 }
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = 0.0;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                        m_objects[v4].pattern = kObjSatelliteForming;
-                        m_objects[v4].scale = 2;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = 0.0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
+                        m_objects[slot].pattern = kObjSatelliteForming;
+                        m_objects[slot].scale = 2;
                     }
                 }
                 break;
             case kObjSatelliteOppositeSpent:
                 if (m_orbitTime <= 0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].facing = facing;
-                m_objects[v4].SetVelocity((double)(m_orbitAngle + 0xb4), 50.0);
-                m_objects[v4].x = m_objects[v4].vx * m_orbitDirection + x;
-                m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
-                if (m_objects[v4].vy < 0.0) {
-                    m_objects[v4].layer = 0;
+                m_objects[slot].facing = facing;
+                m_objects[slot].SetVelocity((double)(m_orbitAngle + 0xb4), 50.0);
+                m_objects[slot].x = m_objects[slot].vx * m_orbitDirection + x;
+                m_objects[slot].y = y - 50.0 + m_objects[slot].vy * 0.25;
+                if (m_objects[slot].vy < 0.0) {
+                    m_objects[slot].layer = 0;
                 } else {
-                    m_objects[v4].layer = 1;
+                    m_objects[slot].layer = 1;
                 }
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = 0.0;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                        m_objects[v4].pattern = kObjSatelliteOppositeForming;
-                        m_objects[v4].scale = 2;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = 0.0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
+                        m_objects[slot].pattern = kObjSatelliteOppositeForming;
+                        m_objects[slot].scale = 2;
                     }
                 }
                 break;
             case kObjSatelliteForming:
                 if (m_orbitTime <= 0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].SetVelocity((double)m_orbitAngle, 50.0);
-                m_objects[v4].x = m_objects[v4].vx * m_orbitDirection + x;
-                m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
-                if (m_objects[v4].vy < 0.0) {
-                    m_objects[v4].layer = 0;
+                m_objects[slot].SetVelocity((double)m_orbitAngle, 50.0);
+                m_objects[slot].x = m_objects[slot].vx * m_orbitDirection + x;
+                m_objects[slot].y = y - 50.0 + m_objects[slot].vy * 0.25;
+                if (m_objects[slot].vy < 0.0) {
+                    m_objects[slot].layer = 0;
                 } else {
-                    m_objects[v4].layer = 1;
+                    m_objects[slot].layer = 1;
                 }
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = 0.0;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                        m_objects[v4].pattern = kObjSatellite;
-                        m_objects[v4].scale = 0;
-                        m_objects[v4].facing = facing;
-                        l50.type = kObjSatelliteSparkle;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y;
-                        l50.scale = 2;
-                        l50.layer = 1;
-                        l50.facing = m_objects[v4].facing;
-                        SpawnObject(&l50);
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = 0.0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
+                        m_objects[slot].pattern = kObjSatellite;
+                        m_objects[slot].scale = 0;
+                        m_objects[slot].facing = facing;
+                        effect.type = kObjSatelliteSparkle;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y;
+                        effect.scale = 2;
+                        effect.layer = 1;
+                        effect.facing = m_objects[slot].facing;
+                        SpawnObject(&effect);
                         m_playVoice = 8;
                     }
                 }
                 break;
             case kObjSatelliteOppositeForming:
                 if (m_orbitTime <= 0) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].SetVelocity((double)(m_orbitAngle + 0xb4), 50.0);
-                m_objects[v4].x = m_objects[v4].vx * m_orbitDirection + x;
-                m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
-                if (m_objects[v4].vy < 0.0) {
-                    m_objects[v4].layer = 0;
+                m_objects[slot].SetVelocity((double)(m_orbitAngle + 0xb4), 50.0);
+                m_objects[slot].x = m_objects[slot].vx * m_orbitDirection + x;
+                m_objects[slot].y = y - 50.0 + m_objects[slot].vy * 0.25;
+                if (m_objects[slot].vy < 0.0) {
+                    m_objects[slot].layer = 0;
                 } else {
-                    m_objects[v4].layer = 1;
+                    m_objects[slot].layer = 1;
                 }
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = 0.0;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                        m_objects[v4].pattern = kObjSatelliteOpposite;
-                        m_objects[v4].scale = 0;
-                        m_objects[v4].facing = facing;
-                        l50.type = kObjSatelliteSparkle;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y;
-                        l50.scale = 2;
-                        l50.layer = 1;
-                        l50.facing = m_objects[v4].facing;
-                        SpawnObject(&l50);
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = 0.0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
+                        m_objects[slot].pattern = kObjSatelliteOpposite;
+                        m_objects[slot].scale = 0;
+                        m_objects[slot].facing = facing;
+                        effect.type = kObjSatelliteSparkle;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y;
+                        effect.scale = 2;
+                        effect.layer = 1;
+                        effect.facing = m_objects[slot].facing;
+                        SpawnObject(&effect);
                         m_playVoice = 8;
                     }
                 }
                 break;
             case kObjSatelliteSparkle:
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon1:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xb) {
+                    if (m_objects[slot].frame == 0xb) {
                         m_playVoice = 9;
                     }
-                    if (m_objects[v4].frame == 0xd && m_objectVar1[v4] < 0x14) {
-                        m_objects[v4].frame = 0xb;
-                        m_objectVar1[v4]++;
+                    if (m_objects[slot].frame == 0xd && m_objectVar1[slot] < 0x14) {
+                        m_objects[slot].frame = 0xb;
+                        m_objectVar1[slot]++;
                     }
-                    if (m_objects[v4].frame == 0xb) {
-                        m_objects[v4].hitsLeft = 1;
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0xb) {
+                        m_objects[slot].hitsLeft = 1;
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon2:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xb) {
+                    if (m_objects[slot].frame == 0xb) {
                         m_playVoice = 0xa;
                     }
-                    if (m_objects[v4].frame == 0xd && m_objectVar1[v4] < 0x14) {
-                        m_objects[v4].frame = 0xb;
-                        m_objectVar1[v4]++;
+                    if (m_objects[slot].frame == 0xd && m_objectVar1[slot] < 0x14) {
+                        m_objects[slot].frame = 0xb;
+                        m_objectVar1[slot]++;
                     }
-                    if (m_objects[v4].frame == 0xb) {
-                        m_objects[v4].hitsLeft = 1;
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0xb) {
+                        m_objects[slot].hitsLeft = 1;
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon3:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xb) {
+                    if (m_objects[slot].frame == 0xb) {
                         m_playVoice = 0xb;
                     }
-                    if (m_objects[v4].frame == 0xd && m_objectVar1[v4] < 0x14) {
-                        m_objects[v4].frame = 0xb;
-                        m_objectVar1[v4]++;
+                    if (m_objects[slot].frame == 0xd && m_objectVar1[slot] < 0x14) {
+                        m_objects[slot].frame = 0xb;
+                        m_objectVar1[slot]++;
                     }
-                    if (m_objects[v4].frame == 0xb) {
-                        m_objects[v4].hitsLeft = 1;
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0xb) {
+                        m_objects[slot].hitsLeft = 1;
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Bomb:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
-                    m_objectVar2[v4] = 0;
-                    m_objectVar3[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
+                    m_objectVar2[slot] = 0;
+                    m_objectVar3[slot] = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                if (m_objects[v4].frame == 5 && m_objects[v4].timer == 0) {
-                    if (m_objectVar3[v4] == 6) {
-                        m_objectVar2[v4] = 0;
-                        m_objectVar3[v4] = 0;
-                        m_objects[v4].frame = 7;
-                        m_objects[v4].timer = 0;
-                        l50.type = kObjLv4Smoke;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 25.0;
-                        l50.scale = 2;
-                        l50.layer = 1;
-                        l50.keep = 1;
-                        l50.facing = m_objects[v4].facing;
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        l50.type = kObjLv4Spark;
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        m_objects[v4].hitsLeft = 1;
-                        m_objects[v4].attackResult = 0;
+                if (m_objects[slot].frame == 5 && m_objects[slot].timer == 0) {
+                    if (m_objectVar3[slot] == 6) {
+                        m_objectVar2[slot] = 0;
+                        m_objectVar3[slot] = 0;
+                        m_objects[slot].frame = 7;
+                        m_objects[slot].timer = 0;
+                        effect.type = kObjLv4Smoke;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 25.0;
+                        effect.scale = 2;
+                        effect.layer = 1;
+                        effect.keep = 1;
+                        effect.facing = m_objects[slot].facing;
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        effect.type = kObjLv4Spark;
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        m_objects[slot].hitsLeft = 1;
+                        m_objects[slot].attackResult = 0;
                         m_playSound = 0x16;
                         ShakeScreen(5, 5);
                         break;
                     }
-                    if (m_objectVar2[v4] == 0xf) {
-                        if (m_objectVar3[v4] < 5) {
-                            l50.type = m_objectVar3[v4] + 0x1b1;
-                            l50.x = m_objects[v4].x;
-                            l50.y = m_objects[v4].y - 50.0;
-                            l50.scale = 0;
-                            l50.layer = 1;
-                            l50.facing = 1;
-                            SpawnObject(&l50);
+                    if (m_objectVar2[slot] == 0xf) {
+                        if (m_objectVar3[slot] < 5) {
+                            effect.type = m_objectVar3[slot] + 0x1b1;
+                            effect.x = m_objects[slot].x;
+                            effect.y = m_objects[slot].y - 50.0;
+                            effect.scale = 0;
+                            effect.layer = 1;
+                            effect.facing = 1;
+                            SpawnObject(&effect);
                         }
-                        m_objectVar3[v4]++;
-                        m_objectVar2[v4] = 0;
+                        m_objectVar3[slot]++;
+                        m_objectVar2[slot] = 0;
                     }
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 7) {
-                        m_objects[v4].frame = 5;
-                        m_objectVar2[v4]++;
+                    if (m_objects[slot].frame == 7) {
+                        m_objects[slot].frame = 5;
+                        m_objectVar2[slot]++;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon4:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
-                    }
-                }
-                if (m_objects[v4].frame == 0xb || m_objects[v4].frame == 0xc) {
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
-                    }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].frame == 0xb || m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
+                    }
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
+                    }
+                }
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xb) {
+                    if (m_objects[slot].frame == 0xb) {
                         m_playVoice = 0xc;
-                        m_objects[v4].vx = 2.0;
+                        m_objects[slot].vx = 2.0;
                     }
-                    if (m_objects[v4].frame == 0xd && m_objectVar1[v4] < 0x14) {
-                        m_objects[v4].frame = 0xb;
-                        m_objectVar1[v4]++;
+                    if (m_objects[slot].frame == 0xd && m_objectVar1[slot] < 0x14) {
+                        m_objects[slot].frame = 0xb;
+                        m_objectVar1[slot]++;
                     }
-                    if (m_objects[v4].frame == 0xb) {
-                        m_objects[v4].hitsLeft = 1;
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0xb) {
+                        m_objects[slot].hitsLeft = 1;
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame == 0xd) {
-                        m_objects[v4].vx = 0.0;
+                    if (m_objects[slot].frame == 0xd) {
+                        m_objects[slot].vx = 0.0;
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon5:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
-                    m_objects[v4].hitsLeft = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
+                    m_objects[slot].hitsLeft = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xf) {
+                    if (m_objects[slot].frame == 0xf) {
                         m_playVoice = 0x10;
-                        l50.type = kObjLv4Summon5Wave;
-                        l50.x = m_objects[v4].x;
-                        l50.y = 0.0;
-                        l50.scale = 2;
-                        l50.layer = 1;
-                        l50.facing = m_objects[v4].facing;
-                        SpawnObject(&l50);
+                        effect.type = kObjLv4Summon5Wave;
+                        effect.x = m_objects[slot].x;
+                        effect.y = 0.0;
+                        effect.scale = 2;
+                        effect.layer = 1;
+                        effect.facing = m_objects[slot].facing;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0x10 && m_objectVar1[v4] < 0xa) {
-                        m_objects[v4].frame = 0xf;
-                        m_objects[v4].hitsLeft = 1;
-                        m_objects[v4].attackResult = 0;
-                        m_objectVar1[v4]++;
-                        l50.type = kObjLv4Summon5Wave;
-                        l50.x = m_objects[v4].x;
-                        l50.y = 0.0;
-                        l50.scale = 2;
-                        l50.layer = 1;
-                        l50.facing = m_objects[v4].facing;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 0xa) {
+                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].hitsLeft = 1;
+                        m_objects[slot].attackResult = 0;
+                        m_objectVar1[slot]++;
+                        effect.type = kObjLv4Summon5Wave;
+                        effect.x = m_objects[slot].x;
+                        effect.y = 0.0;
+                        effect.scale = 2;
+                        effect.layer = 1;
+                        effect.facing = m_objects[slot].facing;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon6:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
                 }
-                if (m_objects[v4].frame == 0xb && m_objects[v4].timer == 0) {
-                    l50.type = kObjLv4Summon6Hit;
-                    l50.x = m_objects[v4].x + (m_objects[v4].facing << 2);
-                    l50.y = m_objects[v4].y - 38.0;
-                    l50.keep = 1;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.facing = m_objects[v4].facing;
-                    SpawnObject(&l50);
+                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0) {
+                    effect.type = kObjLv4Summon6Hit;
+                    effect.x = m_objects[slot].x + (m_objects[slot].facing << 2);
+                    effect.y = m_objects[slot].y - 38.0;
+                    effect.keep = 1;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.facing = m_objects[slot].facing;
+                    SpawnObject(&effect);
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].vx = -m_objects[v4].vx;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].vx = -m_objects[slot].vx;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].vx = -m_objects[v4].vx;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].vx = -m_objects[slot].vx;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xb) {
+                    if (m_objects[slot].frame == 0xb) {
                         m_playVoice = 0xf;
                     }
-                    if (m_objects[v4].frame == 0xd && m_objectVar1[v4] < 0x14) {
-                        m_objects[v4].frame = 0xb;
-                        m_objectVar1[v4]++;
+                    if (m_objects[slot].frame == 0xd && m_objectVar1[slot] < 0x14) {
+                        m_objects[slot].frame = 0xb;
+                        m_objectVar1[slot]++;
                     }
-                    if (m_objects[v4].frame == 0xb) {
-                        m_objects[v4].hitsLeft = 0;
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0xb) {
+                        m_objects[slot].hitsLeft = 0;
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon6Left:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = -((WORD)Random(0, 0x14) * 0.1 + 0.25);
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = -((WORD)Random(0, 0x14) * 0.1 + 0.25);
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
                 }
-                if (m_objects[v4].frame == 0xb && m_objects[v4].timer == 0) {
-                    l50.type = kObjLv4Summon6Hit;
-                    l50.x = m_objects[v4].x - (m_objects[v4].facing << 2);
-                    l50.y = m_objects[v4].y - 38.0;
-                    l50.keep = 1;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.facing = -m_objects[v4].facing;
-                    SpawnObject(&l50);
+                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0) {
+                    effect.type = kObjLv4Summon6Hit;
+                    effect.x = m_objects[slot].x - (m_objects[slot].facing << 2);
+                    effect.y = m_objects[slot].y - 38.0;
+                    effect.keep = 1;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.facing = -m_objects[slot].facing;
+                    SpawnObject(&effect);
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].vx = -m_objects[v4].vx;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].vx = -m_objects[slot].vx;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].vx = -m_objects[v4].vx;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].vx = -m_objects[slot].vx;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * -1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * -1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xb) {
+                    if (m_objects[slot].frame == 0xb) {
                         m_playVoice = 0xf;
                     }
-                    if (m_objects[v4].frame == 0xd && m_objectVar1[v4] < 0x14) {
-                        m_objects[v4].frame = 0xb;
-                        m_objectVar1[v4]++;
+                    if (m_objects[slot].frame == 0xd && m_objectVar1[slot] < 0x14) {
+                        m_objects[slot].frame = 0xb;
+                        m_objectVar1[slot]++;
                     }
-                    if (m_objects[v4].frame == 0xb) {
-                        m_objects[v4].hitsLeft = 0;
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0xb) {
+                        m_objects[slot].hitsLeft = 0;
+                        m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon7:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 * facing + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
-                    m_objects[v4].hitsLeft = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 * facing + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
+                    m_objects[slot].hitsLeft = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].vx = -m_objects[v4].vx;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].vx = -m_objects[slot].vx;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].vx = -m_objects[v4].vx;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].vx = -m_objects[slot].vx;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xb) {
+                    if (m_objects[slot].frame == 0xb) {
                         m_playVoice = 0xe;
-                        l50.type = kObjLv4Summon7Attack;
-                        l50.x = m_objects[v4].x;
-                        l50.y = 0.0;
-                        l50.keep = 1;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = m_objects[v4].facing;
-                        SpawnObject(&l50);
+                        effect.type = kObjLv4Summon7Attack;
+                        effect.x = m_objects[slot].x;
+                        effect.y = 0.0;
+                        effect.keep = 1;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = m_objects[slot].facing;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon7Attack:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vy = -0.5;
-                    m_objectVar1[v4] = 0;
-                    m_objectVar2[v4] = 0;
-                    m_objects[v4].attackResult = 0;
-                    m_objects[v4].hitsLeft = 1;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vy = -0.5;
+                    m_objectVar1[slot] = 0;
+                    m_objectVar2[slot] = 0;
+                    m_objects[slot].attackResult = 0;
+                    m_objects[slot].hitsLeft = 1;
                 }
-                m_objectVar1[v4]++;
-                if (m_objectVar1[v4] == 2) {
-                    l50.type = kObjLv4Puff;
-                    l50.x = m_objects[v4].x;
-                    l50.y = m_objects[v4].y - 10.0;
-                    l50.scale = 2;
-                    l50.layer = 1;
-                    l50.facing = m_objects[v4].facing;
-                    SpawnObject(&l50);
-                    m_objectVar1[v4] = 0;
+                m_objectVar1[slot]++;
+                if (m_objectVar1[slot] == 2) {
+                    effect.type = kObjLv4Puff;
+                    effect.x = m_objects[slot].x;
+                    effect.y = m_objects[slot].y - 10.0;
+                    effect.scale = 2;
+                    effect.layer = 1;
+                    effect.facing = m_objects[slot].facing;
+                    SpawnObject(&effect);
+                    m_objectVar1[slot] = 0;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    m_objects[v4].hitsLeft = 1;
-                    if (m_objects[v4].frame >= v58) {
-                        if (m_objectVar2[v4] < 0xa) {
-                            m_objectVar2[v4]++;
-                            m_objects[v4].frame = m_objects[v4].frame - 4;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    m_objects[slot].hitsLeft = 1;
+                    if (m_objects[slot].frame >= frameCount) {
+                        if (m_objectVar2[slot] < 0xa) {
+                            m_objectVar2[slot]++;
+                            m_objects[slot].frame = m_objects[slot].frame - 4;
                             break;
                         }
-                        l50.type = kObjLv4Smoke;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 25.0;
-                        l50.scale = 2;
-                        l50.layer = 1;
-                        l50.keep = 1;
-                        l50.facing = m_objects[v4].facing;
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        l50.type = kObjLv4Spark;
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
-                        SpawnObject(&l50);
+                        effect.type = kObjLv4Smoke;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 25.0;
+                        effect.scale = 2;
+                        effect.layer = 1;
+                        effect.keep = 1;
+                        effect.facing = m_objects[slot].facing;
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        effect.type = kObjLv4Spark;
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
+                        SpawnObject(&effect);
                         m_playSound = 0x16;
                         ShakeScreen(5, 5);
-                        RemoveObject(v4);
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon8:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0x10) {
-                        l50.type = kObjLv4Shot;
-                        l50.keep = 1;
-                        l50.x = m_objects[v4].x + m_objects[v4].facing * 5;
-                        l50.y = m_objects[v4].y - 10.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = m_objects[v4].facing;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0x10) {
+                        effect.type = kObjLv4Shot;
+                        effect.keep = 1;
+                        effect.x = m_objects[slot].x + m_objects[slot].facing * 5;
+                        effect.y = m_objects[slot].y - 10.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = m_objects[slot].facing;
+                        SpawnObject(&effect);
                         m_playVoice = 0x12;
                     }
-                    if (m_objects[v4].frame == 0x10 && m_objectVar1[v4] < 8) {
-                        m_objects[v4].frame = 0xf;
-                        m_objectVar1[v4]++;
+                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 8) {
+                        m_objects[slot].frame = 0xf;
+                        m_objectVar1[slot]++;
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Shot:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].attackResult = 0;
-                    m_objects[v4].vx = 0.5;
-                    m_objects[v4].vy = -1.0;
-                    m_objectVar1[v4]++;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].attackResult = 0;
+                    m_objects[slot].vx = 0.5;
+                    m_objects[slot].vy = -1.0;
+                    m_objectVar1[slot]++;
                 }
-                if (m_objects[v4].y < 0.0) {
-                    m_objects[v4].vy += 0.025;
+                if (m_objects[slot].y < 0.0) {
+                    m_objects[slot].vy += 0.025;
                 }
-                if (m_objects[v4].y >= 0.0) {
-                    if (m_objects[v4].frame < 2) {
-                        m_objects[v4].frame = m_objects[v4].frame + 2;
+                if (m_objects[slot].y >= 0.0) {
+                    if (m_objects[slot].frame < 2) {
+                        m_objects[slot].frame = m_objects[slot].frame + 2;
                     }
-                    m_objects[v4].y = 0.0;
-                    m_objects[v4].vx = 1.0;
-                    m_objects[v4].vy = 0.0;
+                    m_objects[slot].y = 0.0;
+                    m_objects[slot].vx = 1.0;
+                    m_objects[slot].vy = 0.0;
                 }
-                if (m_objects[v4].x > 650.0 || m_objects[v4].x < -10.0) {
-                    RemoveObject(v4);
+                if (m_objects[slot].x > 650.0 || m_objects[slot].x < -10.0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame == 2) {
-                        m_objects[v4].frame = m_objects[v4].frame - 2;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame == 2) {
+                        m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = m_objects[v4].frame - 2;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                 }
                 break;
             case kObjLv4Summon9:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
-                    m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
-                    m_objectVar1[v4] = 0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 0.25;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.05;
+                    m_objectVar1[slot] = 0;
                 }
-                if (m_objects[v4].frame < 5) {
-                    m_objects[v4].vy += 0.025;
-                    if (m_objects[v4].x > 600.0 && m_objects[v4].facing * m_objects[v4].vx > 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                if (m_objects[slot].frame < 5) {
+                    m_objects[slot].vy += 0.025;
+                    if (m_objects[slot].x > 600.0 && m_objects[slot].facing * m_objects[slot].vx > 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].x < 40.0 && m_objects[v4].facing * m_objects[v4].vx < 0.0) {
-                        m_objects[v4].facing = -m_objects[v4].facing;
+                    if (m_objects[slot].x < 40.0 && m_objects[slot].facing * m_objects[slot].vx < 0.0) {
+                        m_objects[slot].facing = -m_objects[slot].facing;
                     }
-                    if (m_objects[v4].y + m_objects[v4].vy >= 0.0) {
-                        m_objects[v4].vx = 0.0;
-                        m_objects[v4].vy = 0.0;
-                        m_objects[v4].y = 0.0;
-                        m_objects[v4].timer = 0;
-                        m_objects[v4].frame = (WORD)Random(0, 3) + 5;
+                    if (m_objects[slot].y + m_objects[slot].vy >= 0.0) {
+                        m_objects[slot].vx = 0.0;
+                        m_objects[slot].vy = 0.0;
+                        m_objects[slot].y = 0.0;
+                        m_objects[slot].timer = 0;
+                        m_objects[slot].frame = (WORD)Random(0, 3) + 5;
                     }
                 }
-                if (m_objects[v4].attackResult == 5) {
-                    m_objects[v4].frame = (WORD)Random(0, 3) + 1;
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].vx = m_objects[v4].facing * 1.0 * (*m_opponent)->facing;
-                    m_objects[v4].vy = -1.0;
-                    m_objects[v4].attackResult = 0;
+                if (m_objects[slot].attackResult == 5) {
+                    m_objects[slot].frame = (WORD)Random(0, 3) + 1;
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].vx = m_objects[slot].facing * 1.0 * (*m_opponent)->facing;
+                    m_objects[slot].vy = -1.0;
+                    m_objects[slot].attackResult = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame == 5) {
-                        m_objects[v4].frame = 1;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame == 5) {
+                        m_objects[slot].frame = 1;
                     }
-                    if (m_objects[v4].frame == 6) {
-                        l50.type = kObjLv4Popup1;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 6) {
+                        effect.type = kObjLv4Popup1;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 7) {
-                        l50.type = kObjLv4Popup2;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 7) {
+                        effect.type = kObjLv4Popup2;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 8) {
-                        l50.type = kObjLv4Popup3;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 8) {
+                        effect.type = kObjLv4Popup3;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 9) {
-                        l50.type = kObjLv4Popup4;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 9) {
+                        effect.type = kObjLv4Popup4;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0xa) {
-                        l50.type = kObjLv4Popup5;
-                        l50.x = m_objects[v4].x;
-                        l50.y = m_objects[v4].y - 50.0;
-                        l50.scale = 0;
-                        l50.layer = 1;
-                        l50.facing = 1;
-                        SpawnObject(&l50);
+                    if (m_objects[slot].frame == 0xa) {
+                        effect.type = kObjLv4Popup5;
+                        effect.x = m_objects[slot].x;
+                        effect.y = m_objects[slot].y - 50.0;
+                        effect.scale = 0;
+                        effect.layer = 1;
+                        effect.facing = 1;
+                        SpawnObject(&effect);
                     }
-                    if (m_objects[v4].frame == 0x10 && m_objectVar1[v4] < 0xf) {
-                        m_objects[v4].frame = 0xc;
-                        m_objectVar1[v4]++;
+                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 0xf) {
+                        m_objects[slot].frame = 0xc;
+                        m_objectVar1[slot]++;
                     }
-                    if (m_objects[v4].frame == 0xc) {
-                        m_objects[v4].hitsLeft = 1;
-                        m_objects[v4].attackResult = 0;
+                    if (m_objects[slot].frame == 0xc) {
+                        m_objects[slot].hitsLeft = 1;
+                        m_objects[slot].attackResult = 0;
                         m_playVoice = 0x11;
                     }
-                    if (m_objects[v4].frame == v58 - 1) {
-                        m_objects[v4].scale = 1;
+                    if (m_objects[slot].frame == frameCount - 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Smoke:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objectVar1[v4] = (WORD)Random(0, 0x168);
-                    m_objectVar2[v4] = (WORD)Random(0, 0x64);
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objectVar1[slot] = (WORD)Random(0, 0x168);
+                    m_objectVar2[slot] = (WORD)Random(0, 0x64);
                 }
-                m_objectVar2[v4] -= 3;
-                if (m_objectVar2[v4] < 0xa) {
-                    m_objectVar2[v4] = 0xa;
+                m_objectVar2[slot] -= 3;
+                if (m_objectVar2[slot] < 0xa) {
+                    m_objectVar2[slot] = 0xa;
                 }
-                m_objects[v4].SetVelocity((double)m_objectVar1[v4], m_objectVar2[v4] * 0.1);
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].SetVelocity((double)m_objectVar1[slot], m_objectVar2[slot] * 0.1);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Puff:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objectVar1[v4] = (WORD)Random(0, 0x168);
-                    m_objectVar2[v4] = (WORD)Random(0, 0x1e);
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objectVar1[slot] = (WORD)Random(0, 0x168);
+                    m_objectVar2[slot] = (WORD)Random(0, 0x1e);
                 }
-                m_objectVar2[v4] -= 4;
-                if (m_objectVar2[v4] < 5) {
-                    m_objectVar2[v4] = 5;
+                m_objectVar2[slot] -= 4;
+                if (m_objectVar2[slot] < 5) {
+                    m_objectVar2[slot] = 5;
                 }
-                m_objects[v4].SetVelocity((double)m_objectVar1[v4], m_objectVar2[v4] * 0.1);
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].SetVelocity((double)m_objectVar1[slot], m_objectVar2[slot] * 0.1);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Spark:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].vx = (WORD)Random(0, 0xa0) * 0.1 + -8.0;
-                    m_objects[v4].vy = -8.0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].vx = (WORD)Random(0, 0xa0) * 0.1 + -8.0;
+                    m_objects[slot].vy = -8.0;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    if (m_objects[v4].frame >= v58) {
-                        if (m_objectVar1[v4] < 0x10) {
-                            m_objectVar1[v4]++;
-                            m_objects[v4].frame--;
-                            l50.type = kObjLv4Puff;
-                            l50.x = m_objects[v4].x;
-                            l50.y = m_objects[v4].y;
-                            l50.scale = 2;
-                            l50.layer = 1;
-                            l50.facing = m_objects[v4].facing;
-                            SpawnObject(&l50);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    if (m_objects[slot].frame >= frameCount) {
+                        if (m_objectVar1[slot] < 0x10) {
+                            m_objectVar1[slot]++;
+                            m_objects[slot].frame--;
+                            effect.type = kObjLv4Puff;
+                            effect.x = m_objects[slot].x;
+                            effect.y = m_objects[slot].y;
+                            effect.scale = 2;
+                            effect.layer = 1;
+                            effect.facing = m_objects[slot].facing;
+                            SpawnObject(&effect);
                             break;
                         }
-                        RemoveObject(v4);
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon5Wave:
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = 0.0;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = 0.0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Summon6Hit:
-                m_objects[v4].vx = 2.0;
-                m_objects[v4].vy = 0.0;
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].hitsLeft = 1;
-                    m_objects[v4].attackResult = 0;
+                m_objects[slot].vx = 2.0;
+                m_objects[slot].vy = 0.0;
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
+                    m_objects[slot].hitsLeft = 1;
+                    m_objects[slot].attackResult = 0;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Popup1:
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = -0.15;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame == 1) {
-                        m_objects[v4].scale = 1;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = -0.15;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame == 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Popup2:
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = -0.15;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame == 1) {
-                        m_objects[v4].scale = 1;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = -0.15;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame == 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Popup3:
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = -0.15;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame == 1) {
-                        m_objects[v4].scale = 1;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = -0.15;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame == 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Popup4:
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = -0.15;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame == 1) {
-                        m_objects[v4].scale = 1;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = -0.15;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame == 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjLv4Popup5:
-                m_objects[v4].vx = 0.0;
-                m_objects[v4].vy = -0.15;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame == 1) {
-                        m_objects[v4].scale = 1;
+                m_objects[slot].vx = 0.0;
+                m_objects[slot].vy = -0.15;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame == 1) {
+                        m_objects[slot].scale = 1;
                     }
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
                 break;
             case kObjFallInDarkness:
-                m_objects[v4].vx = -0.02;
-                m_objects[v4].drawnWhileHidden = 0x7530;
-                m_objects[v4].timer++;
+                m_objects[slot].vx = -0.02;
+                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                 }
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
-                    l50.type = kObjShardSmall;
-                    l50.x = (double)((int)x + facing * 0x17);
-                    l50.y = (double)((int)y - 4);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardSmall;
-                    l50.x = (double)((int)x - (facing << 2));
-                    l50.y = (double)((int)y - 6);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardSmall;
-                    l50.x = (double)((int)x - facing * 0xe);
-                    l50.y = (double)((int)y - 0x1a);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardSmall;
-                    l50.x = (double)(int)x;
-                    l50.y = (double)(int)y;
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardSmall;
-                    l50.x = (double)((int)x + facing * 0x1e);
-                    l50.y = (double)((int)y - 0x28);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardSmall;
-                    l50.x = (double)((int)x - facing * 0x19);
-                    l50.y = (double)((int)y - 0x50);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardLarge;
-                    l50.x = (double)((int)x - facing * 0x23);
-                    l50.y = (double)((int)y - 0x2a);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardLarge;
-                    l50.x = (double)((int)x - facing * 0x12);
-                    l50.y = (double)((int)y - 0x14);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardLarge;
-                    l50.x = (double)((int)x + facing * 2);
-                    l50.y = (double)((int)y - 0x41);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
-                    l50.type = kObjShardLarge;
-                    l50.x = (double)((int)x + (facing << 4));
-                    l50.y = (double)((int)y - 0x50);
-                    l50.scale = 0;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
+                    effect.type = kObjShardSmall;
+                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.y = (double)((int)y - 4);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardSmall;
+                    effect.x = (double)((int)x - (facing << 2));
+                    effect.y = (double)((int)y - 6);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardSmall;
+                    effect.x = (double)((int)x - facing * 0xe);
+                    effect.y = (double)((int)y - 0x1a);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardSmall;
+                    effect.x = (double)(int)x;
+                    effect.y = (double)(int)y;
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardSmall;
+                    effect.x = (double)((int)x + facing * 0x1e);
+                    effect.y = (double)((int)y - 0x28);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardSmall;
+                    effect.x = (double)((int)x - facing * 0x19);
+                    effect.y = (double)((int)y - 0x50);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardLarge;
+                    effect.x = (double)((int)x - facing * 0x23);
+                    effect.y = (double)((int)y - 0x2a);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardLarge;
+                    effect.x = (double)((int)x - facing * 0x12);
+                    effect.y = (double)((int)y - 0x14);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardLarge;
+                    effect.x = (double)((int)x + facing * 2);
+                    effect.y = (double)((int)y - 0x41);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
+                    effect.type = kObjShardLarge;
+                    effect.x = (double)((int)x + (facing << 4));
+                    effect.y = (double)((int)y - 0x50);
+                    effect.scale = 0;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
                     m_playSound = 0x22;
-                    RemoveObject(v4);
+                    RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
                 }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjShardSmall:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objectVar2[v4] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
-                    m_objectVar1[v4]++;
-                    m_objects[v4].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[v4].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar1[slot]++;
+                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
                 }
-                m_objects[v4].vy += 0.05;
-                if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
-                    m_objects[v4].vy = -m_objects[v4].vy;
+                m_objects[slot].vy += 0.05;
+                if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
+                    m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[v4] < 0xa) {
-                    m_objects[v4].scale = 1;
+                if (m_objectVar2[slot] < 0xa) {
+                    m_objects[slot].scale = 1;
                 }
-                if (m_objectVar2[v4] < 0) {
-                    RemoveObject(v4);
+                if (m_objectVar2[slot] < 0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                m_objectVar2[v4]--;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                m_objectVar2[slot]--;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjShardLarge:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
-                    m_objectVar2[v4] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
-                    m_objectVar1[v4]++;
-                    m_objects[v4].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[v4].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar1[slot]++;
+                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
                 }
-                m_objects[v4].vy += 0.03;
-                if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
-                    m_objects[v4].vy = -m_objects[v4].vy;
+                m_objects[slot].vy += 0.03;
+                if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
+                    m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[v4] < 0xa) {
-                    m_objects[v4].scale = 1;
+                if (m_objectVar2[slot] < 0xa) {
+                    m_objects[slot].scale = 1;
                 }
-                if (m_objectVar2[v4] < 0) {
-                    RemoveObject(v4);
+                if (m_objectVar2[slot] < 0) {
+                    RemoveObject(slot);
                     break;
                 }
-                m_objects[v4].timer++;
-                m_objectVar2[v4]--;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
+                m_objects[slot].timer++;
+                m_objectVar2[slot]--;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        m_objects[slot].frame = 0;
                     }
                 }
                 break;
             case kObjBurnFlames:
-                m_objects[v4].x = x;
-                m_objects[v4].y = y;
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].attackResult = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        RemoveObject(v4);
+                m_objects[slot].x = x;
+                m_objects[slot].y = y;
+                m_objects[slot].timer++;
+                if (m_objects[slot].timer >= duration) {
+                    m_objects[slot].timer = 0;
+                    m_objects[slot].frame++;
+                    m_objects[slot].attackResult = 0;
+                    if (m_objects[slot].frame >= frameCount) {
+                        RemoveObject(slot);
                     }
                 }
             }
         }
-        v4++;
-        if (v4 >= 0x40) {
-            v4 = 0;
+        slot++;
+        if (slot >= 0x40) {
+            slot = 0;
         }
     }
 }

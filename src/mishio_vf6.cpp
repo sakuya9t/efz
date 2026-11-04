@@ -8,26 +8,26 @@
 
 void CMishio::UpdatePattern()
 {
-    WORD x8;
-    WORD l4;
+    WORD frameCount; // frames in the action's animation
+    WORD duration; // ticks the current frame lasts
 
     if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
-    EffectDesc l50;
-    l4 = (short)anims[pattern].frames[frame].duration;
-    x8 = anims[pattern].frameCount;
-    InitEffectDesc((EffectDesc*)&l50);
+    EffectDesc effect; // what CreateEffect or SpawnObject is to make
+    duration = (short)anims[pattern].frames[frame].duration;
+    frameCount = anims[pattern].frameCount;
+    InitEffectDesc((EffectDesc*)&effect);
     switch (pattern) {
     default:
         m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -37,10 +37,10 @@ void CMishio::UpdatePattern()
         vx = 0.4;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -50,10 +50,10 @@ void CMishio::UpdatePattern()
         vx = -0.4;
         vy = 0.0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -64,10 +64,10 @@ void CMishio::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -91,10 +91,10 @@ void CMishio::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -127,10 +127,10 @@ void CMishio::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -159,10 +159,10 @@ void CMishio::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -181,10 +181,10 @@ void CMishio::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -196,10 +196,10 @@ void CMishio::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -209,10 +209,10 @@ void CMishio::UpdatePattern()
         vy = vy + ay;
         m_dashMomentum = 0;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -229,10 +229,10 @@ void CMishio::UpdatePattern()
         m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -254,10 +254,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -283,10 +283,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -311,10 +311,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -343,13 +343,13 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -378,10 +378,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -414,10 +414,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -450,10 +450,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -486,10 +486,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -522,10 +522,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -557,10 +557,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -593,10 +593,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -626,10 +626,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -659,10 +659,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -693,10 +693,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -736,10 +736,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -779,10 +779,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -817,10 +817,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -855,10 +855,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -903,10 +903,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -951,10 +951,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -994,10 +994,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1037,10 +1037,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1068,10 +1068,10 @@ void CMishio::UpdatePattern()
             StartPattern();
             break;
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1094,10 +1094,10 @@ void CMishio::UpdatePattern()
         vx = m_hitVx;
         vy = m_hitVy;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1124,19 +1124,19 @@ void CMishio::UpdatePattern()
             vy = -2.5;
             ay = 0.025;
             m_playSound = 0x1f;
-            l50.type = 0;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1171,10 +1171,10 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1202,10 +1202,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1227,10 +1227,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1252,10 +1252,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1287,10 +1287,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1325,10 +1325,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1363,10 +1363,10 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1377,12 +1377,12 @@ void CMishio::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1f3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            SpawnObject(&l50);
+            effect.type = 0x1f3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            SpawnObject(&effect);
             m_gauge = m_gauge + 0x1e;
             vx = m_hitVx;
             vy = m_hitVy;
@@ -1394,10 +1394,10 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame--;
             }
         }
@@ -1436,14 +1436,14 @@ void CMishio::UpdatePattern()
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -1461,14 +1461,14 @@ void CMishio::UpdatePattern()
     case kEncased:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1500,10 +1500,10 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1513,14 +1513,14 @@ void CMishio::UpdatePattern()
     case kEncased2:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1552,10 +1552,10 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1565,14 +1565,14 @@ void CMishio::UpdatePattern()
     case kEncasedAir:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_rfBlue != 0) {
@@ -1585,10 +1585,10 @@ void CMishio::UpdatePattern()
         }
         vy += 0.04;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -1608,14 +1608,14 @@ void CMishio::UpdatePattern()
     case kEncasedSpin:
         if (frame == 0 && timer == 0) {
             if (m_encasedBreakOut == 0) {
-                l50.type = 0x1f0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.keep = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1f0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.keep = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
                 m_encasedBreakOut = 1;
             }
             if (m_patternVar1 == 0) {
@@ -1631,10 +1631,10 @@ void CMishio::UpdatePattern()
         }
         vy += 0.06;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
             }
         }
@@ -1651,20 +1651,20 @@ void CMishio::UpdatePattern()
         break;
     case kFallInDarkness:
         if (frame == 0 && timer == 0) {
-            l50.type = 0x1ef;
-            l50.x = 60.0;
-            l50.y = 40.0;
-            l50.screen = 1;
-            l50.facing = 1;
-            l50.scale = 0;
-            l50.layer = 0;
-            SpawnObject(&l50);
+            effect.type = 0x1ef;
+            effect.x = 60.0;
+            effect.y = 40.0;
+            effect.screen = 1;
+            effect.facing = 1;
+            effect.scale = 0;
+            effect.layer = 0;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -1672,13 +1672,13 @@ void CMishio::UpdatePattern()
         break;
     case kWakeUp:
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8 - 1) {
+            if (frame == frameCount - 1) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1692,19 +1692,19 @@ void CMishio::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1715,19 +1715,19 @@ void CMishio::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kLyingDown;
                 StartPattern();
             }
@@ -1740,13 +1740,13 @@ void CMishio::UpdatePattern()
             pattern = kWakeUp;
             StartPattern();
         }
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kWakeUp;
                 StartPattern();
             }
@@ -1777,13 +1777,13 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1817,13 +1817,13 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1857,13 +1857,13 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -1897,13 +1897,13 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1934,13 +1934,13 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1971,13 +1971,13 @@ void CMishio::UpdatePattern()
             m_cornerPushback = 0.0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -1992,10 +1992,10 @@ void CMishio::UpdatePattern()
         vx = -1.2;
         vy = vy + ay;
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2013,20 +2013,20 @@ void CMishio::UpdatePattern()
         ay = 0.045;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2044,20 +2044,20 @@ void CMishio::UpdatePattern()
         ay = 0.045;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            m_game->CreateEffect((EffectDesc*)&effect);
         } else {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2073,21 +2073,21 @@ void CMishio::UpdatePattern()
     case 0xa1:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_patternVar1++;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
                 ay = 0.035;
@@ -2105,12 +2105,12 @@ void CMishio::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             StopMoving();
-            l50.type = 9;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x3c);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 9;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x3c);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
@@ -2125,13 +2125,13 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 0xf) {
                 ay = 0.035;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2163,10 +2163,10 @@ void CMishio::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2199,7 +2199,7 @@ void CMishio::UpdatePattern()
             timer = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1 && timer == 0) {
@@ -2210,7 +2210,7 @@ void CMishio::UpdatePattern()
             if (frame == 3) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 FaceOpponent();
                 pattern = kStand;
                 StartPattern();
@@ -2228,10 +2228,10 @@ void CMishio::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2265,10 +2265,10 @@ void CMishio::UpdatePattern()
         timer++;
         m_patternVar1++;
         m_patternVar2++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -2305,27 +2305,27 @@ void CMishio::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            l50.type = 4;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 4;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2342,21 +2342,21 @@ void CMishio::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -2372,21 +2372,21 @@ void CMishio::UpdatePattern()
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
             ax = 0.0;
-            l50.type = 8;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 8;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == x8) {
+            if (frame == frameCount) {
                 FaceOpponent();
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -2420,10 +2420,10 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2444,19 +2444,19 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_playSound = 0x12;
-            l50.type = 1;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 1;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 vx = m_patternVar1 * 0.01;
                 vy = m_patternVar2 * 0.01;
@@ -2485,10 +2485,10 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 break;
@@ -2513,7 +2513,7 @@ void CMishio::UpdatePattern()
             m_playSound = 9;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2) {
@@ -2524,7 +2524,7 @@ void CMishio::UpdatePattern()
             if (frame == 0xa) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -2559,13 +2559,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2601,13 +2601,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 4) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 if (m_inputY != 1) {
                     pattern = kStandUp;
@@ -2634,13 +2634,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2676,13 +2676,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -2718,13 +2718,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2763,13 +2763,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 4) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2796,13 +2796,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2839,13 +2839,13 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2878,13 +2878,13 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2917,13 +2917,13 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (m_hitsLeft > 0) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -2951,7 +2951,7 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -2959,7 +2959,7 @@ void CMishio::UpdatePattern()
                 vx = 1.0;
                 vy = -1.3;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -2993,7 +2993,7 @@ void CMishio::UpdatePattern()
             m_dashMomentum = 0;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1) {
@@ -3004,7 +3004,7 @@ void CMishio::UpdatePattern()
                 m_playSound = 0x14;
                 m_hitsLeft = 1;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -3030,24 +3030,24 @@ void CMishio::UpdatePattern()
             y = 0.0;
             vy = 0.0;
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = 7;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = 7;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
             pattern = kAirDiveLanding;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
@@ -3060,11 +3060,11 @@ void CMishio::UpdatePattern()
             vy = -2.4;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kFall;
                 StartPattern();
             }
@@ -3075,20 +3075,20 @@ void CMishio::UpdatePattern()
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             ShakeScreen(3, 0);
-            l50.type = 3;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.layer = 0;
-            l50.sound = 7;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 3;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.layer = 0;
+            effect.sound = 7;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3111,15 +3111,15 @@ void CMishio::UpdatePattern()
             (*m_opponent)->StopMoving();
             pattern = kThrowConnected;
             (*m_opponent)->pattern = kThrownStandHigh2;
-            l50.type = 0;
-            l50.x = (double)((int)x + facing * 0x24);
-            l50.y = (double)((int)y - 0x2e);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + facing * 0x24);
+            effect.y = (double)((int)y - 0x2e);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3128,7 +3128,7 @@ void CMishio::UpdatePattern()
             } else {
                 m_hitsLeft = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -3140,7 +3140,7 @@ void CMishio::UpdatePattern()
         break;
     case kThrowConnected:
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -3166,7 +3166,7 @@ void CMishio::UpdatePattern()
             if (frame == 5) {
                 facing = -facing;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 FaceOpponent();
@@ -3190,13 +3190,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3224,13 +3224,13 @@ void CMishio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vy = 0.0;
             vx += 2.0;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
@@ -3238,13 +3238,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3272,13 +3272,13 @@ void CMishio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vy = 0.0;
             vx += 2.0;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
@@ -3286,13 +3286,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3315,13 +3315,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3337,13 +3337,13 @@ void CMishio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vy = 0.0;
             vx += 2.0;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
@@ -3351,13 +3351,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3373,13 +3373,13 @@ void CMishio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vy = 0.0;
             vx += 2.0;
-            l50.type = 0x1f;
-            l50.x = (double)(int)x;
-            l50.y = (double)(int)y;
-            l50.scale = 0;
-            l50.layer = 0;
-            l50.side = facing == -1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x1f;
+            effect.x = (double)(int)x;
+            effect.y = (double)(int)y;
+            effect.scale = 0;
+            effect.layer = 0;
+            effect.side = facing == -1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
@@ -3387,13 +3387,13 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kCrouch;
                 StartPattern();
             }
@@ -3407,12 +3407,12 @@ void CMishio::UpdatePattern()
             (*m_opponent)->m_noAirRecovery = 1;
             StopMoving();
             StartPattern();
-            l50.type = 0;
-            l50.x = (double)((int)x + (facing << 5));
-            l50.y = (double)((int)y - 0x39);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0;
+            effect.x = (double)((int)x + (facing << 5));
+            effect.y = (double)((int)y - 0x39);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             frame = 0;
             timer = 0;
             pattern = kAirThrowConnected;
@@ -3422,7 +3422,7 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
@@ -3431,7 +3431,7 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kJumpC;
                 frame = 2;
             }
@@ -3464,13 +3464,13 @@ void CMishio::UpdatePattern()
                 (*m_opponent)->x = x - facing * 6;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kKnockdown;
-                l50.type = 0;
-                l50.x = (double)((int)x - facing * 9);
-                l50.y = (double)((int)y + 4);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.sound = 2;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0;
+                effect.x = (double)((int)x - facing * 9);
+                effect.y = (double)((int)y + 4);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.sound = 2;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 break;
             }
         }
@@ -3485,7 +3485,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3507,7 +3507,7 @@ void CMishio::UpdatePattern()
             if (frame == 0x10) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -3522,7 +3522,7 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -3531,7 +3531,7 @@ void CMishio::UpdatePattern()
             if (frame == 3) {
                 m_playVoice = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_attackResult > 0 && m_powerUp == 0) {
                     if ((WORD)Random(0, 0x3e8) < 0x1f4) {
@@ -3553,7 +3553,7 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -3562,7 +3562,7 @@ void CMishio::UpdatePattern()
             if (frame == 3) {
                 m_playVoice = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_attackResult > 0 && m_powerUp == 0) {
                     if ((WORD)Random(0, 0x3e8) < 0x1f4) {
@@ -3586,13 +3586,13 @@ void CMishio::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
@@ -3601,7 +3601,7 @@ void CMishio::UpdatePattern()
             m_patternVar1 = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2 || frame == 0xb) {
@@ -3613,7 +3613,7 @@ void CMishio::UpdatePattern()
             if (frame == 0xc) {
                 m_playVoice = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_patternVar1 > 0 && m_powerUp == 0) {
                     if ((WORD)Random(0, 0x3e8) < 0x1f4) {
@@ -3639,7 +3639,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -3649,13 +3649,13 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 5) {
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 vx = 3.0;
             }
             if (frame == 7 && m_patternVar1 < 2) {
@@ -3666,7 +3666,7 @@ void CMishio::UpdatePattern()
             if (frame == 7 && m_attackResult == 0) {
                 frame = 0x16;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3683,7 +3683,7 @@ void CMishio::UpdatePattern()
             m_gauge = m_gauge + 5;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -3692,7 +3692,7 @@ void CMishio::UpdatePattern()
             if (frame == 6 || frame == 9 || frame == 0xc || frame == 0xf) {
                 m_attackResult = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3705,13 +3705,13 @@ void CMishio::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_dashMomentum = 0;
             StopMoving();
             m_hitsLeft = 0x63;
@@ -3723,7 +3723,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -3733,13 +3733,13 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 5) {
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 vx = 3.2;
             }
             if (frame == 7 && m_patternVar1 < 2) {
@@ -3751,7 +3751,7 @@ void CMishio::UpdatePattern()
             if (frame == 7 && m_attackResult == 0) {
                 frame = 0x1f;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -3813,7 +3813,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3825,26 +3825,26 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 m_gauge = m_gauge + 0x14;
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x194;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x194;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = k214Recovery;
                 StartPattern();
@@ -3907,7 +3907,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3916,26 +3916,26 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 m_gauge = m_gauge + 0x14;
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x194;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x194;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = k214Recovery;
                 StartPattern();
@@ -3998,7 +3998,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4007,26 +4007,26 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-90.0, 2.2);
                 m_gauge = m_gauge + 0x14;
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x193;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x193;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = k214Recovery;
                 StartPattern();
@@ -4090,7 +4090,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4099,20 +4099,20 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(0.0, 2.2);
                 m_gauge = m_gauge + 0x14;
-                l50.type = 0x195;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x195;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 5 && m_patternVar1 < 4) {
                 m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214Recovery2;
                 frame = 0;
             }
@@ -4183,7 +4183,7 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4192,20 +4192,20 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(45.0, 2.2);
                 m_gauge = m_gauge + 0x14;
-                l50.type = 0x196;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x196;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 6 && m_patternVar1 < 4) {
                 m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214Recovery;
                 frame = 0;
             }
@@ -4276,7 +4276,7 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4285,20 +4285,20 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(90.0, 2.2);
                 m_gauge = m_gauge + 0x14;
-                l50.type = 0x197;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x197;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 6 && m_patternVar1 < 4) {
                 m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214Recovery;
                 frame = 0;
             }
@@ -4310,7 +4310,7 @@ void CMishio::UpdatePattern()
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4319,13 +4319,13 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-90.0, 2.2);
                 m_gauge = m_gauge + 5;
-                l50.type = 0x193;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x193;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -4337,7 +4337,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214FollowRecovery;
                 frame = 0;
                 m_patternVar2++;
@@ -4350,7 +4350,7 @@ void CMishio::UpdatePattern()
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4359,13 +4359,13 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 m_gauge = m_gauge + 5;
-                l50.type = 0x194;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x194;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -4377,7 +4377,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214FollowRecovery;
                 frame = 0;
                 m_patternVar2++;
@@ -4390,7 +4390,7 @@ void CMishio::UpdatePattern()
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4399,13 +4399,13 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(0.0, 2.2);
                 m_gauge = m_gauge + 5;
-                l50.type = 0x195;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x195;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -4417,7 +4417,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214FollowRecovery;
                 frame = 0;
                 m_patternVar2++;
@@ -4438,7 +4438,7 @@ void CMishio::UpdatePattern()
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4447,13 +4447,13 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(45.0, 2.2);
                 m_gauge = m_gauge + 5;
-                l50.type = 0x196;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x196;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -4465,7 +4465,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214FollowRecovery;
                 frame = 0;
                 m_patternVar2++;
@@ -4486,7 +4486,7 @@ void CMishio::UpdatePattern()
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4495,13 +4495,13 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(90.0, 2.2);
                 m_gauge = m_gauge + 5;
-                l50.type = 0x197;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x197;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -4513,7 +4513,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214FollowRecovery;
                 frame = 0;
                 m_patternVar2++;
@@ -4603,14 +4603,14 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 7) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -4630,23 +4630,23 @@ void CMishio::UpdatePattern()
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x190;
-            l50.x = (double)((int)x + (facing << 6));
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            l50.scale = 2;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x190;
+            effect.x = (double)((int)x + (facing << 6));
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            effect.scale = 2;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_shotOut = 1;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
             }
@@ -4659,23 +4659,23 @@ void CMishio::UpdatePattern()
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
             m_playVoice = 1;
-            l50.type = 0x191;
-            l50.x = (double)((int)x + (facing << 6));
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            l50.scale = 2;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x191;
+            effect.x = (double)((int)x + (facing << 6));
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            effect.scale = 2;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_shotOut = 1;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
                 if (m_powerUp == 2) {
@@ -4691,35 +4691,35 @@ void CMishio::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
         }
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
             m_playVoice = 2;
-            l50.type = 0x192;
-            l50.x = (double)((int)x + facing * 0x14);
-            l50.y = (double)((int)y - 0x3c);
-            l50.facing = facing;
-            l50.layer = 1;
-            l50.scale = 2;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.type = 0x192;
+            effect.x = (double)((int)x + facing * 0x14);
+            effect.y = (double)((int)y - 0x3c);
+            effect.facing = facing;
+            effect.layer = 1;
+            effect.scale = 2;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_shotOut = 1;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
                 if (m_powerUp == 2) {
@@ -4734,29 +4734,29 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         if (frame == 5 && timer == 0) {
-            l50.type = 0x198;
+            effect.type = 0x198;
             if (x - (*m_opponent)->x < 150.0 && x - (*m_opponent)->x > -150.0) {
-                l50.x = (*m_opponent)->x;
+                effect.x = (*m_opponent)->x;
             } else {
                 if ((*m_opponent)->x > x) {
-                    l50.x = x + 150.0;
+                    effect.x = x + 150.0;
                 }
                 if ((*m_opponent)->x < x) {
-                    l50.x = x - 150.0;
+                    effect.x = x - 150.0;
                 }
             }
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            l50.scale = 2;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            effect.scale = 2;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_fieldOut = 1;
             m_gauge = m_gauge + 0x19;
             m_playVoice = 3;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4764,7 +4764,7 @@ void CMishio::UpdatePattern()
                 m_patternVar1++;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
                 if (m_powerUp == 2) {
@@ -4779,29 +4779,29 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         if (frame == 5 && timer == 0) {
-            l50.type = 0x198;
+            effect.type = 0x198;
             if (x - (*m_opponent)->x > 150.0 || x - (*m_opponent)->x < -150.0) {
-                l50.x = (*m_opponent)->x;
+                effect.x = (*m_opponent)->x;
             } else {
                 if ((*m_opponent)->x > x) {
-                    l50.x = x + 150.0;
+                    effect.x = x + 150.0;
                 }
                 if ((*m_opponent)->x < x) {
-                    l50.x = x - 150.0;
+                    effect.x = x - 150.0;
                 }
             }
-            l50.y = (double)(int)y;
-            l50.facing = facing;
-            l50.layer = 1;
-            l50.scale = 2;
-            l50.keep = 1;
-            SpawnObject(&l50);
+            effect.y = (double)(int)y;
+            effect.facing = facing;
+            effect.layer = 1;
+            effect.scale = 2;
+            effect.keep = 1;
+            SpawnObject(&effect);
             m_fieldOut = 1;
             m_gauge = m_gauge + 0x19;
             m_playVoice = 3;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -4809,7 +4809,7 @@ void CMishio::UpdatePattern()
                 m_patternVar1++;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 StartPattern();
                 pattern = kStand;
                 if (m_powerUp == 2) {
@@ -4827,25 +4827,25 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame == 2) {
-                l50.type = 0x1b5;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1b5;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 3) {
                 m_playVoice = 5;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_powerUp == 1) {
                     m_powerUp = 0;
@@ -4869,7 +4869,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -4878,15 +4878,15 @@ void CMishio::UpdatePattern()
             if (frame == 3) {
                 m_playVoice = 5;
                 vx = 2.5;
-                l50.type = 0x1b5;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1b5;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_powerUp == 1) {
                     m_powerUp = 0;
@@ -4906,13 +4906,13 @@ void CMishio::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vx = 1.0;
             vy = 0.0;
             ax = 0.0;
@@ -4927,7 +4927,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2 || frame == 0xb) {
@@ -4935,27 +4935,27 @@ void CMishio::UpdatePattern()
             }
             if (frame == 3) {
                 m_playVoice = 5;
-                l50.type = 0x1bc;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1bc;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 9) {
                 m_hitsLeft = 1;
                 m_attackResult = 0;
                 m_playVoice = 5;
-                l50.type = 0x1b5;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1b5;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_powerUp == 1) {
                     m_powerUp = 0;
@@ -4973,7 +4973,7 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -4981,22 +4981,22 @@ void CMishio::UpdatePattern()
             }
             if (frame == 3) {
                 m_playVoice = 4;
-                l50.type = 0x1b6;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1b8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1b6;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1b8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_powerUp == 2) {
                     m_powerUp = 0;
@@ -5020,7 +5020,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -5028,30 +5028,30 @@ void CMishio::UpdatePattern()
             }
             if (frame == 3) {
                 m_playVoice = 4;
-                l50.type = 0x1b6;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1b8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1ba;
-                l50.keep = 1;
-                l50.x = (double)((int)x + facing * 0x5a);
-                l50.y = (double)((int)y - 0x3c);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1b6;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1b8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1ba;
+                effect.keep = 1;
+                effect.x = (double)((int)x + facing * 0x5a);
+                effect.y = (double)((int)y - 0x3c);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_powerUp == 2) {
                     m_powerUp = 0;
@@ -5071,13 +5071,13 @@ void CMishio::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vy = 0.0;
             ax = 0.0;
         }
@@ -5091,7 +5091,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2 || frame == 0xb) {
@@ -5099,41 +5099,41 @@ void CMishio::UpdatePattern()
             }
             if (frame == 3) {
                 m_playVoice = 4;
-                l50.type = 0x1bd;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1b8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1bd;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1b8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 9) {
                 m_hitsLeft = 1;
                 m_attackResult = 0;
                 m_playVoice = 4;
-                l50.type = 0x1b6;
-                l50.x = (double)((int)x + facing * 0x26);
-                l50.y = (double)((int)y - 0x28);
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1b8;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 2;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1b6;
+                effect.x = (double)((int)x + facing * 0x26);
+                effect.y = (double)((int)y - 0x28);
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1b8;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 2;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 if (m_powerUp == 2) {
                     m_powerUp = 0;
@@ -5151,7 +5151,7 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -5160,7 +5160,7 @@ void CMishio::UpdatePattern()
             if (frame == 3) {
                 m_playVoice = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -5181,7 +5181,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -5191,7 +5191,7 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0;
                 vx = 2.5;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -5208,13 +5208,13 @@ void CMishio::UpdatePattern()
             } else {
                 m_rfGauge -= 250.0;
             }
-            l50.type = 0x21;
-            l50.sound = 0xb;
-            l50.x = (double)(int)x;
-            l50.y = (double)((int)y - 0x32);
-            l50.scale = 2;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x21;
+            effect.sound = 0xb;
+            effect.x = (double)(int)x;
+            effect.y = (double)((int)y - 0x32);
+            effect.scale = 2;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             vy = 0.0;
             ax = 0.0;
         }
@@ -5228,7 +5228,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 2 || frame == 0xb) {
@@ -5240,7 +5240,7 @@ void CMishio::UpdatePattern()
             if (frame == 0xc) {
                 m_playVoice = 0;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
@@ -5329,14 +5329,14 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 7) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -5429,14 +5429,14 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 7) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -5452,14 +5452,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x - facing * 0x14);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x - facing * 0x14);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x63;
             m_superCounter = 0;
             StopMoving();
@@ -5483,7 +5483,7 @@ void CMishio::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -5493,13 +5493,13 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 8) {
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 vx = 3.5;
             }
             if (frame == 0xa && m_patternVar1 < 2) {
@@ -5520,7 +5520,7 @@ void CMishio::UpdatePattern()
                 m_patternVar3++;
                 m_attackResult = 0;
             }
-            if (frame >= x8 || frame == 0x28) {
+            if (frame >= frameCount || frame == 0x28) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 1) {
@@ -5535,14 +5535,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x - facing * 0x14);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x - facing * 0x14);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x63;
             m_superCounter = 0;
             StopMoving();
@@ -5566,16 +5566,16 @@ void CMishio::UpdatePattern()
             break;
         }
         if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 0xa) {
-            l50.type = 0x19a;
-            l50.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
-            l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x19a;
+            effect.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
+            effect.y = (double)((int)y - (WORD)Random(0, 0x5a));
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -5585,13 +5585,13 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 8) {
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 vx = 4.0;
             }
             if (frame == 0xa && m_patternVar1 < 2) {
@@ -5612,7 +5612,7 @@ void CMishio::UpdatePattern()
                 m_patternVar3++;
                 m_attackResult = 0;
             }
-            if (frame >= x8 || frame == 0x28) {
+            if (frame >= frameCount || frame == 0x28) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 1) {
@@ -5627,14 +5627,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x - facing * 0x14);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x - facing * 0x14);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 0x63;
             m_superCounter = 0;
             m_playSound = 0x25;
@@ -5661,25 +5661,25 @@ void CMishio::UpdatePattern()
             break;
         }
         if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 0xa) {
-            l50.type = 0x19a;
-            l50.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
-            l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x19a;
+            effect.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
+            effect.y = (double)((int)y - (WORD)Random(0, 0x5a));
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 5) {
-            l50.type = 0x19b;
-            l50.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
-            l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
-            l50.scale = 2;
-            l50.layer = 1;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x19b;
+            effect.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
+            effect.y = (double)((int)y - (WORD)Random(0, 0x5a));
+            effect.scale = 2;
+            effect.layer = 1;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -5689,13 +5689,13 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 8) {
-                l50.type = 0x1f;
-                l50.x = (double)((int)x + facing * 0x28);
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
+                effect.type = 0x1f;
+                effect.x = (double)((int)x + facing * 0x28);
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
                 vx = 5.0;
             }
             if (frame == 0xa && m_patternVar1 < 2) {
@@ -5716,7 +5716,7 @@ void CMishio::UpdatePattern()
                 m_patternVar3++;
                 m_attackResult = 0;
             }
-            if (frame >= x8 || frame == 0x28) {
+            if (frame >= frameCount || frame == 0x28) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 1) {
@@ -5733,14 +5733,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x - facing * 0x14);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x - facing * 0x14);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 8 && frame < 0xb && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -5802,7 +5802,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5810,27 +5810,27 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x19e;
-                l50.keep = 1;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x19e;
+                effect.keep = 1;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 0xb && m_patternVar1 < 4) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = k214214Recovery;
                 StartPattern();
@@ -5845,14 +5845,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x - facing * 0x14);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x - facing * 0x14);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 8 && frame < 0xb && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -5914,7 +5914,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -5922,27 +5922,27 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 m_playVoice = 0xa;
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x19e;
-                l50.keep = 1;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x19e;
+                effect.keep = 1;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 0xb && m_patternVar1 < 4) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = k214214Recovery;
                 StartPattern();
@@ -5958,14 +5958,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x - facing * 0x14);
-            l50.y = (double)((int)y - 0x2a);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x - facing * 0x14);
+            effect.y = (double)((int)y - 0x2a);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
         }
         if (frame > 8 && frame < 0xb && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
@@ -6028,7 +6028,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -6037,27 +6037,27 @@ void CMishio::UpdatePattern()
                 ObjBase::SetVelocity(-45.0, 2.2);
                 m_invulTime = 0x2d;
                 m_playVoice = 0xa;
-                l50.type = 0x1f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.scale = 0;
-                l50.layer = 0;
-                l50.side = facing == -1;
-                m_game->CreateEffect((EffectDesc*)&l50);
-                l50.type = 0x19e;
-                l50.keep = 1;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.scale = 0;
+                effect.layer = 0;
+                effect.side = facing == -1;
+                m_game->CreateEffect((EffectDesc*)&effect);
+                effect.type = 0x19e;
+                effect.keep = 1;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 0xb && m_patternVar1 < 4) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 frame = 0;
                 pattern = k214214Recovery;
                 StartPattern();
@@ -6132,7 +6132,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -6140,14 +6140,14 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-90.0, 2.2);
-                l50.type = 0x19c;
-                l50.keep = 1;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x19c;
+                effect.keep = 1;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -6159,7 +6159,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214214Recovery;
                 frame = 0;
                 m_patternVar2++;
@@ -6234,7 +6234,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -6242,14 +6242,14 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
-                l50.type = 0x19e;
-                l50.keep = 1;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x19e;
+                effect.keep = 1;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -6261,7 +6261,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214214Recovery;
                 frame = 0;
                 m_patternVar2++;
@@ -6336,7 +6336,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -6344,14 +6344,14 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(0.0, 2.2);
-                l50.type = 0x19d;
-                l50.keep = 1;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x19d;
+                effect.keep = 1;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -6363,7 +6363,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214214Recovery;
                 frame = 0;
                 m_patternVar2++;
@@ -6446,7 +6446,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -6454,14 +6454,14 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(45.0, 2.2);
-                l50.type = 0x19f;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x19f;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -6473,7 +6473,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214214Recovery;
                 frame = 0;
                 m_patternVar2++;
@@ -6556,7 +6556,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -6564,14 +6564,14 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(90.0, 2.2);
-                l50.type = 0x1a0;
-                l50.x = (double)(int)x;
-                l50.y = (double)(int)y;
-                l50.facing = facing;
-                l50.layer = 1;
-                l50.keep = 1;
-                l50.scale = 2;
-                SpawnObject(&l50);
+                effect.type = 0x1a0;
+                effect.x = (double)(int)x;
+                effect.y = (double)(int)y;
+                effect.facing = facing;
+                effect.layer = 1;
+                effect.keep = 1;
+                effect.scale = 2;
+                SpawnObject(&effect);
             }
             if (frame == 4 && m_patternVar1 < 0) {
                 m_patternVar1++;
@@ -6583,7 +6583,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
                 break;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = k214214Recovery;
                 frame = 0;
                 m_patternVar2++;
@@ -6676,14 +6676,14 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 7) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStandUp;
                 if (m_inputY == 1) {
                     pattern = kCrouch;
@@ -6706,49 +6706,49 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x + facing * 0x43);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x + facing * 0x43);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 6) {
                 m_playVoice = 6;
-                l50.type = 0x1a1;
-                l50.x = (double)((int)x + facing * 0xf);
-                l50.y = (double)((int)y - 0x94);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1ad;
-                l50.x = (double)((int)x + facing * 0xf);
-                l50.y = (double)((int)y - 0x94);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a1;
+                effect.x = (double)((int)x + facing * 0xf);
+                effect.y = (double)((int)y - 0x94);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1ad;
+                effect.x = (double)((int)x + facing * 0xf);
+                effect.y = (double)((int)y - 0x94);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0xa) {
                 if (m_patternVar1 > 8) {
-                    l50.type = 0x1a5;
-                    l50.x = (double)((int)x + facing * 0xf);
-                    l50.y = (double)((int)y - 0x94);
-                    l50.scale = 2;
-                    l50.keep = 1;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
+                    effect.type = 0x1a5;
+                    effect.x = (double)((int)x + facing * 0xf);
+                    effect.y = (double)((int)y - 0x94);
+                    effect.scale = 2;
+                    effect.keep = 1;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
                     break;
                 }
                 if (m_holdA > 0) {
@@ -6760,23 +6760,23 @@ void CMishio::UpdatePattern()
                 m_playVoice = 8;
             }
             if (frame == 0xf) {
-                l50.type = 0x1a2;
+                effect.type = 0x1a2;
                 if (m_patternVar1 > 8) {
-                    l50.type = 0x1ae;
+                    effect.type = 0x1ae;
                 }
-                l50.x = (double)((int)x + facing * 0x68);
-                l50.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x + facing * 0x68);
+                effect.y = (double)((int)y - 0x32);
                 if (m_patternVar2 == 1) {
-                    l50.y = (double)((int)y - 0x3c);
+                    effect.y = (double)((int)y - 0x3c);
                 }
                 if (m_patternVar2 == 2) {
-                    l50.y = (double)((int)y - 0x28);
+                    effect.y = (double)((int)y - 0x28);
                 }
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0x10 && m_patternVar2 < 2) {
                 frame = frame - 2;
@@ -6786,7 +6786,7 @@ void CMishio::UpdatePattern()
                 m_patternVar2++;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 2) {
@@ -6805,50 +6805,50 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x + facing * 0x43);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x + facing * 0x43);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 6) {
                 m_invulTime = 0xf;
                 m_playVoice = 6;
-                l50.type = 0x1a1;
-                l50.x = (double)((int)x + facing * 0xf);
-                l50.y = (double)((int)y - 0x94);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1ad;
-                l50.x = (double)((int)x + facing * 0xf);
-                l50.y = (double)((int)y - 0x94);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a1;
+                effect.x = (double)((int)x + facing * 0xf);
+                effect.y = (double)((int)y - 0x94);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1ad;
+                effect.x = (double)((int)x + facing * 0xf);
+                effect.y = (double)((int)y - 0x94);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0xa) {
                 if (m_patternVar1 > 8) {
-                    l50.type = 0x1a5;
-                    l50.x = (double)((int)x + facing * 0xf);
-                    l50.y = (double)((int)y - 0x94);
-                    l50.scale = 2;
-                    l50.keep = 1;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
+                    effect.type = 0x1a5;
+                    effect.x = (double)((int)x + facing * 0xf);
+                    effect.y = (double)((int)y - 0x94);
+                    effect.scale = 2;
+                    effect.keep = 1;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
                     break;
                 }
                 if (m_holdB > 0) {
@@ -6860,23 +6860,23 @@ void CMishio::UpdatePattern()
                 m_playVoice = 8;
             }
             if (frame == 0xf) {
-                l50.type = 0x1a3;
+                effect.type = 0x1a3;
                 if (m_patternVar1 > 8) {
-                    l50.type = 0x1af;
+                    effect.type = 0x1af;
                 }
-                l50.x = (double)((int)x + facing * 0x68);
-                l50.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x + facing * 0x68);
+                effect.y = (double)((int)y - 0x32);
                 if (m_patternVar2 == 1) {
-                    l50.y = (double)((int)y - 0x3c);
+                    effect.y = (double)((int)y - 0x3c);
                 }
                 if (m_patternVar2 == 2) {
-                    l50.y = (double)((int)y - 0x28);
+                    effect.y = (double)((int)y - 0x28);
                 }
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0x10 && m_patternVar2 < 2) {
                 frame = frame - 2;
@@ -6886,7 +6886,7 @@ void CMishio::UpdatePattern()
                 m_patternVar2++;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 2) {
@@ -6908,51 +6908,51 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0x43);
-            l50.y = (double)((int)y - 0x29);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0x43);
+            effect.y = (double)((int)y - 0x29);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
             StopMoving();
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             if (frame == 6) {
                 m_invulTime = 0x1e;
                 m_playVoice = 6;
-                l50.type = 0x1a1;
-                l50.x = (double)((int)x + facing * 0xf);
-                l50.y = (double)((int)y - 0x94);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1ad;
-                l50.x = (double)((int)x + facing * 0xf);
-                l50.y = (double)((int)y - 0x94);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a1;
+                effect.x = (double)((int)x + facing * 0xf);
+                effect.y = (double)((int)y - 0x94);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1ad;
+                effect.x = (double)((int)x + facing * 0xf);
+                effect.y = (double)((int)y - 0x94);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0xa) {
                 if (m_patternVar1 > 8) {
-                    l50.type = 0x1a5;
-                    l50.x = (double)((int)x + facing * 0xf);
-                    l50.y = (double)((int)y - 0x94);
-                    l50.scale = 2;
-                    l50.keep = 1;
-                    l50.layer = 1;
-                    l50.facing = facing;
-                    SpawnObject(&l50);
+                    effect.type = 0x1a5;
+                    effect.x = (double)((int)x + facing * 0xf);
+                    effect.y = (double)((int)y - 0x94);
+                    effect.scale = 2;
+                    effect.keep = 1;
+                    effect.layer = 1;
+                    effect.facing = facing;
+                    SpawnObject(&effect);
                     break;
                 }
                 if (m_holdC > 0) {
@@ -6964,23 +6964,23 @@ void CMishio::UpdatePattern()
                 m_playVoice = 8;
             }
             if (frame == 0xf) {
-                l50.type = 0x1a4;
+                effect.type = 0x1a4;
                 if (m_patternVar1 > 8) {
-                    l50.type = 0x1b0;
+                    effect.type = 0x1b0;
                 }
-                l50.x = (double)((int)x + facing * 0x68);
-                l50.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x + facing * 0x68);
+                effect.y = (double)((int)y - 0x32);
                 if (m_patternVar2 == 1) {
-                    l50.y = (double)((int)y - 0x3c);
+                    effect.y = (double)((int)y - 0x3c);
                 }
                 if (m_patternVar2 == 2) {
-                    l50.y = (double)((int)y - 0x28);
+                    effect.y = (double)((int)y - 0x28);
                 }
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0x10 && m_patternVar2 < 2) {
                 frame = frame - 2;
@@ -6990,7 +6990,7 @@ void CMishio::UpdatePattern()
                 m_patternVar2++;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 2) {
@@ -7009,14 +7009,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
-            l50.type = 0x44;
-            l50.sound = 0x13;
-            l50.x = (double)((int)x - facing * 0x1f);
-            l50.y = (double)((int)y - 0x61);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x44;
+            effect.sound = 0x13;
+            effect.x = (double)((int)x - facing * 0x1f);
+            effect.y = (double)((int)y - 0x61);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
             m_patternVar3++;
         }
@@ -7031,7 +7031,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -7043,27 +7043,27 @@ void CMishio::UpdatePattern()
                 m_playVoice = 9;
                 vx = -1.3;
                 vy = -0.8;
-                l50.type = 0x1a6;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1a5;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a6;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1a5;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0x10) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 2) {
@@ -7082,14 +7082,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
-            l50.type = 0x45;
-            l50.sound = 5;
-            l50.x = (double)((int)x - facing * 0x1f);
-            l50.y = (double)((int)y - 0x61);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x45;
+            effect.sound = 5;
+            effect.x = (double)((int)x - facing * 0x1f);
+            effect.y = (double)((int)y - 0x61);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
             m_patternVar3++;
         }
@@ -7104,7 +7104,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -7116,53 +7116,53 @@ void CMishio::UpdatePattern()
                 m_playVoice = 9;
                 vx = -1.3;
                 vy = -0.8;
-                l50.type = 0x1a8;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1a5;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1a8;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1a5;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0xe && m_patternVar2 < 2) {
                 m_playVoice = 9;
                 m_patternVar2++;
                 frame = frame - 4;
                 if (m_patternVar2 == 1) {
-                    l50.type = 0x1b1;
+                    effect.type = 0x1b1;
                 }
                 if (m_patternVar2 == 2) {
-                    l50.type = 0x1a7;
+                    effect.type = 0x1a7;
                 }
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1a5;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1a5;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0x10) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 2) {
@@ -7184,14 +7184,14 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x - facing * 0x1f);
-            l50.y = (double)((int)y - 0x61);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x - facing * 0x1f);
+            effect.y = (double)((int)y - 0x61);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
             StopMoving();
             m_patternVar3++;
@@ -7207,7 +7207,7 @@ void CMishio::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
@@ -7219,59 +7219,59 @@ void CMishio::UpdatePattern()
                 m_playVoice = 9;
                 vx = -1.3;
                 vy = -0.8;
-                l50.type = 0x1ac;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1a5;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.type = 0x1ac;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1a5;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0xe && m_patternVar2 < 4) {
                 m_playVoice = 9;
                 m_patternVar2++;
                 frame = frame - 4;
                 if (m_patternVar2 == 1) {
-                    l50.type = 0x1ab;
+                    effect.type = 0x1ab;
                 }
                 if (m_patternVar2 == 2) {
-                    l50.type = 0x1b2;
+                    effect.type = 0x1b2;
                 }
                 if (m_patternVar2 == 3) {
-                    l50.type = 0x1aa;
+                    effect.type = 0x1aa;
                 }
                 if (m_patternVar2 == 4) {
-                    l50.type = 0x1a9;
+                    effect.type = 0x1a9;
                 }
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
-                l50.type = 0x1a5;
-                l50.x = (double)((int)x + facing * 0x32);
-                l50.y = (double)((int)y - 0x20);
-                l50.scale = 2;
-                l50.keep = 1;
-                l50.layer = 1;
-                l50.facing = facing;
-                SpawnObject(&l50);
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
+                effect.type = 0x1a5;
+                effect.x = (double)((int)x + facing * 0x32);
+                effect.y = (double)((int)y - 0x20);
+                effect.scale = 2;
+                effect.keep = 1;
+                effect.layer = 1;
+                effect.facing = facing;
+                SpawnObject(&effect);
             }
             if (frame == 0x10) {
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
                 if (m_powerUp == 2) {
@@ -7290,67 +7290,67 @@ void CMishio::UpdatePattern()
             m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
-            l50.type = 0x46;
-            l50.sound = 0x40;
-            l50.x = (double)((int)x + facing * 0xd);
-            l50.y = (double)((int)y - 0x34);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            m_game->CreateEffect((EffectDesc*)&l50);
+            effect.type = 0x46;
+            effect.sound = 0x40;
+            effect.x = (double)((int)x + facing * 0xd);
+            effect.y = (double)((int)y - 0x34);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 0x25;
-            l50.type = 0x47;
-            m_game->CreateEffect((EffectDesc*)&l50);
-            l50.type = 0x1b4;
-            l50.x = (double)((int)x + facing * 0xd);
-            l50.y = (double)((int)y - 0x34);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 1;
-            l50.facing = facing;
-            l50.movesInFreeze = 1;
-            SpawnObject(&l50);
+            effect.type = 0x47;
+            m_game->CreateEffect((EffectDesc*)&effect);
+            effect.type = 0x1b4;
+            effect.x = (double)((int)x + facing * 0xd);
+            effect.y = (double)((int)y - 0x34);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 1;
+            effect.facing = facing;
+            effect.movesInFreeze = 1;
+            SpawnObject(&effect);
         }
         if (frame == 7 && timer == 0) {
             m_playVoice = 0xb;
             ShakeScreen(5, 0);
             m_powerUp = 3;
             m_powerUpTime = 0x1194;
-            l50.type = 0x1b3;
-            l50.x = (double)((int)x + facing * 5);
-            l50.y = (double)((int)y - 0x2d);
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 0;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x1ad;
-            l50.x = (double)((int)x + facing * 5);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 0;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x1ad;
-            l50.x = (double)((int)x + facing * 0x2d);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 0;
-            l50.facing = facing;
-            SpawnObject(&l50);
-            l50.type = 0x1ad;
-            l50.x = (double)((int)x - facing * 0x23);
-            l50.y = (double)(int)y;
-            l50.scale = 2;
-            l50.keep = 1;
-            l50.layer = 0;
-            l50.facing = facing;
-            SpawnObject(&l50);
+            effect.type = 0x1b3;
+            effect.x = (double)((int)x + facing * 5);
+            effect.y = (double)((int)y - 0x2d);
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 0;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x1ad;
+            effect.x = (double)((int)x + facing * 5);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 0;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x1ad;
+            effect.x = (double)((int)x + facing * 0x2d);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 0;
+            effect.facing = facing;
+            SpawnObject(&effect);
+            effect.type = 0x1ad;
+            effect.x = (double)((int)x - facing * 0x23);
+            effect.y = (double)(int)y;
+            effect.scale = 2;
+            effect.keep = 1;
+            effect.layer = 0;
+            effect.facing = facing;
+            SpawnObject(&effect);
         }
         timer++;
-        if (timer >= l4) {
+        if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -7358,7 +7358,7 @@ void CMishio::UpdatePattern()
                 m_patternVar1++;
                 frame = frame - 2;
             }
-            if (frame >= x8) {
+            if (frame >= frameCount) {
                 pattern = kStand;
                 StartPattern();
             }
