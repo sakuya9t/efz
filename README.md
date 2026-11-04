@@ -235,6 +235,10 @@ python python/examples/play.py --data "$EFZ_DIR" --agent runs/self/model.zip
 python python/examples/train.py --data "$EFZ_DIR" --opponent human --load runs/self/model.zip
 ```
 
+[runs/](runs/README.md) has the first trained agents (Ayu against Ayu): the best wins 77%
+of full matches against the level-4 CPU. Play it with
+`python python/examples/play.py --data "$EFZ_DIR" --agent runs/curriculum/model.zip --chars ayu ayu`.
+
 It is the same game: `tools/compat.py check` plays every case of the compatibility
 suite both in the SDL3 game and headless, and the logs must agree with the reference
 and with each other; CI runs the headless library's tests that need no game data

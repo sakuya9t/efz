@@ -1,0 +1,9 @@
+starting from runs/pbt/best.zip
+before: L2: win 84% loss 12% cut 3%, 187s, bars dealt 2.23 taken 1.79, air 53% guard 0% own-moves 64%, buttons none/A/B/C/D 22%/16%/27%/23%/13%
+[2M steps, 296s, return 2.5001122361421584] L2: win 100% loss 0% cut 0%, 105s, bars dealt 2.00 taken 0.93, air 37% guard 0% own-moves 67%, buttons none/A/B/C/D 4%/21%/16%/39%/19% | L3: win 83% loss 17% cut 0%, 137s, bars dealt 2.20 taken 1.72, air 35% guard 0% own-moves 61%, buttons none/A/B/C/D 5%/23%/17%/35%/20%
+PROMOTED to level 3
+[4M steps, 564s, return 1.3871824181079864] L3: win 94% loss 6% cut 0%, 134s, bars dealt 2.19 taken 1.59, air 34% guard 0% own-moves 63%, buttons none/A/B/C/D 13%/23%/15%/28%/21% | L4: win 77% loss 23% cut 0%, 157s, bars dealt 2.30 taken 1.99, air 33% guard 0% own-moves 60%, buttons none/A/B/C/D 14%/23%/15%/27%/21%
+PROMOTED to level 4
+GOAL: wins half its matches against the level-4 CPU
+done
+exit 0
