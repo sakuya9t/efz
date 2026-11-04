@@ -42,8 +42,8 @@ SyncBlock makeSyncBlock(int frame, const FrameInput &inputP1, const FrameInput &
     sync.rng = g_game.newRandomSeed();
     if (g_game.sceneId() == 3) {
         CScene *fight = EFZ_SCENES[3];
-        CPlayer *p1 = *fight->players[0];
-        CPlayer *p2 = *fight->players[1];
+        CPlayer *p1 = *fight->m_playerRefs[0];
+        CPlayer *p2 = *fight->m_playerRefs[1];
         sync.stateP1 = g_game.playerAction(0);
         sync.stateP2 = g_game.playerAction(1);
         sync.p1x = p1->x;

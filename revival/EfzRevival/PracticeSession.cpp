@@ -83,7 +83,7 @@ void PracticeSession::start()
 // FUNCTION: 0x10076490
 void PracticeSession::keyPressed(int key)
 {
-    if (isPracticeFight() && g_game.currentScene()->unk2d != 2) {
+    if (isPracticeFight() && g_game.currentScene()->m_leave != 2) {
         if (key == config_.saveState)
             saveState();
         if (key == config_.loadState)
@@ -212,7 +212,7 @@ void PracticeSession::storeState()
 void PracticeSession::restoreState()
 {
     saveState_.load();
-    char speed = ((CScene3 *)g_game.scene(3))->speed;
+    char speed = ((CScene3 *)g_game.scene(3))->m_speed;
     if (paused_) {
         step_ = false;
         stepCount_ = 0;

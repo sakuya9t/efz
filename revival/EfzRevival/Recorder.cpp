@@ -348,12 +348,12 @@ Recorder::Recorder(int player)
 // FUNCTION: 0x10076d40
 BYTE Recorder::guardInput(int player)
 {
-    BYTE input = 2;
+    BYTE input = kInputLeft;
     if (g_game.player(player)->facing != 1)
-        input = 1;
+        input = kInputRight;
     double y = g_game.player((player + 1) % 2)->y;
     if (y >= -5.0)
-        input |= 4;
+        input |= kInputDown;
     return input;
 }
 
@@ -427,7 +427,7 @@ void Recorder::setRecoilGuard(bool enable)
 {
     BYTE *player = (BYTE *)g_game.player(player_);
     if (enable)
-        player[0x14e] = 60;  // CPlayer 0x14e
+        player[0x14e] = 60;  // the low byte of CPlayer::m_recoilGuardWindow
     else
         player[0x14e] = 0;
 }

@@ -1,7 +1,16 @@
 // efz.exe 4.02 as EfzRevival.dll sees it: the globals it reads and patches and the parts
-// of the game's objects it touches. The names are the game's decompilation's (src/efz.h,
-// src/main.cpp, src/scene3.cpp); fields it hasn't named keep their offset. Offsets in
-// the comments are the game's, from the start of each object.
+// of the game's objects it touches. Members and constants have the names of the game's
+// decompilation (src/efz.h, src/main.cpp, src/scene3.cpp), so they can be looked up there;
+// the pattern frame's boxes keep the names the box display gives them. Bytes the DLL
+// doesn't touch are padding named for their offset (unk<offset>). Offsets in the
+// comments are the game's, from the start of each object.
+//
+// Types are the DLL's, not always the game's: where the DLL reads a byte of a wider
+// member (m_invulTime, m_hitsLeft, m_objectHead), the member is that byte, and the code
+// compiles to the original's reads. Each class has as many members as it had before the
+// names, and the constants are macros, not enums: the order of the DLL's strings follows
+// a count of what the compiler meets in every object (docs/revival.md, "Strings"), which
+// a macro can't move.
 #pragma once
 #include <winsock2.h>          // before windows.h, for boost.asio
 #include <windows.h>
@@ -15,8 +24,45 @@
 
 class CGame;
 
-// One sprite frame of an animation (the game's EffectFrame): the hotspot and size are
-// what the box display uses.
+// --- Constants (src/efz.h) -------------------------------------------------------------
+
+// Shared actions, the values of CPlayer::pattern every character has.
+#define kFirstHitReaction 0x32  // the first hit reaction (0x32-0x95)
+#define kWakeUp 0x60            // getting up after kLyingDown
+#define kKnockdownHittable 0x61 // hitting the ground, can be hit
+#define kKnockdown 0x62         // the usual ground hit after an air hit, invulnerable
+#define kLyingDown 0x63         // lies on the ground, then kWakeUp
+#define kFirstGuard 0x96        // the first guard reaction (0x96-0x9c)
+#define kGuardStandMedium 0x97
+#define kGuardCrouchLight 0x99
+#define kGuardAir 0x9c
+#define kRecoilGuardStand 0xa8  // a guard within 30 ticks of pressing back
+#define kRecoilGuardCrouch 0xa9
+#define kRecoilGuardAir 0xaa
+
+// Mishio's (character 15) CMishio::kObjFieldHit: the hits of 22A/22B's field, 1 hit,
+// one animation.
+#define kMishioFieldHit 0x199
+
+// Bits of PatternFrame::flagsAA (the attack) and flagsB0 (the state).
+#define kAttackThrow 0x40       // a throw: tests the defender's push box (collisionBox)
+#define kStateInvulnerable 0x20 // not hit at all
+
+// The input bits of a player's tick (CInput::GetInput): the direction on the screen,
+// then the buttons.
+#define kInputRight 0x1
+#define kInputLeft 0x2
+#define kInputDown 0x4
+#define kInputUp 0x8
+#define kInputA 0x10
+#define kInputB 0x20
+#define kInputC 0x40
+#define kInputD 0x80
+
+// --- Objects ---------------------------------------------------------------------------
+
+// One sprite frame of an animation (the game's EffectFrame, whose x, y, width and height
+// this nests): the hotspot and size are what the box display uses.
 struct SpriteRect {
     short x;                    // 0x0 hotspot within the frame
     short y;                    // 0x2
@@ -38,49 +84,52 @@ struct SpriteAnim {
     SpriteFrame *frames;        // 0x4
 };
 
-// One frame of a pattern's data, read from <character>.pat (src/efz.h PatternFrame).
+// One frame of a pattern's data, read from <character>.pat (src/efz.h PatternFrame). The
+// boxes are named for what the box display draws them as (the game's boxes, attackBoxes
+// and pushBox).
 struct PatternFrame {
-    RECT hurtBoxes[5];          // 0x00
-    RECT hitBoxes[4];           // 0x50
-    RECT collisionBox;          // 0x90
-    short unka0;
+    RECT hurtBoxes[5];          // 0x00 blue
+    RECT hitBoxes[4];           // 0x50 red
+    RECT collisionBox;          // 0x90 yellow: the push box, which keeps the players
+                                //   apart, is what throws test and where objects clash
+    short damage;               // 0xa0
     short unka2;
-    float unka4;
-    short unka8;
-    WORD flagsAA;               // 0xaa: 0x40 the attack may hit again
-    short unkac;
-    short unkae;
-    WORD flagsB0;               // 0xb0: 0x20 no hurtboxes (invincible)
-    short unkb2;
-    short unkb4;
-    short unkb6;
-    float unkb8;
-    float unkbc;
-    char unkc0;
-    char unkc1;
-    short unkc2;
-    short unkc4;
+    float proration;            // 0xa4
+    short chipDamage;           // 0xa8
+    WORD flagsAA;               // 0xaa the attack's kAttack bits
+    short airHitPattern;        // 0xac
+    short groundHitPattern;     // 0xae
+    WORD flagsB0;               // 0xb0 the state's kState bits
+    short untechTime;           // 0xb2
+    short gaugeOnHit;           // 0xb4
+    short gaugeOnGuard;         // 0xb6
+    float hitVx;                // 0xb8
+    float hitVy;                // 0xbc
+    char hitEffect;             // 0xc0
+    char hitSound;              // 0xc1
+    short attackerHitstop;      // 0xc2
+    short defenderHitstop;      // 0xc4
     short unkc6;
 };
 
-// A pattern's frames (src/efz.h PatternData), 8 bytes: CPlayer+0x164 holds 505.
+// A pattern's frames (src/efz.h PatternData), 8 bytes: CPlayer::m_patterns holds 505.
 struct PatternData {
-    short unk0;
-    short unk2;
+    short level;
+    short cancelLevel;
     PatternFrame *frames;       // 0x4
 };
 
 // A snapshot of a player's frame, position and facing, as CScene3 gathers them for its
-// collision checks (src/efz.h CollisionInfo). 0xf0 bytes.
+// collision checks (src/efz.h CollisionInfo; its anim is sprite here). 0xf0 bytes.
 struct CollisionInfo {
     PatternFrame frame;         // 0x00
     SpriteFrame sprite;         // 0xc8
     double x;                   // 0xd8
     double y;                   // 0xe0
-    char facing;                // 0xe8 CPlayer+0x50
-    char unke9;
-    short unkea;
-    int unkec;
+    char facing;                // 0xe8 CPlayer::facing
+    char attackResult;          // 0xe9 CPlayer::m_attackResult
+    short hitsLeft;             // 0xea CPlayer::m_hitsLeft
+    int unkec;                  // 0xec padding to the double's alignment
 };
 
 // One of the 64 objects (projectiles, effects with boxes) a player spawns, 0x98 bytes;
@@ -89,8 +138,8 @@ struct PlayerObject {
     short pattern;              // 0x00
     short frame;                // 0x02
     char unk4[0x80 - 0x04];
-    int unk80;                  // 0x80 nonzero once the object has hit
-    short unk84;                // 0x84 nonzero while it can be hit
+    int attackResult;           // 0x80 nonzero once the object's attack has connected
+    short hitsLeft;             // 0x84 hits it can still land
     char unk86[0x98 - 0x86];
 };
 
@@ -98,48 +147,54 @@ struct PlayerObject {
 class CPlayer {
 public:
     void *vtable;               // 0x000
-    int unk4;
+    int unk4;                   // 0x004 padding: ObjBase starts at 8
     short pattern;              // 0x008 the current action
-    short frame;                // 0x00a
-    short unkc;                 // 0x00c frame counter of the action
+    short frame;                // 0x00a the frame of the pattern's animation
+    short timer;                // 0x00c game frames spent on the current frame
     short unke;
     SpriteAnim *anims;          // 0x010 one per pattern
     char unk14[0x20 - 0x14];
     double x;                   // 0x020
-    double y;                   // 0x028
+    double y;                   // 0x028 0 on the ground, negative in the air
     double vx;                  // 0x030
     double vy;                  // 0x038
     char unk40[0x50 - 0x40];
     char facing;                // 0x050 1 or -1
     char unk51[0x78 - 0x51];
-    short **unk78;              // 0x078 *unk78[2] is the opponent's action
-    CGame *game;                // 0x07c
+    // The other player's slot, WinMain's g_player1 or g_player2 (the game's CPlayer**).
+    // Game::isHit reads m_opponent[2] as the opponent's action, see there.
+    short **m_opponent;         // 0x078
+    CGame *m_game;              // 0x07c
     char unk80[0x8d - 0x80];
-    char character;             // 0x08d
-    BYTE palette;               // 0x08e
+    char m_charId;              // 0x08d the character's number on the select screen
+    BYTE m_paletteIndex;        // 0x08e which <name>N.pal (N = index + 1)
     char unk8f[0xac - 0x8f];
-    BYTE unkac;                 // 0x0ac
+    BYTE m_roundsWon;           // 0x0ac rounds won in this match
     char unkad[0x124 - 0xad];
-    short unk124;               // 0x124
+    short m_untechTime;         // 0x124 ticks before an air recovery is allowed
     short unk126;
-    int unk128;                 // 0x128
+    int m_noAirRecovery;        // 0x128 set by a hit with flagsAA 0x400
     char unk12c[0x134 - 0x12c];
-    float unk134;               // 0x134
+    float m_guardGauge;         // 0x134 0-360; an air recovery waits until it is empty
     char unk138[0x13c - 0x138];
-    char unk13c;                // 0x13c nonzero: no hurtboxes
+    char m_invulTime;           // 0x13c the low byte of the game's short: while > 0 the
+                                //   player can't be hit
     char unk13d[0x14a - 0x13d];
-    short unk14a;               // 0x14a
-    char unk14c[0x164 - 0x14c];
-    PatternData *patterns;      // 0x164
+    short m_hitstop;            // 0x14a ticks the player is stopped by hitstop
+    char unk14c[0x164 - 0x14c]; // 0x14e m_recoilGuardWindow (Recorder::setRecoilGuard)
+    PatternData *m_patterns;    // 0x164 one per pattern, 505 of them
     char unk168[0x16c - 0x168];
-    char unk16c;                // 0x16c nonzero while the attack has not hit yet
+    char m_hitsLeft;            // 0x16c the low byte of the game's short: hits the
+                                //   current attack can still land
     char unk16d[0x2ca - 0x16d];
-    char objectEnd;             // 0x2ca the objects in use run from objectStart
+    // The objects in use run from m_objectTail to m_objectHead, wrapping at 64 (the
+    // game's shorts; the DLL reads their low bytes).
+    char m_objectHead;          // 0x2ca where the next object goes
     char unk2cb;
-    char objectStart;           // 0x2cc   to objectEnd, wrapping at 64
+    char m_objectTail;          // 0x2cc the oldest object
     char unk2cd[0x3d0 - 0x2cd];
-    int objectActive[64];       // 0x3d0
-    PlayerObject objects[64];   // 0x4d0
+    int m_objectActive[64];     // 0x3d0
+    PlayerObject m_objects[64]; // 0x4d0
 };
 
 // DirectInput: the keyboard and two joysticks (src/efz.h CInput). Each player's
@@ -150,68 +205,71 @@ struct KeyBindings {
 
 class CInput {
 public:
-    char keyState[0x100];       // 0x000
+    char m_keyState[0x100];     // 0x000
     char unk100[0x20];
-    DIJOYSTATE joyState[2];     // 0x120
-    KeyBindings bindings[2];    // 0x1c0
-    HWND hwnd;                  // 0x1e0
-    IDirectInput7 *di;          // 0x1e4
-    IDirectInputDevice7 *devices[3];  // 0x1e8 the keyboard, then the joysticks
+    DIJOYSTATE m_joyState[2];   // 0x120
+    KeyBindings m_bindings[2];  // 0x1c0
+    HWND m_hwnd;                // 0x1e0
+    IDirectInput7 *m_di;        // 0x1e4
+    IDirectInputDevice7 *m_devices[3];  // 0x1e8 m_keyboard, then m_joysticks[2]
     int unk1f4;
 };
 
 // DirectSound (src/efz.h CSound): 150 sounds, 0x96 means none.
 class CSound {
 public:
-    DWORD loopLength;
-    DWORD loopEnd;
-    HWND hwnd;
-    IDirectSound *ds;
-    BYTE *data[0x96];
-    DWORD size[0x96];
-    IDirectSoundBuffer *buffers[0x96];  // 0x4c0
+    DWORD m_loopLength;
+    DWORD m_loopEnd;
+    HWND m_hwnd;
+    IDirectSound *m_ds;
+    BYTE *m_data[0x96];
+    DWORD m_size[0x96];
+    IDirectSoundBuffer *m_buffers[0x96];  // 0x4c0
 };
 
 // A replay file (src/efz.h CReplayFile): EfzRevival.cpp replaces its methods, and the
 // handle then holds the DLL's stream (EfzReplay.h).
 struct CReplayFile {
-    BOOL eof;
-    HANDLE handle;
-    DWORD remaining;
-    DWORD read;
+    BOOL m_eof;
+    HANDLE m_handle;
+    DWORD m_remaining;
+    DWORD m_read;
 };
 
 // The shared game state (src/efz.h CGame, 0x142f0 bytes).
 class CGame {
 public:
     char unk0[0xf26];
-    WORD music;                 // 0x0f26 the music's sound ID
+    WORD m_music;               // 0x0f26 the music's sound ID
     char unkf28[0xf35 - 0xf28];
-    PALETTEENTRY palette[0x100];  // 0x0f35; each player's colours are 95 + 40 * player
+    PALETTEENTRY m_palette[0x100];  // 0x0f35; each player's colours are 95 + 40 * player
     char unk1335[0x1338 - 0x1335];
-    BOOL hasPalette[2];         // 0x1338 per player: a palette was chosen (read as a bool)
+    BOOL m_editColor[2];        // 0x1338 per player: the edited palette was chosen (read
+                                //   as a bool)
     char unk1340[0x1343 - 0x1340];
-    char unk1343;               // 0x1343 the side a human plays (single player)
-    char unk1344[0x134c - 0x1344];
-    char unk134c;               // 0x134c
-    char unk134d;
-    char unk134e;
-    BYTE unk134f;               // 0x134f
+    char m_isCpu[2];            // 0x1343 per player: 1 the CPU plays it. With one human,
+                                //   m_isCpu[0] is the human's side
+    char unk1345[0x134c - 0x1345];
+    char m_winner;              // 0x134c the side that won the match
+    char m_round;               // 0x134d
+    char m_roundsToWin;         // 0x134e
+    BYTE m_roundsSetting;       // 0x134f config: rounds to win in VS modes, 1-3
     char unk1350[0x1364 - 0x1350];
-    BYTE unk1364;               // 0x1364 the game mode's menu entry
-    BYTE unk1365;
-    char unk1366;               // 0x1366
+    BYTE m_gameMode;            // 0x1364 0 ARCADE, 1 PRACTICE, 3 VS CPU, 4 VS HUMAN,
+                                //   5 REPLAY, 6 demo
+    BYTE m_cpuLevel;            // 0x1365 config: 1-4
+    char m_fullEffects;         // 0x1366 config: 0 simple effects, 1 normal
     char unk1367;
-    char unk1368;               // 0x1368 (a BOOL WinMain toggles every frame)
+    char m_oddFrame;            // 0x1368 the low byte of a BOOL WinMain toggles every frame
     char unk1369[3];
-    char unk136c;               // 0x136c
+    char m_drawEveryFrame;      // 0x136c the low byte of the config's int: 0 30FPS, 1 60FPS
     char unk136d[3];
-    BYTE unk1370;
+    BYTE m_damageLevel;         // 0x1370 config: 1 50%, 2 100%, 3 200%
     char unk1371[0x137c - 0x1371];
-    void *background;           // 0x137c the stage's animated background (CAnimBg)
+    void *m_background;         // 0x137c the stage's animated background (CAnimBg), if any
     char unk1380[0x14283 - 0x1380];
-    char replayMode;            // 0x14283 0 none, 1 playing, 2 recording
-    CReplayFile replay;         // 0x14284
+    char m_replayMode;          // 0x14283 0 none, 1 playing, 2 recording
+    CReplayFile m_replay;       // 0x14284
     char unk14294[0x142f0 - 0x14294];
 };
 
@@ -221,52 +279,57 @@ class CScene {
 public:
     virtual void Draw() = 0;
     virtual BYTE Update() = 0;  // the next scene
-    virtual void Vf2() = 0;
+    virtual void HandleKeys() = 0;
 
     UINT lastMessage;
-    HWND hwnd;
-    CPlayer *player1;           // 0x0c
-    CPlayer *player2;
-    CPlayer **players[2];       // 0x14 WinMain's g_player1 and g_player2
-    CGame *game;                // 0x1c
-    void *graphics;
-    CInput *input;
-    CSound *sound;
-    char unk2c;
-    char unk2d;                 // 0x2d the fight: 1 round over, 2 match over
-    BYTE unk2e[2];
+    HWND m_hwnd;
+    CPlayer *m_player1;         // 0x0c m_players[0] and [1]: the players when the scene
+    CPlayer *m_player2;         //   was made
+    CPlayer **m_playerRefs[2];  // 0x14 m_player1Ref, m_player2Ref: WinMain's g_player1 and
+                                //   g_player2
+    CGame *m_game;              // 0x1c
+    void *m_graphics;
+    CInput *m_input;
+    CSound *m_sound;
+    char m_enter;               // 0x2c
+    char m_leave;               // 0x2d nonzero: the scene is being left. The fight: 1 quit
+                                //   (Esc, a replay's end, a key in the demo), 2 the match
+                                //   is over
+    BYTE unk2e[2];              // 0x2e the start of m_palette
 };
 
 // The title screen and its menu (scene 0).
 class CScene0 : public CScene {
 public:
     char unk30[0x43c - 0x30];
-    char menuChoice;            // 0x43c 2 VS COM, 3 VS PLAYER, 4 replay ...
+    char m_cursor;              // 0x43c the menu's row: 0 ARCADE, 1 VS CPU, 2 VS HUMAN,
+                                //   3 PRACTICE, 4 REPLAY, 5 OPTION, 6 EXIT
 };
 
 // Character select (scene 1).
 class CScene1 : public CScene {
 public:
     char unk30[0x49e - 0x30];
-    char unk49e[2];             // 0x49e per player: 6 once the choice is final
+    char m_state[2];            // 0x49e per player: 6 once the choice is final
     char unk4a0[0x53c - 0x4a0];
-    char character[2];          // 0x53c
-    char palette[2];            // 0x53e
+    char m_charId[2];           // 0x53c
+    char m_paletteIndex[2];     // 0x53e
 };
 
 // The fight (scene 3, src/efz.h CScene3).
 class CScene3 : public CScene {
 public:
     char unk30[0x45c - 0x30];
-    POINT camera;               // 0x45c
+    POINT m_draw;               // 0x45c m_drawX, m_drawY: the stage-to-screen offset with
+                                //   the screen shake, what everything is drawn with
     char unk464[0x578 - 0x464];
-    char speed;                 // 0x578 3 normally, 0 stops the fight
+    char m_speed;               // 0x578 fight ticks per frame: 3 normally, 0 stops it
 };
 
-// DDRAW.dll's screen palette: its IDirectDrawPalette, with a method of its own after
-// COM's that gives the colours it holds.
+// DDRAW.dll's screen palette: its IDirectDrawPalette (myIDirectDraw.h), with two virtual
+// functions of its own after COM's: the destructor, then the colours it holds.
 struct ProxyPalette : public IDirectDrawPalette {
-    virtual void unknown1c() = 0;
+    virtual void destructor() = 0;
     virtual void getColors(PALETTEENTRY **colors) = 0;
 };
 
@@ -311,11 +374,11 @@ typedef void (__thiscall *BuildBlendTablesFn)(void *graphics, PALETTEENTRY *pale
 // efz.exe 0x40d140: CInput::LoadBindings (key.ini)
 typedef void (__thiscall *LoadBindingsFn)(CInput *input);
 #define EFZ_LOAD_BINDINGS ((LoadBindingsFn)0x40d140)
-// efz.exe 0x7631f0: CScene3::Unk7631f0, drawn by CScene3::Draw after the players
+// efz.exe 0x7631f0: CScene3::DrawBordersAndFlip, called by CScene3::Draw after the players
 typedef void (__thiscall *DrawFightFn)(CScene3 *fight);
 #define EFZ_DRAW_FIGHT ((DrawFightFn)0x7631f0)
-// efz.exe 0x767600: CScene3::Unk767600: an object's box in the fight's coordinates
-// efz.exe 0x7677a0: CScene3::Unk7677a0: the same from a CollisionInfo
+// efz.exe 0x767600: CScene3::BoxOnStage: an object's box in the fight's coordinates
+// efz.exe 0x7677a0: CScene3::InfoBoxOnStage: the same from a CollisionInfo
 // Members that don't use their scene: called without one, with the RECT they return
 // by value given as the first argument (and returned).
 typedef RECT *(__stdcall *ObjectBoxFn)(RECT *result, PlayerObject *object, RECT *box);

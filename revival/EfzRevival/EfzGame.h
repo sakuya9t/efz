@@ -112,16 +112,19 @@ public:
     CGame *getGame();
     CPlayer *player(int index);
     char menuChoice();
-    int humanPlayer();
+    int humanPlayer();                  // CGame::m_isCpu[0]
     int roundWinner();
     int character(int player);
     std::string characterName(int character);
     std::wstring characterNameW(int character);
+    // Whether the fight is being left (CScene::m_leave): quit or the match is over. Not
+    // between rounds, despite the name.
     bool isRoundOver();
     bool isMatchOver();
     int playerAction(int player);
+    // CPlayer::timer: the ticks spent on the action's current frame
     short actionFrame(int player);
-    int playerFlagAc(int player);
+    int playerFlagAc(int player);       // CPlayer::m_roundsWon
     bool isRecoilGuarding(int player);
     bool isGuarding(int player);
     bool isWakingUp(int player);
@@ -131,7 +134,7 @@ public:
     void setRendering(bool enable);
     void setNetplay(bool netplay);
     void setSpectating();
-    void setGameFlag1366(bool value);
+    void setGameFlag1366(bool value);   // CGame::m_fullEffects
 
     // --- Palettes
     bool canChoosePalette(int player);
@@ -207,7 +210,7 @@ public:
     void drawBoxRequest(BoxRequest *request);
     void collectRects(BoxRequest *request, std::vector<HitRect> &rects);
 
-    int unknown0;                           // 0x00
+    int unknown0;                           // 0x00 only ever zeroed
     EfzTimer *timer;                        // 0x04 DDRAW.dll's frame timer
 private:
     friend class SaveState;
@@ -222,7 +225,7 @@ private:
     std::vector<HitRect> rects_;            // 0x08
     bool initialized_;                      // 0x14
     bool rendering_;                        // 0x15 false: the game's drawing is patched out
-    bool unknown16_;                        // 0x16
+    bool unknown16_;                        // 0x16 only ever cleared
     EfzRender *render_;                     // 0x18
     std::vector<FrameInput> inputs_;        // 0x1c the extended replay's inputs
     std::iostream *pendingReplay_;          // 0x28 a recording not yet written out

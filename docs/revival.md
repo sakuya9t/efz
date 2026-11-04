@@ -977,9 +977,11 @@ protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
   the game reads input 3 times a frame). Recording swaps the players' key bindings so
   that you drive the dummy, and appends to the selected buffer (SetBuffer1-5); Random
   picks a non-empty buffer at random each time playback starts. Start conditions: Now,
-  Wake-Up (action 99 past its frame 2), Tech, Guard (actions `0x97`/`0x99`/`0x9c`),
-  Recoil Guard (sets `CPlayer+0x14e` to 60 every frame) and Random RG (that, half the
-  time, starting on actions `0xa8`-`0xaa`); Record Wait and Replay Wait hold until the
+  Wake-Up (lying down, `kLyingDown` 0x63, at least 3 ticks into its frame), Tech, Guard
+  (`kGuardStandMedium`, `kGuardCrouchLight`, `kGuardAir`: three of the seven guards),
+  Recoil Guard (sets the low byte of `CPlayer::m_recoilGuardWindow` to 60 every frame)
+  and Random RG (that, half the time, starting on the recoil guards `0xa8`-`0xaa`);
+  Record Wait and Replay Wait hold until the
   condition is met. Under the guard conditions an idle dummy holds back (and down,
   unless the opponent is in the air). Saving or loading a state restarts recording or
   playback from there. Input delay applies to the human player: 3 zero bytes per frame.
@@ -1039,7 +1041,8 @@ the original's, `make revival-ddraw-check`):
 **Observed** in `revival/EfzRevival/EfzRevival.cpp`, `EfzGame.cpp`, `GameState.cpp`, `Hook.cpp`
 (`0x1006a850`-`0x1006fae2`; 175 of 183 functions match):
 - **Hooks.** `init` hooks `0x401582` (`WinMain`'s loop) to `setup`, which runs once: it sets
-  the window title, makes `0x776053` an unconditional jump and installs the rest:
+  the window title, makes `0x776053` (in `CScene0::Update`, the title) an unconditional
+  jump and installs the rest:
   - `0x40d131`, the end of `CInput::GetInput` -> `inputHook` (left+right becomes left, then
     the session's `input`);
   - `0x7656a7` in `CScene3::HandleKeys` -> the session's `fightUpdate`;
@@ -1057,21 +1060,59 @@ the original's, `make revival-ddraw-check`):
   switches to the replay session (scene 8) or the practice session (scene 1).
 - **Boxes.** A session's `showBoxes(player, kind)` queues requests; `drawBoxesHook` draws
   them during the fight scene's `Draw`. `drawBoxRequest` reads the player's current pattern
-  frame (patterns at `CPlayer+0x164`), puts each box through the game's own box function,
-  the camera (with the shake offset while hit) and x2, and hands it to DDRAW.dll's
+  frame (`CPlayer::m_patterns`), puts each box through the game's own box function
+  (`CScene3::InfoBoxOnStage`, `BoxOnStage` for objects), the fight's drawing offset
+  (`CScene3::m_drawX`/`m_drawY`; the shake `getCamera` adds while the player is hit is
+  `m_hitstop * 2 % 2`, always 0) and x2, and hands it to DDRAW.dll's
   `EfzRender::addRectRender(rect, colour, stipple)`:
-  - hit boxes red `0xffff0000`, stippled `0xf0f0f0f0` while the hit is inactive;
+  - hit boxes red `0xffff0000`, stippled `0xf0f0f0f0` once the attack can't hit any more
+    (`m_hitsLeft` 0), except on a throw's frames (`flagsAA` `kAttackThrow`);
   - hurt boxes blue `0xff0000ff`, only while the player is vulnerable;
   - the collision box yellow `0xffffff00`, plus the crossup midline: a zero-width rectangle
     at the player's x, twice the box's height, starting half a box higher;
   - projectiles (the 64-entry object ring) the same way, offset by 420 in y.
 - **Save states.** A 500,000-byte buffer of copied regions: the x87 state, the F-key word,
-  the fight scene (`0x598` bytes, or all but `0x434`-`0x440` when not full), `CGame`
-  (`0x142f0`), each player (by its character's size), the 1 KB palette, the back buffer,
-  the stage animation frames (`0x1c0` or `0xe0`), plus the random generator's state and
-  the box list. Loading restores everything but the x87 state.
+  the fight scene (`0x598` bytes, or when not full all but its frame-rate count,
+  `m_frameCount`, `m_secondStart` and `m_fps` at `0x434`-`0x43f`), `CGame` (`0x142f0`),
+  each player (by its character's size), the 1 KB palette, the back buffer, the stage
+  background's objects (`0x1c0`, four, for bg16; `0xe0`, two, for the others, though
+  bg10 has one: its save reads `0x70` bytes past the array and a load writes them back),
+  plus the random generator's state and the box list. Loading restores everything but
+  the x87 state.
 - **Crash handler.** Writes "!!!Crash!!!", the DLL's base, the exception's address and code,
   the registers and 150 stack words following the `ebp` chain to `logEfz.txt`.
+
+### The game's names
+
+`revival/EfzRevival/Efz.h`, the DLL's view of `efz.exe`, uses the names of the game's
+decompilation (`src/efz.h`) for the members, the game's functions and the constants
+(`kLyingDown`, `kGuardAir`, `kStateInvulnerable`, `kInputLeft`...), as the readable source
+of [readability.md](readability.md) does; DDRAW.dll's comments name what its raw offsets
+reach. Only what the compiled code can't see changes: member names, macros and comments.
+The names of functions, globals and types stay, as they reach the link (the order of an
+object's functions, the checksums that pick which identical copy survives), and so do the
+members' count in each class and the absence of new declarations: Visual C++ 2022 counts
+each member and enumerator in its literals' numbering, and the DLL's string order follows
+such a count ("Strings" above). So the constants are `#define`s.
+
+Checked with Visual C++ 2022 (no `/GL`, the precompiled header as the Makefile uses it):
+every object that builds without the DirectX SDK, all of the DLL's and the launcher's and
+10 of DDRAW.dll's 13, is the same before and after, its literals' numbers and static data
+layout included.
+
+What the names corrected (**observed** in the code against `src/`):
+- `Game::isRoundOver` is `CScene::m_leave` 1 or 2: the fight is being left (quit, a
+  replay's end, the match over), not between rounds.
+- `CScene0::m_cursor`, the title menu's row, is 2 for VS HUMAN, 3 PRACTICE and 4 REPLAY,
+  one more than the old comment had.
+- A player's hitboxes stay solid on frames with `flagsAA` 0x40, `kAttackThrow`, not an
+  attack that may hit again; an object's `+0x84` is the hits it can still land.
+- `Game::isHit` reads the opponent's action through `m_opponent[2]`, the slot two after
+  the opponent's: `g_scenes[0]` for player 1, `g_game` for player 2, so its second test
+  compares the first word of those. The shake `getCamera` adds is `m_hitstop * 2 % 2`,
+  always 0.
+- The `0x7668e5` hook is in `CScene3::CheckHits`, not in `HandleKeys` (`Vf2`, which has
+  the `0x7656a7` one).
 
 ## The launcher's protocol
 

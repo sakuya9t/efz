@@ -20,7 +20,8 @@ SaveState::~SaveState()
 }
 
 // The scene, CGame and both players, the screen palette and back buffer, the
-// stage's animation, g_rng and Game's kept boxes.
+// stage's animation, g_rng and Game's kept boxes. A partial save leaves out the fight's
+// frame-rate count (CScene3::m_frameCount, m_secondStart and m_fps, 0x434-0x43f).
 // FUNCTION: 0x1006f390
 void SaveState::save(bool full)
 {
@@ -37,8 +38,8 @@ void SaveState::save(bool full)
     }
     CGame *game = g_game.getGame();
     buffer_->add(game, 0x142f0);
-    addPlayer(*fight->players[0]);
-    addPlayer(*fight->players[1]);
+    addPlayer(*fight->m_playerRefs[0]);
+    addPlayer(*fight->m_playerRefs[1]);
     std::stringstream stream;
     stream << g_rng;
     random_ = stream.str();
@@ -54,7 +55,10 @@ void SaveState::save(bool full)
     back->Unlock(0);
     rects_.clear();
     rects_.insert(rects_.begin(), g_game.rects_.begin(), g_game.rects_.end());
-    char *background = (char *)game->background;
+    // The background's objects (CAnimBg::m_objects, 0x70 bytes each): four for bg16
+    // (the low byte of CAnimBg::m_number), two for the others. bg10 has only one, so
+    // the save takes 0x70 bytes past its array, and a load writes them back.
+    char *background = (char *)game->m_background;
     if (background) {
         void *frames = *(void **)(background + 0x10);
         if (background[4] == 16)
@@ -73,7 +77,7 @@ void SaveState::addInt(int *value, int size)
 // FUNCTION: 0x1006f340
 void SaveState::addPlayer(CPlayer *player)
 {
-    int size = g_characterSizes[player->character];
+    int size = g_characterSizes[player->m_charId];
     buffer_->add(player, size);
 }
 

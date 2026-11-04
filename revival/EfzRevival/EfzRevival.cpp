@@ -173,7 +173,7 @@ static void setup()
     hook((void *)0x40e5d0, 7, (void *)setVolumeHook);
     g_game.init();
     g_session->start();
-    g_game.setGameFlag1366(true);
+    g_game.setGameFlag1366(true);   // normal effects, whatever key.ini says
     char *bindings = (char *)g_game.bindings();
     g_joystick = bindings[9];
     if (g_joystick == 0)
@@ -262,12 +262,12 @@ static void inputHook()
     __asm mov frame, ebp
     int player = (*(char **)frame)[8];
     BYTE *input = (BYTE *)(frame + 0x28);
-    if ((*input & 2) && (*input & 1))
-        *input &= ~1;
+    if ((*input & kInputLeft) && (*input & kInputRight))
+        *input &= ~kInputRight;
     g_session->input(input, player);
 }
 
-// CScene3::Draw's call of CScene3::Unk7631f0 (efz.exe 0x76479c), replaced.
+// CScene3::Draw's call of CScene3::DrawBordersAndFlip (efz.exe 0x76479c), replaced.
 // FUNCTION: 0x1006ebb0
 static void drawBoxesHook()
 {
@@ -316,7 +316,7 @@ static void stopSoundHook()
     g_session->stopSound(id);
 }
 
-// At CScene3::Vf2's 0x7656a7.
+// At CScene3::HandleKeys's 0x7656a7.
 // FUNCTION: 0x1006eb10
 static void fightUpdateHook()
 {
@@ -332,7 +332,7 @@ static void fightUpdateHook()
 // The hook targets below are reached through Hook.h's saving trampoline: their caller's
 // frame holds the flags, the game's registers (pushad) and then its stack.
 
-// At CScene3::Vf2's 0x7668e5: the kept boxes of this frame.
+// At CScene3::CheckHits's 0x7668e5: the kept boxes of this frame.
 // FUNCTION: 0x1006eb00
 static void updateRectsHook()
 {
@@ -342,7 +342,7 @@ static void updateRectsHook()
 // FUNCTION: 0x1006eae0
 void onReplayDone()
 {
-    ((ReplayFile *)&g_game.scene(3)->game->replay)->close();
+    ((ReplayFile *)&g_game.scene(3)->m_game->m_replay)->close();
     g_game.setNetplay(false);
 }
 
@@ -449,8 +449,8 @@ static int random()
     return distribution(g_rng);
 }
 
-// In the practice mode the game's own menus pick replays and VS PLAYER: their sessions
-// take over from the one the launcher started.
+// In the practice mode the game's own title menu picks REPLAY, PRACTICE and VS HUMAN:
+// their sessions take over from the one the launcher started.
 // FUNCTION: 0x1006e090
 static void switchSession()
 {
