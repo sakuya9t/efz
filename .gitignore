@@ -13,6 +13,8 @@ uploads/
 # Generated analysis output
 inventory.json
 __pycache__/
+# pip install -e python
+*.egg-info/
 
 # Build output
 build/

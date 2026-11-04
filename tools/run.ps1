@@ -93,7 +93,9 @@ if (-not $configured) {
         Die 'CMake could not set up the build (above)'
     }
 }
-& $cmake --build $build --config RelWithDebInfo --parallel
+# The game and its test; the headless library and tools have a build of their own
+# (docs/headless.md).
+& $cmake --build $build --config RelWithDebInfo --target efz efz-x87-test --parallel
 if ($LASTEXITCODE -ne 0) {
     Die 'the build failed (above)'
 }

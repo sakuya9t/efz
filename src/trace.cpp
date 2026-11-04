@@ -499,10 +499,12 @@ void TraceTick(CScene3* scene)
 {
     int i;
 
-    for (i = 0; i < 2; i++)
-        g_tracePlayers[i] = scene->m_players[i];
+    // Untouched when nothing is traced: the headless library runs many games at once
+    // with the harness built in (docs/headless.md).
     if (!g_traceFile)
         return;
+    for (i = 0; i < 2; i++)
+        g_tracePlayers[i] = scene->m_players[i];
     TraceHashPlayer(scene->m_players[0], TRACE_P1);
     TraceHashPlayer(scene->m_players[1], TRACE_P2);
     TraceHashScene(scene);

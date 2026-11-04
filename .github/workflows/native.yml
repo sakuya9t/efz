@@ -73,6 +73,35 @@ jobs:
           type start.txt
           if not "%status%"=="1" exit /b 1
           findstr /c:"no game data" start.txt
+      # The headless library and tools (docs/headless.md), in a step of their own so that
+      # a failure there is told apart from the game's. Without the game's data, the
+      # library and its Python package can only say so.
+      - name: Headless
+        shell: bash
+        run: |
+          cmake --build build/run --config RelWithDebInfo --parallel 4 \
+            --target efz_env efz-headless efz-bench
+          mkdir -p empty
+          status=0
+          bench=build/run/efz-bench
+          [ -x "$bench" ] || bench=build/run/RelWithDebInfo/efz-bench.exe
+          "$bench" --data empty --envs 2 > bench.txt 2>&1 || status=$?
+          cat bench.txt
+          [ $status = 1 ] && grep -q 'no game data' bench.txt
+          py=$(command -v python3 || command -v python)
+          "$py" -m pip install --quiet numpy
+          "$py" - <<'EOF'
+          import sys
+          sys.path.insert(0, 'python')
+          import efz_env
+          try:
+              efz_env.EfzVecEnv('empty', num_envs=2)
+          except RuntimeError as e:
+              assert 'no game data' in str(e), e
+              print('efz_env:', e)
+          else:
+              sys.exit('efz_env started without game data')
+          EOF
       - uses: actions/upload-artifact@v4
         with:
           name: efz-${{ matrix.name }}

@@ -35,6 +35,12 @@ original's.
 byte of the game state on every tick ([docs/compat.md](docs/compat.md)).
 See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
 
+**And headless, for training agents:** `efz_env`, a library (C API, and a Python
+package) that runs batches of matches without a window or sound on every core, 3,000
+to 4,700 times real time on an 8-core laptop, with the game's CPU as an opponent, save
+states and rewards. See [The headless game](#the-headless-game) and
+[docs/headless.md](docs/headless.md).
+
 | Source | What it is |
 |---|---|
 | `src/main.cpp` | `WinMain`, the window procedure, the 64 FPS frame timer |
@@ -56,6 +62,8 @@ See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
 | `src/efz.rc` | The icon resource (the icon itself is taken from the original at build time) |
 | `src/trace.cpp` | The compatibility test's harness (`make trace` and the native game), not part of efz.exe |
 | `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point |
+| `port/headless/` | The headless platform and the training library `efz_env` (C API: `efz_env.h`), `efz-headless`, `efz-bench` |
+| `python/efz_env/` | The Python package over `efz_env`: `EfzVecEnv`, action tables, a Gymnasium adapter |
 
 ## Game files
 
@@ -164,6 +172,30 @@ tools/compat.py check               # the native game plays the 254 cases (about
 tools/compat.py explain cpu-03      # where a failing case parts from the original, by member
 tools/compat.py coverage            # which lines of src/ the suite runs
 ```
+
+## The headless game
+
+For reinforcement learning and other programs that play: the game without a window,
+sound or keyboard, many matches to a process, stepped in parallel in C++ and handed to
+Python as numpy arrays (or straight into pinned memory for a GPU).
+
+```sh
+cmake -B build/headless -DEFZ_GAME=OFF && cmake --build build/headless --config Release
+build/headless/efz-bench --data "$EFZ_DIR"          # speed; --check: determinism
+python python/examples/bench.py --data "$EFZ_DIR"   # the same from Python
+```
+
+```python
+from efz_env import EfzVecEnv, ActionTable
+env = EfzVecEnv(efz_dir, num_envs=256)              # both sides yours: self-play
+env.set_matches(cpu=(False, True))                  # or player 2 the game's CPU
+obs = env.reset()                                   # (256, 2, 168)
+obs, reward, terminated, truncated, info = env.step(ActionTable().to_bytes(actions))
+```
+
+It is the same game: `efz-headless` plays the compatibility suite's cases into the
+same logs as the SDL3 game. [docs/headless.md](docs/headless.md) has the observations,
+actions, rewards, save states, the GPU and the measurements.
 
 ## Matching workflow
 
@@ -320,7 +352,9 @@ See [docs/recon.md](docs/recon.md). In short:
    - run natively on Windows, macOS and Linux, 64-bit. *Done:* the native game
      ([docs/native.md](docs/native.md)), checked against the original by replays.
    - replace DirectDraw, DirectInput and DirectSound with SDL3. *Done* (`port/`).
-   - separate the deterministic 64 FPS simulation from the platform layer
+   - separate the deterministic 64 FPS simulation from the platform layer. *Begun:* the
+     headless platform runs it without a window, many games to a process
+     ([docs/headless.md](docs/headless.md))
    - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools.
      Netplay is tested against the original game running EfzRevival 1.02h, over the network
      ([docs/compat.md](docs/compat.md), "The network layer")

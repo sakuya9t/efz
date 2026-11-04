@@ -11,6 +11,9 @@
 #include <string.h>
 
 #include "x87.h"
+#ifdef EFZ_MULTI_INSTANCE
+#include "guest.h"
+#endif
 
 namespace efz {
 
@@ -360,7 +363,9 @@ DD AtanDD(DD t)
     return a + a + a + a;
 }
 
+#ifndef EFZ_MULTI_INSTANCE
 uint32_t g_holdrand = 1;
+#endif
 
 #if defined(EFZ_HOST_X87) && defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 #define EFZ_USE_HOST_X87 1
@@ -574,6 +579,11 @@ int Compare(X87Value a, double b)
     int mag = a.exp != eb ? (a.exp > eb ? 1 : -1) : a.mant != mb ? (a.mant > mb ? 1 : -1) : 0;
     return a.neg ? -mag : mag;
 }
+
+#ifdef EFZ_MULTI_INSTANCE
+// Each game's own, in its arena (guest.h).
+#define g_holdrand (G()->holdrand)
+#endif
 
 int Rand()
 {

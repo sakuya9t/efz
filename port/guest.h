@@ -8,23 +8,37 @@
 // thread's stack has handles too, from kStackHandle up. src/efz.h marks the pointer
 // members and each cast between a pointer and an integer with the macros at the end of
 // this file.
+//
+// A build of several games in one process (EFZ_MULTI_INSTANCE, the headless library of
+// port/headless/) gives each game an arena of its own: g_arena and g_stack are then the
+// calling thread's, set to the game it is running (BindArena), and the game's state
+// outside its objects (rand's, the clock's) is kept in its arena too (Globals), so that
+// copying an arena copies the whole game.
 #ifndef EFZ_GUEST_H
 #define EFZ_GUEST_H
 
+#include <stddef.h>
 #include <stdint.h>
 #include <type_traits>
 
+#ifdef EFZ_MULTI_INSTANCE
+#define EFZ_THREAD_LOCAL thread_local
+#else
+#define EFZ_THREAD_LOCAL
+#endif
+
 namespace efz {
 
-extern char* g_arena;
+extern EFZ_THREAD_LOCAL char* g_arena;
 extern uintptr_t g_arenaSize;
 // The lowest address of the stack window: kStackSize bytes ending a little above
 // main's frame (SetStack).
-extern char* g_stack;
+extern EFZ_THREAD_LOCAL char* g_stack;
 const uint32_t kStackHandle = 0xf0000000u;
 const uintptr_t kStackSize = (uintptr_t)16 << 20;
 
-// Called first thing in main with the address of one of its locals.
+// Called first thing in main with the address of one of its locals; in a build of
+// several games, by each thread before it runs one.
 void SetStack(void* local);
 
 // Reports a pointer outside the arena and the stack that the game tried to store, and
@@ -52,6 +66,45 @@ inline uint32_t Handle(const void* p)
         return kStackHandle + (uint32_t)s;
     return BadHandle(p);
 }
+
+// The arena's first 64 KB hold no blocks: no handle is below kArenaStart. The
+// allocator keeps its state there (at kHeapState), and a build of several games each
+// game's Globals (at kGlobals).
+const uintptr_t kArenaStart = 0x10000;
+const uintptr_t kHeapState = 0x1000;
+const uintptr_t kGlobals = 0x2000;
+
+#ifdef EFZ_MULTI_INSTANCE
+// What a game has outside its objects, kept in its arena.
+struct Globals {
+    uint32_t holdrand;   // rand()'s state (x87.cpp)
+    uint32_t clock;      // timeGetTime's, in milliseconds
+    uint8_t input[2];    // what CInput::GetInput gives each player
+    uint8_t drawing;     // whether pictures are drawn (sprites decoded, blitters run)
+    uint8_t quit;        // the game asked to close: WM_CLOSE, or a MessageBox
+    uint32_t root[16];   // the platform's own handles: what WinMain kept in globals
+};
+
+inline Globals* G()
+{
+    return (Globals*)(g_arena + kGlobals);
+}
+
+// An arena of its own for another game: reserved, its first 64 KB and heap set up
+// empty. NewArena leaves the calling thread's arena as it was.
+char* NewArena();
+void FreeArena(char* arena);
+// Makes `arena` the calling thread's (nullptr: none, so that operator new takes from
+// the C library's heap again).
+inline void BindArena(char* arena)
+{
+    g_arena = arena;
+}
+// The bytes of the bound arena that hold its game: [0, ArenaUsed()). Copying them into
+// another arena with LoadArena makes that one the same game.
+uintptr_t ArenaUsed();
+void LoadArena(const void* bytes, uintptr_t size);
+#endif
 
 // A pointer field of the game's structures: 4 bytes, used like a T*.
 template <class T>

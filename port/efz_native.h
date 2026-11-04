@@ -128,6 +128,8 @@ char* _strnset(char* str, int c, size_t count);
 #define DI_OK 0
 #define DS_OK 0
 
+#include "guest.h"
+
 struct IUnknown {
     virtual ULONG Release() = 0;
 
@@ -136,15 +138,17 @@ protected:
 };
 struct IDirectDraw;
 struct IDirectDrawPalette;
-// An 8-bit image in memory: the sprites, and the screen's back buffer.
+// An 8-bit image in memory: the sprites, and the screen's back buffer. Its pixels are
+// in the arena like the rest. A sprite of a game that isn't drawn (efz::Drawing) keeps
+// only its first pixel, which the game reads as the colour key (CGraphics::GetColorKey).
 struct IDirectDrawSurface : IUnknown {
-    IDirectDrawSurface(int width, int height);
+    IDirectDrawSurface(int width, int height, bool allPixels = true);
     ULONG Release();
 
     int width;
     int height;
     int pitch;
-    BYTE* pixels;
+    PTR32(BYTE) pixels;
 
 protected:
     ~IDirectDrawSurface();
@@ -157,7 +161,6 @@ struct IDirectInputDevice7 : IUnknown {
     virtual HRESULT Acquire() = 0;
 };
 
-#include "guest.h"
 #include "x87.h"
 
 #endif

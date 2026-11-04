@@ -164,17 +164,22 @@ multiply-add (`-ffp-contract=off`, `/fp:contract-`), no fast math.
 
 ## The platform layer (`port/`)
 
+The first six are every build's; the rest are SDL3's, which the headless library
+(`port/headless/`, [headless.md](headless.md)) replaces with its own (`platform.h`
+lists what a platform provides).
+
 | File | What it does |
 |---|---|
 | `efz_native.h` | What `efz.h` includes instead of `<windows.h>` and DirectX: Win32 types at their Win32 sizes (handles are 32-bit numbers), the few Win32 functions the game code calls, the DirectX interfaces it touches |
-| `guest.h`, `arena.cpp` | Handles, the arena, `operator new` |
+| `guest.h`, `arena.cpp` | Handles, the arena, `operator new`. The allocator's state is in the arena's first 64 KB and its links are offsets, so an arena's bytes are its whole heap |
 | `x87.h`, `x87.cpp` | `F32`, `X87Value`, the emulated `sin`, `cos`, `atan2`, `rand` |
-| `graphics.cpp` | `CGraphics`: 8-bit surfaces, the loaders and blitters of `src/graphics.cpp` (its assembly loops as C++, DirectDraw's checks on lock rectangles kept), the palette, presenting through an SDL texture |
+| `graphics.cpp` | `CGraphics`: 8-bit surfaces, the loaders and blitters of `src/graphics.cpp` (its assembly loops as C++, DirectDraw's checks on lock rectangles kept), the palette; `Flip` hands the back buffer to the platform |
+| `win32.cpp` | `CreateFile` and the rest over the C library (case-insensitive names, the save folder) |
+| `layout.cpp` | The structure checks |
+| `video.cpp` | Presenting the back buffer through an SDL texture, `--dump`'s frames |
 | `input.cpp` | `CInput`: the keyboard state by DirectInput code, controllers as joysticks; `GetInput` and the `key.ini` loaders as the original |
 | `sound.cpp` | `CSound`: the 150 sound slots, a mixer on SDL's audio thread, `.wav` parsing, the music's loop points |
-| `win32.cpp` | `CreateFile` and the rest over the C library (case-insensitive names, the save folder), `MessageBox`, `timeGetTime` |
-| `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second |
-| `layout.cpp` | The structure checks |
+| `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second; `MessageBox`, `PostMessage`, `timeGetTime` |
 
 ## The compatibility test
 

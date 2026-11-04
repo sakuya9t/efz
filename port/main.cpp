@@ -117,6 +117,27 @@ void PumpEvents()
 
 } // namespace efz
 
+// The Win32 functions of the game code that go to the window system.
+int MessageBoxA(HWND, LPCSTR text, LPCSTR caption, UINT)
+{
+    SDL_Log("%s: %s", caption ? caption : "", text ? text : "");
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, caption ? caption : "",
+                             text ? text : "", efz::Window());
+    return 1;
+}
+
+BOOL PostMessageA(HWND, UINT msg, WPARAM, LPARAM)
+{
+    if (msg == WM_CLOSE)
+        efz::RequestQuit();
+    return TRUE;
+}
+
+DWORD timeGetTime()
+{
+    return (DWORD)SDL_GetTicks();
+}
+
 // --keys: the key events scripted for a frame.
 struct ScriptedKey {
     long frame;

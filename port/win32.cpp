@@ -1,12 +1,16 @@
-// The Win32 functions the game code calls, on SDL3 and the C library.
+// The Win32 file functions the game code calls, on the C library. (MessageBox,
+// PostMessage and timeGetTime are the platform's: port/main.cpp, port/headless/.)
 //
 // Files: the game opens paths like "system\effect\effect.dat" relative to its folder.
 // Here they resolve against the data folder (efz::SetDataDir), whatever the case of the
 // names on disk, and what the game writes (key.ini, records, replays, screenshots) goes
 // to the save folder, which is read first. Both are the current folder by default.
-#include <SDL3/SDL.h>
+//
+// Several games can run at once in a headless build, so the table of open files is
+// shared under a lock, and doesn't allocate (operator new would take from the arena of
+// whichever game opened a file first).
+#include <mutex>
 #include <string>
-#include <vector>
 
 #include <sys/stat.h>
 #ifdef _WIN32
@@ -25,7 +29,9 @@ namespace {
 
 std::string g_dataDir = ".";
 std::string g_saveDir = ".";
-std::vector<FILE*> g_files; // handle n is g_files[n - 1]
+const size_t kFiles = 4096;
+FILE* g_files[kFiles]; // handle n is g_files[n - 1]
+std::mutex g_filesLock;
 
 bool Exists(const std::string& path)
 {
@@ -98,7 +104,7 @@ void MakeParents(const std::string& path)
 
 FILE* FileOf(HANDLE h)
 {
-    if (h == 0 || h == INVALID_HANDLE_VALUE || h > g_files.size())
+    if (h == 0 || h == INVALID_HANDLE_VALUE || h > kFiles)
         return nullptr;
     return g_files[h - 1];
 }
@@ -175,14 +181,15 @@ HANDLE CreateFileA(LPCSTR name, DWORD access, DWORD, SECURITY_ATTRIBUTES*, DWORD
     }
     if (!f)
         return INVALID_HANDLE_VALUE;
-    for (size_t i = 0; i < g_files.size(); i++) {
+    std::lock_guard<std::mutex> lock(g_filesLock);
+    for (size_t i = 0; i < kFiles; i++) {
         if (!g_files[i]) {
             g_files[i] = f;
             return (HANDLE)(i + 1);
         }
     }
-    g_files.push_back(f);
-    return (HANDLE)g_files.size();
+    fclose(f);
+    return INVALID_HANDLE_VALUE;
 }
 
 BOOL ReadFile(HANDLE h, LPVOID buffer, DWORD size, LPDWORD read, void*)
@@ -243,28 +250,9 @@ BOOL CloseHandle(HANDLE h)
     if (!f)
         return FALSE;
     fclose(f);
+    std::lock_guard<std::mutex> lock(efz::g_filesLock);
     efz::g_files[h - 1] = nullptr;
     return TRUE;
-}
-
-int MessageBoxA(HWND, LPCSTR text, LPCSTR caption, UINT)
-{
-    SDL_Log("%s: %s", caption ? caption : "", text ? text : "");
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, caption ? caption : "",
-                             text ? text : "", efz::Window());
-    return 1;
-}
-
-BOOL PostMessageA(HWND, UINT msg, WPARAM, LPARAM)
-{
-    if (msg == WM_CLOSE)
-        efz::RequestQuit();
-    return TRUE;
-}
-
-DWORD timeGetTime()
-{
-    return (DWORD)SDL_GetTicks();
 }
 
 #ifndef _WIN32
