@@ -23,3 +23,4 @@ maps each old member and method name to its new one (`CPlayer::unk118 m_rfGauge`
 | [nanase-exnanase-nagamori-kaori.md](nanase-exnanase-nagamori-kaori.md) | CNanase, CEXNanase, CNagamori, CKaori |
 | [misuzu-minagi-misaki-mio.md](misuzu-minagi-misaki-mio.md) | CMisuzu, CMinagi, CMisaki, CMio |
 | [mai-makoto-mayu-sayuri.md](mai-makoto-mayu-sayuri.md) | CMai, CMakoto, CMayu, CSayuri |
+| [locals.md](locals.md) | 3 November 2026: the conventions of the locals' and parameters' names, and bugs found reading every function for them |

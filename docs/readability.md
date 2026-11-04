@@ -108,6 +108,60 @@ tools/native.sh && tools/compat.py check         # the game is unchanged
 (`port/layout.cpp`'s offset checks) are edited by hand. `constants.py` replaces a
 number only where clang shows what it is (see its docstring).
 
+## Locals, numbers and file names, 3 November 2026
+
+| | Before | After |
+|---|---|---|
+| References to the lifter's local and parameter names (`l4`, `x8`, `v2c`, `p1`) | 77,201 | none; `graphics.cpp` keeps a few names picked for the original's stack layout (`jb`, `sr3`, `row08`) |
+| Hex literals in `src/*.cpp` | 32,425 | 4,153: the codes below |
+
+So Akiko's ReadCommand went from
+
+```cpp
+x6 = 0;
+v4 = m_inputPos + 0x5a;
+for (; v4 < m_inputPos + 0xb4; v4++) {
+    v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
+    if ((v5 & 0x40) != 0 && x6 == 6) {
+```
+
+to
+
+```cpp
+step = 0;
+pos = m_inputPos + (kInputHistoryLength - 90);
+for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+    input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+    if ((input & kInputC) != 0 && step == 6) {
+```
+
+- **Locals and parameters** are named for what they hold. The functions the 24
+  characters repeat shape for shape (UpdatePattern, UpdateObjects, ReadCommand,
+  CpuInput, DrawGauge, the constructors) held nine in ten of the lifter's names and get
+  the same names in every class; the rest were read function by function.
+  [naming/locals.md](naming/locals.md) has the conventions, and the original's bugs
+  found on the way. `efz.h`'s declarations take their definitions' parameter names.
+  Each rename was scoped to its function and refused where the new name was already
+  used there, so no local hides a member or a global.
+- **Numbers that are quantities are decimal**: ticks, frames, positions, gauge, damage,
+  odds (`Random(0, 100) < 20`), rectangles, and the sound, voice, music, stage, palette
+  and character numbers, which the game turns into file names in decimal. **Codes stay
+  hex**, as the docs and `tools/constants.txt` give them: actions (and object and
+  effect types, which are actions), commands, the CPU's actions, key codes, sizes,
+  config offsets, palette entries, bit operations, `case` labels, and values from
+  0x10000 up; so do the platform files (`main`, `graphics`, `input`, `sound`, `file`,
+  `config`, `trace`).
+- **The input** has constants in `efz.h`: the bits of a tick (`kInputRight`...
+  `kInputUp`, `kInputA`...`kInputD`, the masks `kInputDirections` and `kInputButtons`)
+  and `kInputHistoryLength`. `m_inputPos` is where the next tick goes, so the oldest.
+- **`<character>_vf6.cpp` is `<character>_states.cpp`**: the per-state update, named
+  for what it holds rather than for its virtual slot.
+
+None of it changes the code: the native game's Release build (MSVC 19.44) compiled to
+the same `.text`, `.rdata` and `.data` after every step. With the original's compiler
+the renamed locals do reorder stack frames (see below), which can only matter where
+code reads a local before writing it; `tools/compat.py check --exe` checks that build.
+
 ## What was done
 
 - **Members for every offset.** `efz.h` declares a member at each offset the code
@@ -171,9 +225,9 @@ Measured by compiling both forms with `cl` 13.10 `/Od` and comparing, then by
 | A byte array in a struct some function has as a local | `/GS` then guards that function with a cookie (see `PatternFrame` in `efz.h`) |
 | Moving a function, or reordering a file's functions | The code is laid out in definition order |
 
-So the remaining unreadable parts are deliberate: locals keep the lifter's names (`l4`,
-`x8`, `v2c`: a letter for where the slot is and its offset), because naming them means
-choosing names whose hashes keep the frame.
+So, as long as the bytes bound the source, locals kept the lifter's names (`l4`, `x8`,
+`v2c`: a letter for where the slot is and its offset), because naming them meant
+choosing names whose hashes keep the frame. They have names since 3 November 2026.
 
 ## The conventions in efz.h
 
@@ -215,9 +269,8 @@ parameters and callees are typed. Their source matches; only relifting them fail
 
 ## What is left
 
-- **Locals** keep the lifter's names (`l4`, `x8`, `v2c`: where the slot was and its
-  offset). Renaming them changed the original's code; since the reference tag it no
-  longer matters, but it is per function, and still to do.
+- Some numbers are codes without a name yet: other characters' actions, object and
+  effect types the constants don't cover, palette entries.
 - About 60 casts of a member's address remain where the code really reads it as
   another type (`*(RECT*)&...[8] = MakeRect(...)` in a char array of Scene8,
   `*(int*)&m_guardGauge = 0` on a float), and a few `(i << 4) + (char*)p` where the

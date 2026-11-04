@@ -16,8 +16,9 @@ per-function numbers.
 The source reads fields through named members rather than the lifter's raw offsets
 (`m_pointY[4] = -0x1d` for `*(short*)((char*)this + 0x2b00) = -0x1d`, `(*m_opponent)->x`).
 [docs/readability.md](docs/readability.md) records how, and which readability changes
-keep the compiled code. Members, methods, actions (`pattern = kInstantCharge`),
-commands (`m_command == kCmd236A`) and frame flags (`kStateCancellable`) have names;
+keep the compiled code. Members, methods, locals, actions (`pattern = kInstantCharge`),
+commands (`m_command == kCmd236A`), input bits (`input & kInputC`) and frame flags
+(`kStateCancellable`) have names, and quantities are decimal (`m_freezeTime = 120`);
 [docs/naming/](docs/naming/README.md) has the research behind them: each character's
 move list and mechanics, and the original's bugs found on the way.
 

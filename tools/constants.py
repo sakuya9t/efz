@@ -288,6 +288,10 @@ class Rewriter:
     def run(self, fn):
         cls = fn.semantic_parent.spelling if fn.kind in (
             CK.CXX_METHOD, CK.CONSTRUCTOR, CK.DESTRUCTOR) else None
+        # The backgrounds' objects (BgObject) have patterns of their own, 0-3, not
+        # actions, and nothing else in them is a constant here.
+        if cls == 'CAnimBg' or (cls or '').startswith('CBg'):
+            return
         owner = Owner(cls)
         descs = self.effect_descs(fn)
         self.visit(fn, cls, owner, descs)

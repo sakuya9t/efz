@@ -61,25 +61,25 @@ void CBg16::Update()
         duration = (short)m_anims[m_objects[i].pattern].frames[m_objects[i].frame].duration;
         frameCount = m_anims[m_objects[i].pattern].frameCount;
         switch (m_objects[i].pattern) {
-        case kStand:
+        case 0:
             m_objects[i].x++;
             if (m_objects[i].x >= 850.0) {
                 m_objects[i].x -= 850.0;
             }
             break;
-        case kWalkForward:
+        case 1:
             m_objects[i].x += 1.4;
             if (m_objects[i].x >= 806.0) {
                 m_objects[i].x -= 806.0;
             }
             break;
-        case kWalkBack:
+        case 2:
             m_objects[i].x += 1.8;
             if (m_objects[i].x >= 789.0) {
                 m_objects[i].x -= 789.0;
             }
             break;
-        case kCrouch:
+        case 3:
             m_objects[i].x += 2.2;
             if (m_objects[i].x >= 947.0) {
                 m_objects[i].x = 947.0;

@@ -62,12 +62,12 @@ void CBg12::Update()
         duration = (short)m_anims[m_objects[i].pattern].frames[m_objects[i].frame].duration;
         frameCount = m_anims[m_objects[i].pattern].frameCount;
         switch (m_objects[i].pattern) {
-        case kStand:
+        case 0:
             m_objects[i].x += 0.5;
             if (m_objects[i].x >= 640.0) {
                 m_objects[i].x = 0.0;
             }
-        case kWalkForward:
+        case 1:
             m_objects[i].x += 0.25;
             if (m_objects[i].x >= 640.0) {
                 m_objects[i].x = 0.0;
