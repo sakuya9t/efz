@@ -52,9 +52,9 @@ void CPlayer::RemoveObject(short slot)
 
 void CPlayer::AdvanceObjectHead()
 {
-    int v4;
+    int tries; // slots stepped over, at most 63
 
-    v4 = 0;
+    tries = 0;
     do {
         m_objectHead++;
         if (m_objectHead >= 0x40) {
@@ -72,87 +72,87 @@ void CPlayer::AdvanceObjectHead()
                 }
             }
         }
-        v4++;
-    } while (m_objectKeep[m_objectHead] != 0 && v4 < 0x3f);
+        tries++;
+    } while (m_objectKeep[m_objectHead] != 0 && tries < 0x3f);
 }
 
 void CPlayer::ClearObjects()
 {
-    int v4;
+    int i;
 
-    v4 = 0;
-    for (; v4 < 0x40; v4++) {
-        m_objectActive[v4] = 0;
-        m_objectKeep[v4] = 0;
+    i = 0;
+    for (; i < 0x40; i++) {
+        m_objectActive[i] = 0;
+        m_objectKeep[i] = 0;
     }
 }
 
-void CPlayer::InitEffectDesc(EffectDesc* p1)
+void CPlayer::InitEffectDesc(EffectDesc* effect)
 {
-    p1->keep = 0;
-    p1->scale = 0;
-    p1->sound = -1;
-    p1->screen = 0;
-    p1->shadow = 0;
-    p1->movesInFreeze = 0;
-    p1->clip.top = 0;
-    p1->clip.bottom = 0;
-    p1->clip.left = 0;
-    p1->clip.right = 0;
+    effect->keep = 0;
+    effect->scale = 0;
+    effect->sound = -1;
+    effect->screen = 0;
+    effect->shadow = 0;
+    effect->movesInFreeze = 0;
+    effect->clip.top = 0;
+    effect->clip.bottom = 0;
+    effect->clip.left = 0;
+    effect->clip.right = 0;
 }
 
-void CPlayer::DrawObjects(int p1, int p2, BYTE p3)
+void CPlayer::DrawObjects(int drawX, int drawY, BYTE layer)
 {
-    RECT v28;
-    EffectFrame* v18;
-    RECT v14;
-    int l4;
+    RECT src; // the part of the sprite drawn
+    EffectFrame* sprite; // the frame drawn
+    RECT dst; // where on the screen
+    int slot; // the object drawn, an index into m_objects
 
-    l4 = m_objectTail;
-    while (l4 != m_objectHead) {
-        if (m_objectActive[l4] != 0 && p3 == (unsigned char)m_objects[l4].layer && (m_objects[l4].drawnWhileHidden != 0 || m_game->m_hideObjectsTime == 0)) {
-            v18 = &anims[m_objects[l4].pattern].frames[m_objects[l4].frame];
-            v28 = MakeRect(0, 0, v18->width, v18->height);
-            if (m_objects[l4].facing == -1) {
-                v14.left = (int)m_objects[l4].x + (m_objects[l4].screen == 0) * p1 - (v18->width - v18->x);
-                v14.top = (p2 + 0xd2) * (m_objects[l4].screen == 0) + (int)m_objects[l4].y - v18->y;
-                v14.right = v18->width + v14.left;
-                v14.bottom = v18->height + v14.top;
+    slot = m_objectTail;
+    while (slot != m_objectHead) {
+        if (m_objectActive[slot] != 0 && layer == (unsigned char)m_objects[slot].layer && (m_objects[slot].drawnWhileHidden != 0 || m_game->m_hideObjectsTime == 0)) {
+            sprite = &anims[m_objects[slot].pattern].frames[m_objects[slot].frame];
+            src = MakeRect(0, 0, sprite->width, sprite->height);
+            if (m_objects[slot].facing == -1) {
+                dst.left = (int)m_objects[slot].x + (m_objects[slot].screen == 0) * drawX - (sprite->width - sprite->x);
+                dst.top = (drawY + 0xd2) * (m_objects[slot].screen == 0) + (int)m_objects[slot].y - sprite->y;
+                dst.right = sprite->width + dst.left;
+                dst.bottom = sprite->height + dst.top;
             } else {
-                v14.left = (int)m_objects[l4].x + (m_objects[l4].screen == 0) * p1 - v18->x;
-                v14.top = (p2 + 0xd2) * (m_objects[l4].screen == 0) + (int)m_objects[l4].y - v18->y;
-                v14.right = v18->width + v14.left;
-                v14.bottom = v18->height + v14.top;
+                dst.left = (int)m_objects[slot].x + (m_objects[slot].screen == 0) * drawX - sprite->x;
+                dst.top = (drawY + 0xd2) * (m_objects[slot].screen == 0) + (int)m_objects[slot].y - sprite->y;
+                dst.right = sprite->width + dst.left;
+                dst.bottom = sprite->height + dst.top;
             }
-            if (m_objects[l4].clip.top != m_objects[l4].clip.bottom) {
-                if (v14.left < m_objects[l4].clip.left) {
-                    v28.left = m_objects[l4].clip.left - v14.left + v28.left;
-                    v14.left = m_objects[l4].clip.left;
+            if (m_objects[slot].clip.top != m_objects[slot].clip.bottom) {
+                if (dst.left < m_objects[slot].clip.left) {
+                    src.left = m_objects[slot].clip.left - dst.left + src.left;
+                    dst.left = m_objects[slot].clip.left;
                 }
-                if (v14.right > m_objects[l4].clip.right) {
-                    v28.right -= v14.right - m_objects[l4].clip.right;
-                    v14.right = m_objects[l4].clip.right;
+                if (dst.right > m_objects[slot].clip.right) {
+                    src.right -= dst.right - m_objects[slot].clip.right;
+                    dst.right = m_objects[slot].clip.right;
                 }
-                if (v14.top < m_objects[l4].clip.top) {
-                    v28.top = m_objects[l4].clip.top - v14.top + v28.top;
-                    v14.top = m_objects[l4].clip.top;
+                if (dst.top < m_objects[slot].clip.top) {
+                    src.top = m_objects[slot].clip.top - dst.top + src.top;
+                    dst.top = m_objects[slot].clip.top;
                 }
-                if (v14.bottom > m_objects[l4].clip.bottom) {
-                    v28.bottom -= v14.bottom - m_objects[l4].clip.bottom;
-                    v14.bottom = m_objects[l4].clip.bottom;
+                if (dst.bottom > m_objects[slot].clip.bottom) {
+                    src.bottom -= dst.bottom - m_objects[slot].clip.bottom;
+                    dst.bottom = m_objects[slot].clip.bottom;
                 }
             }
-            if (m_objects[l4].scale == 3) {
-                m_graphics->BlitSmear(v14, surfaces[v18->surface], v28, colorKey, m_objects[l4].facing == -1);
-            } else if (m_objects[l4].scale > 0) {
-                m_graphics->BlitEx(v14, surfaces[v18->surface], v28, colorKey, m_objects[l4].facing == -1, m_objects[l4].scale - 1);
+            if (m_objects[slot].scale == 3) {
+                m_graphics->BlitSmear(dst, surfaces[sprite->surface], src, colorKey, m_objects[slot].facing == -1);
+            } else if (m_objects[slot].scale > 0) {
+                m_graphics->BlitEx(dst, surfaces[sprite->surface], src, colorKey, m_objects[slot].facing == -1, m_objects[slot].scale - 1);
             } else {
-                m_graphics->Blit(v14, surfaces[v18->surface], v28, colorKey, m_objects[l4].facing == -1);
+                m_graphics->Blit(dst, surfaces[sprite->surface], src, colorKey, m_objects[slot].facing == -1);
             }
         }
-        l4++;
-        if (l4 >= 0x40) {
-            l4 = 0;
+        slot++;
+        if (slot >= 0x40) {
+            slot = 0;
         }
     }
 }

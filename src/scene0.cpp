@@ -5,8 +5,8 @@
 #include <math.h>
 #include "efz.h"
 
-CScene0::CScene0(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
-    : CScene(p1, p2, p3, p4, p5, p6, p7)
+CScene0::CScene0(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound)
+    : CScene(hwnd, player1Ref, player2Ref, game, graphics, input, sound)
 {
     if (1) {
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_titleSurface, "system\\title.dat", 0, 1);
@@ -45,7 +45,7 @@ CScene0::~CScene0()
 
 BYTE CScene0::Update()
 {
-    int v4;
+    int side; // the player whose input is read; becomes m_humanSide
 
     if (m_enter == 1) {
         m_held[2] = 0;
@@ -68,11 +68,11 @@ BYTE CScene0::Update()
     }
     HandleKeys();
     m_game->UpdateInput();
-    v4 = 0;
-    for (; v4 < 2; v4++) {
-        if (m_held[v4] == 0 && m_game->m_inputY[v4] != 0) {
+    side = 0;
+    for (; side < 2; side++) {
+        if (m_held[side] == 0 && m_game->m_inputY[side] != 0) {
             m_game->PlaySE(8);
-            m_cursor += m_game->m_inputY[v4];
+            m_cursor += m_game->m_inputY[side];
             if (m_cursor > 6) {
                 m_cursor = 0;
             }
@@ -80,20 +80,20 @@ BYTE CScene0::Update()
                 m_cursor = 6;
             }
             unk43e = 0;
-            m_held[v4] = 1;
+            m_held[side] = 1;
         }
-        if (m_game->m_inputY[v4] == 0) {
-            m_held[v4] = 0;
+        if (m_game->m_inputY[side] == 0) {
+            m_held[side] = 0;
             m_idleTime++;
         } else {
             m_idleTime = 0;
         }
-        if (m_game->m_pressA[v4] == 1) {
+        if (m_game->m_pressA[side] == 1) {
             switch (m_cursor) {
             case 0:
-                *(char*)&m_game->m_isCpu[0] = v4 == 1;
-                *(char*)&m_game->m_isCpu[1] = v4 == 0;
-                m_game->m_humanSide = v4;
+                *(char*)&m_game->m_isCpu[0] = side == 1;
+                *(char*)&m_game->m_isCpu[1] = side == 0;
+                m_game->m_humanSide = side;
                 m_game->PlaySE(6);
                 m_game->m_gameMode = 0;
                 m_game->m_roundsToWin = 2;
@@ -101,8 +101,8 @@ BYTE CScene0::Update()
                 m_enter = 2;
                 return 1;
             case 1:
-                *(char*)&m_game->m_isCpu[0] = v4 == 1;
-                *(char*)&m_game->m_isCpu[1] = v4 == 0;
+                *(char*)&m_game->m_isCpu[0] = side == 1;
+                *(char*)&m_game->m_isCpu[1] = side == 0;
                 m_game->PlaySE(6);
                 m_game->m_gameMode = 3;
                 m_game->m_roundsToWin = m_game->m_roundsSetting;
@@ -119,9 +119,9 @@ BYTE CScene0::Update()
                 m_enter = 2;
                 return 1;
             case 3:
-                *(char*)&m_game->m_isCpu[0] = v4 == 1;
-                *(char*)&m_game->m_isCpu[1] = v4 == 0;
-                m_game->m_humanSide = v4;
+                *(char*)&m_game->m_isCpu[0] = side == 1;
+                *(char*)&m_game->m_isCpu[1] = side == 0;
+                m_game->m_humanSide = side;
                 m_game->PlaySE(6);
                 m_game->m_gameMode = 1;
                 m_game->m_roundsToWin = 2;
@@ -161,56 +161,56 @@ void CScene0::Draw()
 
 void CScene0::HandleKeys()
 {
-    int l10c;
-    char v108[256];
+    int hr;
+    char keys[256];
 
-    l10c = m_input->m_keyboard->GetDeviceState(0x100, v108);
-    if (l10c < 0 && l10c == 0x8007001e) {
+    hr = m_input->m_keyboard->GetDeviceState(0x100, keys);
+    if (hr < 0 && hr == 0x8007001e) {
         m_input->m_keyboard->Acquire();
     }
-    if ((v108[1] & 0x80) != 0) {
+    if ((keys[1] & 0x80) != 0) {
         PostMessageA(m_hwnd, 0x10, 0, 0);
     }
 }
 
 void CScene0::DimTitle()
 {
-    int xc;
-    int v8;
-    int v4;
+    int level;
+    int frameStart;
+    int shortFrame; // 1 every other frame, which waits 15 ms instead of 16
 
-    v8 = timeGetTime();
-    v4 = 0;
+    frameStart = timeGetTime();
+    shortFrame = 0;
     m_dimming = 1;
-    xc = 0x14;
-    for (; xc >= 0; xc--) {
+    level = 0x14;
+    for (; level >= 0; level--) {
         Draw();
-        m_graphics->Darken(m_palette, 1, 0xc1, xc * 3 + 0x28);
-        while ((DWORD)(timeGetTime() - v8) < (BYTE)(0x10 - v4)) {
+        m_graphics->Darken(m_palette, 1, 0xc1, level * 3 + 0x28);
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
         }
-        v8 = timeGetTime();
-        v4 = v4 == 0;
+        frameStart = timeGetTime();
+        shortFrame = shortFrame == 0;
     }
     m_dimming = 0;
 }
 
 void CScene0::UndimTitle()
 {
-    int xc;
-    int v8;
-    int v4;
+    int level;
+    int frameStart;
+    int shortFrame; // 1 every other frame, which waits 15 ms instead of 16
 
-    v8 = timeGetTime();
-    v4 = 0;
+    frameStart = timeGetTime();
+    shortFrame = 0;
     m_dimming = 1;
-    xc = 0;
-    for (; xc <= 0x14; xc++) {
+    level = 0;
+    for (; level <= 0x14; level++) {
         Draw();
-        m_graphics->Darken(m_palette, 1, 0xc1, xc * 3 + 0x28);
-        while ((DWORD)(timeGetTime() - v8) < (BYTE)(0x10 - v4)) {
+        m_graphics->Darken(m_palette, 1, 0xc1, level * 3 + 0x28);
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
         }
-        v8 = timeGetTime();
-        v4 = v4 == 0;
+        frameStart = timeGetTime();
+        shortFrame = shortFrame == 0;
     }
     m_dimming = 0;
 }

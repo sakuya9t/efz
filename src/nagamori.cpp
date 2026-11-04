@@ -101,18 +101,18 @@ void CNagamori::RemoveObject(short slot)
     CPlayer::RemoveObject(slot);
 }
 
-void CNagamori::TriggerObjectsNear(short p1, short p2, short p3, short p4)
+void CNagamori::TriggerObjectsNear(short centerX, short centerY, short rangeX, short rangeY)
 {
-    int v4;
+    int slot; // the object tested, an index into m_objects
 
-    v4 = m_objectTail;
-    while (v4 != m_objectHead) {
-        if (m_objectActive[v4] != 0 && fabs(p1 - m_objects[v4].x) < p3 && fabs(p2 - m_objects[v4].y) < p4) {
-            m_objectTriggered[v4] = 1;
+    slot = m_objectTail;
+    while (slot != m_objectHead) {
+        if (m_objectActive[slot] != 0 && fabs(centerX - m_objects[slot].x) < rangeX && fabs(centerY - m_objects[slot].y) < rangeY) {
+            m_objectTriggered[slot] = 1;
         }
-        v4++;
-        if (v4 >= 0x40) {
-            v4 = 0;
+        slot++;
+        if (slot >= 0x40) {
+            slot = 0;
         }
     }
 }

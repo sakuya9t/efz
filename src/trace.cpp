@@ -209,7 +209,7 @@ void TraceStart(CGame* game, CScene** scenes, BYTE* scene)
     const char* dumpFrom = getenv("EFZ_TRACE_DUMP_FROM");
     const char* dumpTo = getenv("EFZ_TRACE_DUMP_TO");
     const char* playSeed = getenv("EFZ_TRACE_SEED");
-    int row, col, c1, c2, stage, pal1, pal2, cpu1, cpu2, n;
+    int row, col, char1, char2, stage, pal1, pal2, cpu1, cpu2, n;
     unsigned seed;
 
     if (!out)
@@ -235,9 +235,9 @@ void TraceStart(CGame* game, CScene** scenes, BYTE* scene)
         game->m_replayPage = (char)(row - 1);
         game->m_replayMode = 1;
         *scene = 2;
-    } else if (record && (n = sscanf(record, "%d-%d:%d:%d:%d:%d:%d:%u:%d:%d", &row, &col, &c1,
-                                     &c2, &stage, &pal1, &pal2, &seed, &cpu1, &cpu2)) >= 8) {
-        CScene2* s2 = (CScene2*)scenes[2];
+    } else if (record && (n = sscanf(record, "%d-%d:%d:%d:%d:%d:%d:%u:%d:%d", &row, &col, &char1,
+                                     &char2, &stage, &pal1, &pal2, &seed, &cpu1, &cpu2)) >= 8) {
+        CScene2* loader = (CScene2*)scenes[2];
         if (n < 10)
             cpu1 = cpu2 = 0;
         srand(seed);
@@ -258,10 +258,10 @@ void TraceStart(CGame* game, CScene** scenes, BYTE* scene)
         game->m_arcadeMatch = 1;
         game->m_beatenChars = 0;
         game->m_playedStages = 0;
-        s2->CreateCharacter(s2->m_player1Ref, s2->m_player2Ref, 0, (char)c1);
-        s2->CreateCharacter(s2->m_player2Ref, s2->m_player1Ref, 1, (char)c2);
-        (*s2->m_player1Ref)->m_paletteIndex = (char)pal1;
-        (*s2->m_player2Ref)->m_paletteIndex = (char)pal2;
+        loader->CreateCharacter(loader->m_player1Ref, loader->m_player2Ref, 0, (char)char1);
+        loader->CreateCharacter(loader->m_player2Ref, loader->m_player1Ref, 1, (char)char2);
+        (*loader->m_player1Ref)->m_paletteIndex = (char)pal1;
+        (*loader->m_player2Ref)->m_paletteIndex = (char)pal2;
         *scene = 2;
     }
 }

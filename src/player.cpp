@@ -11,32 +11,32 @@
 
 int CPlayer::FaceOpponent()
 {
-    char v1;
+    char oldFacing;
 
-    v1 = facing;
+    oldFacing = facing;
     if (x < (*m_opponent)->x) {
         facing = 1;
-        return facing != v1;
+        return facing != oldFacing;
     }
     if (x > (*m_opponent)->x) {
         facing = -1;
-        return facing != v1;
+        return facing != oldFacing;
     }
     return 0;
 }
 
-int CPlayer::FaceX(double p1)
+int CPlayer::FaceX(double targetX)
 {
-    char v1;
+    char oldFacing;
 
-    v1 = facing;
-    if (x < p1) {
+    oldFacing = facing;
+    if (x < targetX) {
         facing = 1;
-        return facing != v1;
+        return facing != oldFacing;
     }
-    if (x > p1) {
+    if (x > targetX) {
         facing = -1;
-        return facing != v1;
+        return facing != oldFacing;
     }
     return 0;
 }
@@ -176,22 +176,22 @@ CPlayer::CPlayer(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
 
 CPlayer::~CPlayer()
 {
-    int v4;
+    int i;
 
     if ((int)surfaces != 0) {
-        v4 = 0;
-        for (; v4 < lastSurface + 1; v4++) {
-            if ((int)surfaces[v4] != 0) {
-                surfaces[v4]->Release();
-                surfaces[v4] = (IDirectDrawSurface*)0;
+        i = 0;
+        for (; i < lastSurface + 1; i++) {
+            if ((int)surfaces[i] != 0) {
+                surfaces[i]->Release();
+                surfaces[i] = (IDirectDrawSurface*)0;
             }
         }
         delete (char*)surfaces;
     }
-    v4 = 0;
-    for (; v4 < 0x32; v4++) {
-        if ((unsigned short)m_voices[v4] != 0x96) {
-            m_sound->Release(m_voices[v4]);
+    i = 0;
+    for (; i < 0x32; i++) {
+        if ((unsigned short)m_voices[i] != 0x96) {
+            m_sound->Release(m_voices[i]);
         }
     }
     delete[] anims;
@@ -286,11 +286,11 @@ void CPlayer::ClearBufferedPress()
 
 void CPlayer::ClearInput()
 {
-    int v4;
+    int i;
 
-    v4 = 0;
-    for (; v4 < kInputHistoryLength; v4++) {
-        m_inputHistory[v4] = 0;
+    i = 0;
+    for (; i < kInputHistoryLength; i++) {
+        m_inputHistory[i] = 0;
     }
     m_command = kCmdNone;
 }
@@ -367,9 +367,9 @@ void CPlayer::TryAirRecovery()
 
 void CPlayer::ApplyVelocity()
 {
-    int v4;
+    int slot; // the object being moved, an index into m_objects
 
-    v4 = m_objectTail;
+    slot = m_objectTail;
     if (m_hitstop == 0 && (*m_opponent)->m_freezeTime == 0) {
         if ((char)AtScreenEdge() * facing * (vx + m_pushVx + (*m_opponent)->m_cornerPushback * ((*m_opponent)->m_hitByBody != 0 && m_freezeTime == 0)) >= 0.0) {
             x = (vx + m_pushVx + (*m_opponent)->m_cornerPushback * ((*m_opponent)->m_hitByBody != 0 && m_freezeTime == 0)) * facing + x;
@@ -384,21 +384,21 @@ void CPlayer::ApplyVelocity()
             y = 0.0;
         }
     }
-    while (v4 != m_objectHead) {
-        if (m_objectActive[v4] != 0 && (m_freezeTime <= 0 || m_objects[v4].movesInFreeze != 0) && m_objects[v4].hitstop == 0 && (*m_opponent)->m_freezeTime == 0) {
-            m_objects[v4].x += (m_objects[v4].vx + 0.0 * m_objects[v4].unk70) * m_objects[v4].facing;
-            m_objects[v4].y = m_objects[v4].y + m_objects[v4].vy;
+    while (slot != m_objectHead) {
+        if (m_objectActive[slot] != 0 && (m_freezeTime <= 0 || m_objects[slot].movesInFreeze != 0) && m_objects[slot].hitstop == 0 && (*m_opponent)->m_freezeTime == 0) {
+            m_objects[slot].x += (m_objects[slot].vx + 0.0 * m_objects[slot].unk70) * m_objects[slot].facing;
+            m_objects[slot].y = m_objects[slot].y + m_objects[slot].vy;
         }
-        v4++;
-        if (v4 >= 0x40) {
-            v4 = 0;
+        slot++;
+        if (slot >= 0x40) {
+            slot = 0;
         }
     }
 }
 
 void CPlayer::UpdateGaugesAndTimers()
 {
-    int v4;
+    int slot; // the object whose hitstop counts down, an index into m_objects
 
     if ((*m_opponent)->m_freezeTime > 0) {
     } else {
@@ -458,18 +458,18 @@ void CPlayer::UpdateGaugesAndTimers()
             m_rfBlue = 0;
             m_rfGauge = 0.0;
         }
-        v4 = m_objectTail;
-        while (v4 != m_objectHead) {
-            if (m_objectActive[v4] != 0) {
-                if (m_objects[v4].hitstop > 0) {
-                    m_objects[v4].hitstop--;
+        slot = m_objectTail;
+        while (slot != m_objectHead) {
+            if (m_objectActive[slot] != 0) {
+                if (m_objects[slot].hitstop > 0) {
+                    m_objects[slot].hitstop--;
                 } else {
-                    m_objects[v4].hitstop = 0;
+                    m_objects[slot].hitstop = 0;
                 }
             }
-            v4++;
-            if (v4 >= 0x40) {
-                v4 = 0;
+            slot++;
+            if (slot >= 0x40) {
+                slot = 0;
             }
         }
         if ((*m_opponent)->IsInHitstun() != 0) {
@@ -520,27 +520,27 @@ char CPlayer::AtScreenEdge()
     return 0;
 }
 
-int CPlayer::CanGuard(PatternFrame* p1, PatternFrame* p2)
+int CPlayer::CanGuard(PatternFrame* attack, PatternFrame* state)
 {
     if (m_noGuardTime > 0) {
         return 0;
     }
-    if ((p1->flagsAA & kAttackUnblockable) > 0) {
+    if ((attack->flagsAA & kAttackUnblockable) > 0) {
         return 0;
     }
-    if ((p2->flagsB0 & kStateCanGuard) == 0) {
+    if ((state->flagsB0 & kStateCanGuard) == 0) {
         return 0;
     }
-    if ((p1->flagsAA & kAttackGuardAir) == 0 && y < 0.0 && m_recoilGuardWindow < 0x1e) {
+    if ((attack->flagsAA & kAttackGuardAir) == 0 && y < 0.0 && m_recoilGuardWindow < 0x1e) {
         return 0;
     }
-    if (HoldsGuard(p1) == 0) {
+    if (HoldsGuard(attack) == 0) {
         return 0;
     }
     return 1;
 }
 
-int CPlayer::HoldsGuard(PatternFrame* p1)
+int CPlayer::HoldsGuard(PatternFrame* attack)
 {
     if (m_cpu != 0) {
         if (m_game->m_gameMode == 1) {
@@ -551,20 +551,20 @@ int CPlayer::HoldsGuard(PatternFrame* p1)
             if (rand() > m_cpuSkill * 1e+04f) {
                 return 0;
             }
-            if ((p1->flagsAA & kAttackGuardStand) == 0) {
+            if ((attack->flagsAA & kAttackGuardStand) == 0) {
                 m_inputY = 1;
-            } else if ((p1->flagsAA & kAttackGuardCrouch) == 0) {
+            } else if ((attack->flagsAA & kAttackGuardCrouch) == 0) {
                 m_inputY = 0;
             }
         }
-        if ((p1->flagsAA & kAttackGuardCrouch) == 0 && m_inputY == 1 && y == 0.0 || (p1->flagsAA & kAttackGuardStand) == 0 && m_inputY != 1 && y == 0.0) {
+        if ((attack->flagsAA & kAttackGuardCrouch) == 0 && m_inputY == 1 && y == 0.0 || (attack->flagsAA & kAttackGuardStand) == 0 && m_inputY != 1 && y == 0.0) {
             return 0;
         }
     } else {
         if (m_inputX != 1 - (((*m_opponent)->x - x > 0.0) << 1) && (IsGuarding() == 0 || m_inputX == 0)) {
             return 0;
         }
-        if ((p1->flagsAA & kAttackGuardCrouch) == 0 && m_inputY == 1 && y == 0.0 || (p1->flagsAA & kAttackGuardStand) == 0 && m_inputY != 1 && y == 0.0) {
+        if ((attack->flagsAA & kAttackGuardCrouch) == 0 && m_inputY == 1 && y == 0.0 || (attack->flagsAA & kAttackGuardStand) == 0 && m_inputY != 1 && y == 0.0) {
             return 0;
         }
     }
@@ -618,16 +618,16 @@ double CPlayer::ProrationFactor()
     return m_proration / 10000.0;
 }
 
-void CPlayer::DealDamage(int p1, double p2)
+void CPlayer::DealDamage(int damage, double proration)
 {
     if (m_comboHits == 0) {
         (*m_opponent)->m_comboStartHp = (*m_opponent)->m_hp;
     }
-    (*m_opponent)->m_hp -= (int)((double)p1 * this->AttackFactor() * (*m_opponent)->DefenseFactor() * this->ProrationFactor());
+    (*m_opponent)->m_hp -= (int)((double)damage * this->AttackFactor() * (*m_opponent)->DefenseFactor() * this->ProrationFactor());
     m_shownProration = m_proration / 100.0;
-    m_proration = p2 / 1000.0 * m_proration;
+    m_proration = proration / 1000.0 * m_proration;
     if (m_proration > 10000.0) {
-        m_proration = p2 / 1000.0 * m_proration;
+        m_proration = proration / 1000.0 * m_proration;
     }
     m_comboHits++;
     m_shownHits = m_comboHits;
@@ -640,10 +640,10 @@ void CPlayer::DealDamage(int p1, double p2)
         m_maxDamage = m_comboDamage;
     }
     m_hitsLanded++;
-    AddScore(p1 / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
+    AddScore(damage / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
-void CPlayer::ScoreHit(PatternFrame* p1)
+void CPlayer::ScoreHit(PatternFrame* attack)
 {
     if ((DWORD)m_comboHits > m_maxHits) {
         m_maxHits = m_comboHits;
@@ -652,31 +652,31 @@ void CPlayer::ScoreHit(PatternFrame* p1)
         m_maxDamage = m_comboDamage;
     }
     m_hitsLanded++;
-    AddScore(p1->damage / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
+    AddScore(attack->damage / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
-void CPlayer::AddScore(int p1)
+void CPlayer::AddScore(int points)
 {
-    m_score += p1;
+    m_score += points;
     while ((unsigned long)m_score >= 0x5f5e100) {
         m_score -= 0x5f5e100;
         m_scoreHigh++;
     }
 }
 
-short CPlayer::Random(short p1, short p2)
+short CPlayer::Random(short low, short high)
 {
-    WORD v8;
-    short v4;
+    WORD roll; // rand(), or the replay's word
+    short result;
 
-    v8 = rand();
+    roll = rand();
     if (m_game->m_replayMode == 1) {
-        v8 = m_game->m_replay.Read();
+        roll = m_game->m_replay.Read();
     } else if (m_game->m_replayMode == 2) {
-        m_game->m_replay.Write(v8);
+        m_game->m_replay.Write(roll);
     }
-    v4 = p1 + (p2 - p1) * v8 / 0x8000;
-    return v4;
+    result = low + (high - low) * roll / 0x8000;
+    return result;
 }
 
 void CPlayer::UpdateAfterimages()
@@ -693,42 +693,42 @@ void CPlayer::UpdateAfterimages()
     }
 }
 
-void CPlayer::StartAfterimages(BYTE p1)
+void CPlayer::StartAfterimages(BYTE spacing)
 {
-    m_afterimages.Start((ObjBase*)this, p1);
+    m_afterimages.Start((ObjBase*)this, spacing);
 }
 
-void CPlayer::ShakeScreen(int p1, int p2)
+void CPlayer::ShakeScreen(int amplitude, int hold)
 {
-    m_game->m_shake = p1;
-    m_game->m_shakeHold = p2;
+    m_game->m_shake = amplitude;
+    m_game->m_shakeHold = hold;
 }
 
-void CPlayer::FocusCameraX(int p1, int p2)
+void CPlayer::FocusCameraX(int percent, int duration)
 {
-    m_game->m_cameraFocusX = (1 - (m_side << 1)) * p1;
-    m_game->m_cameraFocusXTime = p2;
+    m_game->m_cameraFocusX = (1 - (m_side << 1)) * percent;
+    m_game->m_cameraFocusXTime = duration;
 }
 
-void CPlayer::FocusCameraY(int p1, int p2)
+void CPlayer::FocusCameraY(int percent, int duration)
 {
-    m_game->m_cameraFocusY = (1 - (m_side << 1)) * p1;
-    m_game->m_cameraFocusYTime = p2;
+    m_game->m_cameraFocusY = (1 - (m_side << 1)) * percent;
+    m_game->m_cameraFocusYTime = duration;
 }
 
-void CPlayer::Tint(BYTE p1, int p2)
+void CPlayer::Tint(BYTE color, int duration)
 {
-    m_tintColor = p1;
-    m_tintTime = p2;
+    m_tintColor = color;
+    m_tintTime = duration;
     if (m_game->m_drawEveryFrame == 0) {
         m_tintTime = m_tintTime / 2;
     }
 }
 
-void CPlayer::FillBackground(BYTE p1, int p2)
+void CPlayer::FillBackground(BYTE color, int duration)
 {
-    m_fillColor = p1;
-    m_fillTime = p2;
+    m_fillColor = color;
+    m_fillTime = duration;
     if (m_game->m_drawEveryFrame == 0) {
         m_fillTime = m_fillTime / 2;
     }
@@ -737,8 +737,8 @@ void CPlayer::FillBackground(BYTE p1, int p2)
 
 void CPlayer::Load()
 {
-    char v2c[32];
-    char vc[8];
+    char path[32];
+    char number[8]; // the palette's number, as text
 
     if (m_loaded == 0) {
         LoadSprites();
@@ -747,42 +747,42 @@ void CPlayer::Load()
         m_loaded = 1;
     } else if (1) {
         if (m_game->m_editColor[m_side] != 0) {
-            strcpy(v2c, m_name);
-            strcat(v2c, "\\");
-            strcat(v2c, m_name);
-            _itoa(m_paletteIndex + 1, vc, 0xa);
-            strcat(v2c, (const char*)vc);
-            strcat(v2c, ".pal");
-            if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, 0, m_side * 0x28 + 0x5f, 0x28) == 0) {
-                strcpy(v2c, m_name);
-                strcat(v2c, "\\");
-                strcat(v2c, m_name);
-                strcat(v2c, ".dat");
-                m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+            strcpy(path, m_name);
+            strcat(path, "\\");
+            strcat(path, m_name);
+            _itoa(m_paletteIndex + 1, number, 0xa);
+            strcat(path, (const char*)number);
+            strcat(path, ".pal");
+            if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 0x28 + 0x5f, 0x28) == 0) {
+                strcpy(path, m_name);
+                strcat(path, "\\");
+                strcat(path, m_name);
+                strcat(path, ".dat");
+                m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
             }
         } else {
-            strcpy(v2c, m_name);
-            strcat(v2c, "\\");
-            strcat(v2c, m_name);
-            strcat(v2c, ".dat");
-            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+            strcpy(path, m_name);
+            strcat(path, "\\");
+            strcat(path, m_name);
+            strcat(path, ".dat");
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
     } else if (m_game->m_editColor[m_side] != 0) {
-        strcpy(v2c, m_name);
-        strcat(v2c, "\\");
-        strcat(v2c, m_name);
-        _itoa(m_paletteIndex + 1, vc, 0xa);
-        strcat(v2c, (const char*)vc);
-        strcat(v2c, ".pal");
-        if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, 0, m_side * 0x28 + 0x5f, 0x28) == 0) {
-            strcpy(v2c, m_name);
-            strcat(v2c, "\\000.bmp");
-            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+        strcpy(path, m_name);
+        strcat(path, "\\");
+        strcat(path, m_name);
+        _itoa(m_paletteIndex + 1, number, 0xa);
+        strcat(path, (const char*)number);
+        strcat(path, ".pal");
+        if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 0x28 + 0x5f, 0x28) == 0) {
+            strcpy(path, m_name);
+            strcat(path, "\\000.bmp");
+            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
     } else {
-        strcpy(v2c, m_name);
-        strcat(v2c, "\\000.bmp");
-        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+        strcpy(path, m_name);
+        strcat(path, "\\000.bmp");
+        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
     }
     Reset();
     if (m_cpu == 0) {
@@ -802,93 +802,93 @@ void CPlayer::Load()
 
 void CPlayer::LoadSprites()
 {
-    int x74;
-    int v70;
-    int a6c;
-    char v68[32];
-    int l48;
-    char* x44;
-    int v40;
-    int h3c;
-    int n38;
-    int a34;
-    int d30;
-    char x2c[32];
-    char bc[8];
+    int buffer; // the file buffer from operator new, as an int
+    int table; // the surfaces array from operator new, as an int
+    int bmp; // the sprite loaded from <name>\NNN.bmp (a branch never taken)
+    char message[32]; // the number of the sprite that failed, as text
+    int i;
+    char* data; // the .dat file: a count of palette entries, the entries, then the sprites
+    int bytesRead;
+    int size; // the .dat file's size
+    int offset; // where in data the next sprite starts
+    int spriteSize; // bytes LoadSurfaceHigh read, 0 on a failure
+    int file; // the .dat file's handle
+    char path[32];
+    char number[8]; // the palette's or sprite's number, as text
 
-    v70 = TOINT(int, operator new(lastSurface * 4 + 4));
-    surfaces = TOPTR(PTR32(IDirectDrawSurface)*, v70);
+    table = TOINT(int, operator new(lastSurface * 4 + 4));
+    surfaces = TOPTR(PTR32(IDirectDrawSurface)*, table);
     if (1) {
-        n38 = 0;
-        strcpy(x2c, m_name);
-        strcat(x2c, "\\");
-        strcat(x2c, m_name);
-        strcat(x2c, ".dat");
-        d30 = (int)CreateFileA((LPCSTR)x2c, 0x80000000, 0, 0, 3, 0x80, 0);
-        h3c = GetFileSize((HANDLE)d30, 0);
-        x74 = TOINT(int, operator new(h3c));
-        x44 = TOPTR(char*, x74);
-        ReadFile((HANDLE)d30, (LPVOID)x44, h3c, (LPDWORD)&v40, 0);
-        n38 = *(BYTE*)x44 * 3 + 1;
-        l48 = 0;
-        for (; l48 <= lastSurface; l48++) {
-            a34 = m_graphics->LoadSurfaceHigh(&surfaces[l48], (BYTE*)(x44 + n38), 0x80, m_side * 0x28 + 0x5f);
-            if (a34 == 0) {
-                _itoa(l48, v68, 0xa);
-                MessageBoxA(0, (LPCSTR)v68, 0, 0);
+        offset = 0;
+        strcpy(path, m_name);
+        strcat(path, "\\");
+        strcat(path, m_name);
+        strcat(path, ".dat");
+        file = (int)CreateFileA((LPCSTR)path, 0x80000000, 0, 0, 3, 0x80, 0);
+        size = GetFileSize((HANDLE)file, 0);
+        buffer = TOINT(int, operator new(size));
+        data = TOPTR(char*, buffer);
+        ReadFile((HANDLE)file, (LPVOID)data, size, (LPDWORD)&bytesRead, 0);
+        offset = *(BYTE*)data * 3 + 1;
+        i = 0;
+        for (; i <= lastSurface; i++) {
+            spriteSize = m_graphics->LoadSurfaceHigh(&surfaces[i], (BYTE*)(data + offset), 0x80, m_side * 0x28 + 0x5f);
+            if (spriteSize == 0) {
+                _itoa(i, message, 0xa);
+                MessageBoxA(0, (LPCSTR)message, 0, 0);
             } else {
-                n38 += a34;
+                offset += spriteSize;
             }
         }
-        CloseHandle((HANDLE)d30);
-        delete (char*)x44;
+        CloseHandle((HANDLE)file);
+        delete (char*)data;
         if (m_game->m_editColor[m_side] != 0) {
-            strcpy(x2c, m_name);
-            strcat(x2c, "\\");
-            strcat(x2c, m_name);
-            _itoa(m_paletteIndex + 1, bc, 0xa);
-            strcat(x2c, (const char*)bc);
-            strcat(x2c, ".pal");
-            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)x2c, 0, m_side * 0x28 + 0x5f, 0x28);
+            strcpy(path, m_name);
+            strcat(path, "\\");
+            strcat(path, m_name);
+            _itoa(m_paletteIndex + 1, number, 0xa);
+            strcat(path, (const char*)number);
+            strcat(path, ".pal");
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 0x28 + 0x5f, 0x28);
         } else {
-            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)x2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
     } else {
-        a6c = 0;
-        for (; a6c <= lastSurface; a6c++) {
-            strcpy(x2c, m_name);
-            strcat(x2c, "\\");
-            if (a6c >= 0x3e8) {
-                strcat(x2c, "A");
-                _itoa(a6c, bc, 0xa);
-                strcat(x2c, (const char*)bc);
-                strcat(x2c, ".bmp");
-                m_graphics->LoadBmpHigh(&surfaces[a6c], (const char*)x2c, m_side * 0x28 + 0x5f);
+        bmp = 0;
+        for (; bmp <= lastSurface; bmp++) {
+            strcpy(path, m_name);
+            strcat(path, "\\");
+            if (bmp >= 0x3e8) {
+                strcat(path, "A");
+                _itoa(bmp, number, 0xa);
+                strcat(path, (const char*)number);
+                strcat(path, ".bmp");
+                m_graphics->LoadBmpHigh(&surfaces[bmp], (const char*)path, m_side * 0x28 + 0x5f);
             } else {
-                if (a6c < 0x64) {
-                    strcat(x2c, "0");
+                if (bmp < 0x64) {
+                    strcat(path, "0");
                 }
-                if (a6c < 0xa) {
-                    strcat(x2c, "0");
+                if (bmp < 0xa) {
+                    strcat(path, "0");
                 }
-                _itoa(a6c, bc, 0xa);
-                strcat(x2c, (const char*)bc);
-                strcat(x2c, ".bmp");
-                m_graphics->LoadBmpHigh(&surfaces[a6c], (const char*)x2c, m_side * 0x28 + 0x5f);
+                _itoa(bmp, number, 0xa);
+                strcat(path, (const char*)number);
+                strcat(path, ".bmp");
+                m_graphics->LoadBmpHigh(&surfaces[bmp], (const char*)path, m_side * 0x28 + 0x5f);
             }
         }
         if (m_game->m_editColor[m_side] != 0) {
-            strcpy(x2c, m_name);
-            strcat(x2c, "\\");
-            strcat(x2c, m_name);
-            _itoa(m_paletteIndex + 1, bc, 0xa);
-            strcat(x2c, (const char*)bc);
-            strcat(x2c, ".pal");
-            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)x2c, 0, m_side * 0x28 + 0x5f, 0x28);
+            strcpy(path, m_name);
+            strcat(path, "\\");
+            strcat(path, m_name);
+            _itoa(m_paletteIndex + 1, number, 0xa);
+            strcat(path, (const char*)number);
+            strcat(path, ".pal");
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 0x28 + 0x5f, 0x28);
         } else {
-            strcpy(x2c, m_name);
-            strcat(x2c, "\\000.bmp");
-            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)x2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+            strcpy(path, m_name);
+            strcat(path, "\\000.bmp");
+            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
     }
     colorKey = m_graphics->GetColorKey(*surfaces);
@@ -896,105 +896,105 @@ void CPlayer::LoadSprites()
 
 void CPlayer::LoadPatterns()
 {
-    int c50;
-    PatternFrame* l4c;
-    EffectFrame* l48;
-    int x44;
-    int v40;
-    int f3c;
-    int x38;
-    char x34[32];
-    int l4;
+    int box;
+    PatternFrame* frameData; // the frame's boxes and attack values being read
+    EffectFrame* sprite; // the frame's sprite and timing being read
+    int j;
+    int i;
+    int frameCount;
+    int action; // the pattern the record is for
+    char path[32];
+    int patternCount;
 
-    strcpy(x34, m_name);
-    strcat(x34, "\\");
-    strcat(x34, m_name);
-    strcat(x34, ".pat");
-    CFile k10(x34, 1);
-    l4 = k10.ReadInt();
-    v40 = 0;
-    for (; v40 < l4; v40++) {
-        x38 = k10.ReadInt();
-        m_patterns[x38].level = k10.ReadInt();
-        m_patterns[x38].cancelLevel = k10.ReadInt();
-        anims[x38].frameCount = k10.ReadInt();
-        f3c = anims[x38].frameCount;
-        m_patterns[x38].Alloc(f3c);
-        anims[x38].Alloc(f3c);
-        x44 = 0;
-        for (; x44 < f3c; x44++) {
-            l48 = &anims[x38].frames[x44];
-            l4c = &m_patterns[x38].frames[x44];
-            l48->duration = (short)k10.ReadInt() * 3;
-            l48->surface = k10.ReadInt();
-            l48->width = k10.ReadInt();
-            l48->height = k10.ReadInt();
-            l48->x = k10.ReadInt();
-            l48->y = k10.ReadInt();
-            l4c->damage = k10.ReadInt();
-            l4c->flagsAA = k10.ReadInt();
-            l4c->airHitPattern = k10.ReadInt();
-            l4c->flagsB0 = k10.ReadInt();
-            l4c->untechTime = k10.ReadInt();
-            l4c->chipDamage = k10.ReadInt();
-            l4c->gaugeOnHit = k10.ReadInt();
-            l4c->gaugeOnGuard = k10.ReadInt();
-            l4c->hitVy = (short)k10.ReadShort();
-            l4c->hitVy = l4c->hitVy / 1e+02f;
-            l4c->hitVx = (short)k10.ReadShort();
-            l4c->hitVx = l4c->hitVx / -1e+02f;
-            l4c->hitSound = k10.ReadShort();
-            l4c->hitEffect = k10.ReadShort();
-            l4c->attackerHitstop = k10.ReadInt();
-            l4c->defenderHitstop = k10.ReadInt();
-            l4c->proration = k10.ReadInt();
-            l4c->groundHitPattern = k10.ReadInt();
-            k10.Read((void*)&l4c->pushBox.left, 0x10);
-            c50 = 0;
-            for (; c50 < 2; c50++) {
-                k10.Read((void*)((c50 << 4) + (char*)l4c), 0x10);
+    strcpy(path, m_name);
+    strcat(path, "\\");
+    strcat(path, m_name);
+    strcat(path, ".pat");
+    CFile file(path, 1);
+    patternCount = file.ReadInt();
+    i = 0;
+    for (; i < patternCount; i++) {
+        action = file.ReadInt();
+        m_patterns[action].level = file.ReadInt();
+        m_patterns[action].cancelLevel = file.ReadInt();
+        anims[action].frameCount = file.ReadInt();
+        frameCount = anims[action].frameCount;
+        m_patterns[action].Alloc(frameCount);
+        anims[action].Alloc(frameCount);
+        j = 0;
+        for (; j < frameCount; j++) {
+            sprite = &anims[action].frames[j];
+            frameData = &m_patterns[action].frames[j];
+            sprite->duration = (short)file.ReadInt() * 3;
+            sprite->surface = file.ReadInt();
+            sprite->width = file.ReadInt();
+            sprite->height = file.ReadInt();
+            sprite->x = file.ReadInt();
+            sprite->y = file.ReadInt();
+            frameData->damage = file.ReadInt();
+            frameData->flagsAA = file.ReadInt();
+            frameData->airHitPattern = file.ReadInt();
+            frameData->flagsB0 = file.ReadInt();
+            frameData->untechTime = file.ReadInt();
+            frameData->chipDamage = file.ReadInt();
+            frameData->gaugeOnHit = file.ReadInt();
+            frameData->gaugeOnGuard = file.ReadInt();
+            frameData->hitVy = (short)file.ReadShort();
+            frameData->hitVy = frameData->hitVy / 1e+02f;
+            frameData->hitVx = (short)file.ReadShort();
+            frameData->hitVx = frameData->hitVx / -1e+02f;
+            frameData->hitSound = file.ReadShort();
+            frameData->hitEffect = file.ReadShort();
+            frameData->attackerHitstop = file.ReadInt();
+            frameData->defenderHitstop = file.ReadInt();
+            frameData->proration = file.ReadInt();
+            frameData->groundHitPattern = file.ReadInt();
+            file.Read((void*)&frameData->pushBox.left, 0x10);
+            box = 0;
+            for (; box < 2; box++) {
+                file.Read((void*)((box << 4) + (char*)frameData), 0x10);
             }
-            k10.Read((void*)&l4c->attackBoxes[0].left, 0x10);
-            c50 = 2;
-            for (; c50 < 5; c50++) {
-                k10.Read((void*)((c50 << 4) + (char*)l4c), 0x10);
+            file.Read((void*)&frameData->attackBoxes[0].left, 0x10);
+            box = 2;
+            for (; box < 5; box++) {
+                file.Read((void*)((box << 4) + (char*)frameData), 0x10);
             }
-            c50 = 1;
-            for (; c50 < 4; c50++) {
-                k10.Read((void*)&l4c->attackBoxes[c50].left, 0x10);
+            box = 1;
+            for (; box < 4; box++) {
+                file.Read((void*)&frameData->attackBoxes[box].left, 0x10);
             }
         }
     }
-    v40 = 0;
-    for (; v40 < 0x40; v40++) {
-        m_objects[v40].anims = anims;
+    i = 0;
+    for (; i < 0x40; i++) {
+        m_objects[i].anims = anims;
     }
 }
 
 void CPlayer::LoadVoices()
 {
-    int v30;
-    char v2c[32];
-    char vc[8];
+    int i;
+    char path[32];
+    char number[8]; // the voice's number, as text
 
-    v30 = 0;
-    for (; v30 < 0x32; v30++) {
-        strcpy(v2c, m_name);
-        strcat(v2c, "\\wave\\");
-        if (v30 < 0xa) {
-            strcat(v2c, "0");
+    i = 0;
+    for (; i < 0x32; i++) {
+        strcpy(path, m_name);
+        strcat(path, "\\wave\\");
+        if (i < 0xa) {
+            strcat(path, "0");
         }
-        _itoa(v30, vc, 0xa);
-        strcat(v2c, (const char*)vc);
-        strcat(v2c, ".wav");
-        m_voices[v30] = m_sound->Load((const char*)v2c);
-        m_sound->SetVolume(m_voices[v30], -0x1f4);
+        _itoa(i, number, 0xa);
+        strcat(path, (const char*)number);
+        strcat(path, ".wav");
+        m_voices[i] = m_sound->Load((const char*)path);
+        m_sound->SetVolume(m_voices[i], -0x1f4);
     }
 }
 
 void CPlayer::ReadInput()
 {
-    BYTE v1;
+    BYTE input; // this tick's bits (as m_inputHistory's), from GetInput or the replay
 
     if (m_cpu != 0) {
         if (m_game->m_gameMode == 1) {
@@ -1022,11 +1022,11 @@ void CPlayer::ReadInput()
         }
         return;
     }
-    v1 = m_input->GetInput(m_side);
+    input = m_input->GetInput(m_side);
     if (m_game->m_replayMode == 1) {
-        v1 = m_game->m_replay.Read();
+        input = m_game->m_replay.Read();
     } else if (m_game->m_replayMode == 2) {
-        m_game->m_replay.Write(v1);
+        m_game->m_replay.Write(input);
     }
     m_inputX = 0;
     m_inputY = 0;
@@ -1034,41 +1034,41 @@ void CPlayer::ReadInput()
     m_pressB = 0;
     m_pressC = 0;
     m_pressD = 0;
-    if ((v1 & 8) > 0) {
+    if ((input & 8) > 0) {
         m_inputY = -1;
-    } else if ((v1 & 4) > 0) {
+    } else if ((input & 4) > 0) {
         m_inputY = 1;
     }
     if (facing > 0) {
-        if ((v1 & 2) > 0) {
+        if ((input & 2) > 0) {
             m_inputX = -1;
-        } else if ((v1 & 1) > 0) {
+        } else if ((input & 1) > 0) {
             m_inputX = 1;
         }
-    } else if ((v1 & 1) > 0) {
+    } else if ((input & 1) > 0) {
         m_inputX = 1;
-    } else if ((v1 & 2) > 0) {
+    } else if ((input & 2) > 0) {
         m_inputX = -1;
     }
-    if ((v1 & 0x10) > 0) {
+    if ((input & 0x10) > 0) {
         m_pressA = m_holdA == 0;
         m_holdA = 1;
     } else {
         m_holdA = 0;
     }
-    if ((v1 & 0x20) > 0) {
+    if ((input & 0x20) > 0) {
         m_pressB = m_holdB == 0;
         m_holdB = 1;
     } else {
         m_holdB = 0;
     }
-    if ((v1 & 0x40) > 0) {
+    if ((input & 0x40) > 0) {
         m_pressC = m_holdC == 0;
         m_holdC = 1;
     } else {
         m_holdC = 0;
     }
-    if ((v1 & 0x80) > 0) {
+    if ((input & 0x80) > 0) {
         m_pressD = m_holdD == 0;
         m_holdD = 1;
     } else {
@@ -1109,71 +1109,71 @@ void CPlayer::ReadInput()
     ReadCommand();
 }
 
-void CPlayer::DrawSprite(int p1, int p2)
+void CPlayer::DrawSprite(int drawX, int drawY)
 {
-    int v34;
-    RECT v30;
-    EffectFrame v20;
-    RECT v14;
-    int l4;
+    int pos; // the afterimage drawn, an index into m_afterimages' positions
+    RECT src; // the part of the sprite drawn
+    EffectFrame sprite; // the frame drawn
+    RECT dst; // where on the screen
+    int i;
 
     if (m_afterimages.spacing > 0 || m_afterimages.fadeLength > 0) {
-        v34 = m_afterimages.pos - (m_afterimages.spacing * 3 + m_afterimages.fadeLength);
-        l4 = 0;
-        for (; l4 < m_afterimages.fadeLength + m_afterimages.spacing * 3; l4 = m_afterimages.step + l4) {
-            if (v34 >= 0x3c) {
-                v34 -= 0x3c;
+        pos = m_afterimages.pos - (m_afterimages.spacing * 3 + m_afterimages.fadeLength);
+        i = 0;
+        for (; i < m_afterimages.fadeLength + m_afterimages.spacing * 3; i = m_afterimages.step + i) {
+            if (pos >= 0x3c) {
+                pos -= 0x3c;
             }
-            if (v34 < 0) {
-                v34 += 0x3c;
+            if (pos < 0) {
+                pos += 0x3c;
             }
-            v20 = anims[m_afterimages.pattern[v34]].frames[m_afterimages.frame[v34]];
-            v30.left = 0;
-            v30.top = 0;
-            v30.right = v20.width;
-            v30.bottom = v20.height;
-            v14.left = (int)m_afterimages.x[v34] + p1 - v20.x * (m_afterimages.facing[v34] == 1) - (v20.width - v20.x) * (m_afterimages.facing[v34] == -1);
-            v14.top = (int)m_afterimages.y[v34] + 0xd2 - (m_afterimages.y[v34] < 0.0) - v20.y + p2;
-            v14.right = v20.width + v14.left;
-            v14.bottom = v20.height + v14.top;
-            m_graphics->BlitEx(v14, surfaces[v20.surface], v30, colorKey, m_afterimages.facing[v34] == -1, 0);
-            v34 = m_afterimages.step + v34;
+            sprite = anims[m_afterimages.pattern[pos]].frames[m_afterimages.frame[pos]];
+            src.left = 0;
+            src.top = 0;
+            src.right = sprite.width;
+            src.bottom = sprite.height;
+            dst.left = (int)m_afterimages.x[pos] + drawX - sprite.x * (m_afterimages.facing[pos] == 1) - (sprite.width - sprite.x) * (m_afterimages.facing[pos] == -1);
+            dst.top = (int)m_afterimages.y[pos] + 0xd2 - (m_afterimages.y[pos] < 0.0) - sprite.y + drawY;
+            dst.right = sprite.width + dst.left;
+            dst.bottom = sprite.height + dst.top;
+            m_graphics->BlitEx(dst, surfaces[sprite.surface], src, colorKey, m_afterimages.facing[pos] == -1, 0);
+            pos = m_afterimages.step + pos;
         }
     }
-    v20 = anims[pattern].frames[frame];
-    v30.left = 0;
-    v30.top = 0;
-    v30.right = v20.width;
-    v30.bottom = v20.height;
-    v14.left = (int)x + p1 - v20.x * (facing == 1) - (v20.width - v20.x) * (facing == -1);
-    v14.top = (int)y + 0xd2 - (y < 0.0) - v20.y + p2;
-    v14.right = v20.width + v14.left;
-    v14.bottom = v20.height + v14.top;
-    if (v14.top < 0xf0) {
+    sprite = anims[pattern].frames[frame];
+    src.left = 0;
+    src.top = 0;
+    src.right = sprite.width;
+    src.bottom = sprite.height;
+    dst.left = (int)x + drawX - sprite.x * (facing == 1) - (sprite.width - sprite.x) * (facing == -1);
+    dst.top = (int)y + 0xd2 - (y < 0.0) - sprite.y + drawY;
+    dst.right = sprite.width + dst.left;
+    dst.bottom = sprite.height + dst.top;
+    if (dst.top < 0xf0) {
         if (m_tintTime == 0) {
             if (m_drawMode == 3) {
-                m_graphics->BlitSmear(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
+                m_graphics->BlitSmear(dst, surfaces[sprite.surface], src, colorKey, facing == -1);
             } else if (m_drawMode > 0) {
-                m_graphics->BlitEx(v14, surfaces[v20.surface], v30, colorKey, facing == -1, m_drawMode - 1);
+                m_graphics->BlitEx(dst, surfaces[sprite.surface], src, colorKey, facing == -1, m_drawMode - 1);
             } else {
-                m_graphics->Blit(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
+                m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, facing == -1);
             }
         } else {
-            m_graphics->BlitTint(v14, surfaces[v20.surface], v30, colorKey, facing == -1, m_tintColor);
+            m_graphics->BlitTint(dst, surfaces[sprite.surface], src, colorKey, facing == -1, m_tintColor);
             m_tintTime--;
         }
         return;
     }
     if (m_hideOffscreenMarker == 0) {
-        v20 = *anims[kOffscreenMarker].frames;
-        v30.left = 0;
-        v30.top = 0;
-        v30.right = v20.width;
-        v30.bottom = v20.height;
-        v14.left = (int)x + p1 - v20.x * (facing == 1) - (v20.width - v20.x) * (facing == -1);
-        v14.top = 0xef - v20.y;
-        v14.right = v20.width + v14.left;
-        v14.bottom = v20.height + v14.top;
-        m_graphics->Blit(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
+        sprite = *anims[kOffscreenMarker].frames;
+        src.left = 0;
+        src.top = 0;
+        src.right = sprite.width;
+        src.bottom = sprite.height;
+        dst.left = (int)x + drawX - sprite.x * (facing == 1) - (sprite.width - sprite.x) * (facing == -1);
+        dst.top = 0xef - sprite.y;
+        dst.right = sprite.width + dst.left;
+        dst.bottom = sprite.height + dst.top;
+        m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, facing == -1);
     }
 }

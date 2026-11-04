@@ -11,66 +11,66 @@
 
 void CAnimBg::Load()
 {
-    int v48;
-    int f44;
-    char* h40;
-    int a3c;
-    int v38;
-    int v34;
-    int v30;
-    char v2c[32];
-    char vc[8];
+    int buffer; // operator new's block, then data
+    int bmpFrame; // the same for the .bmp files, in the branch if (1) never takes
+    char* data;
+    int bytesRead;
+    int size;
+    int file; // the .dat file's handle
+    int frame; // the frame loaded: MMM in its file name, and its surface
+    char path[32];
+    char num[8];
 
     if (1) {
-        v30 = 0;
-        for (; v30 <= m_lastFrame; v30++) {
+        frame = 0;
+        for (; frame <= m_lastFrame; frame++) {
             if (m_number >= 0xa) {
-                strcpy(v2c, "system\\bg\\bg");
+                strcpy(path, "system\\bg\\bg");
             } else {
-                strcpy(v2c, "system\\bg\\bg0");
+                strcpy(path, "system\\bg\\bg0");
             }
-            _itoa(m_number, vc, 0xa);
-            strcat(v2c, (const char*)vc);
-            if (v30 >= 0x64) {
-                strcat(v2c, "\\");
-            } else if (v30 >= 0xa) {
-                strcat(v2c, "\\0");
+            _itoa(m_number, num, 0xa);
+            strcat(path, (const char*)num);
+            if (frame >= 0x64) {
+                strcat(path, "\\");
+            } else if (frame >= 0xa) {
+                strcat(path, "\\0");
             } else {
-                strcat(v2c, "\\00");
+                strcat(path, "\\00");
             }
-            _itoa(v30, vc, 0xa);
-            strcat(v2c, (const char*)vc);
-            strcat(v2c, ".dat");
-            v34 = (int)CreateFileA((LPCSTR)v2c, 0x80000000, 0, 0, 3, 0x80, 0);
-            v38 = GetFileSize((HANDLE)v34, 0);
-            v48 = TOINT(int, operator new(v38));
-            h40 = TOPTR(char*, v48);
-            ReadFile((HANDLE)v34, (LPVOID)h40, v38, (LPDWORD)&a3c, 0);
-            m_graphics->LoadSurface(&m_surfaces[v30], (BYTE*)(h40 + *(BYTE*)h40 * 3 + 1), 0, 1);
-            CloseHandle((HANDLE)v34);
-            delete (char*)h40;
+            _itoa(frame, num, 0xa);
+            strcat(path, (const char*)num);
+            strcat(path, ".dat");
+            file = (int)CreateFileA((LPCSTR)path, 0x80000000, 0, 0, 3, 0x80, 0);
+            size = GetFileSize((HANDLE)file, 0);
+            buffer = TOINT(int, operator new(size));
+            data = TOPTR(char*, buffer);
+            ReadFile((HANDLE)file, (LPVOID)data, size, (LPDWORD)&bytesRead, 0);
+            m_graphics->LoadSurface(&m_surfaces[frame], (BYTE*)(data + *(BYTE*)data * 3 + 1), 0, 1);
+            CloseHandle((HANDLE)file);
+            delete (char*)data;
         }
     } else {
-        f44 = 0;
-        for (; f44 <= m_lastFrame; f44++) {
+        bmpFrame = 0;
+        for (; bmpFrame <= m_lastFrame; bmpFrame++) {
             if (m_number >= 0xa) {
-                strcpy(v2c, "system\\bg\\bg");
+                strcpy(path, "system\\bg\\bg");
             } else {
-                strcpy(v2c, "system\\bg\\bg0");
+                strcpy(path, "system\\bg\\bg0");
             }
-            _itoa(m_number, vc, 0xa);
-            strcat(v2c, (const char*)vc);
-            if (f44 >= 0x64) {
-                strcat(v2c, "\\");
-            } else if (f44 >= 0xa) {
-                strcat(v2c, "\\0");
+            _itoa(m_number, num, 0xa);
+            strcat(path, (const char*)num);
+            if (bmpFrame >= 0x64) {
+                strcat(path, "\\");
+            } else if (bmpFrame >= 0xa) {
+                strcat(path, "\\0");
             } else {
-                strcat(v2c, "\\00");
+                strcat(path, "\\00");
             }
-            _itoa(f44, vc, 0xa);
-            strcat(v2c, (const char*)vc);
-            strcat(v2c, ".bmp");
-            m_graphics->LoadBmp(&m_surfaces[f44], (const char*)v2c, 1);
+            _itoa(bmpFrame, num, 0xa);
+            strcat(path, (const char*)num);
+            strcat(path, ".bmp");
+            m_graphics->LoadBmp(&m_surfaces[bmpFrame], (const char*)path, 1);
         }
     }
     m_colorKey = m_graphics->GetColorKey(*m_surfaces);
@@ -78,110 +78,110 @@ void CAnimBg::Load()
 
 void CAnimBg::LoadAnims()
 {
-    int h60;
-    int l5c;
-    int l58;
-    int x54;
-    int l50;
-    char v4c[32];
-    int b20;
-    char v1c[8];
-    int n10[4];
+    int box; // the frame's ten 16-byte boxes, skipped
+    int j; // the frame read
+    int i; // the animation read
+    int frameCount; // frames in the animation
+    int animNumber; // the record's first int, unused; a character .pat has the pattern number there
+    char path[32];
+    int animCount;
+    char num[8];
+    int skip[4]; // where each box is read and thrown away
 
     if (m_number >= 0xa) {
-        strcpy(v4c, "system\\bg\\bg");
+        strcpy(path, "system\\bg\\bg");
     } else {
-        strcpy(v4c, "system\\bg\\bg0");
+        strcpy(path, "system\\bg\\bg0");
     }
-    _itoa(m_number, v1c, 0xa);
-    strcat(v4c, (const char*)v1c);
+    _itoa(m_number, num, 0xa);
+    strcat(path, (const char*)num);
     if (m_number >= 0xa) {
-        strcat(v4c, "\\bg");
+        strcat(path, "\\bg");
     } else {
-        strcat(v4c, "\\bg0");
+        strcat(path, "\\bg0");
     }
-    strcat(v4c, (const char*)v1c);
-    strcat(v4c, ".pat");
-    CFile l2c(v4c, 1);
-    b20 = l2c.ReadInt();
-    m_anims = new EffectAnim[b20];
-    l58 = 0;
-    for (; l58 < b20; l58++) {
-        l50 = l2c.ReadInt();
-        l2c.ReadInt();
-        l2c.ReadInt();
-        m_anims[l58].frameCount = l2c.ReadInt();
-        x54 = m_anims[l58].frameCount;
-        (&m_anims[l58])->Alloc(x54);
-        l5c = 0;
-        for (; l5c < x54; l5c++) {
-            m_anims[l58].frames[l5c].duration = l2c.ReadInt();
-            m_anims[l58].frames[l5c].surface = l2c.ReadInt();
-            m_anims[l58].frames[l5c].width = l2c.ReadInt();
-            m_anims[l58].frames[l5c].height = l2c.ReadInt();
-            m_anims[l58].frames[l5c].x = l2c.ReadInt();
-            m_anims[l58].frames[l5c].y = l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            l2c.ReadInt();
-            h60 = 0;
-            for (; h60 < 0xa; h60++) {
-                l2c.Read((void*)n10, 0x10);
+    strcat(path, (const char*)num);
+    strcat(path, ".pat");
+    CFile file(path, 1);
+    animCount = file.ReadInt();
+    m_anims = new EffectAnim[animCount];
+    i = 0;
+    for (; i < animCount; i++) {
+        animNumber = file.ReadInt();
+        file.ReadInt();
+        file.ReadInt();
+        m_anims[i].frameCount = file.ReadInt();
+        frameCount = m_anims[i].frameCount;
+        (&m_anims[i])->Alloc(frameCount);
+        j = 0;
+        for (; j < frameCount; j++) {
+            m_anims[i].frames[j].duration = file.ReadInt();
+            m_anims[i].frames[j].surface = file.ReadInt();
+            m_anims[i].frames[j].width = file.ReadInt();
+            m_anims[i].frames[j].height = file.ReadInt();
+            m_anims[i].frames[j].x = file.ReadInt();
+            m_anims[i].frames[j].y = file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            file.ReadInt();
+            box = 0;
+            for (; box < 0xa; box++) {
+                file.Read((void*)skip, 0x10);
             }
         }
     }
 }
 
-CBg01::CBg01(CGraphics* p1)
+CBg01::CBg01(CGraphics* graphics)
     : CAnimBg()
 {
-    int xc;
-    int v8;
-    int v4;
+    int objects; // the block for m_objects
+    int surfaces; // the block for m_surfaces, a pointer per frame
+    int i;
 
-    m_graphics = p1;
+    m_graphics = graphics;
     m_number = 1;
     m_lastFrame = 0x39;
-    v8 = TOINT(int, operator new(0xe8));
-    m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, v8);
-    xc = TOINT(int, operator new(0xe0));
-    m_objects = TOPTR(BgObject*, xc);
+    surfaces = TOINT(int, operator new(0xe8));
+    m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, surfaces);
+    objects = TOINT(int, operator new(0xe0));
+    m_objects = TOPTR(BgObject*, objects);
     m_anims = new EffectAnim[2];
     CAnimBg::Load();
     CAnimBg::LoadAnims();
-    v4 = 0;
-    for (; v4 < 2; v4++) {
-        m_objects[v4].pattern = v4;
-        m_objects[v4].x = 0.0;
-        m_objects[v4].y = -450.0;
-        m_objects[v4].frame = 0;
-        m_objects[v4].timer = 0;
-        m_objects[v4].facing = 1;
-        m_objects[v4].scale = 2;
-        m_objects[v4].layer = 0;
+    i = 0;
+    for (; i < 2; i++) {
+        m_objects[i].pattern = i;
+        m_objects[i].x = 0.0;
+        m_objects[i].y = -450.0;
+        m_objects[i].frame = 0;
+        m_objects[i].timer = 0;
+        m_objects[i].facing = 1;
+        m_objects[i].scale = 2;
+        m_objects[i].layer = 0;
     }
 }
 
 CBg01::~CBg01()
 {
-    int v4;
+    int i;
 
-    v4 = 0;
-    for (; v4 < 0x3a; v4++) {
-        if ((int)m_surfaces[v4] != 0) {
-            m_surfaces[v4]->Release();
-            m_surfaces[v4] = (IDirectDrawSurface*)0;
+    i = 0;
+    for (; i < 0x3a; i++) {
+        if ((int)m_surfaces[i] != 0) {
+            m_surfaces[i]->Release();
+            m_surfaces[i] = (IDirectDrawSurface*)0;
         }
     }
     delete (char*)m_surfaces;
@@ -191,58 +191,58 @@ CBg01::~CBg01()
 
 void CBg01::Update()
 {
-    WORD xc;
-    WORD v8;
-    int v4;
+    WORD frameCount; // frames in the object's animation
+    WORD duration; // ticks the object's current frame lasts
+    int i;
 
-    v4 = 0;
-    for (; v4 < 2; v4++) {
-        v8 = (short)m_anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
-        xc = m_anims[m_objects[v4].pattern].frameCount;
-        switch (m_objects[v4].pattern) {
+    i = 0;
+    for (; i < 2; i++) {
+        duration = (short)m_anims[m_objects[i].pattern].frames[m_objects[i].frame].duration;
+        frameCount = m_anims[m_objects[i].pattern].frameCount;
+        switch (m_objects[i].pattern) {
         case kStand:
         case kWalkForward:
-            m_objects[v4].timer++;
-            if (m_objects[v4].timer >= v8) {
-                m_objects[v4].timer = 0;
-                m_objects[v4].frame++;
-                if (m_objects[v4].frame >= xc) {
-                    m_objects[v4].frame = 0;
+            m_objects[i].timer++;
+            if (m_objects[i].timer >= duration) {
+                m_objects[i].timer = 0;
+                m_objects[i].frame++;
+                if (m_objects[i].frame >= frameCount) {
+                    m_objects[i].frame = 0;
                 }
             }
         }
     }
 }
 
-void CBg01::Draw(int p1, int p2, char p3)
+void CBg01::Draw(int x, int y, char layer)
 {
-    int v30;
-    RECT v2c;
-    EffectFrame x1c;
-    RECT v10;
+    int i;
+    RECT src; // the part of the sprite drawn
+    EffectFrame sprite; // the frame drawn
+    RECT dst; // where on the screen
 
-    if (p3 == 1) {
+    if (layer == 1) {
         return;
     }
-    v30 = 0;
-    for (; v30 < 2; v30++) {
-        x1c = m_anims[m_objects[v30].pattern].frames[m_objects[v30].frame];
-        v2c = MakeRect(0, 0, x1c.width, x1c.height);
-        if (m_objects[v30].facing == -1) {
-            v10.left = (int)m_objects[v30].x + p1 - (x1c.width - x1c.x);
-            v10.top = p2 + (int)m_objects[v30].y + 0xd2 - x1c.y;
-            v10.right = x1c.width + v10.left;
-            v10.bottom = x1c.height + v10.top;
+    i = 0;
+    for (; i < 2; i++) {
+        sprite = m_anims[m_objects[i].pattern].frames[m_objects[i].frame];
+        src = MakeRect(0, 0, sprite.width, sprite.height);
+        if (m_objects[i].facing == -1) {
+            dst.left = (int)m_objects[i].x + x - (sprite.width - sprite.x);
+            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.right = sprite.width + dst.left;
+            dst.bottom = sprite.height + dst.top;
         } else {
-            v10.left = (int)m_objects[v30].x + p1 - x1c.x;
-            v10.top = p2 + (int)m_objects[v30].y + 0xd2 - x1c.y;
-            v10.right = x1c.width + v10.left;
-            v10.bottom = x1c.height + v10.top;
+            dst.left = (int)m_objects[i].x + x - sprite.x;
+            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.right = sprite.width + dst.left;
+            dst.bottom = sprite.height + dst.top;
         }
-        if (m_objects[v30].scale > 0) {
-            m_graphics->BlitEx(v10, m_surfaces[x1c.surface], v2c, m_colorKey, m_objects[v30].facing == -1, m_objects[v30].scale - 1);
+        if (m_objects[i].scale > 0) {
+            m_graphics->BlitEx(dst, m_surfaces[sprite.surface], src, m_colorKey, m_objects[i].facing == -1, m_objects[i].scale - 1);
         } else {
-            m_graphics->Blit(v10, m_surfaces[x1c.surface], v2c, m_colorKey, m_objects[v30].facing == -1);
+            m_graphics->Blit(dst, m_surfaces[sprite.surface], src, m_colorKey, m_objects[i].facing == -1);
         }
     }
 }

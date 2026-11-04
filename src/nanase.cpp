@@ -470,67 +470,67 @@ void CNanase::StartCommand()
 
 void CNanase::LoadPatterns2()
 {
-    int k2c;
-    PatternFrame* v28;
-    EffectFrame* x24;
-    int x20;
-    int n1c;
-    int a18;
-    int k14;
-    int l4;
+    int box;
+    PatternFrame* frameData; // the frame's boxes and attack values being read
+    EffectFrame* sprite; // the frame's sprite and timing being read
+    int j;
+    int i;
+    int frameCount;
+    int action; // the pattern the record is for
+    int patternCount;
 
-    CFile v10("nanase\\nanase2.pat", 1);
-    l4 = v10.ReadInt();
-    n1c = 0;
-    for (; n1c < l4; n1c++) {
-        k14 = v10.ReadInt();
-        m_patterns2[k14].level = v10.ReadInt();
-        m_patterns2[k14].cancelLevel = v10.ReadInt();
-        m_anims2[k14].frameCount = v10.ReadInt();
-        a18 = m_anims2[k14].frameCount;
-        (TOPTR(PatternData*, TOINT(int, (char*)m_patterns2) + k14 * 8))->Alloc(a18);
-        (TOPTR(EffectAnim*, TOINT(int, (char*)m_anims2) + k14 * 8))->Alloc(a18);
-        x20 = 0;
-        for (; x20 < a18; x20++) {
-            x24 = &m_anims2[k14].frames[x20];
-            v28 = &m_patterns2[k14].frames[x20];
-            x24->duration = (short)v10.ReadInt() * 3;
-            x24->surface = v10.ReadInt();
-            x24->width = v10.ReadInt();
-            x24->height = v10.ReadInt();
-            x24->x = v10.ReadInt();
-            x24->y = v10.ReadInt();
-            v28->damage = v10.ReadInt();
-            v28->flagsAA = v10.ReadInt();
-            v28->airHitPattern = v10.ReadInt();
-            v28->flagsB0 = v10.ReadInt();
-            v28->untechTime = v10.ReadInt();
-            v28->chipDamage = v10.ReadInt();
-            v28->gaugeOnHit = v10.ReadInt();
-            v28->gaugeOnGuard = v10.ReadInt();
-            v28->hitVy = (short)v10.ReadShort();
-            v28->hitVy = v28->hitVy / 1e+02f;
-            v28->hitVx = (short)v10.ReadShort();
-            v28->hitVx = v28->hitVx / -1e+02f;
-            v28->hitSound = v10.ReadShort();
-            v28->hitEffect = v10.ReadShort();
-            v28->attackerHitstop = v10.ReadInt();
-            v28->defenderHitstop = v10.ReadInt();
-            v28->proration = v10.ReadInt();
-            v28->groundHitPattern = v10.ReadInt();
-            v10.Read((void*)&v28->pushBox.left, 0x10);
-            k2c = 0;
-            for (; k2c < 2; k2c++) {
-                v10.Read((void*)((k2c << 4) + (char*)v28), 0x10);
+    CFile file("nanase\\nanase2.pat", 1);
+    patternCount = file.ReadInt();
+    i = 0;
+    for (; i < patternCount; i++) {
+        action = file.ReadInt();
+        m_patterns2[action].level = file.ReadInt();
+        m_patterns2[action].cancelLevel = file.ReadInt();
+        m_anims2[action].frameCount = file.ReadInt();
+        frameCount = m_anims2[action].frameCount;
+        (TOPTR(PatternData*, TOINT(int, (char*)m_patterns2) + action * 8))->Alloc(frameCount);
+        (TOPTR(EffectAnim*, TOINT(int, (char*)m_anims2) + action * 8))->Alloc(frameCount);
+        j = 0;
+        for (; j < frameCount; j++) {
+            sprite = &m_anims2[action].frames[j];
+            frameData = &m_patterns2[action].frames[j];
+            sprite->duration = (short)file.ReadInt() * 3;
+            sprite->surface = file.ReadInt();
+            sprite->width = file.ReadInt();
+            sprite->height = file.ReadInt();
+            sprite->x = file.ReadInt();
+            sprite->y = file.ReadInt();
+            frameData->damage = file.ReadInt();
+            frameData->flagsAA = file.ReadInt();
+            frameData->airHitPattern = file.ReadInt();
+            frameData->flagsB0 = file.ReadInt();
+            frameData->untechTime = file.ReadInt();
+            frameData->chipDamage = file.ReadInt();
+            frameData->gaugeOnHit = file.ReadInt();
+            frameData->gaugeOnGuard = file.ReadInt();
+            frameData->hitVy = (short)file.ReadShort();
+            frameData->hitVy = frameData->hitVy / 1e+02f;
+            frameData->hitVx = (short)file.ReadShort();
+            frameData->hitVx = frameData->hitVx / -1e+02f;
+            frameData->hitSound = file.ReadShort();
+            frameData->hitEffect = file.ReadShort();
+            frameData->attackerHitstop = file.ReadInt();
+            frameData->defenderHitstop = file.ReadInt();
+            frameData->proration = file.ReadInt();
+            frameData->groundHitPattern = file.ReadInt();
+            file.Read((void*)&frameData->pushBox.left, 0x10);
+            box = 0;
+            for (; box < 2; box++) {
+                file.Read((void*)((box << 4) + (char*)frameData), 0x10);
             }
-            v10.Read((void*)&v28->attackBoxes[0].left, 0x10);
-            k2c = 2;
-            for (; k2c < 5; k2c++) {
-                v10.Read((void*)((k2c << 4) + (char*)v28), 0x10);
+            file.Read((void*)&frameData->attackBoxes[0].left, 0x10);
+            box = 2;
+            for (; box < 5; box++) {
+                file.Read((void*)((box << 4) + (char*)frameData), 0x10);
             }
-            k2c = 1;
-            for (; k2c < 4; k2c++) {
-                v10.Read((void*)&v28->attackBoxes[k2c].left, 0x10);
+            box = 1;
+            for (; box < 4; box++) {
+                file.Read((void*)&frameData->attackBoxes[box].left, 0x10);
             }
         }
     }
@@ -564,26 +564,26 @@ void CNanase::DrawGauge()
     }
 }
 
-void CNanase::UsePatterns2(char p1)
+void CNanase::UsePatterns2(char on)
 {
-    int v8;
-    int v4;
+    int j;
+    int i;
 
-    if (p1 == 1 && m_usingPatterns2 == 0) {
+    if (on == 1 && m_usingPatterns2 == 0) {
         anims = TOPTR(EffectAnim*, (int)m_anims2);
-        v4 = 0;
-        for (; v4 < 0x40; v4++) {
-            m_objects[v4].anims = TOPTR(EffectAnim*, (int)m_anims2);
+        i = 0;
+        for (; i < 0x40; i++) {
+            m_objects[i].anims = TOPTR(EffectAnim*, (int)m_anims2);
         }
         m_patterns = TOPTR(PatternData*, (int)m_patterns2);
         m_usingPatterns2 = 1;
         return;
     }
-    if (p1 == 0 && m_usingPatterns2 == 1) {
+    if (on == 0 && m_usingPatterns2 == 1) {
         anims = TOPTR(EffectAnim*, m_anims1);
-        v8 = 0;
-        for (; v8 < 0x40; v8++) {
-            m_objects[v8].anims = TOPTR(EffectAnim*, m_anims1);
+        j = 0;
+        for (; j < 0x40; j++) {
+            m_objects[j].anims = TOPTR(EffectAnim*, m_anims1);
         }
         m_patterns = TOPTR(PatternData*, m_patterns1);
         m_usingPatterns2 = 0;

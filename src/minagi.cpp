@@ -50,7 +50,7 @@ CMinagi::CMinagi(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
 
 void CMinagi::Reset()
 {
-    int l4c;
+    int i;
 
     m_patternVar1 = 0;
     m_patternVar2 = 0;
@@ -69,11 +69,11 @@ void CMinagi::Reset()
     m_pointY[3] = -0x19;
     m_pointX[4] = 0x1b;
     m_pointY[4] = -0x19;
-    l4c = 0;
-    for (; l4c < 0x40; l4c++) {
-        m_objectVar1[l4c] = 0;
-        m_objectVar2[l4c] = 0;
-        m_objectVar3[l4c] = 0;
+    i = 0;
+    for (; i < 0x40; i++) {
+        m_objectVar1[i] = 0;
+        m_objectVar2[i] = 0;
+        m_objectVar3[i] = 0;
     }
     CPlayer::Reset();
     EffectDesc effect;

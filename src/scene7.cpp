@@ -5,8 +5,8 @@
 #include <math.h>
 #include "efz.h"
 
-CScene7::CScene7(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
-    : CScene(p1, p2, p3, p4, p5, p6, p7)
+CScene7::CScene7(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound)
+    : CScene(hwnd, player1Ref, player2Ref, game, graphics, input, sound)
 {
     if (1) {
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_staffSurface, "system\\stfr.dat", 0, 1);

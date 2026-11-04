@@ -7,8 +7,8 @@
 #include <math.h>
 #include "efz.h"
 
-CScene5::CScene5(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
-    : CScene(p1, p2, p3, p4, p5, p6, p7)
+CScene5::CScene5(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound)
+    : CScene(hwnd, player1Ref, player2Ref, game, graphics, input, sound)
 {
     if (1) {
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_winnerSurface, "system\\winner.dat", 0, 0xaf);
@@ -289,8 +289,8 @@ BYTE CScene5::Update()
 
 void CScene5::Draw()
 {
-    int v8;
-    int v4;
+    int column; // a digit of the score's low eight, from the left
+    int offset; // the band repeats every 80 rows
 
     m_graphics->Blit(MakeRect(0, 0, 0x140, 0xa0), m_game->m_stageSurface, MakeRect(m_panX, 0x140, 0x140, 0xa0), 0, 0);
     m_graphics->FillRect(MakeRect(0, 0xa0, 0x140, 0x50), 0xb0);
@@ -301,28 +301,28 @@ void CScene5::Draw()
     }
     m_graphics->FillRect(MakeRect(0x140 - m_curtain, 0, m_curtain, 0xf0), 0xe7);
     m_graphics->FillRect(MakeRect(0, 0, m_curtain, 0xf0), 0xe7);
-    v4 = -0xf0;
-    for (; v4 <= 0xf0; v4 += 0x50) {
+    offset = -0xf0;
+    for (; offset <= 0xf0; offset += 0x50) {
         if (m_band2X <= 0xa0) {
-            m_graphics->Blit(MakeRect(m_curtain - 0xa0, m_band2Y + v4, 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band2X, 0x30, 0xa0, 0x30), m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0xa0, m_band2Y + v4, 0xa0 - m_band2X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band2X + 0xa0, 0x30, 0xa0 - m_band2X, 0x30), m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0x140 - m_band2X, m_band2Y + v4, m_band2X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(0, 0x30, m_band2X, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(m_curtain - 0xa0, m_band2Y + offset, 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band2X, 0x30, 0xa0, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0xa0, m_band2Y + offset, 0xa0 - m_band2X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band2X + 0xa0, 0x30, 0xa0 - m_band2X, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0x140 - m_band2X, m_band2Y + offset, m_band2X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(0, 0x30, m_band2X, 0x30), m_game->m_colorKey, 0);
         } else {
-            m_graphics->Blit(MakeRect(m_curtain - 0xa0, m_band2Y + v4, 0x140 - m_band2X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band2X, 0x30, 0x140 - m_band2X, 0x30), m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(m_curtain + 0xa0 - m_band2X, m_band2Y + v4, m_band2X - 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(0, 0x30, m_band2X - 0xa0, 0x30), m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0xa0, m_band2Y + v4, 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band2X - 0xa0, 0x30, 0xa0, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(m_curtain - 0xa0, m_band2Y + offset, 0x140 - m_band2X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band2X, 0x30, 0x140 - m_band2X, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(m_curtain + 0xa0 - m_band2X, m_band2Y + offset, m_band2X - 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(0, 0x30, m_band2X - 0xa0, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0xa0, m_band2Y + offset, 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band2X - 0xa0, 0x30, 0xa0, 0x30), m_game->m_colorKey, 0);
         }
     }
-    v4 = -0xf0;
-    for (; v4 <= 0xf0; v4 += 0x50) {
+    offset = -0xf0;
+    for (; offset <= 0xf0; offset += 0x50) {
         if (m_band1X <= 0xa0) {
-            m_graphics->Blit(MakeRect(m_curtain - 0xa0, m_band1Y + v4, 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band1X, 0, 0xa0, 0x30), m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0xa0, m_band1Y + v4, 0xa0 - m_band1X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band1X + 0xa0, 0, 0xa0 - m_band1X, 0x30), m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0x140 - m_band1X, m_band1Y + v4, m_band1X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(0, 0, m_band1X, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(m_curtain - 0xa0, m_band1Y + offset, 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band1X, 0, 0xa0, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0xa0, m_band1Y + offset, 0xa0 - m_band1X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band1X + 0xa0, 0, 0xa0 - m_band1X, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0x140 - m_band1X, m_band1Y + offset, m_band1X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(0, 0, m_band1X, 0x30), m_game->m_colorKey, 0);
         } else {
-            m_graphics->Blit(MakeRect(m_curtain - 0xa0, m_band1Y + v4, 0x140 - m_band1X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band1X, 0, 0x140 - m_band1X, 0x30), m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(m_curtain + 0xa0 - m_band1X, m_band1Y + v4, m_band1X - 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(0, 0, m_band1X - 0xa0, 0x30), m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0xa0, m_band1Y + v4, 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band1X - 0xa0, 0, 0xa0, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(m_curtain - 0xa0, m_band1Y + offset, 0x140 - m_band1X, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band1X, 0, 0x140 - m_band1X, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(m_curtain + 0xa0 - m_band1X, m_band1Y + offset, m_band1X - 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(0, 0, m_band1X - 0xa0, 0x30), m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - m_curtain + 0xa0, m_band1Y + offset, 0xa0, 0x30), TOPTR(IDirectDrawSurface*, m_winnerSurface), MakeRect(m_band1X - 0xa0, 0, 0xa0, 0x30), m_game->m_colorKey, 0);
         }
     }
     m_graphics->Blit(MakeRect(m_portraitX + 0x50, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, m_portrait), MakeRect(0, 0, 0x140, 0xf0), m_colorKey, 0);
@@ -353,10 +353,10 @@ void CScene5::Draw()
         DrawNumber(0x136, 0xd7, m_players[m_game->m_humanSide]->m_score);
         if ((unsigned long)m_players[m_game->m_humanSide]->m_scoreHigh > 0) {
             DrawNumber(0xc6, 0xd7, m_players[m_game->m_humanSide]->m_scoreHigh);
-            v8 = 1;
-            for (; v8 < 8; v8++) {
-                if ((double)(unsigned long)m_players[m_game->m_humanSide]->m_score / pow(0xa, 8 - v8) < 1.0) {
-                    DrawNumber(v8 * 0xe + 0xc6, 0xd7, 0);
+            column = 1;
+            for (; column < 8; column++) {
+                if ((double)(unsigned long)m_players[m_game->m_humanSide]->m_score / pow(0xa, 8 - column) < 1.0) {
+                    DrawNumber(column * 0xe + 0xc6, 0xd7, 0);
                 }
             }
         }
@@ -364,40 +364,40 @@ void CScene5::Draw()
     m_graphics->Flip();
 }
 
-void CScene5::DrawNumber(int p1, int p2, int p3)
+void CScene5::DrawNumber(int right, int top, int value)
 {
-    RECT v2c;
-    int v1c;
-    RECT l18;
-    DWORD x8;
-    int l4;
+    RECT src;
+    int digit;
+    RECT dst;
+    DWORD rest; // the digits not drawn yet
+    int x; // the next digit's right edge
 
-    x8 = p3;
-    l4 = p1;
+    rest = value;
+    x = right;
     do {
-        v1c = x8 % 0xa;
-        v2c.top = 0x1c7;
-        v2c.bottom = 0x1da;
-        v2c.left = v1c << 4;
-        v2c.right = v1c + 1 << 4;
-        l18.top = p2;
-        l18.bottom = p2 + 0x13;
-        l18.right = l4;
-        l18.left = l4 - 0x10;
-        m_graphics->Blit(l18, TOPTR(IDirectDrawSurface*, m_resultSurface), v2c, m_game->m_colorKey, 0);
-        l4 -= 0xe;
-        x8 = x8 / 0xa;
-    } while (x8 > 0);
+        digit = rest % 0xa;
+        src.top = 0x1c7;
+        src.bottom = 0x1da;
+        src.left = digit << 4;
+        src.right = digit + 1 << 4;
+        dst.top = top;
+        dst.bottom = top + 0x13;
+        dst.right = x;
+        dst.left = x - 0x10;
+        m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_resultSurface), src, m_game->m_colorKey, 0);
+        x -= 0xe;
+        rest = rest / 0xa;
+    } while (rest > 0);
 }
 
 void CScene5::Enter()
 {
-    int x3c;
-    int v38;
-    char v34[40];
-    char vc[8];
+    int i;
+    int picture; // the win picture, system\<name>\NN; 10 + the index of a rival
+    char path[40];
+    char number[8];
 
-    v38 = rand() % m_players[m_game->m_winner]->m_resultPictures;
+    picture = rand() % m_players[m_game->m_winner]->m_resultPictures;
     if (m_portrait != 0) {
         (TOPTR(IUnknown*, m_portrait))->Release();
         m_portrait = 0;
@@ -406,40 +406,40 @@ void CScene5::Enter()
         (TOPTR(IUnknown*, m_winPicture))->Release();
         m_winPicture = 0;
     }
-    strcpy(v34, "system\\");
-    strcat(v34, m_players[m_game->m_winner]->m_name);
-    strcat(v34, "\\");
-    strcat(v34, m_players[m_game->m_winner]->m_name);
+    strcpy(path, "system\\");
+    strcat(path, m_players[m_game->m_winner]->m_name);
+    strcat(path, "\\");
+    strcat(path, m_players[m_game->m_winner]->m_name);
     if (1) {
-        strcat(v34, ".dat");
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_portrait, (const char*)v34, 0, m_game->m_winner * 0x28 + 0x5f);
-        m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v34, m_players[m_game->m_winner]->m_paletteIndex * 0x28, m_game->m_winner * 0x28 + 0x5f, 0x28);
+        strcat(path, ".dat");
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_portrait, (const char*)path, 0, m_game->m_winner * 0x28 + 0x5f);
+        m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_players[m_game->m_winner]->m_paletteIndex * 0x28, m_game->m_winner * 0x28 + 0x5f, 0x28);
     } else {
-        strcat(v34, ".bmp");
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_portrait, (const char*)v34, m_game->m_winner * 0x28 + 0x5f);
-        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v34, m_players[m_game->m_winner]->m_paletteIndex * 0x28, m_game->m_winner * 0x28 + 0x5f, 0x28);
+        strcat(path, ".bmp");
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_portrait, (const char*)path, m_game->m_winner * 0x28 + 0x5f);
+        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_players[m_game->m_winner]->m_paletteIndex * 0x28, m_game->m_winner * 0x28 + 0x5f, 0x28);
     }
     m_colorKey = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_portrait));
-    x3c = 0;
-    for (; x3c < 0x14; x3c++) {
-        if (m_players[(1 - m_game->m_winner)]->m_charId == m_players[m_game->m_winner]->m_rivals[x3c]) {
-            v38 = x3c + 0xa;
+    i = 0;
+    for (; i < 0x14; i++) {
+        if (m_players[(1 - m_game->m_winner)]->m_charId == m_players[m_game->m_winner]->m_rivals[i]) {
+            picture = i + 0xa;
         }
     }
-    strcpy(v34, "system\\");
-    strcat(v34, m_players[m_game->m_winner]->m_name);
-    strcat(v34, "\\");
-    _itoa(v38, vc, 0xa);
-    if (v38 < 0xa) {
-        strcat(v34, "0");
+    strcpy(path, "system\\");
+    strcat(path, m_players[m_game->m_winner]->m_name);
+    strcat(path, "\\");
+    _itoa(picture, number, 0xa);
+    if (picture < 0xa) {
+        strcat(path, "0");
     }
-    strcat(v34, (const char*)vc);
+    strcat(path, (const char*)number);
     if (1) {
-        strcat(v34, ".dat");
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_winPicture, (const char*)v34, 0, 0xaf);
+        strcat(path, ".dat");
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_winPicture, (const char*)path, 0, 0xaf);
     } else {
-        strcat(v34, ".bmp");
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_winPicture, (const char*)v34, 0xaf);
+        strcat(path, ".bmp");
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_winPicture, (const char*)path, 0xaf);
     }
     if (m_game->m_gameMode == 4) {
         if (m_game->m_winner == 0) {
@@ -542,14 +542,14 @@ void CScene5::Enter()
 
 void CScene5::HandleKeys()
 {
-    int l10c;
-    char v108[256];
+    int hr;
+    char keys[256];
 
-    l10c = m_input->m_keyboard->GetDeviceState(0x100, v108);
-    if (l10c < 0 && l10c == 0x8007001e) {
+    hr = m_input->m_keyboard->GetDeviceState(0x100, keys);
+    if (hr < 0 && hr == 0x8007001e) {
         m_input->m_keyboard->Acquire();
     }
-    if ((v108[1] & 0x80) != 0) {
+    if ((keys[1] & 0x80) != 0) {
         m_leave = 1;
         m_game->m_continued = 0;
     }

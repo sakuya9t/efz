@@ -556,21 +556,21 @@ struct PatternData {
     // FUNCTION: 0x4128e0
     ~PatternData()
     {
-        int v4;
+        int block;
 
         if ((int)frames != 0) {
-            v4 = (int)frames;
-            operator delete(TOPTR(void*, v4));
+            block = (int)frames;
+            operator delete(TOPTR(void*, block));
         }
     }
     // FUNCTION: 0x412ad0
-    void Alloc(int p1)
+    void Alloc(int count)
     {
-        int v4;
+        int block;
 
-        if (p1 > 0) {
-            v4 = TOINT(int, operator new(p1 * 0xc8));
-            frames = TOPTR(PatternFrame*, v4);
+        if (count > 0) {
+            block = TOINT(int, operator new(count * 0xc8));
+            frames = TOPTR(PatternFrame*, block);
         }
     }
 
@@ -661,38 +661,38 @@ struct Afterimages {
         spacing = 0;
     }
     // FUNCTION: 0x412930
-    void Record(ObjBase* p1)
+    void Record(ObjBase* obj)
     {
         step = spacing; // recorded positions between the three afterimages while on; 0
                         // off
         fadeLength = 0;
-        x[pos] = p1->x;
-        y[pos] = p1->y;
-        facing[pos] = p1->facing;
-        pattern[pos] = p1->pattern;
-        frame[pos] = p1->frame;
+        x[pos] = obj->x;
+        y[pos] = obj->y;
+        facing[pos] = obj->facing;
+        pattern[pos] = obj->pattern;
+        frame[pos] = obj->frame;
         pos++;
         if (pos >= 0x3c) {
             pos = 0;
         }
     }
     // FUNCTION: 0x412a10
-    void Start(ObjBase* p1, char p2)
+    void Start(ObjBase* obj, char gap)
     {
-        int v4;
+        int i;
 
         if (spacing == 0 && fadeLength == 0) {
-            v4 = 0;
-            for (; v4 < 0x3c; v4++) {
-                x[v4] = p1->x;
-                y[v4] = p1->y;
-                facing[v4] = p1->facing;
-                pattern[v4] = p1->pattern;
-                frame[v4] = p1->frame;
+            i = 0;
+            for (; i < 0x3c; i++) {
+                x[i] = obj->x;
+                y[i] = obj->y;
+                facing[i] = obj->facing;
+                pattern[i] = obj->pattern;
+                frame[i] = obj->frame;
             }
         }
-        spacing = p2;
-        step = p2;
+        spacing = gap;
+        step = gap;
     }
 
     BYTE spacing;
@@ -941,12 +941,12 @@ public:
     int FaceOpponent();
     // FUNCTION: 0x40e6c0
     // The same towards x = p1.
-    int FaceX(double p1);
+    int FaceX(double targetX);
     // FUNCTION: 0x40e740
     // walking, crouching and jumping from neutral by the input (each character's Move)
     void MoveOnGround();
     // FUNCTION: 0x40eae0
-    CPlayer(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CPlayer(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x40ecb0
     ~CPlayer();
     // FUNCTION: 0x40f170
@@ -978,11 +978,11 @@ public:
     char AtScreenEdge();
     // FUNCTION: 0x410050
     // whether the player guards the attack frame p1 while on frame p2
-    int CanGuard(PatternFrame* p1, PatternFrame* p2);
+    int CanGuard(PatternFrame* attack, PatternFrame* state);
     // FUNCTION: 0x4100f0
     // whether the guard input matches the attack's height (a CPU decides at random by
     // m_cpuSkill)
-    int HoldsGuard(PatternFrame* p1);
+    int HoldsGuard(PatternFrame* attack);
     // FUNCTION: 0x4102e0
     // in air hitstun with m_untechTime run out: the player may recover and can't be hit
     int CanAirRecover();
@@ -1007,37 +1007,37 @@ public:
     // FUNCTION: 0x4105a0
     // Takes p1 times the three factors off the opponent's HP, multiplies m_proration
     // by p2 / 1000 and counts the hit in the combo and the score.
-    void DealDamage(int p1, double p2);
+    void DealDamage(int damage, double proration);
     // FUNCTION: 0x410790
     // DealDamage's bookkeeping (max combo, score) for a hit CScene3 applied itself
-    void ScoreHit(PatternFrame* p1);
+    void ScoreHit(PatternFrame* attack);
     // FUNCTION: 0x410840
-    void AddScore(int p1);
+    void AddScore(int points);
     // FUNCTION: 0x4108a0
     // A random number from p1 up to p2: rand() while recording a replay, which stores it,
     // or the replay's next word when playing one back (docs/compat.md).
-    short Random(short p1, short p2);
+    short Random(short low, short high);
     // FUNCTION: 0x410940
     // once a drawn frame: records the position, or shortens the fading trail
     void UpdateAfterimages();
     // FUNCTION: 0x4109d0
     // Starts drawing afterimages (m_afterimages), for p1.
-    void StartAfterimages(BYTE p1);
+    void StartAfterimages(BYTE spacing);
     // FUNCTION: 0x410a10
     // Shakes the screen p1 pixels, holding for p2 frames.
-    void ShakeScreen(int p1, int p2);
+    void ShakeScreen(int amplitude, int hold);
     // FUNCTION: 0x410a40
     // weights the camera p1 percent toward this player for p2 ticks
-    void FocusCameraX(int p1, int p2);
+    void FocusCameraX(int percent, int duration);
     // FUNCTION: 0x410a80
     // the same vertically
-    void FocusCameraY(int p1, int p2);
+    void FocusCameraY(int percent, int duration);
     // FUNCTION: 0x410ac0
     // Draws the sprite tinted with colour p1 for p2 frames (half as long in one mode).
-    void Tint(BYTE p1, int p2);
+    void Tint(BYTE color, int duration);
     // FUNCTION: 0x410b10
     // Fills the stage background with colour p1 for p2 frames, as supers do.
-    void FillBackground(BYTE p1, int p2);
+    void FillBackground(BYTE color, int duration);
     // FUNCTION: 0x411080
     // <name>\<name>.dat: the sprites.
     void LoadSprites();
@@ -1052,15 +1052,15 @@ public:
     // FUNCTION: 0x4121a0
     // draws the afterimages and the sprite at camera offset (p1, p2), or the marker when
     // below the screen
-    void DrawSprite(int p1, int p2);
+    void DrawSprite(int drawX, int drawY);
     // FUNCTION: 0x412f10
     void AdvanceObjectHead();
     // FUNCTION: 0x413040
     void ClearObjects();
     // FUNCTION: 0x413090
-    void InitEffectDesc(EffectDesc* p1);
+    void InitEffectDesc(EffectDesc* effect);
     // FUNCTION: 0x413100
-    void DrawObjects(int p1, int p2, BYTE p3);
+    void DrawObjects(int drawX, int drawY, BYTE layer);
 
     // FUNCTION: 0x40f110
     virtual void StartPattern();
@@ -1075,9 +1075,9 @@ public:
     // UpdatePattern; empty in most classes
     virtual void PreUpdate() = 0;
     // FUNCTION: 0x412b10
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x412e60
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x410b70
     virtual void Load();
     // FUNCTION: 0x40edf0
@@ -1717,89 +1717,89 @@ public:
 class CScene {
 public:
     // FUNCTION: 0x759c10
-    CScene(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5,
-           CInput* p6, CSound* p7)
+    CScene(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics,
+           CInput* input, CSound* sound)
     {
-        m_player1Ref = p2;
-        m_player2Ref = p3;
-        m_hwnd = p1;
-        m_players[0] = *p2;
-        m_players[1] = *p3;
-        m_game = p4;
-        m_graphics = p5;
-        m_input = p6;
-        m_sound = p7;
+        m_player1Ref = player1Ref;
+        m_player2Ref = player2Ref;
+        m_hwnd = hwnd;
+        m_players[0] = *player1Ref;
+        m_players[1] = *player2Ref;
+        m_game = game;
+        m_graphics = graphics;
+        m_input = input;
+        m_sound = sound;
         m_enter = -1;
         m_leave = 0;
     }
     // FUNCTION: 0x759c90
-    // Darkens (p2 0) or brightens (p2 1) the palette over 21 frames, drawing each one, and
-    // fades the music volume with it.
-    void FadeOut(PALETTEENTRY* p1, BYTE p2, int p3, int p4)
+    // Darkens (brighten 0) or brightens (brighten 1) the palette over 21 frames, drawing
+    // each one, and fades the music volume with it.
+    void FadeOut(PALETTEENTRY* palette, BYTE brighten, int volume, int volumeStep)
     {
-        int l10;
-        int vc;
-        int x8;
-        int l4;
+        int brightenLevel;
+        int darkenLevel;
+        int frameStart;
+        int shortFrame;
 
-        x8 = timeGetTime();
-        l4 = 0;
-        if (p2 == 0) {
-            vc = 0x14;
-            for (; vc >= 0; vc--) {
+        frameStart = timeGetTime();
+        shortFrame = 0;
+        if (brighten == 0) {
+            darkenLevel = 0x14;
+            for (; darkenLevel >= 0; darkenLevel--) {
                 Draw();
-                m_graphics->Darken(p1, 0, 0xff, vc * 5);
-                m_sound->SetVolume((short)m_game->m_music, p3 - (0x14 - vc) * p4 / 2);
-                while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+                m_graphics->Darken(palette, 0, 0xff, darkenLevel * 5);
+                m_sound->SetVolume((short)m_game->m_music, volume - (0x14 - darkenLevel) * volumeStep / 2);
+                while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
                 }
-                x8 = timeGetTime();
-                l4 = l4 == 0;
+                frameStart = timeGetTime();
+                shortFrame = shortFrame == 0;
             }
         }
-        if (p2 == 1) {
-            l10 = 0x14;
-            for (; l10 >= 0; l10--) {
+        if (brighten == 1) {
+            brightenLevel = 0x14;
+            for (; brightenLevel >= 0; brightenLevel--) {
                 Draw();
-                m_graphics->Brighten(p1, 0, 0xff, l10 * 5);
-                m_sound->SetVolume((short)m_game->m_music, p3 - (0x14 - l10) * p4 / 2);
-                while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+                m_graphics->Brighten(palette, 0, 0xff, brightenLevel * 5);
+                m_sound->SetVolume((short)m_game->m_music, volume - (0x14 - brightenLevel) * volumeStep / 2);
+                while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
                 }
-                x8 = timeGetTime();
-                l4 = l4 == 0;
+                frameStart = timeGetTime();
+                shortFrame = shortFrame == 0;
             }
         }
     }
     // FUNCTION: 0x759e20
     // The same without the music.
-    void FadeIn(PALETTEENTRY* p1, BYTE p2)
+    void FadeIn(PALETTEENTRY* palette, BYTE brighten)
     {
-        int l10;
-        int vc;
-        int x8;
-        int l4;
+        int brightenLevel;
+        int darkenLevel;
+        int frameStart;
+        int shortFrame;
 
-        x8 = timeGetTime();
-        l4 = 0;
-        if (p2 == 0) {
-            vc = 0;
-            for (; vc <= 0x14; vc++) {
+        frameStart = timeGetTime();
+        shortFrame = 0;
+        if (brighten == 0) {
+            darkenLevel = 0;
+            for (; darkenLevel <= 0x14; darkenLevel++) {
                 Draw();
-                m_graphics->Darken(p1, 0, 0xff, vc * 5);
-                while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+                m_graphics->Darken(palette, 0, 0xff, darkenLevel * 5);
+                while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
                 }
-                x8 = timeGetTime();
-                l4 = l4 == 0;
+                frameStart = timeGetTime();
+                shortFrame = shortFrame == 0;
             }
         }
-        if (p2 == 1) {
-            l10 = 0;
-            for (; l10 <= 0x14; l10++) {
+        if (brighten == 1) {
+            brightenLevel = 0;
+            for (; brightenLevel <= 0x14; brightenLevel++) {
                 Draw();
-                m_graphics->Brighten(p1, 0, 0xff, l10 * 5);
-                while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+                m_graphics->Brighten(palette, 0, 0xff, brightenLevel * 5);
+                while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
                 }
-                x8 = timeGetTime();
-                l4 = l4 == 0;
+                frameStart = timeGetTime();
+                shortFrame = shortFrame == 0;
             }
         }
     }
@@ -1849,7 +1849,7 @@ public:
     virtual void Update() = 0;
     // (x, y, layer): draws the objects on that layer at the camera offset; CBg01 has only
     // layer 0
-    virtual void Draw(int p1, int p2, char p3) = 0;
+    virtual void Draw(int x, int y, char layer) = 0;
 
     short m_number;         // +4: NN in system\bg\bgNN
     short m_lastFrame;      // +6: frames 0 to m_lastFrame
@@ -1866,13 +1866,13 @@ public:
 class CBg01 : public CAnimBg {
 public:
     // FUNCTION: 0x751370
-    CBg01(CGraphics* p1);
+    CBg01(CGraphics* graphics);
     // FUNCTION: 0x751500
     ~CBg01();
     // FUNCTION: 0x7515d0
     virtual void Update();
     // FUNCTION: 0x751730
-    virtual void Draw(int p1, int p2, char p3);
+    virtual void Draw(int x, int y, char layer);
 
 };
 
@@ -1881,13 +1881,13 @@ public:
 class CBg10 : public CAnimBg {
 public:
     // FUNCTION: 0x751a40
-    CBg10(CGraphics* p1);
+    CBg10(CGraphics* graphics);
     // FUNCTION: 0x751bc0
     ~CBg10();
     // FUNCTION: 0x751c90
     virtual void Update();
     // FUNCTION: 0x751df0
-    virtual void Draw(int p1, int p2, char p3);
+    virtual void Draw(int x, int y, char layer);
 
 };
 
@@ -1896,13 +1896,13 @@ public:
 class CBg12 : public CAnimBg {
 public:
     // FUNCTION: 0x7520b0
-    CBg12(CGraphics* p1);
+    CBg12(CGraphics* graphics);
     // FUNCTION: 0x752240
     ~CBg12();
     // FUNCTION: 0x752310
     virtual void Update();
     // FUNCTION: 0x752470
-    virtual void Draw(int p1, int p2, char p3);
+    virtual void Draw(int x, int y, char layer);
 
 };
 
@@ -1911,13 +1911,13 @@ public:
 class CBg16 : public CAnimBg {
 public:
     // FUNCTION: 0x752900
-    CBg16(CGraphics* p1);
+    CBg16(CGraphics* graphics);
     // FUNCTION: 0x752a90
     ~CBg16();
     // FUNCTION: 0x752b60
     virtual void Update();
     // FUNCTION: 0x752dc0
-    virtual void Draw(int p1, int p2, char p3);
+    virtual void Draw(int x, int y, char layer);
 
 };
 
@@ -1926,7 +1926,7 @@ public:
 class CScene1 : public CScene {
 public:
     // FUNCTION: 0x753260
-    CScene1(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene1(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound);
     // FUNCTION: 0x7538b0
     ~CScene1();
     // FUNCTION: 0x7539f0
@@ -1934,11 +1934,11 @@ public:
     // FUNCTION: 0x755500
     virtual void Draw();
     // FUNCTION: 0x7586b0
-    void CreateCharacter(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3);
+    void CreateCharacter(PTR32(CPlayer)* player, PTR32(CPlayer)* opponent, char side);
     // FUNCTION: 0x759460
     void LoadStagePicture();
     // FUNCTION: 0x7595d0
-    void SetPortraitPalette(char p1);
+    void SetPortraitPalette(char side);
     // FUNCTION: 0x759770
     virtual void HandleKeys();
     // FUNCTION: 0x7598d0
@@ -2002,7 +2002,7 @@ public:
 class CScene6 : public CScene {
 public:
     // FUNCTION: 0x759f30
-    CScene6(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene6(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound);
     // FUNCTION: 0x75a3b0
     ~CScene6();
     // FUNCTION: 0x75a4c0
@@ -2010,7 +2010,7 @@ public:
     // FUNCTION: 0x75b0a0
     virtual void Draw();
     // FUNCTION: 0x75d260
-    void DrawNumber(int p1, int p2, int p3);
+    void DrawNumber(int right, int top, int value);
     // FUNCTION: 0x75d350
     virtual void HandleKeys();
     // FUNCTION: 0x75d400
@@ -2020,11 +2020,11 @@ public:
     // FUNCTION: 0x75d660
     void ShowLoadingScreen();
     // FUNCTION: 0x75d8d0
-    void FadeToBlack(int p1);
+    void FadeToBlack(int unused);
     // FUNCTION: 0x75d970
-    void FadeFromBlack(BYTE p1);
+    void FadeFromBlack(BYTE dimTo);
     // FUNCTION: 0x75da30
-    void SlidePage(BYTE p1);
+    void SlidePage(BYTE slideIn);
 
     BYTE unk430[0x434 - 0x430];
     int m_bgSurface;
@@ -2055,7 +2055,7 @@ public:
 class CScene3 : public CScene {
 public:
     // FUNCTION: 0x75db70
-    void DrawNumber(int p1, int p2, int p3, BYTE p4, BYTE p5, int p6);
+    void DrawNumber(int right, int top, int value, BYTE font, BYTE gap, int blend);
     // FUNCTION: 0x75dd50
     void DrawBackground();
     // FUNCTION: 0x75e240
@@ -2063,13 +2063,13 @@ public:
     // FUNCTION: 0x760060
     void DrawGauges();
     // FUNCTION: 0x7623b0
-    void DrawComboCount(CPlayer* p1);
+    void DrawComboCount(CPlayer* attacker);
     // FUNCTION: 0x762c50
     void DrawShadows();
     // FUNCTION: 0x7631f0
     void DrawBordersAndFlip();
     // FUNCTION: 0x7633a0
-    CScene3(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene3(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound);
     // FUNCTION: 0x763c00
     ~CScene3();
     // FUNCTION: 0x763c20
@@ -2104,30 +2104,30 @@ public:
     // into CPlayer::m_pushVx
     void PushApart();
     // FUNCTION: 0x767600
-    RECT BoxOnStage(ObjBase* p1, RECT* p2);
+    RECT BoxOnStage(ObjBase* obj, RECT* box);
     // FUNCTION: 0x7677a0
-    RECT InfoBoxOnStage(CollisionInfo* p1, RECT* p2);
+    RECT InfoBoxOnStage(CollisionInfo* info, RECT* box);
     // FUNCTION: 0x767930
-    int BoxesOverlap(RECT* p1, RECT* p2);
+    int BoxesOverlap(RECT* a, RECT* b);
     // FUNCTION: 0x7679b0
     // whether p2 will recoil-guard p1's attack using m_canRecoilCounter; then p2's own
     // attack isn't resolved this tick
-    int WillRecoilCounter(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4);
+    int WillRecoilCounter(CPlayer* attacker, CPlayer* defender, CollisionInfo* attackerInfo, CollisionInfo* defenderInfo);
     // FUNCTION: 0x767f60
     // p1's attack against p2: parry, recoil guard, guard point, guard, armor, or the hit
-    void ResolvePlayerAttack(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4);
+    void ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, CollisionInfo* attackerInfo, CollisionInfo* defenderInfo);
     // FUNCTION: 0x7697d0
     // p1's object p3 against p2
-    void ResolveObjectAttack(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4);
+    void ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot, CollisionInfo* defenderInfo);
     // FUNCTION: 0x76b090
     // p1's object p3 against p2's object p4
-    void ResolveObjectHitsObject(CPlayer* p1, CPlayer* p2, int p3, int p4);
+    void ResolveObjectHitsObject(CPlayer* attacker, CPlayer* defender, int slot, int targetSlot);
     // FUNCTION: 0x76bab0
     // two objects' push boxes meet: the lower level is cancelled
-    void ClashObjects(CPlayer* p1, CPlayer* p2, int p3, int p4);
+    void ClashObjects(CPlayer* player, CPlayer* other, int slot, int otherSlot);
     // FUNCTION: 0x76bd40
     // p1's attack against p2's object p5
-    void ResolvePlayerHitsObject(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4, int p5);
+    void ResolvePlayerHitsObject(CPlayer* attacker, CPlayer* defender, CollisionInfo* attackerInfo, CollisionInfo* defenderInfo, int slot);
 
     BYTE unk430[0x434 - 0x430];
     int m_frameCount;
@@ -2167,7 +2167,7 @@ public:
 class CScene2 : public CScene {
 public:
     // FUNCTION: 0x76c6f0
-    CScene2(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene2(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound);
     // FUNCTION: 0x76c740
     ~CScene2();
     // FUNCTION: 0x76c790
@@ -2179,7 +2179,7 @@ public:
     // FUNCTION: 0x76da10
     virtual void HandleKeys();
     // FUNCTION: 0x76da20
-    void CreateCharacter(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3, char p4);
+    void CreateCharacter(PTR32(CPlayer)* player, PTR32(CPlayer)* opponent, char side, char charId);
 
     BYTE unk430[0x434 - 0x430];
     int m_loadingSurface;
@@ -2190,7 +2190,7 @@ public:
 class CScene8 : public CScene {
 public:
     // FUNCTION: 0x76e480
-    CScene8(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene8(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound);
     // FUNCTION: 0x76efe0
     ~CScene8();
     // FUNCTION: 0x76f060
@@ -2243,7 +2243,7 @@ public:
 class CScene5 : public CScene {
 public:
     // FUNCTION: 0x7712f0
-    CScene5(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene5(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound);
     // FUNCTION: 0x771400
     ~CScene5();
     // FUNCTION: 0x7714e0
@@ -2251,7 +2251,7 @@ public:
     // FUNCTION: 0x772800
     virtual void Draw();
     // FUNCTION: 0x774a10
-    void DrawNumber(int p1, int p2, int p3);
+    void DrawNumber(int right, int top, int value);
     // FUNCTION: 0x774b00
     void Enter();
     // FUNCTION: 0x775750
@@ -2291,7 +2291,7 @@ public:
 class CScene7 : public CScene {
 public:
     // FUNCTION: 0x7758b0
-    CScene7(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene7(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound);
     // FUNCTION: 0x7759a0
     ~CScene7();
     // FUNCTION: 0x7759f0
@@ -2313,7 +2313,7 @@ public:
 class CScene0 : public CScene {
 public:
     // FUNCTION: 0x775d60
-    CScene0(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene0(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound);
     // FUNCTION: 0x775f30
     ~CScene0();
     // FUNCTION: 0x775fb0
@@ -2506,13 +2506,13 @@ public:
     // FUNCTION: 0x4136d0
     virtual void UpdatePattern();
     // FUNCTION: 0x422d70
-    CShiori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CShiori(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x422f40
     virtual void Reset();
     // FUNCTION: 0x423090
     virtual void StartPattern();
     // FUNCTION: 0x4230d0
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x423120
     virtual void Move();
     // FUNCTION: 0x423140
@@ -2522,7 +2522,7 @@ public:
     // FUNCTION: 0x4261b0
     virtual void PreUpdate();
     // FUNCTION: 0x4261c0
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x4261f0
     virtual void ReadCommand();
     // FUNCTION: 0x4276b0
@@ -2708,13 +2708,13 @@ public:
     // FUNCTION: 0x434060
     virtual void UpdatePattern();
     // FUNCTION: 0x4463e0
-    CSayuri(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CSayuri(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x446590
     virtual void Reset();
     // FUNCTION: 0x4466d0
     virtual void StartPattern();
     // FUNCTION: 0x446710
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x446760
     virtual void Move();
     // FUNCTION: 0x446780
@@ -2724,7 +2724,7 @@ public:
     // FUNCTION: 0x449300
     virtual void PreUpdate();
     // FUNCTION: 0x449390
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x4493c0
     virtual void ReadCommand();
     // FUNCTION: 0x44ab30
@@ -2895,13 +2895,13 @@ public:
     // FUNCTION: 0x451850
     virtual void UpdatePattern();
     // FUNCTION: 0x461090
-    CNayuki(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CNayuki(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x461260
     virtual void Reset();
     // FUNCTION: 0x4613b0
     virtual void StartPattern();
     // FUNCTION: 0x4613f0
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x461440
     virtual void Move();
     // FUNCTION: 0x461460
@@ -2911,7 +2911,7 @@ public:
     // FUNCTION: 0x464180
     virtual void PreUpdate();
     // FUNCTION: 0x464190
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x4641c0
     virtual void ReadCommand();
     // FUNCTION: 0x4654a0
@@ -3127,13 +3127,13 @@ public:
     // FUNCTION: 0x4c04b0
     virtual void UpdatePattern();
     // FUNCTION: 0x4d2850
-    CMizukaB(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMizukaB(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x4d29e0
     virtual void Reset();
     // FUNCTION: 0x4d2b00
     virtual void StartPattern();
     // FUNCTION: 0x4d2b40
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x4d2b90
     virtual void Move();
     // FUNCTION: 0x4d2bb0
@@ -3143,7 +3143,7 @@ public:
     // FUNCTION: 0x4d59e0
     virtual void PreUpdate();
     // FUNCTION: 0x4d5aa0
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x4d5ad0
     virtual void ReadCommand();
     // FUNCTION: 0x4d6f50
@@ -3392,13 +3392,13 @@ public:
     // FUNCTION: 0x4e7ec0
     virtual void UpdatePattern();
     // FUNCTION: 0x4f8300
-    CMizuka(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMizuka(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x4f8480
     virtual void Reset();
     // FUNCTION: 0x4f8590
     virtual void StartPattern();
     // FUNCTION: 0x4f85d0
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x4f8620
     virtual void Move();
     // FUNCTION: 0x4f8640
@@ -3408,7 +3408,7 @@ public:
     // FUNCTION: 0x4faf30
     virtual void PreUpdate();
     // FUNCTION: 0x4faf40
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x4faf70
     virtual void ReadCommand();
     // FUNCTION: 0x4fdc10
@@ -3653,13 +3653,13 @@ public:
     // FUNCTION: 0x50c4b0
     virtual void UpdatePattern();
     // FUNCTION: 0x519e00
-    CMisuzu(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMisuzu(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x51a070
     virtual void Reset();
     // FUNCTION: 0x51a2a0
     virtual void StartPattern();
     // FUNCTION: 0x51a2e0
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x51a330
     virtual void Move();
     // FUNCTION: 0x51a350
@@ -3669,7 +3669,7 @@ public:
     // FUNCTION: 0x51dde0
     virtual void PreUpdate();
     // FUNCTION: 0x51df30
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x51df60
     virtual void ReadCommand();
     // FUNCTION: 0x51f3e0
@@ -3978,13 +3978,13 @@ public:
     // FUNCTION: 0x530bc0
     virtual void UpdatePattern();
     // FUNCTION: 0x546480
-    CMishio(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMishio(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x546690
     virtual void Reset();
     // FUNCTION: 0x546830
     virtual void StartPattern();
     // FUNCTION: 0x546870
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x5468c0
     virtual void Move();
     // FUNCTION: 0x5468e0
@@ -3994,7 +3994,7 @@ public:
     // FUNCTION: 0x54aa90
     virtual void PreUpdate();
     // FUNCTION: 0x54ad50
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x54ad80
     virtual void ReadCommand();
     // FUNCTION: 0x54c250
@@ -4207,13 +4207,13 @@ public:
     // FUNCTION: 0x5571f0
     virtual void UpdatePattern();
     // FUNCTION: 0x567900
-    CMisaki(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMisaki(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x567a90
     virtual void Reset();
     // FUNCTION: 0x567ba0
     virtual void StartPattern();
     // FUNCTION: 0x567be0
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x567c30
     virtual void Move();
     // FUNCTION: 0x567c50
@@ -4223,7 +4223,7 @@ public:
     // FUNCTION: 0x56a600
     virtual void PreUpdate();
     // FUNCTION: 0x56a610
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x56a640
     virtual void ReadCommand();
     // FUNCTION: 0x56b630
@@ -4489,13 +4489,13 @@ public:
     // FUNCTION: 0x5736d0
     virtual void UpdatePattern();
     // FUNCTION: 0x588310
-    CMio(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMio(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x5884b0
     virtual void Reset();
     // FUNCTION: 0x5885d0
     virtual void StartPattern();
     // FUNCTION: 0x588610
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x588660
     virtual void Move();
     // FUNCTION: 0x588680
@@ -4505,7 +4505,7 @@ public:
     // FUNCTION: 0x58dab0
     virtual void PreUpdate();
     // FUNCTION: 0x58dac0
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x58daf0
     virtual void ReadCommand();
     // FUNCTION: 0x58ee20
@@ -4767,13 +4767,13 @@ public:
     // FUNCTION: 0x59c4a0
     virtual void UpdatePattern();
     // FUNCTION: 0x5a9fa0
-    CMinagi(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMinagi(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x5aa180
     virtual void Reset();
     // FUNCTION: 0x5aa340
     virtual void StartPattern();
     // FUNCTION: 0x5aa380
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x5aa3d0
     virtual void Move();
     // FUNCTION: 0x5aa3f0
@@ -4783,7 +4783,7 @@ public:
     // FUNCTION: 0x5ad510
     virtual void PreUpdate();
     // FUNCTION: 0x5ad520
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x5ad550
     virtual void ReadCommand();
     // FUNCTION: 0x5aea20
@@ -4984,13 +4984,13 @@ public:
     // FUNCTION: 0x5c8580
     virtual void UpdatePattern();
     // FUNCTION: 0x5dddf0
-    CMayu(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMayu(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x5ddf90
     virtual void Reset();
     // FUNCTION: 0x5de0a0
     virtual void StartPattern();
     // FUNCTION: 0x5de0e0
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x5de130
     virtual void Move();
     // FUNCTION: 0x5de150
@@ -5000,7 +5000,7 @@ public:
     // FUNCTION: 0x5e1070
     virtual void PreUpdate();
     // FUNCTION: 0x5e1080
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x5e10b0
     virtual void ReadCommand();
     // FUNCTION: 0x5e2440
@@ -5156,13 +5156,13 @@ public:
     // FUNCTION: 0x5e85f0
     virtual void UpdatePattern();
     // FUNCTION: 0x5f6d90
-    CMakoto(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMakoto(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x5f6f20
     virtual void Reset();
     // FUNCTION: 0x5f7040
     virtual void StartPattern();
     // FUNCTION: 0x5f7080
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x5f70d0
     virtual void Move();
     // FUNCTION: 0x5f70f0
@@ -5172,7 +5172,7 @@ public:
     // FUNCTION: 0x5f9d30
     virtual void PreUpdate();
     // FUNCTION: 0x5f9d40
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x5f9d70
     virtual void ReadCommand();
     // FUNCTION: 0x5fb040
@@ -5428,13 +5428,13 @@ public:
     // FUNCTION: 0x607930
     virtual void UpdatePattern();
     // FUNCTION: 0x6163b0
-    CMai(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMai(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x616570
     virtual void Reset();
     // FUNCTION: 0x6166c0
     virtual void StartPattern();
     // FUNCTION: 0x616700
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x616750
     virtual void Move();
     // FUNCTION: 0x616770
@@ -5444,7 +5444,7 @@ public:
     // FUNCTION: 0x61a620
     virtual void PreUpdate();
     // FUNCTION: 0x61a830
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x61a860
     virtual void ReadCommand();
     // FUNCTION: 0x61b9a0
@@ -5595,13 +5595,13 @@ public:
     // FUNCTION: 0x667570
     virtual void UpdatePattern();
     // FUNCTION: 0x675c80
-    CKanna(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CKanna(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x675e20
     virtual void Reset();
     // FUNCTION: 0x675f40
     virtual void StartPattern();
     // FUNCTION: 0x675f80
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x675fd0
     virtual void Move();
     // FUNCTION: 0x6763c0
@@ -5611,7 +5611,7 @@ public:
     // FUNCTION: 0x677e20
     virtual void PreUpdate();
     // FUNCTION: 0x677e30
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x677e60
     virtual void ReadCommand();
     // FUNCTION: 0x678c30
@@ -5745,13 +5745,13 @@ public:
     // FUNCTION: 0x6d93f0
     virtual void UpdatePattern();
     // FUNCTION: 0x6e8130
-    CAyu(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CAyu(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x6e82f0
     virtual void Reset();
     // FUNCTION: 0x6e8420
     virtual void StartPattern();
     // FUNCTION: 0x6e8460
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x6e84b0
     virtual void Move();
     // FUNCTION: 0x6e84d0
@@ -5761,7 +5761,7 @@ public:
     // FUNCTION: 0x6eaf90
     virtual void PreUpdate();
     // FUNCTION: 0x6eafa0
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x6eafd0
     virtual void ReadCommand();
     // FUNCTION: 0x6ec160
@@ -5931,13 +5931,13 @@ public:
     // FUNCTION: 0x6f2f20
     virtual void UpdatePattern();
     // FUNCTION: 0x7039d0
-    CAkane(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CAkane(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x703b70
     virtual void Reset();
     // FUNCTION: 0x703c90
     virtual void StartPattern();
     // FUNCTION: 0x703cd0
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x703d20
     virtual void Move();
     // FUNCTION: 0x703d40
@@ -5947,7 +5947,7 @@ public:
     // FUNCTION: 0x706a90
     virtual void PreUpdate();
     // FUNCTION: 0x706aa0
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x706ad0
     virtual void ReadCommand();
     // FUNCTION: 0x707e50
@@ -6109,13 +6109,13 @@ public:
     // FUNCTION: 0x712500
     virtual void UpdatePattern();
     // FUNCTION: 0x7219a0
-    CAkiko(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CAkiko(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x721ba0
     virtual void Reset();
     // FUNCTION: 0x721d10
     virtual void StartPattern();
     // FUNCTION: 0x721d50
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x721da0
     virtual void Move();
     // FUNCTION: 0x721dc0
@@ -6125,7 +6125,7 @@ public:
     // FUNCTION: 0x7256b0
     virtual void PreUpdate();
     // FUNCTION: 0x725bd0
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x725c00
     virtual void ReadCommand();
     // FUNCTION: 0x726f10
@@ -6297,7 +6297,7 @@ public:
     // UpdatePattern while the nanase2 tables are in use: the same pattern numbers, unarmed
     void UpdatePattern2();
     // FUNCTION: 0x48a720
-    CNanase(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CNanase(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x48a9b0
     virtual void Reset();
     // FUNCTION: 0x48ab00
@@ -6307,7 +6307,7 @@ public:
     // FUNCTION: 0x48abf0
     virtual void StartPattern();
     // FUNCTION: 0x48ac30
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x48ac80
     virtual void Move();
     // FUNCTION: 0x48aca0
@@ -6321,11 +6321,11 @@ public:
     // FUNCTION: 0x48e140
     // p1 1: switches anims (hers and every object's) and m_patterns to the nanase2 tables;
     // p1 0: back to nanase.pat
-    void UsePatterns2(char p1);
+    void UsePatterns2(char on);
     // FUNCTION: 0x48e250
     virtual void PreUpdate();
     // FUNCTION: 0x48e260
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x48e290
     virtual void ReadCommand();
     // FUNCTION: 0x48f690
@@ -6543,18 +6543,18 @@ public:
     // FUNCTION: 0x49d610
     virtual void UpdatePattern();
     // FUNCTION: 0x4add90
-    CNagamori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
-              BYTE p6);
+    CNagamori(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound,
+              BYTE side);
     // FUNCTION: 0x4adfa0
     virtual void Reset();
     // FUNCTION: 0x4ae130
     virtual void StartPattern();
     // FUNCTION: 0x4ae170
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x4ae1d0
     // Sets m_objectTriggered for each active object within p3 (x) and p4 (y) of (p1, p2):
     // her attacks and explosions detonate bombs this way
-    void TriggerObjectsNear(short p1, short p2, short p3, short p4);
+    void TriggerObjectsNear(short centerX, short centerY, short rangeX, short rangeY);
     // FUNCTION: 0x4ae2c0
     virtual void Move();
     // FUNCTION: 0x4ae2e0
@@ -6564,7 +6564,7 @@ public:
     // FUNCTION: 0x4b1720
     virtual void PreUpdate();
     // FUNCTION: 0x4b1750
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x4b1780
     virtual void ReadCommand();
     // FUNCTION: 0x4b2ac0
@@ -6722,13 +6722,13 @@ public:
     // FUNCTION: 0x62a5e0
     virtual void UpdatePattern();
     // FUNCTION: 0x638d90
-    CKaori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CKaori(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x638f10
     virtual void Reset();
     // FUNCTION: 0x639030
     virtual void StartPattern();
     // FUNCTION: 0x639070
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x6390c0
     virtual void Move();
     // FUNCTION: 0x6390e0
@@ -6738,7 +6738,7 @@ public:
     // FUNCTION: 0x63b620
     virtual void PreUpdate();
     // FUNCTION: 0x63b630
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x63b660
     virtual void ReadCommand();
     // FUNCTION: 0x63c960
@@ -6983,13 +6983,13 @@ public:
     // FUNCTION: 0x6429c0
     virtual void UpdatePattern();
     // FUNCTION: 0x653a20
-    CKano(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CKano(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x653c30
     virtual void Reset();
     // FUNCTION: 0x653dd0
     virtual void StartPattern();
     // FUNCTION: 0x653e10
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x653e60
     virtual void Move();
     // FUNCTION: 0x653e80
@@ -6999,7 +6999,7 @@ public:
     // FUNCTION: 0x657b70
     virtual void PreUpdate();
     // FUNCTION: 0x657e70
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x657ea0
     virtual void ReadCommand();
     // FUNCTION: 0x659250
@@ -7255,7 +7255,7 @@ public:
     // few changed loops and cancels
     void UpdatePatternAlt();
     // FUNCTION: 0x6a59c0
-    CIkumi(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CIkumi(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x6a5c50
     virtual void Reset();
     // FUNCTION: 0x6a5dc0
@@ -7269,7 +7269,7 @@ public:
     // FUNCTION: 0x6a6270
     virtual void StartPattern();
     // FUNCTION: 0x6a62c0
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x6a6310
     virtual void Move();
     // FUNCTION: 0x6a6330
@@ -7281,9 +7281,9 @@ public:
     // FUNCTION: 0x6ab6a0
     // p1 1: swaps m_altAnims/m_altPatterns in (anims, every object's anims, m_patterns);
     // 0: puts the base tables back
-    void UseAltPatterns(char p1);
+    void UseAltPatterns(char on);
     // FUNCTION: 0x6ab7b0
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x6ab7e0
     virtual void ReadCommand();
     // FUNCTION: 0x6acc10
@@ -7459,14 +7459,14 @@ public:
     // FUNCTION: 0x6be9c0
     virtual void UpdatePattern();
     // FUNCTION: 0x6cfbb0
-    CEXNanase(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
-              BYTE p6);
+    CEXNanase(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound,
+              BYTE side);
     // FUNCTION: 0x6cfd80
     virtual void Reset();
     // FUNCTION: 0x6cfed0
     virtual void StartPattern();
     // FUNCTION: 0x6cff10
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x6cff60
     virtual void Move();
     // FUNCTION: 0x6cff80
@@ -7474,11 +7474,11 @@ public:
     // FUNCTION: 0x6d2400
     virtual void DrawGauge();
     // FUNCTION: 0x6d2410
-    void Unk6d2410(int p1);
+    void Unk6d2410(int value);
     // FUNCTION: 0x6d2420
     virtual void PreUpdate();
     // FUNCTION: 0x6d2740
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x6d2770
     virtual void ReadCommand();
     // FUNCTION: 0x6d38e0
@@ -7654,13 +7654,13 @@ public:
     // FUNCTION: 0x730710
     virtual void UpdatePattern();
     // FUNCTION: 0x73e790
-    CNayukiB(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CNayukiB(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side);
     // FUNCTION: 0x73e970
     virtual void Reset();
     // FUNCTION: 0x73eac0
     virtual void StartPattern();
     // FUNCTION: 0x73eb00
-    virtual void RemoveObject(short p1);
+    virtual void RemoveObject(short slot);
     // FUNCTION: 0x73eb50
     virtual void Move();
     // FUNCTION: 0x73eb70
@@ -7670,7 +7670,7 @@ public:
     // FUNCTION: 0x741ac0
     virtual void PreUpdate();
     // FUNCTION: 0x741bc0
-    virtual void SpawnObject(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* desc);
     // FUNCTION: 0x741bf0
     virtual void ReadCommand();
     // FUNCTION: 0x742eb0

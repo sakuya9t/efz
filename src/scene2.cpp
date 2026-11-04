@@ -6,8 +6,8 @@
 #include <math.h>
 #include "efz.h"
 
-CScene2::CScene2(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
-    : CScene(p1, p2, p3, p4, p5, p6, p7)
+CScene2::CScene2(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound)
+    : CScene(hwnd, player1Ref, player2Ref, game, graphics, input, sound)
 {
     m_loadingSurface = 0;
 }
@@ -22,33 +22,33 @@ CScene2::~CScene2()
 
 BYTE CScene2::Update()
 {
-    int v38;
-    char v34[8];
-    char v2c[40];
+    int picture; // the loading screen shown, system\nl\nlNNN
+    char number[8];
+    char path[40];
 
-    v38 = rand() % 0xaf;
+    picture = rand() % 0xaf;
     if (0) {
-        v38 = 0x70;
+        picture = 0x70;
     }
     m_players[0] = *m_player1Ref;
     m_players[1] = *m_player2Ref;
-    strcpy(v2c, "system\\nl\\nl");
-    if (v38 < 0x64) {
-        strcat(v2c, "0");
+    strcpy(path, "system\\nl\\nl");
+    if (picture < 0x64) {
+        strcat(path, "0");
     }
-    if (v38 < 0xa) {
-        strcat(v2c, "0");
+    if (picture < 0xa) {
+        strcat(path, "0");
     }
-    _itoa(v38, v34, 0xa);
-    strcat(v2c, (const char*)v34);
+    _itoa(picture, number, 0xa);
+    strcat(path, (const char*)number);
     if (1) {
-        strcat(v2c, ".dat");
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)v2c, 0, 1);
-        m_graphics->LoadPaletteDat(m_palette, (const char*)v2c, 0, 1, 0xfe);
+        strcat(path, ".dat");
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)path, 0, 1);
+        m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 1, 0xfe);
     } else {
-        strcat(v2c, ".bmp");
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)v2c, 1);
-        m_graphics->LoadPaletteBmp(m_palette, (const char*)v2c, 0, 1, 0xfe);
+        strcat(path, ".bmp");
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)path, 1);
+        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 1, 0xfe);
     }
     Draw();
     CScene::FadeIn(m_palette, 0);
@@ -70,60 +70,60 @@ void CScene2::Draw()
 
 void CScene2::SetupMatch()
 {
-    char v38[40];
-    int l10;
-    char vc[8];
+    char path[40];
+    int pick; // a random character, and in the demo a random stage
+    char number[8];
 
     if (m_game->m_gameMode == 6) {
-        l10 = 0x16;
-        while (l10 == 0x13 || l10 == 0x16) {
-            l10 = rand() % 0x18;
-            if (m_game->m_extraChars == 0 && (l10 == 0x14 || l10 == 0x15 || l10 == 0x17)) {
-                l10 = 0x16;
+        pick = 0x16;
+        while (pick == 0x13 || pick == 0x16) {
+            pick = rand() % 0x18;
+            if (m_game->m_extraChars == 0 && (pick == 0x14 || pick == 0x15 || pick == 0x17)) {
+                pick = 0x16;
             }
-            if (m_game->m_extraChars == -1 && (l10 == 0xc || l10 == 0xd || l10 == 0xe || l10 == 0xf)) {
-                l10 = 0x16;
-            }
-        }
-        CreateCharacter(m_player1Ref, m_player2Ref, 0, l10);
-        l10 = 0x16;
-        while (l10 == 0x13 || l10 == 0x16) {
-            l10 = rand() % 0x18;
-            if (m_game->m_extraChars == 0 && (l10 == 0x14 || l10 == 0x15 || l10 == 0x17)) {
-                l10 = 0x16;
-            }
-            if (m_game->m_extraChars == -1 && (l10 == 0xc || l10 == 0xd || l10 == 0xe || l10 == 0xf)) {
-                l10 = 0x16;
+            if (m_game->m_extraChars == -1 && (pick == 0xc || pick == 0xd || pick == 0xe || pick == 0xf)) {
+                pick = 0x16;
             }
         }
-        CreateCharacter(m_player2Ref, m_player1Ref, 1, l10);
+        CreateCharacter(m_player1Ref, m_player2Ref, 0, pick);
+        pick = 0x16;
+        while (pick == 0x13 || pick == 0x16) {
+            pick = rand() % 0x18;
+            if (m_game->m_extraChars == 0 && (pick == 0x14 || pick == 0x15 || pick == 0x17)) {
+                pick = 0x16;
+            }
+            if (m_game->m_extraChars == -1 && (pick == 0xc || pick == 0xd || pick == 0xe || pick == 0xf)) {
+                pick = 0x16;
+            }
+        }
+        CreateCharacter(m_player2Ref, m_player1Ref, 1, pick);
         (*m_player1Ref)->m_paletteIndex = 0;
         (*m_player2Ref)->m_paletteIndex = (*m_player2Ref)->m_charId == (*m_player1Ref)->m_charId;
         (*m_player1Ref)->m_cpu = 1;
         (*m_player2Ref)->m_cpu = 1;
-        l10 = 0x17;
-        while (l10 == 0x17) {
-            l10 = rand() % 0x17;
-            if (m_game->m_extraChars == 0 && l10 >= 0xd && l10 <= 0x10) {
-                l10 = 0x17;
+        pick = 0x17;
+        while (pick == 0x17) {
+            pick = rand() % 0x17;
+            if (m_game->m_extraChars == 0 && pick >= 0xd && pick <= 0x10) {
+                pick = 0x17;
             }
-            if (m_game->m_extraChars == -1 && l10 >= 0x12 && l10 <= 0x16) {
-                l10 = 0x17;
+            if (m_game->m_extraChars == -1 && pick >= 0x12 && pick <= 0x16) {
+                pick = 0x17;
             }
         }
-        m_game->m_stage = l10;
+        m_game->m_stage = pick;
         m_game->m_editColor[0] = 0;
         m_game->m_editColor[1] = 0;
     } else if (m_game->m_gameMode == 5) {
-        strcpy(v38, "replay\\data");
-        _itoa(m_game->m_replayPage + 1, vc, 0xa);
-        strcat(v38, (const char*)vc);
-        strcat(v38, "-");
-        _itoa(m_game->m_replaySlot + 1, vc, 0xa);
-        strcat(v38, (const char*)vc);
-        strcat(v38, ".rep");
+        strcpy(path, "replay\\data");
+        _itoa(m_game->m_replayPage + 1, number, 0xa);
+        strcat(path, (const char*)number);
+        strcat(path, "-");
+        _itoa(m_game->m_replaySlot + 1, number, 0xa);
+        strcat(path, (const char*)number);
+        strcat(path, ".rep");
         if (m_game->m_replayMode == 1) {
-            m_game->m_replay.OpenRead((const char*)v38);
+            m_game->m_replay.OpenRead((const char*)path);
             CreateCharacter(m_player1Ref, m_player2Ref, 0, m_game->m_replay.Read());
             CreateCharacter(m_player2Ref, m_player1Ref, 1, m_game->m_replay.Read());
             m_game->m_stage = m_game->m_replay.Read();
@@ -136,7 +136,7 @@ void CScene2::SetupMatch()
             (*m_player1Ref)->m_paletteIndex = m_game->m_replay.Read();
             (*m_player2Ref)->m_paletteIndex = m_game->m_replay.Read();
         } else if (m_game->m_replayMode == 2) {
-            m_game->m_replay.OpenWrite((const char*)v38);
+            m_game->m_replay.OpenWrite((const char*)path);
             m_game->m_replay.Write((*m_player1Ref)->m_charId);
             m_game->m_replay.Write((*m_player2Ref)->m_charId);
             m_game->m_replay.Write(0x68);
@@ -145,53 +145,53 @@ void CScene2::SetupMatch()
             m_game->m_replay.Write((*m_player2Ref)->m_paletteIndex);
         }
     } else if (m_game->m_gameMode == 0 && (unsigned char)m_game->m_continued == 0 || m_game->m_gameMode == 2) {
-        l10 = 0x16;
-        while ((1 << l10 & m_game->m_beatenChars) != 0 || l10 == 0x12 || l10 == 0x13 || l10 == 0x16) {
-            l10 = rand() % 0x18;
-            if (m_game->m_extraChars == 0 && (l10 == 0x14 || l10 == 0x15 || l10 == 0x17)) {
-                l10 = 0x16;
+        pick = 0x16;
+        while ((1 << pick & m_game->m_beatenChars) != 0 || pick == 0x12 || pick == 0x13 || pick == 0x16) {
+            pick = rand() % 0x18;
+            if (m_game->m_extraChars == 0 && (pick == 0x14 || pick == 0x15 || pick == 0x17)) {
+                pick = 0x16;
             }
-            if (m_game->m_extraChars == -1 && (l10 == 0xc || l10 == 0xd || l10 == 0xe || l10 == 0xf)) {
-                l10 = 0x16;
+            if (m_game->m_extraChars == -1 && (pick == 0xc || pick == 0xd || pick == 0xe || pick == 0xf)) {
+                pick = 0x16;
             }
         }
         if (m_game->m_gameMode == 0) {
             if (m_game->m_arcadeMatch == 8) {
                 if ((unsigned char)m_game->m_continuedAt == 0 || (unsigned char)m_game->m_continuedAt == 8) {
-                    l10 = 0x13;
+                    pick = 0x13;
                 } else {
-                    l10 = 0x18;
+                    pick = 0x18;
                 }
                 if (m_game->m_extraChars == 0) {
-                    l10 = 0x18;
+                    pick = 0x18;
                 }
             }
         } else if (m_game->m_extraChars == 0) {
             if (m_game->m_arcadeMatch == 8) {
-                l10 = 0x18;
+                pick = 0x18;
             }
         } else {
             if (m_game->m_arcadeMatch == 8) {
-                l10 = 0x13;
+                pick = 0x13;
             }
             if (m_game->m_arcadeMatch == 7) {
-                l10 = 0x18;
+                pick = 0x18;
             }
         }
         if (m_game->m_isCpu[0] == 1) {
-            CreateCharacter(m_player1Ref, m_player2Ref, 0, l10);
+            CreateCharacter(m_player1Ref, m_player2Ref, 0, pick);
             (*m_player1Ref)->m_paletteIndex = 0;
             if ((*m_player1Ref)->m_charId == (*m_player2Ref)->m_charId && (*m_player2Ref)->m_paletteIndex == 0) {
                 (*m_player1Ref)->m_paletteIndex = 1;
             }
         } else {
-            CreateCharacter(m_player2Ref, m_player1Ref, 1, l10);
+            CreateCharacter(m_player2Ref, m_player1Ref, 1, pick);
             (*m_player2Ref)->m_paletteIndex = 0;
             if ((*m_player2Ref)->m_charId == (*m_player1Ref)->m_charId && (*m_player1Ref)->m_paletteIndex == 0) {
                 (*m_player2Ref)->m_paletteIndex = 1;
             }
         }
-        switch (l10) {
+        switch (pick) {
         case 0:
             m_game->m_stage = 4;
             break;
@@ -265,55 +265,55 @@ void CScene2::SetupMatch()
             m_game->m_stage = 0xc;
         }
     }
-    _itoa(m_game->m_stage, vc, 0xa);
+    _itoa(m_game->m_stage, number, 0xa);
     if (m_game->m_stage < 0xa) {
-        strcpy(v38, "system\\bg\\bg0");
+        strcpy(path, "system\\bg\\bg0");
     } else {
-        strcpy(v38, "system\\bg\\bg");
+        strcpy(path, "system\\bg\\bg");
     }
-    strcat(v38, (const char*)vc);
+    strcat(path, (const char*)number);
     if (1) {
-        strcat(v38, ".dat");
+        strcat(path, ".dat");
         if ((int)m_game->m_stageSurface != 0) {
             m_game->m_stageSurface->Release();
             m_game->m_stageSurface = (IDirectDrawSurface*)0;
         }
-        m_game->LoadDat(&m_game->m_stageSurface, (const char*)v38, 0, 1);
-        m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v38, 0, 1, 0x5e);
-        _itoa(m_game->m_stage, vc, 0xa);
+        m_game->LoadDat(&m_game->m_stageSurface, (const char*)path, 0, 1);
+        m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, 1, 0x5e);
+        _itoa(m_game->m_stage, number, 0xa);
         if (m_game->m_stage < 0xa) {
-            strcpy(v38, "system\\bg\\bg0");
+            strcpy(path, "system\\bg\\bg0");
         } else {
-            strcpy(v38, "system\\bg\\bg");
+            strcpy(path, "system\\bg\\bg");
         }
-        strcat(v38, (const char*)vc);
-        strcat(v38, "b.dat");
+        strcat(path, (const char*)number);
+        strcat(path, "b.dat");
         if ((int)m_game->m_stageNegative != 0) {
             m_game->m_stageNegative->Release();
             m_game->m_stageNegative = (IDirectDrawSurface*)0;
         }
-        m_game->LoadDat(&m_game->m_stageNegative, (const char*)v38, 0, 0xaf);
+        m_game->LoadDat(&m_game->m_stageNegative, (const char*)path, 0, 0xaf);
     } else {
-        strcat(v38, ".bmp");
+        strcat(path, ".bmp");
         if ((int)m_game->m_stageSurface != 0) {
             m_game->m_stageSurface->Release();
             m_game->m_stageSurface = (IDirectDrawSurface*)0;
         }
-        m_graphics->LoadBmp(&m_game->m_stageSurface, (const char*)v38, 1);
-        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v38, 0, 1, 0x5e);
-        _itoa(m_game->m_stage, vc, 0xa);
+        m_graphics->LoadBmp(&m_game->m_stageSurface, (const char*)path, 1);
+        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, 0, 1, 0x5e);
+        _itoa(m_game->m_stage, number, 0xa);
         if (m_game->m_stage < 0xa) {
-            strcpy(v38, "system\\bg\\bg0");
+            strcpy(path, "system\\bg\\bg0");
         } else {
-            strcpy(v38, "system\\bg\\bg");
+            strcpy(path, "system\\bg\\bg");
         }
-        strcat(v38, (const char*)vc);
-        strcat(v38, "b.bmp");
+        strcat(path, (const char*)number);
+        strcat(path, "b.bmp");
         if ((int)m_game->m_stageNegative != 0) {
             m_game->m_stageNegative->Release();
             m_game->m_stageNegative = (IDirectDrawSurface*)0;
         }
-        m_graphics->LoadBmp(&m_game->m_stageNegative, (const char*)v38, 0xaf);
+        m_graphics->LoadBmp(&m_game->m_stageNegative, (const char*)path, 0xaf);
     }
     switch (m_game->m_stage) {
     case 1:
@@ -352,85 +352,85 @@ void CScene2::HandleKeys()
 {
 }
 
-void CScene2::CreateCharacter(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3, char p4)
+void CScene2::CreateCharacter(PTR32(CPlayer)* player, PTR32(CPlayer)* opponent, char side, char charId)
 {
-    switch (p4) {
+    switch (charId) {
     case 0:
-        *p1 = new CNanase(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CNanase(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 1:
-        *p1 = new CAyu(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CAyu(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 2:
-        *p1 = new CMai(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMai(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 3:
-        *p1 = new CMakoto(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMakoto(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 4:
-        *p1 = new CAkane(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CAkane(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 5:
-        *p1 = new CMayu(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMayu(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 6:
-        *p1 = new CNagamori(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CNagamori(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 7:
-        *p1 = new CMisaki(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMisaki(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 8:
-        *p1 = new CShiori(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CShiori(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 9:
-        *p1 = new CSayuri(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CSayuri(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0xa:
-        *p1 = new CNayuki(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CNayuki(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0xb:
-        *p1 = new CMio(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMio(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0xc:
-        *p1 = new CEXNanase(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CEXNanase(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0xd:
-        *p1 = new CKaori(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CKaori(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0xe:
-        *p1 = new CIkumi(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CIkumi(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0xf:
-        *p1 = new CMishio(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMishio(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x10:
-        *p1 = new CAkiko(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CAkiko(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x11:
-        *p1 = new CNayukiB(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CNayukiB(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x12:
-        *p1 = new CMizukaB(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMizukaB(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x13:
-        *p1 = new CKanna(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CKanna(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x14:
-        *p1 = new CKano(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CKano(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x15:
-        *p1 = new CMinagi(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMinagi(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x16:
-        *p1 = new CNayuki(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CNayuki(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x17:
-        *p1 = new CMisuzu(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMisuzu(opponent, m_game, m_graphics, m_input, m_sound, side);
         break;
     case 0x18:
-        *p1 = new CMizuka(p2, m_game, m_graphics, m_input, m_sound, p3);
+        *player = new CMizuka(opponent, m_game, m_graphics, m_input, m_sound, side);
     }
-    (*p1)->m_charId = p4;
-    m_players[p3] = *p1;
-    (*p1)->m_cpu = m_game->m_isCpu[p3];
+    (*player)->m_charId = charId;
+    m_players[side] = *player;
+    (*player)->m_cpu = m_game->m_isCpu[side];
 }

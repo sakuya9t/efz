@@ -395,7 +395,7 @@ void CEXNanase::DrawGauge()
 {
 }
 
-void CEXNanase::Unk6d2410(int p1)
+void CEXNanase::Unk6d2410(int value)
 {
 }
 

@@ -4,45 +4,45 @@
 #include <math.h>
 #include "efz.h"
 
-CBg16::CBg16(CGraphics* p1)
+CBg16::CBg16(CGraphics* graphics)
     : CAnimBg()
 {
-    int xc;
-    int v8;
-    int v4;
+    int objects; // the block for m_objects
+    int surfaces; // the block for m_surfaces, a pointer per frame
+    int i;
 
-    m_graphics = p1;
+    m_graphics = graphics;
     m_number = 0x10;
     m_lastFrame = 3;
-    v8 = TOINT(int, operator new(0x10));
-    m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, v8);
-    xc = TOINT(int, operator new(0x1c0));
-    m_objects = TOPTR(BgObject*, xc);
+    surfaces = TOINT(int, operator new(0x10));
+    m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, surfaces);
+    objects = TOINT(int, operator new(0x1c0));
+    m_objects = TOPTR(BgObject*, objects);
     m_anims = new EffectAnim[4];
     CAnimBg::Load();
     CAnimBg::LoadAnims();
-    v4 = 0;
-    for (; v4 < 4; v4++) {
-        m_objects[v4].pattern = v4;
-        m_objects[v4].x = 0.0;
-        m_objects[v4].y = -450.0;
-        m_objects[v4].frame = 0;
-        m_objects[v4].timer = 0;
-        m_objects[v4].facing = 1;
-        m_objects[v4].scale = 2;
-        m_objects[v4].layer = v4 > 1;
+    i = 0;
+    for (; i < 4; i++) {
+        m_objects[i].pattern = i;
+        m_objects[i].x = 0.0;
+        m_objects[i].y = -450.0;
+        m_objects[i].frame = 0;
+        m_objects[i].timer = 0;
+        m_objects[i].facing = 1;
+        m_objects[i].scale = 2;
+        m_objects[i].layer = i > 1;
     }
 }
 
 CBg16::~CBg16()
 {
-    int v4;
+    int i;
 
-    v4 = 0;
-    for (; v4 < 4; v4++) {
-        if ((int)m_surfaces[v4] != 0) {
-            m_surfaces[v4]->Release();
-            m_surfaces[v4] = (IDirectDrawSurface*)0;
+    i = 0;
+    for (; i < 4; i++) {
+        if ((int)m_surfaces[i] != 0) {
+            m_surfaces[i]->Release();
+            m_surfaces[i] = (IDirectDrawSurface*)0;
         }
     }
     delete (char*)m_surfaces;
@@ -52,82 +52,82 @@ CBg16::~CBg16()
 
 void CBg16::Update()
 {
-    short xc;
-    short v8;
-    int v4;
+    short frameCount; // frames in the object's animation; unused too
+    short duration; // ticks the object's current frame lasts; unused, the objects only scroll
+    int i;
 
-    v4 = 0;
-    for (; v4 < 4; v4++) {
-        v8 = (short)m_anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
-        xc = m_anims[m_objects[v4].pattern].frameCount;
-        switch (m_objects[v4].pattern) {
+    i = 0;
+    for (; i < 4; i++) {
+        duration = (short)m_anims[m_objects[i].pattern].frames[m_objects[i].frame].duration;
+        frameCount = m_anims[m_objects[i].pattern].frameCount;
+        switch (m_objects[i].pattern) {
         case kStand:
-            m_objects[v4].x++;
-            if (m_objects[v4].x >= 850.0) {
-                m_objects[v4].x -= 850.0;
+            m_objects[i].x++;
+            if (m_objects[i].x >= 850.0) {
+                m_objects[i].x -= 850.0;
             }
             break;
         case kWalkForward:
-            m_objects[v4].x += 1.4;
-            if (m_objects[v4].x >= 806.0) {
-                m_objects[v4].x -= 806.0;
+            m_objects[i].x += 1.4;
+            if (m_objects[i].x >= 806.0) {
+                m_objects[i].x -= 806.0;
             }
             break;
         case kWalkBack:
-            m_objects[v4].x += 1.8;
-            if (m_objects[v4].x >= 789.0) {
-                m_objects[v4].x -= 789.0;
+            m_objects[i].x += 1.8;
+            if (m_objects[i].x >= 789.0) {
+                m_objects[i].x -= 789.0;
             }
             break;
         case kCrouch:
-            m_objects[v4].x += 2.2;
-            if (m_objects[v4].x >= 947.0) {
-                m_objects[v4].x = 947.0;
+            m_objects[i].x += 2.2;
+            if (m_objects[i].x >= 947.0) {
+                m_objects[i].x = 947.0;
             }
         }
     }
 }
 
-void CBg16::Draw(int p1, int p2, char p3)
+void CBg16::Draw(int x, int y, char layer)
 {
-    int l40;
-    RECT v3c;
-    EffectFrame v2c;
-    RECT v20;
-    RECT v10;
+    int i;
+    RECT src; // the part of the sprite drawn
+    EffectFrame sprite; // the frame drawn
+    RECT dst; // where on the screen
+    RECT wrapDst; // a second copy left of dst, so the scrolling layer wraps around
 
-    l40 = 0;
-    for (; l40 < 4; l40++) {
-        if (p3 != (unsigned char)m_objects[l40].layer) {
+    i = 0;
+    for (; i < 4; i++) {
+        if (layer != (unsigned char)m_objects[i].layer) {
             continue;
         }
-        v2c = m_anims[m_objects[l40].pattern].frames[m_objects[l40].frame];
-        v3c = MakeRect(0, 0, v2c.width, v2c.height);
-        if (m_objects[l40].facing == -1) {
-            v20.left = (int)m_objects[l40].x + p1 - (v2c.width - v2c.x);
-            v20.top = p2 + (int)m_objects[l40].y + 0xd2 - v2c.y;
-            v20.right = v2c.width + v20.left;
-            v20.bottom = v2c.height + v20.top;
-            v10.left = (int)m_objects[l40].x + p1 - (v2c.width - v2c.x) - v2c.width;
-            v10.top = p2 + (int)m_objects[l40].y + 0xd2 - v2c.y;
-            v10.right = v2c.width + v10.left;
-            v10.bottom = v2c.height + v10.top;
+        sprite = m_anims[m_objects[i].pattern].frames[m_objects[i].frame];
+        src = MakeRect(0, 0, sprite.width, sprite.height);
+        if (m_objects[i].facing == -1) {
+            dst.left = (int)m_objects[i].x + x - (sprite.width - sprite.x);
+            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.right = sprite.width + dst.left;
+            dst.bottom = sprite.height + dst.top;
+            wrapDst.left = (int)m_objects[i].x + x - (sprite.width - sprite.x) - sprite.width;
+            wrapDst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            wrapDst.right = sprite.width + wrapDst.left;
+            wrapDst.bottom = sprite.height + wrapDst.top;
         } else {
-            v20.left = (int)m_objects[l40].x + p1 - v2c.x;
-            v20.top = p2 + (int)m_objects[l40].y + 0xd2 - v2c.y;
-            v20.right = v2c.width + v20.left;
-            v20.bottom = v2c.height + v20.top;
-            v10.left = (int)m_objects[l40].x + p1 - v2c.x - v2c.width;
-            v10.top = p2 + (int)m_objects[l40].y + 0xd2 - v2c.y;
-            v10.right = v2c.width + v10.left;
-            v10.bottom = v2c.height + v10.top;
+            dst.left = (int)m_objects[i].x + x - sprite.x;
+            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.right = sprite.width + dst.left;
+            dst.bottom = sprite.height + dst.top;
+            wrapDst.left = (int)m_objects[i].x + x - sprite.x - sprite.width;
+            wrapDst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            wrapDst.right = sprite.width + wrapDst.left;
+            wrapDst.bottom = sprite.height + wrapDst.top;
         }
-        if (m_objects[l40].scale > 0) {
-            m_graphics->BlitEx(v20, m_surfaces[v2c.surface], v3c, m_colorKey, m_objects[l40].facing == -1, m_objects[l40].scale - 1);
-            m_graphics->BlitEx(v10, m_surfaces[v2c.surface], v3c, m_colorKey, m_objects[l40].facing == -1, m_objects[l40].scale - 1);
+        if (m_objects[i].scale > 0) {
+            m_graphics->BlitEx(dst, m_surfaces[sprite.surface], src, m_colorKey, m_objects[i].facing == -1, m_objects[i].scale - 1);
+            m_graphics->BlitEx(wrapDst, m_surfaces[sprite.surface], src, m_colorKey, m_objects[i].facing == -1, m_objects[i].scale - 1);
         } else {
-            m_graphics->Blit(v20, m_surfaces[v2c.surface], v3c, m_colorKey, m_objects[l40].facing == -1);
-            m_graphics->Blit(v10, m_surfaces[v2c.surface], v3c, m_colorKey, m_objects[l40].facing == -1);
+            m_graphics->Blit(dst, m_surfaces[sprite.surface], src, m_colorKey, m_objects[i].facing == -1);
+            m_graphics->Blit(wrapDst, m_surfaces[sprite.surface], src, m_colorKey, m_objects[i].facing == -1);
         }
     }
 }

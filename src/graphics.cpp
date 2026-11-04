@@ -1491,7 +1491,7 @@ void CGraphics::BuildBlendTables(PALETTEENTRY* palette)
     BYTE m;
     BYTE c;
     BYTE jb;
-    WORD a3;
+    WORD a; // the first colour (jb the second, c the candidate)
     WORD dist1;
     WORD aveB;
     WORD kr;
@@ -1513,7 +1513,7 @@ void CGraphics::BuildBlendTables(PALETTEENTRY* palette)
     WORD blueSum;
     WORD best;
     BYTE* redB;
-    BYTE* pbb;
+    BYTE* blueB;
     BYTE* pgc;
     WORD* sq;
     WORD meanR;
@@ -1529,8 +1529,8 @@ void CGraphics::BuildBlendTables(PALETTEENTRY* palette)
     pGa = gbase;
     bbase = &palette[-1].peBlue;
     aBlue = bbase;
-    for (a3 = 0; a3 < 0x100; a3++) {
-        end = a3 + 1;
+    for (a = 0; a < 0x100; a++) {
+        end = a + 1;
         if (end > 0xff)
             end = 0xff;
         row08 += 0x100;
@@ -1540,11 +1540,11 @@ void CGraphics::BuildBlendTables(PALETTEENTRY* palette)
         aBlue += 4;
         redB = red;
         pgb = gbase;
-        pbb = bbase;
+        blueB = bbase;
         for (jb = 0; jb < end; jb++) {
             sr3 = *ra + *(redB += 4);
             addG = *pGa + *(pgb += 4);
-            blueSum = *aBlue + *(pbb += 4);
+            blueSum = *aBlue + *(blueB += 4);
             meanR = sr3 >> 1;
             avgG = addG >> 1;
             aveB = blueSum >> 1;
@@ -1578,9 +1578,9 @@ void CGraphics::BuildBlendTables(PALETTEENTRY* palette)
         }
     }
     for (m = 0; m < 0xff; m++) {
-        for (a3 = 0; a3 < m; a3++) {
-            m_blend[0][a3][m] = m_blend[0][m][a3];
-            m_blend[1][a3][m] = m_blend[1][m][a3];
+        for (a = 0; a < m; a++) {
+            m_blend[0][a][m] = m_blend[0][m][a];
+            m_blend[1][a][m] = m_blend[1][m][a];
         }
     }
 }

@@ -5,8 +5,8 @@
 #include <math.h>
 #include "efz.h"
 
-CScene6::CScene6(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
-    : CScene(p1, p2, p3, p4, p5, p6, p7)
+CScene6::CScene6(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound)
+    : CScene(hwnd, player1Ref, player2Ref, game, graphics, input, sound)
 {
     m_portraitSurface = 0;
     m_loadingSurface = 0;
@@ -88,9 +88,9 @@ CScene6::~CScene6()
 
 BYTE CScene6::Update()
 {
-    int xc;
-    int v8;
-    int v4;
+    int gallerySide;
+    int recordSide;
+    int menuSide;
 
     HandleKeys();
     if (m_enter == 1) {
@@ -121,10 +121,10 @@ BYTE CScene6::Update()
     }
     if ((char)m_held[2] == 0) {
         m_game->UpdateInput();
-        v4 = 0;
-        for (; v4 < 2; v4++) {
-            if (m_game->m_inputY[v4] != 0 && m_held[v4] == 0) {
-                m_cursor += m_game->m_inputY[v4];
+        menuSide = 0;
+        for (; menuSide < 2; menuSide++) {
+            if (m_game->m_inputY[menuSide] != 0 && m_held[menuSide] == 0) {
+                m_cursor += m_game->m_inputY[menuSide];
                 if (m_cursor > 7) {
                     m_cursor = 0;
                 }
@@ -132,15 +132,15 @@ BYTE CScene6::Update()
                     m_cursor = 7;
                 }
                 m_game->PlaySE(8);
-                m_held[v4] = 1;
+                m_held[menuSide] = 1;
             }
-            if (m_game->m_inputX[v4] == 0 && m_game->m_inputY[v4] == 0) {
-                m_held[v4] = 0;
+            if (m_game->m_inputX[menuSide] == 0 && m_game->m_inputY[menuSide] == 0) {
+                m_held[menuSide] = 0;
             }
             switch (m_cursor) {
             case 0:
-                if (m_game->m_inputX[v4] != 0 && m_held[v4] == 0) {
-                    m_game->m_drawEveryFrame += m_game->m_inputX[v4];
+                if (m_game->m_inputX[menuSide] != 0 && m_held[menuSide] == 0) {
+                    m_game->m_drawEveryFrame += m_game->m_inputX[menuSide];
                     if (m_game->m_drawEveryFrame > 1) {
                         m_game->m_drawEveryFrame = 0;
                     }
@@ -149,12 +149,12 @@ BYTE CScene6::Update()
                     }
                     WriteConfigByte(0x22, m_game->m_drawEveryFrame + 1);
                     m_game->PlaySE(8);
-                    m_held[v4] = 1;
+                    m_held[menuSide] = 1;
                 }
                 break;
             case 1:
-                if (m_game->m_inputX[v4] != 0 && m_held[v4] == 0) {
-                    *(char*)&m_game->m_damageLevel += m_game->m_inputX[v4];
+                if (m_game->m_inputX[menuSide] != 0 && m_held[menuSide] == 0) {
+                    *(char*)&m_game->m_damageLevel += m_game->m_inputX[menuSide];
                     if (m_game->m_damageLevel > 3) {
                         m_game->m_damageLevel = 1;
                     }
@@ -163,12 +163,12 @@ BYTE CScene6::Update()
                     }
                     WriteConfigByte(0x24, m_game->m_damageLevel);
                     m_game->PlaySE(8);
-                    m_held[v4] = 1;
+                    m_held[menuSide] = 1;
                 }
                 break;
             case 2:
-                if (m_game->m_inputX[v4] != 0 && m_held[v4] == 0) {
-                    m_game->m_fullEffects += m_game->m_inputX[v4];
+                if (m_game->m_inputX[menuSide] != 0 && m_held[menuSide] == 0) {
+                    m_game->m_fullEffects += m_game->m_inputX[menuSide];
                     if (m_game->m_fullEffects > 1) {
                         m_game->m_fullEffects = 0;
                     }
@@ -177,12 +177,12 @@ BYTE CScene6::Update()
                     }
                     WriteConfigByte(0x23, m_game->m_fullEffects + 1);
                     m_game->PlaySE(8);
-                    m_held[v4] = 1;
+                    m_held[menuSide] = 1;
                 }
                 break;
             case 3:
-                if (m_game->m_inputX[v4] != 0 && m_held[v4] == 0) {
-                    *(char*)&m_game->m_cpuLevel += m_game->m_inputX[v4];
+                if (m_game->m_inputX[menuSide] != 0 && m_held[menuSide] == 0) {
+                    *(char*)&m_game->m_cpuLevel += m_game->m_inputX[menuSide];
                     if (m_game->m_cpuLevel > 4) {
                         m_game->m_cpuLevel = 1;
                     }
@@ -191,12 +191,12 @@ BYTE CScene6::Update()
                     }
                     WriteConfigByte(0x21, m_game->m_cpuLevel);
                     m_game->PlaySE(8);
-                    m_held[v4] = 1;
+                    m_held[menuSide] = 1;
                 }
                 break;
             case 4:
-                if (m_game->m_inputX[v4] != 0 && m_held[v4] == 0) {
-                    *(char*)&m_game->m_roundsSetting += m_game->m_inputX[v4];
+                if (m_game->m_inputX[menuSide] != 0 && m_held[menuSide] == 0) {
+                    *(char*)&m_game->m_roundsSetting += m_game->m_inputX[menuSide];
                     if (m_game->m_roundsSetting > 3) {
                         m_game->m_roundsSetting = 1;
                     }
@@ -205,17 +205,17 @@ BYTE CScene6::Update()
                     }
                     WriteConfigByte(0x26, m_game->m_roundsSetting);
                     m_game->PlaySE(8);
-                    m_held[v4] = 1;
+                    m_held[menuSide] = 1;
                 }
                 break;
             case 5:
-                if (m_game->m_pressA[v4] == 1) {
+                if (m_game->m_pressA[menuSide] == 1) {
                     m_game->PlaySE(6);
                     ShowLoadingScreen();
                 }
                 break;
             case 6:
-                if (m_game->m_pressA[v4] == 1) {
+                if (m_game->m_pressA[menuSide] == 1) {
                     m_game->PlaySE(6);
                     SlidePage(0);
                     if (1) {
@@ -230,21 +230,21 @@ BYTE CScene6::Update()
                 }
                 break;
             case 7:
-                if (m_game->m_pressA[v4] == 1) {
+                if (m_game->m_pressA[menuSide] == 1) {
                     m_leave = 1;
                 }
             }
-            if (m_game->m_pressB[v4] == 1) {
+            if (m_game->m_pressB[menuSide] == 1) {
                 m_leave = 1;
             }
         }
     } else if ((char)m_held[2] == 1) {
         m_game->UpdateInput();
-        v8 = 0;
-        for (; v8 < 2; v8++) {
-            if (m_game->m_inputX[v8] != 0 && m_held[v8] == 0) {
+        recordSide = 0;
+        for (; recordSide < 2; recordSide++) {
+            if (m_game->m_inputX[recordSide] != 0 && m_held[recordSide] == 0) {
                 m_game->PlaySE(8);
-                m_recordChar += m_game->m_inputX[v8];
+                m_recordChar += m_game->m_inputX[recordSide];
                 if (m_game->m_extraChars == 0) {
                     if (m_recordChar == 0xc) {
                         m_recordChar = 0xf;
@@ -261,7 +261,7 @@ BYTE CScene6::Update()
                         m_recordChar = 0xf;
                     }
                     if (m_recordChar == 0x16) {
-                        if (m_game->m_inputX[v8] > 0) {
+                        if (m_game->m_inputX[recordSide] > 0) {
                             m_recordChar = 0;
                         } else {
                             m_recordChar = 0x14;
@@ -275,13 +275,13 @@ BYTE CScene6::Update()
                     m_recordChar = 0x16;
                 }
                 SwitchRecord();
-                m_held[v8] = 1;
+                m_held[recordSide] = 1;
             }
-            if (m_game->m_inputX[v8] == 0 && m_game->m_inputY[v8] == 0) {
-                m_held[v8] = 0;
+            if (m_game->m_inputX[recordSide] == 0 && m_game->m_inputY[recordSide] == 0) {
+                m_held[recordSide] = 0;
             }
-            if (m_game->m_pressA[v8] != 0 || m_game->m_pressB[v8] != 0) {
-                if (m_game->m_pressA[v8] != 0) {
+            if (m_game->m_pressA[recordSide] != 0 || m_game->m_pressB[recordSide] != 0) {
+                if (m_game->m_pressA[recordSide] != 0) {
                     m_game->PlaySE(6);
                 }
                 SlidePage(0);
@@ -297,11 +297,11 @@ BYTE CScene6::Update()
         }
     } else if ((char)m_held[2] == 2) {
         m_game->UpdateInput();
-        xc = 0;
-        for (; xc < 2; xc++) {
-            if (m_game->m_inputX[xc] != 0 || m_game->m_inputY[xc] != 0) {
+        gallerySide = 0;
+        for (; gallerySide < 2; gallerySide++) {
+            if (m_game->m_inputX[gallerySide] != 0 || m_game->m_inputY[gallerySide] != 0) {
                 m_game->PlaySE(8);
-                m_loadingScreen = m_game->m_inputX[xc] + m_game->m_inputY[xc] * 0xa + m_loadingScreen;
+                m_loadingScreen = m_game->m_inputX[gallerySide] + m_game->m_inputY[gallerySide] * 0xa + m_loadingScreen;
                 if (m_loadingScreen > 0xae) {
                     m_loadingScreen = 0;
                 }
@@ -310,8 +310,8 @@ BYTE CScene6::Update()
                 }
                 ShowLoadingScreen();
             }
-            if (m_game->m_pressA[xc] != 0 || m_game->m_pressB[xc] != 0) {
-                if (m_game->m_pressA[xc] != 0) {
+            if (m_game->m_pressA[gallerySide] != 0 || m_game->m_pressB[gallerySide] != 0) {
+                if (m_game->m_pressA[gallerySide] != 0) {
                     m_game->PlaySE(6);
                 }
                 FadeToBlack(1);
@@ -333,13 +333,13 @@ BYTE CScene6::Update()
 
 void CScene6::Draw()
 {
-    RECT v20;
-    RECT v10;
+    RECT dst;
+    RECT src;
 
     if ((char)m_held[2] == 0) {
-        v10 = MakeRect(0, 0, 0x140, 0xf0);
-        v20 = MakeRect(0, 0, 0x140, 0xf0);
-        m_graphics->Blit(v20, TOPTR(IDirectDrawSurface*, m_bgSurface), v10, 0xff, 0);
+        src = MakeRect(0, 0, 0x140, 0xf0);
+        dst = MakeRect(0, 0, 0x140, 0xf0);
+        m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_bgSurface), src, 0xff, 0);
         m_graphics->Blit(MakeRect(0, 0 - m_pageY, 0x140, 0x28), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 0x140, 0x28), m_colorKey, 0);
         m_graphics->Blit(MakeRect(0, m_pageY + 0x28, 0x140, 0xc8), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0x28, 0x140, 0xc8), m_colorKey, 0);
         switch (m_cursor) {
@@ -401,9 +401,9 @@ void CScene6::Draw()
             m_graphics->Blit(MakeRect(0xb0, m_pageY + 0xa7, 0x18, 0xe), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0xb0, 0x14d, 0x18, 0xe), m_colorKey, 0);
         }
     } else if ((char)m_held[2] == 1) {
-        v10 = MakeRect(0, 0, 0x140, 0xf0);
-        v20 = MakeRect(0, 0, 0x140, 0xf0);
-        m_graphics->Blit(v20, TOPTR(IDirectDrawSurface*, m_bgSurface), v10, 0xff, 0);
+        src = MakeRect(0, 0, 0x140, 0xf0);
+        dst = MakeRect(0, 0, 0x140, 0xf0);
+        m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_bgSurface), src, 0xff, 0);
         m_graphics->Blit(MakeRect(0, 0 - m_pageY, 0x140, 0x28), TOPTR(IDirectDrawSurface*, m_scoreSurface), MakeRect(0, 0, 0x140, 0x28), m_scoreKey, 0);
         m_graphics->Blit(MakeRect(0, m_pageY + 0x28, 0x140, 0xc8), TOPTR(IDirectDrawSurface*, m_scoreSurface), MakeRect(0, 0x28, 0x140, 0xc8), m_scoreKey, 0);
         m_graphics->Blit(MakeRect(m_portraitX + 0x50, m_pageY, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, m_portraitSurface), MakeRect(0, 0, 0x140, 0xf0), m_portraitKey, 0);
@@ -418,62 +418,62 @@ void CScene6::Draw()
     m_graphics->Flip();
 }
 
-void CScene6::DrawNumber(int p1, int p2, int p3)
+void CScene6::DrawNumber(int right, int top, int value)
 {
-    RECT v2c;
-    int v1c;
-    RECT l18;
-    DWORD x8;
-    int l4;
+    RECT src;
+    int digit;
+    RECT dst;
+    DWORD rest; // the digits not drawn yet
+    int x; // right edge of the digit drawn
 
-    x8 = p3;
-    l4 = p1;
+    rest = value;
+    x = right;
     do {
-        v1c = x8 % 0xa;
-        v2c.top = 0xf0;
-        v2c.bottom = 0xfe;
-        v2c.left = (v1c << 4) + 2;
-        v2c.right = (v1c << 4) + 0xe;
-        l18.top = p2;
-        l18.bottom = p2 + 0xe;
-        l18.right = l4 - 2;
-        l18.left = l4 - 0xe;
-        m_graphics->Blit(l18, TOPTR(IDirectDrawSurface*, m_scoreSurface), v2c, m_scoreKey, 0);
-        l4 -= 0xa;
-        x8 = x8 / 0xa;
-    } while (x8 > 0);
+        digit = rest % 0xa;
+        src.top = 0xf0;
+        src.bottom = 0xfe;
+        src.left = (digit << 4) + 2;
+        src.right = (digit << 4) + 0xe;
+        dst.top = top;
+        dst.bottom = top + 0xe;
+        dst.right = x - 2;
+        dst.left = x - 0xe;
+        m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_scoreSurface), src, m_scoreKey, 0);
+        x -= 0xa;
+        rest = rest / 0xa;
+    } while (rest > 0);
 }
 
 void CScene6::HandleKeys()
 {
-    int l10c;
-    char v108[256];
+    int hr;
+    char keys[256]; // one byte per DIK_ code, bit 7 down
 
-    l10c = m_input->m_keyboard->GetDeviceState(0x100, v108);
-    if (l10c < 0 && l10c == 0x8007001e) {
+    hr = m_input->m_keyboard->GetDeviceState(0x100, keys);
+    if (hr < 0 && hr == 0x8007001e) {
         m_input->m_keyboard->Acquire();
     }
-    if ((v108[1] & 0x80) != 0) {
+    if ((keys[1] & 0x80) != 0) {
         m_leave = 1;
     }
 }
 
 void CScene6::LoadRecord()
 {
-    char v38[52];
+    char path[52];
 
-    strcpy(v38, "system\\");
-    strcat(v38, m_names[m_recordChar]);
-    strcat(v38, "\\");
-    strcat(v38, m_names[m_recordChar]);
+    strcpy(path, "system\\");
+    strcat(path, m_names[m_recordChar]);
+    strcat(path, "\\");
+    strcat(path, m_names[m_recordChar]);
     if (1) {
-        strcat(v38, ".dat");
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_portraitSurface, (const char*)v38, 0, 0xd6);
-        m_graphics->LoadPaletteDat(m_palette, (const char*)v38, 0, 0xd6, 0x28);
+        strcat(path, ".dat");
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_portraitSurface, (const char*)path, 0, 0xd6);
+        m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 0xd6, 0x28);
     } else {
-        strcat(v38, ".bmp");
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_portraitSurface, (const char*)v38, 0xd6);
-        m_graphics->LoadPaletteBmp(m_palette, (const char*)v38, 0, 0xd6, 0x28);
+        strcat(path, ".bmp");
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_portraitSurface, (const char*)path, 0xd6);
+        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 0xd6, 0x28);
     }
     m_portraitKey = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_portraitSurface));
     m_record.Load(m_names[m_recordChar]);
@@ -481,148 +481,148 @@ void CScene6::LoadRecord()
 
 void CScene6::SwitchRecord()
 {
-    int xc;
-    int v8;
-    int v4;
+    int angle; // degrees, 0-360: the portrait slides out and back
+    int frameStart;
+    int shortFrame; // 1 every other frame, which waits 15 ms instead of 16
 
-    v8 = timeGetTime();
-    v4 = 0;
-    xc = 0;
-    for (; xc <= 0x168; xc += 0xa) {
+    frameStart = timeGetTime();
+    shortFrame = 0;
+    angle = 0;
+    for (; angle <= 0x168; angle += 0xa) {
         Draw();
-        m_portraitX = (int)(160.0 - cos(xc / 57.29579143313326) * 160.0);
-        if (xc == 0xb4) {
+        m_portraitX = (int)(160.0 - cos(angle / 57.29579143313326) * 160.0);
+        if (angle == 0xb4) {
             LoadRecord();
             m_graphics->SetPalette(m_palette);
         }
-        while ((DWORD)(timeGetTime() - v8) < (BYTE)(0x10 - v4)) {
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
         }
-        v8 = timeGetTime();
-        v4 = v4 == 0;
+        frameStart = timeGetTime();
+        shortFrame = shortFrame == 0;
     }
     m_portraitX = 0;
 }
 
 void CScene6::ShowLoadingScreen()
 {
-    int v58;
-    char v54[20];
-    int l40;
-    int x3c;
-    char v38[52];
+    int frameStart;
+    char digits[20];
+    int level; // brightness in 10% steps
+    int shortFrame; // 1 every other frame, which waits 15 ms instead of 16
+    char path[52];
 
-    v58 = timeGetTime();
-    x3c = 0;
-    l40 = 0xa;
-    for (; l40 >= 0; l40--) {
+    frameStart = timeGetTime();
+    shortFrame = 0;
+    level = 0xa;
+    for (; level >= 0; level--) {
         Draw();
-        m_graphics->Darken(m_palette, 0, 0xff, l40 * 0xa);
-        while ((DWORD)(timeGetTime() - v58) < (BYTE)(0x10 - x3c)) {
+        m_graphics->Darken(m_palette, 0, 0xff, level * 0xa);
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
         }
-        v58 = timeGetTime();
-        x3c = x3c == 0;
+        frameStart = timeGetTime();
+        shortFrame = shortFrame == 0;
     }
-    strcpy(v38, "system\\nl\\nl");
+    strcpy(path, "system\\nl\\nl");
     if (m_loadingScreen < 0x64) {
-        strcat(v38, "0");
+        strcat(path, "0");
     }
     if (m_loadingScreen < 0xa) {
-        strcat(v38, "0");
+        strcat(path, "0");
     }
-    _itoa(m_loadingScreen, v54, 0xa);
-    strcat(v38, (const char*)v54);
+    _itoa(m_loadingScreen, digits, 0xa);
+    strcat(path, (const char*)digits);
     if (m_loadingSurface != 0) {
         (TOPTR(IUnknown*, m_loadingSurface))->Release();
         m_loadingSurface = 0;
     }
     if (1) {
-        strcat(v38, ".dat");
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)v38, 0, 1);
-        m_graphics->LoadPaletteDat(m_palette, (const char*)v38, 0, 1, 0xfe);
+        strcat(path, ".dat");
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)path, 0, 1);
+        m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 1, 0xfe);
     } else {
-        strcat(v38, ".bmp");
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)v38, 1);
-        m_graphics->LoadPaletteBmp(m_palette, (const char*)v38, 0, 1, 0xfe);
+        strcat(path, ".bmp");
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)path, 1);
+        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 1, 0xfe);
     }
     m_held[2] = 2;
-    l40 = 0;
-    for (; l40 <= 0xa; l40++) {
+    level = 0;
+    for (; level <= 0xa; level++) {
         Draw();
-        m_graphics->Darken(m_palette, 0, 0xff, l40 * 0xa);
-        while ((DWORD)(timeGetTime() - v58) < (BYTE)(0x10 - x3c)) {
+        m_graphics->Darken(m_palette, 0, 0xff, level * 0xa);
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
         }
-        v58 = timeGetTime();
-        x3c = x3c == 0;
+        frameStart = timeGetTime();
+        shortFrame = shortFrame == 0;
     }
 }
 
-void CScene6::FadeToBlack(int p1)
+void CScene6::FadeToBlack(int unused)
 {
-    int xc;
-    int v8;
-    int v4;
+    int level; // brightness in 5% steps
+    int frameStart;
+    int shortFrame; // 1 every other frame, which waits 15 ms instead of 16
 
-    v8 = timeGetTime();
-    v4 = 0;
-    xc = 0x14;
-    for (; xc >= 0; xc--) {
+    frameStart = timeGetTime();
+    shortFrame = 0;
+    level = 0x14;
+    for (; level >= 0; level--) {
         Draw();
-        m_graphics->Darken(m_palette, 1, 0xff, xc * 5);
-        while ((DWORD)(timeGetTime() - v8) < (BYTE)(0x10 - v4)) {
+        m_graphics->Darken(m_palette, 1, 0xff, level * 5);
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
         }
-        v8 = timeGetTime();
-        v4 = v4 == 0;
+        frameStart = timeGetTime();
+        shortFrame = shortFrame == 0;
     }
 }
 
-void CScene6::FadeFromBlack(BYTE p1)
+void CScene6::FadeFromBlack(BYTE dimTo)
 {
-    int xc;
-    int v8;
-    int v4;
+    int level;
+    int frameStart;
+    int shortFrame; // 1 every other frame, which waits 15 ms instead of 16
 
-    v8 = timeGetTime();
-    v4 = 0;
-    xc = 0;
-    for (; xc <= 0x14; xc++) {
+    frameStart = timeGetTime();
+    shortFrame = 0;
+    level = 0;
+    for (; level <= 0x14; level++) {
         Draw();
-        m_graphics->Darken(m_palette, 1, p1, xc << 1);
-        m_graphics->Darken(m_palette, p1, 0xff, xc * 5);
-        while ((DWORD)(timeGetTime() - v8) < (BYTE)(0x10 - v4)) {
+        m_graphics->Darken(m_palette, 1, dimTo, level << 1);
+        m_graphics->Darken(m_palette, dimTo, 0xff, level * 5);
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
         }
-        v8 = timeGetTime();
-        v4 = v4 == 0;
+        frameStart = timeGetTime();
+        shortFrame = shortFrame == 0;
     }
 }
 
-void CScene6::SlidePage(BYTE p1)
+void CScene6::SlidePage(BYTE slideIn)
 {
-    int l10;
-    int vc;
-    int x8;
-    int l4;
+    int inAngle; // degrees, 90-0
+    int outAngle; // degrees, 0-90
+    int frameStart;
+    int shortFrame; // 1 every other frame, which waits 15 ms instead of 16
 
-    x8 = timeGetTime();
-    l4 = 0;
-    if (p1 == 0) {
-        vc = 0;
-        for (; vc <= 0x5a; vc += 5) {
+    frameStart = timeGetTime();
+    shortFrame = 0;
+    if (slideIn == 0) {
+        outAngle = 0;
+        for (; outAngle <= 0x5a; outAngle += 5) {
             Draw();
-            m_pageY = (short)(int)((1.0 - cos(vc / 57.29579143313326)) * 320.0);
-            while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+            m_pageY = (short)(int)((1.0 - cos(outAngle / 57.29579143313326)) * 320.0);
+            while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
             }
-            x8 = timeGetTime();
-            l4 = l4 == 0;
+            frameStart = timeGetTime();
+            shortFrame = shortFrame == 0;
         }
         return;
     }
-    l10 = 0x5a;
-    for (; l10 >= 0; l10 -= 5) {
+    inAngle = 0x5a;
+    for (; inAngle >= 0; inAngle -= 5) {
         Draw();
-        m_pageY = (short)(int)((1.0 - cos(l10 / 57.29579143313326)) * 320.0);
-        while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+        m_pageY = (short)(int)((1.0 - cos(inAngle / 57.29579143313326)) * 320.0);
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
         }
-        x8 = timeGetTime();
-        l4 = l4 == 0;
+        frameStart = timeGetTime();
+        shortFrame = shortFrame == 0;
     }
 }
