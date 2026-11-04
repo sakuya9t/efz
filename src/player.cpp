@@ -143,25 +143,25 @@ void CPlayer::MoveOnGround()
     }
 }
 
-CPlayer::CPlayer(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
-    : m_opponent(p1)
+CPlayer::CPlayer(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side)
+    : m_opponent(opponent)
 {
-    int v4;
+    int i;
 
-    m_game = p2;
-    m_graphics = p3;
-    m_input = p4;
-    m_sound = p5;
-    m_side = p6;
+    m_game = game;
+    m_graphics = graphics;
+    m_input = input;
+    m_sound = sound;
+    m_side = side;
     m_charId = 0;
     m_paletteIndex = 0;
-    v4 = 0;
-    for (; v4 < 0x32; v4++) {
-        m_voices[v4] = 0x96;
+    i = 0;
+    for (; i < 0x32; i++) {
+        m_voices[i] = 0x96;
     }
-    v4 = 0;
-    for (; v4 < 0x14; v4++) {
-        m_rivals[v4] = -1;
+    i = 0;
+    for (; i < 0x14; i++) {
+        m_rivals[i] = -1;
     }
     surfaces = (PTR32(IDirectDrawSurface)*)0;
     anims = new EffectAnim[0x1f9];
@@ -248,7 +248,7 @@ void CPlayer::Reset()
     m_command = kCmdNone;
     m_inputPos = 0;
     i = 0;
-    for (; i < 0xb4; i++) {
+    for (; i < kInputHistoryLength; i++) {
         m_inputHistory[i] = 0;
     }
     m_playVoice = -1;
@@ -289,7 +289,7 @@ void CPlayer::ClearInput()
     int v4;
 
     v4 = 0;
-    for (; v4 < 0xb4; v4++) {
+    for (; v4 < kInputHistoryLength; v4++) {
         m_inputHistory[v4] = 0;
     }
     m_command = kCmdNone;
@@ -1081,8 +1081,8 @@ void CPlayer::ReadInput()
         m_pressD = 0;
         m_command = kCmdNone;
     }
-    m_inputHistory[m_inputPos] = (m_inputX == 1) + (m_inputX == -1) * 2 + (m_inputY == 1) * 4 + (m_inputY == -1) * 8 + (m_pressA << 4) + (m_pressB << 5) + (m_pressC << 6) + (m_pressD << 7);
-    if ((unsigned char)m_inputHistory[m_inputPos] >= 0x10) {
+    m_inputHistory[m_inputPos] = (m_inputX == 1) + (m_inputX == -1) * kInputLeft + (m_inputY == 1) * kInputDown + (m_inputY == -1) * kInputUp + (m_pressA << 4) + (m_pressB << 5) + (m_pressC << 6) + (m_pressD << 7);
+    if ((unsigned char)m_inputHistory[m_inputPos] >= kInputA) { // a button went down
         if (pattern >= kFirstCharacterAction) {
             m_bufferedPress = m_inputHistory[m_inputPos];
         }
@@ -1092,7 +1092,7 @@ void CPlayer::ReadInput()
         }
     }
     m_inputPos++;
-    if (m_inputPos >= 0xb4) {
+    if (m_inputPos >= kInputHistoryLength) {
         m_inputPos = 0;
     }
     if (m_inputX == 1 - (((*m_opponent)->x - x > 0.0) << 1) && m_recoilGuardWindow == 0 && m_heldDirection == 0) {

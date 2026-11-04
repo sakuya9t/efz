@@ -917,6 +917,23 @@ enum {
 };
 // END constants
 
+// A tick of input as CPlayer::m_inputHistory keeps it (ReadInput), and as
+// m_bufferedPress and m_dashBufferedPress keep a press: the directions held, on the
+// screen (ReadCommand works out forward from facing), and the buttons that went down.
+enum {
+    kInputRight = 0x1,
+    kInputLeft = 0x2,
+    kInputDown = 0x4,
+    kInputUp = 0x8,
+    kInputDirections = 0xf,
+    kInputA = 0x10,
+    kInputB = 0x20,
+    kInputC = 0x40,
+    kInputD = 0x80,
+    kInputButtons = 0xf0,
+    kInputHistoryLength = 180, // ticks m_inputHistory holds
+};
+
 class CPlayer : public ObjBase {
 public:
     // FUNCTION: 0x40e630
@@ -1204,12 +1221,11 @@ public:
                             // (pattern 0xc8 and up), in m_inputHistory's bits
     BYTE m_dashBufferedPress; // +0x1a9: the same during a dash (0xa3-0xa6)
     BYTE m_dashBufferTime;  // +0x1aa: frames m_dashBufferedPress is kept, from 15
-    // The last 180 frames of input, a ring buffer: bits 1 right, 2 left (on the screen;
-    // ReadCommand works out forward from facing), 4 down, 8 up, 0x10-0x80 the buttons
-    // that went down.
-    char m_inputHistory[0xb4]; // +0x1ab
+    // The last 180 ticks of input, a ring buffer of kInput bits.
+    char m_inputHistory[kInputHistoryLength]; // +0x1ab
     BYTE unk25f;
-    short m_inputPos;       // +0x260: the newest entry in m_inputHistory
+    short m_inputPos;       // +0x260: where m_inputHistory's next tick goes, so its oldest;
+                            // m_inputPos + kInputHistoryLength - 1 (wrapped) is the newest
     short m_command;        // +0x262: the move m_inputHistory makes, 0x63 for none
     short m_voices[0x32];   // +0x264: the character's own sound IDs; 0x96 means none
     char m_playVoice;       // +0x2c8: m_voices index CScene3 plays this frame, -1 none

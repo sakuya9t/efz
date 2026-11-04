@@ -7,10 +7,10 @@
 #include <math.h>
 #include "efz.h"
 
-CMayu::CMayu(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
-    : CPlayer(p1, p2, p3, p4, p5, p6)
+CMayu::CMayu(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* input, CSound* sound, BYTE side)
+    : CPlayer(opponent, game, graphics, input, sound, side)
 {
-    int v4;
+    int i;
 
     strcpy(m_name, "mayu");
     lastSurface = 0x182;
@@ -35,11 +35,11 @@ CMayu::CMayu(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p
     m_rivals[3] = 2;
     m_rivals[3] = 4;
     m_rivals[0xa] = 5;
-    v4 = 0;
-    for (; v4 < 0x40; v4++) {
-        m_objectVar1[v4] = 0;
-        m_objectVar2[v4] = 0;
-        m_objectVar3[v4] = 0;
+    i = 0;
+    for (; i < 0x40; i++) {
+        m_objectVar1[i] = 0;
+        m_objectVar2[i] = 0;
+        m_objectVar3[i] = 0;
     }
 }
 
@@ -341,7 +341,7 @@ void CMayu::StartCommand()
         }
         return;
     }
-    if (m_pressA == 1 || (m_bufferedPress & 0x10) != 0 || (m_dashBufferedPress & 0x10) != 0) {
+    if (m_pressA == 1 || (m_bufferedPress & kInputA) != 0 || (m_dashBufferedPress & kInputA) != 0) {
         if (y < 0.0 && pattern == kDashForward && frame > 5) {
             if (m_patterns[pattern].cancelLevel <= m_patterns[kDashHopA].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
@@ -358,20 +358,20 @@ void CMayu::StartCommand()
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2A].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_inputY == 1 || (m_bufferedPress & kInputDown) != 0 || (m_dashBufferedPress & kInputDown) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2A].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k2A;
             return;
         }
-        if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].cancelLevel <= m_patterns[k5A].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_inputY == 0 || (m_bufferedPress & kInputDown) == 0 || (m_dashBufferedPress & kInputDown) == 0) && m_patterns[pattern].cancelLevel <= m_patterns[k5A].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k5A;
             return;
         }
     }
-    if (m_pressB == 1 || (m_bufferedPress & 0x20) != 0 || (m_dashBufferedPress & 0x20) != 0) {
+    if (m_pressB == 1 || (m_bufferedPress & kInputB) != 0 || (m_dashBufferedPress & kInputB) != 0) {
         if (y < 0.0 && pattern == kDashForward && frame > 5) {
             if (m_patterns[pattern].cancelLevel <= m_patterns[kDashHopB].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
@@ -388,19 +388,19 @@ void CMayu::StartCommand()
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_inputX == -facing && m_patterns[pattern].cancelLevel <= m_patterns[k1B].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_inputY == 1 || (m_bufferedPress & kInputDown) != 0 || (m_dashBufferedPress & kInputDown) != 0) && m_inputX == -facing && m_patterns[pattern].cancelLevel <= m_patterns[k1B].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k1B;
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2B].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_inputY == 1 || (m_bufferedPress & kInputDown) != 0 || (m_dashBufferedPress & kInputDown) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2B].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k2B;
             return;
         }
-        if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
+        if (m_inputY == 0 || (m_bufferedPress & kInputDown) == 0 || (m_dashBufferedPress & kInputDown) == 0) {
             if (m_inputX == facing && m_patterns[pattern].cancelLevel <= m_patterns[k6B].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
@@ -421,7 +421,7 @@ void CMayu::StartCommand()
             }
         }
     }
-    if (m_pressC == 1 || (m_bufferedPress & 0x40) != 0 || (m_dashBufferedPress & 0x40) != 0) {
+    if (m_pressC == 1 || (m_bufferedPress & kInputC) != 0 || (m_dashBufferedPress & kInputC) != 0) {
         if (y < 0.0 && pattern == kDashForward && frame > 5) {
             if (m_patterns[pattern].cancelLevel <= m_patterns[kDashHopC].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
@@ -444,13 +444,13 @@ void CMayu::StartCommand()
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2C].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_inputY == 1 || (m_bufferedPress & kInputDown) != 0 || (m_dashBufferedPress & kInputDown) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2C].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k2C;
             return;
         }
-        if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
+        if (m_inputY == 0 || (m_bufferedPress & kInputDown) == 0 || (m_dashBufferedPress & kInputDown) == 0) {
             if (m_inputX != 0 && (*m_opponent)->y == 0.0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].cancelLevel <= m_patterns[kThrow].level && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kGuardAir) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
@@ -488,334 +488,334 @@ void CMayu::ReadCommand()
 
     m_command = kCmdNone;
     step = 0;
-    pos = m_inputPos + 0x5a;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0x80) != 0 && step == 5) {
+    pos = m_inputPos + (kInputHistoryLength - 90);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputD) != 0 && step == 5) {
             m_command = kCmd23693D;
             return;
         }
-        if ((input & 0xf) == (facing == -1) + 5 && step == 4) {
-            if ((input & 0x80) != 0) {
+        if ((input & kInputDirections) == (facing == -1) + 5 && step == 4) {
+            if ((input & kInputD) != 0) {
                 m_command = kCmd23693D;
                 return;
             }
             step = 5;
         }
-        if ((input & 0xf) == (facing == -1) + 9 && step == 3) {
+        if ((input & kInputDirections) == (facing == -1) + 9 && step == 3) {
             step = 4;
         }
-        if ((input & 0xf) == (facing == -1) + 1 && step == 2) {
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == (facing == -1) + 5 && step == 1) {
+        if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 4 && step == 0 && m_gauge == 0xbb8 && y == 0.0) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge == 0xbb8 && y == 0.0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x5a;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0xf0) != 0 && step == 5) {
-            m_command = ((input & 0xe0) > 0) + kCmd21436A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+    pos = m_inputPos + (kInputHistoryLength - 90);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputButtons) != 0 && step == 5) {
+            m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd21436A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
             return;
         }
-        if ((input & 0xf) == (facing == -1) + 1 && step == 4) {
-            if ((input & 0xf0) != 0) {
-                m_command = ((input & 0xe0) > 0) + kCmd21436A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 4) {
+            if ((input & kInputButtons) != 0) {
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd21436A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 5;
         }
-        if ((input & 0xf) == (facing == -1) + 5 && step == 3) {
+        if ((input & kInputDirections) == (facing == -1) + 5 && step == 3) {
             step = 4;
         }
-        if ((input & 0xf) == 2 - (facing == -1) && step == 2) {
+        if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+        if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 4 && step == 0 && m_gauge >= 0x3e8 && y == 0.0) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8 && y == 0.0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x69;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0x70) != 0 && step == 4) {
-            m_command = ((input & 0xe0) > 0) + kCmd641236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+    pos = m_inputPos + (kInputHistoryLength - 75);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & (kInputA | kInputB | kInputC)) != 0 && step == 4) {
+            m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd641236A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
             return;
         }
-        if ((input & 0xf) == (facing == -1) + 5 && step == 3) {
-            if ((input & 0x70) != 0) {
-                m_command = ((input & 0xe0) > 0) + kCmd641236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+        if ((input & kInputDirections) == (facing == -1) + 5 && step == 3) {
+            if ((input & (kInputA | kInputB | kInputC)) != 0) {
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd641236A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 4;
         }
-        if ((input & 0xf) == 6 - (facing == -1) && step == 2) {
+        if ((input & kInputDirections) == 6 - (facing == -1) && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 2 - (facing == -1) && step == 1) {
+        if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == (facing == -1) + 1 && step == 0 && m_gauge >= 0x3e8 && y == 0.0) {
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 0x3e8 && y == 0.0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x64;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0xf0) != 0 && step == 6) {
-            m_command = ((input & 0xe0) > 0) + kCmd214214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+    pos = m_inputPos + (kInputHistoryLength - 80);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputButtons) != 0 && step == 6) {
+            m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd214214A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
             return;
         }
-        if ((input & 0xf) == 2 - (facing == -1) && step == 5) {
-            if ((input & 0xf0) != 0) {
-                m_command = ((input & 0xe0) > 0) + kCmd214214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+        if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 5) {
+            if ((input & kInputButtons) != 0) {
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd214214A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 6;
         }
-        if ((input & 0xf) == 6 - (facing == -1) && step == 4) {
+        if ((input & kInputDirections) == 6 - (facing == -1) && step == 4) {
             step = 5;
         }
-        if ((input & 0xf) == 4 && step == 3) {
+        if ((input & kInputDirections) == kInputDown && step == 3) {
             step = 4;
         }
-        if ((input & 0xf) == 2 - (facing == -1) && step == 2) {
+        if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+        if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 4 && step == 0) {
+        if ((input & kInputDirections) == kInputDown && step == 0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x78;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0xf0) != 0 && step == 3) {
-            m_command = ((input & 0xe0) > 0) + kCmd41236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+    pos = m_inputPos + (kInputHistoryLength - 60);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputButtons) != 0 && step == 3) {
+            m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd41236A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
             return;
         }
-        if ((input & 0xf) == (facing == -1) + 5 && step == 2) {
-            if ((input & 0xf0) != 0) {
-                m_command = ((input & 0xe0) > 0) + kCmd41236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+        if ((input & kInputDirections) == (facing == -1) + 5 && step == 2) {
+            if ((input & kInputButtons) != 0) {
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd41236A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 3;
         }
-        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+        if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 2 - (facing == -1) && step == 0 && y == 0.0 && y == 0.0) {
+        if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 0 && y == 0.0 && y == 0.0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x78;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0xf0) != 0 && step == 3) {
-            m_command = ((input & 0xe0) > 0) + kCmd623A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+    pos = m_inputPos + (kInputHistoryLength - 60);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputButtons) != 0 && step == 3) {
+            m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd623A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
             return;
         }
-        if ((input & 0xf) == (facing == -1) + 5 && step == 2) {
-            if ((input & 0xf0) != 0) {
-                m_command = ((input & 0xe0) > 0) + kCmd623A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+        if ((input & kInputDirections) == (facing == -1) + 5 && step == 2) {
+            if ((input & kInputButtons) != 0) {
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd623A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 3;
         }
-        if ((input & 0xf) == 4 && step == 1) {
+        if ((input & kInputDirections) == kInputDown && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == (facing == -1) + 1 && step == 0 && y == 0.0) {
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && y == 0.0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x87;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0xf0) != 0 && step == 3) {
-            m_command = ((input & 0xe0) > 0) + kCmd236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+    pos = m_inputPos + (kInputHistoryLength - 45);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputButtons) != 0 && step == 3) {
+            m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd236A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
             return;
         }
-        if ((input & 0xf) == (facing == -1) + 1 && step == 2) {
-            if ((input & 0xf0) != 0) {
-                m_command = ((input & 0xe0) > 0) + kCmd236A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 2) {
+            if ((input & kInputButtons) != 0) {
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd236A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 3;
         }
-        if ((input & 0xf) == (facing == -1) + 5 && step == 1) {
+        if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 4 && step == 0) {
+        if ((input & kInputDirections) == kInputDown && step == 0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x87;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0xf0) != 0 && step == 3) {
-            m_command = ((input & 0xe0) > 0) + kCmd214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+    pos = m_inputPos + (kInputHistoryLength - 45);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputButtons) != 0 && step == 3) {
+            m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd214A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
             return;
         }
-        if ((input & 0xf) == 2 - (facing == -1) && step == 2) {
-            if ((input & 0xf0) != 0) {
-                m_command = ((input & 0xe0) > 0) + kCmd214A + ((input & 0xc0) > 0) + ((input & 0x80) > 0);
+        if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 2) {
+            if ((input & kInputButtons) != 0) {
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + kCmd214A + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 3;
         }
-        if ((input & 0xf) == 6 - (facing == -1) && step == 1) {
+        if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 4 && step == 0) {
+        if ((input & kInputDirections) == kInputDown && step == 0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0xaf;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 8) != 0 && step == 1) {
+    pos = m_inputPos + (kInputHistoryLength - 5);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputUp) != 0 && step == 1) {
             m_command = kCmdUp;
             return;
         }
-        if ((input & 8) == 0 && step == 0) {
+        if ((input & kInputUp) == 0 && step == 0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x5a;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0x80) != 0 && step == 4) {
+    pos = m_inputPos + (kInputHistoryLength - 90);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputD) != 0 && step == 4) {
             m_command = kCmd22D;
             return;
         }
-        if ((input & 0xf) == 4 && step == 3) {
+        if ((input & kInputDirections) == kInputDown && step == 3) {
             step = 4;
         }
-        if ((input & 0xf) == 0 && step == 2) {
+        if ((input & kInputDirections) == 0 && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 4 && step == 1) {
+        if ((input & kInputDirections) == kInputDown && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 0 && step == 0 && pattern == kWakeUp) {
+        if ((input & kInputDirections) == 0 && step == 0 && pattern == kWakeUp) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x5a;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0x40) != 0 && step == 4) {
+    pos = m_inputPos + (kInputHistoryLength - 90);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputC) != 0 && step == 4) {
             m_command = kCmd22C;
             return;
         }
-        if ((input & 0xf) == 4 && step == 3) {
+        if ((input & kInputDirections) == kInputDown && step == 3) {
             step = 4;
         }
-        if ((input & 0xf) == 0 && step == 2) {
+        if ((input & kInputDirections) == 0 && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 4 && step == 1) {
+        if ((input & kInputDirections) == kInputDown && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 0 && step == 0) {
+        if ((input & kInputDirections) == 0 && step == 0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x87;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0x20) != 0 && step == 4) {
+    pos = m_inputPos + (kInputHistoryLength - 45);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputB) != 0 && step == 4) {
             m_command = kCmd22B;
             return;
         }
-        if ((input & 0xf) == 4 && step == 3) {
+        if ((input & kInputDirections) == kInputDown && step == 3) {
             step = 4;
         }
-        if ((input & 0xf) == 0 && step == 2) {
+        if ((input & kInputDirections) == 0 && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 4 && step == 1) {
+        if ((input & kInputDirections) == kInputDown && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 0 && step == 0) {
+        if ((input & kInputDirections) == 0 && step == 0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x87;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0x10) != 0 && step == 4) {
+    pos = m_inputPos + (kInputHistoryLength - 45);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputA) != 0 && step == 4) {
             m_command = kCmd22A;
             return;
         }
-        if ((input & 0xf) == 4 && step == 3) {
+        if ((input & kInputDirections) == kInputDown && step == 3) {
             step = 4;
         }
-        if ((input & 0xf) == 0 && step == 2) {
+        if ((input & kInputDirections) == 0 && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 4 && step == 1) {
+        if ((input & kInputDirections) == kInputDown && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 0 && step == 0) {
+        if ((input & kInputDirections) == 0 && step == 0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x87;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0xf) == 1 && step == 3) {
+    pos = m_inputPos + (kInputHistoryLength - 45);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputDirections) == kInputRight && step == 3) {
             m_command = kCmdDashRight;
             return;
         }
-        if ((input & 0xf) == 0 && step == 2) {
+        if ((input & kInputDirections) == 0 && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 1 && step == 1) {
+        if ((input & kInputDirections) == kInputRight && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 0 && step == 0) {
+        if ((input & kInputDirections) == 0 && step == 0) {
             step = 1;
         }
     }
     step = 0;
-    pos = m_inputPos + 0x87;
-    for (; pos < m_inputPos + 0xb4; pos++) {
-        input = m_inputHistory[(pos - (pos >= 0xb4) * 0xb4)];
-        if ((input & 0xf) == 2 && step == 3) {
+    pos = m_inputPos + (kInputHistoryLength - 45);
+    for (; pos < m_inputPos + kInputHistoryLength; pos++) {
+        input = m_inputHistory[(pos - (pos >= kInputHistoryLength) * kInputHistoryLength)];
+        if ((input & kInputDirections) == kInputLeft && step == 3) {
             m_command = kCmdDashLeft;
             break;
         }
-        if ((input & 0xf) == 0 && step == 2) {
+        if ((input & kInputDirections) == 0 && step == 2) {
             step = 3;
         }
-        if ((input & 0xf) == 2 && step == 1) {
+        if ((input & kInputDirections) == kInputLeft && step == 1) {
             step = 2;
         }
-        if ((input & 0xf) == 0 && step == 0) {
+        if ((input & kInputDirections) == 0 && step == 0) {
             step = 1;
         }
     }
