@@ -243,7 +243,9 @@ For EFZ, in order:
    (with command actions), not how to enter it.
 
 Not: whole combos as actions (brittle, and they take away trait 2, choosing the combo
-one can land), or rewards per combo hit (farmed).
+one can land), or rewards per combo hit (farmed). Before training, the action test of
+item 4 above, at the `frame_skip` used: with 4, a three-direction motion takes 12 frames,
+within the 20, but links get coarser.
 
 ### Collecting replays
 
@@ -283,9 +285,59 @@ From replays to data:
    reaction times and adapting (traits 1, 4, 5) by player and level.
 
 Players' names are in the file names: ask before collecting, say it is for training
-agents, let people opt out, and replace names with stable pseudonyms in the data. Before training, the action test of
-item 4 above, at the `frame_skip` used: with 4, a three-direction motion takes 12 frames,
-within the 20, but links get coarser.
+agents, let people opt out, and replace names with stable pseudonyms in the data.
+
+### The community's guides and matches
+
+The English community's resource list (as shared on 4 November 2026) rates the
+characters and links, for each, a video of basic combos and okizeme (wake-up pressure)
+and a playlist of matches. A [system tutorial](https://youtu.be/yp99e1NoKw4) and the
+[Mizuumi wiki](https://wiki.gbl.gg/w/Eternal_Fighter_Zero) cover the rest.
+
+| Character (`efz_env`) | Tier | Combos and okizeme | Matches |
+|---|---|---|---|
+| Mizuka Nagamori (`nagamori`, 6) | S | [video](https://youtu.be/xX7PG3B-sJg) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKommK6hPDYkQML-RTK20l4uMv) |
+| Mishio (`mishio`, 15) | S | [video, 14:07](https://youtu.be/vFQxBwmfEUY?t=14m7s), [in depth](https://www.youtube.com/watch?v=xSTGuTRrKIQ) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKoml6wYByhLSserjMEWbArvii) |
+| Ayu (`ayu`, 1) | S | [video](https://youtu.be/vFQxBwmfEUY) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKomm7WonZ0PcxCEGdTG9P8yIW) |
+| Mio (`mio`, 11) | A | [video, 8:30](https://youtu.be/xX7PG3B-sJg?t=8m30s) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKomntBceDxC2DsebcgCFAvl_a) |
+| Unknown (`mizukab`, 18) | A | [video, 10:40](https://youtu.be/xX7PG3B-sJg?t=10m40s) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKommly3QfqldecU4dup4le9NH) |
+| Mai (`mai`, 2) | A | [video, 10:38](https://youtu.be/vFQxBwmfEUY?t=10m38s) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKomlNjO_fi0EKFYiJEu22nAXf) |
+| Mayu (`mayu`, 5) | A | [video, 6:53](https://youtu.be/xX7PG3B-sJg?t=6m53s) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKomlyOyKDJh45ppZRSGW0xooW) |
+| Shiori (`shiori`, 8) | A | [video, 7:34](https://youtu.be/vFQxBwmfEUY?t=7m34s) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKommjT6HEMGRpRWTeFOLKorSr) |
+| Akiko (`akiko`, 16) | A | [video, 3:46](https://youtu.be/_WUdWVUFZiw?t=3m46s) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKoml6TmYcaDgY_3SZLl9u9ppZ) |
+| Ikumi (`ikumi`, 14) | A- | [video, 5:40](https://youtu.be/_WUdWVUFZiw?t=5m40s) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKomkJjjjahA0JrK7I2jAZyovx) |
+| Rumi Nanase (`nanase`, 0) | C | [video, 3:15](https://youtu.be/xX7PG3B-sJg?t=3m15s); Tony's [BnBs](https://www.nicovideo.jp/watch/sm21225769), [Theory of Rumi RPS](http://www.twitlonger.com/show/n_1sqgmsn), [Rumi's Delayed Home Run](http://www.twitlonger.com/show/n_1sqh199) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKomnTqdjmzJOF8JOFQj0_J3Ck) |
+| Kano (`kano`, 20) | C | [video, 12:10](https://youtu.be/_WUdWVUFZiw?t=12m10s), [BnB combo video](https://youtu.be/6nAFNdH0RKo) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKommgVe0xQQXHpvfBnZvZ1Bn8) |
+| Nayuki, asleep (`nayukib`, 17) | "Neyuki" | [video, 2:54](https://youtu.be/vFQxBwmfEUY?t=2m54s) | [playlist](https://www.youtube.com/playlist?list=PL3AkRwuxKoml3uvtIq5N1-fmH0ifUIE2E) |
+
+The two videos are "EFZ Okizeme Basics" Part 1 (the ONE characters, so Mizuka is
+Mizuka Nagamori and Rumi is Rumi Nanase) and Part 2 (Kanon characters); the third
+(Akiko, Ikumi, Kano) is presumably the series' next part. Unknown is taken to be
+`mizukab`, the selectable version of the eternal world's boss (`mizuka`, 24, isn't on
+the select screen); to be confirmed in the game. Nayuki asleep is `nayukib` (CNayukiB,
+[naming/mizuka-mizukab-nayuki-nayukib.md](naming/mizuka-mizukab-nayuki-nayukib.md)).
+
+Tony's two Rumi texts are the only written strategy in the list: her mixups as rock,
+paper, scissors, and a delayed Home Run. That is the structure trait 4's decision
+points need (which option beats which, in which situation). TwitLonger serves them
+only to a browser (a plain fetch gets the page without the post), so they come by hand.
+
+What they are good for:
+
+- **Which characters next.** The agents in [runs/](../runs/README.md) know only Ayu's
+  mirror. The S tier (Mizuka, Mishio, Ayu) is the next pool to train on, then the A
+  tier.
+- **Combos and okizeme, written down.** The videos show them; nothing gives them as text
+  (YouTube's pages carry no notation). Written in the game's notation per character
+  (by someone who watches them, or by their makers), each can be played in the game,
+  kept if it lands, rated by how hard it is, and used: command actions for its motions,
+  matches started from its starter's hit, and okizeme as the decision points of trait 4.
+- **People's matches.** Videos aren't training data: they hold neither inputs nor
+  states. The same matches were most likely played on EfzRevival, which saved them as
+  `.rep`: asking the players or the playlists' owner for those files turns the
+  playlists into data (with the consent and pseudonyms above). Meanwhile the videos are
+  the yardstick for the human-like measures: jumps, blocking, combos dropped, what
+  people do on wake-up.
 
 ## Human-like agents
 
