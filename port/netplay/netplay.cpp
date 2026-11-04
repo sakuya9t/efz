@@ -64,6 +64,7 @@ struct Menu {
     // NET PLAY written over the title when its letters couldn't make the row.
     bool titleText = false;
     bool titleSelected = false;
+    int titleX = 0, titleY = 0; // where the row goes, on the title's 320x240
     int replayNote = 0; // frames left to show the saved replay's name
     std::string replayShown;
 };
@@ -619,6 +620,8 @@ void InitNetplay(const NetplayOptions& options)
         bool drawn = netplay::DrawTitleItem(graphics, menu, key, selected, x, y);
         g_menu.titleText = !drawn;
         g_menu.titleSelected = selected;
+        g_menu.titleX = x;
+        g_menu.titleY = y;
     };
     g_netplay.openMenu = [] { OpenMenu(); };
     g_netplay.fightKeys = [](char* keys) { g_session.FightKeys(keys); };
@@ -775,12 +778,13 @@ void DrawNetplay(SDL_Renderer* r)
 {
     SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
     if (g_menu.titleText) {
-        // The title's NET PLAY row, written where its letters would be (195, 214 at the
-        // title's 320x240, doubled).
+        // The title's NET PLAY row, written where its letters would be (the title's
+        // 320x240, doubled).
         g_menu.titleText = false;
+        float x = 2.0f * g_menu.titleX, y = 2.0f * g_menu.titleY;
         if (g_menu.titleSelected)
-            Box(r, 390, 428, 240, 28, Color{40, 120, 110, 200});
-        Text(r, 432, 434, "NET PLAY", 2, g_menu.titleSelected ? kWhite : Color{190, 190, 190, 255});
+            Box(r, x, y, 240, 28, Color{40, 120, 110, 200});
+        Text(r, x + 42, y + 6, "NET PLAY", 2, g_menu.titleSelected ? kWhite : Color{190, 190, 190, 255});
     }
     switch (g_menu.screen) {
     case kSetup: DrawSetup(r); break;

@@ -195,7 +195,7 @@ tools/efzlog.py show logs/<session>  # what happened: warnings, errors, crash, f
 tools/efzlog.py export logs/<session>/fight-003.jsonl fight.npz       # a row a tick
 ```
 
-NET PLAY, the title menu's last row, plays a match over the network: one side hosts,
+NET PLAY, on the title menu after VS HUMAN, plays a match over the network: one side hosts,
 the other joins its address, and both play from character select on, with rollback.
 It is EfzRevival 1.02h's netplay, built in ([docs/netplay.md](docs/netplay.md)):
 

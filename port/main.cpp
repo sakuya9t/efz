@@ -526,7 +526,7 @@ int EfzMain(int argc, char** argv)
         }
     }
     // Netplay: the title's NET PLAY, or a match from the command line. Not under the
-    // compatibility test's harness, whose fights mustn't see an eighth title row.
+    // compatibility test's harness, whose fights mustn't see a NET PLAY row.
     if (!harness && replay.empty())
         efz::InitNetplay(netOptions);
     efz::StartWatchdog(15);

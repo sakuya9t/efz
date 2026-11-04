@@ -44,9 +44,9 @@ CScene0::~CScene0()
 }
 
 #ifdef EFZ_NATIVE
-// The native game's title menu has an eighth row, NET PLAY, when it has netplay
-// (efz::NetplayHooks); it is drawn with the menu's own letters and the rows move up one
-// to make room for it.
+// The native game's title menu has a row more, NET PLAY after VS HUMAN, when it has
+// netplay (efz::NetplayHooks); it is drawn with the menu's own letters and the menu
+// moves up a row to make room for it.
 static int TitleRows()
 {
     return efz::g_netplay.drawTitleItem ? 8 : 7;
@@ -56,10 +56,26 @@ static int TitleMenuY()
 {
     return efz::g_netplay.drawTitleItem ? 116 : 130;
 }
-#define TITLE_LAST_ROW (TitleRows() - 1)
+
+// NET PLAY is item 7 (m_cursor keeps the original's item numbers) and the fourth row,
+// after VS HUMAN: the row an item is on, and the item on a row.
+static const int kNetPlayRow = 3;
+
+static int TitleRow(int item)
+{
+    if (TitleRows() == 7)
+        return item;
+    return item == 7 ? kNetPlayRow : item < kNetPlayRow ? item : item + 1;
+}
+
+static int TitleItem(int row)
+{
+    if (TitleRows() == 7)
+        return row;
+    return row == kNetPlayRow ? 7 : row < kNetPlayRow ? row : row - 1;
+}
 #define TITLE_MENU_Y TitleMenuY()
 #else
-#define TITLE_LAST_ROW 6
 #define TITLE_MENU_Y 130
 #endif
 
@@ -98,13 +114,27 @@ BYTE CScene0::Update()
     for (; side < 2; side++) {
         if (m_held[side] == 0 && m_game->m_inputY[side] != 0) {
             m_game->PlaySE(8);
+#ifdef EFZ_NATIVE
+            // Up and down go through the rows in their order, NET PLAY's among them.
+            {
+                int row = TitleRow(m_cursor) + m_game->m_inputY[side];
+                if (row > TitleRows() - 1) {
+                    row = 0;
+                }
+                if (row < 0) {
+                    row = TitleRows() - 1;
+                }
+                m_cursor = TitleItem(row);
+            }
+#else
             m_cursor += m_game->m_inputY[side];
-            if (m_cursor > TITLE_LAST_ROW) {
+            if (m_cursor > 6) {
                 m_cursor = 0;
             }
             if (m_cursor < 0) {
-                m_cursor = TITLE_LAST_ROW;
+                m_cursor = 6;
             }
+#endif
             unk43e = 0;
             m_held[side] = 1;
         }
@@ -191,12 +221,19 @@ BYTE CScene0::Update()
 void CScene0::Draw()
 {
     m_graphics->Blit(MakeRect(0, 0, 320, 240), TOPTR(IDirectDrawSurface*, m_titleSurface), MakeRect(0, 0, 320, 240), 0, 0);
-    m_graphics->Blit(MakeRect(195, TITLE_MENU_Y, 120, 98), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 120, 98), m_colorKey, 0);
 #ifdef EFZ_NATIVE
-    if (TitleRows() == 8)
-        efz::g_netplay.drawTitleItem(m_graphics, TOPTR(IDirectDrawSurface*, m_menuSurface), m_colorKey, m_cursor == 7, 195, TITLE_MENU_Y + 98);
-    if (m_cursor < 7)
+    if (TitleRows() == 8) {
+        // ARCADE to VS HUMAN, NET PLAY, then PRACTICE to EXIT a row lower.
+        m_graphics->Blit(MakeRect(195, TITLE_MENU_Y, 120, kNetPlayRow * 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 120, kNetPlayRow * 14), m_colorKey, 0);
+        efz::g_netplay.drawTitleItem(m_graphics, TOPTR(IDirectDrawSurface*, m_menuSurface), m_colorKey, m_cursor == 7, 195, TITLE_MENU_Y + kNetPlayRow * 14);
+        m_graphics->Blit(MakeRect(195, TITLE_MENU_Y + (kNetPlayRow + 1) * 14, 120, 98 - kNetPlayRow * 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, kNetPlayRow * 14, 120, 98 - kNetPlayRow * 14), m_colorKey, 0);
+        if (m_cursor != 7)
+            m_graphics->Blit(MakeRect(195, TitleRow(m_cursor) * 14 + TITLE_MENU_Y, 120, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, m_cursor * 14 + 98, 120, 14), m_colorKey, 0);
+        m_graphics->Flip();
+        return;
+    }
 #endif
+    m_graphics->Blit(MakeRect(195, TITLE_MENU_Y, 120, 98), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 120, 98), m_colorKey, 0);
     m_graphics->Blit(MakeRect(195, m_cursor * 14 + TITLE_MENU_Y, 120, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, m_cursor * 14 + 98, 120, 14), m_colorKey, 0);
     m_graphics->Flip();
 }

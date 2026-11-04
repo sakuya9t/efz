@@ -24,7 +24,7 @@ match against EfzRevival 1.02h is meant to work too ("Against EfzRevival 1.02h" 
 
 ## Playing
 
-On the title, NET PLAY (the last row) opens netplay's screen over the title:
+On the title, NET PLAY (after VS HUMAN) opens netplay's screen over the title:
 
 | Row | |
 |---|---|
