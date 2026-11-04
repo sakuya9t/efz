@@ -208,6 +208,78 @@ attacks during its moves, guard crush; mixups never pay.
    (several used a GRU or a temporal convolution over the history), and masking hidden
    information in the trainer (Hisoutensoku has cards; EFZ has little).
 
+### Combos: learnt, or started for it
+
+Damage pays for each hit at once, so a policy is drawn from one hit to two to three:
+lenient chains can be found by reinforcement learning alone. Specials, supers and tight
+links are rare finds from per-frame controls. A special needs its motion's directions,
+in order, within the last 60 ticks (20 frames) of the input history (Akane's 623,
+`src/akane.cpp:592`; lenient: the directions needn't be on consecutive frames), and
+then, to cancel into it, the button while the current frame is cancellable and the
+attack has hit or been blocked (`src/akane.cpp:208`). Nearly every project started its
+agent off: special moves or whole combos as actions (FightLadder, SokuAI, ldw079's ~90
+combos with hit-confirm branches), skills as actions (Blade & Soul), or cloning replays
+first (slippi-ai).
+
+For EFZ, in order:
+
+1. **Command actions.** Each character's special and super motions as actions, played out
+   by the environment as the frames of directions and the button: through the human path
+   (`ReadInput`), so execution noise applies, not by setting `m_command` as the CPU does.
+   A motion is 3-6 frames, so little reaction is lost.
+2. **Starting from hits.** Matches started from save states taken just after a hit lands
+   (from CPU fights or the agent's own), so continuing a combo is practised often. Only a
+   game with save states can do this.
+3. **Cloning.** Human replays teach combos and style together. The CPU does combos too,
+   but chooses its specials by setting `m_command` (`src/akane.cpp:897`): its recorded
+   inputs carry the buttons, not the motions, so cloning it teaches which move and when
+   (with command actions), not how to enter it.
+
+Not: whole combos as actions (brittle, and they take away trait 2, choosing the combo
+one can land), or rewards per combo hit (farmed).
+
+### Collecting replays
+
+The community has many replays, from basic combos to advanced; there is no public
+archive of them. They are shared as `.rep` files in its channels (the English, Japanese
+and South American Discord servers the Mizuumi wiki lists), and players keep their own:
+
+- **Netplay.** EfzRevival saves every netplay match by default (`SaveAllReplays = 1`,
+  `ReplayFolder = replay/netplay/`, if that folder exists) as
+  `<YYYYmmdd-HHMMSS> <P1> (<char>) vs <P2> (<char>).rep` ([revival.md](revival.md)):
+  years of matches in many players' folders, with who played whom.
+- **Tournaments.** Tournament mode saves every game, with `tournament_results.txt` (the
+  players, characters, rounds and score of each).
+- **Combos.** Local replays and the practice recorder's; the Mizuumi wiki's combo lists
+  per character (its notation can be turned into inputs and checked in the game). The
+  wiki turns away automated reading, so its pages come by hand or by permission.
+
+An EfzRevival replay is the game's own replay with a block after it: the random seed,
+then both players' inputs, then the block's offset and `-1` ending the file
+(`Game::readExtendedReplay`, `revival/EfzRevival/EfzGame.cpp:1020`). A seed of 0 is an
+early version's bug. The game's own part holds the inputs and every random draw
+([compat.md](compat.md), "The replay format"), which this game already plays back
+exactly; whether a netplay replay's own part is complete is to be checked on real
+files. `key.ini`'s fight settings are in neither.
+
+From replays to data:
+
+1. **Play them back** headless with the fight recorder ([logging.md](logging.md)): every
+   tick's inputs and state, the observations, save states.
+2. **Check them.** Each must end as it was played: the rounds and score of the battle log
+   or `tournament_results.txt`, a KO where the inputs end.
+3. **Find the combos** (the combo counter and damage, from the first hit to the drop) and
+   rate how hard each is by playing it again from the save state before it with each
+   input a frame early or late: the share that still lands. That measures trait 2 from
+   the game itself.
+4. **Use them**: cloning; matches started from their hits; each player's habits,
+   reaction times and adapting (traits 1, 4, 5) by player and level.
+
+Players' names are in the file names: ask before collecting, say it is for training
+agents, let people opt out, and replace names with stable pseudonyms in the data. Before training, the action test of
+item 4 above, at the `frame_skip` used: with 4, a three-direction motion takes 12 frames,
+within the 20, but links get coarser.
+
 ## Human-like agents
 
 A design under discussion (3 November 2026); nothing of it is built. The aim is agents
