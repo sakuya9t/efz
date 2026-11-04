@@ -23,6 +23,12 @@ Statements about the game are **observed** (read from the matched source) or **i
   the test's harness and run under wine; `tests/compat/reference.txt` holds the digest
   of its log for every case. A change passes when every case's log is the reference's,
   byte for byte.
+- **Both ways the fork runs the game: with a window and headless** (decided 4 November
+  2026). Every case runs in the native game and in the headless runner `efz-headless`
+  ([headless.md](headless.md)), which moves its game every 97 frames into a copy on a
+  new thread, as the training library's restarts and workers do. Each log must be the
+  reference's, and the two must be the same: on a machine where a build doesn't give
+  the reference's logs, that the two agree still holds (`--no-reference`).
 - **Two layers: replays and the network.** The suite (the replay layer) checks the
   fork's simulation against the reference. A version with built-in netplay must also
   pass the network layer ("The network layer" below): a match over the network against
@@ -43,19 +49,40 @@ Statements about the game are **observed** (read from the matched source) or **i
 ## Running it
 
 ```sh
-tools/native.sh                      # build/native/efz
-tools/compat.py check                # every case in the native game (about 2 minutes, -j 16)
+tools/native.sh                      # build/native/efz and efz-headless
+tools/compat.py check                # every case in the native game and headless (about 4 minutes, -j 16)
 tools/compat.py check fuzz5- cpu-03  # some: by name, or a prefix ending in -
-tools/compat.py check --windows      # build/windows/efz.exe, under 64-bit wine
+tools/compat.py check --mode game    # one of the two only (game or headless)
+tools/compat.py check --no-reference # only that the two agree with each other
+tools/compat.py check --windows      # build/windows/efz.exe and efz-headless.exe, under 64-bit wine
 tools/compat.py check --exe build/trace/efz.exe   # any 32-bit build with the harness, under wine
 tools/compat.py explain cpu-03       # where and how a failing case parts from the reference
+tools/compat.py explain cpu-03 --mode headless    # the same for the headless runner
 tools/compat.py coverage             # what the suite runs: lines of src/, actions per character
 ```
 
 `EFZ_DIR` names the original game's folder (its data; the suite has none of it). Work
 folders, wine prefixes and the reference's logs are in `$EFZ_COMPAT` (default
-`~/.local/share/efz-decomp/compat2`). A check needs only the data and the build to test;
-`explain` also runs the reference (below), so it needs the toolchain's docker images.
+`~/.local/share/efz-decomp/compat2`). A check needs only the data and the builds to
+test, and runs on Windows as well (Visual Studio's `build/native/RelWithDebInfo/efz.exe`
+is found); `explain` also runs the reference (below), so it needs the toolchain's docker
+images. When the game and the headless runner part, `check` prints where; their logs
+are in `$EFZ_COMPAT/logs/game` and `logs/headless`, for `tools/compat.py diff`.
+
+**In CI.** GitHub's runners can't have the game's data, so CI (`.github/workflows/
+native.yml`) runs what needs none: it builds both on every platform and runs the
+headless library's own tests (`ctest -L headless`: the arena's copies, the sprite
+loader without drawing, the C and Python API). The suite itself runs in its `compat`
+job on a self-hosted runner of the owner's that has the data: label it `efz-data`, set
+`EFZ_DIR` in its environment, and set the repository variable `EFZ_COMPAT` to `true`
+(`EFZ_COMPAT_ARGS` for options). The job never runs for pull requests, whose code
+mustn't run on that machine.
+
+**Measured** (4 November 2026; Windows 11, MSVC 17.14, an EFZ 4.02 install with its own
+`key.ini`; `-j 10`, 7 minutes): the game and the headless runner write the same log in
+all 254 cases. Each gives the reference's in 146, as the source before the headless
+work did on that machine; the other 108 part from the reference the same way in both
+(why is open: [headless.md](headless.md)).
 
 ## The suite
 
@@ -265,9 +292,10 @@ earlier versions.
   to left; a call with two random draws as arguments needs them drawn in that order
   natively (two do, `#ifdef EFZ_NATIVE`).
 - **A change that isn't meant to change the game passes the suite unchanged**
-  (`tools/compat.py check`). This covers renames and other readability work, SDL3,
-  widescreen, input rebinding and the like. Code the suite doesn't run (`coverage`)
-  isn't tested by it: add a case that does before changing it.
+  (`tools/compat.py check`), in the game and headless alike. This covers renames and
+  other readability work, SDL3, the headless platform and library, widescreen, input
+  rebinding and the like. Code the suite doesn't run (`coverage`) isn't tested by it:
+  add a case that does before changing it.
 - **Netplay keeps EfzRevival 1.02h's protocol and its rules.** Against a 1.02h peer, the
   fork speaks that peer's protocol (version `0x66`, the messages of `EfzPackets.proto`).
   It also computes what the original game with Revival computes (the table in "The

@@ -168,7 +168,7 @@ layout (32-bit handles in place of pointers) and floating point (the x87's, on e
 CPU); [docs/compat.md](docs/compat.md) the suite that checks it:
 
 ```sh
-tools/compat.py check               # the native game plays the 254 cases (about 2 minutes)
+tools/compat.py check               # the 254 cases in the native game and headless (about 4 minutes)
 tools/compat.py explain cpu-03      # where a failing case parts from the original, by member
 tools/compat.py coverage            # which lines of src/ the suite runs
 ```
@@ -204,8 +204,10 @@ obs = env.reset()                                   # (256, 2, 168)
 obs, reward, terminated, truncated, info = env.step(ActionTable().to_bytes(actions))
 ```
 
-It is the same game: `efz-headless` plays the compatibility suite's cases into the
-same logs as the SDL3 game. [docs/headless.md](docs/headless.md) has the observations,
+It is the same game: `tools/compat.py check` plays every case of the compatibility
+suite both in the SDL3 game and headless, and the logs must agree with the reference
+and with each other; CI runs the headless library's tests that need no game data
+(`ctest -L headless`). [docs/headless.md](docs/headless.md) has the observations,
 actions, rewards, save states, the GPU and the measurements.
 
 ## Matching workflow

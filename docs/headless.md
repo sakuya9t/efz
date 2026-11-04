@@ -60,18 +60,31 @@ does:
 the compatibility suite ([compat.md](compat.md): CPU fights, the harness's scripted
 input, and replays) into logs identical byte for byte to the SDL3 game's, built from
 the commit before this one, with and without `--draw` (5 of the cases drawn). The
-whole game state is hashed after every tick, so that is every byte of it.
+whole game state is hashed after every tick, so that is every byte of it. On 4 November
+the whole suite, with `--hop 97` (below): the same logs in all 254 cases.
 
-The whole suite against the reference, as for the SDL3 game:
+**From now on the compatibility suite checks it on every run** ([compat.md](compat.md)):
+`tools/compat.py check` plays each case in the SDL3 game and in `efz-headless`, and
+each log must be the reference's and the two the same. `efz-headless` runs with
+`--hop 97`: every 97 frames its game is copied into another arena and goes on on a new
+thread, as the library's restarts (copies of saved games) and its workers (any thread
+takes any game) do, so the check covers what training relies on and not only the
+platform. What needs no game data runs in CI on every platform: `ctest -L headless`
+(`tests/headless_test.cpp`: arena copies give the same heap; arenas on different
+threads stay apart; a sprite loaded without drawing takes the same bytes and keeps the
+same colour key as one decoded whole, on 4,000 random images; the API's structures)
+and `python/tests` (the Python package against the library).
 
 ```sh
-tools/compat.py check --native build/headless/efz-headless
+tools/compat.py check                     # both, every case
+tools/compat.py check --mode headless     # the headless runner only
+ctest --test-dir build/native -L headless # without the game's data
 ```
 
 **Observed, and not from this work:** on that machine, the SDL3 game built with MSVC
-(the commit before this, untouched) gives the reference's log in 19 of those 40 cases.
-The others differ from it in the same way in the SDL3 game, `efz-headless` and the
-headless library. The suite's results so far are from GCC and MinGW builds on Linux
+(the commit before this, untouched) gives the reference's log in 19 of those 40 cases,
+and 146 of all 254. The others differ from it in the same way in the SDL3 game and
+`efz-headless`. The suite's results so far are from GCC and MinGW builds on Linux
 ([native.md](native.md)), and this machine's `key.ini` may not be the one the reference
 was recorded with (`key.ini` bytes 0x21-0x26 set CPU level, draw rate, effects, damage
 and rounds). Which of the two it is is open.

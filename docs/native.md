@@ -198,9 +198,9 @@ CPU from a seed, and log the whole game state, hashed, after every tick of the f
 each log with the original's (the `compat-reference` tag's build, under wine):
 
 ```sh
-tools/native.sh && tools/compat.py check   # the native game
-tools/compat.py check --windows            # the Windows build, under 64-bit wine
-tools/compat.py check --native build/native-x87/efz   # another native build
+tools/native.sh && tools/compat.py check   # the native game, and headless
+tools/compat.py check --windows            # the Windows builds, under 64-bit wine
+tools/compat.py check --native build/native-x87/efz   # another native build (and its efz-headless)
 ```
 
 Results (31 October 2026; the suite compares every byte of the state since then):

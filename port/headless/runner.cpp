@@ -1,20 +1,22 @@
 // efz-headless: the game on the headless platform (platform.cpp), run as port/main.cpp
 // runs it on SDL3 but without a window, sound or waiting between frames. It takes the
-// compatibility test's EFZ_TRACE variables (src/trace.cpp), so that the test can check
-// the headless platform plays the original's game:
-//
-//   tools/compat.py check --native build/headless/efz-headless
+// compatibility test's EFZ_TRACE variables (src/trace.cpp), so that the test checks the
+// headless platform plays the original's game too: tools/compat.py check runs every
+// case in both the game and this (docs/compat.md).
 //
 //   efz-headless [--data DIR] [--save DIR] [--frames N] [--draw] [--dump DIR]
-//                [--dump-every N]
+//                [--dump-every N] [--hop N]
 //
 // --data and --save as the game's (port/main.cpp). --draw draws the frames, which the
 // game doesn't need; --dump writes every --dump-every'th (default 60) to DIR/NNNNNN.bmp
-// (and implies --draw).
+// (and implies --draw). --hop N moves the game every N frames into another arena, a
+// copy, and on to a new thread, as the training library's restarts and workers do: the
+// game must play on as if nothing happened (tools/compat.py passes it).
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string>
+#include <thread>
 
 #include "efz.h"
 #include "headless.h"
@@ -70,7 +72,7 @@ int main(int argc, char** argv)
 {
     int stackMark;
     std::string data, save, dump;
-    long frames = -1, dumpEvery = 60;
+    long frames = -1, dumpEvery = 60, hop = 0;
     bool draw = false;
     for (int i = 1; i < argc; i++) {
         std::string a = argv[i];
@@ -87,11 +89,13 @@ int main(int argc, char** argv)
             dump = argv[++i], draw = true;
         else if (a == "--dump-every" && more)
             dumpEvery = atol(argv[++i]);
+        else if (a == "--hop" && more)
+            hop = atol(argv[++i]);
         else if (a == "--fast" || a == "--fullscreen")
             ; // as the game's, which the tests pass: always fast, never a window
         else {
             fprintf(stderr, "usage: %s [--data DIR] [--save DIR] [--frames N] [--draw] "
-                            "[--dump DIR] [--dump-every N]\n", argv[0]);
+                            "[--dump DIR] [--dump-every N] [--hop N]\n", argv[0]);
             return 2;
         }
     }
@@ -121,16 +125,51 @@ int main(int argc, char** argv)
     TraceStart(efz::headless::Game(), scenes, &scene);
     efz::headless::SceneIndex() = scene;
 
+    // The frames: all on this thread, or with --hop in runs of that many, each in the
+    // other of two arenas (the game copied there, as the library starts matches from
+    // copies) and on a new thread (as the library's workers take any game).
+    char* arenas[2] = {efz::g_arena, nullptr};
+    int current = 0;
+    long n = 0;
+    bool done = false;
     static uint8_t rgb[640 * 480 * 3];
-    for (long n = 0; n != frames; n++) {
-        if (efz::QuitRequested() || TraceQuit((BYTE)efz::headless::SceneIndex()))
-            break;
-        efz::headless::RunFrame();
-        int w, h;
-        if (!dump.empty() && n % dumpEvery == 0 && efz::headless::FrameRGB(rgb, &w, &h)) {
-            char path[64];
-            snprintf(path, sizeof(path), "/%06ld.bmp", n);
-            WriteBmp((dump + path).c_str(), rgb, w, h);
+    auto run = [&](long count) {
+        int mark;
+        efz::SetStack(&mark);
+        efz::BindArena(arenas[current]);
+        for (long k = 0; k != count; k++, n++) {
+            if (n == frames || efz::QuitRequested() ||
+                TraceQuit((BYTE)efz::headless::SceneIndex())) {
+                done = true;
+                break;
+            }
+            efz::headless::RunFrame();
+            int w, h;
+            if (!dump.empty() && n % dumpEvery == 0 && efz::headless::FrameRGB(rgb, &w, &h)) {
+                char path[64];
+                snprintf(path, sizeof(path), "/%06ld.bmp", n);
+                WriteBmp((dump + path).c_str(), rgb, w, h);
+            }
+        }
+        efz::BindArena(nullptr);
+    };
+    if (hop <= 0) {
+        run(-1);
+    } else {
+        efz::BindArena(nullptr); // the threads' own allocations stay out of the game
+        while (!done) {
+            std::thread(run, hop).join();
+            if (done)
+                break;
+            int next = 1 - current;
+            if (!arenas[next])
+                arenas[next] = efz::NewArena();
+            efz::BindArena(arenas[current]);
+            uintptr_t size = efz::ArenaUsed();
+            efz::BindArena(arenas[next]);
+            efz::LoadArena(arenas[current], size);
+            efz::BindArena(nullptr);
+            current = next;
         }
     }
     fflush(NULL);

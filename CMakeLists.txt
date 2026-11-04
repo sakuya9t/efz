@@ -210,3 +210,34 @@ if(EFZ_GAME)
                      -P ${CMAKE_SOURCE_DIR}/tests/crash_test.cmake)
   endforeach()
 endif()
+
+# What the headless library relies on, checked without the game's data (labelled
+# headless: ctest -L headless). The game itself is the compatibility suite's, which
+# tools/compat.py runs in both the game and efz-headless.
+if(EFZ_HEADLESS)
+  add_executable(efz-headless-test tests/headless_test.cpp $<TARGET_OBJECTS:efz_headless>)
+  efz_game_target(efz-headless-test)
+  target_include_directories(efz-headless-test PRIVATE ${CMAKE_SOURCE_DIR}/port/headless)
+  target_compile_definitions(efz-headless-test PRIVATE EFZ_MULTI_INSTANCE EFZ_ENV_BUILD)
+  target_link_libraries(efz-headless-test PRIVATE Threads::Threads)
+  if(MSVC)
+    target_link_options(efz-headless-test PRIVATE $<$<NOT:$<CONFIG:Debug>>:/LTCG>)
+  endif()
+  if(MINGW)
+    target_link_options(efz-headless-test PRIVATE -static)
+  endif()
+  if(EFZ_COVERAGE)
+    target_link_options(efz-headless-test PRIVATE --coverage)
+  endif()
+  add_test(NAME headless COMMAND efz-headless-test)
+  # The Python package against the library (skipped without numpy).
+  find_package(Python3 COMPONENTS Interpreter QUIET)
+  if(Python3_Interpreter_FOUND)
+    add_test(NAME headless-python
+             COMMAND Python3::Interpreter -m unittest discover -s python/tests -t python -v
+             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+    set_tests_properties(headless-python PROPERTIES LABELS headless
+                         ENVIRONMENT "EFZ_ENV_LIBRARY=$<TARGET_FILE:efz_env>")
+  endif()
+  set_tests_properties(headless PROPERTIES LABELS headless)
+endif()
