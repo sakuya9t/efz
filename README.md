@@ -35,6 +35,11 @@ original's.
 byte of the game state on every tick ([docs/compat.md](docs/compat.md)).
 See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
 
+**With EfzRevival's netplay built in:** NET PLAY on the title hosts or joins a match over
+the network, rollback and all, with EfzRevival 1.02h's protocol and rules, recovered
+from its binaries and made native (no launcher, no injected DLL). See
+[docs/netplay.md](docs/netplay.md).
+
 **And headless, for training agents:** `efz_env`, a library (C API, and a Python
 package) that runs batches of matches without a window or sound on every core, 3,000
 to 4,700 times real time on an 8-core laptop, with the game's CPU as an opponent, save
@@ -62,6 +67,7 @@ states and rewards. See [The headless game](#the-headless-game) and
 | `src/efz.rc` | The icon resource (the icon itself is taken from the original at build time) |
 | `src/trace.cpp` | The compatibility test's harness (`make trace` and the native game), not part of efz.exe |
 | `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point; the log, crash reports and fight records |
+| `port/netplay/` | Netplay: EfzRevival 1.02h's launcher protocol and online session (rollback) in the game's process, its UDP messages, the NET PLAY screens ([docs/netplay.md](docs/netplay.md)) |
 | `port/headless/` | The headless platform and the training library `efz_env` (C API: `efz_env.h`), `efz-headless`, `efz-bench` |
 | `python/efz_env/` | The Python package over `efz_env`: `EfzVecEnv`, action tables, a Gymnasium adapter |
 
@@ -187,6 +193,15 @@ tick and is data to learn from ([docs/logging.md](docs/logging.md)):
 efz --data DIR --replay-fight logs/<session>/fight-003.jsonl --fast   # replay a fight, check every tick
 tools/efzlog.py show logs/<session>  # what happened: warnings, errors, crash, fights
 tools/efzlog.py export logs/<session>/fight-003.jsonl fight.npz       # a row a tick
+```
+
+NET PLAY, the title menu's last row, plays a match over the network: one side hosts,
+the other joins its address, and both play from character select on, with rollback.
+It is EfzRevival 1.02h's netplay, built in ([docs/netplay.md](docs/netplay.md)):
+
+```sh
+efz --data DIR --host                       # or from the command line: host on UDP 10800
+efz --data DIR --join 192.168.1.5          # join it
 ```
 
 ## The headless game
@@ -391,7 +406,9 @@ See [docs/recon.md](docs/recon.md). In short:
      headless platform runs it without a window, many games to a process
      ([docs/headless.md](docs/headless.md))
    - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools.
-     Netplay is tested against the original game running EfzRevival 1.02h, over the network
+     *Begun:* rollback netplay is built in, with EfzRevival 1.02h's protocol and rules
+     ([docs/netplay.md](docs/netplay.md)); native against native is checked frame by frame.
+     Netplay is to be tested against the original game running EfzRevival 1.02h, over the network
      ([docs/compat.md](docs/compat.md), "The network layer")
    - add widescreen and HD output, in-game input binding and controller hot-plug
    - add mod support for characters, stages and palettes

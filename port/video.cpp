@@ -6,6 +6,7 @@
 #include "efz.h"
 #include "platform.h"
 #include "log.h"
+#include "netplay.h"
 
 namespace {
 
@@ -87,6 +88,23 @@ void Present(IDirectDrawSurface* back, const PALETTEENTRY* pal)
     SDL_RenderClear(g_renderer);
     SDL_RenderTexture(g_renderer, g_texture, nullptr, nullptr);
     DrawWatermark();
+    DrawNetplay(g_renderer); // its screens and a match's information, over the frame
+    // For tests: EFZ_DUMP_WINDOW=DIR writes the window as shown, overlays included, every
+    // EFZ_DUMP_WINDOW_EVERY (default 30) frames shown, to DIR/wNNNNNN.bmp.
+    static const char* windowDump = getenv("EFZ_DUMP_WINDOW");
+    static long shown = 0;
+    if (windowDump) {
+        static long every = getenv("EFZ_DUMP_WINDOW_EVERY") ? atol(getenv("EFZ_DUMP_WINDOW_EVERY")) : 30;
+        if (every > 0 && shown % every == 0) {
+            if (SDL_Surface* s = SDL_RenderReadPixels(g_renderer, nullptr)) {
+                char path[1100];
+                snprintf(path, sizeof(path), "%s/w%06ld.bmp", windowDump, shown);
+                SDL_SaveBMP(s, path);
+                SDL_DestroySurface(s);
+            }
+        }
+        shown++;
+    }
     SDL_RenderPresent(g_renderer);
 }
 

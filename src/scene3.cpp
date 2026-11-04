@@ -98,6 +98,12 @@ BYTE CScene3::Update()
             delete (char*)m_game->m_background;
             m_game->m_background = (CAnimBg*)0;
         }
+#ifdef EFZ_NATIVE
+        // A network match: its replay is closed and the mode is VS HUMAN again, so that
+        // the game goes on to character select (EfzRevival's hook at efz.exe 0x763e50).
+        if (efz::g_netplay.active)
+            efz::g_netplay.matchLeft();
+#endif
         m_leave = 0;
         m_enter = 1;
         if (m_game->m_replayMode > 0) {
@@ -118,6 +124,11 @@ BYTE CScene3::Update()
     if (m_leave == 2) {
         m_speed = 1;
         if (UpdateEndFade() != 0) {
+#ifdef EFZ_NATIVE
+            // The match is over; as above (efz.exe 0x763f04): on to the results.
+            if (efz::g_netplay.active)
+                efz::g_netplay.matchLeft();
+#endif
             m_leave = 0;
             m_enter = 1;
             if (m_game->m_replayMode > 0) {
@@ -495,6 +506,12 @@ void CScene3::HandleKeys()
     char keyState[256];
 
     hr = m_input->m_keyboard->GetDeviceState(0x100, keyState);
+#ifdef EFZ_NATIVE
+    // A network match: F4-F8 and Esc as either player pressed them on this frame
+    // (EfzRevival's hook at efz.exe 0x7656a7).
+    if (efz::g_netplay.active)
+        efz::g_netplay.fightKeys(keyState);
+#endif
     if (hr < 0 && hr == 0x8007001e) {
         m_input->m_keyboard->Acquire();
     }

@@ -27,6 +27,14 @@
 //   --seed N          rand()'s seed (default: the clock), logged either way
 //   --crash-test KIND crash on purpose (segv, abort or fatal) to test the crash report
 //
+// Netplay (docs/netplay.md): the title menu's NET PLAY, or straight from here (the game
+// quits when the match ends):
+//   --host            host a match on --port
+//   --join ADDRESS    join the match hosted at ADDRESS (host[:port])
+//   --port N          the UDP port (default 10800, EfzRevival's)
+//   --name NAME       the name the other player sees
+//   --delay N         the input delay (default: the recommended one)
+//
 // For tests, which run it without a display (SDL_VIDEO_DRIVER=offscreen):
 //   --frames N        quit after N frames
 //   --fast            don't wait between frames
@@ -42,6 +50,7 @@
 #include "platform.h"
 #include "crash.h"
 #include "log.h"
+#include "netplay.h"
 #include "record.h"
 
 namespace {
@@ -99,6 +108,64 @@ SDL_Window* Window()
     return g_window;
 }
 
+GameObjects Objects()
+{
+    GameObjects o;
+    o.game = g_game;
+    o.scenes = g_scenes;
+    o.scene = &g_scene;
+    o.graphics = g_graphics;
+    o.input = g_inputDev;
+    o.sound = g_sound;
+    return o;
+}
+
+// What WinMain made after the devices: the game and its scenes.
+static void MakeGame()
+{
+    g_game = new CGame(g_graphics, g_inputDev, g_sound);
+    g_game->LoadSounds();
+    g_game->LoadEffectAnims();
+    g_game->LoadEffects();
+    PTR32(CPlayer)* p1 = &g_players[0];
+    PTR32(CPlayer)* p2 = &g_players[1];
+    g_scenes[0] = new CScene0(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_scenes[1] = new CScene1(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_scenes[2] = new CScene2(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_scenes[3] = new CScene3(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_scenes[4] = NULL;
+    g_scenes[5] = new CScene5(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_scenes[6] = new CScene6(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_scenes[7] = new CScene7(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_scenes[8] = new CScene8(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_scene = 0;
+}
+
+// What WM_DESTROY did to them.
+static void DeleteGame()
+{
+    for (int i = 0; i < 9; i++) {
+        delete g_scenes[i];
+        g_scenes[i] = NULL;
+    }
+    delete g_game;
+    g_game = NULL;
+    for (int i = 0; i < 2; i++) {
+        if (g_players[i])
+            delete (CPlayer*)g_players[i];
+        g_players[i] = NULL;
+    }
+}
+
+void RestartGame()
+{
+    Uint64 start = SDL_GetTicksNS();
+    DeleteGame();
+    MakeGame();
+    efz::LogInfo("main", "the game made anew in %.0f ms",
+                 (double)(SDL_GetTicksNS() - start) / SDL_NS_PER_MS);
+}
+
 void RequestQuit()
 {
     if (!g_quit)
@@ -117,6 +184,8 @@ void PumpEvents()
     Heartbeat(); // the watchdog's: the game's own waits pump events too
     g_pumps++;
     while (SDL_PollEvent(&e)) {
+        if (NetplayEvent(e))
+            continue;
         switch (e.type) {
         case SDL_EVENT_QUIT:
             if (!g_quit)
@@ -237,7 +306,8 @@ static void Usage(const char* name)
             "[--log-level L] [--log-keep N] [--log-max-mb N] [--verbose] "
             "[--record | --no-record] "
             "[--replay-fight FILE] [--seed N] [--crash-test KIND] [--frames N] [--fast] "
-            "[--keys SCRIPT] [--dump DIR] [--dump-every N]\n",
+            "[--keys SCRIPT] [--dump DIR] [--dump-every N] "
+            "[--host | --join ADDRESS] [--port N] [--name NAME] [--delay N]\n",
             name);
 }
 
@@ -257,6 +327,7 @@ int EfzMain(int argc, char** argv)
     if (const char* env = getenv("EFZ_LOG_LEVEL"))
         efz::ParseLogLevel(env, &fileLevel);
     std::vector<ScriptedKey> keys;
+    efz::NetplayOptions netOptions;
     for (int i = 1; i < argc; i++) {
         std::string a = argv[i];
         bool more = i + 1 < argc;
@@ -297,6 +368,16 @@ int EfzMain(int argc, char** argv)
             seeded = true;
         } else if (a == "--crash-test" && more)
             crashTest = argv[++i];
+        else if (a == "--host")
+            netOptions.host = true;
+        else if (a == "--join" && more)
+            netOptions.join = argv[++i];
+        else if (a == "--port" && more)
+            netOptions.port = atoi(argv[++i]);
+        else if (a == "--name" && more)
+            netOptions.name = argv[++i];
+        else if (a == "--delay" && more)
+            netOptions.delay = atoi(argv[++i]);
         else {
             Usage(argv[0]);
             return 2;
@@ -418,23 +499,10 @@ int EfzMain(int argc, char** argv)
     efz::LogInfo("main", "key.ini: screen mode %d, key preset %d", ReadConfigByte(0x20),
                  ReadConfigByte(0x9c));
 
-    g_game = new CGame(g_graphics, g_inputDev, g_sound);
-    g_game->LoadSounds();
-    g_game->LoadEffectAnims();
-    g_game->LoadEffects();
-
     g_players = new PTR32(CPlayer)[2];
-    PTR32(CPlayer)* p1 = &g_players[0];
-    PTR32(CPlayer)* p2 = &g_players[1];
-    g_scenes[0] = new CScene0(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
-    g_scenes[1] = new CScene1(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
-    g_scenes[2] = new CScene2(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
-    g_scenes[3] = new CScene3(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
-    g_scenes[4] = NULL;
-    g_scenes[5] = new CScene5(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
-    g_scenes[6] = new CScene6(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
-    g_scenes[7] = new CScene7(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
-    g_scenes[8] = new CScene8(kWindow, p1, p2, g_game, g_graphics, g_inputDev, g_sound);
+    g_players[0] = NULL;
+    g_players[1] = NULL;
+    efz::MakeGame();
     TraceStart(g_game, g_scenes, &g_scene);
     fast |= TraceFast() != 0;
 
@@ -457,6 +525,10 @@ int EfzMain(int argc, char** argv)
             code = 4;
         }
     }
+    // Netplay: the title's NET PLAY, or a match from the command line. Not under the
+    // compatibility test's harness, whose fights mustn't see an eighth title row.
+    if (!harness && replay.empty())
+        efz::InitNetplay(netOptions);
     efz::StartWatchdog(15);
 
     // 64 frames a second, which the original's timer thread approached by adjusting its
@@ -479,6 +551,21 @@ int EfzMain(int argc, char** argv)
         if (TraceQuit(g_scene)) {
             why = "the harness's fight ended";
             break;
+        }
+        if (efz::NetplayRunning()) {
+            // Netplay's screens, or a match: it runs the scenes itself (and logs a match's
+            // frames by the match's count).
+            efz::SetLogFrame(n, g_scene);
+            efz::NetplayFrame();
+            next += frame;
+            if (fast)
+                continue;
+            Uint64 now = SDL_GetTicksNS();
+            if (now < next)
+                SDL_DelayPrecise(next - now);
+            else if (now - next > frame * 4)
+                next = now;
+            continue;
         }
         efz::SetLogFrame(n, g_scene);
         efz::RecorderFrameStart(n, g_scene);
@@ -530,21 +617,14 @@ int EfzMain(int argc, char** argv)
     if (!why)
         why = n == frames ? "--frames" : g_quitWhy;
     efz::LogInfo("main", "quitting after %ld frames: %s", n, why);
+    efz::ShutdownNetplay();
     efz::StopWatchdog();
     efz::StopRecorder();
     if (!replay.empty() && code == 0)
         code = efz::ReplayResult();
 
     // What WM_DESTROY did.
-    for (int i = 0; i < 9; i++) {
-        delete g_scenes[i];
-        g_scenes[i] = NULL;
-    }
-    delete g_game;
-    if (g_players[0])
-        delete (CPlayer*)g_players[0];
-    if (g_players[1])
-        delete (CPlayer*)g_players[1];
+    efz::DeleteGame();
     g_sound->Shutdown();
     g_inputDev->Shutdown();
     g_graphics->Shutdown();

@@ -10,6 +10,7 @@
 
 #include "efz.h"
 #include "platform.h"
+#include "netplay.h"
 
 namespace {
 
@@ -231,6 +232,10 @@ void CSound::Stop(WORD id)
 
 void CSound::Play(WORD id, BOOL loop)
 {
+    // A network match's rollback runs frames again: netplay plays each sound once
+    // (EfzRevival's hook of CSound::Play, efz.exe 0x40de80).
+    if (efz::NetplaySound(id, loop))
+        return;
     if (id < 0x96 && m_buffers[id]) {
         AudioLock lock;
         IDirectSoundBuffer* b = m_buffers[id];

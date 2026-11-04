@@ -1315,6 +1315,26 @@ bool RecorderFrameEnd(int scene)
     return r.active && r.done;
 }
 
+void SuspendRecorder(bool suspend)
+{
+    static TraceHooks saved;
+    static bool suspended;
+    if (suspend == suspended)
+        return;
+    suspended = suspend;
+    if (suspend) {
+        if (g.inScene3) {
+            EndFight("netplay");
+            g.inScene3 = false;
+        }
+        saved = g_traceHooks;
+        memset(&g_traceHooks, 0, sizeof(g_traceHooks));
+        LogInfo("record", "fight records off for the network match");
+    } else {
+        g_traceHooks = saved;
+    }
+}
+
 void StopRecorder()
 {
     EndFight("exit");

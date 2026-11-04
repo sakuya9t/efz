@@ -72,6 +72,10 @@ set(EFZ_SDL_SOURCES)
 foreach(f main sdlmain input sound video log crash record)
   list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
 endforeach()
+# Netplay: EfzRevival 1.02h's, built in (port/netplay/, docs/netplay.md).
+foreach(f net protocol session titleitem netplay)
+  list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/netplay/${f}.cpp)
+endforeach()
 
 # What every target compiling the game needs. The recovered code reads every structure
 # through casts of other types, so the compiler may not assume the types keep apart;
@@ -109,9 +113,9 @@ if(EFZ_GAME)
   if(MINGW)
     target_link_options(efz PRIVATE -static)
   endif()
-  # The crash report's stack traces and minidumps (port/crash.cpp).
+  # The crash report's stack traces and minidumps (port/crash.cpp); netplay's sockets.
   if(WIN32)
-    target_link_libraries(efz PRIVATE dbghelp)
+    target_link_libraries(efz PRIVATE dbghelp ws2_32)
   else()
     target_link_libraries(efz PRIVATE ${CMAKE_DL_LIBS})
   endif()
@@ -199,6 +203,18 @@ target_include_directories(efz-x87-test PRIVATE port)
 target_compile_options(efz-x87-test PRIVATE
                        $<IF:$<CXX_COMPILER_ID:MSVC>,/fp:precise /fp:contract-,-ffp-contract=off>)
 add_test(NAME x87 COMMAND efz-x87-test)
+
+# Netplay's network layer and EfzRevival's rand (tests/netplay_test.cpp): zlib, protobuf's
+# wire format, the random numbers both sides draw, a socket over the loopback. No game
+# data and no peer.
+add_executable(efz-netplay-test tests/netplay_test.cpp port/netplay/net.cpp port/x87.cpp)
+target_include_directories(efz-netplay-test PRIVATE port)
+target_compile_options(efz-netplay-test PRIVATE
+                       $<IF:$<CXX_COMPILER_ID:MSVC>,/fp:precise /fp:contract-,-ffp-contract=off>)
+if(WIN32)
+  target_link_libraries(efz-netplay-test PRIVATE ws2_32)
+endif()
+add_test(NAME netplay COMMAND efz-netplay-test)
 
 # A crash or a hang must leave a report (port/crash.cpp, docs/logging.md): the game
 # crashes or hangs on purpose, which needs no game data.

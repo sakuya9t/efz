@@ -163,4 +163,37 @@ struct IDirectInputDevice7 : IUnknown {
 
 #include "x87.h"
 
+// --- Netplay (port/netplay/, docs/netplay.md): what the game code asks at the places
+// where EfzRevival 1.02h patches efz.exe for a network match. Empty in a build without
+// netplay (the headless library) and whenever no match is being played, so the game is
+// the original's then.
+class CGraphics;
+
+namespace efz {
+
+struct NetplayHooks {
+    // A network session runs the game, under Revival's rules.
+    bool active;
+    // The title menu's NET PLAY item (null: the menu has its seven items): drawn with the
+    // menu's own letters at (x, y), and chosen.
+    void (*drawTitleItem)(CGraphics* graphics, IDirectDrawSurface* menu, BYTE colorKey,
+                          bool selected, int x, int y);
+    void (*openMenu)();
+    // CScene3::HandleKeys, once the keyboard is read: the function keys both players
+    // pressed on this frame, in place of the keyboard's.
+    void (*fightKeys)(char* keys);
+    // CScene3::Update leaves the fight (Revival's hooks at efz.exe 0x763e50 and 0x763f04):
+    // the match's replay is closed, and the game is VS HUMAN again.
+    void (*matchLeft)();
+    // CReplayFile's writing, in a match: to the session's replay (kNetplayReplay).
+    void (*replayOpen)();
+    void (*replayWrite)(short value);
+    void (*replayClose)();
+};
+extern NetplayHooks g_netplay;
+// CReplayFile's handle while the session keeps the replay.
+const HANDLE kNetplayReplay = 0xef2e0001u;
+
+} // namespace efz
+
 #endif

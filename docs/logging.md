@@ -177,6 +177,9 @@ record grows by about 4 MB a minute of fighting:
 {"type":"end","t":4002,"f":1393,"reason":"match_end","winner":0,"rounds_won":[2,1],"hp":[3120,-412],"anomalies":{}}
 ```
 
+None are made during a network match ([netplay.md](netplay.md)): its rollback runs frames
+again, which a record can't follow, and the match keeps a replay of its own.
+
 **The header** (`"type":"fight"`): the session and the fight's number, the build, the
 game mode (`mode`: 0 arcade, 1 practice, 3 vs cpu, 4 vs human, 5 replay, 6 demo) and
 `replay_mode` (1 playing a replay, with `replay_copy` and `replay_offset`; 2 recording

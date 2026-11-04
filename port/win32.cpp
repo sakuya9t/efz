@@ -26,6 +26,9 @@
 
 namespace efz {
 
+// Set by netplay (port/netplay/) in the game; empty elsewhere (efz_native.h).
+NetplayHooks g_netplay;
+
 namespace {
 
 std::string g_dataDir = ".";

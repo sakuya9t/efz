@@ -11,6 +11,7 @@
 #include "efz.h"
 #include "platform.h"
 #include "log.h"
+#include "netplay.h"
 #include "record.h"
 
 namespace {
@@ -118,6 +119,13 @@ struct Keyboard : IDirectInputDevice7 {
     HRESULT GetDeviceState(DWORD size, LPVOID data)
     {
         DWORD n = size < sizeof(g_keys) ? size : sizeof(g_keys);
+        // In a network match the game sees no keys of its own: the function keys it acts
+        // on come from both players' inputs (efz::NetplayHooks::fightKeys), and netplay
+        // reads Esc itself.
+        if (efz::g_netplay.active) {
+            memset(data, 0, n);
+            return DI_OK;
+        }
         memcpy(data, g_keys, n);
         efz::FilterKeyboard((unsigned char*)data, n); // recorded, or a replay's
         return DI_OK;
@@ -186,6 +194,46 @@ void KeyEvent(int scancode, bool down)
 void ResetInput()
 {
     memset(g_keys, 0, sizeof(g_keys));
+}
+
+const unsigned char* KeyboardState()
+{
+    return g_keys;
+}
+
+unsigned char LocalControls()
+{
+    if (!g_input)
+        return 0;
+    DIJOYSTATE pads[2];
+    memset(pads, 0, sizeof(pads));
+    for (int pad = 0; pad < 2; pad++) {
+        if (g_input->m_joysticks[pad])
+            g_input->m_joysticks[pad]->GetDeviceState(sizeof(DIJOYSTATE), &pads[pad]);
+    }
+    // CInput::GetInput's reading of P1's bindings.
+    BYTE result = 0;
+    const short* binding = g_input->m_bindings[0];
+    for (int i = 0; i < 8; i++) {
+        BYTE dik = binding[i] & 0xff;
+        WORD type = binding[i] & 0xf00;
+        if (type == 0) {
+            if (g_keys[dik] & 0x80)
+                result |= 1 << i;
+        } else if (type == 0x100 || type == 0x200) {
+            int pad = type == 0x100 ? 0 : 1;
+            if (!g_input->m_joysticks[pad])
+                continue;
+            const DIJOYSTATE& st = pads[pad];
+            if ((st.lX < -500 && dik == 0x12) || (st.lX > 500 && dik == 0x13) ||
+                (st.lY < -500 && dik == 0x10) || (st.lY > 500 && dik == 0x11) ||
+                (dik < 0x10 && (st.rgbButtons[dik] & 0x80)))
+                result |= 1 << i;
+        }
+    }
+    if ((result & 2) && (result & 1))
+        result &= ~1;
+    return result;
 }
 
 // Opens controllers into the free joystick slots and closes the ones unplugged.
@@ -350,6 +398,14 @@ BYTE CInput::GetInput(BYTE player)
         binding++;
     }
     efz::NoteInput(player, result);
+    // A network match: the input of this frame for that player, local or remote, in
+    // place of the controls (EfzRevival's hook at the end of CInput::GetInput, efz.exe
+    // 0x40d131, which first makes left and right together left).
+    if (efz::g_netplay.active) {
+        if ((result & 2) && (result & 1))
+            result &= ~1;
+        efz::NetplayInput(player, &result);
+    }
     return result;
 }
 

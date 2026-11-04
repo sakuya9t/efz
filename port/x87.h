@@ -99,8 +99,16 @@ inline double operator*(Float32 a, X87Value b) { return Mul(b, a); }
 int Rand();
 void Srand(unsigned seed);
 // rand()'s whole state, which Srand(state) restores; the recorder logs it
-// (port/record.cpp).
+// (port/record.cpp). Under Revival's rand, that generator's state.
 uint32_t RandState();
+#ifndef EFZ_MULTI_INSTANCE
+// Revival's rand, which netplay plays with (port/netplay/): std::minstd_rand through
+// Visual C++ 2012's uniform_int_distribution(0, 0x7fff), seeded as std::minstd_rand
+// is, its state (RandState) restored as Revival's save states restore it.
+void SetRevivalRand(bool on);
+void SeedRevivalRand(uint32_t seed);
+void SetRevivalRandState(uint32_t state);
+#endif
 
 } // namespace efz
 

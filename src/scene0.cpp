@@ -43,6 +43,26 @@ CScene0::~CScene0()
     }
 }
 
+#ifdef EFZ_NATIVE
+// The native game's title menu has an eighth row, NET PLAY, when it has netplay
+// (efz::NetplayHooks); it is drawn with the menu's own letters and the rows move up one
+// to make room for it.
+static int TitleRows()
+{
+    return efz::g_netplay.drawTitleItem ? 8 : 7;
+}
+
+static int TitleMenuY()
+{
+    return efz::g_netplay.drawTitleItem ? 116 : 130;
+}
+#define TITLE_LAST_ROW (TitleRows() - 1)
+#define TITLE_MENU_Y TitleMenuY()
+#else
+#define TITLE_LAST_ROW 6
+#define TITLE_MENU_Y 130
+#endif
+
 BYTE CScene0::Update()
 {
     int side; // the player whose input is read; becomes m_humanSide
@@ -59,7 +79,13 @@ BYTE CScene0::Update()
         CScene::FadeIn(m_palette, 1);
         m_enter = 0;
     }
+#ifdef EFZ_NATIVE
+    // EfzRevival makes the demo's branch never taken (efz.exe 0x776053): a network match
+    // starts on the title, and must not leave it on its own.
+    if (m_idleTime > 1800 && !efz::g_netplay.active) {
+#else
     if (m_idleTime > 1800 && 1) {
+#endif
         m_idleTime = 0;
         m_game->m_gameMode = 6;
         CScene::FadeOut(m_palette, 1, 0, 0);
@@ -73,11 +99,11 @@ BYTE CScene0::Update()
         if (m_held[side] == 0 && m_game->m_inputY[side] != 0) {
             m_game->PlaySE(8);
             m_cursor += m_game->m_inputY[side];
-            if (m_cursor > 6) {
+            if (m_cursor > TITLE_LAST_ROW) {
                 m_cursor = 0;
             }
             if (m_cursor < 0) {
-                m_cursor = 6;
+                m_cursor = TITLE_LAST_ROW;
             }
             unk43e = 0;
             m_held[side] = 1;
@@ -144,6 +170,17 @@ BYTE CScene0::Update()
                 return 6;
             case 6:
                 PostMessageA(m_hwnd, 0x10, 0, 0);
+#ifdef EFZ_NATIVE
+                break;
+            case 7:
+                // NET PLAY: netplay's own menu, over the title.
+                m_game->PlaySE(6);
+                m_held[0] = 1;
+                m_held[1] = 1;
+                efz::g_netplay.openMenu();
+                Draw();
+                return 0;
+#endif
             }
         }
     }
@@ -154,8 +191,13 @@ BYTE CScene0::Update()
 void CScene0::Draw()
 {
     m_graphics->Blit(MakeRect(0, 0, 320, 240), TOPTR(IDirectDrawSurface*, m_titleSurface), MakeRect(0, 0, 320, 240), 0, 0);
-    m_graphics->Blit(MakeRect(195, 130, 120, 98), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 120, 98), m_colorKey, 0);
-    m_graphics->Blit(MakeRect(195, m_cursor * 14 + 130, 120, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, m_cursor * 14 + 98, 120, 14), m_colorKey, 0);
+    m_graphics->Blit(MakeRect(195, TITLE_MENU_Y, 120, 98), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 120, 98), m_colorKey, 0);
+#ifdef EFZ_NATIVE
+    if (TitleRows() == 8)
+        efz::g_netplay.drawTitleItem(m_graphics, TOPTR(IDirectDrawSurface*, m_menuSurface), m_colorKey, m_cursor == 7, 195, TITLE_MENU_Y + 98);
+    if (m_cursor < 7)
+#endif
+    m_graphics->Blit(MakeRect(195, m_cursor * 14 + TITLE_MENU_Y, 120, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, m_cursor * 14 + 98, 120, 14), m_colorKey, 0);
     m_graphics->Flip();
 }
 

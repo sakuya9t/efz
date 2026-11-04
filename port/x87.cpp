@@ -585,8 +585,31 @@ int Compare(X87Value a, double b)
 #define g_holdrand (G()->holdrand)
 #endif
 
+#ifndef EFZ_MULTI_INSTANCE
+// Netplay's rand (SetRevivalRand): std::minstd_rand's state, 1 to 2^31 - 2, while it
+// is on. One game a process only: the headless library never plays online.
+static bool g_revivalRand;
+static uint32_t g_minstd = 1;
+#endif
+
 int Rand()
 {
+#ifndef EFZ_MULTI_INSTANCE
+    if (g_revivalRand) {
+        // EfzRevival.dll's random() (EfzRevival.cpp): std::uniform_int_distribution<int>
+        // (0, 0x7fff) over a std::minstd_rand, as Visual C++ 2012 compiles it (read from
+        // the machine code of Revival's DLL). The distribution draws 30 bits at a time
+        // (_Rng_from_urng: the engine's range, 2^31 - 3, holds 30 whole bits), each one
+        // the engine's next value less its minimum, 1, drawn again while above 2^30 - 1;
+        // 0x7fff + 1 divides 2^30, so the remainder by 0x8000 is never refused.
+        uint32_t bits;
+        do {
+            g_minstd = (uint32_t)((uint64_t)g_minstd * 48271u % 2147483647u);
+            bits = g_minstd - 1;
+        } while (bits > 0x3fffffffu);
+        return (int)(bits & 0x7fff);
+    }
+#endif
     g_holdrand = g_holdrand * 214013u + 2531011u;
     return (g_holdrand >> 16) & 0x7fff;
 }
@@ -598,7 +621,31 @@ void Srand(unsigned seed)
 
 uint32_t RandState()
 {
+#ifndef EFZ_MULTI_INSTANCE
+    if (g_revivalRand)
+        return g_minstd;
+#endif
     return g_holdrand;
 }
+
+#ifndef EFZ_MULTI_INSTANCE
+void SetRevivalRand(bool on)
+{
+    g_revivalRand = on;
+}
+
+void SeedRevivalRand(uint32_t seed)
+{
+    // std::minstd_rand::seed: the seed modulo 2^31 - 1, 0 taken as 1.
+    g_minstd = seed % 2147483647u;
+    if (g_minstd == 0)
+        g_minstd = 1;
+}
+
+void SetRevivalRandState(uint32_t state)
+{
+    g_minstd = state;
+}
+#endif
 
 } // namespace efz

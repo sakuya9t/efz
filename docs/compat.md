@@ -239,8 +239,12 @@ to code the suite never runs is not tested by it: add a case that runs it.
 
 ## The network layer
 
-**Decided 3 November 2026. Not runnable yet: the fork has no netplay of its own.** From
-the first version with netplay built in, every version also has to pass this test. The
+**Decided 3 November 2026. Not run yet.** The fork has had netplay built in since November
+2026 ([netplay.md](netplay.md)): EfzRevival 1.02h's protocol and rules, checked native
+against native (both games' sync records the same on every frame, with and without
+latency). Against end (b) it hasn't been run: that needs EfzRevival 1.02h's binaries,
+which the machine it was written on doesn't have. Every version with netplay has to pass
+this test. The
 two ends of the match:
 
 | End | What runs |
