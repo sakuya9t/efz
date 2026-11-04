@@ -52,8 +52,9 @@ struct Menu {
     std::string error;
     std::string ended;
     int delay = 0;
-    std::vector<std::string> addresses; // this computer's, for the host
-    unsigned char pad = 0;              // P1's controls on the last frame
+    std::vector<net::LocalAddress> addresses; // this computer's, for the host
+    Uint64 addressesAt = 0;                   // when they were read (SDL_GetTicks)
+    unsigned char pad = 0;                    // P1's controls on the last frame
     bool escDown = false;
     // From the command line: start at once, choose this delay (-1 the recommended).
     bool automatic = false;
@@ -203,7 +204,8 @@ void Begin()
         }
         return;
     }
-    g_menu.addresses = s.host ? net::LocalAddresses() : std::vector<std::string>();
+    g_menu.addresses = s.host ? net::LocalAddresses() : std::vector<net::LocalAddress>();
+    g_menu.addressesAt = SDL_GetTicks();
     g_menu.screen = kConnect;
 }
 
@@ -500,18 +502,31 @@ void DrawConnect(SDL_Renderer* r)
     }
     y += 8;
     if (g_protocol.phase == Protocol::kHosting) {
-        Text(r, kPanelX + 24, y, "Give the other player this computer's address", 1, kGrey);
-        y += 14;
-        Text(r, kPanelX + 24, y, "and the port (open it on your router to play over the", 1,
-             kGrey);
-        y += 12;
-        Text(r, kPanelX + 24, y, "internet; UDP):", 1, kGrey);
-        y += 18;
         std::string port = std::to_string(g_protocol.LocalPort());
+        static const char* const kHint[] = {
+            "Give the other player the address on a network you share:",
+            "the same router, or a VPN such as Radmin VPN, ZeroTier or",
+            "Tailscale. Over the internet without one: your public address",
+            "(the router's), with this UDP port forwarded to this computer.",
+        };
+        for (const char* line : kHint) {
+            Text(r, kPanelX + 24, y, line, 1, kGrey);
+            y += 12;
+        }
+        y += 8;
         if (g_menu.addresses.empty())
             Text(r, kPanelX + 40, y, "(this computer's address):" + port, 2, kTeal);
-        for (size_t i = 0; i < g_menu.addresses.size() && i < 4; i++) {
-            Text(r, kPanelX + 40, y, g_menu.addresses[i] + ":" + port, 2, kTeal);
+        const float right = kPanelX + kPanelW - 16;
+        for (size_t i = 0; i < g_menu.addresses.size() && i < 5; i++) {
+            std::string address = g_menu.addresses[i].address + ":" + port;
+            Text(r, kPanelX + 40, y, address, 2, kTeal);
+            // The adapter's name after it, cut to what fits.
+            float x = kPanelX + 40 + Width(address, 2) + 12;
+            size_t fits = (size_t)std::max(0.0f, (right - x) / SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE);
+            std::string network = g_menu.addresses[i].network;
+            if (network.size() > fits)
+                network = fits > 3 ? network.substr(0, fits - 3) + "..." : std::string();
+            Text(r, x, y + 4, network, 1, kGrey);
             y += 22;
         }
     } else if (g_protocol.phase >= Protocol::kMeasuring) {
@@ -669,6 +684,12 @@ void NetplayFrame()
     case kConnect:
     case kDelay:
         g_protocol.Poll();
+        // While the host waits, its addresses again each second: a VPN connected or a
+        // network joined after START shows up.
+        if (g_protocol.phase == Protocol::kHosting && SDL_GetTicks() - g_menu.addressesAt >= 1000) {
+            g_menu.addresses = net::LocalAddresses();
+            g_menu.addressesAt = SDL_GetTicks();
+        }
         if (g_protocol.phase == Protocol::kChoosing && g_menu.screen != kDelay) {
             g_menu.delay = g_protocol.recommendedDelay;
             g_menu.screen = kDelay;

@@ -39,9 +39,16 @@ The arrow keys move and change, typing edits, Enter starts, Esc goes back; P1's 
 work too (A to start, B to go back). The settings are kept in `netplay.ini` in the save
 folder.
 
-Hosting shows this computer's addresses for the other player. Over the internet the host
-needs the UDP port forwarded to it on their router (Revival's hole-punching server isn't
-used); Windows asks, the first time, whether to let the game through its firewall. Once the two are connected, both games measure the round trip for about four
+Hosting lists this computer's addresses, each with the network adapter it is on ("Wi-Fi",
+"Radmin VPN", "eth0"), and reads them again every second while it waits, so a VPN
+connected after START shows up. The one to give the other player is the address on a
+network both computers are on: the same router's, or a VPN's that joins the two
+(Radmin VPN, Hamachi, ZeroTier, Tailscale). Over the internet without such a VPN it is
+the router's public address, which no adapter of this computer has (the router's status
+page shows it), and the host needs the UDP port forwarded to it on the router (Revival's
+hole-punching server isn't used). A VPN service that forwards a port to its users is the
+same: its exit address, and PORT set to the port it forwards. Windows asks, the first
+time, whether to let the game through its firewall. Once the two are connected, both games measure the round trip for about four
 seconds and suggest an input delay, which each player confirms with Enter (or changes
 with left and right). Then both games start from the title, as Revival starts `efz.exe`:
 P1's first inputs pick VS HUMAN, and the two players are at character select.
@@ -177,7 +184,8 @@ match's replay stands in for them.
 
 - `ctest -R netplay` (`tests/netplay_test.cpp`): inflating zlib's own streams (fixed,
   dynamic and stored blocks, and damaged ones), protobuf's wire format, Revival's
-  `rand()`, a socket over the loopback (IPv4 to a dual-stack socket and back). CI runs it.
+  `rand()`, a socket over the loopback (IPv4 to a dual-stack socket and back), and the
+  addresses a host lists (printed, each with its adapter). CI runs it.
 - Two games on one machine, with `--host` and `--join 127.0.0.1` and scripted input
   (`--keys`), compare their sync records frame by frame and log the result: "frames
   0-N: both sides' sync records agree", and at the end "sync records: ... all the same".

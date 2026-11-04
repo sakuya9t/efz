@@ -56,9 +56,15 @@ struct Endpoint {
 // "host", "host:port", "1.2.3.4:port", "[v6]:port" or a bare IPv6 address, resolved
 // (getaddrinfo: this can wait on DNS). The port is defaultPort when not given.
 bool Resolve(const std::string& text, uint16_t defaultPort, Endpoint* out, std::string* error);
-// This computer's IPv4 addresses on its networks (not loopback), for telling the other
-// player where to connect.
-std::vector<std::string> LocalAddresses();
+// This computer's IPv4 addresses on its networks that are up (not loopback), for telling
+// the other player where to connect, each with the network adapter it is on: "Wi-Fi",
+// "Radmin VPN", "eth0", "tailscale0". A VPN's address is there; the address the internet
+// sees (the router's, or a VPN provider's exit) isn't on any adapter of this computer.
+struct LocalAddress {
+    std::string address; // "192.168.1.5"
+    std::string network; // the adapter's name, ASCII when Windows has an ASCII one
+};
+std::vector<LocalAddress> LocalAddresses();
 
 // A non-blocking UDP socket.
 class Socket {

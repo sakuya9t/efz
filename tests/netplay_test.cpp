@@ -242,12 +242,31 @@ static void TestSockets()
     CHECK(a.Receive(buffer, sizeof(buffer), &from) == -1);
 }
 
+// The addresses a host shows: each an IPv4 address that can be joined, on a named adapter,
+// none twice, none loopback or link-local. Which there are depends on the machine.
+static void TestLocalAddresses()
+{
+    std::vector<net::LocalAddress> list = net::LocalAddresses();
+    for (size_t i = 0; i < list.size(); i++) {
+        printf("netplay: %s on %s\n", list[i].address.c_str(), list[i].network.c_str());
+        net::Endpoint e;
+        std::string error;
+        CHECK(net::Resolve(list[i].address, 10800, &e, &error) && !e.IsV6());
+        CHECK(list[i].address.compare(0, 4, "127.") != 0);
+        CHECK(list[i].address.compare(0, 8, "169.254.") != 0);
+        CHECK(!list[i].network.empty());
+        for (size_t j = 0; j < i; j++)
+            CHECK(list[j].address != list[i].address);
+    }
+}
+
 int main()
 {
     TestInflate();
     TestWire();
     TestRand();
     TestSockets();
+    TestLocalAddresses();
     if (g_failed) {
         fprintf(stderr, "%d checks failed\n", g_failed);
         return 1;

@@ -13,6 +13,7 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <mstcpip.h>
+#include <iphlpapi.h>
 #ifndef SIO_UDP_CONNRESET
 #define SIO_UDP_CONNRESET _WSAIOW(IOC_VENDOR, 12)
 #endif
@@ -22,6 +23,7 @@ typedef int socklen_t;
 #include <errno.h>
 #include <fcntl.h>
 #include <ifaddrs.h>
+#include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -221,30 +223,85 @@ bool Resolve(const std::string& textIn, uint16_t defaultPort, Endpoint* out, std
     return true;
 }
 
-std::vector<std::string> LocalAddresses()
+namespace {
+
+// An address worth giving the other player: not loopback, not one Windows or the system
+// made up for want of DHCP (169.254.x.x), and not listed already.
+void AddAddress(std::vector<LocalAddress>* out, const sockaddr* sa, const std::string& network)
 {
-    std::vector<std::string> out;
-    std::string error;
-    if (!StartSockets(&error))
-        return out;
+    char text[INET_ADDRSTRLEN];
+    if (!inet_ntop(AF_INET, &((const sockaddr_in*)sa)->sin_addr, text, sizeof(text)))
+        return;
+    if (strncmp(text, "127.", 4) == 0 || strncmp(text, "169.254.", 8) == 0)
+        return;
+    for (const LocalAddress& a : *out)
+        if (a.address == text)
+            return;
+    LocalAddress a;
+    a.address = text;
+    a.network = network;
+    out->push_back(a);
+}
+
 #ifdef _WIN32
-    char host[256];
-    if (gethostname(host, sizeof(host)) != 0)
+std::string Utf8(const wchar_t* w)
+{
+    if (!w || !*w)
+        return std::string();
+    int n = WideCharToMultiByte(CP_UTF8, 0, w, -1, nullptr, 0, nullptr, nullptr);
+    if (n <= 1)
+        return std::string();
+    std::string s((size_t)n, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, w, -1, &s[0], n, nullptr, nullptr);
+    s.resize((size_t)n - 1);
+    return s;
+}
+
+bool Ascii(const std::string& s)
+{
+    for (unsigned char c : s)
+        if (c >= 0x80)
+            return false;
+    return true;
+}
+#endif
+
+} // namespace
+
+std::vector<LocalAddress> LocalAddresses()
+{
+    std::vector<LocalAddress> out;
+#ifdef _WIN32
+    if (!StartSockets(nullptr)) // for inet_ntop
         return out;
-    addrinfo hints;
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_INET;
-    addrinfo* list = nullptr;
-    if (getaddrinfo(host, nullptr, &hints, &list) != 0)
-        return out;
-    for (addrinfo* a = list; a; a = a->ai_next) {
-        char text[INET_ADDRSTRLEN];
-        inet_ntop(AF_INET, &((sockaddr_in*)a->ai_addr)->sin_addr, text, sizeof(text));
-        if (strncmp(text, "127.", 4) != 0 && strncmp(text, "169.254.", 8) != 0 &&
-            std::find(out.begin(), out.end(), text) == out.end())
-            out.push_back(text);
+    // Every adapter that is up, with its name: the network card's, and a VPN's (Radmin
+    // VPN, Hamachi, ZeroTier, Tailscale), whose address is the one to give a player on
+    // that VPN.
+    ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_DNS_SERVER;
+    std::vector<unsigned char> buffer(16 * 1024);
+    ULONG size = (ULONG)buffer.size();
+    ULONG r = ERROR_BUFFER_OVERFLOW;
+    for (int tries = 0; tries < 4 && r == ERROR_BUFFER_OVERFLOW; tries++) {
+        buffer.resize(size);
+        r = GetAdaptersAddresses(AF_INET, flags, nullptr, (IP_ADAPTER_ADDRESSES*)buffer.data(),
+                                 &size);
     }
-    freeaddrinfo(list);
+    if (r != NO_ERROR)
+        return out;
+    for (IP_ADAPTER_ADDRESSES* a = (IP_ADAPTER_ADDRESSES*)buffer.data(); a; a = a->Next) {
+        if (a->OperStatus != IfOperStatusUp || a->IfType == IF_TYPE_SOFTWARE_LOOPBACK)
+            continue;
+        // Windows' name for the adapter ("Wi-Fi", "Radmin VPN") is in the user's language;
+        // the screen's font has ASCII only, and the driver's description then says more.
+        std::string network = Utf8(a->FriendlyName);
+        if (network.empty() || !Ascii(network))
+            network = Utf8(a->Description);
+        for (IP_ADAPTER_UNICAST_ADDRESS* u = a->FirstUnicastAddress; u; u = u->Next) {
+            if (u->Address.lpSockaddr && u->Address.lpSockaddr->sa_family == AF_INET &&
+                u->DadState == IpDadStatePreferred)
+                AddAddress(&out, u->Address.lpSockaddr, network);
+        }
+    }
 #else
     ifaddrs* list = nullptr;
     if (getifaddrs(&list) != 0)
@@ -252,11 +309,10 @@ std::vector<std::string> LocalAddresses()
     for (ifaddrs* a = list; a; a = a->ifa_next) {
         if (!a->ifa_addr || a->ifa_addr->sa_family != AF_INET)
             continue;
-        char text[INET_ADDRSTRLEN];
-        inet_ntop(AF_INET, &((sockaddr_in*)a->ifa_addr)->sin_addr, text, sizeof(text));
-        if (strncmp(text, "127.", 4) != 0 && strncmp(text, "169.254.", 8) != 0 &&
-            std::find(out.begin(), out.end(), text) == out.end())
-            out.push_back(text);
+        if (!(a->ifa_flags & IFF_UP) || !(a->ifa_flags & IFF_RUNNING) ||
+            (a->ifa_flags & IFF_LOOPBACK))
+            continue;
+        AddAddress(&out, a->ifa_addr, a->ifa_name ? a->ifa_name : "");
     }
     freeifaddrs(list);
 #endif

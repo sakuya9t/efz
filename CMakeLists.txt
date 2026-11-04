@@ -113,9 +113,10 @@ if(EFZ_GAME)
   if(MINGW)
     target_link_options(efz PRIVATE -static)
   endif()
-  # The crash report's stack traces and minidumps (port/crash.cpp); netplay's sockets.
+  # The crash report's stack traces and minidumps (port/crash.cpp); netplay's sockets and
+  # the host's network adapters.
   if(WIN32)
-    target_link_libraries(efz PRIVATE dbghelp ws2_32)
+    target_link_libraries(efz PRIVATE dbghelp ws2_32 iphlpapi)
   else()
     target_link_libraries(efz PRIVATE ${CMAKE_DL_LIBS})
   endif()
@@ -212,7 +213,7 @@ target_include_directories(efz-netplay-test PRIVATE port)
 target_compile_options(efz-netplay-test PRIVATE
                        $<IF:$<CXX_COMPILER_ID:MSVC>,/fp:precise /fp:contract-,-ffp-contract=off>)
 if(WIN32)
-  target_link_libraries(efz-netplay-test PRIVATE ws2_32)
+  target_link_libraries(efz-netplay-test PRIVATE ws2_32 iphlpapi)
 endif()
 add_test(NAME netplay COMMAND efz-netplay-test)
 
