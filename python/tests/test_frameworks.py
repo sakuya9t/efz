@@ -77,6 +77,48 @@ class Autoreset(unittest.TestCase):
         env.close()
 
 
+class Recording(unittest.TestCase):
+    def test_records_a_replay_slot(self):
+        with tempfile.TemporaryDirectory() as save:
+            env = EfzVecEnv(DATA, 1, num_threads=1, frame_skip=4, max_frames=64 * 600,
+                            rounds_to_win=1, autoreset='disabled', save_dir=save, seed=3)
+            env.set_matches(chars=('ayu', 'mai'), stage=2, cpu=(False, False))
+            path = env.record(0, 2, 3)
+            self.assertTrue(path.endswith(os.path.join('replay', 'data2-3.rep')))
+            env.reset()
+            from efz_env import actions
+            for k in range(20000):  # player 1 walks in and attacks; player 2 stands
+                controls = np.array([[actions.FORWARD | (actions.A if k % 2 else 0), 0]],
+                                    np.uint8)
+                _, _, term, trunc, info = env.step(controls)
+                if term[0] or trunc[0]:
+                    break
+            self.assertTrue(term[0])
+            size = os.path.getsize(path)
+            words = np.fromfile(path, dtype='<i2')
+            # The header (src/scene2.cpp): P1, P2, 104, stage, P1 palette, P2 palette.
+            self.assertEqual(words[:6].tolist(), [1, 2, 104, 2, 0, 0])
+            frames = int(info['frame'][0])
+            # Each frame at least two refill words and an input word per player.
+            self.assertGreater(len(words), 6 + 4 * frames)
+            # The file was closed with the match: stepping on doesn't grow it.
+            env.step(np.zeros((1, 2), np.uint8))
+            self.assertEqual(os.path.getsize(path), size)
+            # A slot that holds a replay isn't overwritten unless asked.
+            with self.assertRaises(FileExistsError):
+                env.record(0, 2, 3)
+            env.record(0, 2, 3, overwrite=True)
+            env.close()
+
+    def test_refuses_the_cpu(self):
+        with tempfile.TemporaryDirectory() as save:
+            env = EfzVecEnv(DATA, 1, num_threads=1, save_dir=save)
+            env.set_matches(chars=('ayu', 'mai'), cpu=(False, True))
+            with self.assertRaisesRegex(RuntimeError, 'CPU'):
+                env.record(0, 1, 1)
+            env.close()
+
+
 class Seeding(unittest.TestCase):
     def rollout(self, env, seed, steps=150):
         rng = np.random.default_rng(0)

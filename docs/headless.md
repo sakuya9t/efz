@@ -195,6 +195,7 @@ it; both are documented where they are declared. In short:
 | Matches | `set_matches(chars, stage, cpu, palettes, char_pool, stage_pool)`: fixed, or drawn for each match from pools (default every playable character, 0-21 and 23, and every stage) |
 | Save states | `save_state(i)` and `load_state(i, state)`: the whole game, a few MB. A state loads into any environment of any batch of the same process (the game's objects hold the addresses of their C++ classes' tables) |
 | Pictures | `drawing=True`, then `render(i)`: the last frame, 320×240 RGB |
+| Replays | `record(i, page, slot)`: environment i's next match is recorded as the replay menu's record item records one, into `replay/data<page>-<slot>.rep` in the save folder (`save_dir`, default the EFZ folder), which EFZ's REPLAY menu plays back. The match is built from its start (loading and intro) with the game writing the file; when it is won the game plays on through the end of the match and closes it, as after a match. Both players must be the program's: a replay doesn't hold the CPU's decisions. The fight settings of `key.ini` (damage, rounds) aren't in a replay: record with the ones the EFZ that plays it has (the defaults are the game's own: damage 100%, two rounds). `examples/record_replay.py` records two agents |
 | Frameworks | below |
 
 ## Training frameworks
@@ -226,6 +227,8 @@ python python/examples/train.py --data "$EFZ_DIR" --opponent human --load runs/s
 # Population-based training: 6 agents in a league, 20 generations (run again to continue):
 python python/examples/pbt.py --data "$EFZ_DIR" --out runs/pbt --population 6 --generations 20
 python python/examples/play.py --data "$EFZ_DIR" --agent runs/pbt/best.zip
+# Record two agents' match into a replay slot (EFZ: REPLAY, page 1, slot 1):
+python python/examples/record_replay.py --data "$EFZ_DIR" --p1 runs/pbt/best.zip --p2 runs/self/model.zip --slot 1-1
 ```
 
 `train.py` writes the run's folder: `model.zip` and checkpoints, `config.json` (the

@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 2
+#define EFZ_ENV_VERSION 3
 
 /* What a step does when a match ends (EfzEnvConfig.autoreset). */
 #define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
@@ -165,6 +165,19 @@ EFZ_ENV_API int efz_env_reset(EfzEnv* env, const uint8_t* mask);
  * alone, so the same seed, the same matches and the same actions play the same games in
  * any environment. Takes effect from its next match (efz_env_reset, or an autoreset). */
 EFZ_ENV_API int efz_env_seed(EfzEnv* env, int32_t index, uint64_t seed);
+
+/* Records environment `index`'s next match as a replay, as the replay menu's record item
+ * does: the game writes replay\data<page>-<slot>.rep (page and slot 1-9) in the save
+ * folder (the data folder unless efz_env_set_save_dir says otherwise), which EFZ's replay
+ * menu plays back. The match is built from its start (the loading and the intro, as the
+ * menus start it), not from the saved copy; when it is won the game plays on to the end
+ * of the match and closes the file as it does after a match. A match cut short, or reset,
+ * ends the file where it is. Both players must be the program's: a replay doesn't hold
+ * the CPU's decisions. Returns -1 (efz_env_error says why) if they aren't. */
+EFZ_ENV_API int efz_env_record(EfzEnv* env, int32_t index, int32_t page, int32_t slot);
+/* Where the game writes files (replays): `dir`, or the data folder for NULL. For the
+ * process, as the data folder is. */
+EFZ_ENV_API int efz_env_set_save_dir(EfzEnv* env, const char* dir);
 /* One step of every environment: actions[num_envs][2]. A side the CPU plays ignores its
  * byte. Returns when every environment has stepped. */
 EFZ_ENV_API int efz_env_step(EfzEnv* env, const uint8_t* actions);

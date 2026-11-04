@@ -399,6 +399,9 @@ struct Slot {
     bool broken = false;   // its game asked to close (a file it needs is missing)
     bool pending = false;  // its match ended: the next step starts the next (NEXT_STEP)
     bool finished = false; // its match ended: it waits for efz_env_reset (DISABLED)
+    int recordPage = 0;    // efz_env_record: its next match is recorded to this slot
+    int recordSlot = 0;
+    bool recording = false; // the game is writing its match's replay
 };
 
 const uint32_t kStateMagic = 0x5a464545; // "EEFZ"
@@ -414,6 +417,7 @@ struct StateHeader {
 
 struct EfzEnv {
     EfzEnvConfig cfg;
+    std::string dataDir;
     int n = 0;
     std::vector<Slot> slots;
     // The buffers of efz_env_buffers.
@@ -454,14 +458,22 @@ bool Actionable()
 
 // Sets up the bound arena's game for `m` (a copy of env->init) and plays it through the
 // loading and the intro, as the menus would have started it: VS on the replay menu's
-// footing (mode 5, no replay), which keeps records and replays unwritten.
-bool BuildMatch(EfzEnv* env, const Match& m)
+// footing (mode 5, no replay), which keeps records and replays unwritten. With a page and
+// slot (1-9), as the replay menu's record item: the game writes the match's replay there
+// from the loading on.
+bool BuildMatch(EfzEnv* env, const Match& m, int recordPage = 0, int recordSlot = 0,
+                unsigned seed = 1)
 {
     env->init.Load();
     const EfzEnvConfig& cfg = env->cfg;
     CGame* game = Game();
     game->m_gameMode = 5;
     game->m_replayMode = 0;
+    if (recordPage > 0) {
+        game->m_replayMode = 2;
+        game->m_replayPage = (char)(recordPage - 1);
+        game->m_replaySlot = (char)(recordSlot - 1);
+    }
     game->m_roundsToWin = (char)cfg.rounds_to_win;
     game->m_roundsSetting = (char)cfg.rounds_to_win;
     game->m_isCpu[0] = m.cpu[0];
@@ -482,7 +494,7 @@ bool BuildMatch(EfzEnv* env, const Match& m)
     (*loader->m_player1Ref)->m_paletteIndex = m.palettes[0];
     (*loader->m_player2Ref)->m_paletteIndex = m.palettes[1];
     G()->input[0] = G()->input[1] = 0;
-    srand(1);
+    srand(seed);
     SceneIndex() = 2;
     for (int frame = 0; frame < 2000; frame++) {
         RunFrame();
@@ -515,10 +527,66 @@ Match DrawMatch(const EfzMatch& spec, uint64_t& rng)
     return m;
 }
 
+bool LoadMatch(EfzEnv* env, Slot& s, const Match& m);
+
 // Starts the slot's next match in its (bound) arena.
 bool StartMatch(EfzEnv* env, Slot& s)
 {
     Match m = DrawMatch(s.spec, s.ep.rng);
+    int page = s.recordPage, slot = s.recordSlot;
+    s.recordPage = s.recordSlot = 0;
+    if (page > 0 && (m.cpu[0] || m.cpu[1])) {
+        env->SetError("not recorded: a replay doesn't hold the CPU's decisions, so both "
+                      "players must be the program's");
+        page = 0;
+    }
+    if (page > 0) {
+        // Recorded: built from its start with the game writing the replay, not copied.
+        if (!BuildMatch(env, m, page, slot, (unsigned)SplitMix(s.ep.rng))) {
+            Game()->m_replay.Close();
+            Game()->m_replayMode = 0;
+            env->SetError("the recorded match could not be started");
+            s.broken = true;
+            return false;
+        }
+        s.recording = true;
+    } else if (!LoadMatch(env, s, m)) {
+        return false;
+    }
+    s.ep.match = m;
+    s.ep.frame = 0;
+    s.ep.episode++;
+    s.ep.prevHp[0] = s.ep.prevHp[1] = 9999;
+    s.ep.prevRounds[0] = s.ep.prevRounds[1] = 0;
+    s.ep.ret[0] = s.ep.ret[1] = 0;
+    s.started = true;
+    s.broken = false;
+    return true;
+}
+
+// Ends the slot's recording (its arena bound): after a match won, plays on as the game
+// does after a match (the end fade) until it closes the replay; else closes it now.
+void EndRecording(Slot& s, bool playOut)
+{
+    if (!s.recording)
+        return;
+    s.recording = false;
+    if (playOut) {
+        G()->input[0] = G()->input[1] = 0;
+        for (int frame = 0; frame < 2000 && SceneIndex() == 3 && Game()->m_replayMode == 2;
+             frame++)
+            RunFrame();
+    }
+    if (Game()->m_replayMode == 2) {
+        Game()->m_replay.Close();
+        Game()->m_replayMode = 0;
+    }
+}
+
+// Starts match `m` in the slot's (bound) arena from its saved copy, made the first time
+// it is asked for.
+bool LoadMatch(EfzEnv* env, Slot& s, const Match& m)
+{
     std::shared_ptr<CacheEntry> entry = env->cache.Get(m.Key());
     {
         std::lock_guard<std::mutex> lock(entry->lock);
@@ -544,14 +612,6 @@ bool StartMatch(EfzEnv* env, Slot& s)
     }
     // The CPU and the effects draw from rand: a seed of its own for each match.
     srand((unsigned)SplitMix(s.ep.rng));
-    s.ep.match = m;
-    s.ep.frame = 0;
-    s.ep.episode++;
-    s.ep.prevHp[0] = s.ep.prevHp[1] = 9999;
-    s.ep.prevRounds[0] = s.ep.prevRounds[1] = 0;
-    s.ep.ret[0] = s.ep.ret[1] = 0;
-    s.started = true;
-    s.broken = false;
     return true;
 }
 
@@ -731,6 +791,7 @@ void ResetOne(EfzEnv* env, int i)
     Slot& s = env->slots[i];
     s.pending = s.finished = false;
     BindArena(s.arena);
+    EndRecording(s, false); // a reset cuts a recorded match short
     env->reward[2 * i] = env->reward[2 * i + 1] = 0;
     env->terminated[i] = env->truncated[i] = 0;
     if (StartMatch(env, s)) {
@@ -786,6 +847,7 @@ void StepOne(EfzEnv* env, int i)
     } else {
         memset(ObsOf(env, env->finalObsOut, i), 0, 2 * kObsDim * sizeof(float));
     }
+    EndRecording(s, terminated && !s.broken);
     if (cfg.autoreset != EFZ_AUTORESET_SAME_STEP) {
         // The step's observation is the match's last; the next match waits.
         memcpy(ObsOf(env, env->obsOut, i), ObsOf(env, env->finalObsOut, i),
@@ -897,6 +959,7 @@ EfzEnv* efz_env_create(const char* dataDir, const EfzEnvConfig* config, char* er
 
     std::unique_ptr<EfzEnv> env(new EfzEnv);
     env->cfg = cfg;
+    env->dataDir = dataDir;
     env->n = cfg.num_envs;
     env->cache.SetCapacity((size_t)cfg.cache_size);
     size_t obsSize = (size_t)env->n * 2 * kObsDim;
@@ -949,8 +1012,14 @@ void efz_env_destroy(EfzEnv* env)
         return;
     BindArena(nullptr);
     Finish(env);
-    for (Slot& s : env->slots)
+    for (Slot& s : env->slots) {
+        if (s.recording) { // its replay ends where the match is
+            BindArena(s.arena);
+            EndRecording(s, false);
+            BindArena(nullptr);
+        }
         FreeArena(s.arena);
+    }
     delete env;
 }
 
@@ -999,6 +1068,35 @@ int efz_env_reset(EfzEnv* env, const uint8_t* mask)
     }
     Pool::Get().Launch(env->job, (int)which.size(), [env, &which](int k) { ResetOne(env, which[k]); });
     Pool::Get().Wait(env->job);
+    return 0;
+}
+
+int efz_env_record(EfzEnv* env, int32_t index, int32_t page, int32_t slot)
+{
+    if (!env || index < 0 || index >= env->n)
+        return -1;
+    Finish(env);
+    if (page < 1 || page > 9 || slot < 1 || slot > 9) {
+        env->SetError("replay slots are page 1-9, slot 1-9");
+        return -1;
+    }
+    Slot& s = env->slots[index];
+    if (s.spec.cpu[0] || s.spec.cpu[1]) {
+        env->SetError("a replay doesn't hold the CPU's decisions: both players must be the "
+                      "program's (set_matches cpu=(False, False))");
+        return -1;
+    }
+    s.recordPage = page;
+    s.recordSlot = slot;
+    return 0;
+}
+
+int efz_env_set_save_dir(EfzEnv* env, const char* dir)
+{
+    if (!env)
+        return -1;
+    Finish(env);
+    SetDataDir(env->dataDir.c_str(), dir && *dir ? dir : env->dataDir.c_str());
     return 0;
 }
 
@@ -1084,7 +1182,12 @@ int efz_env_load_state(EfzEnv* env, int32_t index, const void* state, size_t siz
     SetStack(&stackMark);
     Slot& s = env->slots[index];
     BindArena(s.arena);
+    EndRecording(s, false);
     LoadArena((const char*)state + sizeof(h), (uintptr_t)h.arenaSize);
+    if (Game()->m_replayMode == 2) { // saved while recording: a loaded game never writes
+        Game()->m_replay.m_handle = NULL;
+        Game()->m_replayMode = 0;
+    }
     s.ep = h.ep;
     s.started = true;
     s.broken = false;
