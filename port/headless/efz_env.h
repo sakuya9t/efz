@@ -4,8 +4,9 @@
  * step runs frame_skip frames of the game (64 a second; each is three ticks of the
  * simulation, as in the game) with each player's controls held, then reports what each
  * player sees, its reward and whether the match ended. A side can be the game's own
- * CPU instead of the program. Ended matches start again at once (the step returns the
- * new match's first observation; the old one's last is in final_obs).
+ * CPU instead of the program. Ended matches start again at once by default (the step
+ * returns the new match's first observation; the old one's last is in final_obs), or at
+ * the next step, or when the program resets them (EfzEnvConfig.autoreset).
  *
  * The games are the recovered source's, unchanged: the same as the original's, tick
  * for tick (docs/headless.md has how that is tested). They run on num_threads threads,
@@ -36,7 +37,17 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 1
+#define EFZ_ENV_VERSION 2
+
+/* What a step does when a match ends (EfzEnvConfig.autoreset). */
+#define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
+                                     view, final_obs the last of the match that ended */
+#define EFZ_AUTORESET_NEXT_STEP 1 /* obs (and final_obs) is the last view; the next step
+                                     starts the next match, ignoring its actions, with no
+                                     reward (Gymnasium's default) */
+#define EFZ_AUTORESET_DISABLED 2  /* the environment stays ended (its steps do nothing, its
+                                     obs, info, terminated and truncated stay as at the end)
+                                     until efz_env_reset starts it again */
 
 /* Controls: one byte per player per step. With relative_actions the two horizontal
  * bits are forward (toward where the player faces) and back; otherwise screen right
@@ -76,6 +87,9 @@ typedef struct EfzEnvConfig {
     float reward_round;         /* per round won, minus per round lost; 0 */
     float reward_match;         /* for winning the match, minus for losing it; 1 */
     uint64_t seed;              /* draws characters and stages, and seeds each match's rand */
+    int32_t autoreset;          /* EFZ_AUTORESET_*: what a step does when a match ends;
+                                   EFZ_AUTORESET_SAME_STEP */
+    int32_t reserved;
 } EfzEnvConfig;
 
 /* What an environment plays. Character and stage numbers -1 are drawn anew for each
@@ -146,6 +160,11 @@ EFZ_ENV_API int efz_env_set_matches(EfzEnv* env, const EfzMatch* matches, int32_
 /* Starts a new match in the environments whose mask byte is set (mask NULL: all). Their
  * observations, info and zero rewards are in the buffers when it returns. */
 EFZ_ENV_API int efz_env_reset(EfzEnv* env, const uint8_t* mask);
+/* Seeds environment `index` as efz_env_create's seed seeds them all: what its following
+ * matches draw (characters and stages from pools, each match's rand) follows from `seed`
+ * alone, so the same seed, the same matches and the same actions play the same games in
+ * any environment. Takes effect from its next match (efz_env_reset, or an autoreset). */
+EFZ_ENV_API int efz_env_seed(EfzEnv* env, int32_t index, uint64_t seed);
 /* One step of every environment: actions[num_envs][2]. A side the CPU plays ignores its
  * byte. Returns when every environment has stepped. */
 EFZ_ENV_API int efz_env_step(EfzEnv* env, const uint8_t* actions);

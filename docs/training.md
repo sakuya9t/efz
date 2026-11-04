@@ -9,8 +9,9 @@ Street Fighter and other fighting games.
 
 In short:
 
-- The frameworks need thin adapters (50-100 lines each), and `efz_env` has four gaps to
-  close first. One of them makes RLlib record wrong episodes without an error.
+- The frameworks need thin adapters (50-100 lines each), and `efz_env` had four gaps
+  (its only autoreset was one RLlib's runner and Gymnasium's wrappers don't expect).
+  Both are done: the gaps are closed and the adapters are in `python/efz_env`.
 - Every Hisoutensoku AI that plays well is hand-written rules. The learning attempts
   (2021-2026) were held back by slow environments, and none beats a person.
 - EFZ's CPU is hand-written rules too. At level 4 it blocks every attack it is able to
@@ -28,7 +29,7 @@ scripts; none is in the repository.
 | Stable-Baselines3 2.9.2 | A `VecEnv` over `EfzVecEnv` (~70 lines, mapping onto `step_async`/`step_wait`) trained PPO against the CPU (1,600 agent-steps a second including training) and in self-play with both players as agents of one policy (7,200 a second). CPU torch was the bottleneck, not the game | Small |
 | TorchRL 0.14.1 | `GymWrapper(EfzVsCpu(...))` fails: it reads the vector env's `autoreset_mode` attribute. With that attribute, `check_env_specs` passes and the observation at a match's end is its last, not the next match's first | Small |
 | PettingZoo 1.27.0 | A `ParallelEnv` over a one-match batch passes `parallel_api_test` and `parallel_seed_test`. PettingZoo has no batched form, so this gives up the batch | Small |
-| RLlib 2.60.0 (on Windows) | Single-agent PPO runs on the batch with `gym_env_vectorize_mode="vector_entry_point"`, but reported 302-step episodes for 300-step matches: `SingleAgentEnvRunner` assumes next-step autoreset (an episode with no data takes the step's observation as its reset and drops that step). Multi-agent self-play works with one `MultiAgentEnv` per match; `num_envs_per_env_runner` > 1 goes through RLlib's own `SyncVectorMultiAgentEnv` (next-step only), so not through our batch | Medium |
+| RLlib 2.60.0 (on Windows) | Single-agent PPO runs on the batch with `gym_env_vectorize_mode="vector_entry_point"`. `SingleAgentEnvRunner` assumes next-step autoreset (an episode with no data takes the step's observation as its reset and drops that step), so with same-step autoreset it would take the next match's first view for the last one's end. Its `episode_len_mean` reads 302 for 300-step matches in either mode: RLlib's own count, not a sign of that (an earlier version of this page took it for one). Multi-agent self-play works with one `MultiAgentEnv` per match; `num_envs_per_env_runner` > 1 goes through RLlib's own `SyncVectorMultiAgentEnv` (next-step only), so not through our batch | Medium |
 | Minari 0.5.4 | `DataCollector` over the one-environment adapter wrote a dataset (it needs `minari[create]`, which installs JAX) | Small |
 
 Read, not run:
@@ -45,14 +46,17 @@ Read, not run:
 | Gymnax, Brax, PureJaxRL and the like | The environment must be written in JAX: not possible for this game |
 | OpenSpiel 2.0 | A simultaneous-move game in Python, with save states for its game copies; its algorithms suit small games |
 
-### Gaps in efz_env
+### Gaps in efz_env (closed)
 
-| Gap | What it breaks | Fix |
+Found on 3 November 2026 and closed the same day (efz_env version 2; the adapters are
+in `python/efz_env`, [headless.md](headless.md), "Training frameworks"):
+
+| Gap | What it broke | Now |
 |---|---|---|
-| Only same-step autoreset (a match that ends starts again within the step) | Gymnasium's vector observation and reward wrappers refuse it; RLlib silently misaligns episodes; TorchRL and Tianshou prefer no autoreset | A native option: same step, next step, or off (`efz_env_reset` with a mask already exists) |
-| `reset(seed=...)` does nothing: the seed is read when the batch is made (`port/headless/env.cpp`, `s.ep.rng = SplitMix(seed) ^ i`) | The same seed and actions diverged at step 58; Gymnasium's seeding contract | Seeds per environment on reset in the C API |
-| `EfzVsCpu`'s info key `episode` (a match counter) | Gymnasium's `RecordEpisodeStatistics`, SB3 and CleanRL use `episode` for return and length | Rename it (`match_index`) |
-| `EfzVsCpu` has no `autoreset_mode` attribute | TorchRL's `GymWrapper` | One line |
+| Only same-step autoreset (a match that ends starts again within the step) | Gymnasium's vector observation and reward wrappers refuse it; RLlib's runner assumes next-step; TorchRL refuses next-step and prefers none; Tianshou resets ended environments itself | `EfzEnvConfig.autoreset`: same step, next step (`EfzVsCpu`'s default) or off. TorchRL runs `EfzVsCpu` with `'disabled'` or `'same_step'` |
+| `reset(seed=...)` did nothing: the seed was read when the batch was made | The same seed and actions diverged at step 58; Gymnasium's seeding contract | `efz_env_seed(env, i, seed)`; `reset(seed=s)` seeds environment i with s + i. `check_env` passes |
+| `EfzVsCpu`'s info key `episode` (a match counter) | Gymnasium's `RecordEpisodeStatistics`, SB3 and CleanRL use `episode` for return and length | `match_index` (none in the single environment, whose info must not depend on how many matches came before) |
+| `EfzVsCpu` had no `autoreset_mode` attribute | TorchRL's `GymWrapper` | It has |
 
 There is no standard for batched two-player games. The working convention (PufferLib's,
 and the SB3 adapter's) treats a batch of N matches as 2N agents: one shared policy with

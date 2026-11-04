@@ -5,9 +5,10 @@
     obs, reward, terminated, truncated, info = env.step(actions)   # actions (256, 2) uint8
 
 Everything returned is a numpy view of the library's buffers, written in place by the
-next step or reset: copy what you keep. Matches that end restart within the same step
-(the returned obs is the new match's first view; final_obs holds the last view of the
-match that ended, and info describes it).
+next step or reset: copy what you keep. By default matches that end restart within the
+same step (the returned obs is the new match's first view; final_obs holds the last view
+of the match that ended, and info describes it); autoreset='next_step' restarts them at
+the next step instead, and 'disabled' leaves them ended until reset(mask).
 """
 
 import ctypes
@@ -18,6 +19,12 @@ import numpy as np
 from . import _native
 
 STAGES = 23
+
+AUTORESET = {
+    'same_step': _native.AUTORESET_SAME_STEP,
+    'next_step': _native.AUTORESET_NEXT_STEP,
+    'disabled': _native.AUTORESET_DISABLED,
+}
 
 
 def character_names():
@@ -76,13 +83,19 @@ class EfzVecEnv:
         bar dealt minus taken, plus reward_round per round won minus lost, plus
         reward_match for winning the match minus for losing it.
     seed: draws random characters and stages and seeds the game's CPU.
+    autoreset: what a step does when a match ends: 'same_step' (the next match starts
+        in the step; final_obs is the last view), 'next_step' (obs is the last view;
+        the next step starts the next match, ignoring its actions, with no reward) or
+        'disabled' (the environment stays ended until reset(mask) starts it again).
     """
 
     def __init__(self, data_dir=None, num_envs=64, *, num_threads=0, frame_skip=1,
                  max_frames=0, rounds_to_win=2, cpu_level=2, damage_level=2,
                  skip_noninteractive=True, relative_actions=True, drawing=False,
                  cache_size=64, reward_damage=1.0, reward_round=0.0, reward_match=1.0,
-                 seed=0):
+                 seed=0, autoreset='same_step'):
+        if autoreset not in AUTORESET:
+            raise ValueError(f'autoreset must be one of {sorted(AUTORESET)}')
         data_dir = data_dir or os.environ.get('EFZ_DATA') or os.environ.get('EFZ_DIR')
         if not data_dir:
             raise ValueError('pass data_dir, the folder of an EFZ 4.02 install (or set EFZ_DATA)')
@@ -97,7 +110,7 @@ class EfzVecEnv:
                                 relative_actions=int(relative_actions), drawing=int(drawing),
                                 cache_size=cache_size, reward_damage=reward_damage,
                                 reward_round=reward_round, reward_match=reward_match,
-                                seed=seed).items():
+                                seed=seed, autoreset=AUTORESET[autoreset]).items():
             setattr(cfg, name, value)
         self.config = cfg
         error = ctypes.create_string_buffer(512)
@@ -108,6 +121,7 @@ class EfzVecEnv:
         self.obs_dim = lib.efz_env_obs_dim()
         self.observation_names = [lib.efz_env_obs_name(i).decode() for i in range(self.obs_dim)]
         self.drawing = bool(drawing)
+        self.autoreset = autoreset
         self._actions = np.zeros((num_envs, 2), dtype=np.uint8)
         self._pending = False
         self._keep = None
@@ -207,10 +221,25 @@ class EfzVecEnv:
             self._lib.efz_env_step_wait(self._h)
             self._pending = False
 
-    def reset(self, mask=None):
-        """Starts new matches (in every environment, or where mask is true). Returns obs;
-        info is in self.info."""
+    def seed(self, index, seed):
+        """Seeds environment `index`: its following matches (characters and stages drawn
+        from pools, the game's rand) follow from `seed` alone, from its next match on."""
         self._finish()
+        if self._lib.efz_env_seed(self._h, int(index), int(seed) & (2**64 - 1)) != 0:
+            raise IndexError(f'no environment {index}')
+
+    def reset(self, mask=None, seed=None):
+        """Starts new matches (in every environment, or where mask is true). Returns obs;
+        info is in self.info. seed: an int seeds environment i with seed + i (as
+        Gymnasium's vector environments do), or a sequence gives each its own (None
+        leaves one as it is); only the environments reset are seeded."""
+        self._finish()
+        if seed is not None:
+            which = range(self.num_envs) if mask is None else np.flatnonzero(mask)
+            for i in which:
+                s = seed + int(i) if isinstance(seed, (int, np.integer)) else seed[i]
+                if s is not None:
+                    self.seed(i, s)
         if mask is None:
             self._lib.efz_env_reset(self._h, None)
         else:

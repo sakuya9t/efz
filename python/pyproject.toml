@@ -4,13 +4,18 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "efz_env"
-version = "0.1.0"
+version = "0.2.0"
 description = "Headless EFZ for training agents: batches of matches stepped in parallel in C++"
 requires-python = ">=3.9"
 dependencies = ["numpy"]
 
 [project.optional-dependencies]
 gym = ["gymnasium>=1.0"]
+sb3 = ["gymnasium>=1.0", "stable-baselines3>=2.0"]
+pettingzoo = ["gymnasium>=1.0", "pettingzoo>=1.24"]
+# Playing against agents in a window (efz_env.human, examples/play.py).
+human = ["pygame-ce>=2.4"]
+all = ["gymnasium>=1.0", "stable-baselines3>=2.0", "pettingzoo>=1.24", "pygame-ce>=2.4"]
 
 [tool.setuptools]
 packages = ["efz_env"]

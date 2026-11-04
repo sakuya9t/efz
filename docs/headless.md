@@ -190,11 +190,49 @@ it; both are documented where they are declared. In short:
 | A side | the program's, or the game's CPU (`cpu=(False, True)`, at `cpu_level` 1-4) |
 | Controls | one byte per player: `0x01` right (forward with `relative_actions`, the default), `0x02` left (back), `0x04` down, `0x08` up, `0x10`-`0x80` A-D. A button counts when it goes down: hold it across steps and it is one press. `ActionTable` maps discrete actions (default 9 directions × none/A/B/C/D) to bytes |
 | Rewards | per player: `reward_damage` per full HP bar dealt minus taken (default 1), `reward_round` per round won minus lost (0), `reward_match` for winning the match minus for losing (1). Zero-sum |
-| Ends | `terminated` when a player wins the match, `truncated` at `max_frames`. The environment starts its next match in the same step: `obs` is the new match's, `final_obs` the last of the old one, and `info` describes the old one (`ended`, `winner`, `episode_return`...) |
+| Ends | `terminated` when a player wins the match, `truncated` at `max_frames`. What follows is `autoreset`'s: `'same_step'` (default) starts the next match in the same step (`obs` is the new match's, `final_obs` the last of the old one, and `info` describes the old one: `ended`, `winner`, `episode_return`...); `'next_step'` returns the last view as `obs` too and starts the next match at the next step, which ignores its actions and has no reward (Gymnasium's default); `'disabled'` leaves the environment ended until `reset(mask)` |
+| Seeds | `seed` (the batch's) draws each environment's characters and stages and seeds each match's `rand`; `reset(seed=s)` seeds environment i with s + i (a list: one each), so the same seed, matches and actions play the same games |
 | Matches | `set_matches(chars, stage, cpu, palettes, char_pool, stage_pool)`: fixed, or drawn for each match from pools (default every playable character, 0-21 and 23, and every stage) |
 | Save states | `save_state(i)` and `load_state(i, state)`: the whole game, a few MB. A state loads into any environment of any batch of the same process (the game's objects hold the addresses of their C++ classes' tables) |
 | Pictures | `drawing=True`, then `render(i)`: the last frame, 320×240 RGB |
-| Gymnasium | `efz_env.gym.EfzVsCpu`: the vector API for one agent (player 1) against the CPU, discrete actions |
+| Frameworks | below |
+
+## Training frameworks
+
+Each adapter is a module of its own, needing only its framework (`pip install -e
+python[all]`, or `[gym]`, `[sb3]`, `[pettingzoo]`, `[human]`). `python/tests/test_frameworks.py`
+checks each with the framework's own tests where it has them (with `EFZ_DATA` set).
+
+| Module | What |
+|---|---|
+| `efz_env.gym` | Gymnasium: `EfzVsCpu`, the batch as a vector environment (player 1 against the CPU; `autoreset_mode` NEXT_STEP by default, so Gymnasium's vector wrappers work; SAME_STEP and DISABLED too), and `EfzVsCpuEnv`, one match as a `gymnasium.Env` (passes `check_env`). Registered as `efz/VsCpu-v0`: `gym.make` gives the one match, `gym.make_vec(..., vectorization_mode='vector_entry_point')` the batch. TorchRL's `GymWrapper` takes `EfzVsCpu` made with `autoreset_mode='disabled'` or `'same_step'` (it refuses NEXT_STEP) |
+| `efz_env.sb3` | Stable-Baselines3: `EfzSB3VecEnv`, the batch as SB3's `VecEnv`. `opponent='cpu'`; `'self'`: both players are agents of the policy being trained (2 × `num_envs` agents); or a callable for player 2, e.g. `frozen(model)`, a copy of a policy as it is now |
+| `efz_env.pettingzoo` | PettingZoo's Parallel API: `EfzParallelEnv`, one match, both players agents (a batch of one: PettingZoo has no batched form) |
+| `efz_env.human` | Playing it yourself: `HumanMatch` shows a match in a window (pygame-ce) at the game's speed and takes your keyboard or gamepad for one side; the other is an agent or the CPU. Every match is recorded. `HumanVecEnv` makes those matches an SB3 environment, so an agent learns from them as they are played |
+
+The scripts (`python/examples/`):
+
+```sh
+# Train with PPO (Stable-Baselines3) against the CPU, in self-play, or against frozen copies:
+python python/examples/train.py --data "$EFZ_DIR" --opponent cpu  --steps 2e6 --out runs/vs-cpu
+python python/examples/train.py --data "$EFZ_DIR" --opponent self --steps 2e6 --out runs/self
+python python/examples/train.py --data "$EFZ_DIR" --opponent past --steps 2e6 --out runs/past
+# Play a trained agent (you are player 2: arrows, Z X C V = A B C D, or a gamepad; Esc stops):
+python python/examples/play.py --data "$EFZ_DIR" --agent runs/self/model.zip
+python python/examples/play.py --data "$EFZ_DIR" --cpu --cpu-level 4      # the game's CPU
+# Play it while it learns from your matches (start from a trained agent):
+python python/examples/train.py --data "$EFZ_DIR" --opponent human --load runs/self/model.zip --out runs/human
+```
+
+`train.py` writes the run's folder: `model.zip` and checkpoints, `config.json` (the
+frame skip and actions `play.py` uses the model with) and TensorBoard logs if
+tensorboard is installed. The window is the headless library's drawing, so it has no
+sound. Each match played is recorded as `<time>.npz` and `.json`: every frame's views of
+both players, the bytes both sent, your controls as on screen and the agent's choices,
+and the rewards; data for cloning the human side or for the agent's own learning later.
+Learning from your matches is slow (one match at the game's speed, against thousands a
+second headless): it is for adapting a trained agent to people, and for collecting their
+play.
 
 ### Observations
 

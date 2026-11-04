@@ -209,6 +209,17 @@ obs = env.reset()                                   # (256, 2, 168)
 obs, reward, terminated, truncated, info = env.step(ActionTable().to_bytes(actions))
 ```
 
+Adapters for Gymnasium (`efz/VsCpu-v0`), Stable-Baselines3 and PettingZoo, a PPO
+training script, and a window to play a trained agent yourself, which records every
+match and can let the agent learn from them:
+
+```sh
+pip install -e "python[all]"
+python python/examples/train.py --data "$EFZ_DIR" --opponent self --steps 2e6 --out runs/self
+python python/examples/play.py --data "$EFZ_DIR" --agent runs/self/model.zip
+python python/examples/train.py --data "$EFZ_DIR" --opponent human --load runs/self/model.zip
+```
+
 It is the same game: `tools/compat.py check` plays every case of the compatibility
 suite both in the SDL3 game and headless, and the logs must agree with the reference
 and with each other; CI runs the headless library's tests that need no game data

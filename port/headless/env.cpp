@@ -396,7 +396,9 @@ struct Slot {
     EfzMatch spec;
     Episode ep;
     bool started = false;
-    bool broken = false; // its game asked to close (a file it needs is missing)
+    bool broken = false;   // its game asked to close (a file it needs is missing)
+    bool pending = false;  // its match ended: the next step starts the next (NEXT_STEP)
+    bool finished = false; // its match ended: it waits for efz_env_reset (DISABLED)
 };
 
 const uint32_t kStateMagic = 0x5a464545; // "EEFZ"
@@ -727,6 +729,7 @@ float* ObsOf(EfzEnv* env, float* base, int i)
 void ResetOne(EfzEnv* env, int i)
 {
     Slot& s = env->slots[i];
+    s.pending = s.finished = false;
     BindArena(s.arena);
     env->reward[2 * i] = env->reward[2 * i + 1] = 0;
     env->terminated[i] = env->truncated[i] = 0;
@@ -748,8 +751,10 @@ void StepOne(EfzEnv* env, int i)
     float* reward = &env->reward[2 * i];
     const uint8_t* act = &env->actions[2 * i];
     reward[0] = reward[1] = 0;
+    if (s.finished) // DISABLED: as it ended, until efz_env_reset
+        return;
     env->terminated[i] = env->truncated[i] = 0;
-    if (!s.started || s.broken) {
+    if (!s.started || s.broken || s.pending) {
         ResetOne(env, i);
         return;
     }
@@ -780,6 +785,17 @@ void StepOne(EfzEnv* env, int i)
         WriteInfo(s, env->info[i], winner, true);
     } else {
         memset(ObsOf(env, env->finalObsOut, i), 0, 2 * kObsDim * sizeof(float));
+    }
+    if (cfg.autoreset != EFZ_AUTORESET_SAME_STEP) {
+        // The step's observation is the match's last; the next match waits.
+        memcpy(ObsOf(env, env->obsOut, i), ObsOf(env, env->finalObsOut, i),
+               2 * kObsDim * sizeof(float));
+        if (cfg.autoreset == EFZ_AUTORESET_NEXT_STEP)
+            s.pending = true;
+        else
+            s.finished = true;
+        BindArena(nullptr);
+        return;
     }
     if (StartMatch(env, s)) {
         WriteObs(env, s, ObsOf(env, env->obsOut, i));
@@ -819,6 +835,7 @@ void efz_env_default_config(EfzEnvConfig* c)
     c->reward_round = 0.0f;
     c->reward_match = 1.0f;
     c->seed = 0;
+    c->autoreset = EFZ_AUTORESET_SAME_STEP;
 }
 
 int32_t efz_env_version(void)
@@ -866,6 +883,8 @@ EfzEnv* efz_env_create(const char* dataDir, const EfzEnvConfig* config, char* er
     cfg.damage_level = std::min(3, std::max(1, cfg.damage_level));
     if (cfg.cache_size <= 0)
         cfg.cache_size = 64;
+    if (cfg.autoreset < EFZ_AUTORESET_SAME_STEP || cfg.autoreset > EFZ_AUTORESET_DISABLED)
+        return fail("autoreset must be EFZ_AUTORESET_SAME_STEP, _NEXT_STEP or _DISABLED");
     if (!dataDir || !*dataDir)
         return fail("no data_dir: the folder of an EFZ 4.02 install");
     std::string probe = std::string(dataDir) + "/system/effect/effect.dat";
@@ -983,6 +1002,16 @@ int efz_env_reset(EfzEnv* env, const uint8_t* mask)
     return 0;
 }
 
+int efz_env_seed(EfzEnv* env, int32_t index, uint64_t seed)
+{
+    if (!env || index < 0 || index >= env->n)
+        return -1;
+    Finish(env);
+    uint64_t state = seed;
+    env->slots[index].ep.rng = SplitMix(state);
+    return 0;
+}
+
 int efz_env_step_async(EfzEnv* env, const uint8_t* actions)
 {
     if (!env)
@@ -1059,6 +1088,7 @@ int efz_env_load_state(EfzEnv* env, int32_t index, const void* state, size_t siz
     s.ep = h.ep;
     s.started = true;
     s.broken = false;
+    s.pending = s.finished = false;
     env->reward[2 * index] = env->reward[2 * index + 1] = 0;
     env->terminated[index] = env->truncated[index] = 0;
     WriteObs(env, s, ObsOf(env, env->obsOut, index));

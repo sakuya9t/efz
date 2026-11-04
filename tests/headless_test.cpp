@@ -239,7 +239,7 @@ void TestSprites()
 void TestApi()
 {
     // python/efz_env/_native.py declares the same.
-    CHECK(sizeof(EfzEnvConfig) == 64);
+    CHECK(sizeof(EfzEnvConfig) == 72);
     CHECK(sizeof(EfzMatch) == 20);
     CHECK(sizeof(EfzInfo) == 32);
     CHECK(sizeof(EfzBuffers) == 6 * sizeof(void*));
@@ -257,9 +257,14 @@ void TestApi()
     char error[256] = "";
     EfzEnvConfig config;
     efz_env_default_config(&config);
+    CHECK(config.autoreset == EFZ_AUTORESET_SAME_STEP);
     config.num_envs = 2;
     CHECK(efz_env_create("no-such-efz-folder", &config, error, sizeof(error)) == nullptr);
     CHECK(strstr(error, "no game data") != nullptr);
+    config.autoreset = 3;
+    CHECK(efz_env_create("no-such-efz-folder", &config, error, sizeof(error)) == nullptr);
+    CHECK(strstr(error, "autoreset") != nullptr);
+    CHECK(efz_env_seed(nullptr, 0, 1) == -1);
 }
 
 } // namespace

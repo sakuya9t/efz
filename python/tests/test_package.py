@@ -17,7 +17,7 @@ from efz_env import _native
 class Layout(unittest.TestCase):
     def test_structures_match_the_header(self):
         # port/headless/efz_env.h; tests/headless_test.cpp checks the C side.
-        self.assertEqual(ctypes.sizeof(_native.Config), 64)
+        self.assertEqual(ctypes.sizeof(_native.Config), 72)
         self.assertEqual(ctypes.sizeof(_native.Match), 20)
         self.assertEqual(ctypes.sizeof(_native.Info), 32)
         self.assertEqual(ctypes.sizeof(_native.Buffers), 6 * ctypes.sizeof(ctypes.c_void_p))

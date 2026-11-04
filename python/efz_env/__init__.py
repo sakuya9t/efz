@@ -9,7 +9,12 @@ run in C++ on every core without a window or sound. See docs/headless.md.
     obs = env.reset()
     obs, reward, terminated, truncated, info = env.step(table.to_bytes(indices))
 
-efz_env.gym.EfzVsCpu is Gymnasium's vector API for one agent against the game's CPU.
+For the training frameworks (each imported on its own, needing only its framework):
+efz_env.gym (Gymnasium: EfzVsCpu, EfzVsCpuEnv, registered as efz/VsCpu-v0),
+efz_env.sb3 (Stable-Baselines3: against the CPU, in self-play or against a frozen
+policy), efz_env.pettingzoo (one match, both players agents) and efz_env.human (playing
+it yourself in a window, recorded; an agent can learn from those matches). Scripts:
+python/examples/train.py and play.py.
 """
 
 from . import actions

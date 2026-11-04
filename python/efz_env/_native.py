@@ -10,7 +10,12 @@ import glob
 import os
 import sys
 
-VERSION = 1
+VERSION = 2
+
+# EfzEnvConfig.autoreset
+AUTORESET_SAME_STEP = 0
+AUTORESET_NEXT_STEP = 1
+AUTORESET_DISABLED = 2
 
 if sys.platform == 'win32':
     _NAMES = ['efz_env.dll', 'libefz_env.dll']
@@ -37,6 +42,8 @@ class Config(ctypes.Structure):
         ('reward_round', ctypes.c_float),
         ('reward_match', ctypes.c_float),
         ('seed', ctypes.c_uint64),
+        ('autoreset', ctypes.c_int32),
+        ('reserved', ctypes.c_int32),
     ]
 
 
@@ -109,6 +116,7 @@ def _bind(lib):
         'efz_env_set_obs_buffers': (None, [P, P, P]),
         'efz_env_set_matches': (ctypes.c_int, [P, ctypes.POINTER(Match), ctypes.c_int32]),
         'efz_env_reset': (ctypes.c_int, [P, P]),
+        'efz_env_seed': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_uint64]),
         'efz_env_step': (ctypes.c_int, [P, P]),
         'efz_env_step_async': (ctypes.c_int, [P, P]),
         'efz_env_step_wait': (ctypes.c_int, [P]),
