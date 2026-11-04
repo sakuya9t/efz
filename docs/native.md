@@ -150,8 +150,16 @@ multiply-add (`-ffp-contract=off`, `/fp:contract-`), no fast math.
 - **Evaluation order.** The original evaluates a call's arguments right to left. Two
   calls take two random draws as arguments (`ObjBase::SetVelocity` in `CShiori` and
   `CNayukiB`); `#ifdef EFZ_NATIVE` there draws them in the original's
-  order. No other call or operator has two arguments whose order matters (checked by
-  scanning for calls with side effects in two arguments).
+  order. An operator's operands it evaluates left to right, which C++ leaves to the
+  compiler as well. GCC happens to do the same; Visual C++ 2022 doesn't always: it
+  draws the second `rand()` of `rand() * 20 / 32768 + (rand() < 16384) * 180` first.
+  That expression, four times in `src/effect.cpp` (the hit sparks' particles, `0x2a`-
+  `0x2d`), parted 108 of the suite's cases between the MSVC build and the original
+  until the two draws became statements of their own (4 November 2026). Other
+  statements draw more than once among an operator's operands (the burst of objects
+  `0x1f1`/`0x1f2`, for one) in shapes Visual C++ 2022 evaluates left to right; the
+  suite checks the ones it runs, on every push and in both compilers (`compat` in
+  `.github/workflows/native.yml`).
 - **`rand`.** The static CRT's (`port/x87.cpp`): the same sequence from the same seed.
 - **Integers and characters.** Signed overflow wraps (`-fwrapv`) and `char` is signed
   (`-fsigned-char`), as with the original's compiler. The code still reads some
@@ -208,6 +216,8 @@ Results (31 October 2026; the suite compares every byte of the state since then)
 | The native game | Cases | Ticks | Play as the original does |
 |---|---|---|---|
 | Linux x64, GCC (the default: emulated `sin`, `cos`, `atan2`) | 254 | 1,223,436 | all |
+| Windows x64, MSVC 17.14 (Visual C++ 2022), the game and `efz-headless` (4 November) | 254 | 1,223,436 | all, since `src/effect.cpp`'s draws are in the original's order (146 before) |
+| Windows x64, MinGW-w64 GCC 16.2, `efz-headless` (4 November) | 254 | 1,223,436 | all |
 
 Before 31 October the test compared only the players' status (action, frame, position,
 velocity, HP, combo, gauge) on 154 replays:

@@ -87,13 +87,13 @@ tools/compat.py check --mode headless     # the headless runner only
 ctest --test-dir build/native -L headless # without the game's data
 ```
 
-**Observed, and not from this work:** on that machine, the SDL3 game built with MSVC
-(the commit before this, untouched) gives the reference's log in 19 of those 40 cases,
-and 146 of all 254. The others differ from it in the same way in the SDL3 game and
-`efz-headless`. The suite's results so far are from GCC and MinGW builds on Linux
-([native.md](native.md)), and this machine's `key.ini` may not be the one the reference
-was recorded with (`key.ini` bytes 0x21-0x26 set CPU level, draw rate, effects, damage
-and rounds). Which of the two it is is open.
+**Found on the way, and fixed** (4 November 2026): the SDL3 game built with MSVC gave
+the reference's log in only 146 of the 254 cases, the same in `efz-headless`. Not
+`key.ini`: GCC builds give it in all 254 with the same one. Visual C++ 2022 draws the
+two `rand()`s of one expression in `src/effect.cpp` in the other order from the
+original's compiler (and GCC), which C++ allows ([native.md](native.md), "Evaluation
+order"); with the draws in statements of their own, both MSVC builds give the
+reference's log in all 254.
 
 ## How it runs many games at once
 
