@@ -36,8 +36,20 @@ TABLE = ActionTable()
 # The observation's columns events are read from: self_action, self_hitstun,
 # self_airborne, opp_action, opp_hitstun, opp_own_action, self_combo_hits (the combo
 # one is doing: the attacker's counter, / 30) and self_combo_damage (/ 9999).
-COLUMNS = [18, 20, 39, 50, 52, 67, 30, 38, 23, 35]  # + self_hitstop, self_own_action
+COLUMNS = [18, 20, 39, 50, 52, 67, 30, 38, 23, 35,  # + self_hitstop, self_own_action
+           9, 10, 11]  # + self_gauge (/ 3000), self_rf_gauge (/ 1000), self_rf_blue
 INSTANT_CHARGE = [0xa7, 0xab]  # 22C on the ground and in the air: cancels a move that hit
+
+
+def resources(power, rf, blue):
+    """A resource group: the RF gauge as the HUD draws it (red under 500: no Instant
+    Charge; cyan 500-999: 22C cancels; blue, full: it also gives back proration) and the
+    bars of power, 'blue2' etc."""
+    state = 'blue' if blue else 'cyan' if rf >= 500 else 'red'
+    return f'{state}{min(3, int(power // 1000))}'
+
+
+GROUPS = [f'{s}{b}' for s in ('red', 'cyan', 'blue') for b in range(4)]
 GUARD_GROUND, GUARD_AIR = list(range(0x96, 0x9c)), [0x9c]
 RG_GROUND, RG_AIR = [0xa8, 0xa9], [0xaa]
 RG = RG_GROUND + RG_AIR
@@ -78,6 +90,9 @@ class Events:
         hits or more, the damage a minute;
         combo_special, combo_ic: the share of combos of 2 hits or more in which a
         special or super, and an Instant Charge (22C), came out; ic_per_min;
+        combo_by_resources: per resource group at the combo's start (resources(): the
+        RF gauge red, cyan or blue, and the bars of power), the combos' count, damage on
+        average, at the 90th percentile and the most;
     busy_presses, busy_turns: the share of its presses, and of its changes of direction,
         made while it couldn't move (in a move of its own, or in hitstop): what a cancel
         is made of, a motion buffered for the moment the move connects.
@@ -171,7 +186,11 @@ class Events:
                 e = later[0] if len(later) else T
                 h, d = int(hits[b:e].max()), float(dmg[b:e].max())
                 n['combos'] += 1
-                n['combo_list'].append((h, d))
+                if cols.shape[1] > 12:
+                    g = resources(cols[b, 10] * 3000, cols[b, 11] * 1000, cols[b, 12] > 0)
+                else:
+                    g = None
+                n['combo_list'].append((h, d, g))
                 n['combo_hits'] += h
                 n['combo_damage'] += d
                 n['combos3'] += int(h >= 3)
@@ -224,7 +243,14 @@ class Events:
         out['combo_hits'] = round(n['combo_hits'] / c, 2) if c else None
         out['combo_damage'] = round(n['combo_damage'] / c) if c else None
         if c:
-            hits, dmg = np.array(n['combo_list']).T
+            hits = np.array([x[0] for x in n['combo_list']], float)
+            dmg = np.array([x[1] for x in n['combo_list']], float)
+            groups = np.array([x[2] or '' for x in n['combo_list']])
+            out['combo_by_resources'] = {
+                g: dict(n=int((groups == g).sum()), damage=round(float(dmg[groups == g].mean())),
+                        p90=round(float(np.percentile(dmg[groups == g], 90))),
+                        most=round(float(dmg[groups == g].max())))
+                for g in GROUPS if (groups == g).any()}
             out['combo_damage_p90'] = round(float(np.percentile(dmg, 90)))
             out['combo_damage_max'] = round(float(dmg.max()))
             out['combo_hits_p90'] = round(float(np.percentile(hits, 90)), 1)

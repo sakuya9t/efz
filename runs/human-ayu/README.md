@@ -127,6 +127,41 @@ it can cost: pokes stop paying. (`finetune.py --combo` can also make it the targ
 agent's KL pull during its own combos; not used, as it would pull the agent's combos
 toward a superhuman's.)
 
+### The red team
+
+`combo-red/`: the combo master (4M) trained on to 12M without the reaction time or the
+KL pull. On the held-out starts (the resources their players had): damage 1,068 on
+average, 2,877 at the 90th percentile, 4,143 at most (people from the same starts: 502,
+1,534, 2,926), an Instant Charge in 30% of them. Against the agent in whole matches it
+loses (2-0, slot 1-4 of D:/tasogare/EFZ/replay): its neutral is still the clone's, its
+training having started at hits already landed.
+
+People's combos by the resources at their start (`combo_library.py`; the RF gauge as the
+HUD draws it: red under 500, no Instant Charge; cyan 500-999, 22C cancels; blue, full,
+22C also gives back five times the gauge in proration; and the bars of power):
+
+| RF \ bars | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| red | 1,540 / 2,884 / 5,883 | 1,399 / 2,686 / 4,343 | 1,350 / 2,674 / 4,321 | 1,298 / 2,472 / 4,152 |
+| cyan | 1,688 / 3,071 / 5,883 | 1,594 / 3,002 / 6,601 | 1,561 / 2,998 / 7,123 | 1,520 / 2,904 / 6,635 |
+| blue | 2,189 / 4,227 / 7,421 | 1,970 / 4,277 / 7,079 | 1,897 / 3,918 / 6,952 | 1,767 / 3,654 / 6,235 |
+
+(average / 90th percentile / most; the bars counted at the first hit, after a super
+starting the combo has spent them.) Every combo of 6,000 and more used a blue Instant
+Charge and a super. So the red team's trials now start with resources drawn from these 12
+groups (`combo.py --rich`, the library's `efz_env_set_gauges`), with two helpers (the
+user's): the juggle (the defender's untech time, potential-based shaping) and a cost on
+the super gauge (`combo-red2/`, training). And built-in combos (`macros.py`): people's
+284 most damaging combos as action sequences, the one to play chosen by a selector learnt
+from trials. Played blindly from another start a recorded combo makes 22% of its damage
+(6% of them 80% or more); the best of up to 12 per start, with blue RF and 3 bars, makes
+2,317 on average and 6,165 at most, where the red team alone makes 1,312 and 4,386.
+
+The agent against it (`agent-red/`, from 10M at level 4, a quarter of its mirror matches
+against the red team, which sees the game as it is): to 14M steps, more guarding (13.5 a
+minute against the CPU) and less damage taken from the red team's combos (6,800 to 6,050
+a minute), its own combos about as before; stopped while the red team improves.
+
 ## The models
 
 On Hugging Face, https://huggingface.co/sakuya9t/efz, under the same paths:

@@ -11,8 +11,10 @@ is Ayu played by one of: a frozen copy of the policy (taken at each chunk's star
 clone, the agent of runs/curriculum (every 4 frames, as it was trained), and the --team:
 clones of single players (bc.py --players), each with its own habits, so that no one
 way of winning works against all of them (a league, as against self-play's narrowing),
-and the --combo master (combo.py), which also becomes the pull's target while the
-agent's own combo runs: people's play in neutral, the combo master's in combos. The reward
+and the --combo master (combo.py): a red-team opponent, seeing the game as it is
+(without the reaction time the others have), that lands the most damaging combo it can,
+so that a hit taken costs what it can. With --combo-teacher it is also the target of the
+pull while the agent's own combo runs (people's play elsewhere). The reward
 is the damage dealt minus taken (full bars) and 1 for the match, as the clone's critic
 learnt it from people's matches. Each chunk (--chunk steps) is followed by matches
 played to the end against the CPU (at the level of the chunk) and the curriculum
@@ -55,7 +57,12 @@ def parse():
     p.add_argument('--old', default=os.path.join(REPO, 'runs', 'curriculum', 'model.zip'),
                    help='an agent of frame_skip 4 among the opponents')
     p.add_argument('--team', nargs='*', default=[], help="players' clones among the opponents")
-    p.add_argument('--combo', help="combo.py's combo master: an opponent, and the teacher in combos")
+    p.add_argument('--combo', help="combo.py's combo master: a red-team opponent")
+    p.add_argument('--combo-teacher', action='store_true',
+                   help="the combo master as the pull's target in the agent's own combos")
+    p.add_argument('--combo-delay', type=int, default=0, help="the combo master's reaction time")
+    p.add_argument('--combo-share', type=float, default=0.25,
+                   help='share of the matches against agents that the combo master plays')
     p.add_argument('--level', type=int, default=2, help="the CPU's level to start at")
     p.add_argument('--promote', type=float, default=0.6,
                    help='share of wins against the CPU to move up a level')
@@ -85,12 +92,21 @@ def make_env(args, opponents, seed, level):
     n = args.envs
     n_cpu = int(round(n * args.cpu_share))
     cpu_envs = np.arange(n) >= n - n_cpu
-    # The matches against agents: Ayu's mirror, shared out among the opponents.
+    # The matches against agents: Ayu's mirror, shared out among the opponents; the
+    # combo master (the last of them) plays --combo-share of them.
     assignment = np.where(cpu_envs, -1, np.arange(n) % len(opponents))
+    red = len(opponents) - 1 if args.combo else -2
+    if args.combo:
+        mirror = np.flatnonzero(~cpu_envs)
+        k = int(round(len(mirror) * args.combo_share))
+        others = len(opponents) - 1
+        assignment[mirror] = [red if j < k else j % others for j in range(len(mirror))]
     chars = [('ayu', None) if c else ('ayu', 'ayu') for c in cpu_envs]
+    # The combo master has a reaction time of its own.
+    opponent_delay = np.where(assignment == red, min(args.combo_delay, args.delay), args.delay)
     return EfzSB3VecEnv(args.data, n, opponent=mixture(opponents, assignment),
                         cpu_envs=cpu_envs, chars=chars, frame_skip=1, history=args.history,
-                        delay=args.delay,
+                        delay=args.delay, opponent_delay=opponent_delay if args.delay else None,
                         max_frames=int(args.minutes * 3840), cpu_level=level,
                         reward_round=0.0, reward_match=1.0, seed=seed)
 
@@ -116,6 +132,9 @@ def evaluate(args, model_path, level):
     if args.old and os.path.exists(args.old):
         a.chars = ('ayu', 'ayu')
         out['old'] = ev.play(a, me, ev.Agent(args.old), args.eval)
+    if args.combo:
+        a.chars = ('ayu', 'ayu')
+        out['red'] = ev.play(a, me, ev.Agent(args.combo), args.eval)
     return out
 
 
@@ -127,7 +146,10 @@ def show(results):
                      f"{s['presses_per_second']} presses/s, per min {s['jumps_per_min']} jumps "
                      f"{s['guard_ground_per_min']} guards {s['hit_ground_per_min']}+"
                      f"{s['hit_air_per_min']} hits, RG {s['rg_ground']}/{s['rg_air']} "
-                     f"RC {s['rc']}, after RG move/hit {s['rg_move']}/{s['rg_punish']}")
+                     f"RC {s['rc']}, after RG move/hit {s['rg_move']}/{s['rg_punish']}, "
+                     f"combo avg/p90/max {s.get('combo_damage')}/{s.get('combo_damage_p90')}/"
+                     f"{s.get('combo_damage_max')} IC {s.get('combo_ic')}"
+                     + (f", taken {r['sides'][1].get('combo_damage_per_min')}/min" if k == 'red' else ''))
     return ' | '.join(parts)
 
 
@@ -151,6 +173,7 @@ def main():
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
                        team=[os.path.relpath(t, REPO) for t in args.team],
                        combo=args.combo and os.path.relpath(args.combo, REPO),
+                       combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
                        level=args.level, ppo=settings,
                        actions=[TABLE.describe(i) for i in range(len(TABLE))]), f, indent=1)
     prior = PPO.load(args.prior, device='cpu')
@@ -164,8 +187,8 @@ def main():
     env = make_env(args, opponents(clone), len(history), level)
     model = PPO.load(start, env=env, device='cpu', **settings)
     if args.prior_coef > 0:
-        model.policy.set_prior(prior.policy, args.prior_coef, args.ent_coef,
-                               combo=master.policy if master is not None else None)
+        teacher = master.policy if master is not None and args.combo_teacher else None
+        model.policy.set_prior(prior.policy, args.prior_coef, args.ent_coef, combo=teacher)
     print('starting from', start, flush=True)
     if not history:
         before = evaluate(args, start, level)
