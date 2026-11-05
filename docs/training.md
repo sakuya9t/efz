@@ -263,6 +263,20 @@ and South American Discord servers the Mizuumi wiki lists), and players keep the
   per character (its notation can be turned into inputs and checked in the game). The
   wiki turns away automated reading, so its pages come by hand or by permission.
 
+**The community's collection** (linked from its resource list, on MEGA): six archives,
+579 MB, from Shimatora, minase, Tony, a Japanese netplay pack and an old tournament
+pack. Checked on 4 November 2026 with the two smallest (2,271 replays, all header
+version 104, nearly every character; most of the Japanese pack's EfzRevival blocks
+carry the old version's seed 0): `efz-headless` plays them back (`EFZ_TRACE_PLAY`), and
+every one of the 64 whose EfzRevival block holds its own copy of each frame's inputs
+ends in a KO and lasts exactly as long as the original match (134 frames less, the
+same for all: where the copy starts counting). Of 100 others drawn at random, 96 end
+in a KO; the 4 that don't are all plain replays (recorded with the game's own REPLAY
+menu, not netplay), which can stop anywhere, combo showcases and practice among them.
+So people's matches, with every input and state, are there to learn from without any
+video. The files carry players' names: kept out of the repository, and pseudonymised in
+any data made from them.
+
 An EfzRevival replay is the game's own replay with a block after it: the random seed,
 then both players' inputs, then the block's offset and `-1` ending the file
 (`Game::readExtendedReplay`, `revival/EfzRevival/EfzGame.cpp:1020`). A seed of 0 is an
@@ -327,17 +341,67 @@ What they are good for:
 - **Which characters next.** The agents in [runs/](../runs/README.md) know only Ayu's
   mirror. The S tier (Mizuka, Mishio, Ayu) is the next pool to train on, then the A
   tier.
-- **Combos and okizeme, written down.** The videos show them; nothing gives them as text
-  (YouTube's pages carry no notation). Written in the game's notation per character
-  (by someone who watches them, or by their makers), each can be played in the game,
-  kept if it lands, rated by how hard it is, and used: command actions for its motions,
-  matches started from its starter's hit, and okizeme as the decision points of trait 4.
-- **People's matches.** Videos aren't training data: they hold neither inputs nor
-  states. The same matches were most likely played on EfzRevival, which saved them as
-  `.rep`: asking the players or the playlists' owner for those files turns the
-  playlists into data (with the consent and pseudonyms above). Meanwhile the videos are
-  the yardstick for the human-like measures: jumps, blocking, combos dropped, what
-  people do on wake-up.
+- **Combos and okizeme, written down.** The videos show them; YouTube's pages carry no
+  notation, but some videos have it on screen: the Kano combo video's panel lists its
+  recipes (`2A2A2BC6CS`, `2A2A2BBC(密着)`...) and the replay slots they were recorded
+  in (`(REP1-2)`), so the author has them as `.rep`. Written down (by OCR of such
+  panels, by someone who watches, or by asking the makers), each can be played in the
+  game, kept if it lands, rated by how hard it is, and used: command actions for its
+  motions, matches started from its starter's hit, and okizeme as the decision points
+  of trait 4.
+- **People's matches.** A video holds neither inputs nor states. The same matches were
+  most likely played on EfzRevival, which saved them as `.rep`: asking the players or
+  the playlists' owner for those files turns the playlists into data (with the consent
+  and pseudonyms above). Otherwise they can be rebuilt from the video (below).
+
+### Learning from video
+
+Learning to act from videos without their inputs is done in two steps (behavioural
+cloning from observation, [BCO](https://arxiv.org/abs/1805.01954); OpenAI's
+[VPT](https://arxiv.org/abs/2206.11795) for Minecraft): a model that infers the actions
+between frames, trained where the actions are known, labels the videos, and a policy
+is cloned from the labels. We have what those didn't: the game itself, which draws
+every frame it plays with its state and inputs known. The videos are its pictures: the
+thumbnails (real frames) show the same HUD, sprites and fonts at 2x or 3x (640x480 or
+960x720 of a 4:3 area), the game's own 64 FPS counter, and in training-mode videos the
+hits, damage and power display.
+
+**An input model alone falls short.** Measured (4 November 2026): an MLP inferring each
+frame's input from the state of the frames around it (frames t-2 to t+6, 770,000
+windows of the trained agent's and random play, inputs held 1-6 frames) got the
+direction right 34% of the time and found almost no presses of A or D. Most frames'
+inputs change nothing one can see (mid-move, in stun, a button held), so nothing can
+infer them, and they don't matter either.
+
+**Render and compare instead.** Rebuild a match by searching, frame by frame, for the
+inputs that make the game's next frame look like the video's: from the match's first
+frame (known: the characters, palettes and stage, the round's start), try the
+candidate inputs from a save state, draw each next frame, keep what matches the
+video's frame best. Inputs with no visible effect don't matter (any of them gives the
+same frame); a special move's motion, whose effect shows only when its button comes
+(the game looks 20 frames back for it), is found by going back over those frames from
+their save states. At the library's speed a few candidates a frame for a three-minute
+match is cheap. What it gives is exact: a replay of the match in this game, its inputs
+and every state, which plays in EFZ and can be checked against the video by eye.
+
+What has to be handled:
+
+- **The video's frame rate** (60 or 30 a second against the game's 64): which game
+  frame each video frame shows is part of the search (in order, some frames unseen).
+- **Its picture**: the 4:3 area found and scaled, compression, overlays (input
+  displays, side panels, captions) masked out.
+- **Random draws** (`CPlayer::Random`, which some moves use): a replay records them; a
+  video doesn't, so when no input explains a frame, the draw is searched too.
+- **Where it starts**: full matches start from a round's start, which the game knows;
+  combo videos start in training mode at positions and gauges to be fitted first.
+
+**Steps.** First on our own matches, where the answer is known: record them, draw them,
+degrade the pictures as YouTube does (scaling, H.264, 60 frames a second), rebuild, and
+check the rebuilt match is the recorded one frame for frame. Then one real match video
+(downloading it, `yt-dlp`, is a matter of YouTube's terms: the videos' owners' or the
+user's call), its rebuilt replay compared with the video. Then the playlists: matches
+of each character by people, as states and inputs, for cloning (traits 1-5's measures
+too), and the combo videos as a combo library.
 
 ## Human-like agents
 
