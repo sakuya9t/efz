@@ -15,6 +15,15 @@ opponent:
             mixture([...], assignment) for several, each in its own matches. With
             cpu_envs (a mask of the matches), the game's CPU plays player 2 in those.
 
+history: frames of each agent's own inputs appended to its observation
+(efz_env.history: what a policy acting every frame needs to carry a motion through),
+for the opponent's observations too. An opponent made by frozen() from a policy over
+fewer features (one trained without history) gets the observation it knows.
+
+delay: a reaction time, in steps: every view the environment gives (the agents' and
+the opponent's) is the game as it was that many steps before (efz_env.history.Delay);
+the input history stays current, as a player knows what it pressed.
+
 Matches that end restart in the same step, as SB3 expects: infos[i] then holds
 'terminal_observation', 'TimeLimit.truncated' and 'episode' ({'r', 'l', 't'}, as SB3's
 Monitor writes it, so SB3 logs ep_rew_mean without a VecMonitor).
@@ -27,6 +36,7 @@ from gymnasium import spaces
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv
 
 from .actions import ActionTable
+from .history import Delay, InputHistory
 from .vec import EfzVecEnv
 
 
@@ -36,10 +46,24 @@ def frozen(model, deterministic=False):
     policy = type(source)(**source._get_constructor_parameters()).to(source.device)
     policy.load_state_dict(source.state_dict())
     policy.set_training_mode(False)
+    width = policy.observation_space.shape[0]
 
     def act(obs):
-        actions, _ = policy.predict(obs, deterministic=deterministic)
+        actions, _ = policy.predict(obs[:, :width], deterministic=deterministic)
         return actions
+    return act
+
+
+def held(opponent, steps):
+    """An opponent that decides every `steps` steps and holds its choice in between: a
+    policy trained with frame_skip=steps, playing in an environment of frame_skip=1."""
+    state = {'k': 0, 'last': None}
+
+    def act(obs):
+        if state['last'] is None or len(state['last']) != len(obs) or state['k'] % steps == 0:
+            state['last'] = np.asarray(opponent(obs))
+        state['k'] += 1
+        return state['last']
     return act
 
 
@@ -61,7 +85,7 @@ def mixture(policies, assignment):
 class EfzSB3VecEnv(VecEnv):
     def __init__(self, data_dir=None, num_envs=64, *, opponent='cpu', cpu_envs=None,
                  action_table=None, chars=(None, None), stage=None, char_pool=None,
-                 stage_pool=None, **config):
+                 stage_pool=None, history=0, delay=0, **config):
         if 'autoreset' in config and config['autoreset'] != 'same_step':
             raise ValueError("SB3 VecEnvs reset in the same step: leave autoreset alone")
         self.env = EfzVecEnv(data_dir, num_envs, autoreset='same_step', **config)
@@ -85,7 +109,11 @@ class EfzSB3VecEnv(VecEnv):
         self._controls = np.zeros((num_envs, 2), dtype=np.uint8)
         self._length = np.zeros(num_envs, dtype=np.int64)
         self._start = time.time()
-        obs_space = spaces.Box(-np.inf, np.inf, (self.env.obs_dim,), np.float32)
+        self.history = InputHistory((num_envs, 2), history) if history else None
+        self.delay = Delay((num_envs, 2), delay, self.env.obs_dim) if delay else None
+        self._view = None  # what the players see now (delayed)
+        width = self.env.obs_dim + (self.history.size if self.history else 0)
+        obs_space = spaces.Box(-np.inf, np.inf, (width,), np.float32)
         super().__init__(self.k * num_envs, obs_space, spaces.Discrete(len(self.table)))
 
     def set_opponent(self, opponent):
@@ -99,12 +127,24 @@ class EfzSB3VecEnv(VecEnv):
         """(num_envs, 2, ...) -> per agent."""
         return a.reshape((2 * self.n,) + a.shape[2:]) if self.selfplay else a[:, 0]
 
+    def _with_history(self, obs):
+        if self.history is None:
+            return obs
+        return np.concatenate([obs, self.history.features()], axis=-1)
+
     def reset(self):
         seeds = [s for s in getattr(self, '_seeds', [])][::self.k] or None
         if seeds is not None and all(s is None for s in seeds):
             seeds = None
         self._length[:] = 0
         obs = self.env.reset(seed=seeds)
+        if self.history is not None:
+            self.history.clear()
+        if self.delay is not None:
+            self.delay.clear()
+            obs = self.delay.push(obs)
+        self._view = obs
+        obs = self._with_history(obs)
         if hasattr(self, '_reset_seeds'):
             self._reset_seeds()
         if hasattr(self, '_reset_options'):
@@ -118,7 +158,8 @@ class EfzSB3VecEnv(VecEnv):
         else:
             self._controls[:, 0] = controls
             if self.opponent is not None:
-                self._controls[:, 1] = self.table.to_bytes(self.opponent(self.env.obs[:, 1]))
+                view = self._with_history(self._view)[:, 1]
+                self._controls[:, 1] = self.table.to_bytes(self.opponent(view))
         self.env.step_async(self._controls)
 
     def step_wait(self):
@@ -126,8 +167,11 @@ class EfzSB3VecEnv(VecEnv):
         self._length += 1
         ended = terminated | truncated
         infos = [{} for _ in range(self.num_envs)]
+        if self.history is not None:
+            self.history.push(info['input'])
         if ended.any():
-            final = self._agents(self.env.final_obs)
+            final = self.env.final_obs if self.delay is None else self.delay.peek(self.env.final_obs)
+            final = self._agents(self._with_history(final))
             elapsed = round(time.time() - self._start, 6)
             for m in np.flatnonzero(ended):
                 for p in range(self.k):
@@ -140,7 +184,14 @@ class EfzSB3VecEnv(VecEnv):
                         'winner': int(info['winner'][m]),
                     }
                 self._length[m] = 0
+        if self.history is not None and ended.any():
+            self.history.clear(ended)  # the next match's first view: nothing input yet
+        if self.delay is not None:
+            self.delay.clear(ended)
+            obs = self.delay.push(obs)
+        self._view = obs
         dones = np.repeat(ended, self.k)
+        obs = self._with_history(obs)
         return self._agents(obs).copy(), self._agents(reward).copy(), dones, infos
 
     def close(self):

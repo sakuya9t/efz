@@ -244,6 +244,20 @@ class EfzVecEnv:
             raise RuntimeError(f'efz_env: {self._lib.efz_env_error(self._h).decode(errors="replace")}')
         return path
 
+    def play(self, index, path):
+        """Plays the replay at `path` back in environment `index`, as the replay menu's
+        play item does, for its next match (from its next reset or autoreset): a .rep,
+        the game's own or EfzRevival's. Its characters, stage and palettes are the
+        replay's; each step its inputs play instead of the actions given, and
+        info['input'] holds them (each player's control byte on the step's first frame,
+        forward/back with relative_actions), info['replay'] set. The match ends when it
+        is won (terminated) or when the replay runs out (truncated: cut short, or a
+        showcase that just stops). rounds_to_win and damage_level must be the replay's
+        (EfzRevival's netplay: 2 and 2, the defaults)."""
+        self._finish()
+        if self._lib.efz_env_play(self._h, int(index), os.fsencode(os.fspath(path))) != 0:
+            raise ValueError(f'efz_env: {self._lib.efz_env_error(self._h).decode(errors="replace")}')
+
     def seed(self, index, seed):
         """Seeds environment `index`: its following matches (characters and stages drawn
         from pools, the game's rand) follow from `seed` alone, from its next match on."""

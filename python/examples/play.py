@@ -43,16 +43,10 @@ def main():
         sys.exit('pass --agent model.zip, or --cpu')
     policy, frame_skip = None, args.frame_skip
     if args.agent:
-        from stable_baselines3 import PPO
-        model = PPO.load(args.agent, device='cpu')
-        config = os.path.join(os.path.dirname(args.agent), 'config.json')
-        if frame_skip is None and os.path.exists(config):
-            with open(config) as f:
-                frame_skip = json.load(f).get('frame_skip')
-
-        def policy(obs):
-            action, _ = model.predict(obs, deterministic=args.deterministic)
-            return int(action)
+        # As trained: deciding every frame_skip frames, with its input history.
+        from efz_env.agent import Agent
+        policy = Agent(args.agent, deterministic=args.deterministic, frame_skip=frame_skip)
+        frame_skip = policy.frame_skip
     chars = tuple(None if c == 'any' else c for c in args.chars) if args.chars else (None, None)
     match = HumanMatch(args.data, human=args.side - 1,
                        opponent='cpu' if args.cpu else 'agent', chars=chars, stage=args.stage,

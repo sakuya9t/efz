@@ -402,6 +402,12 @@ struct Slot {
     int recordPage = 0;    // efz_env_record: its next match is recorded to this slot
     int recordSlot = 0;
     bool recording = false; // the game is writing its match's replay
+    std::string playNext;  // efz_env_play: its next match plays this replay back
+    Match playMatch;       // the replay's characters, stage and palettes
+    long playTrailer = 0;  // bytes at the replay's end that aren't the game's
+    bool playing = false;  // the game is reading its match's replay
+    bool inputTaken = false; // input[] holds the step's first frame's
+    uint8_t input[2] = {0, 0}; // EfzInfo.input
 };
 
 const uint32_t kStateMagic = 0x5a464545; // "EEFZ"
@@ -456,23 +462,35 @@ bool Actionable()
            Fight()->m_enter == 0;
 }
 
+// How BuildMatch starts a match besides: recorded, or a replay played back.
+struct Build {
+    int recordPage = 0;          // 1-9, with recordSlot: as the replay menu's record item
+    int recordSlot = 0;
+    const char* play = nullptr;  // a replay file: as the replay menu's play item
+    long trailer = 0;            // bytes at its end that aren't the game's
+};
+
 // Sets up the bound arena's game for `m` (a copy of env->init) and plays it through the
 // loading and the intro, as the menus would have started it: VS on the replay menu's
 // footing (mode 5, no replay), which keeps records and replays unwritten. With a page and
 // slot (1-9), as the replay menu's record item: the game writes the match's replay there
-// from the loading on.
-bool BuildMatch(EfzEnv* env, const Match& m, int recordPage = 0, int recordSlot = 0,
-                unsigned seed = 1)
+// from the loading on. With a replay file, as its play item: the loader reads the
+// characters, stage and palettes from it (the same as m's), and the game its inputs.
+bool BuildMatch(EfzEnv* env, const Match& m, const Build& how = Build(), unsigned seed = 1)
 {
     env->init.Load();
     const EfzEnvConfig& cfg = env->cfg;
     CGame* game = Game();
     game->m_gameMode = 5;
     game->m_replayMode = 0;
-    if (recordPage > 0) {
+    if (how.recordPage > 0) {
         game->m_replayMode = 2;
-        game->m_replayPage = (char)(recordPage - 1);
-        game->m_replaySlot = (char)(recordSlot - 1);
+        game->m_replayPage = (char)(how.recordPage - 1);
+        game->m_replaySlot = (char)(how.recordSlot - 1);
+    } else if (how.play) {
+        game->m_replayMode = 1;
+        game->m_replayPage = 0;
+        game->m_replaySlot = 0;
     }
     game->m_roundsToWin = (char)cfg.rounds_to_win;
     game->m_roundsSetting = (char)cfg.rounds_to_win;
@@ -488,22 +506,41 @@ bool BuildMatch(EfzEnv* env, const Match& m, int recordPage = 0, int recordSlot 
     game->m_damageLevel = (char)cfg.damage_level;
     game->m_drawEveryFrame = 1;
     game->m_fullEffects = 1;
-    CScene2* loader = (CScene2*)Scene(2);
-    loader->CreateCharacter(loader->m_player1Ref, loader->m_player2Ref, 0, m.chars[0]);
-    loader->CreateCharacter(loader->m_player2Ref, loader->m_player1Ref, 1, m.chars[1]);
-    (*loader->m_player1Ref)->m_paletteIndex = m.palettes[0];
-    (*loader->m_player2Ref)->m_paletteIndex = m.palettes[1];
+    if (!how.play) {
+        CScene2* loader = (CScene2*)Scene(2);
+        loader->CreateCharacter(loader->m_player1Ref, loader->m_player2Ref, 0, m.chars[0]);
+        loader->CreateCharacter(loader->m_player2Ref, loader->m_player1Ref, 1, m.chars[1]);
+        (*loader->m_player1Ref)->m_paletteIndex = m.palettes[0];
+        (*loader->m_player2Ref)->m_paletteIndex = m.palettes[1];
+    }
     G()->input[0] = G()->input[1] = 0;
     srand(seed);
     SceneIndex() = 2;
+    SetReplayFile(how.play); // the loader opens it as replay slot 1-1's file
+    bool opened = !how.play, ok = false;
     for (int frame = 0; frame < 2000; frame++) {
         RunFrame();
+        if (!opened && game->m_replay.m_handle) {
+            // What follows the game's part (EfzRevival's block) reads as the file's end.
+            opened = true;
+            SetReplayFile(nullptr);
+            DWORD& left = game->m_replay.m_remaining;
+            left = left > (DWORD)how.trailer ? left - (DWORD)how.trailer : 0;
+        }
         if (QuitRequested() || (SceneIndex() != 2 && SceneIndex() != 3))
-            return false;
-        if (Actionable())
-            return true;
+            break;
+        if (Actionable()) {
+            ok = true;
+            break;
+        }
     }
-    return false;
+    SetReplayFile(nullptr);
+    if (ok && how.play) { // the replay the loader read is the one efz_env_play read
+        CScene3* fight = (CScene3*)Scene(3);
+        ok = game->m_replayMode == 1 && fight->m_players[0]->m_charId == m.chars[0] &&
+             fight->m_players[1]->m_charId == m.chars[1];
+    }
+    return ok;
 }
 
 Match DrawMatch(const EfzMatch& spec, uint64_t& rng)
@@ -529,29 +566,69 @@ Match DrawMatch(const EfzMatch& spec, uint64_t& rng)
 
 bool LoadMatch(EfzEnv* env, Slot& s, const Match& m);
 
+// Starts the replay efz_env_play gave the slot, in its (bound) arena: built from its
+// start, the loader reading the replay.
+bool StartPlayback(EfzEnv* env, Slot& s)
+{
+    std::string path;
+    {
+        Unbound unbound; // the slot's strings are the C library's
+        path.swap(s.playNext);
+    }
+    Build how;
+    how.play = path.c_str();
+    how.trailer = s.playTrailer;
+    bool ok = BuildMatch(env, s.playMatch, how);
+    {
+        Unbound unbound;
+        std::string().swap(path);
+    }
+    if (!ok) {
+        if (Game()->m_replayMode == 1) {
+            Game()->m_replay.Close();
+            Game()->m_replayMode = 0;
+        }
+        env->SetError("the replay could not be played back");
+        s.broken = true;
+        return false;
+    }
+    s.playing = true;
+    return true;
+}
+
 // Starts the slot's next match in its (bound) arena.
 bool StartMatch(EfzEnv* env, Slot& s)
 {
-    Match m = DrawMatch(s.spec, s.ep.rng);
-    int page = s.recordPage, slot = s.recordSlot;
-    s.recordPage = s.recordSlot = 0;
-    if (page > 0 && (m.cpu[0] || m.cpu[1])) {
-        env->SetError("not recorded: a replay doesn't hold the CPU's decisions, so both "
-                      "players must be the program's");
-        page = 0;
-    }
-    if (page > 0) {
-        // Recorded: built from its start with the game writing the replay, not copied.
-        if (!BuildMatch(env, m, page, slot, (unsigned)SplitMix(s.ep.rng))) {
-            Game()->m_replay.Close();
-            Game()->m_replayMode = 0;
-            env->SetError("the recorded match could not be started");
-            s.broken = true;
+    Match m;
+    if (!s.playNext.empty()) {
+        m = s.playMatch;
+        if (!StartPlayback(env, s))
+            return false;
+    } else {
+        m = DrawMatch(s.spec, s.ep.rng);
+        int page = s.recordPage, slot = s.recordSlot;
+        s.recordPage = s.recordSlot = 0;
+        if (page > 0 && (m.cpu[0] || m.cpu[1])) {
+            env->SetError("not recorded: a replay doesn't hold the CPU's decisions, so "
+                          "both players must be the program's");
+            page = 0;
+        }
+        if (page > 0) {
+            // Recorded: built from its start with the game writing the replay, not copied.
+            Build how;
+            how.recordPage = page;
+            how.recordSlot = slot;
+            if (!BuildMatch(env, m, how, (unsigned)SplitMix(s.ep.rng))) {
+                Game()->m_replay.Close();
+                Game()->m_replayMode = 0;
+                env->SetError("the recorded match could not be started");
+                s.broken = true;
+                return false;
+            }
+            s.recording = true;
+        } else if (!LoadMatch(env, s, m)) {
             return false;
         }
-        s.recording = true;
-    } else if (!LoadMatch(env, s, m)) {
-        return false;
     }
     s.ep.match = m;
     s.ep.frame = 0;
@@ -559,15 +636,24 @@ bool StartMatch(EfzEnv* env, Slot& s)
     s.ep.prevHp[0] = s.ep.prevHp[1] = 9999;
     s.ep.prevRounds[0] = s.ep.prevRounds[1] = 0;
     s.ep.ret[0] = s.ep.ret[1] = 0;
+    s.input[0] = s.input[1] = 0;
     s.started = true;
     s.broken = false;
     return true;
 }
 
-// Ends the slot's recording (its arena bound): after a match won, plays on as the game
-// does after a match (the end fade) until it closes the replay; else closes it now.
-void EndRecording(Slot& s, bool playOut)
+// Ends the slot's replay (its arena bound). One played back is closed. One recorded,
+// after a match won, plays on as the game does after a match (the end fade) until it
+// closes the replay; else it is closed now.
+void EndReplay(Slot& s, bool playOut)
 {
+    if (s.playing) {
+        s.playing = false;
+        if (Game()->m_replayMode == 1) {
+            Game()->m_replay.Close();
+            Game()->m_replayMode = 0;
+        }
+    }
     if (!s.recording)
         return;
     s.recording = false;
@@ -615,24 +701,64 @@ bool LoadMatch(EfzEnv* env, Slot& s, const Match& m)
     return true;
 }
 
+// Swaps forward and back for a player facing left (from controls relative to facing, or
+// to them).
+uint8_t Mirror(uint8_t bits, bool relative, int facing)
+{
+    if (relative && facing < 0)
+        bits = (uint8_t)((bits & ~3) | (bits & 1) << 1 | (bits & 2) >> 1);
+    return bits;
+}
+
+// The controls `p` played on the frame just run, as CPlayer::ReadInput read them: its
+// directions on the screen and its buttons held (or pressed: the CPU presses them
+// without holding).
+uint8_t ControlsRead(CPlayer* p)
+{
+    uint8_t bits = 0;
+    if (p->m_inputX == 1)
+        bits |= EFZ_RIGHT;
+    else if (p->m_inputX == -1)
+        bits |= EFZ_LEFT;
+    if (p->m_inputY == 1)
+        bits |= EFZ_DOWN;
+    else if (p->m_inputY == -1)
+        bits |= EFZ_UP;
+    if (p->m_holdA || p->m_pressA)
+        bits |= EFZ_A;
+    if (p->m_holdB || p->m_pressB)
+        bits |= EFZ_B;
+    if (p->m_holdC || p->m_pressC)
+        bits |= EFZ_C;
+    if (p->m_holdD || p->m_pressD)
+        bits |= EFZ_D;
+    return bits;
+}
+
 // One frame with the players' controls (relative to their facing, if so configured);
-// adds to the rewards. Returns the match's winner once it is decided, else -1.
+// adds to the rewards. Returns the match's winner once it is decided, else -1; -2 if
+// the fight scene ended otherwise, -3 if the replay played back ran out.
 int Frame(EfzEnv* env, Slot& s, const uint8_t* act, float* reward)
 {
     const EfzEnvConfig& cfg = env->cfg;
     CScene3* fight = Fight();
     Globals* g = G();
+    int facing[2];
     for (int p = 0; p < 2; p++) {
-        uint8_t bits = act ? act[p] : 0;
-        if (cfg.relative_actions && fight->m_players[p]->facing < 0)
-            bits = (uint8_t)((bits & ~3) | (bits & 1) << 1 | (bits & 2) >> 1);
-        g->input[p] = bits;
+        facing[p] = fight->m_players[p]->facing;
+        g->input[p] = Mirror(act ? act[p] : 0, cfg.relative_actions != 0, facing[p]);
     }
     RunFrame();
     env->ticks.fetch_add(fight->m_speed, std::memory_order_relaxed);
     s.ep.frame++;
     if (SceneIndex() != 3)
         return -2;
+    if (!s.inputTaken) {
+        s.inputTaken = true;
+        for (int p = 0; p < 2; p++)
+            s.input[p] = Mirror(ControlsRead(fight->m_players[p]), cfg.relative_actions != 0,
+                                facing[p]);
+    }
 
     int taken[2];
     int8_t rounds[2];
@@ -655,6 +781,9 @@ int Frame(EfzEnv* env, Slot& s, const uint8_t* act, float* reward)
         reward[p] += r;
         s.ep.ret[p] += r;
     }
+    // The replay's end: the scene leaves the next frame (CScene3::HandleKeys).
+    if (winner == -1 && s.playing && (Game()->m_replay.m_eof || fight->m_leave == 1))
+        return -3;
     return winner;
 }
 
@@ -778,6 +907,10 @@ void WriteInfo(const Slot& s, EfzInfo& info, int winner, bool ended)
     info.winner = (int8_t)winner;
     info.stage = s.ep.match.stage;
     info.ended = ended;
+    info.input[0] = s.input[0];
+    info.input[1] = s.input[1];
+    info.replay = s.playing;
+    info.reserved = 0;
 }
 
 float* ObsOf(EfzEnv* env, float* base, int i)
@@ -791,7 +924,7 @@ void ResetOne(EfzEnv* env, int i)
     Slot& s = env->slots[i];
     s.pending = s.finished = false;
     BindArena(s.arena);
-    EndRecording(s, false); // a reset cuts a recorded match short
+    EndReplay(s, false); // a reset cuts a replay short
     env->reward[2 * i] = env->reward[2 * i + 1] = 0;
     env->terminated[i] = env->truncated[i] = 0;
     if (StartMatch(env, s)) {
@@ -821,14 +954,19 @@ void StepOne(EfzEnv* env, int i)
     }
     BindArena(s.arena);
     int winner = -1;
+    s.inputTaken = false;
     for (int k = 0; k < cfg.frame_skip && winner == -1; k++)
         winner = Frame(env, s, act, reward);
     if (cfg.skip_noninteractive) {
         for (int guard = 0; winner == -1 && !Actionable() && guard < 4000; guard++)
             winner = Frame(env, s, nullptr, reward);
     }
+    bool ranOut = winner == -3; // the replay played back ends here, the match unfinished
+    if (ranOut)
+        winner = -1;
     bool terminated = winner != -1;
-    bool truncated = !terminated && cfg.max_frames > 0 && s.ep.frame >= cfg.max_frames;
+    bool truncated = !terminated &&
+                     (ranOut || (cfg.max_frames > 0 && s.ep.frame >= cfg.max_frames));
     if (winner == -2) { // the fight scene ended some other way: start over
         winner = -1;
         s.broken = true;
@@ -847,7 +985,7 @@ void StepOne(EfzEnv* env, int i)
     } else {
         memset(ObsOf(env, env->finalObsOut, i), 0, 2 * kObsDim * sizeof(float));
     }
-    EndRecording(s, terminated && !s.broken);
+    EndReplay(s, terminated && !s.broken);
     if (cfg.autoreset != EFZ_AUTORESET_SAME_STEP) {
         // The step's observation is the match's last; the next match waits.
         memcpy(ObsOf(env, env->obsOut, i), ObsOf(env, env->finalObsOut, i),
@@ -1013,9 +1151,9 @@ void efz_env_destroy(EfzEnv* env)
     BindArena(nullptr);
     Finish(env);
     for (Slot& s : env->slots) {
-        if (s.recording) { // its replay ends where the match is
+        if (s.recording || s.playing) { // its replay ends where the match is
             BindArena(s.arena);
-            EndRecording(s, false);
+            EndReplay(s, false);
             BindArena(nullptr);
         }
         FreeArena(s.arena);
@@ -1088,6 +1226,65 @@ int efz_env_record(EfzEnv* env, int32_t index, int32_t page, int32_t slot)
     }
     s.recordPage = page;
     s.recordSlot = slot;
+    return 0;
+}
+
+int efz_env_play(EfzEnv* env, int32_t index, const char* path)
+{
+    if (!env || index < 0 || index >= env->n || !path || !*path)
+        return -1;
+    Finish(env);
+    Unbound unbound;
+    std::vector<uint8_t> b;
+    if (FILE* f = OpenPath(path, "rb")) {
+        uint8_t buf[65536];
+        size_t n;
+        while ((n = fread(buf, 1, sizeof(buf), f)) > 0)
+            b.insert(b.end(), buf, buf + n);
+        fclose(f);
+    } else {
+        env->SetError(std::string("cannot read ") + path);
+        return -1;
+    }
+    auto word = [&](size_t at) { return (int)(int16_t)(b[at] | b[at + 1] << 8); };
+    auto dword = [&](size_t at) {
+        return (int32_t)(b[at] | b[at + 1] << 8 | b[at + 2] << 16 | (uint32_t)b[at + 3] << 24);
+    };
+    // The header CScene2 reads: P1, P2, [a version over 100,] stage, P1's palette, P2's.
+    Match m;
+    memset(&m, 0, sizeof(m));
+    size_t at = 6;
+    if (b.size() >= 12) {
+        m.chars[0] = (int8_t)word(0);
+        m.chars[1] = (int8_t)word(2);
+        int stage = word(4);
+        if (stage > 100) {
+            stage = word(6);
+            at = 8;
+        }
+        m.stage = (int8_t)stage;
+        m.palettes[0] = (int8_t)word(at);
+        m.palettes[1] = (int8_t)word(at + 2);
+    }
+    bool ok = b.size() >= 12 && word(0) >= 0 && word(0) < EFZ_CHARACTERS && word(2) >= 0 &&
+              word(2) < EFZ_CHARACTERS && m.stage >= 0 && m.stage < EFZ_STAGES;
+    if (!ok) {
+        env->SetError(std::string("not a replay: ") + path);
+        return -1;
+    }
+    // EfzRevival's block after the game's part ends with its offset and -1
+    // (Game::readExtendedReplay): the game would read it as inputs.
+    long game = (long)b.size();
+    if (b.size() >= 28 && dword(b.size() - 4) == -1) {
+        int32_t offset = dword(b.size() - 8);
+        if (offset >= 12 && (size_t)offset + 16 <= b.size())
+            game = offset;
+    }
+    game &= ~1L; // whole words
+    Slot& s = env->slots[index];
+    s.playNext = path;
+    s.playMatch = m;
+    s.playTrailer = (long)b.size() - game;
     return 0;
 }
 
@@ -1182,9 +1379,11 @@ int efz_env_load_state(EfzEnv* env, int32_t index, const void* state, size_t siz
     SetStack(&stackMark);
     Slot& s = env->slots[index];
     BindArena(s.arena);
-    EndRecording(s, false);
+    EndReplay(s, false);
     LoadArena((const char*)state + sizeof(h), (uintptr_t)h.arenaSize);
-    if (Game()->m_replayMode == 2) { // saved while recording: a loaded game never writes
+    // Saved while recording or playing a replay back: a loaded game neither writes one
+    // nor reads one (the file is the saving environment's), its players play on.
+    if (Game()->m_replayMode == 1 || Game()->m_replayMode == 2) {
         Game()->m_replay.m_handle = NULL;
         Game()->m_replayMode = 0;
     }

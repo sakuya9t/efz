@@ -90,6 +90,12 @@ FILE* OpenForUpdate(const char* name, bool create);
 // closes: a replayed fight's replay file (port/record.cpp). INVALID_HANDLE_VALUE's
 // number when the table is full.
 uint32_t AdoptFile(FILE* f);
+// While set (a UTF-8 path; nullptr: none), the replay slot's file the game opens for
+// reading on this thread is this one instead: a headless environment playing a replay
+// file (efz_env_play) through the replay menu's own path.
+void SetReplayFile(const char* path);
+// fopen by UTF-8 path, on Windows too (where fopen takes the ANSI code page's).
+FILE* OpenPath(const char* path, const char* mode);
 
 } // namespace efz
 

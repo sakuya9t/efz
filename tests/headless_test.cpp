@@ -241,7 +241,7 @@ void TestApi()
     // python/efz_env/_native.py declares the same.
     CHECK(sizeof(EfzEnvConfig) == 72);
     CHECK(sizeof(EfzMatch) == 20);
-    CHECK(sizeof(EfzInfo) == 32);
+    CHECK(sizeof(EfzInfo) == 36);
     CHECK(sizeof(EfzBuffers) == 6 * sizeof(void*));
     CHECK(efz_env_version() == EFZ_ENV_VERSION);
     int dim = efz_env_obs_dim();

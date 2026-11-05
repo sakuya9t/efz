@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 3
+#define EFZ_ENV_VERSION 4
 
 /* What a step does when a match ends (EfzEnvConfig.autoreset). */
 #define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
@@ -116,6 +116,12 @@ typedef struct EfzInfo {
     int8_t chars[2];        /* of the match the observation is from */
     int8_t stage;
     int8_t ended;           /* a match ended this step: its last observation is final_obs */
+    uint8_t input[2];       /* each player's controls on the step's first frame, as the game
+                               read them (forward/back with relative_actions): the step's
+                               actions, the replay's in a replay played back
+                               (efz_env_play), the CPU's directions and presses on its side */
+    int8_t replay;          /* the match plays a replay back (efz_env_play) */
+    int8_t reserved;
     float episode_return[2];/* of the match that ended, or so far */
 } EfzInfo;
 
@@ -175,6 +181,18 @@ EFZ_ENV_API int efz_env_seed(EfzEnv* env, int32_t index, uint64_t seed);
  * ends the file where it is. Both players must be the program's: a replay doesn't hold
  * the CPU's decisions. Returns -1 (efz_env_error says why) if they aren't. */
 EFZ_ENV_API int efz_env_record(EfzEnv* env, int32_t index, int32_t page, int32_t slot);
+/* Plays a replay back in environment `index`, as the replay menu's play item does, for
+ * its next match (efz_env_reset, or an autoreset): `path` is a .rep file (UTF-8), the
+ * game's own or EfzRevival's (its block after the game's part is left unread). The match
+ * is built from the replay's characters, stage and palettes, from the loading on; each
+ * step the replay's inputs play instead of the step's actions, and info.input says what
+ * they were, with info.replay set. It ends when it is won (terminated, as the original
+ * was) or when the replay runs out (truncated: a match cut short, or a showcase that
+ * just stops). rounds_to_win and damage_level must be the replay's (EfzRevival's
+ * netplay: 2 and 2). Afterwards the environment plays its matches as before. A save state
+ * of a replay played back loads as a match of the program's from there. Returns -1
+ * (efz_env_error says why) if the file can't be read or isn't a replay. */
+EFZ_ENV_API int efz_env_play(EfzEnv* env, int32_t index, const char* path);
 /* Where the game writes files (replays): `dir`, or the data folder for NULL. For the
  * process, as the data folder is. */
 EFZ_ENV_API int efz_env_set_save_dir(EfzEnv* env, const char* dir);

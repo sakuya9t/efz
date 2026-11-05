@@ -18,9 +18,9 @@ class Layout(unittest.TestCase):
     def test_structures_match_the_header(self):
         # port/headless/efz_env.h; tests/headless_test.cpp checks the C side.
         self.assertEqual(ctypes.sizeof(_native.Config), 72)
-        self.assertEqual(_native.VERSION, 3)
+        self.assertEqual(_native.VERSION, 4)
         self.assertEqual(ctypes.sizeof(_native.Match), 20)
-        self.assertEqual(ctypes.sizeof(_native.Info), 32)
+        self.assertEqual(ctypes.sizeof(_native.Info), 36)
         self.assertEqual(ctypes.sizeof(_native.Buffers), 6 * ctypes.sizeof(ctypes.c_void_p))
 
     def test_library(self):
@@ -36,8 +36,9 @@ class Layout(unittest.TestCase):
 
     def test_info_as_numpy(self):
         info = np.ctypeslib.as_array((_native.Info * 2)())
-        self.assertEqual(info.dtype.itemsize, 32)
+        self.assertEqual(info.dtype.itemsize, 36)
         self.assertEqual(info['hp'].shape, (2, 2))
+        self.assertEqual(info['input'].shape, (2, 2))
 
 
 class Actions(unittest.TestCase):
@@ -54,6 +55,59 @@ class Actions(unittest.TestCase):
         self.assertEqual(out.dtype, np.uint8)
         self.assertEqual(out.shape, (45, 2))
         self.assertEqual(table.describe(table.actions.index((6, 'C'))), '6C')
+
+
+class History(unittest.TestCase):
+    def controls(self, n=300):
+        rng = np.random.default_rng(3)
+        table = actions.ActionTable()
+        # Held for a few steps at a time, as people hold them; some with two buttons.
+        c = table.to_bytes(np.repeat(rng.integers(0, 45, n // 3), 3))
+        c[::7] |= actions.A
+        return c
+
+    def test_online_is_offline(self):
+        from efz_env.history import InputHistory, history_features
+        c = self.controls()
+        offline = history_features(c, frames=8)
+        hist = InputHistory((1,), frames=8)
+        for t in range(len(c)):
+            np.testing.assert_array_equal(hist.features()[0], offline[t])
+            hist.push(c[t:t + 1])
+
+    def test_delay_online_is_offline(self):
+        from efz_env.history import Delay, delayed
+        obs = np.arange(40, dtype=np.float32).reshape(20, 2)
+        d = Delay((1,), 5, 2)
+        seen = []
+        for t in range(len(obs)):
+            if t == 12:  # a new match: its first view fills the buffer
+                d.clear()
+            seen.append(d.push(obs[t:t + 1])[0])
+        want = np.concatenate([delayed(obs[:12], 5), delayed(obs[12:], 5)])
+        np.testing.assert_array_equal(np.stack(seen), want)
+        np.testing.assert_array_equal(d.peek(obs[:1])[0], obs[19 - 4])
+
+    def test_features(self):
+        from efz_env.history import input_features
+        f = input_features(np.array([actions.UP | actions.BACK | actions.A | actions.C]),
+                           np.array([actions.A]))
+        np.testing.assert_array_equal(f[0], [-1, 1, 0, 0, 1, 0])  # C went down, A was held
+
+    def test_labels_play_the_same_presses(self):
+        # Playing the labels gives the game the same directions and the same buttons
+        # going down (with one button where two went down together).
+        from efz_env.history import action_labels, input_features
+        table = actions.ActionTable()
+        c = self.controls()
+        played = table.to_bytes(action_labels(c, table))
+        prev = np.concatenate([[0], c[:-1]]).astype(np.uint8)
+        prev_played = np.concatenate([[0], played[:-1]]).astype(np.uint8)
+        want, got = input_features(c, prev), input_features(played, prev_played)
+        np.testing.assert_array_equal(got[:, :2], want[:, :2])
+        went_down = want[:, 2:].sum(1) > 0
+        np.testing.assert_array_equal(got[:, 2:].sum(1) > 0, went_down)
+        self.assertTrue((got[:, 2:] <= want[:, 2:]).all())
 
 
 class WithoutData(unittest.TestCase):

@@ -36,6 +36,15 @@ std::string g_saveDir = ".";
 const size_t kFiles = 4096;
 FILE* g_files[kFiles]; // handle n is g_files[n - 1]
 std::mutex g_filesLock;
+thread_local const char* t_replayFile = nullptr; // SetReplayFile's
+
+// "replay\data<page>-<slot>.rep", as CScene2 names a replay slot's file.
+bool IsReplaySlot(const char* name)
+{
+    size_t n = strlen(name);
+    return n > 11 && strncmp(name, "replay", 6) == 0 && (name[6] == '\\' || name[6] == '/') &&
+           strncmp(name + 7, "data", 4) == 0 && strcmp(name + n - 4, ".rep") == 0;
+}
 
 bool Exists(const std::string& path)
 {
@@ -121,6 +130,36 @@ void SetDataDir(const char* data, const char* save)
     g_saveDir = save ? save : data;
 }
 
+void SetReplayFile(const char* path)
+{
+    t_replayFile = path;
+}
+
+FILE* OpenPath(const char* path, const char* mode)
+{
+#ifdef _WIN32
+    // UTF-8 to UTF-16 (no windows.h here: the game's own Win32 types are).
+    std::wstring wide, wmode(mode, mode + strlen(mode));
+    for (const unsigned char* p = (const unsigned char*)path; *p;) {
+        uint32_t c = *p++;
+        int more = c >= 0xf0 ? 3 : c >= 0xe0 ? 2 : c >= 0xc0 ? 1 : 0;
+        c &= more == 3 ? 0x07 : more == 2 ? 0x0f : more == 1 ? 0x1f : 0x7f;
+        for (; more > 0 && (*p & 0xc0) == 0x80; more--)
+            c = c << 6 | (*p++ & 0x3f);
+        if (c >= 0x10000) {
+            c -= 0x10000;
+            wide += (wchar_t)(0xd800 + (c >> 10));
+            wide += (wchar_t)(0xdc00 + (c & 0x3ff));
+        } else {
+            wide += (wchar_t)c;
+        }
+    }
+    return _wfopen(wide.c_str(), wmode.c_str());
+#else
+    return fopen(path, mode);
+#endif
+}
+
 FILE* OpenGameFile(const char* name, const char* mode)
 {
     bool write = strchr(mode, 'w') || strchr(mode, 'a') || strchr(mode, '+');
@@ -179,6 +218,14 @@ HANDLE CreateFileA(LPCSTR name, DWORD access, DWORD, SECURITY_ATTRIBUTES*, DWORD
     using namespace efz;
     bool write = (access & GENERIC_WRITE) != 0;
     FILE* f = nullptr;
+    if (t_replayFile && !write && IsReplaySlot(name)) {
+        f = OpenPath(t_replayFile, "rb");
+        if (!f) {
+            efz::LogDebug("file", "cannot open %s for reading", t_replayFile);
+            return INVALID_HANDLE_VALUE;
+        }
+        return AdoptFile(f);
+    }
     switch (disposition) {
     case CREATE_ALWAYS:
         f = OpenGameFile(name, "w+b");

@@ -296,10 +296,13 @@ class HumanMatch:
 
     def play(self, policy=None, matches=None):
         """Plays matches until Esc (or `matches` of them): policy(obs) -> action index for
-        the agent's side (None: it stands still; ignored against the CPU)."""
+        the agent's side (None: it stands still; ignored against the CPU). A policy with a
+        reset() (efz_env.agent.Agent) is told of each new match."""
         try:
             while matches is None or self.matches < matches:
                 obs = self.reset()
+                if hasattr(policy, 'reset'):
+                    policy.reset()
                 while True:
                     action = 0 if policy is None or self.opponent == 'cpu' else policy(obs)
                     obs, _, term, trunc, _ = self.agent_step(action)

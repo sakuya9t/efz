@@ -119,6 +119,67 @@ class Recording(unittest.TestCase):
             env.close()
 
 
+class Playback(unittest.TestCase):
+    def test_plays_a_recorded_match_back(self):
+        from efz_env import actions
+        config = dict(num_threads=1, frame_skip=1, max_frames=64 * 600, rounds_to_win=1,
+                      autoreset='disabled')
+        with tempfile.TemporaryDirectory() as save:
+            env = EfzVecEnv(DATA, 1, save_dir=save, seed=5, **config)
+            env.set_matches(chars=('ayu', 'mai'), stage=4, cpu=(False, False))
+            path = env.record(0, 1, 1)
+            env.reset()
+            table = actions.ActionTable()
+            rng = np.random.default_rng(1)
+            played, views = [], [env.obs.copy()]
+            for k in range(64 * 600):  # player 1 walks in pressing A; player 2 at random
+                controls = np.array([[actions.FORWARD | (actions.A if k % 2 else 0),
+                                      table.to_bytes(rng.integers(0, len(table)))]], np.uint8)
+                _, _, term, trunc, info = env.step(controls)
+                np.testing.assert_array_equal(info['input'][0], controls[0])
+                self.assertEqual(info['replay'][0], 0)
+                played.append(controls[0])
+                views.append(env.final_obs.copy() if term[0] or trunc[0] else env.obs.copy())
+                if term[0] or trunc[0]:
+                    break
+            self.assertTrue(term[0])
+            end = info.copy()
+            env.close()
+
+            # The replay's inputs play, whatever the actions; the same game step by step.
+            env = EfzVecEnv(DATA, 1, **config)
+            env.play(0, path)
+            env.reset()
+            self.assertEqual(env.info['replay'][0], 1)
+            self.assertEqual(env.info['chars'][0].tolist(), [1, 2])
+            np.testing.assert_array_equal(env.obs, views[0])
+            for k, controls in enumerate(played):
+                _, _, term, trunc, info = env.step(np.full((1, 2), 0x55, np.uint8))
+                np.testing.assert_array_equal(info['input'][0], controls, err_msg=f'step {k}')
+                view = env.final_obs if term[0] or trunc[0] else env.obs
+                np.testing.assert_array_equal(view, views[k + 1], err_msg=f'step {k}')
+                self.assertEqual(bool(term[0] or trunc[0]), k == len(played) - 1)
+            self.assertTrue(term[0])
+            for field in ('frame', 'winner', 'hp', 'rounds_won'):
+                np.testing.assert_array_equal(info[field], end[field])
+            # Afterwards it plays the program's matches again.
+            env.reset()
+            self.assertEqual(env.info['replay'][0], 0)
+            env.close()
+
+    def test_refuses_what_isnt_a_replay(self):
+        env = EfzVecEnv(DATA, 1, num_threads=1)
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, 'cannot read'):
+                env.play(0, os.path.join(tmp, 'missing.rep'))
+            junk = os.path.join(tmp, 'junk.rep')
+            with open(junk, 'wb') as f:
+                f.write(b'\x7f\x00' * 8)
+            with self.assertRaisesRegex(ValueError, 'not a replay'):
+                env.play(0, junk)
+        env.close()
+
+
 class Seeding(unittest.TestCase):
     def rollout(self, env, seed, steps=150):
         rng = np.random.default_rng(0)
@@ -238,6 +299,58 @@ class StableBaselines3(unittest.TestCase):
         venv = EfzSB3VecEnv(DATA, 2, opponent=frozen(model), chars=('ayu', 'mai'),
                             max_frames=40, num_threads=2)
         self.learn(venv, 64)
+        venv.close()
+
+    def test_delay(self):
+        # Every view is the game of `delay` steps before; the input history is current.
+        from efz_env.sb3 import EfzSB3VecEnv
+        venv = EfzSB3VecEnv(DATA, 2, opponent=lambda o: np.zeros(len(o), np.int64),
+                            chars=('ayu', 'mai'), max_frames=400, num_threads=2, history=2,
+                            delay=3)
+        raw = [venv.reset()]
+        live = [venv.env.obs[:, 0].copy()]
+        forward_a = venv.table.actions.index((6, 'A'))
+        for _ in range(6):
+            venv.step_async(np.full(2, forward_a))
+            raw.append(venv.step_wait()[0])
+            live.append(venv.env.obs[:, 0].copy())
+        for t in range(7):
+            np.testing.assert_array_equal(raw[t][:, :168], live[max(0, t - 3)])
+        np.testing.assert_array_equal(raw[1][:, 168:174], [[1, 0, 1, 0, 0, 0]] * 2)
+        venv.close()
+
+    def test_history_and_prior(self):
+        # Observations with the input history; EfzPolicy pulled toward a prior; an
+        # opponent without history (the 168 features) among ones with.
+        from stable_baselines3 import PPO
+        from efz_env.history import FEATURES
+        from efz_env.policy import EfzPolicy, policy_kwargs
+        from efz_env.sb3 import EfzSB3VecEnv, frozen
+        plain = self.learn(EfzSB3VecEnv(DATA, 2, opponent='cpu', chars=('ayu', 'mai'),
+                                        max_frames=20, num_threads=2), 64)
+        venv = EfzSB3VecEnv(DATA, 2, opponent=frozen(plain), chars=('ayu', 'mai'),
+                            max_frames=30, num_threads=2, history=4)
+        self.assertEqual(venv.observation_space.shape, (168 + 4 * FEATURES,))
+        obs = venv.reset()
+        self.assertTrue((obs[:, 168:] == 0).all())
+        venv.step_async(np.full(2, venv.table.actions.index((6, 'A'))))
+        obs, _, _, _ = venv.step_wait()
+        np.testing.assert_array_equal(obs[:, 168:168 + FEATURES], [[1, 0, 1, 0, 0, 0]] * 2)
+        kw = dict(n_steps=16, batch_size=32, n_epochs=1, verbose=0, device='cpu',
+                  ent_coef=0.01, policy_kwargs=policy_kwargs(width=32))
+        prior = PPO(EfzPolicy, venv, **kw)
+        model = PPO(EfzPolicy, venv, **kw)
+        model.policy.set_prior(prior.policy, coef=0.1, ent_coef=0.01)
+        model.learn(64)
+        self.assertGreaterEqual(model.policy.prior_kl, 0.0)
+        with tempfile.TemporaryDirectory() as tmp:  # saved and loaded without the prior
+            model.save(os.path.join(tmp, 'm.zip'))
+            loaded = PPO.load(os.path.join(tmp, 'm.zip'), device='cpu')
+            self.assertNotIn('prior', loaded.policy.__dict__)
+            np.testing.assert_allclose(loaded.policy.logits(
+                loaded.policy.obs_to_tensor(obs)[0]).detach().numpy(),
+                model.policy.logits(model.policy.obs_to_tensor(obs)[0]).detach().numpy(),
+                rtol=1e-5, atol=1e-6)
         venv.close()
 
 
