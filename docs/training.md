@@ -418,8 +418,9 @@ too), and the combo videos as a combo library.
 
 ## Human-like agents
 
-A design under discussion (3 November 2026); nothing of it is built. The aim is agents
-that play like people, and like weaker people when asked, not only agents that win.
+A design under discussion (3 November 2026). The aim is agents that play like people,
+and like weaker people when asked, not only agents that win. What has been built of it
+since, and where it stands, is in [progress.md](progress.md).
 
 ### Limits a person has
 

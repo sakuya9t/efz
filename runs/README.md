@@ -22,6 +22,9 @@ the time in the air. The game's CPU doesn't punish that; people will. Making it 
 like a person is the plan in [docs/training.md](../docs/training.md), "Human-like
 agents".
 
+Where the work stands, what lives outside the repository, and how to continue it on
+another machine: [docs/progress.md](../docs/progress.md).
+
 ## Using them
 
 The models are on Hugging Face (https://huggingface.co/sakuya9t/efz), under the same paths:
