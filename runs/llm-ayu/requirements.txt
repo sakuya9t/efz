@@ -1,0 +1,11 @@
+# The language-model agent on a Linux CUDA machine (setup-linux.sh installs these; on
+# Linux PyPI's torch wheels carry CUDA). transformers 4.56 or later: from_pretrained's
+# dtype= argument.
+torch>=2.4
+transformers>=4.56
+accelerate
+peft
+numpy
+gymnasium
+stable-baselines3
+huggingface_hub

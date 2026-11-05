@@ -1,6 +1,7 @@
 """The trained models live on Hugging Face (https://huggingface.co/sakuya9t/efz), under the
 same paths as here: runs/<run>/<model>.zip with the settings beside it that
-efz_env.agent and the run's scripts read (config.json, <model>.config.json).
+efz_env.agent and the run's scripts read (config.json, <model>.config.json), and the
+language models' folders (runs/llm-ayu/<model>/: body/, head.pt, llm.json).
 
     python runs/hub.py download                      # every run's models, into runs/
     python runs/hub.py download human-ayu            # one run's
@@ -18,7 +19,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 HUB = 'sakuya9t/efz'
 MODELS = ['*.zip', '**/*.zip', 'config.json', '**/config.json', '*.config.json',
-          '**/*.config.json']
+          '**/*.config.json',
+          # a language model's folder (runs/llm-ayu): its body, head and settings
+          '**/body/*', '**/head.pt', '**/llm.json']
 
 
 def main():
