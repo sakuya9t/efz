@@ -10,7 +10,7 @@ import glob
 import os
 import sys
 
-VERSION = 4
+VERSION = 5
 
 # EfzEnvConfig.autoreset
 AUTORESET_SAME_STEP = 0
@@ -122,6 +122,8 @@ def _bind(lib):
         'efz_env_seed': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_uint64]),
         'efz_env_record': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32, ctypes.c_int32]),
         'efz_env_play': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_char_p]),
+        'efz_env_set_gauges': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32, ctypes.c_int32,
+                                              ctypes.c_double, ctypes.c_int32]),
         'efz_env_set_save_dir': (ctypes.c_int, [P, ctypes.c_char_p]),
         'efz_env_step': (ctypes.c_int, [P, P]),
         'efz_env_step_async': (ctypes.c_int, [P, P]),

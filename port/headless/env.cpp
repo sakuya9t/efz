@@ -1307,6 +1307,33 @@ int efz_env_set_save_dir(EfzEnv* env, const char* dir)
     return 0;
 }
 
+int efz_env_set_gauges(EfzEnv* env, int32_t index, int32_t player, int32_t power, double rf,
+                       int32_t blue)
+{
+    if (!env || index < 0 || index >= env->n || player < 0 || player > 1)
+        return -1;
+    Finish(env);
+    Slot& s = env->slots[index];
+    if (!s.started || s.broken)
+        return -1;
+    BindArena(s.arena);
+    int ok = -1;
+    if (SceneIndex() == 3) {
+        CPlayer* p = Fight()->m_players[player];
+        if (power >= 0)
+            p->m_gauge = (short)std::min(power, 3000);
+        if (rf >= 0)
+            p->m_rfGauge = std::min(rf, 1000.0);
+        if (blue >= 0)
+            p->m_rfBlue = blue ? 1 : 0;
+        WriteObs(env, s, ObsOf(env, env->obsOut, index));
+        WriteInfo(s, env->info[index], -1, false);
+        ok = 0;
+    }
+    BindArena(nullptr);
+    return ok;
+}
+
 int efz_env_seed(EfzEnv* env, int32_t index, uint64_t seed)
 {
     if (!env || index < 0 || index >= env->n)

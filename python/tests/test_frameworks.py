@@ -167,6 +167,23 @@ class Playback(unittest.TestCase):
             self.assertEqual(env.info['replay'][0], 0)
             env.close()
 
+    def test_set_gauges(self):
+        env = EfzVecEnv(DATA, 1, num_threads=1)
+        env.set_matches(chars=('ayu', 'mai'))
+        env.reset()
+        names = env.observation_names
+        env.set_gauges(0, 1, power=3000, rf=1000, blue=True)
+        self.assertEqual(env.info['gauge'][0, 1], 3000)
+        self.assertEqual(env.obs[0, 0, names.index('opp_gauge')], 1.0)
+        self.assertEqual(env.obs[0, 1, names.index('self_rf_gauge')], 1.0)
+        self.assertEqual(env.obs[0, 1, names.index('self_rf_blue')], 1.0)
+        env.set_gauges(0, 1, rf=400)  # the rest as it was
+        self.assertAlmostEqual(float(env.obs[0, 1, names.index('self_rf_gauge')]), 0.4)
+        self.assertEqual(env.obs[0, 1, names.index('self_rf_blue')], 1.0)
+        env.step(np.zeros((1, 2), np.uint8))
+        self.assertEqual(env.info['gauge'][0, 1], 3000)  # it holds in the game
+        env.close()
+
     def test_states_of_another_process_are_refused(self):
         # A state's objects point into the library: one saved where it was loaded at
         # another address (another process) is refused, not loaded to crash.
@@ -332,6 +349,22 @@ class StableBaselines3(unittest.TestCase):
         for t in range(7):
             np.testing.assert_array_equal(raw[t][:, :168], live[max(0, t - 3)])
         np.testing.assert_array_equal(raw[1][:, 168:174], [[1, 0, 1, 0, 0, 0]] * 2)
+        venv.close()
+
+        # An opponent with a delay of its own (0 in the first match: the game as it is).
+        seen = []
+        venv = EfzSB3VecEnv(DATA, 2, opponent=lambda o: seen.append(o.copy()) or
+                            np.zeros(len(o), np.int64), chars=('ayu', 'mai'), max_frames=400,
+                            num_threads=2, history=2, delay=3, opponent_delay=[0, 3])
+        venv.reset()
+        p2 = [venv.env.obs[:, 1].copy()]
+        for _ in range(6):
+            venv.step_async(np.zeros(2, np.int64))
+            venv.step_wait()
+            p2.append(venv.env.obs[:, 1].copy())
+        for t, view in enumerate(seen):
+            np.testing.assert_array_equal(view[0, :168], p2[t][0])
+            np.testing.assert_array_equal(view[1, :168], p2[max(0, t - 3)][1])
         venv.close()
 
     def test_history_and_prior(self):

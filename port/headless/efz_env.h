@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 4
+#define EFZ_ENV_VERSION 5
 
 /* What a step does when a match ends (EfzEnvConfig.autoreset). */
 #define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
@@ -193,6 +193,13 @@ EFZ_ENV_API int efz_env_record(EfzEnv* env, int32_t index, int32_t page, int32_t
  * of a replay played back loads as a match of the program's from there. Returns -1
  * (efz_env_error says why) if the file can't be read or isn't a replay. */
 EFZ_ENV_API int efz_env_play(EfzEnv* env, int32_t index, const char* path);
+/* Sets player `player`'s (0 or 1) gauges in environment `index`'s match now, as
+ * training mode's refill sets them: the power gauge (0-3000: a level per 1000), the RF
+ * gauge (0-1000) and whether it is blue (full: 22C, Instant Charge, then gives back
+ * five times the gauge in proration). A value below 0 leaves that gauge as it is. The
+ * observation and info are written again. Returns -1 if the environment has no match. */
+EFZ_ENV_API int efz_env_set_gauges(EfzEnv* env, int32_t index, int32_t player, int32_t power,
+                                   double rf, int32_t blue);
 /* Where the game writes files (replays): `dir`, or the data folder for NULL. For the
  * process, as the data folder is. */
 EFZ_ENV_API int efz_env_set_save_dir(EfzEnv* env, const char* dir);

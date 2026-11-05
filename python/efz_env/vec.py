@@ -258,6 +258,19 @@ class EfzVecEnv:
         if self._lib.efz_env_play(self._h, int(index), os.fsencode(os.fspath(path))) != 0:
             raise ValueError(f'efz_env: {self._lib.efz_env_error(self._h).decode(errors="replace")}')
 
+    def set_gauges(self, index, player, power=None, rf=None, blue=None):
+        """Sets a player's gauges in environment `index`'s match now, as training mode's
+        refill does: power (0-3000, a level per 1000), rf (the RF gauge, 0-1000) and blue
+        (full: Instant Charge, 22C, then gives back five times the gauge in proration);
+        None leaves one as it is. obs and info show them at once."""
+        self._finish()
+        r = self._lib.efz_env_set_gauges(self._h, int(index), int(player),
+                                         -1 if power is None else int(power),
+                                         -1.0 if rf is None else float(rf),
+                                         -1 if blue is None else int(bool(blue)))
+        if r != 0:
+            raise RuntimeError(f'efz_env: environment {index} has no match to set')
+
     def seed(self, index, seed):
         """Seeds environment `index`: its following matches (characters and stages drawn
         from pools, the game's rand) follow from `seed` alone, from its next match on."""

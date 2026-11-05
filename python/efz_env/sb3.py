@@ -22,7 +22,9 @@ fewer features (one trained without history) gets the observation it knows.
 
 delay: a reaction time, in steps: every view the environment gives (the agents' and
 the opponent's) is the game as it was that many steps before (efz_env.history.Delay);
-the input history stays current, as a player knows what it pressed.
+the input history stays current, as a player knows what it pressed. opponent_delay:
+the opponent's own, per match or for all, up to delay (0: it sees the game as it is, a
+red-team opponent without a person's limits).
 
 Matches that end restart in the same step, as SB3 expects: infos[i] then holds
 'terminal_observation', 'TimeLimit.truncated' and 'episode' ({'r', 'l', 't'}, as SB3's
@@ -85,7 +87,7 @@ def mixture(policies, assignment):
 class EfzSB3VecEnv(VecEnv):
     def __init__(self, data_dir=None, num_envs=64, *, opponent='cpu', cpu_envs=None,
                  action_table=None, chars=(None, None), stage=None, char_pool=None,
-                 stage_pool=None, history=0, delay=0, **config):
+                 stage_pool=None, history=0, delay=0, opponent_delay=None, **config):
         if 'autoreset' in config and config['autoreset'] != 'same_step':
             raise ValueError("SB3 VecEnvs reset in the same step: leave autoreset alone")
         self.env = EfzVecEnv(data_dir, num_envs, autoreset='same_step', **config)
@@ -111,6 +113,12 @@ class EfzSB3VecEnv(VecEnv):
         self._start = time.time()
         self.history = InputHistory((num_envs, 2), history) if history else None
         self.delay = Delay((num_envs, 2), delay, self.env.obs_dim) if delay else None
+        self.opponent_delay = None
+        if opponent_delay is not None and delay:
+            d = np.broadcast_to(np.asarray(opponent_delay, dtype=int), (num_envs,)).copy()
+            if (d < 0).any() or (d > delay).any():
+                raise ValueError('opponent_delay: from 0 to delay')
+            self.opponent_delay = d
         self._view = None  # what the players see now (delayed)
         width = self.env.obs_dim + (self.history.size if self.history else 0)
         obs_space = spaces.Box(-np.inf, np.inf, (width,), np.float32)
@@ -159,6 +167,9 @@ class EfzSB3VecEnv(VecEnv):
             self._controls[:, 0] = controls
             if self.opponent is not None:
                 view = self._with_history(self._view)[:, 1]
+                if self.opponent_delay is not None:  # its own: so many steps ago
+                    seen = self.delay.buf[np.arange(self.n), 1, self.opponent_delay]
+                    view = np.concatenate([seen, view[:, seen.shape[1]:]], axis=1)
                 self._controls[:, 1] = self.table.to_bytes(self.opponent(view))
         self.env.step_async(self._controls)
 
