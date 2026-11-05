@@ -6,8 +6,10 @@ each side played.
 
 A model is an SB3 model.zip with its config.json beside it (frame_skip, history): the
 environment steps every frame and each model decides every frame_skip of them, holding
-its choice in between, with the input history it was trained with. --chars: P1's and
-P2's characters ('random': drawn per match from the 23). Prints and returns (as JSON
+its choice in between, with the input history it was trained with; or a language model's
+folder (runs/llm-ayu: llm.json), played by llm.LLMAgent (on CUDA if there is one). --chars: P1's and
+P2's characters ('random': drawn per match from the 23; for P2 'tiers': a third of
+the matches each against the level-4 CPU's tiers, TIERS). Prints and returns (as JSON
 with --json) P1's wins, losses and matches cut short at --minutes, and per side how it
 played (Events): presses per second (and per frame, by button), and per minute its
 jumps, guards, recoil guards (RG: a guard within 10 frames of pressing back, the only
@@ -32,13 +34,20 @@ from efz_env import ActionTable, EfzVecEnv
 from efz_env.agent import Agent
 from efz_env.history import input_features
 
+import tactics  # noqa: E402  (runs/human-ayu is on the path)
+
 TABLE = ActionTable()
 # The observation's columns events are read from: self_action, self_hitstun,
 # self_airborne, opp_action, opp_hitstun, opp_own_action, self_combo_hits (the combo
 # one is doing: the attacker's counter, / 30) and self_combo_damage (/ 9999).
 COLUMNS = [18, 20, 39, 50, 52, 67, 30, 38, 23, 35,  # + self_hitstop, self_own_action
            9, 10, 11,  # + self_gauge (/ 3000), self_rf_gauge (/ 1000), self_rf_blue
-           31]  # + self_proration (/ 10000)
+           31,  # + self_proration (/ 10000)
+           8, 62, 70, 41, 42, 43,  # + self_hp (/ 9999); the combo done to one: opp_combo_hits,
+           # opp_combo_damage; and the attacker's resources: opp_gauge, opp_rf_gauge, opp_rf_blue
+           ] + tactics.OBS  # + what tactics.py reads
+TAKEN = 14  # where those start
+TACTICS = 20  # and tactics.OBS
 INSTANT_CHARGE = [0xa7, 0xab]  # 22C on the ground and in the air: cancels a move that hit
 
 
@@ -66,7 +75,6 @@ MOVES = {
 RC_WINDOW = 90      # steps after the opponent's RG in which its counterattack is looked for
 PUNISH_WINDOW = 40  # steps after one's own RG in which a move of one's own is looked for
 HIT_WINDOW = 40     # steps after a move starts in which it can hit
-
 
 def _prev(x, fill):
     return np.concatenate([[fill], x[:-1]])
@@ -98,6 +106,20 @@ class Events:
         combo_by_resources: per resource group at the combo's start (resources(): the
         RF gauge red, cyan or blue, and the bars of power), the combos' count, damage on
         average, at the 90th percentile and the most;
+    damage taken (defence): damage_taken_per_min, the HP lost a minute (combos, chip,
+        throws: everything); the opponent's combos on one (its combo counter), per
+        minute, their damage on average, at the 90th percentile and the most, and the
+        same by the attacker's resource group at the combo's start (taken_by_resources);
+    tactics (tactics.py has the definitions), both ways: pressure (one's attacks
+        guarded) and under_pressure (the opponent's): the frame advantage after each
+        guard, what came next by advantage (plus, even, minus the defender could punish
+        by the frame data, minus safe), power gained per guard, blockstring gaps, the
+        defender's ways out (invincible moves, mashes, jumps, backdashes; RG and what
+        followed it) and how each went, and for one's own the moves guarded last;
+        okizeme (the opponent's knockdowns) and wakeup (one's own): the riser's choices
+        and how each went, the attacker's setup; free_time and opponent_free_time: the
+        steps free while the other can't act, and what they were used for (a setup: an
+        object out, a trap; a move; closing in; waiting);
     busy_presses, busy_turns: the share of its presses, and of its changes of direction,
         made while it couldn't move (in a move of its own, or in hitstop): what a cancel
         is made of, a motion buffered for the moment the move connects.
@@ -116,6 +138,10 @@ class Events:
         self.n['presses'] = np.zeros(4)
         self.n['combo_list'] = []  # each combo's (hits, damage, resource group)
         self.n['proration_left'] = []  # at the end of each of 3 hits or more
+        self.n['hp_lost'] = 0.0
+        self.n['taken_list'] = []  # each of the opponent's combos on one: (damage, its group)
+        for k in ('press_off', 'press_def', 'oki_off', 'oki_def', 'free_self', 'free_opp'):
+            self.n[k] = []  # tactics.measure()'s
 
     def add_match(self, cols, controls):
         """One player's match: cols (T, len(COLUMNS)), the observation's COLUMNS before
@@ -207,6 +233,26 @@ class Events:
                     seg = enter[b:e]
                     n['combo_special'] += int((seg & np.isin(a[b:e], self.moves['special'])).any())
                     n['combo_ic'] += int((seg & np.isin(a[b:e], INSTANT_CHARGE)).any())
+        # Damage taken: HP lost (it refills between rounds: only the drops count), and
+        # the opponent's combos on one.
+        if cols.shape[1] > TAKEN + 5:
+            hp = cols[:, TAKEN] * 9999
+            n['hp_lost'] += float(np.clip(hp[:-1] - hp[1:], 0, None).sum())
+            hits = np.round(cols[:, TAKEN + 1] * 30).astype(int)
+            dmg = cols[:, TAKEN + 2] * 9999
+            on = hits > 0
+            starts = np.flatnonzero(on & ~_prev(on, False))
+            ends = np.flatnonzero(~on & _prev(on, False))
+            for b in starts:
+                later = ends[ends > b]
+                e = later[0] if len(later) else T
+                g = resources(cols[b, TAKEN + 3] * 3000, cols[b, TAKEN + 4] * 1000,
+                              cols[b, TAKEN + 5] > 0)
+                n['taken_list'].append((float(dmg[b:e].max()), g))
+        # Pressure, wake-up and free time, both ways (tactics.py).
+        if cols.shape[1] >= TACTICS + len(tactics.OBS):
+            for k, v in tactics.measure(cols[:, TACTICS:TACTICS + len(tactics.OBS)]).items():
+                n[k] += v
         # The guesses: a counter hit is a hit on an opponent in a move of its own.
         for g, acts in self.moves['guess'].items():
             for t in np.flatnonzero(enter & np.isin(a, acts)):
@@ -272,6 +318,21 @@ class Events:
         out['ic_per_min'] = round(n['ic'] * per_min, 2)
         out['busy_presses'] = share(n['presses_busy'], n['presses_all'])
         out['busy_turns'] = share(n['turns_busy'], n['turns_all'])
+        out['damage_taken_per_min'] = round(n['hp_lost'] * per_min)
+        taken = n['taken_list']
+        out['taken_combos_per_min'] = round(len(taken) * per_min, 2)
+        if taken:
+            dmg = np.array([x[0] for x in taken], float)
+            groups = np.array([x[1] for x in taken])
+            out['taken_combo_damage'] = round(float(dmg.mean()))
+            out['taken_combo_damage_p90'] = round(float(np.percentile(dmg, 90)))
+            out['taken_combo_damage_max'] = round(float(dmg.max()))
+            out['taken_by_resources'] = {
+                g: dict(n=int((groups == g).sum()), damage=round(float(dmg[groups == g].mean())),
+                        p90=round(float(np.percentile(dmg[groups == g], 90))),
+                        most=round(float(dmg[groups == g].max())))
+                for g in GROUPS if (groups == g).any()}
+        out.update(tactics.report(n, per_min))
         return out
 
 
@@ -279,8 +340,12 @@ def play(args, p1, p2, matches, level=4, seed=7):
     env = EfzVecEnv(args.data, matches, frame_skip=1, max_frames=int(args.minutes * 3840),
                     cpu_level=level, autoreset='disabled', seed=seed,
                     reward_round=0.0, reward_match=1.0)
-    chars = [None if c == 'random' else c for c in args.chars]
-    env.set_matches(chars=tuple(chars), cpu=(False, p2 == 'cpu'))
+    chars = [None if c in ('random', 'tiers') else c for c in args.chars]
+    if args.chars[1] == 'tiers':
+        env.set_matches(chars=[(chars[0], c) for c in tier_opponents(matches, seed)],
+                        cpu=(False, p2 == 'cpu'))
+    else:
+        env.set_matches(chars=tuple(chars), cpu=(False, p2 == 'cpu'))
     agents = [p1] + ([] if p2 == 'cpu' else [p2])
     for side, a in enumerate(agents):
         a.batch(matches)
@@ -314,14 +379,48 @@ def play(args, p1, p2, matches, level=4, seed=7):
     env.close()
     events = []
     for s in range(2):
-        e = Events(args.chars[s])
+        e = Events(args.chars[s] if args.chars[s] not in ('random', 'tiers') else '')
         for match in seen[s]:
             e.add_match(np.array([c for c, _ in match]), np.array([u for _, u in match]))
         events.append(e)
     return dict(win=float((result == 1).mean()), loss=float((result == -1).mean()),
                 cut=float((result == 0).mean()), matches=matches,
                 sides=[e.report() for e in events],
+                by_tier=_by_tier(result, chars_played) if p2 == 'cpu' and level == 4 else {},
                 by_opponent=_by_opponent(result, chars_played))
+
+
+# The level-4 CPU by how hard it is to beat (the user's): Kanna the hardest, then Ayu
+# and Mishio, then the rest; at level 3 and below every character is easy, so results
+# there have no tiers. The 23 playable characters: all but 22 (Nayuki's second) and 24
+# (Mizuka, the boss), as efz_env draws them.
+TIERS = {'kanna': 'hardest', 'ayu': 'hard', 'mishio': 'hard'}
+TIER_ORDER = ('hardest', 'hard', 'rest')
+UNPLAYABLE = ('nayuki2', 'mizuka')
+
+
+def tier_opponents(n, seed=7):
+    """P2's characters for n matches, a third per tier: Kanna; Ayu and Mishio in turn;
+    one of the rest, drawn."""
+    from efz_env.vec import character_names
+    rest = [c for c in character_names() if c not in TIERS and c not in UNPLAYABLE]
+    rng = np.random.default_rng(seed)
+    return ['kanna' if i % 3 == 0 else ('ayu', 'mishio')[(i // 3) % 2] if i % 3 == 1
+            else rest[rng.integers(len(rest))] for i in range(n)]
+
+
+def _by_tier(result, chars):
+    from efz_env.vec import character_names
+    names = character_names()
+    tiers = np.array([TIERS.get(names[c], 'rest') for c in chars[:, 1]])
+    out = {}
+    for t in TIER_ORDER:
+        r = result[tiers == t]
+        if len(r):
+            out[t] = dict(matches=len(r), win=round(float((r == 1).mean()), 3),
+                          loss=round(float((r == -1).mean()), 3),
+                          cut=round(float((r == 0).mean()), 3))
+    return out
 
 
 def _by_opponent(result, chars):
@@ -334,26 +433,40 @@ def _by_opponent(result, chars):
     return out
 
 
+def make_agent(path, deterministic=False):
+    """An SB3 model.zip's Agent, or a language model's folder's (llm.json) LLMAgent."""
+    if os.path.isdir(path) and os.path.exists(os.path.join(path, 'llm.json')):
+        sys.path.insert(0, os.path.join(REPO, 'runs', 'llm-ayu'))
+        from llm import LLMAgent
+        return LLMAgent(path, deterministic=deterministic)
+    return Agent(path, deterministic=deterministic)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--data', default=os.environ.get('EFZ_DATA') or os.environ.get('EFZ_DIR'))
     p.add_argument('--p1', required=True)
     p.add_argument('--p2', default='cpu', help="'cpu' or a model.zip")
-    p.add_argument('--chars', nargs=2, default=('ayu', 'random'))
+    p.add_argument('--chars', nargs=2, default=('ayu', 'random'),
+                   help="P1's and P2's: names, 'random', or for P2 'tiers' (TIERS)")
     p.add_argument('--level', type=int, nargs='+', default=[4])
     p.add_argument('--matches', type=int, default=64)
     p.add_argument('--minutes', type=float, default=5)
     p.add_argument('--deterministic', action='store_true')
     p.add_argument('--json', help='write the results here')
     args = p.parse_args()
-    p1 = Agent(args.p1, deterministic=args.deterministic)
-    p2 = 'cpu' if args.p2 == 'cpu' else Agent(args.p2, deterministic=args.deterministic)
+    p1 = make_agent(args.p1, args.deterministic)
+    p2 = 'cpu' if args.p2 == 'cpu' else make_agent(args.p2, args.deterministic)
     out = {}
     for level in (args.level if p2 == 'cpu' else [0]):
         r = play(args, p1, p2, args.matches, level)
         key = f'cpu{level}' if p2 == 'cpu' else 'vs'
         out[key] = r
-        print(key, json.dumps({k: v for k, v in r.items() if k != 'by_opponent'}), flush=True)
+        print(key, json.dumps({k: v for k, v in r.items() if k not in ('by_opponent', 'sides')}),
+              flush=True)
+        if r['by_tier']:
+            print('  by tier:', ', '.join(f"{t} {v['win']:.0%} of {v['matches']}"
+                                          for t, v in r['by_tier'].items()), flush=True)
     if args.json:
         with open(args.json, 'w') as f:
             json.dump(out, f, indent=1)

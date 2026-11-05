@@ -189,6 +189,49 @@ combos): the proration left at the end of combos of 3 hits or more is 64% for pe
 (the red team of `combo-red3/`, with the juggle helper and a super cost of 0.1 a bar;
 `combo-red2/`, with 0.5 a bar, fell behind with 3 bars and was stopped at 15M).
 
+Phase 2 against the lookahead red team, at 18.1M steps: it wins 75% against the level-4
+CPU (random characters), 97% against the curriculum agent and 94% against the red team,
+which deals it 7,325 a minute in combos. Red team 3 at 20.1M: 1,090 on people's resources,
+blue RF and 3 bars 1,344 / 3,689 / 4,386 (average / 90th percentile / most): its 90th
+percentile is above the 12M red team's, its average not yet.
+
+## Defence and tactics
+
+The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, both ways
+(one's own play and the opponent's), with people's numbers in `people.json`:
+
+- **Damage taken.** HP lost a minute, and the opponent's combos on one (average, 90th
+  percentile, most, and by the attacker's resources). People's Ayu takes 7,428 a minute
+  and deals 6,796; the combos on her average 934, p90 2,189, most 8,066.
+- **Pressure, in frames.** After each guard, the frame advantage: the step the defender
+  is free minus the step the attacker is (each contact found by the guard restarting;
+  the advantage taken from the move that made the last one). A minus guard matters
+  only if the defender can use it (the user's point): it is *punishable* when the
+  defender has a move as fast as the disadvantage that reaches, by the game's own frame
+  data (`framedata.py`: per character and move, its startup, reach and invulnerable
+  frames, from the `.pat` files; `framedata.json` is made on each machine and kept out
+  of the repository). People's Ayu: median +2, 54% of guards plus, 19% punishable; the
+  defender fights back after 25% of the punishable ones, 16.5% of the safe minus ones,
+  14% of the plus ones; about 36 power gained per guard. By the move guarded last,
+  0x107 is the "stupid move": -10, punishable 76% of the time, fought back 47%.
+- **Ways out** (the user's: invincible moves and the like). What the defender started
+  after a guard: an invincible move (invulnerable in its first frames by the frame data,
+  or by the timer some moves set: a reversal), another move (a mash), a jump, a backdash;
+  and RG, with what followed it. For Ayu under pressure, invincible moves got her out
+  60% of the time (trapped 4.5%), mashes 34% (trapped 25%).
+- **Wake-up.** Per knockdown, the riser's choice and how it went (who hit first, the HP
+  swing over 3 seconds), and the attacker's setup (frames free before the rise, meaty,
+  airborne, close, objects out). Ayu rising: guard 56%, mash 19%, invincible 10%, jump
+  10%; an invincible reversal swings 527 HP her way, waiting costs her 509.
+- **Free time.** Steps free while the opponent can't act, and their use: a setup (a move
+  that put out an object: a trap), a charge (`tactics.CHARGE`: Kano's 5D and 236D for her
+  magic gauge), another move, closing in, waiting. Mizuka uses 32% of hers for setups,
+  Misuzu 6.6%, Kano charges in 7.5%; most characters set up in under 2%.
+- **The CPU's tiers.** At level 4 the CPU is hardest as Kanna, then Ayu and Mishio, then
+  the rest (the user's); below level 4 all are easy. `evaluate.py --chars ayu tiers`
+  plays a third of the matches against each tier and reports the wins by tier;
+  `finetune.py` evaluates level 4 that way (`--cpu-chars`).
+
 ## The models
 
 On Hugging Face, https://huggingface.co/sakuya9t/efz, under the same paths:
@@ -203,7 +246,9 @@ the combo master's checkpoints are only there.
 | `dataset.py` | replays to data: per Ayu side, the views, inputs and rewards of each step |
 | `bc.py` | the clone: the 45 actions people's inputs come to each frame, and the critic from their matches' returns; `--delay` for a reaction time, `--players` for one player's clone (from the clone of everyone, `--init`) |
 | `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones |
-| `evaluate.py` | matches to the end, with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move) |
+| `evaluate.py` | matches to the end, with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move, damage taken, and `tactics.py`'s); `--chars ayu tiers` for the level-4 CPU's tiers; plays language models too (`runs/llm-ayu`) |
+| `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up and free time, both ways |
+| `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames (`framedata.json`) |
 | `people.py` | the same measures of people, overall, by opponent and by player |
 | `compare.py` | people and agents side by side, as the tables here |
 | `team_check.py` | whether players' clones predict their players better than the clone of everyone |

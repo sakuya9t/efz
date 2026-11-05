@@ -1161,6 +1161,1582 @@
      }
     }
    }
+  },
+  {
+   "steps": 16121856,
+   "level": 4,
+   "train_seconds": 1360.065357685089,
+   "prior_kl": 0.0377904511988163,
+   "ep_return": 1.525308509171009,
+   "eval": {
+    "cpu": {
+     "win": 0.53125,
+     "loss": 0.4375,
+     "cut": 0.03125,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0097,
+        "B": 0.0086,
+        "C": 0.0068,
+        "D": 0.0004
+       },
+       "presses_per_second": 1.63,
+       "jumps_per_min": 15.81,
+       "guard_ground_per_min": 10.67,
+       "guard_air_per_min": 0.11,
+       "rg_ground_per_min": 1.6,
+       "rg_air_per_min": 0.13,
+       "hit_ground_per_min": 9.9,
+       "hit_air_per_min": 2.18,
+       "rg_ground": 0.072,
+       "rg_air": 0.054,
+       "rc": 0.086,
+       "rc_chances_per_min": 2.07,
+       "rg_move": 0.521,
+       "rg_punish": 0.233,
+       "rg_long": 0.068,
+       "rg_long_hit": 0.7,
+       "guess_623A_per_min": 0.34,
+       "guess_623A_counter": 0.172,
+       "guess_623B_per_min": 0.38,
+       "guess_623B_counter": 0.188,
+       "combos_per_min": 10.22,
+       "combo_hits": 2.39,
+       "combo_damage": 705,
+       "combo_by_resources": {
+        "red0": {
+         "n": 167,
+         "damage": 737,
+         "p90": 1457,
+         "most": 3953
+        },
+        "red1": {
+         "n": 128,
+         "damage": 649,
+         "p90": 1220,
+         "most": 2162
+        },
+        "red2": {
+         "n": 48,
+         "damage": 621,
+         "p90": 1050,
+         "most": 1747
+        },
+        "red3": {
+         "n": 25,
+         "damage": 606,
+         "p90": 1214,
+         "most": 2020
+        },
+        "cyan0": {
+         "n": 169,
+         "damage": 745,
+         "p90": 1627,
+         "most": 3143
+        },
+        "cyan1": {
+         "n": 134,
+         "damage": 718,
+         "p90": 1575,
+         "most": 2570
+        },
+        "cyan2": {
+         "n": 63,
+         "damage": 695,
+         "p90": 1590,
+         "most": 2904
+        },
+        "cyan3": {
+         "n": 34,
+         "damage": 602,
+         "p90": 1162,
+         "most": 1791
+        },
+        "blue0": {
+         "n": 18,
+         "damage": 729,
+         "p90": 1224,
+         "most": 2849
+        },
+        "blue1": {
+         "n": 32,
+         "damage": 584,
+         "p90": 904,
+         "most": 1900
+        },
+        "blue2": {
+         "n": 26,
+         "damage": 957,
+         "p90": 1934,
+         "most": 2347
+        },
+        "blue3": {
+         "n": 19,
+         "damage": 755,
+         "p90": 1282,
+         "most": 1866
+        }
+       },
+       "combo_damage_p90": 1471,
+       "combo_damage_max": 3953,
+       "combo_hits_p90": 5.0,
+       "combo_hits_max": 25,
+       "combo_proration_left": 0.773,
+       "combo_3plus": 0.312,
+       "combo_damage_per_min": 7209,
+       "combo_special": 0.503,
+       "combo_ic": 0.016,
+       "ic_per_min": 0.17,
+       "busy_presses": 0.421,
+       "busy_turns": 0.412
+      },
+      {
+       "presses": {
+        "A": 0.0142,
+        "B": 0.0174,
+        "C": 0.0053,
+        "D": 0.011
+       },
+       "presses_per_second": 3.07,
+       "jumps_per_min": 21.32,
+       "guard_ground_per_min": 10.34,
+       "guard_air_per_min": 0.26,
+       "rg_ground_per_min": 3.04,
+       "rg_air_per_min": 0.28,
+       "hit_ground_per_min": 7.72,
+       "hit_air_per_min": 2.39,
+       "rg_ground": 0.144,
+       "rg_air": 0.097,
+       "rc": 0.315,
+       "rc_chances_per_min": 0.86,
+       "rg_move": 0.847,
+       "rg_punish": 0.395,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "combos_per_min": 12.04,
+       "combo_hits": 2.17,
+       "combo_damage": 582,
+       "combo_by_resources": {
+        "red0": {
+         "n": 157,
+         "damage": 598,
+         "p90": 1151,
+         "most": 2481
+        },
+        "red1": {
+         "n": 116,
+         "damage": 647,
+         "p90": 1072,
+         "most": 2373
+        },
+        "red2": {
+         "n": 67,
+         "damage": 545,
+         "p90": 1036,
+         "most": 1608
+        },
+        "red3": {
+         "n": 42,
+         "damage": 666,
+         "p90": 1133,
+         "most": 1744
+        },
+        "cyan0": {
+         "n": 155,
+         "damage": 696,
+         "p90": 1508,
+         "most": 3636
+        },
+        "cyan1": {
+         "n": 172,
+         "damage": 545,
+         "p90": 979,
+         "most": 2378
+        },
+        "cyan2": {
+         "n": 98,
+         "damage": 494,
+         "p90": 1086,
+         "most": 2666
+        },
+        "cyan3": {
+         "n": 83,
+         "damage": 524,
+         "p90": 1027,
+         "most": 2136
+        },
+        "blue0": {
+         "n": 36,
+         "damage": 652,
+         "p90": 1074,
+         "most": 3033
+        },
+        "blue1": {
+         "n": 34,
+         "damage": 421,
+         "p90": 988,
+         "most": 1060
+        },
+        "blue2": {
+         "n": 37,
+         "damage": 454,
+         "p90": 829,
+         "most": 1988
+        },
+        "blue3": {
+         "n": 19,
+         "damage": 542,
+         "p90": 935,
+         "most": 1370
+        }
+       },
+       "combo_damage_p90": 1110,
+       "combo_damage_max": 3636,
+       "combo_hits_p90": 4.0,
+       "combo_hits_max": 27,
+       "combo_proration_left": 0.806,
+       "combo_3plus": 0.247,
+       "combo_damage_per_min": 7010,
+       "combo_special": 0.0,
+       "combo_ic": 0.016,
+       "ic_per_min": 0.5,
+       "busy_presses": 0.581,
+       "busy_turns": 0.534
+      }
+     ],
+     "by_opponent": {
+      "nanase": [
+       1,
+       0,
+       0
+      ],
+      "mai": [
+       0,
+       2,
+       0
+      ],
+      "makoto": [
+       1,
+       0,
+       0
+      ],
+      "akane": [
+       0,
+       1,
+       0
+      ],
+      "mayu": [
+       1,
+       1,
+       0
+      ],
+      "nagamori": [
+       0,
+       1,
+       0
+      ],
+      "misaki": [
+       1,
+       0,
+       0
+      ],
+      "shiori": [
+       2,
+       2,
+       0
+      ],
+      "sayuri": [
+       0,
+       3,
+       0
+      ],
+      "nayuki": [
+       2,
+       0,
+       0
+      ],
+      "mio": [
+       0,
+       1,
+       0
+      ],
+      "exnanase": [
+       1,
+       0,
+       0
+      ],
+      "kaori": [
+       3,
+       0,
+       0
+      ],
+      "mishio": [
+       0,
+       0,
+       1
+      ],
+      "akiko": [
+       2,
+       0,
+       0
+      ],
+      "nayukib": [
+       1,
+       0,
+       0
+      ],
+      "kanna": [
+       0,
+       2,
+       0
+      ],
+      "kano": [
+       2,
+       1,
+       0
+      ]
+     },
+     "level": 4
+    },
+    "old": {
+     "win": 0.9375,
+     "loss": 0.0625,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0111,
+        "B": 0.0091,
+        "C": 0.0066,
+        "D": 0.0003
+       },
+       "presses_per_second": 1.74,
+       "jumps_per_min": 11.69,
+       "guard_ground_per_min": 2.92,
+       "guard_air_per_min": 0.06,
+       "rg_ground_per_min": 0.66,
+       "rg_air_per_min": 0.02,
+       "hit_ground_per_min": 7.34,
+       "hit_air_per_min": 1.22,
+       "rg_ground": 0.06,
+       "rg_air": 0.015,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.18,
+       "rg_move": 0.765,
+       "rg_punish": 0.5,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 0.4,
+       "guess_623A_counter": 0.15,
+       "guess_623B_per_min": 0.3,
+       "guess_623B_counter": 0.467,
+       "combos_per_min": 15.71,
+       "combo_hits": 3.24,
+       "combo_damage": 865,
+       "combo_by_resources": {
+        "red0": {
+         "n": 153,
+         "damage": 786,
+         "p90": 1800,
+         "most": 2995
+        },
+        "red1": {
+         "n": 97,
+         "damage": 706,
+         "p90": 1377,
+         "most": 2236
+        },
+        "red2": {
+         "n": 57,
+         "damage": 736,
+         "p90": 1631,
+         "most": 2196
+        },
+        "red3": {
+         "n": 7,
+         "damage": 835,
+         "p90": 1253,
+         "most": 1387
+        },
+        "cyan0": {
+         "n": 177,
+         "damage": 930,
+         "p90": 1796,
+         "most": 3693
+        },
+        "cyan1": {
+         "n": 171,
+         "damage": 911,
+         "p90": 1726,
+         "most": 2851
+        },
+        "cyan2": {
+         "n": 65,
+         "damage": 981,
+         "p90": 2019,
+         "most": 2609
+        },
+        "cyan3": {
+         "n": 11,
+         "damage": 1188,
+         "p90": 2040,
+         "most": 2306
+        },
+        "blue0": {
+         "n": 9,
+         "damage": 1074,
+         "p90": 1725,
+         "most": 2896
+        },
+        "blue1": {
+         "n": 21,
+         "damage": 824,
+         "p90": 1453,
+         "most": 2334
+        },
+        "blue2": {
+         "n": 8,
+         "damage": 1259,
+         "p90": 1818,
+         "most": 1838
+        },
+        "blue3": {
+         "n": 10,
+         "damage": 923,
+         "p90": 1628,
+         "most": 1775
+        }
+       },
+       "combo_damage_p90": 1784,
+       "combo_damage_max": 3693,
+       "combo_hits_p90": 7.0,
+       "combo_hits_max": 10,
+       "combo_proration_left": 0.723,
+       "combo_3plus": 0.473,
+       "combo_damage_per_min": 13592,
+       "combo_special": 0.64,
+       "combo_ic": 0.016,
+       "ic_per_min": 0.34,
+       "busy_presses": 0.522,
+       "busy_turns": 0.504
+      },
+      {
+       "presses": {
+        "A": 0.0389,
+        "B": 0.0318,
+        "C": 0.0348,
+        "D": 0.04
+       },
+       "presses_per_second": 9.31,
+       "jumps_per_min": 19.45,
+       "guard_ground_per_min": 2.76,
+       "guard_air_per_min": 0.0,
+       "rg_ground_per_min": 0.46,
+       "rg_air_per_min": 0.0,
+       "hit_ground_per_min": 11.57,
+       "hit_air_per_min": 1.14,
+       "rg_ground": 0.031,
+       "rg_air": 0.0,
+       "rc": 0.043,
+       "rc_chances_per_min": 0.46,
+       "rg_move": 0.435,
+       "rg_punish": 0.261,
+       "rg_long": 0.043,
+       "rg_long_hit": 1.0,
+       "guess_623A_per_min": 0.38,
+       "guess_623A_counter": 0.211,
+       "guess_623B_per_min": 0.6,
+       "guess_623B_counter": 0.2,
+       "combos_per_min": 8.67,
+       "combo_hits": 2.35,
+       "combo_damage": 812,
+       "combo_by_resources": {
+        "red0": {
+         "n": 94,
+         "damage": 747,
+         "p90": 1497,
+         "most": 3827
+        },
+        "red1": {
+         "n": 61,
+         "damage": 781,
+         "p90": 1732,
+         "most": 2409
+        },
+        "red2": {
+         "n": 35,
+         "damage": 833,
+         "p90": 1699,
+         "most": 2238
+        },
+        "red3": {
+         "n": 31,
+         "damage": 551,
+         "p90": 901,
+         "most": 1715
+        },
+        "cyan0": {
+         "n": 57,
+         "damage": 952,
+         "p90": 1932,
+         "most": 4169
+        },
+        "cyan1": {
+         "n": 58,
+         "damage": 1095,
+         "p90": 2026,
+         "most": 2169
+        },
+        "cyan2": {
+         "n": 42,
+         "damage": 765,
+         "p90": 1753,
+         "most": 1947
+        },
+        "cyan3": {
+         "n": 31,
+         "damage": 759,
+         "p90": 1677,
+         "most": 2220
+        },
+        "blue0": {
+         "n": 9,
+         "damage": 588,
+         "p90": 1303,
+         "most": 1357
+        },
+        "blue1": {
+         "n": 3,
+         "damage": 631,
+         "p90": 734,
+         "most": 768
+        },
+        "blue2": {
+         "n": 2,
+         "damage": 1048,
+         "p90": 1332,
+         "most": 1403
+        },
+        "blue3": {
+         "n": 11,
+         "damage": 495,
+         "p90": 774,
+         "most": 1310
+        }
+       },
+       "combo_damage_p90": 1793,
+       "combo_damage_max": 4169,
+       "combo_hits_p90": 5.0,
+       "combo_hits_max": 21,
+       "combo_proration_left": 0.705,
+       "combo_3plus": 0.306,
+       "combo_damage_per_min": 7040,
+       "combo_special": 0.208,
+       "combo_ic": 0.0,
+       "ic_per_min": 0.0,
+       "busy_presses": 0.513,
+       "busy_turns": 0.522
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       30,
+       2,
+       0
+      ]
+     }
+    },
+    "red": {
+     "win": 0.84375,
+     "loss": 0.15625,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0106,
+        "B": 0.0085,
+        "C": 0.0052,
+        "D": 0.0002
+       },
+       "presses_per_second": 1.57,
+       "jumps_per_min": 12.36,
+       "guard_ground_per_min": 2.39,
+       "guard_air_per_min": 0.05,
+       "rg_ground_per_min": 0.62,
+       "rg_air_per_min": 0.14,
+       "hit_ground_per_min": 6.28,
+       "hit_air_per_min": 1.44,
+       "rg_ground": 0.067,
+       "rg_air": 0.087,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.1,
+       "rg_move": 0.542,
+       "rg_punish": 0.333,
+       "rg_long": 0.042,
+       "rg_long_hit": 0.5,
+       "guess_623A_per_min": 0.6,
+       "guess_623A_counter": 0.158,
+       "guess_623B_per_min": 0.13,
+       "guess_623B_counter": 0.0,
+       "combos_per_min": 12.08,
+       "combo_hits": 3.32,
+       "combo_damage": 875,
+       "combo_by_resources": {
+        "red0": {
+         "n": 97,
+         "damage": 746,
+         "p90": 1522,
+         "most": 2120
+        },
+        "red1": {
+         "n": 54,
+         "damage": 897,
+         "p90": 1720,
+         "most": 2379
+        },
+        "red2": {
+         "n": 33,
+         "damage": 740,
+         "p90": 1168,
+         "most": 2674
+        },
+        "red3": {
+         "n": 38,
+         "damage": 591,
+         "p90": 1061,
+         "most": 2850
+        },
+        "cyan0": {
+         "n": 152,
+         "damage": 938,
+         "p90": 1719,
+         "most": 3780
+        },
+        "cyan1": {
+         "n": 158,
+         "damage": 895,
+         "p90": 1705,
+         "most": 2899
+        },
+        "cyan2": {
+         "n": 75,
+         "damage": 940,
+         "p90": 1773,
+         "most": 2889
+        },
+        "cyan3": {
+         "n": 35,
+         "damage": 1147,
+         "p90": 2244,
+         "most": 2858
+        },
+        "blue0": {
+         "n": 26,
+         "damage": 967,
+         "p90": 1978,
+         "most": 2246
+        },
+        "blue1": {
+         "n": 42,
+         "damage": 834,
+         "p90": 1856,
+         "most": 2544
+        },
+        "blue2": {
+         "n": 32,
+         "damage": 866,
+         "p90": 1779,
+         "most": 2612
+        },
+        "blue3": {
+         "n": 20,
+         "damage": 848,
+         "p90": 1789,
+         "most": 2304
+        }
+       },
+       "combo_damage_p90": 1757,
+       "combo_damage_max": 3780,
+       "combo_hits_p90": 7.0,
+       "combo_hits_max": 19,
+       "combo_proration_left": 0.728,
+       "combo_3plus": 0.5,
+       "combo_damage_per_min": 10573,
+       "combo_special": 0.612,
+       "combo_ic": 0.009,
+       "ic_per_min": 0.08,
+       "busy_presses": 0.474,
+       "busy_turns": 0.456
+      },
+      {
+       "presses": {
+        "A": 0.0822,
+        "B": 0.11,
+        "C": 0.1849,
+        "D": 0.017
+       },
+       "presses_per_second": 25.23,
+       "jumps_per_min": 26.04,
+       "guard_ground_per_min": 0.82,
+       "guard_air_per_min": 0.03,
+       "rg_ground_per_min": 0.17,
+       "rg_air_per_min": 0.02,
+       "hit_ground_per_min": 7.42,
+       "hit_air_per_min": 2.5,
+       "rg_ground": 0.021,
+       "rg_air": 0.006,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.4,
+       "rg_move": 0.667,
+       "rg_punish": 0.25,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 3.28,
+       "guess_623A_counter": 0.072,
+       "guess_623B_per_min": 4.99,
+       "guess_623B_counter": 0.149,
+       "combos_per_min": 7.78,
+       "combo_hits": 3.33,
+       "combo_damage": 1003,
+       "combo_by_resources": {
+        "red0": {
+         "n": 305,
+         "damage": 930,
+         "p90": 1858,
+         "most": 4651
+        },
+        "red1": {
+         "n": 62,
+         "damage": 1096,
+         "p90": 2593,
+         "most": 3522
+        },
+        "cyan0": {
+         "n": 98,
+         "damage": 1057,
+         "p90": 2393,
+         "most": 4204
+        },
+        "cyan1": {
+         "n": 26,
+         "damage": 1427,
+         "p90": 3565,
+         "most": 4039
+        }
+       },
+       "combo_damage_p90": 2215,
+       "combo_damage_max": 4651,
+       "combo_hits_p90": 8.0,
+       "combo_hits_max": 18,
+       "combo_proration_left": 0.753,
+       "combo_3plus": 0.45,
+       "combo_damage_per_min": 7802,
+       "combo_special": 0.805,
+       "combo_ic": 0.314,
+       "ic_per_min": 2.14,
+       "busy_presses": 0.583,
+       "busy_turns": 0.627
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       27,
+       5,
+       0
+      ]
+     },
+     "plans": {
+      "n": 492,
+      "potential": 562.8475609756098,
+      "own": 429.2662601626016,
+      "library": 0.21138211382113822,
+      "big": 0.018292682926829267
+     }
+    }
+   }
+  },
+  {
+   "steps": 18137088,
+   "level": 4,
+   "train_seconds": 1531.608045578003,
+   "prior_kl": 0.04165972024202347,
+   "ep_return": 1.6961705881357192,
+   "eval": {
+    "cpu": {
+     "win": 0.75,
+     "loss": 0.25,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0112,
+        "B": 0.0078,
+        "C": 0.0067,
+        "D": 0.0004
+       },
+       "presses_per_second": 1.67,
+       "jumps_per_min": 13.66,
+       "guard_ground_per_min": 9.03,
+       "guard_air_per_min": 0.26,
+       "rg_ground_per_min": 1.24,
+       "rg_air_per_min": 0.13,
+       "hit_ground_per_min": 9.44,
+       "hit_air_per_min": 1.74,
+       "rg_ground": 0.063,
+       "rg_air": 0.059,
+       "rc": 0.059,
+       "rc_chances_per_min": 2.11,
+       "rg_move": 0.541,
+       "rg_punish": 0.229,
+       "rg_long": 0.083,
+       "rg_long_hit": 0.444,
+       "guess_623A_per_min": 0.44,
+       "guess_623A_counter": 0.229,
+       "guess_623B_per_min": 0.44,
+       "guess_623B_counter": 0.257,
+       "combos_per_min": 10.87,
+       "combo_hits": 2.53,
+       "combo_damage": 743,
+       "combo_by_resources": {
+        "red0": {
+         "n": 186,
+         "damage": 774,
+         "p90": 1688,
+         "most": 3227
+        },
+        "red1": {
+         "n": 151,
+         "damage": 633,
+         "p90": 1296,
+         "most": 2623
+        },
+        "red2": {
+         "n": 81,
+         "damage": 734,
+         "p90": 1422,
+         "most": 2215
+        },
+        "red3": {
+         "n": 51,
+         "damage": 668,
+         "p90": 1182,
+         "most": 2406
+        },
+        "cyan0": {
+         "n": 142,
+         "damage": 930,
+         "p90": 1826,
+         "most": 4275
+        },
+        "cyan1": {
+         "n": 138,
+         "damage": 776,
+         "p90": 1647,
+         "most": 2158
+        },
+        "cyan2": {
+         "n": 77,
+         "damage": 596,
+         "p90": 1338,
+         "most": 1755
+        },
+        "cyan3": {
+         "n": 39,
+         "damage": 668,
+         "p90": 1518,
+         "most": 1939
+        },
+        "blue1": {
+         "n": 2,
+         "damage": 392,
+         "p90": 554,
+         "most": 594
+        },
+        "blue3": {
+         "n": 2,
+         "damage": 350,
+         "p90": 468,
+         "most": 498
+        }
+       },
+       "combo_damage_p90": 1588,
+       "combo_damage_max": 4275,
+       "combo_hits_p90": 6.0,
+       "combo_hits_max": 19,
+       "combo_proration_left": 0.761,
+       "combo_3plus": 0.349,
+       "combo_damage_per_min": 8078,
+       "combo_special": 0.594,
+       "combo_ic": 0.026,
+       "ic_per_min": 0.31,
+       "busy_presses": 0.452,
+       "busy_turns": 0.447
+      },
+      {
+       "presses": {
+        "A": 0.0152,
+        "B": 0.0167,
+        "C": 0.0053,
+        "D": 0.0115
+       },
+       "presses_per_second": 3.12,
+       "jumps_per_min": 20.41,
+       "guard_ground_per_min": 12.13,
+       "guard_air_per_min": 0.25,
+       "rg_ground_per_min": 3.65,
+       "rg_air_per_min": 0.26,
+       "hit_ground_per_min": 8.39,
+       "hit_air_per_min": 2.39,
+       "rg_ground": 0.151,
+       "rg_air": 0.091,
+       "rc": 0.304,
+       "rc_chances_per_min": 0.58,
+       "rg_move": 0.872,
+       "rg_punish": 0.38,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "combos_per_min": 11.13,
+       "combo_hits": 2.36,
+       "combo_damage": 601,
+       "combo_by_resources": {
+        "red0": {
+         "n": 149,
+         "damage": 660,
+         "p90": 1232,
+         "most": 3914
+        },
+        "red1": {
+         "n": 99,
+         "damage": 570,
+         "p90": 1045,
+         "most": 2859
+        },
+        "red2": {
+         "n": 61,
+         "damage": 629,
+         "p90": 1346,
+         "most": 2886
+        },
+        "red3": {
+         "n": 34,
+         "damage": 686,
+         "p90": 1322,
+         "most": 1862
+        },
+        "cyan0": {
+         "n": 151,
+         "damage": 641,
+         "p90": 1133,
+         "most": 3611
+        },
+        "cyan1": {
+         "n": 138,
+         "damage": 567,
+         "p90": 971,
+         "most": 2768
+        },
+        "cyan2": {
+         "n": 70,
+         "damage": 581,
+         "p90": 1076,
+         "most": 2539
+        },
+        "cyan3": {
+         "n": 56,
+         "damage": 456,
+         "p90": 854,
+         "most": 1407
+        },
+        "blue0": {
+         "n": 25,
+         "damage": 771,
+         "p90": 1694,
+         "most": 2299
+        },
+        "blue1": {
+         "n": 60,
+         "damage": 575,
+         "p90": 1213,
+         "most": 1576
+        },
+        "blue2": {
+         "n": 29,
+         "damage": 447,
+         "p90": 806,
+         "most": 1180
+        },
+        "blue3": {
+         "n": 18,
+         "damage": 593,
+         "p90": 1028,
+         "most": 1391
+        }
+       },
+       "combo_damage_p90": 1162,
+       "combo_damage_max": 3914,
+       "combo_hits_p90": 4.0,
+       "combo_hits_max": 61,
+       "combo_proration_left": 0.802,
+       "combo_3plus": 0.278,
+       "combo_damage_per_min": 6694,
+       "combo_special": 0.0,
+       "combo_ic": 0.015,
+       "ic_per_min": 0.3,
+       "busy_presses": 0.54,
+       "busy_turns": 0.511
+      }
+     ],
+     "by_opponent": {
+      "nanase": [
+       1,
+       0,
+       0
+      ],
+      "mai": [
+       2,
+       0,
+       0
+      ],
+      "makoto": [
+       1,
+       0,
+       0
+      ],
+      "akane": [
+       1,
+       0,
+       0
+      ],
+      "mayu": [
+       2,
+       0,
+       0
+      ],
+      "nagamori": [
+       0,
+       1,
+       0
+      ],
+      "misaki": [
+       1,
+       0,
+       0
+      ],
+      "shiori": [
+       1,
+       3,
+       0
+      ],
+      "sayuri": [
+       2,
+       1,
+       0
+      ],
+      "nayuki": [
+       2,
+       0,
+       0
+      ],
+      "mio": [
+       1,
+       0,
+       0
+      ],
+      "exnanase": [
+       1,
+       0,
+       0
+      ],
+      "kaori": [
+       3,
+       0,
+       0
+      ],
+      "mishio": [
+       1,
+       0,
+       0
+      ],
+      "akiko": [
+       1,
+       1,
+       0
+      ],
+      "nayukib": [
+       1,
+       0,
+       0
+      ],
+      "kanna": [
+       0,
+       2,
+       0
+      ],
+      "kano": [
+       3,
+       0,
+       0
+      ]
+     },
+     "level": 4
+    },
+    "old": {
+     "win": 0.96875,
+     "loss": 0.03125,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0113,
+        "B": 0.0096,
+        "C": 0.0069,
+        "D": 0.0002
+       },
+       "presses_per_second": 1.79,
+       "jumps_per_min": 10.34,
+       "guard_ground_per_min": 2.75,
+       "guard_air_per_min": 0.02,
+       "rg_ground_per_min": 0.79,
+       "rg_air_per_min": 0.02,
+       "hit_ground_per_min": 6.07,
+       "hit_air_per_min": 0.69,
+       "rg_ground": 0.082,
+       "rg_air": 0.033,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.15,
+       "rg_move": 0.636,
+       "rg_punish": 0.515,
+       "rg_long": 0.061,
+       "rg_long_hit": 0.5,
+       "guess_623A_per_min": 0.47,
+       "guess_623A_counter": 0.211,
+       "guess_623B_per_min": 0.3,
+       "guess_623B_counter": 0.167,
+       "combos_per_min": 16.95,
+       "combo_hits": 3.33,
+       "combo_damage": 935,
+       "combo_by_resources": {
+        "red0": {
+         "n": 115,
+         "damage": 852,
+         "p90": 1635,
+         "most": 4073
+        },
+        "red1": {
+         "n": 79,
+         "damage": 761,
+         "p90": 1500,
+         "most": 1802
+        },
+        "red2": {
+         "n": 54,
+         "damage": 835,
+         "p90": 1629,
+         "most": 1946
+        },
+        "red3": {
+         "n": 30,
+         "damage": 800,
+         "p90": 1551,
+         "most": 1741
+        },
+        "cyan0": {
+         "n": 121,
+         "damage": 1095,
+         "p90": 1931,
+         "most": 3894
+        },
+        "cyan1": {
+         "n": 113,
+         "damage": 946,
+         "p90": 1654,
+         "most": 2264
+        },
+        "cyan2": {
+         "n": 74,
+         "damage": 1000,
+         "p90": 1952,
+         "most": 2221
+        },
+        "cyan3": {
+         "n": 51,
+         "damage": 1023,
+         "p90": 1711,
+         "most": 2283
+        },
+        "blue0": {
+         "n": 7,
+         "damage": 1000,
+         "p90": 1686,
+         "most": 1792
+        },
+        "blue1": {
+         "n": 18,
+         "damage": 952,
+         "p90": 1381,
+         "most": 1872
+        },
+        "blue2": {
+         "n": 11,
+         "damage": 1387,
+         "p90": 1867,
+         "most": 1886
+        },
+        "blue3": {
+         "n": 11,
+         "damage": 677,
+         "p90": 1125,
+         "most": 1462
+        }
+       },
+       "combo_damage_p90": 1763,
+       "combo_damage_max": 4073,
+       "combo_hits_p90": 7.0,
+       "combo_hits_max": 10,
+       "combo_proration_left": 0.721,
+       "combo_3plus": 0.522,
+       "combo_damage_per_min": 15856,
+       "combo_special": 0.697,
+       "combo_ic": 0.029,
+       "ic_per_min": 0.37,
+       "busy_presses": 0.546,
+       "busy_turns": 0.535
+      },
+      {
+       "presses": {
+        "A": 0.0398,
+        "B": 0.0335,
+        "C": 0.0333,
+        "D": 0.0407
+       },
+       "presses_per_second": 9.42,
+       "jumps_per_min": 19.36,
+       "guard_ground_per_min": 3.5,
+       "guard_air_per_min": 0.0,
+       "rg_ground_per_min": 0.3,
+       "rg_air_per_min": 0.0,
+       "hit_ground_per_min": 11.97,
+       "hit_air_per_min": 1.31,
+       "rg_ground": 0.019,
+       "rg_air": 0.0,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.57,
+       "rg_move": 0.667,
+       "rg_punish": 0.417,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 0.22,
+       "guess_623A_counter": 0.0,
+       "guess_623B_per_min": 0.47,
+       "guess_623B_counter": 0.105,
+       "combos_per_min": 6.84,
+       "combo_hits": 2.52,
+       "combo_damage": 909,
+       "combo_by_resources": {
+        "red0": {
+         "n": 69,
+         "damage": 963,
+         "p90": 1944,
+         "most": 2616
+        },
+        "red1": {
+         "n": 41,
+         "damage": 757,
+         "p90": 1622,
+         "most": 2209
+        },
+        "red2": {
+         "n": 25,
+         "damage": 918,
+         "p90": 1781,
+         "most": 2027
+        },
+        "red3": {
+         "n": 18,
+         "damage": 750,
+         "p90": 1404,
+         "most": 1753
+        },
+        "cyan0": {
+         "n": 32,
+         "damage": 1058,
+         "p90": 1917,
+         "most": 2923
+        },
+        "cyan1": {
+         "n": 42,
+         "damage": 893,
+         "p90": 1975,
+         "most": 2104
+        },
+        "cyan2": {
+         "n": 26,
+         "damage": 1005,
+         "p90": 1893,
+         "most": 2273
+        },
+        "cyan3": {
+         "n": 17,
+         "damage": 872,
+         "p90": 2158,
+         "most": 2800
+        },
+        "blue0": {
+         "n": 2,
+         "damage": 1080,
+         "p90": 1195,
+         "most": 1224
+        },
+        "blue1": {
+         "n": 1,
+         "damage": 358,
+         "p90": 358,
+         "most": 358
+        },
+        "blue3": {
+         "n": 3,
+         "damage": 721,
+         "p90": 1045,
+         "most": 1134
+        }
+       },
+       "combo_damage_p90": 1910,
+       "combo_damage_max": 2923,
+       "combo_hits_p90": 5.0,
+       "combo_hits_max": 22,
+       "combo_proration_left": 0.693,
+       "combo_3plus": 0.333,
+       "combo_damage_per_min": 6219,
+       "combo_special": 0.145,
+       "combo_ic": 0.0,
+       "ic_per_min": 0.0,
+       "busy_presses": 0.479,
+       "busy_turns": 0.487
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       31,
+       1,
+       0
+      ]
+     }
+    },
+    "red": {
+     "win": 0.9375,
+     "loss": 0.0625,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0101,
+        "B": 0.008,
+        "C": 0.0051,
+        "D": 0.0002
+       },
+       "presses_per_second": 1.5,
+       "jumps_per_min": 11.35,
+       "guard_ground_per_min": 2.62,
+       "guard_air_per_min": 0.06,
+       "rg_ground_per_min": 0.55,
+       "rg_air_per_min": 0.11,
+       "hit_ground_per_min": 5.96,
+       "hit_air_per_min": 1.55,
+       "rg_ground": 0.06,
+       "rg_air": 0.064,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.05,
+       "rg_move": 0.333,
+       "rg_punish": 0.143,
+       "rg_long": 0.024,
+       "rg_long_hit": 1.0,
+       "guess_623A_per_min": 0.58,
+       "guess_623A_counter": 0.162,
+       "guess_623B_per_min": 0.34,
+       "guess_623B_counter": 0.318,
+       "combos_per_min": 11.96,
+       "combo_hits": 3.4,
+       "combo_damage": 913,
+       "combo_by_resources": {
+        "red0": {
+         "n": 99,
+         "damage": 841,
+         "p90": 1716,
+         "most": 2143
+        },
+        "red1": {
+         "n": 75,
+         "damage": 769,
+         "p90": 1511,
+         "most": 2612
+        },
+        "red2": {
+         "n": 49,
+         "damage": 723,
+         "p90": 1349,
+         "most": 2726
+        },
+        "red3": {
+         "n": 50,
+         "damage": 775,
+         "p90": 1545,
+         "most": 1982
+        },
+        "cyan0": {
+         "n": 112,
+         "damage": 1045,
+         "p90": 1958,
+         "most": 2494
+        },
+        "cyan1": {
+         "n": 153,
+         "damage": 949,
+         "p90": 1749,
+         "most": 2105
+        },
+        "cyan2": {
+         "n": 84,
+         "damage": 930,
+         "p90": 1836,
+         "most": 3263
+        },
+        "cyan3": {
+         "n": 55,
+         "damage": 950,
+         "p90": 1872,
+         "most": 2595
+        },
+        "blue0": {
+         "n": 12,
+         "damage": 1085,
+         "p90": 1906,
+         "most": 2073
+        },
+        "blue1": {
+         "n": 24,
+         "damage": 1080,
+         "p90": 2328,
+         "most": 2950
+        },
+        "blue2": {
+         "n": 30,
+         "damage": 943,
+         "p90": 1863,
+         "most": 2156
+        },
+        "blue3": {
+         "n": 20,
+         "damage": 1093,
+         "p90": 1852,
+         "most": 1997
+        }
+       },
+       "combo_damage_p90": 1847,
+       "combo_damage_max": 3263,
+       "combo_hits_p90": 7.0,
+       "combo_hits_max": 19,
+       "combo_proration_left": 0.725,
+       "combo_3plus": 0.524,
+       "combo_damage_per_min": 10925,
+       "combo_special": 0.648,
+       "combo_ic": 0.017,
+       "ic_per_min": 0.14,
+       "busy_presses": 0.456,
+       "busy_turns": 0.439
+      },
+      {
+       "presses": {
+        "A": 0.0824,
+        "B": 0.1115,
+        "C": 0.1911,
+        "D": 0.0167
+       },
+       "presses_per_second": 25.71,
+       "jumps_per_min": 25.98,
+       "guard_ground_per_min": 0.27,
+       "guard_air_per_min": 0.0,
+       "rg_ground_per_min": 0.14,
+       "rg_air_per_min": 0.0,
+       "hit_ground_per_min": 7.06,
+       "hit_air_per_min": 2.76,
+       "rg_ground": 0.019,
+       "rg_air": 0.0,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.17,
+       "rg_move": 0.444,
+       "rg_punish": 0.333,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 3.04,
+       "guess_623A_counter": 0.082,
+       "guess_623B_per_min": 4.91,
+       "guess_623B_counter": 0.169,
+       "combos_per_min": 7.57,
+       "combo_hits": 3.04,
+       "combo_damage": 967,
+       "combo_by_resources": {
+        "red0": {
+         "n": 293,
+         "damage": 840,
+         "p90": 1739,
+         "most": 4479
+        },
+        "red1": {
+         "n": 55,
+         "damage": 933,
+         "p90": 2079,
+         "most": 3944
+        },
+        "cyan0": {
+         "n": 107,
+         "damage": 1247,
+         "p90": 2696,
+         "most": 4749
+        },
+        "cyan1": {
+         "n": 28,
+         "damage": 1296,
+         "p90": 3276,
+         "most": 3722
+        }
+       },
+       "combo_damage_p90": 2175,
+       "combo_damage_max": 4749,
+       "combo_hits_p90": 7.0,
+       "combo_hits_max": 19,
+       "combo_proration_left": 0.765,
+       "combo_3plus": 0.418,
+       "combo_damage_per_min": 7325,
+       "combo_special": 0.737,
+       "combo_ic": 0.302,
+       "ic_per_min": 2.02,
+       "busy_presses": 0.585,
+       "busy_turns": 0.627
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       30,
+       2,
+       0
+      ]
+     },
+     "plans": {
+      "n": 485,
+      "potential": 516.6288659793814,
+      "own": 396.4865979381443,
+      "library": 0.18762886597938144,
+      "big": 0.01443298969072165
+     }
+    }
+   }
   }
  ]
 }

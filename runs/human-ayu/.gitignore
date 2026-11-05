@@ -5,3 +5,5 @@ combo-red/*.zip
 agent-red/*.zip
 combo-red2/*.zip
 combo-red3/*.zip
+# Made from the game's .pat files on each machine (framedata.py): no game data here
+framedata.json

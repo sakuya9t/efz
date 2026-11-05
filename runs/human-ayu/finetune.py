@@ -78,6 +78,9 @@ def parse():
     p.add_argument('--budget', type=float, default=6e7)
     p.add_argument('--minutes', type=float, default=5)
     p.add_argument('--eval', type=int, default=48)
+    p.add_argument('--cpu-chars', default='tiers', choices=('tiers', 'random'),
+                   help="the level-4 CPU's characters in evaluations: a third per tier "
+                        "(evaluate.TIERS) or drawn")
     p.add_argument('--lr', type=float, default=1e-4)
     p.add_argument('--ent-coef', type=float, default=0.005)
     p.add_argument('--torch-threads', type=int, default=8)
@@ -132,7 +135,7 @@ def evaluate(args, model_path, level):
     a.data, a.minutes = args.data, args.minutes
     me = ev.Agent(model_path)
     out = {}
-    a.chars = ('ayu', 'random')
+    a.chars = ('ayu', args.cpu_chars if level == 4 else 'random')  # tiers: level 4's
     out['cpu'] = ev.play(a, me, 'cpu', args.eval, level)
     out['cpu']['level'] = level
     if args.old and os.path.exists(args.old):
@@ -167,7 +170,9 @@ def show(results):
                      f"RC {s['rc']}, after RG move/hit {s['rg_move']}/{s['rg_punish']}, "
                      f"combo avg/p90/max {s.get('combo_damage')}/{s.get('combo_damage_p90')}/"
                      f"{s.get('combo_damage_max')} IC {s.get('combo_ic')}"
-                     + (f", taken {r['sides'][1].get('combo_damage_per_min')}/min" if k == 'red' else ''))
+                     + (f", taken {r['sides'][1].get('combo_damage_per_min')}/min" if k == 'red' else '')
+                     + (' [' + ', '.join(f"{t} {v['win']:.0%}" for t, v in r['by_tier'].items()) + ']'
+                        if k == 'cpu' and r.get('by_tier') else ''))
     return ' | '.join(parts)
 
 
