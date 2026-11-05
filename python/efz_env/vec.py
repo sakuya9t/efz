@@ -325,9 +325,11 @@ class EfzVecEnv:
         return buf.raw
 
     def load_state(self, index, state):
+        """Loads a save_state() of this process (another process's only where the
+        library is at the same address: ValueError otherwise)."""
         self._finish()
         if self._lib.efz_env_load_state(self._h, index, state, len(state)) != 0:
-            raise ValueError('not a save state of this library')
+            raise ValueError(f'efz_env: {self._lib.efz_env_error(self._h).decode(errors="replace")}')
 
     def render(self, index=0):
         """The last frame environment `index` drew, (240, 320, 3) uint8 RGB. Needs

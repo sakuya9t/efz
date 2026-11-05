@@ -22,7 +22,10 @@ prior) to PPO's loss, so that what it learns by reward stays close to how the pr
 plays (KL-regularised RL, as in human-regularised self-play). SB3's PPO has an entropy
 bonus and no such term, so it goes in through the entropy evaluate_actions returns:
 entropy - (coef / ent_coef) * KL, whose ent_coef-weighted loss is the entropy bonus
-plus coef * KL. ent_coef must not be 0. The prior isn't saved with the policy.
+plus coef * KL. ent_coef must not be 0. The prior isn't saved with the policy. With a
+`combo` policy too, the pull is toward it instead while the policy's own combo runs (its
+combo counter, self_combo_hits, above 0 in what it sees): a teacher of combos (a combo
+master trained on combo trials), people's play elsewhere.
 """
 
 import numpy as np
@@ -34,6 +37,7 @@ from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 OBS_DIM = 168
 SELF_ACTION, OPP_ACTION = 18, 50
 SELF_CHAR, OPP_CHAR = 34, 66
+SELF_COMBO_HITS = 30
 DROPPED = (0, 36, 68)  # frame, self_cpu, opp_cpu
 ACTIONS = 1024  # action numbers are kept below this
 CHARACTERS = 25
@@ -91,16 +95,20 @@ class EfzPolicy(ActorCriticPolicy):
         for extractor in (self.pi_features_extractor, self.vf_features_extractor):
             extractor.set_scale(mean, std)
 
-    def set_prior(self, prior, coef, ent_coef):
+    def set_prior(self, prior, coef, ent_coef, combo=None):
         """Pulls training toward `prior` (a policy over the same observations, frozen
-        here) by coef * KL(self || prior); ent_coef is PPO's."""
+        here) by coef * KL(self || prior); ent_coef is PPO's. `combo`: the policy to pull
+        toward instead during the policy's own combos."""
         if ent_coef <= 0:
             raise ValueError('the KL goes in through the entropy term: ent_coef > 0')
-        prior.set_training_mode(False)
-        for p in prior.parameters():
-            p.requires_grad_(False)
+        for policy in (prior, combo):
+            if policy is not None:
+                policy.set_training_mode(False)
+                for p in policy.parameters():
+                    p.requires_grad_(False)
         # Kept out of the modules: neither trained, nor saved with this policy.
         self.__dict__['prior'] = prior
+        self.__dict__['combo_prior'] = combo
         self.__dict__['prior_scale'] = coef / ent_coef
         self.__dict__['prior_kl'] = float('nan')
 
@@ -134,6 +142,11 @@ class EfzPolicy(ActorCriticPolicy):
         logp = distribution.distribution.logits  # normalised: log-probabilities
         with th.no_grad():
             prior_logp = prior.logits(obs)
+            combo = self.__dict__.get('combo_prior')
+            if combo is not None:
+                in_combo = obs[:, SELF_COMBO_HITS] > 0
+                if in_combo.any():
+                    prior_logp = th.where(in_combo[:, None], combo.logits(obs), prior_logp)
         kl = (logp.exp() * (logp - prior_logp)).sum(-1)
         self.__dict__['prior_kl'] = float(kl.mean().detach())
         return values, log_prob, entropy - self.__dict__['prior_scale'] * kl

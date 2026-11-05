@@ -205,7 +205,10 @@ EFZ_ENV_API int efz_env_step_async(EfzEnv* env, const uint8_t* actions);
 EFZ_ENV_API int efz_env_step_wait(EfzEnv* env);
 
 /* Save states: the whole game of one environment, to go back to (search, curricula).
- * A state loads into any environment of any batch in the same process. */
+ * A state loads into any environment of any batch in the same process. Another process's
+ * is refused (-1, efz_env_error says why) unless the library is loaded at the same address
+ * there: the game's objects hold the addresses of its code. To keep a position across
+ * processes, keep how to reach it (a replay and a step: efz_env_play). */
 EFZ_ENV_API size_t efz_env_state_size(EfzEnv* env, int32_t index);
 EFZ_ENV_API size_t efz_env_save_state(EfzEnv* env, int32_t index, void* out, size_t size);
 EFZ_ENV_API int efz_env_load_state(EfzEnv* env, int32_t index, const void* state, size_t size);

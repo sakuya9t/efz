@@ -416,8 +416,18 @@ struct StateHeader {
     uint32_t magic;
     uint32_t version;
     uint64_t arenaSize;
+    uint64_t base; // where the library is loaded (LibraryBase): what the state's pointers assume
     Episode ep;
 };
+
+// The game's objects in an arena hold the addresses of their C++ classes' tables, which
+// are the library's: a state is only good where the library is loaded at the same address
+// (in the process that saved it; in another only by chance, as address randomisation
+// places it).
+uint64_t LibraryBase()
+{
+    return (uint64_t)(uintptr_t)&efz_env_version;
+}
 
 } // namespace
 
@@ -1359,6 +1369,7 @@ size_t efz_env_save_state(EfzEnv* env, int32_t index, void* out, size_t size)
     h.magic = kStateMagic;
     h.version = EFZ_ENV_VERSION;
     h.arenaSize = need - sizeof(StateHeader);
+    h.base = LibraryBase();
     h.ep = s.ep;
     memcpy(out, &h, sizeof(h));
     memcpy((char*)out + sizeof(h), s.arena, (size_t)h.arenaSize);
@@ -1372,8 +1383,15 @@ int efz_env_load_state(EfzEnv* env, int32_t index, const void* state, size_t siz
     StateHeader h;
     memcpy(&h, state, sizeof(h));
     if (h.magic != kStateMagic || h.version != EFZ_ENV_VERSION ||
-        h.arenaSize + sizeof(StateHeader) != size)
+        h.arenaSize + sizeof(StateHeader) != size) {
+        env->SetError("not a save state of this library");
         return -1;
+    }
+    if (h.base != LibraryBase()) {
+        env->SetError("the state was saved where the library was loaded at another address "
+                      "(another process): its objects' pointers would be wrong here");
+        return -1;
+    }
     Finish(env);
     int stackMark;
     SetStack(&stackMark);

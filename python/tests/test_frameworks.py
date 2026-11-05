@@ -167,6 +167,21 @@ class Playback(unittest.TestCase):
             self.assertEqual(env.info['replay'][0], 0)
             env.close()
 
+    def test_states_of_another_process_are_refused(self):
+        # A state's objects point into the library: one saved where it was loaded at
+        # another address (another process) is refused, not loaded to crash.
+        import struct
+        env = EfzVecEnv(DATA, 1, num_threads=1)
+        env.reset()
+        state = env.save_state(0)
+        env.load_state(0, state)
+        base = struct.unpack_from('<Q', state, 16)[0]  # StateHeader.base
+        moved = bytearray(state)
+        struct.pack_into('<Q', moved, 16, base + 0x10000)
+        with self.assertRaisesRegex(ValueError, 'another address'):
+            env.load_state(0, bytes(moved))
+        env.close()
+
     def test_refuses_what_isnt_a_replay(self):
         env = EfzVecEnv(DATA, 1, num_threads=1)
         with tempfile.TemporaryDirectory() as tmp:
@@ -322,6 +337,7 @@ class StableBaselines3(unittest.TestCase):
     def test_history_and_prior(self):
         # Observations with the input history; EfzPolicy pulled toward a prior; an
         # opponent without history (the 168 features) among ones with.
+        import torch
         from stable_baselines3 import PPO
         from efz_env.history import FEATURES
         from efz_env.policy import EfzPolicy, policy_kwargs
@@ -343,6 +359,20 @@ class StableBaselines3(unittest.TestCase):
         model.policy.set_prior(prior.policy, coef=0.1, ent_coef=0.01)
         model.learn(64)
         self.assertGreaterEqual(model.policy.prior_kl, 0.0)
+        # A second prior for the policy's own combos: in combo states, the KL is to it.
+        combo = PPO(EfzPolicy, venv, **kw)
+        model.policy.set_prior(prior.policy, coef=0.1, ent_coef=0.01, combo=combo.policy)
+        x = model.policy.obs_to_tensor(obs[:1])[0].repeat(2, 1)
+        x[1, 30] = 1 / 30  # self_combo_hits: in a combo
+        a = torch.zeros(2, dtype=torch.long)
+        _, _, ent = model.policy.evaluate_actions(x, a)
+        logp = model.policy.logits(x)
+        for row, ref in ((0, prior), (1, combo)):
+            p = ref.policy.logits(x[row:row + 1])
+            kl = (logp[row].exp() * (logp[row] - p[0])).sum()
+            h = -(logp[row].exp() * logp[row]).sum()
+            self.assertAlmostEqual(float(ent[row]), float(h - 10 * kl), places=4)
+        model.learn(64)
         with tempfile.TemporaryDirectory() as tmp:  # saved and loaded without the prior
             model.save(os.path.join(tmp, 'm.zip'))
             loaded = PPO.load(os.path.join(tmp, 'm.zip'), device='cpu')
