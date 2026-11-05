@@ -189,11 +189,11 @@ combos): the proration left at the end of combos of 3 hits or more is 64% for pe
 (the red team of `combo-red3/`, with the juggle helper and a super cost of 0.1 a bar;
 `combo-red2/`, with 0.5 a bar, fell behind with 3 bars and was stopped at 15M).
 
-Phase 2 against the lookahead red team, at 18.1M steps: it wins 75% against the level-4
-CPU (random characters), 97% against the curriculum agent and 94% against the red team,
-which deals it 7,325 a minute in combos. Red team 3 at 20.1M: 1,090 on people's resources,
-blue RF and 3 bars 1,344 / 3,689 / 4,386 (average / 90th percentile / most): its 90th
-percentile is above the 12M red team's, its average not yet.
+Phase 2 against the lookahead red team, to 30.2M steps: it wins 66% against the level-4
+CPU (random characters), 100% against the curriculum agent and 94% against the red team.
+Red team 3, to 24.2M: 1,097 / 3,064 / 4,143 on people's resources (average / 90th
+percentile / most; the 12M red team 1,068 / 2,877 / 4,143), blue RF and 3 bars 1,359 /
+3,700 / 4,386.
 
 ## Defence and tactics
 
@@ -232,6 +232,60 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   plays a third of the matches against each tier and reports the wins by tier;
   `finetune.py` evaluates level 4 that way (`--cpu-chars`).
 
+## Other characters: clones, exploiters, a league
+
+From 5 November the scripts take any character: `dataset.py --char`, `bc.py --char`,
+`people.py --char`, and `finetune.py --char` with `--vs MODEL:CHAR` (frozen opponents of
+other characters, playing `--vs-share` of the matches against agents), `--focus` (a
+shaping reward for what an opponent is meant to be good at, `focus.py`: `setup`, a move
+in free time that puts out an object; `charge`, Kano's charge moves in free time) and
+`--stop-win`. Each character's run is in its own folder (`mizukab/`, `kano/`...): people's
+measures (`people.json`), the clone with a 14-frame reaction time (`bc-d14.zip`, as
+Ayu's), and the exploiter (`exploiter/`), trained against a frozen copy of the agent
+(`target.zip`: `agent-red` at 22.2M steps), a quarter of its matches against the CPU,
+with its focus and a KL pull toward its clone. The checkpoints are on Hugging Face.
+
+| Character | People's sides (in sync) | Clone: held-out nll, press recall | People's free time used for | Clone vs the agent | Exploiter vs the agent |
+|---|---|---|---|---|---|
+| Ayu (`bc-d14`) | 1,908 | 0.349, 3% | setups 3% | | |
+| Mizuka (`mizukab`) | 2,573 | 0.320, 8.7% | setups 31% | 0% | 84% after 3M steps (focus: setup) |
+| Kano | 2,963 | 0.295, 9.8% | charge 7%, setups 4% | 28% (16% cut) | 100% after 1M steps (focus: charge) |
+
+Both exploiters found holes in the agent within a few million steps:
+
+- **Mizuka** wins by trap pressure: she uses 43% of her free windows for setups (her
+  clone 18%), and after her guarded strings the agent is a median of 10 frames minus
+  (-1 against the clone); the agent guards 17 times a minute (7) and is still hit 13
+  times, mostly just holding guard (60% of the gaps, trapped 24%). The agent deals 5,957
+  a minute, she 8,230. Replays: EFZ's REPLAY menu, page 1, slots 7-9 (two of the agent's
+  wins, then one of hers).
+- **Kano** stopped guarding (6 a minute, her clone 17) and attacks, sets up and charges
+  in free time (18% of it); the agent is knocked down 5.4 times a minute and hit in the
+  air 2.8, and deals 4,749 a minute to her 7,972. She also beats the level-3 CPU 72%.
+
+The agent had met other characters only as the CPU, which neither sets traps nor zones
+like this. `agent-league/` continues it from `agent-red` at 30.2M against the league: the
+CPU, the clone, a frozen copy, the curriculum agent, the team, red team 3 with the
+lookahead, and the two exploiters (40% of the matches against agents; from 38.3M shared
+between them by `finetune.py --pfsp 2`, (1 - the last win) squared, so mostly Kano's).
+To 50.4M steps, then 64 matches each on the same seeds (`agent-league/compare/`):
+
+| Agent | Level-4 CPU: Kanna / Ayu, Mishio / the rest | Mizuka's exploiter | Kano's exploiter |
+|---|---|---|---|
+| `agent-red`, 30.2M | 0% / 67% / 81% | 33% | 16% |
+| `agent-league`, 50.4M | 0% / 67% / 86% | **69%** | 19% |
+
+Mizuka's hole closed (it deals her 8,257 a minute, from 6,504; her strings leave it -6, from
+-9), keeping people's rates (1.6 presses a second, 13 jumps and 10 guards a minute).
+Kano's didn't: it still jumps 19 times a minute against her and is hit in the air 2.4
+times and knocked down 5.5 (her anti-airs and okizeme), a change within the noise; its
+per-chunk evaluations against her stayed at 3-19% throughout. The level-4 CPU's Kanna is
+still never beaten. The evaluations of 32 matches swing by +-8%: the one against Mizuka
+went 31, 41, 34, 50, 62, 34, 44, 25, 59, 75% over the chunks.
+
+Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
+clones were stopped (the system ran short of memory) and are next.
+
 ## The models
 
 On Hugging Face, https://huggingface.co/sakuya9t/efz, under the same paths:
@@ -245,9 +299,10 @@ the combo master's checkpoints are only there.
 |---|---|
 | `dataset.py` | replays to data: per Ayu side, the views, inputs and rewards of each step |
 | `bc.py` | the clone: the 45 actions people's inputs come to each frame, and the critic from their matches' returns; `--delay` for a reaction time, `--players` for one player's clone (from the clone of everyone, `--init`) |
-| `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones |
+| `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones; any character (`--char`), opponents of other characters (`--vs`, shared by `--pfsp`), a focus (`--focus`), `--stop-win` |
 | `evaluate.py` | matches to the end, with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move, damage taken, and `tactics.py`'s); `--chars ayu tiers` for the level-4 CPU's tiers; plays language models too (`runs/llm-ayu`) |
 | `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up and free time, both ways |
+| `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time |
 | `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames (`framedata.json`) |
 | `people.py` | the same measures of people, overall, by opponent and by player |
 | `compare.py` | people and agents side by side, as the tables here |
