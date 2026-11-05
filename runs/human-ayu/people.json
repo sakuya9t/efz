@@ -28,7 +28,21 @@
   "guess_623A_per_min": 0.25,
   "guess_623A_counter": 0.193,
   "guess_623B_per_min": 0.35,
-  "guess_623B_counter": 0.197
+  "guess_623B_counter": 0.197,
+  "combos_per_min": 7.01,
+  "combo_hits": 3.93,
+  "combo_damage": 970,
+  "combo_damage_p90": 2357,
+  "combo_damage_max": 7421,
+  "combo_hits_p90": 10.0,
+  "combo_hits_max": 44,
+  "combo_3plus": 0.394,
+  "combo_damage_per_min": 6796,
+  "combo_special": 0.444,
+  "combo_ic": 0.165,
+  "ic_per_min": 0.9,
+  "busy_presses": 0.389,
+  "busy_turns": 0.374
  },
  "by_opponent": {
   "akane": {
@@ -57,7 +71,21 @@
    "guess_623A_per_min": 0.26,
    "guess_623A_counter": 0.222,
    "guess_623B_per_min": 0.46,
-   "guess_623B_counter": 0.304
+   "guess_623B_counter": 0.304,
+   "combos_per_min": 6.31,
+   "combo_hits": 3.54,
+   "combo_damage": 904,
+   "combo_damage_p90": 2289,
+   "combo_damage_max": 5776,
+   "combo_hits_p90": 10.0,
+   "combo_hits_max": 30,
+   "combo_3plus": 0.333,
+   "combo_damage_per_min": 5710,
+   "combo_special": 0.466,
+   "combo_ic": 0.194,
+   "ic_per_min": 0.99,
+   "busy_presses": 0.392,
+   "busy_turns": 0.367
   },
   "akiko": {
    "presses": {
@@ -85,7 +113,21 @@
    "guess_623A_per_min": 0.4,
    "guess_623A_counter": 0.241,
    "guess_623B_per_min": 0.59,
-   "guess_623B_counter": 0.192
+   "guess_623B_counter": 0.192,
+   "combos_per_min": 6.32,
+   "combo_hits": 2.98,
+   "combo_damage": 806,
+   "combo_damage_p90": 1744,
+   "combo_damage_max": 5014,
+   "combo_hits_p90": 7.0,
+   "combo_hits_max": 29,
+   "combo_3plus": 0.312,
+   "combo_damage_per_min": 5097,
+   "combo_special": 0.399,
+   "combo_ic": 0.085,
+   "ic_per_min": 0.48,
+   "busy_presses": 0.407,
+   "busy_turns": 0.373
   },
   "ayu": {
    "presses": {
@@ -113,7 +155,21 @@
    "guess_623A_per_min": 0.44,
    "guess_623A_counter": 0.265,
    "guess_623B_per_min": 0.24,
-   "guess_623B_counter": 0.135
+   "guess_623B_counter": 0.135,
+   "combos_per_min": 8.38,
+   "combo_hits": 3.37,
+   "combo_damage": 833,
+   "combo_damage_p90": 1995,
+   "combo_damage_max": 5786,
+   "combo_hits_p90": 8.0,
+   "combo_hits_max": 43,
+   "combo_3plus": 0.369,
+   "combo_damage_per_min": 6980,
+   "combo_special": 0.402,
+   "combo_ic": 0.136,
+   "ic_per_min": 0.75,
+   "busy_presses": 0.363,
+   "busy_turns": 0.384
   },
   "exnanase": {
    "presses": {
@@ -141,7 +197,21 @@
    "guess_623A_per_min": 0.2,
    "guess_623A_counter": 0.087,
    "guess_623B_per_min": 0.33,
-   "guess_623B_counter": 0.1
+   "guess_623B_counter": 0.1,
+   "combos_per_min": 7.85,
+   "combo_hits": 4.01,
+   "combo_damage": 962,
+   "combo_damage_p90": 2230,
+   "combo_damage_max": 6196,
+   "combo_hits_p90": 10.0,
+   "combo_hits_max": 29,
+   "combo_3plus": 0.425,
+   "combo_damage_per_min": 7559,
+   "combo_special": 0.331,
+   "combo_ic": 0.122,
+   "ic_per_min": 0.79,
+   "busy_presses": 0.396,
+   "busy_turns": 0.403
   },
   "ikumi": {
    "presses": {
@@ -169,7 +239,21 @@
    "guess_623A_per_min": 0.07,
    "guess_623A_counter": 0.2,
    "guess_623B_per_min": 0.2,
-   "guess_623B_counter": 0.29
+   "guess_623B_counter": 0.29,
+   "combos_per_min": 5.91,
+   "combo_hits": 4.63,
+   "combo_damage": 1090,
+   "combo_damage_p90": 2698,
+   "combo_damage_max": 7079,
+   "combo_hits_p90": 14.0,
+   "combo_hits_max": 32,
+   "combo_3plus": 0.423,
+   "combo_damage_per_min": 6441,
+   "combo_special": 0.526,
+   "combo_ic": 0.176,
+   "ic_per_min": 0.92,
+   "busy_presses": 0.373,
+   "busy_turns": 0.373
   },
   "kanna": {
    "presses": {
@@ -197,7 +281,21 @@
    "guess_623A_per_min": 0.0,
    "guess_623A_counter": null,
    "guess_623B_per_min": 11.23,
-   "guess_623B_counter": 0.0
+   "guess_623B_counter": 0.0,
+   "combos_per_min": 5.88,
+   "combo_hits": 2.0,
+   "combo_damage": 238,
+   "combo_damage_p90": 370,
+   "combo_damage_max": 698,
+   "combo_hits_p90": 3.0,
+   "combo_hits_max": 3,
+   "combo_3plus": 0.364,
+   "combo_damage_per_min": 1402,
+   "combo_special": 0.429,
+   "combo_ic": 0.0,
+   "ic_per_min": 0.0,
+   "busy_presses": 0.374,
+   "busy_turns": 0.332
   },
   "kano": {
    "presses": {
@@ -225,7 +323,21 @@
    "guess_623A_per_min": 0.15,
    "guess_623A_counter": 0.182,
    "guess_623B_per_min": 0.36,
-   "guess_623B_counter": 0.038
+   "guess_623B_counter": 0.038,
+   "combos_per_min": 5.71,
+   "combo_hits": 5.51,
+   "combo_damage": 1252,
+   "combo_damage_p90": 2962,
+   "combo_damage_max": 5576,
+   "combo_hits_p90": 17.0,
+   "combo_hits_max": 29,
+   "combo_3plus": 0.481,
+   "combo_damage_per_min": 7147,
+   "combo_special": 0.654,
+   "combo_ic": 0.244,
+   "ic_per_min": 1.37,
+   "busy_presses": 0.358,
+   "busy_turns": 0.309
   },
   "kaori": {
    "presses": {
@@ -253,7 +365,21 @@
    "guess_623A_per_min": 0.17,
    "guess_623A_counter": 0.208,
    "guess_623B_per_min": 0.27,
-   "guess_623B_counter": 0.139
+   "guess_623B_counter": 0.139,
+   "combos_per_min": 7.98,
+   "combo_hits": 4.24,
+   "combo_damage": 981,
+   "combo_damage_p90": 2477,
+   "combo_damage_max": 6220,
+   "combo_hits_p90": 12.0,
+   "combo_hits_max": 37,
+   "combo_3plus": 0.393,
+   "combo_damage_per_min": 7829,
+   "combo_special": 0.445,
+   "combo_ic": 0.202,
+   "ic_per_min": 1.21,
+   "busy_presses": 0.371,
+   "busy_turns": 0.407
   },
   "mai": {
    "presses": {
@@ -281,7 +407,21 @@
    "guess_623A_per_min": 0.17,
    "guess_623A_counter": 0.2,
    "guess_623B_per_min": 0.38,
-   "guess_623B_counter": 0.093
+   "guess_623B_counter": 0.093,
+   "combos_per_min": 5.38,
+   "combo_hits": 4.78,
+   "combo_damage": 1164,
+   "combo_damage_p90": 2898,
+   "combo_damage_max": 6601,
+   "combo_hits_p90": 14.0,
+   "combo_hits_max": 32,
+   "combo_3plus": 0.455,
+   "combo_damage_per_min": 6263,
+   "combo_special": 0.472,
+   "combo_ic": 0.201,
+   "ic_per_min": 0.98,
+   "busy_presses": 0.406,
+   "busy_turns": 0.359
   },
   "makoto": {
    "presses": {
@@ -309,7 +449,21 @@
    "guess_623A_per_min": 0.21,
    "guess_623A_counter": 0.192,
    "guess_623B_per_min": 0.34,
-   "guess_623B_counter": 0.357
+   "guess_623B_counter": 0.357,
+   "combos_per_min": 6.94,
+   "combo_hits": 4.33,
+   "combo_damage": 1066,
+   "combo_damage_p90": 2634,
+   "combo_damage_max": 6235,
+   "combo_hits_p90": 11.0,
+   "combo_hits_max": 31,
+   "combo_3plus": 0.424,
+   "combo_damage_per_min": 7395,
+   "combo_special": 0.54,
+   "combo_ic": 0.22,
+   "ic_per_min": 1.21,
+   "busy_presses": 0.397,
+   "busy_turns": 0.377
   },
   "mayu": {
    "presses": {
@@ -337,7 +491,21 @@
    "guess_623A_per_min": 0.34,
    "guess_623A_counter": 0.172,
    "guess_623B_per_min": 0.36,
-   "guess_623B_counter": 0.248
+   "guess_623B_counter": 0.248,
+   "combos_per_min": 6.53,
+   "combo_hits": 3.36,
+   "combo_damage": 901,
+   "combo_damage_p90": 2102,
+   "combo_damage_max": 5742,
+   "combo_hits_p90": 9.0,
+   "combo_hits_max": 38,
+   "combo_3plus": 0.358,
+   "combo_damage_per_min": 5879,
+   "combo_special": 0.45,
+   "combo_ic": 0.135,
+   "ic_per_min": 0.73,
+   "busy_presses": 0.396,
+   "busy_turns": 0.395
   },
   "minagi": {
    "presses": {
@@ -365,7 +533,21 @@
    "guess_623A_per_min": 0.12,
    "guess_623A_counter": 0.0,
    "guess_623B_per_min": 0.23,
-   "guess_623B_counter": 0.25
+   "guess_623B_counter": 0.25,
+   "combos_per_min": 7.13,
+   "combo_hits": 4.12,
+   "combo_damage": 1005,
+   "combo_damage_p90": 2541,
+   "combo_damage_max": 4716,
+   "combo_hits_p90": 11.0,
+   "combo_hits_max": 21,
+   "combo_3plus": 0.412,
+   "combo_damage_per_min": 7164,
+   "combo_special": 0.55,
+   "combo_ic": 0.221,
+   "ic_per_min": 1.3,
+   "busy_presses": 0.371,
+   "busy_turns": 0.371
   },
   "mio": {
    "presses": {
@@ -393,7 +575,21 @@
    "guess_623A_per_min": 0.14,
    "guess_623A_counter": 0.184,
    "guess_623B_per_min": 0.23,
-   "guess_623B_counter": 0.21
+   "guess_623B_counter": 0.21,
+   "combos_per_min": 6.06,
+   "combo_hits": 4.88,
+   "combo_damage": 1127,
+   "combo_damage_p90": 2737,
+   "combo_damage_max": 5737,
+   "combo_hits_p90": 14.0,
+   "combo_hits_max": 29,
+   "combo_3plus": 0.463,
+   "combo_damage_per_min": 6829,
+   "combo_special": 0.456,
+   "combo_ic": 0.159,
+   "ic_per_min": 0.86,
+   "busy_presses": 0.379,
+   "busy_turns": 0.372
   },
   "misaki": {
    "presses": {
@@ -421,7 +617,21 @@
    "guess_623A_per_min": 0.23,
    "guess_623A_counter": 0.238,
    "guess_623B_per_min": 0.39,
-   "guess_623B_counter": 0.371
+   "guess_623B_counter": 0.371,
+   "combos_per_min": 6.49,
+   "combo_hits": 5.27,
+   "combo_damage": 1202,
+   "combo_damage_p90": 2940,
+   "combo_damage_max": 6952,
+   "combo_hits_p90": 17.0,
+   "combo_hits_max": 32,
+   "combo_3plus": 0.474,
+   "combo_damage_per_min": 7798,
+   "combo_special": 0.663,
+   "combo_ic": 0.213,
+   "ic_per_min": 1.12,
+   "busy_presses": 0.395,
+   "busy_turns": 0.384
   },
   "mishio": {
    "presses": {
@@ -449,7 +659,21 @@
    "guess_623A_per_min": 0.36,
    "guess_623A_counter": 0.158,
    "guess_623B_per_min": 0.49,
-   "guess_623B_counter": 0.156
+   "guess_623B_counter": 0.156,
+   "combos_per_min": 8.93,
+   "combo_hits": 3.52,
+   "combo_damage": 894,
+   "combo_damage_p90": 2170,
+   "combo_damage_max": 7421,
+   "combo_hits_p90": 9.0,
+   "combo_hits_max": 34,
+   "combo_3plus": 0.359,
+   "combo_damage_per_min": 7977,
+   "combo_special": 0.388,
+   "combo_ic": 0.128,
+   "ic_per_min": 0.83,
+   "busy_presses": 0.442,
+   "busy_turns": 0.399
   },
   "misuzu": {
    "presses": {
@@ -477,7 +701,21 @@
    "guess_623A_per_min": 0.26,
    "guess_623A_counter": 0.283,
    "guess_623B_per_min": 0.23,
-   "guess_623B_counter": 0.149
+   "guess_623B_counter": 0.149,
+   "combos_per_min": 6.43,
+   "combo_hits": 4.04,
+   "combo_damage": 1016,
+   "combo_damage_p90": 2334,
+   "combo_damage_max": 6552,
+   "combo_hits_p90": 10.0,
+   "combo_hits_max": 31,
+   "combo_3plus": 0.426,
+   "combo_damage_per_min": 6532,
+   "combo_special": 0.502,
+   "combo_ic": 0.162,
+   "ic_per_min": 0.83,
+   "busy_presses": 0.377,
+   "busy_turns": 0.344
   },
   "mizukab": {
    "presses": {
@@ -505,7 +743,21 @@
    "guess_623A_per_min": 0.21,
    "guess_623A_counter": 0.222,
    "guess_623B_per_min": 0.47,
-   "guess_623B_counter": 0.325
+   "guess_623B_counter": 0.325,
+   "combos_per_min": 6.82,
+   "combo_hits": 3.94,
+   "combo_damage": 966,
+   "combo_damage_p90": 2284,
+   "combo_damage_max": 5068,
+   "combo_hits_p90": 10.0,
+   "combo_hits_max": 29,
+   "combo_3plus": 0.414,
+   "combo_damage_per_min": 6590,
+   "combo_special": 0.458,
+   "combo_ic": 0.19,
+   "ic_per_min": 0.95,
+   "busy_presses": 0.36,
+   "busy_turns": 0.339
   },
   "nagamori": {
    "presses": {
@@ -533,7 +785,21 @@
    "guess_623A_per_min": 0.24,
    "guess_623A_counter": 0.25,
    "guess_623B_per_min": 0.45,
-   "guess_623B_counter": 0.308
+   "guess_623B_counter": 0.308,
+   "combos_per_min": 6.92,
+   "combo_hits": 4.29,
+   "combo_damage": 1059,
+   "combo_damage_p90": 2848,
+   "combo_damage_max": 5253,
+   "combo_hits_p90": 13.0,
+   "combo_hits_max": 28,
+   "combo_3plus": 0.393,
+   "combo_damage_per_min": 7331,
+   "combo_special": 0.469,
+   "combo_ic": 0.205,
+   "ic_per_min": 0.96,
+   "busy_presses": 0.383,
+   "busy_turns": 0.352
   },
   "nanase": {
    "presses": {
@@ -561,7 +827,21 @@
    "guess_623A_per_min": 0.16,
    "guess_623A_counter": 0.136,
    "guess_623B_per_min": 0.34,
-   "guess_623B_counter": 0.16
+   "guess_623B_counter": 0.16,
+   "combos_per_min": 9.51,
+   "combo_hits": 3.62,
+   "combo_damage": 885,
+   "combo_damage_p90": 2173,
+   "combo_damage_max": 5610,
+   "combo_hits_p90": 9.0,
+   "combo_hits_max": 44,
+   "combo_3plus": 0.372,
+   "combo_damage_per_min": 8413,
+   "combo_special": 0.351,
+   "combo_ic": 0.145,
+   "ic_per_min": 0.82,
+   "busy_presses": 0.381,
+   "busy_turns": 0.36
   },
   "nayuki": {
    "presses": {
@@ -589,7 +869,21 @@
    "guess_623A_per_min": 0.19,
    "guess_623A_counter": 0.111,
    "guess_623B_per_min": 0.41,
-   "guess_623B_counter": 0.263
+   "guess_623B_counter": 0.263,
+   "combos_per_min": 7.21,
+   "combo_hits": 4.35,
+   "combo_damage": 1064,
+   "combo_damage_p90": 2578,
+   "combo_damage_max": 5371,
+   "combo_hits_p90": 11.0,
+   "combo_hits_max": 25,
+   "combo_3plus": 0.43,
+   "combo_damage_per_min": 7669,
+   "combo_special": 0.489,
+   "combo_ic": 0.208,
+   "ic_per_min": 1.1,
+   "busy_presses": 0.41,
+   "busy_turns": 0.402
   },
   "nayukib": {
    "presses": {
@@ -617,7 +911,21 @@
    "guess_623A_per_min": 0.19,
    "guess_623A_counter": 0.22,
    "guess_623B_per_min": 0.45,
-   "guess_623B_counter": 0.167
+   "guess_623B_counter": 0.167,
+   "combos_per_min": 7.42,
+   "combo_hits": 3.93,
+   "combo_damage": 959,
+   "combo_damage_p90": 2330,
+   "combo_damage_max": 7123,
+   "combo_hits_p90": 10.2,
+   "combo_hits_max": 37,
+   "combo_3plus": 0.39,
+   "combo_damage_per_min": 7122,
+   "combo_special": 0.429,
+   "combo_ic": 0.187,
+   "ic_per_min": 1.14,
+   "busy_presses": 0.386,
+   "busy_turns": 0.387
   },
   "sayuri": {
    "presses": {
@@ -645,7 +953,21 @@
    "guess_623A_per_min": 0.44,
    "guess_623A_counter": 0.203,
    "guess_623B_per_min": 0.28,
-   "guess_623B_counter": 0.168
+   "guess_623B_counter": 0.168,
+   "combos_per_min": 5.82,
+   "combo_hits": 3.26,
+   "combo_damage": 898,
+   "combo_damage_p90": 1998,
+   "combo_damage_max": 5756,
+   "combo_hits_p90": 8.0,
+   "combo_hits_max": 30,
+   "combo_3plus": 0.364,
+   "combo_damage_per_min": 5224,
+   "combo_special": 0.434,
+   "combo_ic": 0.166,
+   "ic_per_min": 0.75,
+   "busy_presses": 0.389,
+   "busy_turns": 0.342
   },
   "shiori": {
    "presses": {
@@ -673,7 +995,21 @@
    "guess_623A_per_min": 0.18,
    "guess_623A_counter": 0.053,
    "guess_623B_per_min": 0.27,
-   "guess_623B_counter": 0.071
+   "guess_623B_counter": 0.071,
+   "combos_per_min": 6.22,
+   "combo_hits": 4.99,
+   "combo_damage": 1185,
+   "combo_damage_p90": 2907,
+   "combo_damage_max": 5825,
+   "combo_hits_p90": 16.0,
+   "combo_hits_max": 30,
+   "combo_3plus": 0.466,
+   "combo_damage_per_min": 7368,
+   "combo_special": 0.607,
+   "combo_ic": 0.251,
+   "ic_per_min": 1.21,
+   "busy_presses": 0.408,
+   "busy_turns": 0.368
   }
  },
  "by_player": {
@@ -704,7 +1040,21 @@
    "guess_623A_per_min": 0.27,
    "guess_623A_counter": 0.168,
    "guess_623B_per_min": 0.18,
-   "guess_623B_counter": 0.1
+   "guess_623B_counter": 0.1,
+   "combos_per_min": 9.38,
+   "combo_hits": 3.68,
+   "combo_damage": 891,
+   "combo_damage_p90": 2071,
+   "combo_damage_max": 5571,
+   "combo_hits_p90": 9.0,
+   "combo_hits_max": 43,
+   "combo_3plus": 0.407,
+   "combo_damage_per_min": 8358,
+   "combo_special": 0.324,
+   "combo_ic": 0.133,
+   "ic_per_min": 0.91,
+   "busy_presses": 0.378,
+   "busy_turns": 0.388
   },
   "596": {
    "matches": 173,
@@ -733,7 +1083,21 @@
    "guess_623A_per_min": 0.5,
    "guess_623A_counter": 0.228,
    "guess_623B_per_min": 0.91,
-   "guess_623B_counter": 0.208
+   "guess_623B_counter": 0.208,
+   "combos_per_min": 7.26,
+   "combo_hits": 1.83,
+   "combo_damage": 614,
+   "combo_damage_p90": 997,
+   "combo_damage_max": 4682,
+   "combo_hits_p90": 4.0,
+   "combo_hits_max": 28,
+   "combo_3plus": 0.204,
+   "combo_damage_per_min": 4461,
+   "combo_special": 0.287,
+   "combo_ic": 0.028,
+   "ic_per_min": 0.39,
+   "busy_presses": 0.47,
+   "busy_turns": 0.398
   },
   "unnamed": {
    "matches": 171,
@@ -762,7 +1126,21 @@
    "guess_623A_per_min": 0.21,
    "guess_623A_counter": 0.088,
    "guess_623B_per_min": 0.32,
-   "guess_623B_counter": 0.178
+   "guess_623B_counter": 0.178,
+   "combos_per_min": 5.39,
+   "combo_hits": 5.5,
+   "combo_damage": 1317,
+   "combo_damage_p90": 3049,
+   "combo_damage_max": 7421,
+   "combo_hits_p90": 16.0,
+   "combo_hits_max": 34,
+   "combo_3plus": 0.489,
+   "combo_damage_per_min": 7097,
+   "combo_special": 0.668,
+   "combo_ic": 0.278,
+   "ic_per_min": 1.26,
+   "busy_presses": 0.387,
+   "busy_turns": 0.352
   },
   "208": {
    "matches": 120,
@@ -791,7 +1169,21 @@
    "guess_623A_per_min": 0.23,
    "guess_623A_counter": 0.137,
    "guess_623B_per_min": 0.28,
-   "guess_623B_counter": 0.182
+   "guess_623B_counter": 0.182,
+   "combos_per_min": 7.32,
+   "combo_hits": 4.29,
+   "combo_damage": 1057,
+   "combo_damage_p90": 2381,
+   "combo_damage_max": 5786,
+   "combo_hits_p90": 10.0,
+   "combo_hits_max": 38,
+   "combo_3plus": 0.46,
+   "combo_damage_per_min": 7736,
+   "combo_special": 0.495,
+   "combo_ic": 0.122,
+   "ic_per_min": 0.75,
+   "busy_presses": 0.359,
+   "busy_turns": 0.397
   },
   "1": {
    "matches": 109,
@@ -820,7 +1212,21 @@
    "guess_623A_per_min": 0.35,
    "guess_623A_counter": 0.222,
    "guess_623B_per_min": 0.33,
-   "guess_623B_counter": 0.195
+   "guess_623B_counter": 0.195,
+   "combos_per_min": 6.2,
+   "combo_hits": 3.21,
+   "combo_damage": 843,
+   "combo_damage_p90": 1932,
+   "combo_damage_max": 4946,
+   "combo_hits_p90": 8.0,
+   "combo_hits_max": 44,
+   "combo_3plus": 0.31,
+   "combo_damage_per_min": 5230,
+   "combo_special": 0.416,
+   "combo_ic": 0.117,
+   "ic_per_min": 0.55,
+   "busy_presses": 0.411,
+   "busy_turns": 0.366
   },
   "639": {
    "matches": 66,
@@ -849,7 +1255,21 @@
    "guess_623A_per_min": 0.17,
    "guess_623A_counter": 0.1,
    "guess_623B_per_min": 0.05,
-   "guess_623B_counter": 0.167
+   "guess_623B_counter": 0.167,
+   "combos_per_min": 5.93,
+   "combo_hits": 2.29,
+   "combo_damage": 673,
+   "combo_damage_p90": 1435,
+   "combo_damage_max": 3652,
+   "combo_hits_p90": 5.0,
+   "combo_hits_max": 14,
+   "combo_3plus": 0.289,
+   "combo_damage_per_min": 3992,
+   "combo_special": 0.283,
+   "combo_ic": 0.118,
+   "ic_per_min": 0.41,
+   "busy_presses": 0.349,
+   "busy_turns": 0.328
   },
   "379": {
    "matches": 60,
@@ -878,7 +1298,21 @@
    "guess_623A_per_min": 0.12,
    "guess_623A_counter": 0.235,
    "guess_623B_per_min": 0.46,
-   "guess_623B_counter": 0.143
+   "guess_623B_counter": 0.143,
+   "combos_per_min": 4.42,
+   "combo_hits": 5.19,
+   "combo_damage": 1244,
+   "combo_damage_p90": 2980,
+   "combo_damage_max": 6176,
+   "combo_hits_p90": 17.0,
+   "combo_hits_max": 37,
+   "combo_3plus": 0.416,
+   "combo_damage_per_min": 5498,
+   "combo_special": 0.535,
+   "combo_ic": 0.269,
+   "ic_per_min": 0.96,
+   "busy_presses": 0.387,
+   "busy_turns": 0.339
   },
   "282": {
    "matches": 57,
@@ -907,7 +1341,21 @@
    "guess_623A_per_min": 0.12,
    "guess_623A_counter": 0.176,
    "guess_623B_per_min": 0.15,
-   "guess_623B_counter": 0.381
+   "guess_623B_counter": 0.381,
+   "combos_per_min": 6.79,
+   "combo_hits": 4.7,
+   "combo_damage": 1087,
+   "combo_damage_p90": 2729,
+   "combo_damage_max": 5380,
+   "combo_hits_p90": 15.0,
+   "combo_hits_max": 24,
+   "combo_3plus": 0.435,
+   "combo_damage_per_min": 7383,
+   "combo_special": 0.628,
+   "combo_ic": 0.372,
+   "ic_per_min": 1.78,
+   "busy_presses": 0.433,
+   "busy_turns": 0.376
   },
   "143": {
    "matches": 48,
@@ -936,7 +1384,21 @@
    "guess_623A_per_min": 0.06,
    "guess_623A_counter": 0.167,
    "guess_623B_per_min": 0.74,
-   "guess_623B_counter": 0.429
+   "guess_623B_counter": 0.429,
+   "combos_per_min": 7.76,
+   "combo_hits": 5.21,
+   "combo_damage": 1209,
+   "combo_damage_p90": 2807,
+   "combo_damage_max": 5825,
+   "combo_hits_p90": 16.0,
+   "combo_hits_max": 26,
+   "combo_3plus": 0.482,
+   "combo_damage_per_min": 9387,
+   "combo_special": 0.651,
+   "combo_ic": 0.262,
+   "ic_per_min": 1.61,
+   "busy_presses": 0.399,
+   "busy_turns": 0.441
   },
   "435": {
    "matches": 46,
@@ -965,7 +1427,21 @@
    "guess_623A_per_min": 0.06,
    "guess_623A_counter": 0.143,
    "guess_623B_per_min": 0.15,
-   "guess_623B_counter": 0.222
+   "guess_623B_counter": 0.222,
+   "combos_per_min": 4.08,
+   "combo_hits": 6.24,
+   "combo_damage": 1410,
+   "combo_damage_p90": 3247,
+   "combo_damage_max": 6196,
+   "combo_hits_p90": 19.0,
+   "combo_hits_max": 29,
+   "combo_3plus": 0.483,
+   "combo_damage_per_min": 5747,
+   "combo_special": 0.585,
+   "combo_ic": 0.151,
+   "ic_per_min": 0.6,
+   "busy_presses": 0.323,
+   "busy_turns": 0.324
   },
   "402": {
    "matches": 41,
@@ -994,7 +1470,21 @@
    "guess_623A_per_min": 0.1,
    "guess_623A_counter": 0.083,
    "guess_623B_per_min": 0.37,
-   "guess_623B_counter": 0.071
+   "guess_623B_counter": 0.071,
+   "combos_per_min": 5.3,
+   "combo_hits": 5.89,
+   "combo_damage": 1279,
+   "combo_damage_p90": 2955,
+   "combo_damage_max": 6552,
+   "combo_hits_p90": 18.0,
+   "combo_hits_max": 31,
+   "combo_3plus": 0.507,
+   "combo_damage_per_min": 6780,
+   "combo_special": 0.616,
+   "combo_ic": 0.188,
+   "ic_per_min": 1.26,
+   "busy_presses": 0.337,
+   "busy_turns": 0.323
   },
   "461": {
    "matches": 41,
@@ -1023,7 +1513,21 @@
    "guess_623A_per_min": 0.09,
    "guess_623A_counter": 0.333,
    "guess_623B_per_min": 0.21,
-   "guess_623B_counter": 0.136
+   "guess_623B_counter": 0.136,
+   "combos_per_min": 4.04,
+   "combo_hits": 6.62,
+   "combo_damage": 1441,
+   "combo_damage_p90": 3359,
+   "combo_damage_max": 6601,
+   "combo_hits_p90": 19.0,
+   "combo_hits_max": 37,
+   "combo_3plus": 0.494,
+   "combo_damage_per_min": 5818,
+   "combo_special": 0.567,
+   "combo_ic": 0.179,
+   "ic_per_min": 0.69,
+   "busy_presses": 0.318,
+   "busy_turns": 0.341
   },
   "479": {
    "matches": 41,
@@ -1052,7 +1556,21 @@
    "guess_623A_per_min": 1.0,
    "guess_623A_counter": 0.267,
    "guess_623B_per_min": 0.2,
-   "guess_623B_counter": 0.267
+   "guess_623B_counter": 0.267,
+   "combos_per_min": 5.77,
+   "combo_hits": 2.55,
+   "combo_damage": 792,
+   "combo_damage_p90": 1726,
+   "combo_damage_max": 2951,
+   "combo_hits_p90": 6.0,
+   "combo_hits_max": 13,
+   "combo_3plus": 0.342,
+   "combo_damage_per_min": 4570,
+   "combo_special": 0.155,
+   "combo_ic": 0.08,
+   "ic_per_min": 0.48,
+   "busy_presses": 0.392,
+   "busy_turns": 0.323
   }
  }
 }

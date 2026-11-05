@@ -34,8 +34,10 @@ from efz_env.history import input_features
 
 TABLE = ActionTable()
 # The observation's columns events are read from: self_action, self_hitstun,
-# self_airborne, opp_action, opp_hitstun, opp_own_action.
-COLUMNS = [18, 20, 39, 50, 52, 67]
+# self_airborne, opp_action, opp_hitstun, opp_own_action, self_combo_hits (the combo
+# one is doing: the attacker's counter, / 30) and self_combo_damage (/ 9999).
+COLUMNS = [18, 20, 39, 50, 52, 67, 30, 38, 23, 35]  # + self_hitstop, self_own_action
+INSTANT_CHARGE = [0xa7, 0xab]  # 22C on the ground and in the air: cancels a move that hit
 GUARD_GROUND, GUARD_AIR = list(range(0x96, 0x9c)), [0x9c]
 RG_GROUND, RG_AIR = [0xa8, 0xa9], [0xaa]
 RG = RG_GROUND + RG_AIR
@@ -45,6 +47,7 @@ FIRST_OWN = 0xc8  # kFirstCharacterAction: the character's own moves from here
 MOVES = {
     'ayu': dict(long=[0xfb, 0x102, 0x106, 0x10b] + list(range(0x12c, 0x135)) +
                 list(range(0x13b, 0x13e)),
+                special=list(range(0xfa, 0x13e)),  # specials and supers
                 guess={'623A': [0xfa], '623B': [0xfc]}),
 }
 RC_WINDOW = 90      # steps after the opponent's RG in which its counterattack is looked for
@@ -69,18 +72,29 @@ class Events:
         and hit; rg_long: a long or RF one (C specials, supers) started; rg_long_hit:
         of those, the share that hit;
     guess_<move>_counter: of the times it did the move (623A, 623B), the share that hit
-        the opponent in a move of its own (the counter hit a right guess gets).
+        the opponent in a move of its own (the counter hit a right guess gets);
+    combos (one's own, from the combo counter): per minute, their hits and damage on
+        average (in HP, 9999 a bar), at the 90th percentile and the most, the share of 3
+        hits or more, the damage a minute;
+        combo_special, combo_ic: the share of combos of 2 hits or more in which a
+        special or super, and an Instant Charge (22C), came out; ic_per_min;
+    busy_presses, busy_turns: the share of its presses, and of its changes of direction,
+        made while it couldn't move (in a move of its own, or in hitstop): what a cancel
+        is made of, a motion buffered for the moment the move connects.
     """
 
     def __init__(self, char='ayu'):
-        self.moves = MOVES.get(char, dict(long=[], guess={}))
+        self.moves = MOVES.get(char, dict(long=[], special=[], guess={}))
         keys = ['frames', 'jumps', 'guard_ground', 'guard_air', 'rg_ground', 'rg_air',
                 'hit_ground', 'hit_air', 'rc', 'rc_guard', 'rc_hit', 'rg', 'rg_move',
-                'rg_punish', 'rg_long', 'rg_long_hit']
+                'rg_punish', 'rg_long', 'rg_long_hit', 'ic', 'combos', 'combo_hits',
+                'combo_damage', 'combos3', 'combos2', 'combo_special', 'combo_ic',
+                'presses_all', 'presses_busy', 'turns_all', 'turns_busy']
         for g in self.moves['guess']:
             keys += [f'guess_{g}', f'guess_{g}_counter']
         self.n = dict.fromkeys(keys, 0)
         self.n['presses'] = np.zeros(4)
+        self.n['combo_list'] = []  # each combo's (hits, damage)
 
     def add_match(self, cols, controls):
         """One player's match: cols (T, len(COLUMNS)), the observation's COLUMNS before
@@ -133,6 +147,39 @@ class Events:
             if a[s0] in self.moves['long']:
                 n['rg_long'] += 1
                 n['rg_long_hit'] += int(landed)
+        # Inputs while it can't move.
+        if cols.shape[1] > 9:
+            busy = (cols[:, 8] > 0) | (cols[:, 9] > 0)
+            f = input_features(controls, prev_c)
+            pressed = f[:, 2:].sum(1) > 0
+            d = np.round(f[:, 0]).astype(int) * 3 + np.round(f[:, 1]).astype(int)
+            turned = d != _prev(d, 0)
+            n['presses_all'] += int(pressed.sum())
+            n['presses_busy'] += int((pressed & busy).sum())
+            n['turns_all'] += int(turned.sum())
+            n['turns_busy'] += int((turned & busy).sum())
+        # Combos: runs of the combo counter, with what came out during them.
+        n['ic'] += int((enter & np.isin(a, INSTANT_CHARGE)).sum())
+        if cols.shape[1] > 7:
+            hits = np.round(cols[:, 6] * 30).astype(int)
+            dmg = cols[:, 7] * 9999
+            on = hits > 0
+            starts = np.flatnonzero(on & ~_prev(on, False))
+            ends = np.flatnonzero(~on & _prev(on, False))
+            for b in starts:
+                later = ends[ends > b]
+                e = later[0] if len(later) else T
+                h, d = int(hits[b:e].max()), float(dmg[b:e].max())
+                n['combos'] += 1
+                n['combo_list'].append((h, d))
+                n['combo_hits'] += h
+                n['combo_damage'] += d
+                n['combos3'] += int(h >= 3)
+                if h >= 2:
+                    n['combos2'] += 1
+                    seg = enter[b:e]
+                    n['combo_special'] += int((seg & np.isin(a[b:e], self.moves['special'])).any())
+                    n['combo_ic'] += int((seg & np.isin(a[b:e], INSTANT_CHARGE)).any())
         # The guesses: a counter hit is a hit on an opponent in a move of its own.
         for g, acts in self.moves['guess'].items():
             for t in np.flatnonzero(enter & np.isin(a, acts)):
@@ -172,6 +219,23 @@ class Events:
         for g in self.moves['guess']:
             out[f'guess_{g}_per_min'] = round(n[f'guess_{g}'] * per_min, 2)
             out[f'guess_{g}_counter'] = share(n[f'guess_{g}_counter'], n[f'guess_{g}'])
+        c = n['combos']
+        out['combos_per_min'] = round(c * per_min, 2)
+        out['combo_hits'] = round(n['combo_hits'] / c, 2) if c else None
+        out['combo_damage'] = round(n['combo_damage'] / c) if c else None
+        if c:
+            hits, dmg = np.array(n['combo_list']).T
+            out['combo_damage_p90'] = round(float(np.percentile(dmg, 90)))
+            out['combo_damage_max'] = round(float(dmg.max()))
+            out['combo_hits_p90'] = round(float(np.percentile(hits, 90)), 1)
+            out['combo_hits_max'] = int(hits.max())
+        out['combo_3plus'] = share(n['combos3'], c)
+        out['combo_damage_per_min'] = round(n['combo_damage'] * per_min)
+        out['combo_special'] = share(n['combo_special'], n['combos2'])
+        out['combo_ic'] = share(n['combo_ic'], n['combos2'])
+        out['ic_per_min'] = round(n['ic'] * per_min, 2)
+        out['busy_presses'] = share(n['presses_busy'], n['presses_all'])
+        out['busy_turns'] = share(n['turns_busy'], n['turns_all'])
         return out
 
 

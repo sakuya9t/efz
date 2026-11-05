@@ -1,14 +1,16 @@
 # Trained agents
 
-The first agents trained on `efz_env` ([docs/headless.md](../docs/headless.md)), 3-4
-November 2026, on a Ryzen 7 6800U laptop (PyTorch on the CPU). Each `.zip` is a
-Stable-Baselines3 PPO model: an MLP (256, 256) over the library's 168 observations,
-choosing among the default `ActionTable`'s 45 actions (nine directions, with no button or
-one of A-D) every 4 frames. **All of them know only Ayu against Ayu** (random stages):
-they were never shown another character.
+Agents trained on `efz_env` ([docs/headless.md](../docs/headless.md)), 3-4 November 2026,
+on a Ryzen 7 6800U laptop (PyTorch on the CPU). Each `.zip` is a Stable-Baselines3 PPO
+model choosing among the default `ActionTable`'s 45 actions (nine directions, with no
+button or one of A-D). The first three (`curriculum/`, `pbt/`, `vs-cpu/`) are an MLP
+(256, 256) over the library's 168 observations deciding every 4 frames, and **know only
+Ayu against Ayu** (random stages). `human-ayu/`'s decide every frame, see their own last
+inputs too, and learnt from people's Ayu against every character (its README).
 
 | Run | What | Made by | Result |
 |---|---|---|---|
+| [`human-ayu/`](human-ayu/README.md) | Ayu from people's replays: clones of people (every frame, with a 14-frame reaction time), six players' clones, an agent fine-tuned from the clone with a KL pull toward it, a combo master | its scripts, from the community's 1,908 in-sync Ayu matches | The clone plays at people's rates of presses, jumps, guards and 623s; the agent beats the level-3 CPU (any character) 75% and the curriculum agent 91% after 10M steps, with short combos; the combo master out-damages people from their own starts on average |
 | [`curriculum/`](curriculum/) | The best: `model.zip` | `curriculum/curriculum.py`, from `pbt/best.zip`: 2 chunks of 2M steps (10 minutes), the CPU's level raised as it won | On full matches (64 each, cut at 5 minutes) against the CPU it wins 100% at level 2, 94% at level 3, 77% at level 4 |
 | [`pbt/`](pbt/) | `best.zip`, the best of a population | `python/examples/pbt.py --population 4 --generations 4 --steps 1e5 --envs 64 --chars ayu ayu` (16 minutes) | Rated 1345 with the level-2 CPU at 1000; wins 84% of full matches against it |
 | [`vs-cpu/`](vs-cpu/) | `model.zip`, the first run | `python/examples/train.py --opponent cpu --chars ayu ayu --cpu-level 2 --steps 1.5e6 --max-frames 7680` (3.5 minutes) | Against the level-2 CPU in 2-minute matches: 5% won, none lost, the rest timed out; mean return +0.60 (random play: -0.16) |
@@ -20,6 +22,10 @@ like a person is the plan in [docs/training.md](../docs/training.md), "Human-lik
 agents".
 
 ## Using them
+
+The models are on Hugging Face (https://huggingface.co/sakuya9t/efz), under the same paths:
+`python runs/hub.py download` fetches them into runs/ (`human-ayu`'s checkpoints are only
+there).
 
 ```sh
 # Play the best yourself (you are player 2: arrows, Z X C V = A B C D, or a gamepad):

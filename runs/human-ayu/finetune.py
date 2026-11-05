@@ -10,7 +10,9 @@ character drawn from all of them (people's Ayu met them all); in the rest it
 is Ayu played by one of: a frozen copy of the policy (taken at each chunk's start), the
 clone, the agent of runs/curriculum (every 4 frames, as it was trained), and the --team:
 clones of single players (bc.py --players), each with its own habits, so that no one
-way of winning works against all of them (a league, as against self-play's narrowing). The reward
+way of winning works against all of them (a league, as against self-play's narrowing),
+and the --combo master (combo.py), which also becomes the pull's target while the
+agent's own combo runs: people's play in neutral, the combo master's in combos. The reward
 is the damage dealt minus taken (full bars) and 1 for the match, as the clone's critic
 learnt it from people's matches. Each chunk (--chunk steps) is followed by matches
 played to the end against the CPU (at the level of the chunk) and the curriculum
@@ -53,6 +55,7 @@ def parse():
     p.add_argument('--old', default=os.path.join(REPO, 'runs', 'curriculum', 'model.zip'),
                    help='an agent of frame_skip 4 among the opponents')
     p.add_argument('--team', nargs='*', default=[], help="players' clones among the opponents")
+    p.add_argument('--combo', help="combo.py's combo master: an opponent, and the teacher in combos")
     p.add_argument('--level', type=int, default=2, help="the CPU's level to start at")
     p.add_argument('--promote', type=float, default=0.6,
                    help='share of wins against the CPU to move up a level')
@@ -147,17 +150,22 @@ def main():
         json.dump(dict(frame_skip=1, history=args.history, delay=args.delay, chars=['ayu', None],
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
                        team=[os.path.relpath(t, REPO) for t in args.team],
+                       combo=args.combo and os.path.relpath(args.combo, REPO),
                        level=args.level, ppo=settings,
                        actions=[TABLE.describe(i) for i in range(len(TABLE))]), f, indent=1)
     prior = PPO.load(args.prior, device='cpu')
     clone = frozen(prior)
     old = held(frozen(PPO.load(args.old, device='cpu')), 4) if args.old else None
     team = [frozen(PPO.load(t, device='cpu')) for t in args.team]
+    master = PPO.load(args.combo, device='cpu') if args.combo else None
+    if master is not None:
+        team.append(frozen(master))
     opponents = lambda snapshot: [o for o in (snapshot, clone, old) if o is not None] + team
     env = make_env(args, opponents(clone), len(history), level)
     model = PPO.load(start, env=env, device='cpu', **settings)
     if args.prior_coef > 0:
-        model.policy.set_prior(prior.policy, args.prior_coef, args.ent_coef)
+        model.policy.set_prior(prior.policy, args.prior_coef, args.ent_coef,
+                               combo=master.policy if master is not None else None)
     print('starting from', start, flush=True)
     if not history:
         before = evaluate(args, start, level)

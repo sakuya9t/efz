@@ -1,0 +1,1400 @@
+{
+ "level": 4,
+ "history": [
+  {
+   "steps": 0,
+   "level": 2,
+   "eval": {
+    "cpu": {
+     "win": 0.125,
+     "loss": 0.59375,
+     "cut": 0.28125,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0062,
+        "B": 0.0075,
+        "C": 0.0053,
+        "D": 0.001
+       },
+       "presses_per_second": 1.28,
+       "jumps_per_min": 21.15,
+       "guard_ground_per_min": 11.35,
+       "guard_air_per_min": 0.36,
+       "rg_ground_per_min": 1.61,
+       "rg_air_per_min": 0.17,
+       "hit_ground_per_min": 8.27,
+       "hit_air_per_min": 2.59,
+       "rg_ground": 0.076,
+       "rg_air": 0.054,
+       "rc": 0.036,
+       "rc_chances_per_min": 0.49,
+       "rg_move": 0.363,
+       "rg_punish": 0.159,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 0.19,
+       "guess_623A_counter": 0.286,
+       "guess_623B_per_min": 0.19,
+       "guess_623B_counter": 0.19
+      },
+      {
+       "presses": {
+        "A": 0.0066,
+        "B": 0.0098,
+        "C": 0.0032,
+        "D": 0.0074
+       },
+       "presses_per_second": 1.73,
+       "jumps_per_min": 22.87,
+       "guard_ground_per_min": 4.68,
+       "guard_air_per_min": 0.29,
+       "rg_ground_per_min": 0.68,
+       "rg_air_per_min": 0.16,
+       "hit_ground_per_min": 6.13,
+       "hit_air_per_min": 2.62,
+       "rg_ground": 0.059,
+       "rg_air": 0.052,
+       "rc": 0.172,
+       "rc_chances_per_min": 0.56,
+       "rg_move": 0.832,
+       "rg_punish": 0.337,
+       "rg_long": 0.0,
+       "rg_long_hit": null
+      }
+     ],
+     "by_opponent": {
+      "nanase": [
+       0,
+       1,
+       0
+      ],
+      "mai": [
+       0,
+       1,
+       1
+      ],
+      "makoto": [
+       1,
+       0,
+       0
+      ],
+      "akane": [
+       0,
+       1,
+       0
+      ],
+      "mayu": [
+       0,
+       2,
+       0
+      ],
+      "nagamori": [
+       0,
+       1,
+       0
+      ],
+      "misaki": [
+       0,
+       1,
+       0
+      ],
+      "shiori": [
+       0,
+       4,
+       0
+      ],
+      "sayuri": [
+       0,
+       1,
+       2
+      ],
+      "nayuki": [
+       0,
+       1,
+       1
+      ],
+      "mio": [
+       0,
+       1,
+       0
+      ],
+      "exnanase": [
+       1,
+       0,
+       0
+      ],
+      "kaori": [
+       1,
+       2,
+       0
+      ],
+      "mishio": [
+       0,
+       0,
+       1
+      ],
+      "akiko": [
+       1,
+       0,
+       1
+      ],
+      "nayukib": [
+       0,
+       1,
+       0
+      ],
+      "kanna": [
+       0,
+       2,
+       0
+      ],
+      "kano": [
+       0,
+       0,
+       3
+      ]
+     },
+     "level": 2
+    },
+    "old": {
+     "win": 0.0,
+     "loss": 1.0,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0057,
+        "B": 0.0066,
+        "C": 0.0058,
+        "D": 0.0007
+       },
+       "presses_per_second": 1.2,
+       "jumps_per_min": 19.0,
+       "guard_ground_per_min": 8.76,
+       "guard_air_per_min": 0.09,
+       "rg_ground_per_min": 1.58,
+       "rg_air_per_min": 0.27,
+       "hit_ground_per_min": 7.08,
+       "hit_air_per_min": 4.02,
+       "rg_ground": 0.091,
+       "rg_air": 0.061,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.09,
+       "rg_move": 0.504,
+       "rg_punish": 0.309,
+       "rg_long": 0.007,
+       "rg_long_hit": 0.0,
+       "guess_623A_per_min": 0.16,
+       "guess_623A_counter": 0.333,
+       "guess_623B_per_min": 0.27,
+       "guess_623B_counter": 0.2
+      },
+      {
+       "presses": {
+        "A": 0.0351,
+        "B": 0.0276,
+        "C": 0.0363,
+        "D": 0.0409
+       },
+       "presses_per_second": 8.95,
+       "jumps_per_min": 16.15,
+       "guard_ground_per_min": 0.69,
+       "guard_air_per_min": 0.0,
+       "rg_ground_per_min": 0.11,
+       "rg_air_per_min": 0.0,
+       "hit_ground_per_min": 6.78,
+       "hit_air_per_min": 0.63,
+       "rg_ground": 0.014,
+       "rg_air": 0.0,
+       "rc": 0.052,
+       "rc_chances_per_min": 0.77,
+       "rg_move": 1.0,
+       "rg_punish": 0.75,
+       "rg_long": 0.125,
+       "rg_long_hit": 1.0,
+       "guess_623A_per_min": 0.32,
+       "guess_623A_counter": 0.083,
+       "guess_623B_per_min": 0.63,
+       "guess_623B_counter": 0.17
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       0,
+       32,
+       0
+      ]
+     }
+    }
+   }
+  },
+  {
+   "steps": 2015232,
+   "level": 2,
+   "train_seconds": 826.9302356243134,
+   "prior_kl": 0.02494186908006668,
+   "ep_return": 1.496280609369278,
+   "eval": {
+    "cpu": {
+     "win": 0.8125,
+     "loss": 0.15625,
+     "cut": 0.03125,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0131,
+        "B": 0.0112,
+        "C": 0.0083,
+        "D": 0.0008
+       },
+       "presses_per_second": 2.14,
+       "jumps_per_min": 17.6,
+       "guard_ground_per_min": 5.57,
+       "guard_air_per_min": 0.08,
+       "rg_ground_per_min": 0.95,
+       "rg_air_per_min": 0.09,
+       "hit_ground_per_min": 8.6,
+       "hit_air_per_min": 1.87,
+       "rg_ground": 0.063,
+       "rg_air": 0.043,
+       "rc": 0.045,
+       "rc_chances_per_min": 0.84,
+       "rg_move": 0.524,
+       "rg_punish": 0.244,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 0.54,
+       "guess_623A_counter": 0.116,
+       "guess_623B_per_min": 0.39,
+       "guess_623B_counter": 0.097
+      },
+      {
+       "presses": {
+        "A": 0.0076,
+        "B": 0.0103,
+        "C": 0.0033,
+        "D": 0.0143
+       },
+       "presses_per_second": 2.28,
+       "jumps_per_min": 22.01,
+       "guard_ground_per_min": 8.7,
+       "guard_air_per_min": 0.26,
+       "rg_ground_per_min": 1.46,
+       "rg_air_per_min": 0.23,
+       "hit_ground_per_min": 9.85,
+       "hit_air_per_min": 2.94,
+       "rg_ground": 0.073,
+       "rg_air": 0.066,
+       "rc": 0.206,
+       "rc_chances_per_min": 0.43,
+       "rg_move": 0.799,
+       "rg_punish": 0.351,
+       "rg_long": 0.0,
+       "rg_long_hit": null
+      }
+     ],
+     "by_opponent": {
+      "nanase": [
+       0,
+       1,
+       0
+      ],
+      "mai": [
+       2,
+       0,
+       0
+      ],
+      "makoto": [
+       1,
+       0,
+       0
+      ],
+      "akane": [
+       1,
+       0,
+       0
+      ],
+      "mayu": [
+       0,
+       1,
+       1
+      ],
+      "nagamori": [
+       1,
+       0,
+       0
+      ],
+      "misaki": [
+       1,
+       0,
+       0
+      ],
+      "shiori": [
+       2,
+       2,
+       0
+      ],
+      "sayuri": [
+       3,
+       0,
+       0
+      ],
+      "nayuki": [
+       2,
+       0,
+       0
+      ],
+      "mio": [
+       1,
+       0,
+       0
+      ],
+      "exnanase": [
+       1,
+       0,
+       0
+      ],
+      "kaori": [
+       2,
+       1,
+       0
+      ],
+      "mishio": [
+       1,
+       0,
+       0
+      ],
+      "akiko": [
+       2,
+       0,
+       0
+      ],
+      "nayukib": [
+       1,
+       0,
+       0
+      ],
+      "kanna": [
+       2,
+       0,
+       0
+      ],
+      "kano": [
+       3,
+       0,
+       0
+      ]
+     },
+     "level": 2
+    },
+    "old": {
+     "win": 0.25,
+     "loss": 0.75,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.01,
+        "B": 0.0082,
+        "C": 0.0094,
+        "D": 0.0006
+       },
+       "presses_per_second": 1.81,
+       "jumps_per_min": 17.8,
+       "guard_ground_per_min": 4.26,
+       "guard_air_per_min": 0.03,
+       "rg_ground_per_min": 1.19,
+       "rg_air_per_min": 0.09,
+       "hit_ground_per_min": 8.39,
+       "hit_air_per_min": 2.79,
+       "rg_ground": 0.086,
+       "rg_air": 0.032,
+       "rc": 0.067,
+       "rc_chances_per_min": 0.2,
+       "rg_move": 0.667,
+       "rg_punish": 0.469,
+       "rg_long": 0.01,
+       "rg_long_hit": 1.0,
+       "guess_623A_per_min": 0.52,
+       "guess_623A_counter": 0.282,
+       "guess_623B_per_min": 0.31,
+       "guess_623B_counter": 0.261
+      },
+      {
+       "presses": {
+        "A": 0.038,
+        "B": 0.0281,
+        "C": 0.0373,
+        "D": 0.0395
+       },
+       "presses_per_second": 9.14,
+       "jumps_per_min": 19.22,
+       "guard_ground_per_min": 1.11,
+       "guard_air_per_min": 0.0,
+       "rg_ground_per_min": 0.24,
+       "rg_air_per_min": 0.01,
+       "hit_ground_per_min": 9.39,
+       "hit_air_per_min": 1.11,
+       "rg_ground": 0.022,
+       "rg_air": 0.012,
+       "rc": 0.032,
+       "rc_chances_per_min": 0.84,
+       "rg_move": 0.684,
+       "rg_punish": 0.526,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 0.43,
+       "guess_623A_counter": 0.125,
+       "guess_623B_per_min": 0.51,
+       "guess_623B_counter": 0.158
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       8,
+       24,
+       0
+      ]
+     }
+    }
+   }
+  },
+  {
+   "steps": 4030464,
+   "level": 3,
+   "train_seconds": 830.3849840164185,
+   "prior_kl": 0.027956664562225342,
+   "ep_return": 1.1369966918230057,
+   "eval": {
+    "cpu": {
+     "win": 0.34375,
+     "loss": 0.625,
+     "cut": 0.03125,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0114,
+        "B": 0.0099,
+        "C": 0.007,
+        "D": 0.0004
+       },
+       "presses_per_second": 1.83,
+       "jumps_per_min": 17.3,
+       "guard_ground_per_min": 9.57,
+       "guard_air_per_min": 0.18,
+       "rg_ground_per_min": 1.17,
+       "rg_air_per_min": 0.14,
+       "hit_ground_per_min": 10.12,
+       "hit_air_per_min": 2.46,
+       "rg_ground": 0.056,
+       "rg_air": 0.051,
+       "rc": 0.086,
+       "rc_chances_per_min": 1.27,
+       "rg_move": 0.483,
+       "rg_punish": 0.225,
+       "rg_long": 0.017,
+       "rg_long_hit": 0.5,
+       "guess_623A_per_min": 0.52,
+       "guess_623A_counter": 0.234,
+       "guess_623B_per_min": 0.27,
+       "guess_623B_counter": 0.24
+      },
+      {
+       "presses": {
+        "A": 0.0113,
+        "B": 0.015,
+        "C": 0.0038,
+        "D": 0.0099
+       },
+       "presses_per_second": 2.56,
+       "jumps_per_min": 22.76,
+       "guard_ground_per_min": 9.53,
+       "guard_air_per_min": 0.3,
+       "rg_ground_per_min": 1.99,
+       "rg_air_per_min": 0.31,
+       "hit_ground_per_min": 7.08,
+       "hit_air_per_min": 2.89,
+       "rg_ground": 0.107,
+       "rg_air": 0.088,
+       "rc": 0.261,
+       "rc_chances_per_min": 0.51,
+       "rg_move": 0.833,
+       "rg_punish": 0.34,
+       "rg_long": 0.0,
+       "rg_long_hit": null
+      }
+     ],
+     "by_opponent": {
+      "nanase": [
+       0,
+       1,
+       0
+      ],
+      "mai": [
+       0,
+       2,
+       0
+      ],
+      "makoto": [
+       1,
+       0,
+       0
+      ],
+      "akane": [
+       0,
+       1,
+       0
+      ],
+      "mayu": [
+       0,
+       1,
+       1
+      ],
+      "nagamori": [
+       1,
+       0,
+       0
+      ],
+      "misaki": [
+       1,
+       0,
+       0
+      ],
+      "shiori": [
+       0,
+       4,
+       0
+      ],
+      "sayuri": [
+       1,
+       2,
+       0
+      ],
+      "nayuki": [
+       0,
+       2,
+       0
+      ],
+      "mio": [
+       1,
+       0,
+       0
+      ],
+      "exnanase": [
+       1,
+       0,
+       0
+      ],
+      "kaori": [
+       2,
+       1,
+       0
+      ],
+      "mishio": [
+       1,
+       0,
+       0
+      ],
+      "akiko": [
+       0,
+       2,
+       0
+      ],
+      "nayukib": [
+       0,
+       1,
+       0
+      ],
+      "kanna": [
+       0,
+       2,
+       0
+      ],
+      "kano": [
+       2,
+       1,
+       0
+      ]
+     },
+     "level": 3
+    },
+    "old": {
+     "win": 0.46875,
+     "loss": 0.53125,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0113,
+        "B": 0.0092,
+        "C": 0.0075,
+        "D": 0.0004
+       },
+       "presses_per_second": 1.81,
+       "jumps_per_min": 16.73,
+       "guard_ground_per_min": 5.61,
+       "guard_air_per_min": 0.06,
+       "rg_ground_per_min": 1.1,
+       "rg_air_per_min": 0.13,
+       "hit_ground_per_min": 8.28,
+       "hit_air_per_min": 2.23,
+       "rg_ground": 0.074,
+       "rg_air": 0.053,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.11,
+       "rg_move": 0.701,
+       "rg_punish": 0.471,
+       "rg_long": 0.023,
+       "rg_long_hit": 0.5,
+       "guess_623A_per_min": 0.61,
+       "guess_623A_counter": 0.256,
+       "guess_623B_per_min": 0.38,
+       "guess_623B_counter": 0.296
+      },
+      {
+       "presses": {
+        "A": 0.0379,
+        "B": 0.0287,
+        "C": 0.0362,
+        "D": 0.0399
+       },
+       "presses_per_second": 9.13,
+       "jumps_per_min": 18.09,
+       "guard_ground_per_min": 1.88,
+       "guard_air_per_min": 0.0,
+       "rg_ground_per_min": 0.18,
+       "rg_air_per_min": 0.0,
+       "hit_ground_per_min": 10.72,
+       "hit_air_per_min": 1.17,
+       "rg_ground": 0.014,
+       "rg_air": 0.0,
+       "rc": 0.071,
+       "rc_chances_per_min": 0.79,
+       "rg_move": 0.846,
+       "rg_punish": 0.615,
+       "rg_long": 0.077,
+       "rg_long_hit": 1.0,
+       "guess_623A_per_min": 0.3,
+       "guess_623A_counter": 0.286,
+       "guess_623B_per_min": 0.57,
+       "guess_623B_counter": 0.15
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       15,
+       17,
+       0
+      ]
+     }
+    }
+   }
+  },
+  {
+   "steps": 6045696,
+   "level": 3,
+   "train_seconds": 828.5983173847198,
+   "prior_kl": 0.030239805579185486,
+   "ep_return": 1.6174137319624424,
+   "eval": {
+    "cpu": {
+     "win": 0.46875,
+     "loss": 0.53125,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0139,
+        "B": 0.0089,
+        "C": 0.0068,
+        "D": 0.0004
+       },
+       "presses_per_second": 1.92,
+       "jumps_per_min": 15.18,
+       "guard_ground_per_min": 9.67,
+       "guard_air_per_min": 0.26,
+       "rg_ground_per_min": 1.33,
+       "rg_air_per_min": 0.21,
+       "hit_ground_per_min": 10.04,
+       "hit_air_per_min": 2.09,
+       "rg_ground": 0.063,
+       "rg_air": 0.081,
+       "rc": 0.063,
+       "rc_chances_per_min": 1.56,
+       "rg_move": 0.525,
+       "rg_punish": 0.213,
+       "rg_long": 0.014,
+       "rg_long_hit": 0.5,
+       "guess_623A_per_min": 0.27,
+       "guess_623A_counter": 0.08,
+       "guess_623B_per_min": 0.24,
+       "guess_623B_counter": 0.182
+      },
+      {
+       "presses": {
+        "A": 0.0112,
+        "B": 0.0149,
+        "C": 0.0039,
+        "D": 0.0107
+       },
+       "presses_per_second": 2.6,
+       "jumps_per_min": 21.81,
+       "guard_ground_per_min": 10.36,
+       "guard_air_per_min": 0.24,
+       "rg_ground_per_min": 2.42,
+       "rg_air_per_min": 0.25,
+       "hit_ground_per_min": 7.18,
+       "hit_air_per_min": 2.49,
+       "rg_ground": 0.121,
+       "rg_air": 0.084,
+       "rc": 0.22,
+       "rc_chances_per_min": 0.55,
+       "rg_move": 0.77,
+       "rg_punish": 0.361,
+       "rg_long": 0.0,
+       "rg_long_hit": null
+      }
+     ],
+     "by_opponent": {
+      "nanase": [
+       1,
+       0,
+       0
+      ],
+      "mai": [
+       0,
+       2,
+       0
+      ],
+      "makoto": [
+       0,
+       1,
+       0
+      ],
+      "akane": [
+       1,
+       0,
+       0
+      ],
+      "mayu": [
+       1,
+       1,
+       0
+      ],
+      "nagamori": [
+       0,
+       1,
+       0
+      ],
+      "misaki": [
+       1,
+       0,
+       0
+      ],
+      "shiori": [
+       0,
+       4,
+       0
+      ],
+      "sayuri": [
+       1,
+       2,
+       0
+      ],
+      "nayuki": [
+       1,
+       1,
+       0
+      ],
+      "mio": [
+       0,
+       1,
+       0
+      ],
+      "exnanase": [
+       1,
+       0,
+       0
+      ],
+      "kaori": [
+       2,
+       1,
+       0
+      ],
+      "mishio": [
+       1,
+       0,
+       0
+      ],
+      "akiko": [
+       1,
+       1,
+       0
+      ],
+      "nayukib": [
+       1,
+       0,
+       0
+      ],
+      "kanna": [
+       0,
+       2,
+       0
+      ],
+      "kano": [
+       3,
+       0,
+       0
+      ]
+     },
+     "level": 3
+    },
+    "old": {
+     "win": 0.59375,
+     "loss": 0.40625,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0121,
+        "B": 0.009,
+        "C": 0.007,
+        "D": 0.0005
+       },
+       "presses_per_second": 1.82,
+       "jumps_per_min": 15.58,
+       "guard_ground_per_min": 3.92,
+       "guard_air_per_min": 0.15,
+       "rg_ground_per_min": 1.06,
+       "rg_air_per_min": 0.14,
+       "hit_ground_per_min": 7.95,
+       "hit_air_per_min": 2.2,
+       "rg_ground": 0.082,
+       "rg_air": 0.055,
+       "rc": 0.167,
+       "rc_chances_per_min": 0.09,
+       "rg_move": 0.671,
+       "rg_punish": 0.443,
+       "rg_long": 0.013,
+       "rg_long_hit": 0.0,
+       "guess_623A_per_min": 0.47,
+       "guess_623A_counter": 0.323,
+       "guess_623B_per_min": 0.33,
+       "guess_623B_counter": 0.136
+      },
+      {
+       "presses": {
+        "A": 0.0376,
+        "B": 0.0297,
+        "C": 0.0365,
+        "D": 0.0402
+       },
+       "presses_per_second": 9.21,
+       "jumps_per_min": 18.87,
+       "guard_ground_per_min": 2.19,
+       "guard_air_per_min": 0.03,
+       "rg_ground_per_min": 0.29,
+       "rg_air_per_min": 0.03,
+       "hit_ground_per_min": 10.81,
+       "hit_air_per_min": 1.06,
+       "rg_ground": 0.022,
+       "rg_air": 0.027,
+       "rc": 0.059,
+       "rc_chances_per_min": 0.78,
+       "rg_move": 0.524,
+       "rg_punish": 0.19,
+       "rg_long": 0.095,
+       "rg_long_hit": 1.0,
+       "guess_623A_per_min": 0.32,
+       "guess_623A_counter": 0.19,
+       "guess_623B_per_min": 0.5,
+       "guess_623B_counter": 0.121
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       19,
+       13,
+       0
+      ]
+     }
+    }
+   }
+  },
+  {
+   "steps": 8060928,
+   "level": 3,
+   "train_seconds": 923.0170078277588,
+   "prior_kl": 0.03414463996887207,
+   "ep_return": 1.6345664328336715,
+   "eval": {
+    "cpu": {
+     "win": 0.59375,
+     "loss": 0.40625,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0103,
+        "B": 0.0093,
+        "C": 0.0075,
+        "D": 0.0004
+       },
+       "presses_per_second": 1.77,
+       "jumps_per_min": 14.36,
+       "guard_ground_per_min": 10.68,
+       "guard_air_per_min": 0.09,
+       "rg_ground_per_min": 1.38,
+       "rg_air_per_min": 0.07,
+       "hit_ground_per_min": 10.47,
+       "hit_air_per_min": 1.81,
+       "rg_ground": 0.061,
+       "rg_air": 0.037,
+       "rc": 0.11,
+       "rc_chances_per_min": 1.55,
+       "rg_move": 0.37,
+       "rg_punish": 0.126,
+       "rg_long": 0.025,
+       "rg_long_hit": 0.0,
+       "guess_623A_per_min": 0.43,
+       "guess_623A_counter": 0.314,
+       "guess_623B_per_min": 0.23,
+       "guess_623B_counter": 0.211
+      },
+      {
+       "presses": {
+        "A": 0.0117,
+        "B": 0.0143,
+        "C": 0.0042,
+        "D": 0.0105
+       },
+       "presses_per_second": 2.6,
+       "jumps_per_min": 20.7,
+       "guard_ground_per_min": 10.71,
+       "guard_air_per_min": 0.34,
+       "rg_ground_per_min": 2.53,
+       "rg_air_per_min": 0.22,
+       "hit_ground_per_min": 7.59,
+       "hit_air_per_min": 2.4,
+       "rg_ground": 0.122,
+       "rg_air": 0.074,
+       "rc": 0.188,
+       "rc_chances_per_min": 0.59,
+       "rg_move": 0.8,
+       "rg_punish": 0.329,
+       "rg_long": 0.0,
+       "rg_long_hit": null
+      }
+     ],
+     "by_opponent": {
+      "nanase": [
+       1,
+       0,
+       0
+      ],
+      "mai": [
+       1,
+       1,
+       0
+      ],
+      "makoto": [
+       1,
+       0,
+       0
+      ],
+      "akane": [
+       1,
+       0,
+       0
+      ],
+      "mayu": [
+       1,
+       1,
+       0
+      ],
+      "nagamori": [
+       0,
+       1,
+       0
+      ],
+      "misaki": [
+       1,
+       0,
+       0
+      ],
+      "shiori": [
+       1,
+       3,
+       0
+      ],
+      "sayuri": [
+       2,
+       1,
+       0
+      ],
+      "nayuki": [
+       2,
+       0,
+       0
+      ],
+      "mio": [
+       0,
+       1,
+       0
+      ],
+      "exnanase": [
+       1,
+       0,
+       0
+      ],
+      "kaori": [
+       2,
+       1,
+       0
+      ],
+      "mishio": [
+       1,
+       0,
+       0
+      ],
+      "akiko": [
+       1,
+       1,
+       0
+      ],
+      "nayukib": [
+       0,
+       1,
+       0
+      ],
+      "kanna": [
+       0,
+       2,
+       0
+      ],
+      "kano": [
+       3,
+       0,
+       0
+      ]
+     },
+     "level": 3
+    },
+    "old": {
+     "win": 0.8125,
+     "loss": 0.1875,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0103,
+        "B": 0.0089,
+        "C": 0.0073,
+        "D": 0.0003
+       },
+       "presses_per_second": 1.72,
+       "jumps_per_min": 13.84,
+       "guard_ground_per_min": 4.5,
+       "guard_air_per_min": 0.05,
+       "rg_ground_per_min": 0.97,
+       "rg_air_per_min": 0.1,
+       "hit_ground_per_min": 7.94,
+       "hit_air_per_min": 1.49,
+       "rg_ground": 0.072,
+       "rg_air": 0.058,
+       "rc": 0.077,
+       "rc_chances_per_min": 0.21,
+       "rg_move": 0.493,
+       "rg_punish": 0.313,
+       "rg_long": 0.06,
+       "rg_long_hit": 0.75,
+       "guess_623A_per_min": 0.6,
+       "guess_623A_counter": 0.237,
+       "guess_623B_per_min": 0.33,
+       "guess_623B_counter": 0.238
+      },
+      {
+       "presses": {
+        "A": 0.0385,
+        "B": 0.03,
+        "C": 0.035,
+        "D": 0.0401
+       },
+       "presses_per_second": 9.19,
+       "jumps_per_min": 18.8,
+       "guard_ground_per_min": 3.33,
+       "guard_air_per_min": 0.02,
+       "rg_ground_per_min": 0.38,
+       "rg_air_per_min": 0.02,
+       "hit_ground_per_min": 11.22,
+       "hit_air_per_min": 1.08,
+       "rg_ground": 0.025,
+       "rg_air": 0.014,
+       "rc": 0.1,
+       "rc_chances_per_min": 0.63,
+       "rg_move": 0.48,
+       "rg_punish": 0.2,
+       "rg_long": 0.12,
+       "rg_long_hit": 0.333,
+       "guess_623A_per_min": 0.33,
+       "guess_623A_counter": 0.238,
+       "guess_623B_per_min": 0.48,
+       "guess_623B_counter": 0.133
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       26,
+       6,
+       0
+      ]
+     }
+    }
+   }
+  },
+  {
+   "steps": 10076160,
+   "level": 3,
+   "train_seconds": 977.5125069618225,
+   "prior_kl": 0.03429795429110527,
+   "ep_return": 1.8379997563362123,
+   "eval": {
+    "cpu": {
+     "win": 0.75,
+     "loss": 0.21875,
+     "cut": 0.03125,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0124,
+        "B": 0.0093,
+        "C": 0.0071,
+        "D": 0.0003
+       },
+       "presses_per_second": 1.86,
+       "jumps_per_min": 13.58,
+       "guard_ground_per_min": 9.36,
+       "guard_air_per_min": 0.23,
+       "rg_ground_per_min": 1.26,
+       "rg_air_per_min": 0.16,
+       "hit_ground_per_min": 9.44,
+       "hit_air_per_min": 1.65,
+       "rg_ground": 0.063,
+       "rg_air": 0.077,
+       "rc": 0.087,
+       "rc_chances_per_min": 1.41,
+       "rg_move": 0.457,
+       "rg_punish": 0.189,
+       "rg_long": 0.031,
+       "rg_long_hit": 0.75,
+       "guess_623A_per_min": 0.35,
+       "guess_623A_counter": 0.258,
+       "guess_623B_per_min": 0.31,
+       "guess_623B_counter": 0.036
+      },
+      {
+       "presses": {
+        "A": 0.0108,
+        "B": 0.0159,
+        "C": 0.004,
+        "D": 0.0115
+       },
+       "presses_per_second": 2.71,
+       "jumps_per_min": 21.18,
+       "guard_ground_per_min": 12.05,
+       "guard_air_per_min": 0.35,
+       "rg_ground_per_min": 2.67,
+       "rg_air_per_min": 0.2,
+       "hit_ground_per_min": 7.63,
+       "hit_air_per_min": 2.68,
+       "rg_ground": 0.119,
+       "rg_air": 0.062,
+       "rc": 0.389,
+       "rc_chances_per_min": 0.6,
+       "rg_move": 0.763,
+       "rg_punish": 0.319,
+       "rg_long": 0.0,
+       "rg_long_hit": null
+      }
+     ],
+     "by_opponent": {
+      "nanase": [
+       1,
+       0,
+       0
+      ],
+      "mai": [
+       1,
+       0,
+       1
+      ],
+      "makoto": [
+       1,
+       0,
+       0
+      ],
+      "akane": [
+       1,
+       0,
+       0
+      ],
+      "mayu": [
+       2,
+       0,
+       0
+      ],
+      "nagamori": [
+       1,
+       0,
+       0
+      ],
+      "misaki": [
+       1,
+       0,
+       0
+      ],
+      "shiori": [
+       1,
+       3,
+       0
+      ],
+      "sayuri": [
+       2,
+       1,
+       0
+      ],
+      "nayuki": [
+       2,
+       0,
+       0
+      ],
+      "mio": [
+       1,
+       0,
+       0
+      ],
+      "exnanase": [
+       1,
+       0,
+       0
+      ],
+      "kaori": [
+       3,
+       0,
+       0
+      ],
+      "mishio": [
+       1,
+       0,
+       0
+      ],
+      "akiko": [
+       1,
+       1,
+       0
+      ],
+      "nayukib": [
+       1,
+       0,
+       0
+      ],
+      "kanna": [
+       0,
+       2,
+       0
+      ],
+      "kano": [
+       3,
+       0,
+       0
+      ]
+     },
+     "level": 3
+    },
+    "old": {
+     "win": 0.90625,
+     "loss": 0.09375,
+     "cut": 0.0,
+     "matches": 32,
+     "sides": [
+      {
+       "presses": {
+        "A": 0.0121,
+        "B": 0.009,
+        "C": 0.0068,
+        "D": 0.0002
+       },
+       "presses_per_second": 1.8,
+       "jumps_per_min": 13.54,
+       "guard_ground_per_min": 3.68,
+       "guard_air_per_min": 0.11,
+       "rg_ground_per_min": 0.8,
+       "rg_air_per_min": 0.11,
+       "hit_ground_per_min": 8.22,
+       "hit_air_per_min": 1.39,
+       "rg_ground": 0.063,
+       "rg_air": 0.071,
+       "rc": 0.0,
+       "rc_chances_per_min": 0.08,
+       "rg_move": 0.607,
+       "rg_punish": 0.429,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 0.56,
+       "guess_623A_counter": 0.147,
+       "guess_623B_per_min": 0.34,
+       "guess_623B_counter": 0.476
+      },
+      {
+       "presses": {
+        "A": 0.0382,
+        "B": 0.0309,
+        "C": 0.035,
+        "D": 0.0399
+       },
+       "presses_per_second": 9.21,
+       "jumps_per_min": 19.31,
+       "guard_ground_per_min": 2.45,
+       "guard_air_per_min": 0.02,
+       "rg_ground_per_min": 0.23,
+       "rg_air_per_min": 0.0,
+       "hit_ground_per_min": 11.39,
+       "hit_air_per_min": 1.03,
+       "rg_ground": 0.016,
+       "rg_air": 0.0,
+       "rc": 0.03,
+       "rc_chances_per_min": 0.54,
+       "rg_move": 0.5,
+       "rg_punish": 0.214,
+       "rg_long": 0.0,
+       "rg_long_hit": null,
+       "guess_623A_per_min": 0.44,
+       "guess_623A_counter": 0.074,
+       "guess_623B_per_min": 0.34,
+       "guess_623B_counter": 0.143
+      }
+     ],
+     "by_opponent": {
+      "ayu": [
+       29,
+       3,
+       0
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

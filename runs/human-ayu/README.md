@@ -63,11 +63,11 @@ and they differ in strength (8% to 38% wins against the level-2 CPU), but they k
 little of their players' habits: most measures fall back to everyone's (docs/training.md,
 "A team of players"). They are among the opponents of the fine-tuning.
 
-## The fine-tuned agent (training)
+## The fine-tuned agent
 
 `finetune.py --start bc-d14.zip --prior bc-d14.zip --delay 14 --level 2 --team
-team/player*.zip --chunk 2e6 --budget 3e7 --eval 32` into `agent/`, started 4 November
-2026, 19:49: about 14 minutes a chunk of 2 million steps (2,400 a second). Its
+team/player*.zip --chunk 2e6 --budget 3e7 --eval 32` into `agent/`, 4 November 2026,
+19:49 to 21:12: about 14 minutes a chunk of 2 million steps (2,400 a second). Its
 evaluations after each chunk (32 matches against the CPU at the chunk's level, any
 character, and 32 against the curriculum agent in the mirror):
 
@@ -77,8 +77,62 @@ character, and 32 against the curriculum agent in the mirror):
 | 2M | 2 | 81% (promoted) | 25% | 0.025 | 2.14 | 5.6 |
 | 4M | 3 | 34% | 47% | 0.028 | 1.83 | 9.6 |
 | 6M | 3 | 47% | 59% | 0.030 | 1.92 | 9.7 |
+| 8M | 3 | 59% | 81% | 0.034 | 1.77 | 10.7 |
+| 10M | 3 | 75% (promoted) | 91% | 0.034 | 1.86 | 9.4 |
 
-`agent/` (its model and checkpoints) comes with the run's end.
+Stopped at 10M (`finetune.json` continues it, at level 4) for what its combos lack, next.
+
+## Combos, and the combo master
+
+Its combos (the user's observation: little Instant Charge, cancels, damage), against
+the CPU after 10M steps, with people's from their matches:
+
+| | People | Curriculum agent (CPU 3) | Agent, 10M (CPU 3) | Agent, 10M (CPU 4) |
+|---|---|---|---|---|
+| Wins | - | 81% | 69% | 44% |
+| Combo damage: average / 90th percentile / most | 970 / 2,357 / 7,421 | 737 / 1,433 / 3,578 | 718 / 1,486 / 4,112 | 694 / 1,477 / 4,407 |
+| Combo hits: 90th percentile / most | 10 / 44 | 5 / 21 | 5 / 21 | 5 / 19 |
+| Combos (2+ hits) with a special / an Instant Charge | 44% / 16% | 22% / 0% | 59% / 0.7% | 57% / 2% |
+| Damage a minute in combos | 6,796 | 8,521 | 8,051 | 6,917 |
+
+It deals as much a minute as people from more, shorter combos: the reward pays a poke at
+once and a long combo only when every input of it is right, so learning from whole
+matches settles there. The long ones (the 90th percentile and the most, at half of
+people's) need cancels buffered while the character can't move and Instant Charge.
+
+`combo_starts.py` keeps 706 places where people's combos started (the first hit, from
+330 replays; 82 from replays bc.py holds out), and `combo.py` trains the combo master on
+trials from them: the agent has the attacker, the defender guards once it can, the
+reward is the combo's damage. A save state holds the library's addresses, so the starts
+are kept as a replay and a step and made again by playing back (706 of 706 at the view
+kept, in 36 s). On held-out starts, the damage after the first hit, people's from the
+same starts (the clone and 2M on 64 of the 82, people 468 / 1,452 / 2,926 there):
+
+| | The clone (64) | Combo master, 2M (64) | 4M (82) | People (82) |
+|---|---|---|---|---|
+| Damage: average / 90th percentile / most | 264 / 934 / 2,330 | 504 / 1,429 / 2,235 | 602 / 1,581 / 2,662 | 502 / 1,534 / 2,926 |
+| Hits, most | 10 | 9.5 | 10 | 20 |
+| Better than the player from the same start | 11% | 35% | 35% | - |
+| With an Instant Charge | 0% | 3% | 1% | - |
+
+It overtook people on average within 2 million steps (6-8 minutes a million), not yet
+on the longest combos; from 3M half its trials start where people made the most (the
+corner, the meter) and run up to 1,200 steps.
+
+Its role (the user's): a red-team opponent, landing the most damaging combo whenever it
+can. It needn't convert at people's rate, so it is trained on without the KL pull toward
+people or the reaction time, and plays the agent seeing the game as it is (the agent and
+its other opponents seeing it 14 frames late), so that taking a hit costs the agent what
+it can cost: pokes stop paying. (`finetune.py --combo` can also make it the target of the
+agent's KL pull during its own combos; not used, as it would pull the agent's combos
+toward a superhuman's.)
+
+## The models
+
+On Hugging Face, https://huggingface.co/sakuya9t/efz, under the same paths:
+`python runs/hub.py download human-ayu` (the clones, the team, the agent's checkpoints,
+the combo master). The repository keeps the clones and the team too; the agent's and
+the combo master's checkpoints are only there.
 
 ## The scripts
 
@@ -87,5 +141,9 @@ character, and 32 against the curriculum agent in the mirror):
 | `dataset.py` | replays to data: per Ayu side, the views, inputs and rewards of each step |
 | `bc.py` | the clone: the 45 actions people's inputs come to each frame, and the critic from their matches' returns; `--delay` for a reaction time, `--players` for one player's clone (from the clone of everyone, `--init`) |
 | `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones |
-| `evaluate.py` | matches to the end, with how each side played (`Events`) |
+| `evaluate.py` | matches to the end, with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move) |
 | `people.py` | the same measures of people, overall, by opponent and by player |
+| `compare.py` | people and agents side by side, as the tables here |
+| `team_check.py` | whether players' clones predict their players better than the clone of everyone |
+| `combo_starts.py` | where people's combos started, kept as a replay and a step |
+| `combo.py` | the combo master: trials from those starts, rewarded for the combo's damage |

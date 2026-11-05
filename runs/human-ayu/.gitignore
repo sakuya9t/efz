@@ -1,0 +1,3 @@
+# Checkpoints live on Hugging Face (runs/hub.py): the agent's and the combo master's
+agent/*.zip
+combo/*.zip
