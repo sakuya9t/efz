@@ -277,13 +277,26 @@ So people's matches, with every input and state, are there to learn from without
 video. The files carry players' names: kept out of the repository, and pseudonymised in
 any data made from them.
 
+All six archives (fetched the same day, kept outside the repository in
+`D:\tasogare\efz-replays`: `archives/`, `replays/` with only the `.rep` files, and
+`index.csv` of their headers) hold 55,424 replays, 10 GB: minase's 20,463 (2014-2020),
+Shimatora's 24,010 (to March 2020), Shima's 6,846 (2020-2021), the tournament pack's
+1,834 (15 nested zips among them), the Japanese pack's 2,230 and Tony's 41. 52,876 have
+an EfzRevival block. Every character is in them, from Sayuri's 11,447 sides to Ayu's
+1,953 (and 232 Kanna); the library plays them back itself (`EfzVecEnv.play`), and
+`runs/human-ayu/dataset.py` makes data of one character's
+([runs/human-ayu](../runs/human-ayu/README.md)). Of Ayu's 1,919 replays, those whose
+block counts the match's frames end exactly 459 frames short of that count (our count
+starts after the intro) in 1,252 cases, and 13 don't (a desync, or another version's
+count); 4 tiny ones end within the intro.
+
 An EfzRevival replay is the game's own replay with a block after it: the random seed,
 then both players' inputs, then the block's offset and `-1` ending the file
 (`Game::readExtendedReplay`, `revival/EfzRevival/EfzGame.cpp:1020`). A seed of 0 is an
 early version's bug. The game's own part holds the inputs and every random draw
 ([compat.md](compat.md), "The replay format"), which this game already plays back
-exactly; whether a netplay replay's own part is complete is to be checked on real
-files. `key.ini`'s fight settings are in neither.
+exactly; a netplay replay's own part is complete (the collection's play back to their
+end, above). `key.ini`'s fight settings are in neither.
 
 From replays to data:
 
@@ -443,6 +456,36 @@ around them as people do; preferences go in the objective.
 Signals: **pressure** from the game state (in block or hit stun, near the wall, low HP,
 the opponent able to act first, just combo'd); **lead** from the HP and rounds.
 
+**Execution rates** (the user's, 4 November 2026): what people can't push high however
+well they read the game, each a parameter of a persona and a measure. The recoil guard
+(RG: a guard within 10 frames of pressing back) is the only guard in the air against
+what can't be guarded there (`CPlayer::CanGuard`, `src/player.cpp:534`), anti-airs among
+them, which is why people jump in less than an agent with instant reactions would. The
+recoil counter (RC): an attacker whose attack was recoil-guarded can recoil-guard the
+counterattack from any state (`m_canRecoilCounter`, `src/scene3.cpp:1047`). Then the
+long inputs: an RF move (a C special, paid from the RF gauge) or a super entered within
+the window an RG or RC opens. The guesses: 623A or 623B, the one that counter-hits what
+the opponent does. And a character's own, such as Rumi's home run. All read from the
+game's state (`runs/human-ayu/evaluate.py`, `Events`), people's from their replays
+(`people.py`):
+
+| Ayu, per attack met, chance or use | People (1,908 matches) | The curriculum agent (the level-4 CPU, any character) |
+|---|---|---|
+| Recoil-guarded, ground / air | 13.6% / 14.3% | 1.3% / 0.4% |
+| Recoil counter, of the chances | 27.1% (1.3 a minute) | 5.4% (1.5 a minute) |
+| A move of its own within 40 steps of its RG; it hit | 40% ; 15% | 89% ; 28% |
+| A long or RF move after its RG; it hit | 2% ; 37% of those | 0% |
+| 623A, 623B a minute; a counter hit | 0.25, 0.35 ; 19%, 20% | 0.36, 0.65 ; 18%, 11% |
+| Guards on the ground a minute; hits taken ground + air | 11.7 ; 5.2 + 2.6 | 0.8 ; 11.2 + 2.2 |
+| Jumps a minute; presses a second | 19.0 ; 1.5 | 19.0 ; 9.3 |
+
+The agent the CPU taught jumps as often as people (holding up through each jump, where
+people tap it), but hardly guards and never recoil-guards: the CPU doesn't make it pay.
+Where it is superhuman is reaction: a move out after nearly every RG it makes. A
+reaction delay on what it sees (`delay`, below) is what keeps an agent's RG and punish
+rates near people's; a KL penalty toward people's play alone doesn't stop RL from
+reacting on the next frame.
+
 The 2012 Reimu AI already did a version of 3: ahead by more than 1,000 HP it waits up to
 `(lead + 1000) / 500` random frames before reacting (`00_reimuEXAM_main.ai:9282`).
 
@@ -460,6 +503,32 @@ opponent updates), knowledge (the moves and mechanics it uses at all). At play t
 persona chooses the player. With human replays, persona ranges can be fitted per skill band to
 the measures above; style can come from them too (behaviour cloning, then RL kept near
 it by a KL penalty, or a discriminator's reward).
+
+**A team of players** (the user's, 4 November 2026). The replays say who played (the
+file names, made pseudonyms: `players.csv` beside the replays, out of the repository),
+so each player's matches make a clone of that player: started from the clone of
+everyone and trained on theirs alone, it keeps the game everyone knows and takes their
+habits. A team of such clones gives characters and variance that one clone of everyone
+averages away, and as opponents in training it is a league: what beats one doesn't beat
+all, which keeps self-play out of the narrow optimum it finds alone (AlphaStar's league
+had human-started agents for this). Ayu's 89 players differ most where the execution
+rates above are: among the 11 named with 40 matches or more (EfzPlayer, the default
+name, is many people), 623B 0.05 to 0.91 a minute, 623A
+0.06 to 1.0, recoil guards 9% to 25% on the ground and 6% to 28% in the air, the recoil
+counter 4% to 39%, punishes after an RG 5% to 21%, guards 8 to 18 a minute; they all
+jump 16 to 20 times a minute. One player has 496 of the 1,953 sides.
+
+Tried (4 November 2026, `runs/human-ayu/team/`): six players' clones, each the clone
+of everyone (with the 14-frame reaction time) trained two more epochs on one player's
+matches. Each predicts its player's held-out matches better than the clone of everyone
+(1-3.5% lower loss, all six), and they differ in strength (8% to 38% wins against the
+level-2 CPU), but played out they keep little of their players' habits: 479's 1.0 623A
+a minute comes out at 0.1, 639's 18 guards a minute at 11, 143's 25% recoil guards at
+8%; most measures fall back to everyone's. Two epochs on a few dozen matches move the
+clone of everyone too little. Next: one policy given the player (an embedding, as the
+persona above) and trained on everyone's matches at once, so that what is a player's
+own is learnt as theirs rather than averaged away; and the habits compared against the
+same opponents (here the CPU, whose attacks set how often one guards).
 
 **Cautions.** A crude pressure signal is gamed (avoiding corners absurdly if "near the
 wall" dominates it): keep it to stun, frame disadvantage and HP, and watch the measures.

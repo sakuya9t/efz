@@ -1,0 +1,103 @@
+{
+ "args": {
+  "data": "D:/tasogare/EFZ",
+  "dataset": "D:/tasogare/efz-replays/datasets/ayu",
+  "out": "runs/human-ayu",
+  "history": 16,
+  "delay": 14,
+  "name": "bc-d14",
+  "keep": 0.25,
+  "epochs": 4,
+  "batch": 4096,
+  "lr": 0.001,
+  "gamma": 0.999,
+  "width": 512,
+  "vf_coef": 0.5,
+  "limit": 0,
+  "players": null,
+  "who": null,
+  "init": null,
+  "torch_threads": 8
+ },
+ "matches": 1908,
+ "people": {
+  "presses": {
+   "A": 0.0069,
+   "B": 0.0081,
+   "C": 0.0062,
+   "D": 0.001
+  },
+  "presses_per_second": 1.43,
+  "jumps_per_min": 18.79,
+  "guard_ground_per_min": 12.77,
+  "guard_air_per_min": 0.39,
+  "rg_ground_per_min": 2.79,
+  "rg_air_per_min": 0.42,
+  "hit_ground_per_min": 5.17,
+  "hit_air_per_min": 2.65,
+  "rg_ground": 0.135,
+  "rg_air": 0.122,
+  "rc": 0.27,
+  "rc_chances_per_min": 1.36,
+  "rg_move": 0.424,
+  "rg_punish": 0.16,
+  "rg_long": 0.024,
+  "rg_long_hit": 0.294,
+  "guess_623A_per_min": 0.22,
+  "guess_623A_counter": 0.165,
+  "guess_623B_per_min": 0.33,
+  "guess_623B_counter": 0.222
+ },
+ "train_steps": 4935940,
+ "val_steps": 1671998,
+ "epochs": [
+  {
+   "nll": 0.3757252720651477,
+   "action": 0.9125549193240662,
+   "direction": 0.9326691778339448,
+   "press_recall": 0.005245471682648963,
+   "press_precision": 0.5013054830287206,
+   "presses": 0.02189177259781411,
+   "epoch": 0,
+   "train_nll": 0.6010194486758388,
+   "train_value": 0.0652624723705246,
+   "seconds": 282.3810398578644
+  },
+  {
+   "nll": 0.36203824194836454,
+   "action": 0.9128013311020707,
+   "direction": 0.9333773126522878,
+   "press_recall": 0.040488484550446686,
+   "press_precision": 0.3931034482758621,
+   "presses": 0.02189177259781411,
+   "epoch": 1,
+   "train_nll": 0.3608501464470597,
+   "train_value": 0.042260582439422614,
+   "seconds": 287.46855998039246
+  },
+  {
+   "nll": 0.35072716323734576,
+   "action": 0.91365240867513,
+   "direction": 0.9337499207534937,
+   "press_recall": 0.02603611725814824,
+   "press_precision": 0.5129171151776103,
+   "presses": 0.02189177259781411,
+   "epoch": 2,
+   "train_nll": 0.34820186680209814,
+   "train_value": 0.028117406280213617,
+   "seconds": 295.1994526386261
+  },
+  {
+   "nll": 0.34876102913674545,
+   "action": 0.9138641314164251,
+   "direction": 0.9339365238475166,
+   "press_recall": 0.03193727290112832,
+   "press_precision": 0.5258659469185785,
+   "presses": 0.02189177259781411,
+   "epoch": 3,
+   "train_nll": 0.34147363922995216,
+   "train_value": 0.02273205921120514,
+   "seconds": 286.66154861450195
+  }
+ ]
+}

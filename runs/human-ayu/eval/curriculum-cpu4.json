@@ -1,0 +1,164 @@
+{
+ "cpu4": {
+  "win": 0.5833333333333334,
+  "loss": 0.4166666666666667,
+  "cut": 0.0,
+  "matches": 48,
+  "sides": [
+   {
+    "presses": {
+     "A": 0.0401,
+     "B": 0.0303,
+     "C": 0.0367,
+     "D": 0.0383
+    },
+    "presses_per_second": 9.31,
+    "jumps_per_min": 18.99,
+    "guard_ground_per_min": 0.82,
+    "guard_air_per_min": 0.05,
+    "rg_ground_per_min": 0.15,
+    "rg_air_per_min": 0.01,
+    "hit_ground_per_min": 11.2,
+    "hit_air_per_min": 2.21,
+    "rg_ground": 0.013,
+    "rg_air": 0.004,
+    "rc": 0.054,
+    "rc_chances_per_min": 1.51,
+    "rg_move": 0.889,
+    "rg_punish": 0.278,
+    "rg_long": 0.0,
+    "rg_long_hit": null,
+    "guess_623A_per_min": 0.36,
+    "guess_623A_counter": 0.175,
+    "guess_623B_per_min": 0.65,
+    "guess_623B_counter": 0.113
+   },
+   {
+    "presses": {
+     "A": 0.013,
+     "B": 0.0134,
+     "C": 0.0054,
+     "D": 0.01
+    },
+    "presses_per_second": 2.67,
+    "jumps_per_min": 19.42,
+    "guard_ground_per_min": 6.18,
+    "guard_air_per_min": 0.25,
+    "rg_ground_per_min": 1.97,
+    "rg_air_per_min": 0.58,
+    "hit_ground_per_min": 7.77,
+    "hit_air_per_min": 3.72,
+    "rg_ground": 0.123,
+    "rg_air": 0.128,
+    "rc": 0.455,
+    "rc_chances_per_min": 0.1,
+    "rg_move": 0.779,
+    "rg_punish": 0.457,
+    "rg_long": 0.0,
+    "rg_long_hit": null
+   }
+  ],
+  "by_opponent": {
+   "nanase": [
+    1,
+    2,
+    0
+   ],
+   "mai": [
+    2,
+    0,
+    0
+   ],
+   "makoto": [
+    1,
+    2,
+    0
+   ],
+   "akane": [
+    1,
+    1,
+    0
+   ],
+   "mayu": [
+    3,
+    0,
+    0
+   ],
+   "nagamori": [
+    3,
+    0,
+    0
+   ],
+   "misaki": [
+    1,
+    0,
+    0
+   ],
+   "shiori": [
+    0,
+    5,
+    0
+   ],
+   "sayuri": [
+    1,
+    2,
+    0
+   ],
+   "nayuki": [
+    2,
+    0,
+    0
+   ],
+   "mio": [
+    0,
+    2,
+    0
+   ],
+   "exnanase": [
+    2,
+    0,
+    0
+   ],
+   "kaori": [
+    2,
+    1,
+    0
+   ],
+   "ikumi": [
+    1,
+    0,
+    0
+   ],
+   "mishio": [
+    1,
+    0,
+    0
+   ],
+   "akiko": [
+    1,
+    1,
+    0
+   ],
+   "nayukib": [
+    0,
+    1,
+    0
+   ],
+   "kanna": [
+    0,
+    2,
+    0
+   ],
+   "kano": [
+    3,
+    1,
+    0
+   ],
+   "minagi": [
+    3,
+    0,
+    0
+   ]
+  }
+ }
+}
