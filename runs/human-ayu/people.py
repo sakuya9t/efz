@@ -26,6 +26,7 @@ from evaluate import COLUMNS, Events
 def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--dataset', required=True)
+    p.add_argument('--char', default='ayu', help="the dataset's character")
     p.add_argument('--split', choices=('val', 'all'), default='all')
     p.add_argument('--out', default=os.path.join(HERE, 'people.json'))
     p.add_argument('--by-player', help="players.csv (the replays' pseudonyms)")
@@ -40,17 +41,17 @@ def main():
         for r in csv.DictReader(open(args.by_player, encoding='utf-8')):
             who[(r['id'], r['side'])] = r['player']
     by_opponent, by_player = {}, {}
-    total = Events('ayu')
+    total = Events(args.char)
     for r in rows:
         with np.load(os.path.join(args.dataset, f"{r['id']}-{r['side']}.npz")) as z:
             cols, inputs = z['obs'][:, COLUMNS], z['input']
-        e = Events('ayu')
+        e = Events(args.char)
         e.add_match(cols, inputs)
         total.merge(e)
-        by_opponent.setdefault(r['opponent'], Events('ayu')).merge(e)
+        by_opponent.setdefault(r['opponent'], Events(args.char)).merge(e)
         if who:
             pl = who.get((r['id'], r['side']), 'unnamed')
-            by_player.setdefault(pl, [0, Events('ayu')])
+            by_player.setdefault(pl, [0, Events(args.char)])
             by_player[pl][0] += 1
             by_player[pl][1].merge(e)
     out = dict(split=args.split, matches=len(rows), minutes=round(total.n['frames'] / 3840, 1),

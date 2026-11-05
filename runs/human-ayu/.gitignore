@@ -7,3 +7,9 @@ combo-red2/*.zip
 combo-red3/*.zip
 # Made from the game's .pat files on each machine (framedata.py): no game data here
 framedata.json
+# The other characters' clones and exploiters too
+mizukab/**/*.zip
+kano/**/*.zip
+misuzu/**/*.zip
+mishio/**/*.zip
+agent-league/*.zip

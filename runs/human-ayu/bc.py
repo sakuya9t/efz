@@ -20,6 +20,8 @@ gets <name>.zip (a PPO model whose policy is the clone: examples/play.py,
 record_replay.py and finetune.py load it), <name>.json (the evaluations) and its
 settings (config.json, or <name>.config.json).
 
+Another character: --char (its dataset: dataset.py --char), Ayu by default.
+
 A player's clone: --players (numbers of the replays' players.csv, the pseudonyms kept
 beside the replays) learns from those players' matches alone, best started from the
 clone of everyone (--init bc.zip) at a lower --lr for an epoch or two: the game from
@@ -56,6 +58,7 @@ def parse():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--data', default=os.environ.get('EFZ_DATA') or os.environ.get('EFZ_DIR'))
     p.add_argument('--dataset', required=True)
+    p.add_argument('--char', default='ayu', help="the dataset's character")
     p.add_argument('--out', default=HERE)
     p.add_argument('--history', type=int, default=16, help='steps of own inputs seen')
     p.add_argument('--delay', type=int, default=0,
@@ -100,7 +103,7 @@ def load(args):
         rows = rows[:args.limit]
     rng = np.random.default_rng(0)
     parts = {'train': [], 'val': []}
-    people = Events('ayu')  # how people played, in the held-out matches
+    people = Events(args.char)  # how people played, in the held-out matches
     for r in rows:
         with np.load(os.path.join(args.dataset, f"{r['id']}-{r['side']}.npz")) as z:
             obs, inp, rew = z['obs'], z['input'], z['reward']
@@ -218,7 +221,7 @@ def main():
     # As an SB3 model, for what loads one.
     from stable_baselines3 import PPO
     from efz_env.sb3 import EfzSB3VecEnv
-    venv = EfzSB3VecEnv(args.data, 1, frame_skip=1, history=args.history, chars=('ayu', None))
+    venv = EfzSB3VecEnv(args.data, 1, frame_skip=1, history=args.history, chars=(args.char, None))
     model = PPO(EfzPolicy, venv, policy_kwargs=kwargs, device='cpu', verbose=0)
     model.policy.load_state_dict(policy.state_dict())
     model.save(os.path.join(args.out, f'{args.name}.zip'))
@@ -230,7 +233,7 @@ def main():
     if args.name != 'bc':
         config = os.path.join(args.out, f'{args.name}.config.json')
     with open(config, 'w') as f:
-        json.dump(dict(frame_skip=1, history=args.history, delay=args.delay, chars=['ayu', None],
+        json.dump(dict(frame_skip=1, history=args.history, delay=args.delay, chars=[args.char, None],
                        actions=[TABLE.describe(i) for i in range(len(TABLE))]), f, indent=1)
     print(f'done in {time.time() - t0:.0f}s')
 

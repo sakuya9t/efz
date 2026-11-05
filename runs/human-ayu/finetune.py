@@ -20,6 +20,20 @@ learnt it from people's matches. Each chunk (--chunk steps) is followed by match
 played to the end against the CPU (at the level of the chunk) and the curriculum
 agent, with how it played (evaluate.py's Events: people's are people.py's). --out gets
 model.zip, chunkNNN.zip, finetune.json (the evaluations) and config.json.
+
+Any character (--char, from its clone: bc.py --char), Ayu by default; the mirror
+opponents above (a frozen copy, the clone, --old, --team, --combo) play the learner's
+character. --vs MODEL:CHAR adds frozen opponents of their own characters (an agent of
+another run), which play --vs-share of the matches against agents (1: only they). With
+--focus the learner also gets focus.py's shaping reward for what it is meant to be good
+at ('setup': objects put out in free time, Mizuka's and Misuzu's traps; 'charge': Kano's
+charge moves in free time): an exploiter with a style, trained against a frozen agent
+(--vs) and kept close to its people's clone. --stop-win ends it once it beats every --vs
+opponent that often.
+
+    python runs/human-ayu/finetune.py --char kano --start runs/human-ayu/kano/bc-d14.zip \\
+        --prior runs/human-ayu/kano/bc-d14.zip --delay 14 --out runs/human-ayu/kano/exploiter \\
+        --vs runs/human-ayu/agent-red/model.zip:ayu --vs-share 1 --cpu-share 0.25 --focus charge
 """
 
 import argparse
@@ -46,15 +60,30 @@ import evaluate as ev
 TABLE = ActionTable()
 
 
+OLD = os.path.join(REPO, 'runs', 'curriculum', 'model.zip')
+
+
 def parse():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--data', default=os.environ.get('EFZ_DATA') or os.environ.get('EFZ_DIR'))
     p.add_argument('--out', default=os.path.join(HERE, 'agent'))
+    p.add_argument('--char', default='ayu', help="the learner's character")
+    p.add_argument('--vs', nargs='*', default=[],
+                   help='frozen opponents of other runs, MODEL.zip:CHAR (CHAR: ayu if left out)')
+    p.add_argument('--vs-share', type=float, default=0.5,
+                   help='share of the matches against agents that the --vs opponents play')
+    p.add_argument('--focus', choices=('setup', 'charge'), help="a shaping reward (focus.py)")
+    p.add_argument('--focus-coef', type=float, default=0.02)
+    p.add_argument('--pfsp', type=float, default=0,
+                   help='share out the --vs matches by (1 - the last evaluation\'s win) ** PFSP: '
+                        'more against what it loses to (prioritized fictitious self-play; 0: evenly)')
+    p.add_argument('--stop-win', type=float, default=0,
+                   help='stop once winning this share against every --vs opponent (0: never)')
     p.add_argument('--start', default=os.path.join(HERE, 'bc.zip'))
     p.add_argument('--prior', default=os.path.join(HERE, 'bc.zip'),
                    help='the policy to stay close to')
     p.add_argument('--prior-coef', type=float, default=0.1)
-    p.add_argument('--old', default=os.path.join(REPO, 'runs', 'curriculum', 'model.zip'),
+    p.add_argument('--old', default=OLD,
                    help='an agent of frame_skip 4 among the opponents')
     p.add_argument('--team', nargs='*', default=[], help="players' clones among the opponents")
     p.add_argument('--combo', help="combo.py's combo master: a red-team opponent")
@@ -84,7 +113,12 @@ def parse():
     p.add_argument('--lr', type=float, default=1e-4)
     p.add_argument('--ent-coef', type=float, default=0.005)
     p.add_argument('--torch-threads', type=int, default=8)
-    return p.parse_args()
+    args = p.parse_args()
+    if args.char != 'ayu' and args.old == OLD:  # the curriculum agent plays Ayu only
+        args.old = ''
+    args.vs = [tuple(v.rsplit(':', 1)) if ':' in os.path.basename(v) else (v, 'ayu')
+               for v in args.vs]
+    return args
 
 
 def ppo_settings(args):
@@ -93,20 +127,49 @@ def ppo_settings(args):
                 vf_coef=0.5, max_grad_norm=0.5)
 
 
-def make_env(args, opponents, seed, level):
+def vs_counts(n, wins, power):
+    """n matches shared out among the --vs opponents: by (1 - win) ** power (PFSP), at
+    least one each, by largest remainder; evenly without wins or power."""
+    k = len(wins)
+    if not power or any(w is None for w in wins):
+        return [n // k + (j < n % k) for j in range(k)]
+    w = np.array([(1 - x) ** power + 0.02 for x in wins])
+    share = (n - k) * w / w.sum()
+    counts = 1 + np.floor(share).astype(int)
+    for j in np.argsort(-(share - np.floor(share)))[:n - counts.sum()]:
+        counts[j] += 1
+    return [int(c) for c in counts]
+
+
+def make_env(args, opponents, vs, seed, level, wins=None):
+    """opponents: the mirror ones (the learner's character); vs: [(opponent, char)];
+    wins: the learner's last wins against each of vs (for --pfsp)."""
     n = args.envs
     n_cpu = int(round(n * args.cpu_share))
     cpu_envs = np.arange(n) >= n - n_cpu
-    # The matches against agents: Ayu's mirror, shared out among the opponents; the
-    # combo master (the last of them) plays --combo-share of them.
-    assignment = np.where(cpu_envs, -1, np.arange(n) % len(opponents))
+    agents = np.flatnonzero(~cpu_envs)
+    k_vs = int(round(len(agents) * args.vs_share)) if vs else 0
+    vs_envs, mirror = agents[:k_vs], agents[k_vs:]
+    # The mirror matches, shared out among the mirror opponents; the combo master (the
+    # last of them) plays --combo-share of them. Then the --vs opponents' (after them).
+    assignment = np.full(n, -1)
+    assignment[mirror] = np.arange(len(mirror)) % max(1, len(opponents))
     red = len(opponents) - 1 if args.combo else -2
     if args.combo:
-        mirror = np.flatnonzero(~cpu_envs)
         k = int(round(len(mirror) * args.combo_share))
         others = len(opponents) - 1
         assignment[mirror] = [red if j < k else j % others for j in range(len(mirror))]
-    chars = [('ayu', None) if c else ('ayu', 'ayu') for c in cpu_envs]
+    if len(vs_envs):
+        counts = vs_counts(len(vs_envs), wins or [None] * len(vs), args.pfsp)
+        which = np.repeat(np.arange(len(vs)), counts)
+        assignment[vs_envs] = len(opponents) + which
+        print('--vs matches:', ', '.join(f'{c}' for c in counts), flush=True)
+    chars = [(args.char, None)] * n
+    for i in mirror:
+        chars[i] = (args.char, args.char)
+    for i in vs_envs:
+        chars[i] = (args.char, vs[assignment[i] - len(opponents)][1])
+    opponents = list(opponents) + [o for o, _ in vs]
     # The combo master has a reaction time of its own.
     opponent_delay = np.where(assignment == red, min(args.combo_delay, args.delay), args.delay)
     env = EfzSB3VecEnv(args.data, n, opponent=mixture(opponents, assignment),
@@ -117,6 +180,9 @@ def make_env(args, opponents, seed, level):
     for o in opponents:  # the lookahead red team saves this environment's games
         if hasattr(o, 'attach'):
             o.attach(env)
+    if args.focus:
+        import focus
+        env = focus.Focus(env, args.focus, args.focus_coef, args.char)
     return env
 
 
@@ -135,14 +201,17 @@ def evaluate(args, model_path, level):
     a.data, a.minutes = args.data, args.minutes
     me = ev.Agent(model_path)
     out = {}
-    a.chars = ('ayu', args.cpu_chars if level == 4 else 'random')  # tiers: level 4's
+    a.chars = (args.char, args.cpu_chars if level == 4 else 'random')  # tiers: level 4's
     out['cpu'] = ev.play(a, me, 'cpu', args.eval, level)
     out['cpu']['level'] = level
     if args.old and os.path.exists(args.old):
-        a.chars = ('ayu', 'ayu')
+        a.chars = (args.char, 'ayu')
         out['old'] = ev.play(a, me, ev.Agent(args.old), args.eval)
+    for j, (path, char) in enumerate(args.vs):
+        a.chars = (args.char, char)
+        out[f'vs{j}'] = ev.play(a, me, ev.Agent(path), args.eval)
     if args.combo:
-        a.chars = ('ayu', 'ayu')
+        a.chars = (args.char, args.char)
         red = RED['agent'] if RED else ev.Agent(args.combo)
         n = len(red.plans) if RED else 0
         out['red'] = ev.play(a, me, red, args.eval)
@@ -192,7 +261,9 @@ def main():
         print(f'continuing {args.out} after chunk {len(history)}', flush=True)
     settings = ppo_settings(args)
     with open(os.path.join(args.out, 'config.json'), 'w') as f:
-        json.dump(dict(frame_skip=1, history=args.history, delay=args.delay, chars=['ayu', None],
+        json.dump(dict(frame_skip=1, history=args.history, delay=args.delay, chars=[args.char, None],
+                       vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
+                       focus=args.focus, focus_coef=args.focus_coef,
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
                        team=[os.path.relpath(t, REPO) for t in args.team],
                        combo=args.combo and os.path.relpath(args.combo, REPO),
@@ -215,7 +286,8 @@ def main():
     elif master is not None:
         team.append(frozen(master))
     opponents = lambda snapshot: [o for o in (snapshot, clone, old) if o is not None] + team
-    env = make_env(args, opponents(clone), len(history), level)
+    vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
+    env = make_env(args, opponents(clone), vs, len(history), level)
     model = PPO.load(start, env=env, device='cpu', **settings)
     if args.prior_coef > 0:
         teacher = master.policy if master is not None and args.combo_teacher else None
@@ -227,7 +299,9 @@ def main():
         history.append(dict(steps=0, level=level, eval=before))
     while model.num_timesteps < args.budget:
         env.close()
-        env = make_env(args, opponents(frozen(model)), len(history) + 1, level)
+        last = history[-1]['eval'] if history else {}
+        wins = [last.get(f'vs{j}', {}).get('win') for j in range(len(vs))]
+        env = make_env(args, opponents(frozen(model)), vs, len(history) + 1, level, wins)
         model.set_env(env)
         t = time.time()
         model.learn(int(args.chunk), reset_num_timesteps=False, callback=KLLog())
@@ -237,17 +311,25 @@ def main():
         model.save(os.path.join(args.out, f'chunk{len(history):03d}.zip'))
         results = evaluate(args, path, level)
         returns = [e['r'] for e in model.ep_info_buffer]
+        focus = env.take() if args.focus else None  # the focus' events, a minute of play
+        focus_rate = focus['events'] / max(1, focus['steps']) * 3840 if focus else None
         history.append(dict(steps=model.num_timesteps, level=level, train_seconds=seconds,
                             prior_kl=model.policy.prior_kl,
                             ep_return=float(np.mean(returns)) if returns else None,
-                            eval=results))
+                            focus_per_min=focus_rate, eval=results))
         print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s, L{level}, '
-              f'KL {model.policy.prior_kl:.3f}] ' + show(results), flush=True)
+              f'KL {model.policy.prior_kl:.3f}'
+              + (f', {args.focus} {focus_rate:.2f}/min' if focus else '') + '] '
+              + show(results), flush=True)
         if results['cpu']['win'] >= args.promote and level < 4:
             level += 1
             print(f'promoted to level {level}', flush=True)
         with open(state_path, 'w') as f:
             json.dump(dict(level=level, history=history), f, indent=1)
+        if args.stop_win and args.vs and all(results[f'vs{j}']['win'] >= args.stop_win
+                                             for j in range(len(args.vs))):
+            print(f'beats every --vs opponent {args.stop_win:.0%} of the time: stopping', flush=True)
+            break
     env.close()
     print('done', flush=True)
 
