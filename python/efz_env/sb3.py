@@ -71,7 +71,8 @@ def held(opponent, steps):
 
 def mixture(policies, assignment):
     """An opponent of several policies: match i is played by policies[assignment[i]]
-    (each a callable as EfzSB3VecEnv's opponent; None for matches the CPU plays)."""
+    (each a callable as EfzSB3VecEnv's opponent; None for matches the CPU plays). A
+    policy with takes_index set is given its matches' indices too: policy(obs, idx)."""
     assignment = np.asarray(assignment)
     groups = [(p, np.flatnonzero(assignment == k)) for k, p in enumerate(policies)]
 
@@ -79,7 +80,10 @@ def mixture(policies, assignment):
         actions = np.zeros(len(obs), dtype=np.int64)
         for policy, idx in groups:
             if policy is not None and len(idx):
-                actions[idx] = policy(obs[idx])
+                if getattr(policy, 'takes_index', False):
+                    actions[idx] = policy(obs[idx], idx)
+                else:
+                    actions[idx] = policy(obs[idx])
         return actions
     return act
 
