@@ -19,7 +19,8 @@
  "combo": "runs\\human-ayu\\combo-red\\combo.zip",
  "combo_teacher": false,
  "combo_delay": 0,
- "level": 4,
+ "lookahead": "D:/tasogare/efz-replays/combo-library.npz",
+ "level": 2,
  "ppo": {
   "learning_rate": 0.0001,
   "n_steps": 256,

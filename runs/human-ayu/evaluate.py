@@ -37,7 +37,8 @@ TABLE = ActionTable()
 # self_airborne, opp_action, opp_hitstun, opp_own_action, self_combo_hits (the combo
 # one is doing: the attacker's counter, / 30) and self_combo_damage (/ 9999).
 COLUMNS = [18, 20, 39, 50, 52, 67, 30, 38, 23, 35,  # + self_hitstop, self_own_action
-           9, 10, 11]  # + self_gauge (/ 3000), self_rf_gauge (/ 1000), self_rf_blue
+           9, 10, 11,  # + self_gauge (/ 3000), self_rf_gauge (/ 1000), self_rf_blue
+           31]  # + self_proration (/ 10000)
 INSTANT_CHARGE = [0xa7, 0xab]  # 22C on the ground and in the air: cancels a move that hit
 
 
@@ -90,6 +91,10 @@ class Events:
         hits or more, the damage a minute;
         combo_special, combo_ic: the share of combos of 2 hits or more in which a
         special or super, and an Instant Charge (22C), came out; ic_per_min;
+        combo_proration_left: the attacker's proration at the end of its combos of 3
+        hits or more (/ 10000; each hit cuts it, and with it the hits' damage and the
+        untech time they give: the in-air bar, which costs nothing, so a combo ending
+        with much of it left could have gone on: the user's);
         combo_by_resources: per resource group at the combo's start (resources(): the
         RF gauge red, cyan or blue, and the bars of power), the combos' count, damage on
         average, at the 90th percentile and the most;
@@ -109,7 +114,8 @@ class Events:
             keys += [f'guess_{g}', f'guess_{g}_counter']
         self.n = dict.fromkeys(keys, 0)
         self.n['presses'] = np.zeros(4)
-        self.n['combo_list'] = []  # each combo's (hits, damage)
+        self.n['combo_list'] = []  # each combo's (hits, damage, resource group)
+        self.n['proration_left'] = []  # at the end of each of 3 hits or more
 
     def add_match(self, cols, controls):
         """One player's match: cols (T, len(COLUMNS)), the observation's COLUMNS before
@@ -186,6 +192,8 @@ class Events:
                 e = later[0] if len(later) else T
                 h, d = int(hits[b:e].max()), float(dmg[b:e].max())
                 n['combos'] += 1
+                if cols.shape[1] > 13 and h >= 3:
+                    n['proration_left'].append(float(cols[e - 1, 13]))
                 if cols.shape[1] > 12:
                     g = resources(cols[b, 10] * 3000, cols[b, 11] * 1000, cols[b, 12] > 0)
                 else:
@@ -255,6 +263,8 @@ class Events:
             out['combo_damage_max'] = round(float(dmg.max()))
             out['combo_hits_p90'] = round(float(np.percentile(hits, 90)), 1)
             out['combo_hits_max'] = int(hits.max())
+        left = n['proration_left']
+        out['combo_proration_left'] = round(float(np.mean(left)), 3) if left else None
         out['combo_3plus'] = share(n['combos3'], c)
         out['combo_damage_per_min'] = round(n['combo_damage'] * per_min)
         out['combo_special'] = share(n['combo_special'], n['combos2'])
@@ -272,8 +282,10 @@ def play(args, p1, p2, matches, level=4, seed=7):
     chars = [None if c == 'random' else c for c in args.chars]
     env.set_matches(chars=tuple(chars), cpu=(False, p2 == 'cpu'))
     agents = [p1] + ([] if p2 == 'cpu' else [p2])
-    for a in agents:
+    for side, a in enumerate(agents):
         a.batch(matches)
+        if hasattr(a, 'attach'):  # the lookahead red team (redteam.py) saves the games
+            a.attach(env, side)
     obs = env.reset()
     done = np.zeros(matches, bool)
     result = np.zeros(matches, int)  # 1 P1 won, -1 lost, 0 cut short

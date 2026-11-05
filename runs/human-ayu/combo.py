@@ -31,7 +31,10 @@ reward, phi the defender's untech time left while it is juggled (in hitstun in t
 so that a hit keeping the juggle up pays at once and not only through the hits it makes
 possible. Being potential-based it changes how fast it is learnt, not which combo is
 best. And --meter-cost c: minus c for each bar of power gauge spent (supers), so that the
-long combos are found without them; the RF gauge (Instant Charge) is free. The reward is the damage
+long combos are found without them; the RF gauge (Instant Charge) is free. And
+--leftover-cost l: minus l times the proration left when the combo ends (people's end
+with 64% of it left, the agents' with 74-79%: the in-air bar costs nothing, so what is
+left of it is damage not made; the user's). The reward is the damage
 dealt (per 1000 HP); a small KL toward the clone (--prior-coef) keeps its inputs a
 person's. Every --chunk steps the held-out starts (from replays bc.py holds out) are
 played once each and compared with what their players did from there (the damage after
@@ -72,6 +75,7 @@ def group_gauges(group, rng):
     lo = 500 if state == 'cyan' else 0
     return power, float(lo + rng.integers(0, 500)), False
 SELF_GAUGE = 9  # self_gauge (/ 3000)
+SELF_PRORATION = 31  # self_proration (/ 10000)
 OPP_HITSTUN, OPP_UNTECH, OPP_AIRBORNE = 52, 61, 71  # opp_untech: ticks / 100
 ACTION = 18
 INSTANT_CHARGE = (0xa7, 0xab)
@@ -154,7 +158,7 @@ class ComboTrials(VecEnv):
 
     def __init__(self, data_dir, starts, num_envs, delay=14, history=16, limit=1200, seed=0,
                  order=False, focus=0.0, rich=0.0, gauges=None, juggle=0.0, meter_cost=0.0,
-                 gamma=0.99):
+                 gamma=0.99, leftover_cost=0.0):
         self.env = EfzVecEnv(data_dir, num_envs, frame_skip=1, rounds_to_win=2,
                              max_frames=0, autoreset='disabled', reward_round=0.0,
                              reward_match=0.0)
@@ -163,6 +167,8 @@ class ComboTrials(VecEnv):
         self.limit, self.order, self.next = limit, order, 0
         self.focus = focus
         self.juggle, self.meter_cost, self.gamma = juggle, meter_cost, gamma
+        self.leftover_cost = leftover_cost
+        self.proration = np.ones(num_envs)  # the attacker's, at its combo's last hit
         self.phi = np.zeros(num_envs)    # the juggle's potential now
         self.gauge = np.zeros(num_envs)  # the attacker's power gauge, last step
         self.rich = rich      # share of trials with resources drawn from the groups
@@ -222,6 +228,7 @@ class ComboTrials(VecEnv):
         self.dealt[i] = 0.0
         self.hp[i] = float(self.env.info['hp'][i, 1 - s])
         self.phi[i] = self._phi(self.env.obs[i, s])
+        self.proration[i] = min(1.0, float(self.env.obs[i, s, SELF_PRORATION]))
         self.gauge[i] = float(self.env.obs[i, s, SELF_GAUGE]) * 3000
         self.max_hits[i] = round(float(self.env.obs[i, s, COMBO_HITS]) * 30)
         self.ic[i] = self.special[i] = False
@@ -280,6 +287,10 @@ class ComboTrials(VecEnv):
             self.ic[i] |= act in INSTANT_CHARGE
             self.special[i] |= act in SPECIALS
             ended = hits == 0 or term[i] or trunc[i] or self.t[i] >= self.limit
+            if hits > 0:
+                self.proration[i] = min(1.0, float(obs[i, s, SELF_PRORATION]))
+            if ended and self.leftover_cost and not term[i]:  # a KO wastes nothing
+                rewards[i] -= self.leftover_cost * self.proration[i]
             if self.juggle:  # the potential is 0 once the trial ends
                 phi = 0.0 if ended else self._phi(obs[i, s])
                 rewards[i] += self.gamma * phi - self.phi[i]
@@ -361,6 +372,8 @@ def parse():
                    help="weight of the juggle helper (the defender's untech time, shaped)")
     p.add_argument('--meter-cost', type=float, default=0.0,
                    help='reward taken off per bar of power gauge spent')
+    p.add_argument('--leftover-cost', type=float, default=0.0,
+                   help="reward taken off per the proration left at the combo's end")
     p.add_argument('--pool', type=int, default=500, help='training starts held in memory')
     p.add_argument('--envs', type=int, default=48)
     p.add_argument('--chunk', type=float, default=1e6)
@@ -392,7 +405,8 @@ def main():
                     gamma=0.99, gae_lambda=0.95, ent_coef=args.ent_coef, clip_range=0.2)
     trials = ComboTrials(args.data, train, args.envs, args.delay, args.history, args.limit,
                          seed=1, focus=args.focus, rich=args.rich, juggle=args.juggle,
-                         meter_cost=args.meter_cost, gamma=settings['gamma'])
+                         meter_cost=args.meter_cost, gamma=settings['gamma'],
+                         leftover_cost=args.leftover_cost)
     state = os.path.join(args.out, 'combo.json')
     history = []
     if args.resume:
@@ -408,6 +422,7 @@ def main():
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
                        limit=args.limit, focus=args.focus, rich=args.rich,
                        juggle=args.juggle, meter_cost=args.meter_cost,
+                       leftover_cost=args.leftover_cost,
                        ppo=settings), f, indent=1)
     def both(m):
         return evaluate(args, m, test), {g: evaluate(args, m, test, gauges=g)

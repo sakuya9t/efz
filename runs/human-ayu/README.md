@@ -162,6 +162,33 @@ against the red team, which sees the game as it is): to 14M steps, more guarding
 minute against the CPU) and less damage taken from the red team's combos (6,800 to 6,050
 a minute), its own combos about as before; stopped while the red team improves.
 
+The selector (`macros/`, 10,682 combo trials and 1,248 of the red team's own play from
+the training starts) helps only with full resources; the best option in hindsight is
+50-70% above the red team alone in every group:
+
+| Held-out starts | Red team alone | With the selector | Best in hindsight |
+|---|---|---|---|
+| red RF, 0 bars | 651 / 1,524 / 2,533 | 587 / 1,859 / 2,533 | 994 / 2,283 / 3,053 |
+| cyan RF, 0 bars | 960 / 2,464 / 3,479 | 821 / 2,415 / 3,113 | 1,329 / 2,999 / 4,589 |
+| blue RF, 0 bars | 1,083 / 2,821 / 4,268 | 970 / 2,667 / 3,317 | 1,825 / 4,434 / 5,480 |
+| blue RF, 3 bars | 1,378 / 3,599 / 4,386 | 1,521 / 3,798 / 4,593 | 2,336 / 5,228 / 6,165 |
+
+So the red team doesn't predict: `redteam.py` tries, at each of its first hits, the
+library combos with that starter and its own play on copies of the game (save states, a
+batch of its own) and plays the best: the hindsight column by construction. Each plan
+also gives the hit's conversion potential, the most any option made from it: the
+measure of an "easy location" (the user's: a hit from which a big combo is likely),
+which the agent should learn to avoid giving even where it doesn't take fewer hits.
+`finetune.py --lookahead` puts it in front of the agent (from 14.1M, a quarter of the
+mirror matches) and reports, against it, the potential of the hits the agent took and
+the share worth 3,000 or more.
+
+The in-air bar (the user's point: it costs nothing, so people spend it with longer
+combos): the proration left at the end of combos of 3 hits or more is 64% for people,
+74% for the agent at 14M, 79% for the red team. `combo.py --leftover-cost` charges for it
+(the red team of `combo-red3/`, with the juggle helper and a super cost of 0.1 a bar;
+`combo-red2/`, with 0.5 a bar, fell behind with 3 bars and was stopped at 15M).
+
 ## The models
 
 On Hugging Face, https://huggingface.co/sakuya9t/efz, under the same paths:

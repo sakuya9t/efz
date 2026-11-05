@@ -61,6 +61,8 @@ def parse():
     p.add_argument('--combo-teacher', action='store_true',
                    help="the combo master as the pull's target in the agent's own combos")
     p.add_argument('--combo-delay', type=int, default=0, help="the combo master's reaction time")
+    p.add_argument('--lookahead', help="combo_library.py's library: the combo master tries its "
+                   "options at each hit on copies of the game and plays the best (redteam.py)")
     p.add_argument('--combo-share', type=float, default=0.25,
                    help='share of the matches against agents that the combo master plays')
     p.add_argument('--level', type=int, default=2, help="the CPU's level to start at")
@@ -104,11 +106,15 @@ def make_env(args, opponents, seed, level):
     chars = [('ayu', None) if c else ('ayu', 'ayu') for c in cpu_envs]
     # The combo master has a reaction time of its own.
     opponent_delay = np.where(assignment == red, min(args.combo_delay, args.delay), args.delay)
-    return EfzSB3VecEnv(args.data, n, opponent=mixture(opponents, assignment),
+    env = EfzSB3VecEnv(args.data, n, opponent=mixture(opponents, assignment),
                         cpu_envs=cpu_envs, chars=chars, frame_skip=1, history=args.history,
                         delay=args.delay, opponent_delay=opponent_delay if args.delay else None,
                         max_frames=int(args.minutes * 3840), cpu_level=level,
                         reward_round=0.0, reward_match=1.0, seed=seed)
+    for o in opponents:  # the lookahead red team saves this environment's games
+        if hasattr(o, 'attach'):
+            o.attach(env)
+    return env
 
 
 class KLLog(BaseCallback):
@@ -134,8 +140,20 @@ def evaluate(args, model_path, level):
         out['old'] = ev.play(a, me, ev.Agent(args.old), args.eval)
     if args.combo:
         a.chars = ('ayu', 'ayu')
-        out['red'] = ev.play(a, me, ev.Agent(args.combo), args.eval)
+        red = RED['agent'] if RED else ev.Agent(args.combo)
+        n = len(red.plans) if RED else 0
+        out['red'] = ev.play(a, me, red, args.eval)
+        if RED:  # what the hits the agent took were worth to the red team
+            plans = red.plans[n:]
+            out['red']['plans'] = dict(
+                n=len(plans), potential=float(np.mean([p[0] for p in plans])) if plans else None,
+                own=float(np.mean([p[1] for p in plans])) if plans else None,
+                library=float(np.mean([p[2] for p in plans])) if plans else None,
+                big=float(np.mean([p[0] >= 3000 for p in plans])) if plans else None)
     return out
+
+
+RED = {}  # the lookahead red team: its planner, opponent and agent
 
 
 def show(results):
@@ -174,6 +192,7 @@ def main():
                        team=[os.path.relpath(t, REPO) for t in args.team],
                        combo=args.combo and os.path.relpath(args.combo, REPO),
                        combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
+                       lookahead=args.lookahead,
                        level=args.level, ppo=settings,
                        actions=[TABLE.describe(i) for i in range(len(TABLE))]), f, indent=1)
     prior = PPO.load(args.prior, device='cpu')
@@ -181,7 +200,14 @@ def main():
     old = held(frozen(PPO.load(args.old, device='cpu')), 4) if args.old else None
     team = [frozen(PPO.load(t, device='cpu')) for t in args.team]
     master = PPO.load(args.combo, device='cpu') if args.combo else None
-    if master is not None:
+    if master is not None and args.lookahead:
+        import macros
+        import redteam
+        planner = redteam.Planner(args.data, macros.load_library(args.lookahead, 300), master)
+        RED.update(opponent=redteam.RedTeamOpponent(planner, master),
+                   agent=redteam.RedTeamAgent(planner, args.combo))
+        team.append(RED['opponent'])
+    elif master is not None:
         team.append(frozen(master))
     opponents = lambda snapshot: [o for o in (snapshot, clone, old) if o is not None] + team
     env = make_env(args, opponents(clone), len(history), level)
