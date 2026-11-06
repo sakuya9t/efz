@@ -342,7 +342,22 @@ agent is a median of 10 frames minus (6 against the first), fights back after 13
 (21%), and her objects are out 30% of the time (14%), setups in 44% of her free windows.
 The new Kano found the old hole (19 jumps a minute, anti-aired).
 `agent-league2/` (the exploiters 60% of the agent matches) and `agent-league2-kl/` (a
-pull of 0.05 toward the clone) continue `agent-league` against all four.
+pull of 0.05 toward the clone, from 0.1) continued `agent-league` against all four, to
+70.5M steps. On the same seeds (`<run>/compare/`; 64 matches against each exploiter, 63
+against the CPU):
+
+| Agent | Level-4 CPU: Kanna / Ayu, Mishio / the rest | Mizuka 1 | Mizuka 2 | Kano 1 | Kano 2 | Guards a minute (CPU) |
+|---|---|---|---|---|---|---|
+| `agent-league`, 50.4M | 0% / 67% / 86% | 69% | 23% | 19% | 19% | 9.6 |
+| `agent-league2` (share 0.6) | 0% / 62% / 86% | 69% | 61% | 25% | 38% | 8.4 |
+| `agent-league2-kl` (pull 0.05) | 0% / 62% / 90% | **84%** | **75%** | **59%** | **62%** | 6.2 |
+
+The weaker pull closes Kano's hole (she was beaten 19% of the time), and the second
+Mizuka's; more of the exploiters' matches alone does much less. What it costs: it guards
+the CPU 6.2 times a minute (people 11.7 against people), its other rates as before
+(presses 1.66 a second, jumps 13.7 a minute, combos 820 / 1,650 at the 90th percentile;
+KL to the clone 0.071, from 0.04). These are the exploiters it trained against: a third
+round of exploiters is what would say whether it is robust or only knows these four.
 
 Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
 clones were stopped (the system ran short of memory) and are next.
