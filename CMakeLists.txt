@@ -145,13 +145,10 @@ if(EFZ_HEADLESS)
   set_target_properties(efz_headless PROPERTIES POSITION_INDEPENDENT_CODE ON
                                                 CXX_VISIBILITY_PRESET hidden
                                                 VISIBILITY_INLINES_HIDDEN ON)
+  # On Linux the arena's base pointers take the static TLS model (EFZ_THREAD_LOCAL,
+  # port/guest.h), and only they.
   if(MSVC)
     target_compile_options(efz_headless PRIVATE $<$<NOT:$<CONFIG:Debug>>:/Ob2 /Oi /GL>)
-  elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    # The arena's base is thread-local (port/guest.h) and read on every pointer the game
-    # follows: the static TLS model, not a __tls_get_addr call each time. Two pointers
-    # fit in what glibc keeps for libraries loaded later.
-    target_compile_options(efz_headless PRIVATE -ftls-model=initial-exec)
   endif()
 
   # efz_env: the C API of port/headless/efz_env.h, for Python (python/efz_env) and

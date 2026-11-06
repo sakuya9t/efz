@@ -22,7 +22,16 @@
 #include <type_traits>
 
 #ifdef EFZ_MULTI_INSTANCE
+#if defined(__linux__) && defined(__GNUC__)
+// The arena's base is read on every pointer the game follows: the static TLS model, not
+// a __tls_get_addr call each time. Two pointers fit in what glibc keeps for libraries
+// loaded later. Only these: with -ftls-model=initial-exec on everything, libstdc++'s own
+// thread-locals (std::call_once's) were bound that way too, and loading the library
+// after torch failed ("cannot allocate memory in static TLS block").
+#define EFZ_THREAD_LOCAL thread_local __attribute__((tls_model("initial-exec")))
+#else
 #define EFZ_THREAD_LOCAL thread_local
+#endif
 #else
 #define EFZ_THREAD_LOCAL
 #endif
