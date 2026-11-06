@@ -233,15 +233,45 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
 - **The CPU's tiers.** At level 4 the CPU is hardest as Kanna, then Ayu and Mishio, then
   the rest (the user's); below level 4 all are easy. `evaluate.py --chars ayu tiers`
   plays a third of the matches against each tier and reports the wins by tier;
-  `finetune.py` evaluates level 4 that way (`--cpu-chars`). What the source says: the
-  level sets `m_cpuSkill`, and a CPU guards an attack when `rand() <= m_cpuSkill * 10000`
-  (`CPlayer::HoldsGuard`, src/player.cpp:551), choosing the right height itself; `rand()`
-  tops at 32,767, so it guards 31%, 61%, 92% and, at level 4, 100% of what it can,
-  every character alike. The level also scales the random chances in each character's
-  `CpuInput`. So the tiers come from the characters' own routines and moves, not from
-  guarding; and since Mishio's `CpuInput` is byte-identical to Kano's, Ikumi's and
-  Shiori's (docs/naming/kano-ikumi-mishio-shiori.md), the routine alone doesn't make
-  her tier either. Why these three is not worked out.
+  `finetune.py` evaluates level 4 that way (`--cpu-chars`).
+
+  *Why, in the source* (6 November). The level sets `m_cpuSkill`; a CPU guards an attack
+  when `rand() <= m_cpuSkill * 10000` (`CPlayer::HoldsGuard`, src/player.cpp:551), the
+  height chosen for it, and `rand()` tops at 32,767: 31%, 61%, 92% and at level 4 100% of
+  what it can, every character alike. Each routine also opens the recoil-guard window at
+  random each tick (kanna.cpp:703-711) and starts something after an RG, and the level
+  scales its other chances. What separates the characters is how their routine's few
+  choices fit their moves (the user's guess):
+  - **Ayu:** a x2000 where x2 was meant (ayu.cpp:790) makes every hit that lands while
+    she is in guard stun a recoil guard, and her favourite move after one is 623C,
+    invincible from its 2nd step.
+  - **Mishio:** Shiori's routine (byte for byte, as Kano's and Ikumi's), whose top pick
+    after an RG and against an attack is 623C (mishio.cpp:1144): for Mishio an
+    invincible 623 of 6-9 steps, which also grants her power-ups; Kano has no such
+    command, Ikumi's takes 28 steps, Shiori's 12.
+  - **Kanna:** any hit, guard or knockdown state sets a 180-tick cooldown
+    (kanna.cpp:697-699) that switches off all her neutral attacks (:1464-1529): she never
+    presses into frame traps, guards everything, keeps only her invincible 623A/236C
+    reactions, and has the cast's strongest anti-air (623A, 6% a tick against a jump
+    attack, :1551-1555). The same rule is her flaw (the user's): a throw (C + forward or
+    back within 30 px, unblockable, which nobody, CPU or human, can break; only 27 ticks
+    of immunity after a jump start, a guard, a knockdown or a wake-up) puts her in a hit
+    state, so each throw renews the cooldown, and up close she only stands or walks. The
+    community beats her by throwing her again and again, or with Nanase's home run.
+
+  *Measured* (`eval/cpu4-chars/`: `agent-league` against each level-4 CPU, 32 matches
+  each): Kanna 0%, Unknown (`mizukab`) 28%, Ayu 31%, Nanase 47%, Mai 50%, Sayuri 56%,
+  Shiori 66%, ... Mishio 94%, Ikumi, Kano, Minagi and EXNanase 100%. Across the 23 the
+  agent's wins follow how often the CPU hits it in the air (Spearman -0.79) and the
+  damage it deals (-0.72) more than its reversals (-0.3): Kanna deals 15,406 a minute
+  (the others 5,400-9,700) and anti-airs 4.2 times a minute; Ayu's CPU escapes the
+  agent's pressure with an invincible move 38% of the time, 85% of them working. Of a
+  routine shared by several characters one is clearly strongest: Shiori 66% against
+  Mishio 94%, Ikumi and Kano 100%; Misaki 78% against Misuzu 97% and Minagi 100%. This
+  agent finds Mishio easy, against the tier. It throws 0.01-0.07 times a minute (people's
+  Ayu 0.26: `throws_per_min`), so it never found Kanna's flaw. Beating level-4 Kanna is
+  a diagnostic, not a target: a rise in it is to be checked against the agent's throws
+  before it is believed.
 
 ## Other characters: clones, exploiters, a league
 

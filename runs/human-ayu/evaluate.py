@@ -72,6 +72,9 @@ def resources(power, rf, full):
 # In the gauge's order (macros.py's one-hot inputs are by this order).
 GROUPS = [f'{s}{b}' for s in ('blue', 'red', 'cyan') for b in range(4)]
 GUARD_GROUND, GUARD_AIR = list(range(0x96, 0x9c)), [0x9c]
+THROWN = list(range(0x64, 0x79))  # the poses a throw puts its victim in (src/efz.h kThrown*)
+THROW_WINDOW = 384  # steps after a throw in which its follow-up is looked for (6 s)
+OPP_HP = TACTICS + 15  # tactics.OBS's opp_hp (/ 9999)
 RG_GROUND, RG_AIR = [0xa8, 0xa9], [0xaa]
 RG = RG_GROUND + RG_AIR
 FIRST_OWN = 0xc8  # kFirstCharacterAction: the character's own moves from here
@@ -95,7 +98,12 @@ class Events:
     """How a player played, counted over whole matches (Ayu's moves for the counts of
     moves): per minute, its presses, jumps, guards, recoil guards (RG: a guard within 10
     frames of pressing back; in the air the only guard against what can't be guarded
-    there, anti-airs among them) and hits taken; and how often
+    there, anti-airs among them), hits taken, and throws landed and suffered
+    (throws_per_min, thrown_per_min: the victim enters a thrown pose, THROWN; command
+    throws too); of its throws, throw_damage, the victim's HP lost from the throw until
+    it is free again, and throw_combo, the share followed by more damage after the throw
+    itself (a combo from it: the user's, for Nanase, Akane, Mayu, Mai, Shiori, Mishio,
+    Minagi, Unknown and others); and how often
 
     rg_ground, rg_air: an attack met there was recoil-guarded (of RG, guard and hit);
     rc: after the opponent recoil-guarded one's attack, its counterattack was
@@ -138,7 +146,7 @@ class Events:
 
     def __init__(self, char='ayu'):
         self.moves = MOVES.get(char, dict(long=[], special=[], guess={}))
-        keys = ['frames', 'jumps', 'guard_ground', 'guard_air', 'rg_ground', 'rg_air',
+        keys = ['frames', 'jumps', 'throws', 'thrown', 'guard_ground', 'guard_air', 'rg_ground', 'rg_air',
                 'hit_ground', 'hit_air', 'rc', 'rc_guard', 'rc_hit', 'rg', 'rg_move',
                 'rg_punish', 'rg_long', 'rg_long_hit', 'ic', 'combos', 'combo_hits',
                 'combo_damage', 'combos3', 'combos2', 'combo_special', 'combo_ic',
@@ -150,6 +158,7 @@ class Events:
         self.n['combo_list'] = []  # each combo's (hits, damage, resource group)
         self.n['proration_left'] = []  # at the end of each of 3 hits or more
         self.n['hp_lost'] = 0.0
+        self.n['throw_list'] = []  # each throw landed: (HP the victim lost, of it after the throw)
         self.n['taken_list'] = []  # each of the opponent's combos on one: (damage, its group)
         for k in ('press_off', 'press_def', 'oki_off', 'oki_def', 'free_self', 'free_opp'):
             self.n[k] = []  # tactics.measure()'s
@@ -174,6 +183,21 @@ class Events:
         ohit = (cols[:, 4] > 0) & ~_prev(cols[:, 4] > 0, False)
         oown = cols[:, 5] > 0
         n['jumps'] += int((air & ~_prev(air, False)).sum())
+        othrown = np.isin(oa, THROWN)
+        throws = np.flatnonzero(othrown & ~_prev(othrown, False))
+        n['throws'] += len(throws)
+        if cols.shape[1] > OPP_HP:
+            ohp = cols[:, OPP_HP] * 9999
+            ofree = np.isin(oa, tactics.FREE)
+            for t in throws:
+                hi = min(T, t + THROW_WINDOW)
+                after = np.flatnonzero(~othrown[t:hi])
+                released = t + int(after[0]) if len(after) else hi - 1
+                free = np.flatnonzero(ofree[released:hi])
+                end = released + int(free[0]) if len(free) else hi - 1
+                before = ohp[t - 1] if t > 0 else ohp[t]
+                n['throw_list'].append((float(before - ohp[end]), float(ohp[released] - ohp[end])))
+        n['thrown'] += int((enter & np.isin(a, THROWN) & ~np.isin(_prev(a, -1), THROWN)).sum())
         n['hit_ground'] += int((hit & ~air).sum())
         n['hit_air'] += int((hit & air).sum())
         for k, acts in (('guard_ground', GUARD_GROUND), ('guard_air', GUARD_AIR),
@@ -287,8 +311,8 @@ class Events:
         out = dict(presses={b: round(float(n['presses'][i] / frames), 4)
                             for i, b in enumerate('ABCD')},
                    presses_per_second=round(float(n['presses'].sum() / frames * 64), 2))
-        for k in ('jumps', 'guard_ground', 'guard_air', 'rg_ground', 'rg_air', 'hit_ground',
-                  'hit_air'):
+        for k in ('jumps', 'throws', 'thrown', 'guard_ground', 'guard_air', 'rg_ground',
+                  'rg_air', 'hit_ground', 'hit_air'):
             out[k + '_per_min'] = round(n[k] * per_min, 2)
         for where in ('ground', 'air'):
             out['rg_' + where] = share(n['rg_' + where], n['rg_' + where] +
@@ -330,6 +354,9 @@ class Events:
         out['busy_presses'] = share(n['presses_busy'], n['presses_all'])
         out['busy_turns'] = share(n['turns_busy'], n['turns_all'])
         out['damage_taken_per_min'] = round(n['hp_lost'] * per_min)
+        th = n['throw_list']
+        out['throw_damage'] = round(float(np.mean([x[0] for x in th]))) if th else None
+        out['throw_combo'] = share(sum(x[1] > 0 for x in th), len(th))
         taken = n['taken_list']
         out['taken_combos_per_min'] = round(len(taken) * per_min, 2)
         if taken:
@@ -403,9 +430,9 @@ def play(args, p1, p2, matches, level=4, seed=7):
 
 # The level-4 CPU by how hard it is to beat (the user's): Kanna the hardest, then Ayu
 # and Mishio, then the rest; at level 3 and below every character is easy, so results
-# there have no tiers. (Level 4 guards everything it can for every character: the tiers
-# are the characters' CpuInput and moves; README.md, "The CPU's tiers".) The 23 playable characters: all but 22 (Nayuki's second) and 24
-# (Mizuka, the boss), as efz_env draws them.
+# there have no tiers (README.md, "The CPU's tiers": why, and each character measured).
+# The 23 playable characters: all but 22 (Nayuki's second) and 24 (Mizuka, the boss), as
+# efz_env draws them.
 TIERS = {'kanna': 'hardest', 'ayu': 'hard', 'mishio': 'hard'}
 TIER_ORDER = ('hardest', 'hard', 'rest')
 UNPLAYABLE = ('nayuki2', 'mizuka')
