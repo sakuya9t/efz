@@ -233,7 +233,15 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
 - **The CPU's tiers.** At level 4 the CPU is hardest as Kanna, then Ayu and Mishio, then
   the rest (the user's); below level 4 all are easy. `evaluate.py --chars ayu tiers`
   plays a third of the matches against each tier and reports the wins by tier;
-  `finetune.py` evaluates level 4 that way (`--cpu-chars`).
+  `finetune.py` evaluates level 4 that way (`--cpu-chars`). What the source says: the
+  level sets `m_cpuSkill`, and a CPU guards an attack when `rand() <= m_cpuSkill * 10000`
+  (`CPlayer::HoldsGuard`, src/player.cpp:551), choosing the right height itself; `rand()`
+  tops at 32,767, so it guards 31%, 61%, 92% and, at level 4, 100% of what it can,
+  every character alike. The level also scales the random chances in each character's
+  `CpuInput`. So the tiers come from the characters' own routines and moves, not from
+  guarding; and since Mishio's `CpuInput` is byte-identical to Kano's, Ikumi's and
+  Shiori's (docs/naming/kano-ikumi-mishio-shiori.md), the routine alone doesn't make
+  her tier either. Why these three is not worked out.
 
 ## Other characters: clones, exploiters, a league
 

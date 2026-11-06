@@ -403,7 +403,8 @@ def play(args, p1, p2, matches, level=4, seed=7):
 
 # The level-4 CPU by how hard it is to beat (the user's): Kanna the hardest, then Ayu
 # and Mishio, then the rest; at level 3 and below every character is easy, so results
-# there have no tiers. The 23 playable characters: all but 22 (Nayuki's second) and 24
+# there have no tiers. (Level 4 guards everything it can for every character: the tiers
+# are the characters' CpuInput and moves; README.md, "The CPU's tiers".) The 23 playable characters: all but 22 (Nayuki's second) and 24
 # (Mizuka, the boss), as efz_env draws them.
 TIERS = {'kanna': 'hardest', 'ayu': 'hard', 'mishio': 'hard'}
 TIER_ORDER = ('hardest', 'hard', 'rest')
