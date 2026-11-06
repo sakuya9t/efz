@@ -180,7 +180,8 @@ class ComboTrials(VecEnv):
         self.juggle, self.meter_cost, self.gamma = juggle, meter_cost, gamma
         self.leftover_cost = leftover_cost
         self.reward_scale, self.bootstrap, self.sample = reward_scale, bootstrap, sample
-        self.recent = []  # the last trials' results, for a log (take_recent)
+        self.recent = []  # the last 2000 trials' results, for a log (practice.take_trials)
+        self.finished = 0  # trials ended
         self.proration = np.ones(num_envs)  # the attacker's, at its combo's last hit
         self.phi = np.zeros(num_envs)    # the juggle's potential now
         self.gauge = np.zeros(num_envs)  # the attacker's power gauge, last step
@@ -331,6 +332,7 @@ class ComboTrials(VecEnv):
                     self.results.append(result)
                 self.recent.append(result)
                 del self.recent[:-2000]
+                self.finished += 1
                 self._load(i)
             views.append(self._view(i))
         return np.stack(views), rewards, dones, infos

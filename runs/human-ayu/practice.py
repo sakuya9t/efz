@@ -159,10 +159,11 @@ class Practice(VecEnv):
         """The trials since the last call: their count, combo damage (average, 90th
         percentile, most), hits, and shares with an Instant Charge and a special."""
         r, self.trials.recent = self.trials.recent, []
+        n, self.trials.finished = self.trials.finished, 0
         if not r:
             return dict(trials=0)
-        d = np.array([x['damage'] for x in r])
-        return dict(trials=len(r), damage=round(float(d.mean())),
+        d = np.array([x['damage'] for x in r])  # (the last 2000 of them)
+        return dict(trials=n, damage=round(float(d.mean())),
                     damage_p90=round(float(np.percentile(d, 90))), damage_max=round(float(d.max())),
                     hits=round(float(np.mean([x['hits'] for x in r])), 2),
                     ic=round(float(np.mean([x['ic'] for x in r])), 3),
