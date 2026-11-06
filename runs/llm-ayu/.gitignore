@@ -2,3 +2,5 @@
 # (llm.json, train.log, history.json) stay here.
 */body/
 */head.pt
+*/state.pt
+*/state.pt.tmp

@@ -19,7 +19,8 @@ training split, else '?', and '?' in --player-drop of the training prompts, so t
 model plays everyone ('?') or someone.
 
 --out gets the best model by held-out nll (body/, head.pt, llm.json: its settings, and
-the evaluations), and train.log. Needs torch, transformers and (for --lora) peft; meant
+the evaluations), train.log, and state.pt (the last evaluation's weights and optimizer:
+--resume continues from it). Needs torch, transformers and (for --lora) peft; meant
 for a CUDA machine (README.md), and runs on a CPU for a smoke test (--limit, --max-steps).
 """
 
@@ -68,13 +69,19 @@ def parse():
     p.add_argument('--weight-decay', type=float, default=0.01)
     p.add_argument('--lora', type=int, default=0, help='LoRA rank (0: full fine-tuning)')
     p.add_argument('--grad-ckpt', action='store_true', help='gradient checkpointing (less memory)')
+    p.add_argument('--compile', action='store_true',
+                   help='torch.compile the model (about twice as fast on a small GPU)')
     p.add_argument('--max-len', type=int, default=320)
+    p.add_argument('--group', type=int, default=16,
+                   help='batches made at once from examples of similar length (1: none)')
     p.add_argument('--val-steps', type=int, default=50000, help='held-out steps evaluated')
     p.add_argument('--eval-every', type=int, default=2000, help='optimizer steps')
     p.add_argument('--limit', type=int, default=0, help='at most this many matches (0 all)')
     p.add_argument('--workers', type=int, default=4)
     p.add_argument('--device', default=None)
     p.add_argument('--seed', type=int, default=0)
+    p.add_argument('--resume', action='store_true',
+                   help="continue from --out's last evaluation (state.pt: weights, optimizer, step)")
     return p.parse_args()
 
 
@@ -150,21 +157,33 @@ class Steps(th.utils.data.Dataset):
         return st.prompt(view, mine, theirs, inputs, player), int(y[t]), w
 
 
-def collate(tokenizer, max_len):
+def collate(tokenizer, max_len, group=1):
+    """Tokenized batches: a list of `group` of them, from the examples sorted by length (each
+    padded only to its longest: less padding), in random order."""
     def fn(items):
         texts, y, w = zip(*items)
-        b = tokenizer(list(texts), padding=True, truncation=True, max_length=max_len,
-                      return_tensors='pt')
-        return b['input_ids'], b['attention_mask'], th.tensor(y), th.tensor(w, dtype=th.float32)
+        ids = tokenizer(list(texts), truncation=True, max_length=max_len)['input_ids']
+        order = np.argsort([len(x) for x in ids], kind='stable') if group > 1 else np.arange(len(ids))
+        out = []
+        for part in np.array_split(order, min(group, len(ids))):
+            b = tokenizer.pad({'input_ids': [ids[i] for i in part]}, return_tensors='pt')
+            out.append((b['input_ids'], b['attention_mask'], th.tensor([y[i] for i in part]),
+                        th.tensor([w[i] for i in part], dtype=th.float32)))
+        return [out[i] for i in np.random.permutation(len(out))]
     return fn
 
 
 def loader(ds, args, tokenizer, shuffle, batch):
     return th.utils.data.DataLoader(
-        ds, batch_size=batch, shuffle=shuffle, num_workers=args.workers,
-        collate_fn=collate(tokenizer, args.max_len), pin_memory=th.cuda.is_available(),
+        ds, batch_size=batch * args.group, shuffle=shuffle, num_workers=args.workers,
+        collate_fn=collate(tokenizer, args.max_len, args.group), pin_memory=th.cuda.is_available(),
         persistent_workers=args.workers > 0, drop_last=shuffle,
         worker_init_fn=lambda i: np.random.seed((args.seed * 1000 + i) % 2 ** 32))
+
+
+def batches(dl):
+    for group in dl:
+        yield from group
 
 
 def autocast(device):
@@ -174,14 +193,15 @@ def autocast(device):
 
 
 @th.no_grad()
-def evaluate(policy, dl, device):
+def evaluate(policy, dl, device, forward=None):
     """bc.py's measures on the held-out steps."""
+    forward = policy if forward is None else forward
     policy.eval()
     nll, hit, hit_dir, n, pred_press, true_press, both = 0.0, 0, 0, 0, 0, 0, 0
-    for ids, mask, y, _ in dl:
+    for ids, mask, y, _ in batches(dl):
         ids, mask, y = ids.to(device), mask.to(device), y.to(device)
         with autocast(device):
-            logits = policy(ids, mask)
+            logits = forward(ids, mask)
         logp = th.log_softmax(logits.float(), 1)
         nll += float(th.nn.functional.nll_loss(logp, y, reduction='sum'))
         p = logp.argmax(1)
@@ -228,6 +248,8 @@ def main():
                                          'gate_proj', 'up_proj', 'down_proj'])
         policy.body = get_peft_model(policy.body, cfg)
     policy.to(device).train()
+    # The compiled forward shares the policy's weights; prompts' lengths vary, so dynamic.
+    forward = th.compile(policy, dynamic=True) if args.compile else policy
     params = [p for p in policy.parameters() if p.requires_grad]
     say(f'{args.base}: {sum(p.numel() for p in policy.parameters()) / 1e6:.0f}M parameters, '
         f'{sum(p.numel() for p in params) / 1e6:.1f}M trained, on {device}')
@@ -237,7 +259,7 @@ def main():
     val = Steps(matches, index['val'], None, args)
     dl = loader(train, args, tok, True, args.batch)
     vdl = loader(val, args, tok, False, args.batch * 2)
-    per_epoch = len(dl) // args.accum
+    per_epoch = len(dl) * args.group // args.accum
     total = args.max_steps or max(1, int(per_epoch * args.epochs))
     opt = th.optim.AdamW(params, lr=lr, weight_decay=args.weight_decay, betas=(0.9, 0.95))
 
@@ -249,11 +271,21 @@ def main():
     sched = th.optim.lr_scheduler.LambdaLR(opt, schedule)
     config = dict(format=FORMAT, base=args.base, delay=args.delay, history=args.history,
                   moves=args.moves, max_len=args.max_len, players=named, args=vars(args))
-    history, best = [], None
+    history, best, step = [], None, 0
+    state_path = os.path.join(args.out, 'state.pt')
+    if args.resume and os.path.exists(state_path):
+        state = th.load(state_path, map_location='cpu', weights_only=False)
+        policy.load_state_dict(state['policy'])
+        opt.load_state_dict(state['opt'])
+        sched.load_state_dict(state['sched'])
+        step, history, best = state['step'], state['history'], state['best']
+        th.manual_seed(args.seed + step)  # (the examples in another order)
+        say(f'resumed from {state_path} at step {step}')
+        del state
 
     def checkpoint(step):
         nonlocal best
-        ev = evaluate(policy, vdl, device)
+        ev = evaluate(policy, vdl, device, forward)
         ev.update(step=step, examples=step * args.batch * args.accum,
                   seconds=round(time.time() - t0))
         history.append(ev)
@@ -264,15 +296,19 @@ def main():
             say('  saved (best held-out nll)')
         with open(os.path.join(args.out, 'history.json'), 'w') as f:
             json.dump(history, f, indent=1)
+        # The last evaluation's state, for --resume (the best model is body/ and head.pt).
+        th.save(dict(policy=policy.state_dict(), opt=opt.state_dict(), sched=sched.state_dict(),
+                     step=step, history=history, best=best), state_path + '.tmp')
+        os.replace(state_path + '.tmp', state_path)
 
     say(f'{total} optimizer steps ({per_epoch} an epoch), lr {lr}')
-    step, seen_tokens, t_log = 0, 0, time.time()
+    seen_tokens, t_log = 0, time.time()
     run_loss, run_n = 0.0, 0
     while step < total:
-        for k, (ids, mask, y, w) in enumerate(dl):
+        for k, (ids, mask, y, w) in enumerate(batches(dl)):
             ids, mask, y, w = ids.to(device), mask.to(device), y.to(device), w.to(device)
             with autocast(device):
-                logits = policy(ids, mask)
+                logits = forward(ids, mask)
             nll = th.nn.functional.cross_entropy(logits.float(), y, reduction='none')
             loss = (nll * w).sum() / w.sum()
             (loss / args.accum).backward()
@@ -293,6 +329,7 @@ def main():
                 t_log, seen_tokens, run_loss, run_n = time.time(), 0, 0.0, 0
             if step % args.eval_every == 0 or step == total:
                 checkpoint(step)
+                t_log, seen_tokens = time.time(), 0
             if step >= total:
                 break
     say(f'done in {time.time() - t0:.0f}s; best held-out', json.dumps(best))
