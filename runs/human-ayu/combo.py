@@ -365,13 +365,15 @@ def evaluate(args, model, starts, gauges=None):
     r = trials.results
     mean = lambda k: float(np.mean([x[k] for x in r]))
     top = lambda k, q: float(np.percentile([x[k] for x in r], q))
-    return dict(starts=len(r), damage=mean('damage'), human_damage=mean('human_damage'),
-                damage_p90=top('damage', 90), human_damage_p90=top('human_damage', 90),
-                damage_max=top('damage', 100), human_damage_max=top('human_damage', 100),
-                hits=mean('hits'), human_hits=mean('human_hits'),
-                hits_max=top('hits', 100), human_hits_max=top('human_hits', 100),
-                better=float(np.mean([x['damage'] > x['human_damage'] for x in r])),
-                ic=mean('ic'), special=mean('special'))
+    out = dict(starts=len(r), damage=mean('damage'), damage_p90=top('damage', 90),
+               damage_max=top('damage', 100), hits=mean('hits'), hits_max=top('hits', 100),
+               ic=mean('ic'), special=mean('special'))
+    if all(x['human_damage'] is not None for x in r):  # people's starts: their players' combos
+        out.update(human_damage=mean('human_damage'), human_damage_p90=top('human_damage', 90),
+                   human_damage_max=top('human_damage', 100), human_hits=mean('human_hits'),
+                   human_hits_max=top('human_hits', 100),
+                   better=float(np.mean([x['damage'] > x['human_damage'] for x in r])))
+    return out
 
 
 def parse():
