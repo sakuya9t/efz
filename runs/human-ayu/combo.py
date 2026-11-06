@@ -17,16 +17,16 @@ combo counter goes back to 0, at a KO, or after --limit steps. --focus of the tr
 start from the quarter of starts their players made the most of (most starts are a
 poke with nothing to follow; those are where the long combos are: the corner, the
 meter), the rest from any. In --rich of them the attacker's resources are drawn from
-the 12 groups (evaluate.resources: the RF gauge red under 500, no Instant Charge; cyan
-500-999, 22C cancels; blue, full, it also gives back five times the gauge in proration,
-the way to 7,000 and more; and 0-3 bars of power), so that it learns to use what it
+the 12 groups (evaluate.resources: the RF gauge blue under 500, no Instant Charge; red
+500-999, one 22C cancel; cyan, full, whose Instant Charge also gives back five times the
+gauge in proration, the way to 7,000 and more; and 0-3 bars of power), so that it learns to use what it
 has; in the rest they are the player's. Each evaluation plays every held-out start as
 its player had it, and with the resources of --eval-groups.
 
 Two helpers (the user's) for long combos. The juggle: each hit sets the defender's
 untech time (the bar under a juggled player: until it runs out it can't recover) to the
 hit's own times the attacker's proration (the combo's power, which each hit cuts, and a
-blue Instant Charge gives back); --juggle w adds w * (gamma * phi' - phi) to each step's
+cyan Instant Charge gives back); --juggle w adds w * (gamma * phi' - phi) to each step's
 reward, phi the defender's untech time left while it is juggled (in hitstun in the air),
 so that a hit keeping the juggle up pays at once and not only through the hits it makes
 possible. Being potential-based it changes how fast it is learnt, not which combo is
@@ -67,12 +67,12 @@ from evaluate import GROUPS  # noqa: E402  (runs/human-ayu is on the path)
 
 
 def group_gauges(group, rng):
-    """Gauges in a resource group ('cyan2': RF 500-999, 2,000-2,999 power), drawn."""
+    """Gauges in a resource group ('red2': RF 500-999, 2,000-2,999 power), drawn."""
     state, bars = group[:-1], int(group[-1])
     power = 3000 if bars == 3 else int(bars * 1000 + rng.integers(0, 1000))
-    if state == 'blue':
+    if state == 'cyan':
         return power, 1000.0, True
-    lo = 500 if state == 'cyan' else 0
+    lo = 500 if state == 'red' else 0
     return power, float(lo + rng.integers(0, 500)), False
 SELF_GAUGE = 9  # self_gauge (/ 3000)
 SELF_PRORATION = 31  # self_proration (/ 10000)
@@ -172,7 +172,7 @@ class ComboTrials(VecEnv):
         self.phi = np.zeros(num_envs)    # the juggle's potential now
         self.gauge = np.zeros(num_envs)  # the attacker's power gauge, last step
         self.rich = rich      # share of trials with resources drawn from the groups
-        self.gauges = gauges  # a group ('blue3'...): every trial with its resources
+        self.gauges = gauges  # a group ('cyan3'...): every trial with its resources
         by_damage = np.argsort([st['damage'] for st in starts])
         self.best = by_damage[-max(1, len(starts) // 4):]  # the top quarter
         self.rng = np.random.default_rng(seed)
@@ -367,7 +367,7 @@ def parse():
     p.add_argument('--resume', action='store_true', help="continue --out's combo.zip")
     p.add_argument('--rich', type=float, default=0.5,
                    help='share of trials with resources drawn from the 12 groups')
-    p.add_argument('--eval-groups', nargs='*', default=['red0', 'cyan0', 'blue0', 'blue3'])
+    p.add_argument('--eval-groups', nargs='*', default=['blue0', 'red0', 'cyan0', 'cyan3'])
     p.add_argument('--juggle', type=float, default=0.0,
                    help="weight of the juggle helper (the defender's untech time, shaped)")
     p.add_argument('--meter-cost', type=float, default=0.0,

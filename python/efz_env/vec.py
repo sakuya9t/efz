@@ -261,7 +261,8 @@ class EfzVecEnv:
     def set_gauges(self, index, player, power=None, rf=None, blue=None):
         """Sets a player's gauges in environment `index`'s match now, as training mode's
         refill does: power (0-3000, a level per 1000), rf (the RF gauge, 0-1000) and blue
-        (full: Instant Charge, 22C, then gives back five times the gauge in proration);
+        (the game's m_rfBlue: the gauge was full and is being spent, drawn cyan on the HUD;
+        an Instant Charge, 22C, then gives back five times the gauge in proration);
         None leaves one as it is. obs and info show them at once."""
         self._finish()
         r = self._lib.efz_env_set_gauges(self._h, int(index), int(player),

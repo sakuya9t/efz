@@ -1137,7 +1137,8 @@ public:
                       // 0.1 a tick (0.3 below 500, doubled while guarding) out of
                       // hitstun; 500 pays for a C special and 22C (Instant Charge); adds
                       // up to 10% damage (AttackFactor)
-    char m_rfBlue; // set when m_rfGauge fills (it turns blue): no refill, drains while
+    char m_rfBlue; // set when m_rfGauge fills (the HUD draws it cyan, blinking; under 500
+                   // the gauge is blue, 500-999 red): no refill, drains while
                    // being hit, C specials cost 250, 22C restores m_rfGauge*5 proration;
                    // cleared when it empties
     BYTE unk121[0x124 - 0x121];

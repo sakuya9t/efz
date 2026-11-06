@@ -13,7 +13,7 @@ Training (train.py) and playing (llm.LLMAgent) build these the same way: Context
 A prompt looks like:
 
     Ayu (player 473) vs Kanna. Round 2, rounds 0-1.
-    Me: HP 73% power 1.2 RF 64 cyan guard 100%. x 210 y 0, moving 3 0. Doing m204 frame 3, airborne.
+    Me: HP 73% power 1.2 RF 64 red guard 100%. x 210 y 0, moving 3 0. Doing m204 frame 3, airborne.
     Opponent: HP 51% power 0.4 RF 12 red guard 80%. x 330 y -40, moving -2 4. Doing guard frame 2, guarding.
     Opponent 120 px ahead, 40 px above.
     Objects: mine 40,-30 hitting; theirs none.
@@ -25,6 +25,10 @@ A prompt looks like:
 import numpy as np
 
 from efz_env import ActionTable
+
+# The prompt's version, kept in a model's llm.json; LLMAgent plays only its own. 2: the RF
+# gauge's colours as the HUD draws them (1 had blue and red swapped and called full cyan).
+FORMAT = 'statetext-2'
 
 TABLE = ActionTable()
 ACTIONS = [TABLE.describe(i) for i in range(len(TABLE))]
@@ -89,7 +93,9 @@ def inputs_text(labels):
 def _player(v, b, who):
     hp = v[b + HP] * 100
     rf = v[b + RF] * 1000
-    state = 'blue' if v[b + BLUE] > 0 else 'cyan' if rf >= 500 else 'red'
+    # As the HUD draws it (runs/human-ayu/evaluate.py, rf_state): blue under 500, red
+    # 500-999, cyan from full (rf_blue) until spent.
+    state = 'cyan' if v[b + BLUE] > 0 else 'red' if rf >= 500 else 'blue'
     s = (f'{who}: HP {hp:.0f}% power {v[b + GAUGE] * 3:.1f} RF {rf / 10:.0f} {state} '
          f'guard {v[b + GUARD_GAUGE] * 100:.0f}%. x {v[b + X] * 320 + 320:.0f} y {v[b + Y] * 240:.0f}')
     vx, vy = v[b + VX] * 20, v[b + VY] * 20

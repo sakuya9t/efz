@@ -291,7 +291,7 @@ viewer, 6 floats each. `env.observation_names` names them (`self_hp`, `opp_x`,
 | Block | Features |
 |---|---|
 | Match | frames into the match / `max_frames` (or / 10000), round, intro running, a KO waiting for the next round, the opponent's x and y relative to the viewer's, the viewer's side, rounds to win |
-| Each player | HP / 9999, power gauge / 3000, RF gauge / 1000, RF gauge blue, guard gauge / 360, x ((x − 320) / 320), y / 240 (negative in the air), velocity / 20, facing, the action (pattern) number and its frame, in hitstun, guarding, dashing, hitstop, a super's freeze, invulnerable, unable to guard, armor, throw-protected, air-recovery wait, combo hits, proration, rounds won, air actions used, character number, the action is a move of the character's own, played by the CPU, Akiko's seal, the combo's damage, airborne |
+| Each player | HP / 9999, power gauge / 3000, RF gauge / 1000, RF gauge blue (the game's `m_rfBlue`: it filled and is being spent, drawn cyan on the HUD), guard gauge / 360, x ((x − 320) / 320), y / 240 (negative in the air), velocity / 20, facing, the action (pattern) number and its frame, in hitstun, guarding, dashing, hitstop, a super's freeze, invulnerable, unable to guard, armor, throw-protected, air-recovery wait, combo hits, proration, rounds won, air actions used, character number, the action is a move of the character's own, played by the CPU, Akiko's seal, the combo's damage, airborne |
 | Each object | active, x relative to the viewer, y, velocity, can still hit |
 
 The action and character numbers are categorical, as numbers: a network does better

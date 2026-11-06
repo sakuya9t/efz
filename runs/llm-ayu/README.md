@@ -21,8 +21,8 @@ a reaction time, and its own inputs at once), about 200 tokens:
 
 ```
 Ayu (player 473) vs Nagamori. Round 2, rounds 1-0.
-Me: HP 37% power 2.4 RF 63 cyan guard 29%. x 325 y 0. Doing m204 frame 2, hitstop 19.
-Opponent: HP 77% power 0.7 RF 51 cyan guard 0%. x 287 y 0, moving -1 0. Doing guard frame 0, guarding, throw-protected, hitstop 19.
+Me: HP 37% power 2.4 RF 63 red guard 29%. x 325 y 0. Doing m204 frame 2, hitstop 19.
+Opponent: HP 77% power 0.7 RF 51 red guard 0%. x 287 y 0, moving -1 0. Doing guard frame 0, guarding, throw-protected, hitstop 19.
 Opponent 37 px ahead, level.
 Objects: mine none; theirs 299,-43.
 Before: me m208 land crouch-down crouch; opponent knockdown lying wake-up recoil-guard.

@@ -51,15 +51,26 @@ TACTICS = 20  # and tactics.OBS
 INSTANT_CHARGE = [0xa7, 0xab]  # 22C on the ground and in the air: cancels a move that hit
 
 
-def resources(power, rf, blue):
-    """A resource group: the RF gauge as the HUD draws it (red under 500: no Instant
-    Charge; cyan 500-999: 22C cancels; blue, full: it also gives back proration) and the
-    bars of power, 'blue2' etc."""
-    state = 'blue' if blue else 'cyan' if rf >= 500 else 'red'
-    return f'{state}{min(3, int(power // 1000))}'
+def rf_state(rf, full):
+    """The RF gauge as the HUD draws it (src/player.cpp, src/scene3_draw.cpp). 'blue',
+    under 500: no Instant Charge or RF move, it grows fast (0.3 a frame, twice that
+    guarding); 'red', 500-999: one Instant Charge or one RF move (500), it grows slowly
+    (0.1); 'cyan', once it reaches 1000 (the game's m_rfBlue, obs rf_blue) until it is
+    spent: it no longer grows and drains when hit; one Instant Charge, which also adds
+    five times the gauge to the combo's proration (up to 50%), or RF moves at 250 each (up
+    to 4). An Instant Charge empties it in any state. Damage dealt is also multiplied by
+    1 + gauge / 10000."""
+    return 'cyan' if full else 'red' if rf >= 500 else 'blue'
 
 
-GROUPS = [f'{s}{b}' for s in ('red', 'cyan', 'blue') for b in range(4)]
+def resources(power, rf, full):
+    """A resource group: the RF gauge's state (rf_state) and the bars of power, 'cyan2'
+    etc."""
+    return f'{rf_state(rf, full)}{min(3, int(power // 1000))}'
+
+
+# In the gauge's order (macros.py's one-hot inputs are by this order).
+GROUPS = [f'{s}{b}' for s in ('blue', 'red', 'cyan') for b in range(4)]
 GUARD_GROUND, GUARD_AIR = list(range(0x96, 0x9c)), [0x9c]
 RG_GROUND, RG_AIR = [0xa8, 0xa9], [0xaa]
 RG = RG_GROUND + RG_AIR

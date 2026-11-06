@@ -100,6 +100,9 @@ class LLMAgent:
                  dtype=None, chunk=128):
         with open(os.path.join(path, 'llm.json')) as f:
             self.config = json.load(f)
+        if self.config.get('format') != st.FORMAT:
+            raise ValueError(f"{path}: prompts of {self.config.get('format')}, not {st.FORMAT} "
+                             '(statetext.py): retrain it')
         self.device = device or device_default()
         if dtype is None:
             dtype = th.bfloat16 if self.device == 'cuda' else th.float32

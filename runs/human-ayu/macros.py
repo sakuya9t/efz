@@ -167,7 +167,7 @@ def main():
     p.add_argument('--top', type=int, default=300, help='library combos used')
     p.add_argument('--per-start', type=int, default=12, help='combos tried from each start')
     p.add_argument('--draws', type=int, default=2, help='resource groups drawn per start')
-    p.add_argument('--eval-groups', nargs='*', default=['red0', 'cyan0', 'blue0', 'blue3'])
+    p.add_argument('--eval-groups', nargs='*', default=['blue0', 'red0', 'cyan0', 'cyan3'])
     p.add_argument('--out', default=os.path.join(HERE, 'macros'))
     args = p.parse_args()
     from stable_baselines3 import PPO

@@ -45,7 +45,6 @@ import statetext as st
 from efz_env.history import action_labels
 from llm import LLMPolicy, device_default
 
-FORMAT = 'statetext-1'
 
 
 def parse():
@@ -269,7 +268,7 @@ def main():
         q = (step - args.warmup) / max(1, total - args.warmup)
         return 0.1 + 0.9 * 0.5 * (1 + math.cos(math.pi * min(1.0, q)))
     sched = th.optim.lr_scheduler.LambdaLR(opt, schedule)
-    config = dict(format=FORMAT, base=args.base, delay=args.delay, history=args.history,
+    config = dict(format=st.FORMAT, base=args.base, delay=args.delay, history=args.history,
                   moves=args.moves, max_len=args.max_len, players=named, args=vars(args))
     history, best, step = [], None, 0
     state_path = os.path.join(args.out, 'state.pt')

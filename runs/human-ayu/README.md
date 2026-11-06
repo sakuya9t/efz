@@ -137,24 +137,27 @@ loses (2-0, slot 1-4 of D:/tasogare/EFZ/replay): its neutral is still the clone'
 training having started at hits already landed.
 
 People's combos by the resources at their start (`combo_library.py`; the RF gauge as the
-HUD draws it: red under 500, no Instant Charge; cyan 500-999, 22C cancels; blue, full,
-22C also gives back five times the gauge in proration; and the bars of power):
+HUD draws it, `evaluate.rf_state`: blue under 500, growing fast, no Instant Charge or RF
+move; red 500-999, growing slowly, one Instant Charge (22C) or one RF move; cyan from
+full until spent, not growing and drained by hits, one Instant Charge that also gives
+back five times the gauge in proration (up to 50%), or RF moves at 250 each; and the bars
+of power):
 
 | RF \ bars | 0 | 1 | 2 | 3 |
 |---|---|---|---|---|
-| red | 1,540 / 2,884 / 5,883 | 1,399 / 2,686 / 4,343 | 1,350 / 2,674 / 4,321 | 1,298 / 2,472 / 4,152 |
-| cyan | 1,688 / 3,071 / 5,883 | 1,594 / 3,002 / 6,601 | 1,561 / 2,998 / 7,123 | 1,520 / 2,904 / 6,635 |
-| blue | 2,189 / 4,227 / 7,421 | 1,970 / 4,277 / 7,079 | 1,897 / 3,918 / 6,952 | 1,767 / 3,654 / 6,235 |
+| blue | 1,540 / 2,884 / 5,883 | 1,399 / 2,686 / 4,343 | 1,350 / 2,674 / 4,321 | 1,298 / 2,472 / 4,152 |
+| red | 1,688 / 3,071 / 5,883 | 1,594 / 3,002 / 6,601 | 1,561 / 2,998 / 7,123 | 1,520 / 2,904 / 6,635 |
+| cyan | 2,189 / 4,227 / 7,421 | 1,970 / 4,277 / 7,079 | 1,897 / 3,918 / 6,952 | 1,767 / 3,654 / 6,235 |
 
 (average / 90th percentile / most; the bars counted at the first hit, after a super
-starting the combo has spent them.) Every combo of 6,000 and more used a blue Instant
+starting the combo has spent them.) Every combo of 6,000 and more used a cyan Instant
 Charge and a super. So the red team's trials now start with resources drawn from these 12
 groups (`combo.py --rich`, the library's `efz_env_set_gauges`), with two helpers (the
 user's): the juggle (the defender's untech time, potential-based shaping) and a cost on
 the super gauge (`combo-red2/`, training). And built-in combos (`macros.py`): people's
 284 most damaging combos as action sequences, the one to play chosen by a selector learnt
 from trials. Played blindly from another start a recorded combo makes 22% of its damage
-(6% of them 80% or more); the best of up to 12 per start, with blue RF and 3 bars, makes
+(6% of them 80% or more); the best of up to 12 per start, with cyan RF and 3 bars, makes
 2,317 on average and 6,165 at most, where the red team alone makes 1,312 and 4,386.
 
 The agent against it (`agent-red/`, from 10M at level 4, a quarter of its mirror matches
@@ -168,10 +171,10 @@ the training starts) helps only with full resources; the best option in hindsigh
 
 | Held-out starts | Red team alone | With the selector | Best in hindsight |
 |---|---|---|---|
-| red RF, 0 bars | 651 / 1,524 / 2,533 | 587 / 1,859 / 2,533 | 994 / 2,283 / 3,053 |
-| cyan RF, 0 bars | 960 / 2,464 / 3,479 | 821 / 2,415 / 3,113 | 1,329 / 2,999 / 4,589 |
-| blue RF, 0 bars | 1,083 / 2,821 / 4,268 | 970 / 2,667 / 3,317 | 1,825 / 4,434 / 5,480 |
-| blue RF, 3 bars | 1,378 / 3,599 / 4,386 | 1,521 / 3,798 / 4,593 | 2,336 / 5,228 / 6,165 |
+| blue RF, 0 bars | 651 / 1,524 / 2,533 | 587 / 1,859 / 2,533 | 994 / 2,283 / 3,053 |
+| red RF, 0 bars | 960 / 2,464 / 3,479 | 821 / 2,415 / 3,113 | 1,329 / 2,999 / 4,589 |
+| cyan RF, 0 bars | 1,083 / 2,821 / 4,268 | 970 / 2,667 / 3,317 | 1,825 / 4,434 / 5,480 |
+| cyan RF, 3 bars | 1,378 / 3,599 / 4,386 | 1,521 / 3,798 / 4,593 | 2,336 / 5,228 / 6,165 |
 
 So the red team doesn't predict: `redteam.py` tries, at each of its first hits, the
 library combos with that starter and its own play on copies of the game (save states, a
@@ -192,7 +195,7 @@ combos): the proration left at the end of combos of 3 hits or more is 64% for pe
 Phase 2 against the lookahead red team, to 30.2M steps: it wins 66% against the level-4
 CPU (random characters), 100% against the curriculum agent and 94% against the red team.
 Red team 3, to 24.2M: 1,097 / 3,064 / 4,143 on people's resources (average / 90th
-percentile / most; the 12M red team 1,068 / 2,877 / 4,143), blue RF and 3 bars 1,359 /
+percentile / most; the 12M red team 1,068 / 2,877 / 4,143), cyan RF and 3 bars 1,359 /
 3,700 / 4,386.
 
 ## Defence and tactics

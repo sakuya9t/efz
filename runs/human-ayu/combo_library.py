@@ -1,6 +1,6 @@
 """People's Ayu combos as a library: every combo of the dataset's matches with its damage,
 hits, length, the move it started from, the gauges it had (power, RF, blue), whether it
-used an Instant Charge (blue or red) or a super, and whether in the corner; and the
+used an Instant Charge (with the RF gauge red or cyan) or a super, and whether in the corner; and the
 inputs that made it, from the step after its first hit to its end (relative to facing,
 as an agent's), with the one before (prev: what the first of them presses follows from). Writes --out (npz: the --keep most damaging) and prints the best.
 
@@ -70,12 +70,12 @@ def main():
         top = [c for c in found if c['damage'] >= t]
         if top:
             share = lambda k: np.mean([bool(c[k]) for c in top])
-            print(f'  {len(top):5d} of {t}+: blue IC {share("ic_blue"):.0%}, any IC {share("ic"):.0%}, '
+            print(f'  {len(top):5d} of {t}+: cyan IC {share("ic_blue"):.0%}, any IC {share("ic"):.0%}, '
                   f'super {share("super"):.0%}, corner {share("corner"):.0%}, started with '
-                  f'blue RF {share("blue"):.0%}, power {np.mean([c["power"] for c in top]):.0f}')
+                  f'cyan RF {share("blue"):.0%}, power {np.mean([c["power"] for c in top]):.0f}')
     sys.path.insert(0, HERE)
     from evaluate import GROUPS, resources
-    print('by resources at the start (RF gauge red < 500, cyan 500-999, blue full; bars of power):')
+    print('by resources at the start (RF gauge blue < 500, red 500-999, cyan full; bars of power):')
     for g in GROUPS:
         d = np.array([c['damage'] for c in found
                       if resources(c['power'], c['rf'], c['blue']) == g])

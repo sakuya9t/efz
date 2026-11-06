@@ -29,73 +29,73 @@
   "combo_hits": 4.54,
   "combo_damage": 995,
   "combo_by_resources": {
-   "red0": {
+   "blue0": {
     "n": 4730,
     "damage": 1052,
     "p90": 2536,
     "most": 5541
    },
-   "red1": {
+   "blue1": {
     "n": 4646,
     "damage": 891,
     "p90": 2127,
     "most": 4555
    },
-   "red2": {
+   "blue2": {
     "n": 4334,
     "damage": 857,
     "p90": 1911,
     "most": 4235
    },
-   "red3": {
+   "blue3": {
     "n": 4279,
     "damage": 843,
     "p90": 1890,
     "most": 4404
    },
-   "cyan0": {
+   "red0": {
     "n": 4462,
     "damage": 1060,
     "p90": 2753,
     "most": 6103
    },
-   "cyan1": {
+   "red1": {
     "n": 6378,
     "damage": 996,
     "p90": 2518,
     "most": 7265
    },
-   "cyan2": {
+   "red2": {
     "n": 5746,
     "damage": 1011,
     "p90": 2575,
     "most": 7084
    },
-   "cyan3": {
+   "red3": {
     "n": 5311,
     "damage": 1026,
     "p90": 2639,
     "most": 8251
    },
-   "blue0": {
+   "cyan0": {
     "n": 223,
     "damage": 1250,
     "p90": 3525,
     "most": 7314
    },
-   "blue1": {
+   "cyan1": {
     "n": 545,
     "damage": 1273,
     "p90": 3732,
     "most": 6674
    },
-   "blue2": {
+   "cyan2": {
     "n": 671,
     "damage": 1423,
     "p90": 4108,
     "most": 7240
    },
-   "blue3": {
+   "cyan3": {
     "n": 758,
     "damage": 1525,
     "p90": 4224,
@@ -120,73 +120,73 @@
   "taken_combo_damage_p90": 2722,
   "taken_combo_damage_max": 8734,
   "taken_by_resources": {
-   "red0": {
+   "blue0": {
     "n": 3928,
     "damage": 1047,
     "p90": 2354,
     "most": 5009
    },
-   "red1": {
+   "blue1": {
     "n": 2941,
     "damage": 925,
     "p90": 2091,
     "most": 4502
    },
-   "red2": {
+   "blue2": {
     "n": 2759,
     "damage": 893,
     "p90": 2174,
     "most": 6684
    },
-   "red3": {
+   "blue3": {
     "n": 2828,
     "damage": 936,
     "p90": 2242,
     "most": 5546
    },
-   "cyan0": {
+   "red0": {
     "n": 5697,
     "damage": 1253,
     "p90": 2943,
     "most": 6166
    },
-   "cyan1": {
+   "red1": {
     "n": 6726,
     "damage": 1133,
     "p90": 2627,
     "most": 6552
    },
-   "cyan2": {
+   "red2": {
     "n": 5472,
     "damage": 1096,
     "p90": 2617,
     "most": 7211
    },
-   "cyan3": {
+   "red3": {
     "n": 5658,
     "damage": 1118,
     "p90": 2751,
     "most": 6904
    },
-   "blue0": {
+   "cyan0": {
     "n": 457,
     "damage": 1393,
     "p90": 3609,
     "most": 7123
    },
-   "blue1": {
+   "cyan1": {
     "n": 1484,
     "damage": 1457,
     "p90": 4087,
     "most": 6972
    },
-   "blue2": {
+   "cyan2": {
     "n": 1837,
     "damage": 1439,
     "p90": 4045,
     "most": 7416
    },
-   "blue3": {
+   "cyan3": {
     "n": 2348,
     "damage": 1458,
     "p90": 4044,
@@ -776,73 +776,73 @@
    "combo_hits": 4.34,
    "combo_damage": 1040,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 69,
      "damage": 1027,
      "p90": 2420,
      "most": 3652
     },
-    "red1": {
+    "blue1": {
      "n": 74,
      "damage": 917,
      "p90": 2299,
      "most": 3298
     },
-    "red2": {
+    "blue2": {
      "n": 63,
      "damage": 934,
      "p90": 2143,
      "most": 3174
     },
-    "red3": {
+    "blue3": {
      "n": 101,
      "damage": 876,
      "p90": 2192,
      "most": 4248
     },
-    "cyan0": {
+    "red0": {
      "n": 94,
      "damage": 1062,
      "p90": 2794,
      "most": 3781
     },
-    "cyan1": {
+    "red1": {
      "n": 104,
      "damage": 837,
      "p90": 2076,
      "most": 3310
     },
-    "cyan2": {
+    "red2": {
      "n": 130,
      "damage": 982,
      "p90": 2535,
      "most": 4548
     },
-    "cyan3": {
+    "red3": {
      "n": 118,
      "damage": 1112,
      "p90": 2971,
      "most": 5161
     },
-    "blue0": {
+    "cyan0": {
      "n": 4,
      "damage": 2338,
      "p90": 4128,
      "most": 4157
     },
-    "blue1": {
+    "cyan1": {
      "n": 19,
      "damage": 2074,
      "p90": 5549,
      "most": 6674
     },
-    "blue2": {
+    "cyan2": {
      "n": 27,
      "damage": 1604,
      "p90": 5040,
      "most": 5829
     },
-    "blue3": {
+    "cyan3": {
      "n": 22,
      "damage": 1558,
      "p90": 4813,
@@ -867,73 +867,73 @@
    "taken_combo_damage_p90": 1990,
    "taken_combo_damage_max": 5205,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 104,
      "damage": 847,
      "p90": 1712,
      "most": 3344
     },
-    "red1": {
+    "blue1": {
      "n": 95,
      "damage": 837,
      "p90": 1697,
      "most": 2607
     },
-    "red2": {
+    "blue2": {
      "n": 105,
      "damage": 611,
      "p90": 1141,
      "most": 2282
     },
-    "red3": {
+    "blue3": {
      "n": 69,
      "damage": 963,
      "p90": 1780,
      "most": 3210
     },
-    "cyan0": {
+    "red0": {
      "n": 183,
      "damage": 1060,
      "p90": 2073,
      "most": 4162
     },
-    "cyan1": {
+    "red1": {
      "n": 257,
      "damage": 964,
      "p90": 1935,
      "most": 3950
     },
-    "cyan2": {
+    "red2": {
      "n": 220,
      "damage": 898,
      "p90": 1885,
      "most": 3176
     },
-    "cyan3": {
+    "red3": {
      "n": 195,
      "damage": 1017,
      "p90": 1996,
      "most": 4580
     },
-    "blue0": {
+    "cyan0": {
      "n": 12,
      "damage": 1159,
      "p90": 3096,
      "most": 3757
     },
-    "blue1": {
+    "cyan1": {
      "n": 46,
      "damage": 1431,
      "p90": 3580,
      "most": 4655
     },
-    "blue2": {
+    "cyan2": {
      "n": 44,
      "damage": 1318,
      "p90": 3309,
      "most": 4233
     },
-    "blue3": {
+    "cyan3": {
      "n": 40,
      "damage": 1322,
      "p90": 3067,
@@ -1496,73 +1496,73 @@
    "combo_hits": 4.02,
    "combo_damage": 956,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 65,
      "damage": 1079,
      "p90": 2583,
      "most": 4111
     },
-    "red1": {
+    "blue1": {
      "n": 66,
      "damage": 926,
      "p90": 2066,
      "most": 4184
     },
-    "red2": {
+    "blue2": {
      "n": 92,
      "damage": 738,
      "p90": 1793,
      "most": 3859
     },
-    "red3": {
+    "blue3": {
      "n": 89,
      "damage": 870,
      "p90": 1853,
      "most": 3967
     },
-    "cyan0": {
+    "red0": {
      "n": 66,
      "damage": 1027,
      "p90": 2480,
      "most": 3542
     },
-    "cyan1": {
+    "red1": {
      "n": 91,
      "damage": 1062,
      "p90": 2778,
      "most": 3938
     },
-    "cyan2": {
+    "red2": {
      "n": 83,
      "damage": 1129,
      "p90": 2989,
      "most": 3891
     },
-    "cyan3": {
+    "red3": {
      "n": 75,
      "damage": 856,
      "p90": 2098,
      "most": 3642
     },
-    "blue0": {
+    "cyan0": {
      "n": 1,
      "damage": 430,
      "p90": 430,
      "most": 430
     },
-    "blue1": {
+    "cyan1": {
      "n": 2,
      "damage": 388,
      "p90": 404,
      "most": 408
     },
-    "blue2": {
+    "cyan2": {
      "n": 10,
      "damage": 1162,
      "p90": 2598,
      "most": 3215
     },
-    "blue3": {
+    "cyan3": {
      "n": 5,
      "damage": 967,
      "p90": 1823,
@@ -1587,73 +1587,73 @@
    "taken_combo_damage_p90": 3209,
    "taken_combo_damage_max": 7123,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 70,
      "damage": 1141,
      "p90": 2727,
      "most": 4694
     },
-    "red1": {
+    "blue1": {
      "n": 27,
      "damage": 1075,
      "p90": 2178,
      "most": 3242
     },
-    "red2": {
+    "blue2": {
      "n": 36,
      "damage": 1055,
      "p90": 2160,
      "most": 4326
     },
-    "red3": {
+    "blue3": {
      "n": 63,
      "damage": 1143,
      "p90": 2567,
      "most": 4550
     },
-    "cyan0": {
+    "red0": {
      "n": 133,
      "damage": 1691,
      "p90": 3963,
      "most": 4975
     },
-    "cyan1": {
+    "red1": {
      "n": 122,
      "damage": 1287,
      "p90": 3001,
      "most": 4626
     },
-    "cyan2": {
+    "red2": {
      "n": 105,
      "damage": 1042,
      "p90": 2753,
      "most": 4724
     },
-    "cyan3": {
+    "red3": {
      "n": 178,
      "damage": 1209,
      "p90": 3080,
      "most": 4751
     },
-    "blue0": {
+    "cyan0": {
      "n": 9,
      "damage": 2267,
      "p90": 4866,
      "most": 7123
     },
-    "blue1": {
+    "cyan1": {
      "n": 34,
      "damage": 1128,
      "p90": 3099,
      "most": 5512
     },
-    "blue2": {
+    "cyan2": {
      "n": 43,
      "damage": 1873,
      "p90": 5429,
      "most": 7070
     },
-    "blue3": {
+    "cyan3": {
      "n": 96,
      "damage": 1258,
      "p90": 3071,
@@ -2216,73 +2216,73 @@
    "combo_hits": 3.72,
    "combo_damage": 915,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 39,
      "damage": 792,
      "p90": 1645,
      "most": 2800
     },
-    "red1": {
+    "blue1": {
      "n": 47,
      "damage": 1026,
      "p90": 2287,
      "most": 4148
     },
-    "red2": {
+    "blue2": {
      "n": 44,
      "damage": 705,
      "p90": 1366,
      "most": 1869
     },
-    "red3": {
+    "blue3": {
      "n": 52,
      "damage": 850,
      "p90": 1835,
      "most": 3591
     },
-    "cyan0": {
+    "red0": {
      "n": 56,
      "damage": 858,
      "p90": 2220,
      "most": 3049
     },
-    "cyan1": {
+    "red1": {
      "n": 57,
      "damage": 1086,
      "p90": 2746,
      "most": 4338
     },
-    "cyan2": {
+    "red2": {
      "n": 40,
      "damage": 1139,
      "p90": 2417,
      "most": 3496
     },
-    "cyan3": {
+    "red3": {
      "n": 58,
      "damage": 841,
      "p90": 1899,
      "most": 3115
     },
-    "blue0": {
+    "cyan0": {
      "n": 6,
      "damage": 552,
      "p90": 900,
      "most": 1192
     },
-    "blue1": {
+    "cyan1": {
      "n": 5,
      "damage": 765,
      "p90": 1357,
      "most": 1640
     },
-    "blue2": {
+    "cyan2": {
      "n": 4,
      "damage": 1360,
      "p90": 2253,
      "most": 2363
     },
-    "blue3": {
+    "cyan3": {
      "n": 10,
      "damage": 1128,
      "p90": 3491,
@@ -2307,73 +2307,73 @@
    "taken_combo_damage_p90": 2560,
    "taken_combo_damage_max": 5068,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 74,
      "damage": 1097,
      "p90": 2077,
      "most": 3547
     },
-    "red1": {
+    "blue1": {
      "n": 71,
      "damage": 1102,
      "p90": 2273,
      "most": 3586
     },
-    "red2": {
+    "blue2": {
      "n": 68,
      "damage": 1050,
      "p90": 2553,
      "most": 3276
     },
-    "red3": {
+    "blue3": {
      "n": 25,
      "damage": 1080,
      "p90": 2560,
      "most": 3437
     },
-    "cyan0": {
+    "red0": {
      "n": 60,
      "damage": 1288,
      "p90": 2704,
      "most": 3410
     },
-    "cyan1": {
+    "red1": {
      "n": 56,
      "damage": 1401,
      "p90": 3045,
      "most": 3801
     },
-    "cyan2": {
+    "red2": {
      "n": 48,
      "damage": 977,
      "p90": 1847,
      "most": 3486
     },
-    "cyan3": {
+    "red3": {
      "n": 45,
      "damage": 955,
      "p90": 2582,
      "most": 3349
     },
-    "blue0": {
+    "cyan0": {
      "n": 6,
      "damage": 2200,
      "p90": 3731,
      "most": 3789
     },
-    "blue1": {
+    "cyan1": {
      "n": 10,
      "damage": 1763,
      "p90": 3084,
      "most": 5068
     },
-    "blue2": {
+    "cyan2": {
      "n": 2,
      "damage": 1180,
      "p90": 1829,
      "most": 1991
     },
-    "blue3": {
+    "cyan3": {
      "n": 13,
      "damage": 676,
      "p90": 1186,
@@ -2908,73 +2908,73 @@
    "combo_hits": 5.44,
    "combo_damage": 1115,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 302,
      "damage": 1205,
      "p90": 2836,
      "most": 4045
     },
-    "red1": {
+    "blue1": {
      "n": 303,
      "damage": 1059,
      "p90": 2449,
      "most": 4021
     },
-    "red2": {
+    "blue2": {
      "n": 270,
      "damage": 936,
      "p90": 2066,
      "most": 3901
     },
-    "red3": {
+    "blue3": {
      "n": 256,
      "damage": 835,
      "p90": 1919,
      "most": 4404
     },
-    "cyan0": {
+    "red0": {
      "n": 271,
      "damage": 1277,
      "p90": 3186,
      "most": 4094
     },
-    "cyan1": {
+    "red1": {
      "n": 363,
      "damage": 1196,
      "p90": 2848,
      "most": 4770
     },
-    "cyan2": {
+    "red2": {
      "n": 405,
      "damage": 1017,
      "p90": 2541,
      "most": 4753
     },
-    "cyan3": {
+    "red3": {
      "n": 405,
      "damage": 1148,
      "p90": 2902,
      "most": 4489
     },
-    "blue0": {
+    "cyan0": {
      "n": 7,
      "damage": 635,
      "p90": 1173,
      "most": 1824
     },
-    "blue1": {
+    "cyan1": {
      "n": 15,
      "damage": 1876,
      "p90": 3561,
      "most": 3969
     },
-    "blue2": {
+    "cyan2": {
      "n": 24,
      "damage": 1455,
      "p90": 3221,
      "most": 4167
     },
-    "blue3": {
+    "cyan3": {
      "n": 54,
      "damage": 1995,
      "p90": 5125,
@@ -2999,73 +2999,73 @@
    "taken_combo_damage_p90": 3069,
    "taken_combo_damage_max": 8344,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 188,
      "damage": 1208,
      "p90": 2267,
      "most": 5009
     },
-    "red1": {
+    "blue1": {
      "n": 130,
      "damage": 1062,
      "p90": 1988,
      "most": 3811
     },
-    "red2": {
+    "blue2": {
      "n": 149,
      "damage": 1007,
      "p90": 2124,
      "most": 6684
     },
-    "red3": {
+    "blue3": {
      "n": 164,
      "damage": 883,
      "p90": 1909,
      "most": 4179
     },
-    "cyan0": {
+    "red0": {
      "n": 287,
      "damage": 1395,
      "p90": 2981,
      "most": 5356
     },
-    "cyan1": {
+    "red1": {
      "n": 322,
      "damage": 1378,
      "p90": 3117,
      "most": 5219
     },
-    "cyan2": {
+    "red2": {
      "n": 315,
      "damage": 1232,
      "p90": 2884,
      "most": 6396
     },
-    "cyan3": {
+    "red3": {
      "n": 347,
      "damage": 1339,
      "p90": 3223,
      "most": 6664
     },
-    "blue0": {
+    "cyan0": {
      "n": 12,
      "damage": 1361,
      "p90": 4095,
      "most": 4575
     },
-    "blue1": {
+    "cyan1": {
      "n": 62,
      "damage": 1877,
      "p90": 5400,
      "most": 6337
     },
-    "blue2": {
+    "cyan2": {
      "n": 64,
      "damage": 2057,
      "p90": 5355,
      "most": 6518
     },
-    "blue3": {
+    "cyan3": {
      "n": 140,
      "damage": 1797,
      "p90": 4903,
@@ -3641,73 +3641,73 @@
    "combo_hits": 4.25,
    "combo_damage": 938,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 217,
      "damage": 1025,
      "p90": 2291,
      "most": 3584
     },
-    "red1": {
+    "blue1": {
      "n": 210,
      "damage": 878,
      "p90": 2024,
      "most": 3686
     },
-    "red2": {
+    "blue2": {
      "n": 219,
      "damage": 878,
      "p90": 2101,
      "most": 3552
     },
-    "red3": {
+    "blue3": {
      "n": 212,
      "damage": 790,
      "p90": 1622,
      "most": 3452
     },
-    "cyan0": {
+    "red0": {
      "n": 215,
      "damage": 913,
      "p90": 2463,
      "most": 4221
     },
-    "cyan1": {
+    "red1": {
      "n": 289,
      "damage": 936,
      "p90": 2451,
      "most": 3708
     },
-    "cyan2": {
+    "red2": {
      "n": 242,
      "damage": 952,
      "p90": 2793,
      "most": 4084
     },
-    "cyan3": {
+    "red3": {
      "n": 263,
      "damage": 933,
      "p90": 2419,
      "most": 5976
     },
-    "blue0": {
+    "cyan0": {
      "n": 17,
      "damage": 1139,
      "p90": 3124,
      "most": 4221
     },
-    "blue1": {
+    "cyan1": {
      "n": 18,
      "damage": 1429,
      "p90": 3918,
      "most": 4960
     },
-    "blue2": {
+    "cyan2": {
      "n": 24,
      "damage": 1718,
      "p90": 3463,
      "most": 5761
     },
-    "blue3": {
+    "cyan3": {
      "n": 24,
      "damage": 1405,
      "p90": 3974,
@@ -3732,73 +3732,73 @@
    "taken_combo_damage_p90": 2656,
    "taken_combo_damage_max": 7236,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 228,
      "damage": 1084,
      "p90": 2555,
      "most": 3938
     },
-    "red1": {
+    "blue1": {
      "n": 182,
      "damage": 918,
      "p90": 2120,
      "most": 3703
     },
-    "red2": {
+    "blue2": {
      "n": 107,
      "damage": 964,
      "p90": 2560,
      "most": 3547
     },
-    "red3": {
+    "blue3": {
      "n": 50,
      "damage": 793,
      "p90": 1496,
      "most": 3393
     },
-    "cyan0": {
+    "red0": {
      "n": 416,
      "damage": 1236,
      "p90": 2572,
      "most": 5385
     },
-    "cyan1": {
+    "red1": {
      "n": 436,
      "damage": 1135,
      "p90": 2433,
      "most": 6357
     },
-    "cyan2": {
+    "red2": {
      "n": 234,
      "damage": 1125,
      "p90": 2514,
      "most": 5429
     },
-    "cyan3": {
+    "red3": {
      "n": 123,
      "damage": 1043,
      "p90": 2526,
      "most": 4299
     },
-    "blue0": {
+    "cyan0": {
      "n": 48,
      "damage": 1639,
      "p90": 3579,
      "most": 5229
     },
-    "blue1": {
+    "cyan1": {
      "n": 87,
      "damage": 1929,
      "p90": 4910,
      "most": 5624
     },
-    "blue2": {
+    "cyan2": {
      "n": 66,
      "damage": 1841,
      "p90": 4459,
      "most": 7236
     },
-    "blue3": {
+    "cyan3": {
      "n": 34,
      "damage": 1406,
      "p90": 3562,
@@ -4354,73 +4354,73 @@
    "combo_hits": 1.83,
    "combo_damage": 432,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 5,
      "damage": 533,
      "p90": 841,
      "most": 855
     },
-    "red1": {
+    "blue1": {
      "n": 2,
      "damage": 361,
      "p90": 364,
      "most": 364
     },
-    "red2": {
+    "blue2": {
      "n": 1,
      "damage": 280,
      "p90": 280,
      "most": 280
     },
-    "red3": {
+    "blue3": {
      "n": 1,
      "damage": 252,
      "p90": 252,
      "most": 252
     },
-    "cyan0": {
+    "red0": {
      "n": 3,
      "damage": 457,
      "p90": 538,
      "most": 559
     },
-    "cyan1": {
+    "red1": {
      "n": 10,
      "damage": 372,
      "p90": 564,
      "most": 691
     },
-    "cyan2": {
+    "red2": {
      "n": 6,
      "damage": 638,
      "p90": 800,
      "most": 819
     },
-    "cyan3": {
+    "red3": {
      "n": 3,
      "damage": 241,
      "p90": 356,
      "most": 383
     },
-    "blue0": {
+    "cyan0": {
      "n": 2,
      "damage": 887,
      "p90": 1437,
      "most": 1575
     },
-    "blue1": {
+    "cyan1": {
      "n": 15,
      "damage": 344,
      "p90": 647,
      "most": 669
     },
-    "blue2": {
+    "cyan2": {
      "n": 9,
      "damage": 436,
      "p90": 653,
      "most": 783
     },
-    "blue3": {
+    "cyan3": {
      "n": 1,
      "damage": 628,
      "p90": 628,
@@ -4445,49 +4445,49 @@
    "taken_combo_damage_p90": 938,
    "taken_combo_damage_max": 1670,
    "taken_by_resources": {
-    "red2": {
+    "blue2": {
      "n": 2,
      "damage": 530,
      "p90": 717,
      "most": 764
     },
-    "red3": {
+    "blue3": {
      "n": 1,
      "damage": 174,
      "p90": 174,
      "most": 174
     },
-    "cyan0": {
+    "red0": {
      "n": 3,
      "damage": 886,
      "p90": 1464,
      "most": 1621
     },
-    "cyan2": {
+    "red2": {
      "n": 3,
      "damage": 295,
      "p90": 430,
      "most": 463
     },
-    "cyan3": {
+    "red3": {
      "n": 5,
      "damage": 679,
      "p90": 911,
      "most": 960
     },
-    "blue0": {
+    "cyan0": {
      "n": 3,
      "damage": 908,
      "p90": 1076,
      "most": 1133
     },
-    "blue1": {
+    "cyan1": {
      "n": 5,
      "damage": 391,
      "p90": 650,
      "most": 661
     },
-    "blue3": {
+    "cyan3": {
      "n": 21,
      "damage": 469,
      "p90": 838,
@@ -4887,73 +4887,73 @@
    "combo_hits": 4.18,
    "combo_damage": 979,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 244,
      "damage": 1037,
      "p90": 2269,
      "most": 4128
     },
-    "red1": {
+    "blue1": {
      "n": 197,
      "damage": 914,
      "p90": 2246,
      "most": 4555
     },
-    "red2": {
+    "blue2": {
      "n": 229,
      "damage": 852,
      "p90": 1631,
      "most": 3508
     },
-    "red3": {
+    "blue3": {
      "n": 183,
      "damage": 800,
      "p90": 2051,
      "most": 3073
     },
-    "cyan0": {
+    "red0": {
      "n": 220,
      "damage": 1134,
      "p90": 2817,
      "most": 4052
     },
-    "cyan1": {
+    "red1": {
      "n": 282,
      "damage": 874,
      "p90": 2278,
      "most": 3755
     },
-    "cyan2": {
+    "red2": {
      "n": 289,
      "damage": 983,
      "p90": 2585,
      "most": 6606
     },
-    "cyan3": {
+    "red3": {
      "n": 216,
      "damage": 987,
      "p90": 2568,
      "most": 3874
     },
-    "blue0": {
+    "cyan0": {
      "n": 11,
      "damage": 1467,
      "p90": 4228,
      "most": 4228
     },
-    "blue1": {
+    "cyan1": {
      "n": 24,
      "damage": 1025,
      "p90": 2949,
      "most": 3972
     },
-    "blue2": {
+    "cyan2": {
      "n": 50,
      "damage": 1063,
      "p90": 3792,
      "most": 4480
     },
-    "blue3": {
+    "cyan3": {
      "n": 58,
      "damage": 1717,
      "p90": 4011,
@@ -4978,73 +4978,73 @@
    "taken_combo_damage_p90": 2049,
    "taken_combo_damage_max": 6757,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 137,
      "damage": 871,
      "p90": 1819,
      "most": 3205
     },
-    "red1": {
+    "blue1": {
      "n": 196,
      "damage": 768,
      "p90": 1614,
      "most": 3049
     },
-    "red2": {
+    "blue2": {
      "n": 157,
      "damage": 721,
      "p90": 1517,
      "most": 3405
     },
-    "red3": {
+    "blue3": {
      "n": 81,
      "damage": 792,
      "p90": 1728,
      "most": 3833
     },
-    "cyan0": {
+    "red0": {
      "n": 104,
      "damage": 1001,
      "p90": 2300,
      "most": 2937
     },
-    "cyan1": {
+    "red1": {
      "n": 567,
      "damage": 970,
      "p90": 2108,
      "most": 4741
     },
-    "cyan2": {
+    "red2": {
      "n": 492,
      "damage": 926,
      "p90": 1989,
      "most": 4328
     },
-    "cyan3": {
+    "red3": {
      "n": 284,
      "damage": 1071,
      "p90": 2724,
      "most": 6523
     },
-    "blue0": {
+    "cyan0": {
      "n": 24,
      "damage": 626,
      "p90": 1405,
      "most": 4133
     },
-    "blue1": {
+    "cyan1": {
      "n": 119,
      "damage": 764,
      "p90": 1545,
      "most": 4062
     },
-    "blue2": {
+    "cyan2": {
      "n": 299,
      "damage": 1048,
      "p90": 2195,
      "most": 6591
     },
-    "blue3": {
+    "cyan3": {
      "n": 219,
      "damage": 1221,
      "p90": 3471,
@@ -5626,73 +5626,73 @@
    "combo_hits": 4.65,
    "combo_damage": 1010,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 263,
      "damage": 1001,
      "p90": 2380,
      "most": 3962
     },
-    "red1": {
+    "blue1": {
      "n": 279,
      "damage": 919,
      "p90": 2263,
      "most": 4331
     },
-    "red2": {
+    "blue2": {
      "n": 260,
      "damage": 900,
      "p90": 2254,
      "most": 4235
     },
-    "red3": {
+    "blue3": {
      "n": 203,
      "damage": 780,
      "p90": 1582,
      "most": 3501
     },
-    "cyan0": {
+    "red0": {
      "n": 255,
      "damage": 1060,
      "p90": 2827,
      "most": 3979
     },
-    "cyan1": {
+    "red1": {
      "n": 438,
      "damage": 1041,
      "p90": 2778,
      "most": 4753
     },
-    "cyan2": {
+    "red2": {
      "n": 403,
      "damage": 1044,
      "p90": 2558,
      "most": 4870
     },
-    "cyan3": {
+    "red3": {
      "n": 300,
      "damage": 1023,
      "p90": 2682,
      "most": 7743
     },
-    "blue0": {
+    "cyan0": {
      "n": 20,
      "damage": 539,
      "p90": 1009,
      "most": 1186
     },
-    "blue1": {
+    "cyan1": {
      "n": 40,
      "damage": 1381,
      "p90": 4154,
      "most": 5556
     },
-    "blue2": {
+    "cyan2": {
      "n": 43,
      "damage": 2035,
      "p90": 5186,
      "most": 6381
     },
-    "blue3": {
+    "cyan3": {
      "n": 45,
      "damage": 1200,
      "p90": 3336,
@@ -5717,73 +5717,73 @@
    "taken_combo_damage_p90": 3076,
    "taken_combo_damage_max": 6884,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 146,
      "damage": 1064,
      "p90": 2492,
      "most": 3552
     },
-    "red1": {
+    "blue1": {
      "n": 92,
      "damage": 948,
      "p90": 2324,
      "most": 3191
     },
-    "red2": {
+    "blue2": {
      "n": 92,
      "damage": 820,
      "p90": 1762,
      "most": 2932
     },
-    "red3": {
+    "blue3": {
      "n": 61,
      "damage": 1251,
      "p90": 3325,
      "most": 3811
     },
-    "cyan0": {
+    "red0": {
      "n": 216,
      "damage": 1397,
      "p90": 2938,
      "most": 5649
     },
-    "cyan1": {
+    "red1": {
      "n": 342,
      "damage": 1201,
      "p90": 2689,
      "most": 6249
     },
-    "cyan2": {
+    "red2": {
      "n": 330,
      "damage": 1279,
      "p90": 2897,
      "most": 6596
     },
-    "cyan3": {
+    "red3": {
      "n": 184,
      "damage": 1459,
      "p90": 3336,
      "most": 5952
     },
-    "blue0": {
+    "cyan0": {
      "n": 17,
      "damage": 1643,
      "p90": 3664,
      "most": 5571
     },
-    "blue1": {
+    "cyan1": {
      "n": 101,
      "damage": 1728,
      "p90": 4091,
      "most": 5439
     },
-    "blue2": {
+    "cyan2": {
      "n": 115,
      "damage": 1602,
      "p90": 4177,
      "most": 6884
     },
-    "blue3": {
+    "cyan3": {
      "n": 104,
      "damage": 1797,
      "p90": 4580,
@@ -6339,73 +6339,73 @@
    "combo_hits": 3.79,
    "combo_damage": 929,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 192,
      "damage": 1021,
      "p90": 2145,
      "most": 3691
     },
-    "red1": {
+    "blue1": {
      "n": 155,
      "damage": 799,
      "p90": 1941,
      "most": 3513
     },
-    "red2": {
+    "blue2": {
      "n": 175,
      "damage": 805,
      "p90": 1733,
      "most": 3244
     },
-    "red3": {
+    "blue3": {
      "n": 230,
      "damage": 782,
      "p90": 1822,
      "most": 3523
     },
-    "cyan0": {
+    "red0": {
      "n": 141,
      "damage": 1039,
      "p90": 2649,
      "most": 6025
     },
-    "cyan1": {
+    "red1": {
      "n": 223,
      "damage": 1017,
      "p90": 2571,
      "most": 4250
     },
-    "cyan2": {
+    "red2": {
      "n": 163,
      "damage": 919,
      "p90": 2348,
      "most": 5981
     },
-    "cyan3": {
+    "red3": {
      "n": 251,
      "damage": 923,
      "p90": 2466,
      "most": 3906
     },
-    "blue0": {
+    "cyan0": {
      "n": 13,
      "damage": 823,
      "p90": 1304,
      "most": 2868
     },
-    "blue1": {
+    "cyan1": {
      "n": 18,
      "damage": 1142,
      "p90": 2899,
      "most": 5141
     },
-    "blue2": {
+    "cyan2": {
      "n": 42,
      "damage": 1081,
      "p90": 2877,
      "most": 4162
     },
-    "blue3": {
+    "cyan3": {
      "n": 37,
      "damage": 1393,
      "p90": 4200,
@@ -6430,73 +6430,73 @@
    "taken_combo_damage_p90": 2944,
    "taken_combo_damage_max": 8734,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 162,
      "damage": 1273,
      "p90": 3027,
      "most": 4150
     },
-    "red1": {
+    "blue1": {
      "n": 73,
      "damage": 1203,
      "p90": 2946,
      "most": 3503
     },
-    "red2": {
+    "blue2": {
      "n": 93,
      "damage": 969,
      "p90": 2399,
      "most": 3093
     },
-    "red3": {
+    "blue3": {
      "n": 194,
      "damage": 994,
      "p90": 2365,
      "most": 4333
     },
-    "cyan0": {
+    "red0": {
      "n": 264,
      "damage": 1190,
      "p90": 3022,
      "most": 4855
     },
-    "cyan1": {
+    "red1": {
      "n": 228,
      "damage": 1198,
      "p90": 2866,
      "most": 6552
     },
-    "cyan2": {
+    "red2": {
      "n": 196,
      "damage": 1101,
      "p90": 2593,
      "most": 3950
     },
-    "cyan3": {
+    "red3": {
      "n": 501,
      "damage": 1040,
      "p90": 2433,
      "most": 5732
     },
-    "blue0": {
+    "cyan0": {
      "n": 25,
      "damage": 1259,
      "p90": 3433,
      "most": 5385
     },
-    "blue1": {
+    "cyan1": {
      "n": 64,
      "damage": 1573,
      "p90": 4382,
      "most": 6664
     },
-    "blue2": {
+    "cyan2": {
      "n": 68,
      "damage": 1663,
      "p90": 4703,
      "most": 6171
     },
-    "blue3": {
+    "cyan3": {
      "n": 222,
      "damage": 1681,
      "p90": 4660,
@@ -7065,73 +7065,73 @@
    "combo_hits": 4.15,
    "combo_damage": 953,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 81,
      "damage": 1243,
      "p90": 3027,
      "most": 3855
     },
-    "red1": {
+    "blue1": {
      "n": 106,
      "damage": 667,
      "p90": 1330,
      "most": 2849
     },
-    "red2": {
+    "blue2": {
      "n": 112,
      "damage": 807,
      "p90": 1513,
      "most": 3322
     },
-    "red3": {
+    "blue3": {
      "n": 74,
      "damage": 911,
      "p90": 2199,
      "most": 3596
     },
-    "cyan0": {
+    "red0": {
      "n": 110,
      "damage": 1001,
      "p90": 2539,
      "most": 3632
     },
-    "cyan1": {
+    "red1": {
      "n": 169,
      "damage": 851,
      "p90": 1959,
      "most": 4611
     },
-    "cyan2": {
+    "red2": {
      "n": 123,
      "damage": 992,
      "p90": 2400,
      "most": 7084
     },
-    "cyan3": {
+    "red3": {
      "n": 96,
      "damage": 1068,
      "p90": 2292,
      "most": 3198
     },
-    "blue0": {
+    "cyan0": {
      "n": 7,
      "damage": 982,
      "p90": 1802,
      "most": 2917
     },
-    "blue1": {
+    "cyan1": {
      "n": 11,
      "damage": 1839,
      "p90": 4404,
      "most": 5781
     },
-    "blue2": {
+    "cyan2": {
      "n": 11,
      "damage": 811,
      "p90": 1079,
      "most": 3156
     },
-    "blue3": {
+    "cyan3": {
      "n": 7,
      "damage": 2937,
      "p90": 4804,
@@ -7156,73 +7156,73 @@
    "taken_combo_damage_p90": 2166,
    "taken_combo_damage_max": 5849,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 134,
      "damage": 960,
      "p90": 1564,
      "most": 4726
     },
-    "red1": {
+    "blue1": {
      "n": 118,
      "damage": 826,
      "p90": 1839,
      "most": 2986
     },
-    "red2": {
+    "blue2": {
      "n": 147,
      "damage": 749,
      "p90": 1888,
      "most": 3244
     },
-    "red3": {
+    "blue3": {
      "n": 100,
      "damage": 617,
      "p90": 1241,
      "most": 3364
     },
-    "cyan0": {
+    "red0": {
      "n": 154,
      "damage": 1143,
      "p90": 2342,
      "most": 3830
     },
-    "cyan1": {
+    "red1": {
      "n": 253,
      "damage": 1015,
      "p90": 2258,
      "most": 4697
     },
-    "cyan2": {
+    "red2": {
      "n": 147,
      "damage": 774,
      "p90": 1870,
      "most": 3127
     },
-    "cyan3": {
+    "red3": {
      "n": 132,
      "damage": 1167,
      "p90": 2819,
      "most": 4038
     },
-    "blue0": {
+    "cyan0": {
      "n": 16,
      "damage": 1246,
      "p90": 3152,
      "most": 4587
     },
-    "blue1": {
+    "cyan1": {
      "n": 35,
      "damage": 1103,
      "p90": 2594,
      "most": 4997
     },
-    "blue2": {
+    "cyan2": {
      "n": 70,
      "damage": 997,
      "p90": 2768,
      "most": 5649
     },
-    "blue3": {
+    "cyan3": {
      "n": 33,
      "damage": 1275,
      "p90": 3141,
@@ -7791,73 +7791,73 @@
    "combo_hits": 4.87,
    "combo_damage": 1039,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 135,
      "damage": 1112,
      "p90": 2652,
      "most": 3520
     },
-    "red1": {
+    "blue1": {
      "n": 109,
      "damage": 922,
      "p90": 2163,
      "most": 3864
     },
-    "red2": {
+    "blue2": {
      "n": 75,
      "damage": 715,
      "p90": 1404,
      "most": 2517
     },
-    "red3": {
+    "blue3": {
      "n": 84,
      "damage": 915,
      "p90": 1996,
      "most": 3669
     },
-    "cyan0": {
+    "red0": {
      "n": 147,
      "damage": 958,
      "p90": 2267,
      "most": 3642
     },
-    "cyan1": {
+    "red1": {
      "n": 184,
      "damage": 1018,
      "p90": 2670,
      "most": 4650
     },
-    "cyan2": {
+    "red2": {
      "n": 110,
      "damage": 1198,
      "p90": 2807,
      "most": 4382
     },
-    "cyan3": {
+    "red3": {
      "n": 85,
      "damage": 1055,
      "p90": 2553,
      "most": 3486
     },
-    "blue0": {
+    "cyan0": {
      "n": 3,
      "damage": 1731,
      "p90": 3091,
      "most": 3469
     },
-    "blue1": {
+    "cyan1": {
      "n": 18,
      "damage": 1557,
      "p90": 4348,
      "most": 5122
     },
-    "blue2": {
+    "cyan2": {
      "n": 17,
      "damage": 2050,
      "p90": 4642,
      "most": 5297
     },
-    "blue3": {
+    "cyan3": {
      "n": 15,
      "damage": 1456,
      "p90": 3574,
@@ -7882,73 +7882,73 @@
    "taken_combo_damage_p90": 3055,
    "taken_combo_damage_max": 6904,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 95,
      "damage": 1225,
      "p90": 2923,
      "most": 4494
     },
-    "red1": {
+    "blue1": {
      "n": 62,
      "damage": 1056,
      "p90": 2494,
      "most": 4221
     },
-    "red2": {
+    "blue2": {
      "n": 54,
      "damage": 1133,
      "p90": 2521,
      "most": 3686
     },
-    "red3": {
+    "blue3": {
      "n": 82,
      "damage": 1288,
      "p90": 2975,
      "most": 3999
     },
-    "cyan0": {
+    "red0": {
      "n": 131,
      "damage": 1329,
      "p90": 3210,
      "most": 3874
     },
-    "cyan1": {
+    "red1": {
      "n": 117,
      "damage": 1295,
      "p90": 3055,
      "most": 4763
     },
-    "cyan2": {
+    "red2": {
      "n": 112,
      "damage": 1056,
      "p90": 2378,
      "most": 4038
     },
-    "cyan3": {
+    "red3": {
      "n": 145,
      "damage": 1218,
      "p90": 3125,
      "most": 6904
     },
-    "blue0": {
+    "cyan0": {
      "n": 3,
      "damage": 2487,
      "p90": 4606,
      "most": 5253
     },
-    "blue1": {
+    "cyan1": {
      "n": 6,
      "damage": 4054,
      "p90": 6037,
      "most": 6801
     },
-    "blue2": {
+    "cyan2": {
      "n": 14,
      "damage": 1467,
      "p90": 3621,
      "most": 6865
     },
-    "blue3": {
+    "cyan3": {
      "n": 27,
      "damage": 1529,
      "p90": 4170,
@@ -8497,73 +8497,73 @@
    "combo_hits": 4.32,
    "combo_damage": 960,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 93,
      "damage": 842,
      "p90": 1754,
      "most": 3625
     },
-    "red1": {
+    "blue1": {
      "n": 124,
      "damage": 902,
      "p90": 2135,
      "most": 3513
     },
-    "red2": {
+    "blue2": {
      "n": 114,
      "damage": 717,
      "p90": 1354,
      "most": 3415
     },
-    "red3": {
+    "blue3": {
      "n": 106,
      "damage": 668,
      "p90": 1324,
      "most": 3691
     },
-    "cyan0": {
+    "red0": {
      "n": 78,
      "damage": 941,
      "p90": 2201,
      "most": 3217
     },
-    "cyan1": {
+    "red1": {
      "n": 135,
      "damage": 1038,
      "p90": 2558,
      "most": 5434
     },
-    "cyan2": {
+    "red2": {
      "n": 141,
      "damage": 938,
      "p90": 2485,
      "most": 4106
     },
-    "cyan3": {
+    "red3": {
      "n": 171,
      "damage": 974,
      "p90": 2766,
      "most": 4287
     },
-    "blue0": {
+    "cyan0": {
      "n": 2,
      "damage": 3635,
      "p90": 3740,
      "most": 3767
     },
-    "blue1": {
+    "cyan1": {
      "n": 14,
      "damage": 1592,
      "p90": 3564,
      "most": 5341
     },
-    "blue2": {
+    "cyan2": {
      "n": 6,
      "damage": 2450,
      "p90": 4242,
      "most": 4846
     },
-    "blue3": {
+    "cyan3": {
      "n": 42,
      "damage": 2032,
      "p90": 4608,
@@ -8588,73 +8588,73 @@
    "taken_combo_damage_p90": 2337,
    "taken_combo_damage_max": 6059,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 125,
      "damage": 839,
      "p90": 1607,
      "most": 3562
     },
-    "red1": {
+    "blue1": {
      "n": 72,
      "damage": 837,
      "p90": 2158,
      "most": 3210
     },
-    "red2": {
+    "blue2": {
      "n": 80,
      "damage": 775,
      "p90": 1916,
      "most": 3911
     },
-    "red3": {
+    "blue3": {
      "n": 182,
      "damage": 882,
      "p90": 2058,
      "most": 3471
     },
-    "cyan0": {
+    "red0": {
      "n": 120,
      "damage": 1036,
      "p90": 2614,
      "most": 3642
     },
-    "cyan1": {
+    "red1": {
      "n": 108,
      "damage": 1059,
      "p90": 2637,
      "most": 3884
     },
-    "cyan2": {
+    "red2": {
      "n": 110,
      "damage": 789,
      "p90": 1918,
      "most": 3476
     },
-    "cyan3": {
+    "red3": {
      "n": 220,
      "damage": 1031,
      "p90": 2414,
      "most": 5483
     },
-    "blue0": {
+    "cyan0": {
      "n": 2,
      "damage": 1474,
      "p90": 2318,
      "most": 2529
     },
-    "blue1": {
+    "cyan1": {
      "n": 10,
      "damage": 1053,
      "p90": 2457,
      "most": 3008
     },
-    "blue2": {
+    "cyan2": {
      "n": 10,
      "damage": 1355,
      "p90": 2884,
      "most": 6059
     },
-    "blue3": {
+    "cyan3": {
      "n": 19,
      "damage": 1376,
      "p90": 3274,
@@ -9217,73 +9217,73 @@
    "combo_hits": 4.29,
    "combo_damage": 952,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 302,
      "damage": 1126,
      "p90": 2703,
      "most": 4853
     },
-    "red1": {
+    "blue1": {
      "n": 286,
      "damage": 852,
      "p90": 1945,
      "most": 3725
     },
-    "red2": {
+    "blue2": {
      "n": 363,
      "damage": 854,
      "p90": 1909,
      "most": 3589
     },
-    "red3": {
+    "blue3": {
      "n": 511,
      "damage": 841,
      "p90": 1981,
      "most": 4050
     },
-    "cyan0": {
+    "red0": {
      "n": 284,
      "damage": 1015,
      "p90": 2583,
      "most": 3923
     },
-    "cyan1": {
+    "red1": {
      "n": 410,
      "damage": 902,
      "p90": 2217,
      "most": 3913
     },
-    "cyan2": {
+    "red2": {
      "n": 494,
      "damage": 974,
      "p90": 2379,
      "most": 4853
     },
-    "cyan3": {
+    "red3": {
      "n": 644,
      "damage": 965,
      "p90": 2427,
      "most": 6518
     },
-    "blue0": {
+    "cyan0": {
      "n": 11,
      "damage": 1135,
      "p90": 2949,
      "most": 3161
     },
-    "blue1": {
+    "cyan1": {
      "n": 36,
      "damage": 1128,
      "p90": 3294,
      "most": 5151
     },
-    "blue2": {
+    "cyan2": {
      "n": 60,
      "damage": 1000,
      "p90": 2380,
      "most": 4162
     },
-    "blue3": {
+    "cyan3": {
      "n": 78,
      "damage": 1449,
      "p90": 3851,
@@ -9308,73 +9308,73 @@
    "taken_combo_damage_p90": 2412,
    "taken_combo_damage_max": 6523,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 311,
      "damage": 896,
      "p90": 2066,
      "most": 3733
     },
-    "red1": {
+    "blue1": {
      "n": 271,
      "damage": 807,
      "p90": 2059,
      "most": 3789
     },
-    "red2": {
+    "blue2": {
      "n": 263,
      "damage": 760,
      "p90": 1921,
      "most": 3122
     },
-    "red3": {
+    "blue3": {
      "n": 221,
      "damage": 809,
      "p90": 2108,
      "most": 3686
     },
-    "cyan0": {
+    "red0": {
      "n": 478,
      "damage": 986,
      "p90": 2444,
      "most": 4111
     },
-    "cyan1": {
+    "red1": {
      "n": 562,
      "damage": 1002,
      "p90": 2533,
      "most": 5693
     },
-    "cyan2": {
+    "red2": {
      "n": 429,
      "damage": 953,
      "p90": 2388,
      "most": 6523
     },
-    "cyan3": {
+    "red3": {
      "n": 444,
      "damage": 928,
      "p90": 2240,
      "most": 4428
     },
-    "blue0": {
+    "cyan0": {
      "n": 29,
      "damage": 1210,
      "p90": 3153,
      "most": 4650
     },
-    "blue1": {
+    "cyan1": {
      "n": 114,
      "damage": 1007,
      "p90": 3208,
      "most": 4794
     },
-    "blue2": {
+    "cyan2": {
      "n": 149,
      "damage": 981,
      "p90": 2634,
      "most": 5483
     },
-    "blue3": {
+    "cyan3": {
      "n": 155,
      "damage": 1406,
      "p90": 4016,
@@ -9956,73 +9956,73 @@
    "combo_hits": 4.78,
    "combo_damage": 1037,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 272,
      "damage": 1131,
      "p90": 2767,
      "most": 3557
     },
-    "red1": {
+    "blue1": {
      "n": 334,
      "damage": 892,
      "p90": 2162,
      "most": 3894
     },
-    "red2": {
+    "blue2": {
      "n": 289,
      "damage": 834,
      "p90": 1784,
      "most": 3562
     },
-    "red3": {
+    "blue3": {
      "n": 242,
      "damage": 920,
      "p90": 2114,
      "most": 3691
     },
-    "cyan0": {
+    "red0": {
      "n": 291,
      "damage": 1101,
      "p90": 2890,
      "most": 3908
     },
-    "cyan1": {
+    "red1": {
      "n": 478,
      "damage": 991,
      "p90": 2482,
      "most": 4848
     },
-    "cyan2": {
+    "red2": {
      "n": 407,
      "damage": 1084,
      "p90": 2692,
      "most": 5058
     },
-    "cyan3": {
+    "red3": {
      "n": 342,
      "damage": 1089,
      "p90": 2830,
      "most": 4294
     },
-    "blue0": {
+    "cyan0": {
      "n": 8,
      "damage": 1687,
      "p90": 3723,
      "most": 4157
     },
-    "blue1": {
+    "cyan1": {
      "n": 21,
      "damage": 1429,
      "p90": 3288,
      "most": 5170
     },
-    "blue2": {
+    "cyan2": {
      "n": 35,
      "damage": 1845,
      "p90": 4775,
      "most": 6718
     },
-    "blue3": {
+    "cyan3": {
      "n": 52,
      "damage": 1702,
      "p90": 4949,
@@ -10047,73 +10047,73 @@
    "taken_combo_damage_p90": 3271,
    "taken_combo_damage_max": 7382,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 204,
      "damage": 1029,
      "p90": 2018,
      "most": 4336
     },
-    "red1": {
+    "blue1": {
      "n": 159,
      "damage": 1021,
      "p90": 2329,
      "most": 4502
     },
-    "red2": {
+    "blue2": {
      "n": 155,
      "damage": 995,
      "p90": 2389,
      "most": 4604
     },
-    "red3": {
+    "blue3": {
      "n": 153,
      "damage": 887,
      "p90": 1815,
      "most": 5068
     },
-    "cyan0": {
+    "red0": {
      "n": 302,
      "damage": 1384,
      "p90": 3452,
      "most": 4968
     },
-    "cyan1": {
+    "red1": {
      "n": 358,
      "damage": 1365,
      "p90": 3624,
      "most": 5859
     },
-    "cyan2": {
+    "red2": {
      "n": 276,
      "damage": 1227,
      "p90": 3242,
      "most": 4785
     },
-    "cyan3": {
+    "red3": {
      "n": 289,
      "damage": 1296,
      "p90": 3296,
      "most": 4768
     },
-    "blue0": {
+    "cyan0": {
      "n": 20,
      "damage": 782,
      "p90": 2255,
      "most": 2954
     },
-    "blue1": {
+    "cyan1": {
      "n": 68,
      "damage": 1336,
      "p90": 3135,
      "most": 6972
     },
-    "blue2": {
+    "cyan2": {
      "n": 65,
      "damage": 1995,
      "p90": 5350,
      "most": 7382
     },
-    "blue3": {
+    "cyan3": {
      "n": 97,
      "damage": 1919,
      "p90": 5648,
@@ -10695,73 +10695,73 @@
    "combo_hits": 4.54,
    "combo_damage": 976,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 176,
      "damage": 988,
      "p90": 2383,
      "most": 3940
     },
-    "red1": {
+    "blue1": {
      "n": 145,
      "damage": 839,
      "p90": 2047,
      "most": 3593
     },
-    "red2": {
+    "blue2": {
      "n": 141,
      "damage": 894,
      "p90": 2088,
      "most": 3410
     },
-    "red3": {
+    "blue3": {
      "n": 139,
      "damage": 815,
      "p90": 1795,
      "most": 3830
     },
-    "cyan0": {
+    "red0": {
      "n": 215,
      "damage": 937,
      "p90": 2460,
      "most": 5312
     },
-    "cyan1": {
+    "red1": {
      "n": 276,
      "damage": 939,
      "p90": 2470,
      "most": 4355
     },
-    "cyan2": {
+    "red2": {
      "n": 184,
      "damage": 1070,
      "p90": 2720,
      "most": 4958
     },
-    "cyan3": {
+    "red3": {
      "n": 144,
      "damage": 994,
      "p90": 2383,
      "most": 4126
     },
-    "blue0": {
+    "cyan0": {
      "n": 1,
      "damage": 1833,
      "p90": 1833,
      "most": 1833
     },
-    "blue1": {
+    "cyan1": {
      "n": 25,
      "damage": 1393,
      "p90": 3660,
      "most": 5214
     },
-    "blue2": {
+    "cyan2": {
      "n": 38,
      "damage": 1427,
      "p90": 4309,
      "most": 5322
     },
-    "blue3": {
+    "cyan3": {
      "n": 21,
      "damage": 2002,
      "p90": 4502,
@@ -10786,73 +10786,73 @@
    "taken_combo_damage_p90": 3006,
    "taken_combo_damage_max": 7607,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 115,
      "damage": 959,
      "p90": 2147,
      "most": 3840
     },
-    "red1": {
+    "blue1": {
      "n": 55,
      "damage": 866,
      "p90": 1983,
      "most": 2954
     },
-    "red2": {
+    "blue2": {
      "n": 65,
      "damage": 739,
      "p90": 1534,
      "most": 3325
     },
-    "red3": {
+    "blue3": {
      "n": 122,
      "damage": 1045,
      "p90": 2463,
      "most": 4650
     },
-    "cyan0": {
+    "red0": {
      "n": 191,
      "damage": 1179,
      "p90": 2805,
      "most": 3916
     },
-    "cyan1": {
+    "red1": {
      "n": 202,
      "damage": 1215,
      "p90": 2963,
      "most": 4929
     },
-    "cyan2": {
+    "red2": {
      "n": 149,
      "damage": 1156,
      "p90": 2896,
      "most": 4177
     },
-    "cyan3": {
+    "red3": {
      "n": 319,
      "damage": 1243,
      "p90": 3198,
      "most": 6269
     },
-    "blue0": {
+    "cyan0": {
      "n": 5,
      "damage": 964,
      "p90": 1606,
      "most": 1911
     },
-    "blue1": {
+    "cyan1": {
      "n": 40,
      "damage": 1860,
      "p90": 4820,
      "most": 6396
     },
-    "blue2": {
+    "cyan2": {
      "n": 79,
      "damage": 1317,
      "p90": 3713,
      "most": 6059
     },
-    "blue3": {
+    "cyan3": {
      "n": 185,
      "damage": 1582,
      "p90": 4450,
@@ -11415,73 +11415,73 @@
    "combo_hits": 4.91,
    "combo_damage": 1029,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 619,
      "damage": 1021,
      "p90": 2550,
      "most": 4018
     },
-    "red1": {
+    "blue1": {
      "n": 662,
      "damage": 912,
      "p90": 2210,
      "most": 3952
     },
-    "red2": {
+    "blue2": {
      "n": 475,
      "damage": 901,
      "p90": 2111,
      "most": 3596
     },
-    "red3": {
+    "blue3": {
      "n": 313,
      "damage": 824,
      "p90": 1716,
      "most": 3808
     },
-    "cyan0": {
+    "red0": {
      "n": 672,
      "damage": 1108,
      "p90": 2770,
      "most": 4602
     },
-    "cyan1": {
+    "red1": {
      "n": 888,
      "damage": 1021,
      "p90": 2522,
      "most": 7265
     },
-    "cyan2": {
+    "red2": {
      "n": 723,
      "damage": 1015,
      "p90": 2595,
      "most": 5995
     },
-    "cyan3": {
+    "red3": {
      "n": 466,
      "damage": 1082,
      "p90": 2898,
      "most": 4004
     },
-    "blue0": {
+    "cyan0": {
      "n": 50,
      "damage": 1422,
      "p90": 3998,
      "most": 7314
     },
-    "blue1": {
+    "cyan1": {
      "n": 112,
      "damage": 1206,
      "p90": 3547,
      "most": 6269
     },
-    "blue2": {
+    "cyan2": {
      "n": 92,
      "damage": 1613,
      "p90": 4305,
      "most": 7240
     },
-    "blue3": {
+    "cyan3": {
      "n": 82,
      "damage": 1647,
      "p90": 4352,
@@ -11506,73 +11506,73 @@
    "taken_combo_damage_p90": 2900,
    "taken_combo_damage_max": 6772,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 395,
      "damage": 1081,
      "p90": 2415,
      "most": 3877
     },
-    "red1": {
+    "blue1": {
      "n": 369,
      "damage": 1059,
      "p90": 2322,
      "most": 3542
     },
-    "red2": {
+    "blue2": {
      "n": 278,
      "damage": 1128,
      "p90": 2570,
      "most": 3481
     },
-    "red3": {
+    "blue3": {
      "n": 240,
      "damage": 1018,
      "p90": 2282,
      "most": 4138
     },
-    "cyan0": {
+    "red0": {
      "n": 802,
      "damage": 1241,
      "p90": 2943,
      "most": 6166
     },
-    "cyan1": {
+    "red1": {
      "n": 869,
      "damage": 1122,
      "p90": 2552,
      "most": 6025
     },
-    "cyan2": {
+    "red2": {
      "n": 709,
      "damage": 1231,
      "p90": 2739,
      "most": 6269
     },
-    "cyan3": {
+    "red3": {
      "n": 433,
      "damage": 1165,
      "p90": 2716,
      "most": 6083
     },
-    "blue0": {
+    "cyan0": {
      "n": 77,
      "damage": 1590,
      "p90": 4282,
      "most": 5869
     },
-    "blue1": {
+    "cyan1": {
      "n": 279,
      "damage": 1687,
      "p90": 4602,
      "most": 6772
     },
-    "blue2": {
+    "cyan2": {
      "n": 272,
      "damage": 1766,
      "p90": 4773,
      "most": 6318
     },
-    "blue3": {
+    "cyan3": {
      "n": 236,
      "damage": 1585,
      "p90": 4422,
@@ -12154,73 +12154,73 @@
    "combo_hits": 4.39,
    "combo_damage": 984,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 202,
      "damage": 1057,
      "p90": 2681,
      "most": 3523
     },
-    "red1": {
+    "blue1": {
      "n": 142,
      "damage": 816,
      "p90": 1609,
      "most": 3449
     },
-    "red2": {
+    "blue2": {
      "n": 160,
      "damage": 850,
      "p90": 1805,
      "most": 3513
     },
-    "red3": {
+    "blue3": {
      "n": 225,
      "damage": 975,
      "p90": 2314,
      "most": 4047
     },
-    "cyan0": {
+    "red0": {
      "n": 148,
      "damage": 1110,
      "p90": 2919,
      "most": 4399
     },
-    "cyan1": {
+    "red1": {
      "n": 223,
      "damage": 1077,
      "p90": 2649,
      "most": 5004
     },
-    "cyan2": {
+    "red2": {
      "n": 250,
      "damage": 1025,
      "p90": 2457,
      "most": 5078
     },
-    "cyan3": {
+    "red3": {
      "n": 293,
      "damage": 919,
      "p90": 2343,
      "most": 3369
     },
-    "blue0": {
+    "cyan0": {
      "n": 4,
      "damage": 1246,
      "p90": 2621,
      "most": 3318
     },
-    "blue1": {
+    "cyan1": {
      "n": 13,
      "damage": 766,
      "p90": 1456,
      "most": 2413
     },
-    "blue2": {
+    "cyan2": {
      "n": 29,
      "damage": 1013,
      "p90": 3510,
      "most": 4880
     },
-    "blue3": {
+    "cyan3": {
      "n": 44,
      "damage": 1060,
      "p90": 2568,
@@ -12245,73 +12245,73 @@
    "taken_combo_damage_p90": 2453,
    "taken_combo_damage_max": 5078,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 202,
      "damage": 1057,
      "p90": 2681,
      "most": 3523
     },
-    "red1": {
+    "blue1": {
      "n": 142,
      "damage": 816,
      "p90": 1609,
      "most": 3449
     },
-    "red2": {
+    "blue2": {
      "n": 160,
      "damage": 850,
      "p90": 1805,
      "most": 3513
     },
-    "red3": {
+    "blue3": {
      "n": 225,
      "damage": 975,
      "p90": 2314,
      "most": 4047
     },
-    "cyan0": {
+    "red0": {
      "n": 148,
      "damage": 1110,
      "p90": 2919,
      "most": 4399
     },
-    "cyan1": {
+    "red1": {
      "n": 223,
      "damage": 1077,
      "p90": 2649,
      "most": 5004
     },
-    "cyan2": {
+    "red2": {
      "n": 250,
      "damage": 1025,
      "p90": 2457,
      "most": 5078
     },
-    "cyan3": {
+    "red3": {
      "n": 293,
      "damage": 919,
      "p90": 2343,
      "most": 3369
     },
-    "blue0": {
+    "cyan0": {
      "n": 4,
      "damage": 1246,
      "p90": 2621,
      "most": 3318
     },
-    "blue1": {
+    "cyan1": {
      "n": 13,
      "damage": 766,
      "p90": 1456,
      "most": 2413
     },
-    "blue2": {
+    "cyan2": {
      "n": 29,
      "damage": 1013,
      "p90": 3510,
      "most": 4880
     },
-    "blue3": {
+    "cyan3": {
      "n": 44,
      "damage": 1060,
      "p90": 2568,
@@ -12900,73 +12900,73 @@
    "combo_hits": 4.83,
    "combo_damage": 1040,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 356,
      "damage": 1084,
      "p90": 2813,
      "most": 5541
     },
-    "red1": {
+    "blue1": {
      "n": 318,
      "damage": 950,
      "p90": 2168,
      "most": 3420
     },
-    "red2": {
+    "blue2": {
      "n": 367,
      "damage": 891,
      "p90": 1937,
      "most": 4091
     },
-    "red3": {
+    "blue3": {
      "n": 288,
      "damage": 917,
      "p90": 2013,
      "most": 3491
     },
-    "cyan0": {
+    "red0": {
      "n": 236,
      "damage": 1165,
      "p90": 2961,
      "most": 3942
     },
-    "cyan1": {
+    "red1": {
      "n": 369,
      "damage": 1046,
      "p90": 2696,
      "most": 3703
     },
-    "cyan2": {
+    "red2": {
      "n": 411,
      "damage": 1099,
      "p90": 2722,
      "most": 5922
     },
-    "cyan3": {
+    "red3": {
      "n": 296,
      "damage": 1139,
      "p90": 2826,
      "most": 8251
     },
-    "blue0": {
+    "cyan0": {
      "n": 11,
      "damage": 1899,
      "p90": 3506,
      "most": 4023
     },
-    "blue1": {
+    "cyan1": {
      "n": 23,
      "damage": 1507,
      "p90": 3822,
      "most": 6440
     },
-    "blue2": {
+    "cyan2": {
      "n": 18,
      "damage": 920,
      "p90": 2232,
      "most": 3064
     },
-    "blue3": {
+    "cyan3": {
      "n": 31,
      "damage": 1084,
      "p90": 2394,
@@ -12991,73 +12991,73 @@
    "taken_combo_damage_p90": 2971,
    "taken_combo_damage_max": 7211,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 262,
      "damage": 922,
      "p90": 2731,
      "most": 3952
     },
-    "red1": {
+    "blue1": {
      "n": 141,
      "damage": 951,
      "p90": 2683,
      "most": 3896
     },
-    "red2": {
+    "blue2": {
      "n": 147,
      "damage": 884,
      "p90": 2316,
      "most": 3801
     },
-    "red3": {
+    "blue3": {
      "n": 83,
      "damage": 848,
      "p90": 2290,
      "most": 3994
     },
-    "cyan0": {
+    "red0": {
      "n": 434,
      "damage": 1325,
      "p90": 3212,
      "most": 6064
     },
-    "cyan1": {
+    "red1": {
      "n": 376,
      "damage": 1043,
      "p90": 2639,
      "most": 5200
     },
-    "cyan2": {
+    "red2": {
      "n": 363,
      "damage": 1174,
      "p90": 3030,
      "most": 7211
     },
-    "cyan3": {
+    "red3": {
      "n": 237,
      "damage": 1127,
      "p90": 3177,
      "most": 5629
     },
-    "blue0": {
+    "cyan0": {
      "n": 19,
      "damage": 1553,
      "p90": 3157,
      "most": 3530
     },
-    "blue1": {
+    "cyan1": {
      "n": 72,
      "damage": 1406,
      "p90": 3917,
      "most": 5937
     },
-    "blue2": {
+    "cyan2": {
      "n": 89,
      "damage": 1362,
      "p90": 4085,
      "most": 5971
     },
-    "blue3": {
+    "cyan3": {
      "n": 73,
      "damage": 1400,
      "p90": 3495,
@@ -13619,73 +13619,73 @@
    "combo_hits": 3.94,
    "combo_damage": 893,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 273,
      "damage": 964,
      "p90": 2229,
      "most": 3942
     },
-    "red1": {
+    "blue1": {
      "n": 277,
      "damage": 778,
      "p90": 1857,
      "most": 4270
     },
-    "red2": {
+    "blue2": {
      "n": 186,
      "damage": 762,
      "p90": 1747,
      "most": 3381
     },
-    "red3": {
+    "blue3": {
      "n": 227,
      "damage": 766,
      "p90": 1813,
      "most": 3215
     },
-    "cyan0": {
+    "red0": {
      "n": 207,
      "damage": 859,
      "p90": 2284,
      "most": 3562
     },
-    "cyan1": {
+    "red1": {
      "n": 234,
      "damage": 986,
      "p90": 2486,
      "most": 3530
     },
-    "cyan2": {
+    "red2": {
      "n": 201,
      "damage": 913,
      "p90": 2309,
      "most": 4426
     },
-    "cyan3": {
+    "red3": {
      "n": 233,
      "damage": 1041,
      "p90": 2590,
      "most": 4431
     },
-    "blue0": {
+    "cyan0": {
      "n": 6,
      "damage": 2323,
      "p90": 4574,
      "most": 5053
     },
-    "blue1": {
+    "cyan1": {
      "n": 5,
      "damage": 454,
      "p90": 873,
      "most": 1183
     },
-    "blue2": {
+    "cyan2": {
      "n": 16,
      "damage": 1233,
      "p90": 3291,
      "most": 3916
     },
-    "blue3": {
+    "cyan3": {
      "n": 11,
      "damage": 935,
      "p90": 1933,
@@ -13710,73 +13710,73 @@
    "taken_combo_damage_p90": 2397,
    "taken_combo_damage_max": 6552,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 172,
      "damage": 1203,
      "p90": 2273,
      "most": 4057
     },
-    "red1": {
+    "blue1": {
      "n": 123,
      "damage": 741,
      "p90": 1482,
      "most": 2925
     },
-    "red2": {
+    "blue2": {
      "n": 112,
      "damage": 945,
      "p90": 1986,
      "most": 3662
     },
-    "red3": {
+    "blue3": {
      "n": 150,
      "damage": 829,
      "p90": 1755,
      "most": 3884
     },
-    "cyan0": {
+    "red0": {
      "n": 213,
      "damage": 1268,
      "p90": 2785,
      "most": 3852
     },
-    "cyan1": {
+    "red1": {
      "n": 185,
      "damage": 1041,
      "p90": 2228,
      "most": 3816
     },
-    "cyan2": {
+    "red2": {
      "n": 158,
      "damage": 1212,
      "p90": 2456,
      "most": 4196
     },
-    "cyan3": {
+    "red3": {
      "n": 180,
      "damage": 1174,
      "p90": 2528,
      "most": 6415
     },
-    "blue0": {
+    "cyan0": {
      "n": 23,
      "damage": 1196,
      "p90": 2099,
      "most": 3083
     },
-    "blue1": {
+    "cyan1": {
      "n": 29,
      "damage": 1262,
      "p90": 2372,
      "most": 6552
     },
-    "blue2": {
+    "cyan2": {
      "n": 33,
      "damage": 1232,
      "p90": 2415,
      "most": 4423
     },
-    "blue3": {
+    "cyan3": {
      "n": 38,
      "damage": 1442,
      "p90": 3289,
@@ -14338,73 +14338,73 @@
    "combo_hits": 4.23,
    "combo_damage": 927,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 192,
      "damage": 937,
      "p90": 2056,
      "most": 3718
     },
-    "red1": {
+    "blue1": {
      "n": 179,
      "damage": 760,
      "p90": 1564,
      "most": 3486
     },
-    "red2": {
+    "blue2": {
      "n": 158,
      "damage": 855,
      "p90": 2176,
      "most": 3220
     },
-    "red3": {
+    "blue3": {
      "n": 176,
      "damage": 878,
      "p90": 1793,
      "most": 3479
     },
-    "cyan0": {
+    "red0": {
      "n": 181,
      "damage": 1036,
      "p90": 2722,
      "most": 4155
     },
-    "cyan1": {
+    "red1": {
      "n": 271,
      "damage": 865,
      "p90": 2055,
      "most": 6171
     },
-    "cyan2": {
+    "red2": {
      "n": 212,
      "damage": 862,
      "p90": 2200,
      "most": 3520
     },
-    "cyan3": {
+    "red3": {
      "n": 175,
      "damage": 1070,
      "p90": 2837,
      "most": 4411
     },
-    "blue0": {
+    "cyan0": {
      "n": 16,
      "damage": 1066,
      "p90": 2668,
      "most": 4582
     },
-    "blue1": {
+    "cyan1": {
      "n": 26,
      "damage": 1264,
      "p90": 3219,
      "most": 4602
     },
-    "blue2": {
+    "cyan2": {
      "n": 21,
      "damage": 1830,
      "p90": 4292,
      "most": 5146
     },
-    "blue3": {
+    "cyan3": {
      "n": 10,
      "damage": 1275,
      "p90": 3343,
@@ -14429,73 +14429,73 @@
    "taken_combo_damage_p90": 2548,
    "taken_combo_damage_max": 7416,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 200,
      "damage": 985,
      "p90": 1995,
      "most": 3540
     },
-    "red1": {
+    "blue1": {
      "n": 210,
      "damage": 1021,
      "p90": 2142,
      "most": 3525
     },
-    "red2": {
+    "blue2": {
      "n": 122,
      "damage": 1061,
      "p90": 2432,
      "most": 3784
     },
-    "red3": {
+    "blue3": {
      "n": 104,
      "damage": 1267,
      "p90": 2811,
      "most": 4953
     },
-    "cyan0": {
+    "red0": {
      "n": 207,
      "damage": 1214,
      "p90": 2448,
      "most": 4643
     },
-    "cyan1": {
+    "red1": {
      "n": 237,
      "damage": 1162,
      "p90": 2268,
      "most": 3745
     },
-    "cyan2": {
+    "red2": {
      "n": 152,
      "damage": 1330,
      "p90": 2804,
      "most": 4282
     },
-    "cyan3": {
+    "red3": {
      "n": 132,
      "damage": 1411,
      "p90": 3536,
      "most": 5375
     },
-    "blue0": {
+    "cyan0": {
      "n": 15,
      "damage": 1687,
      "p90": 3057,
      "most": 5283
     },
-    "blue1": {
+    "cyan1": {
      "n": 42,
      "damage": 1336,
      "p90": 3123,
      "most": 6113
     },
-    "blue2": {
+    "cyan2": {
      "n": 28,
      "damage": 2109,
      "p90": 5233,
      "most": 7416
     },
-    "blue3": {
+    "cyan3": {
      "n": 23,
      "damage": 1578,
      "p90": 4356,
@@ -15051,73 +15051,73 @@
    "combo_hits": 4.56,
    "combo_damage": 980,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 197,
      "damage": 1091,
      "p90": 2823,
      "most": 3740
     },
-    "red1": {
+    "blue1": {
      "n": 227,
      "damage": 893,
      "p90": 2196,
      "most": 3547
     },
-    "red2": {
+    "blue2": {
      "n": 176,
      "damage": 869,
      "p90": 1899,
      "most": 3357
     },
-    "red3": {
+    "blue3": {
      "n": 144,
      "damage": 797,
      "p90": 1675,
      "most": 3405
     },
-    "cyan0": {
+    "red0": {
      "n": 230,
      "damage": 968,
      "p90": 2829,
      "most": 3701
     },
-    "cyan1": {
+    "red1": {
      "n": 319,
      "damage": 977,
      "p90": 2552,
      "most": 6054
     },
-    "cyan2": {
+    "red2": {
      "n": 271,
      "damage": 933,
      "p90": 2492,
      "most": 4860
     },
-    "cyan3": {
+    "red3": {
      "n": 175,
      "damage": 1143,
      "p90": 2895,
      "most": 3667
     },
-    "blue0": {
+    "cyan0": {
      "n": 5,
      "damage": 1883,
      "p90": 4046,
      "most": 4519
     },
-    "blue1": {
+    "cyan1": {
      "n": 44,
      "damage": 1116,
      "p90": 2924,
      "most": 4128
     },
-    "blue2": {
+    "cyan2": {
      "n": 47,
      "damage": 1190,
      "p90": 4169,
      "most": 5043
     },
-    "blue3": {
+    "cyan3": {
      "n": 40,
      "damage": 1275,
      "p90": 3324,
@@ -15142,73 +15142,73 @@
    "taken_combo_damage_p90": 3230,
    "taken_combo_damage_max": 6655,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 182,
      "damage": 1091,
      "p90": 2309,
      "most": 3701
     },
-    "red1": {
+    "blue1": {
      "n": 160,
      "damage": 880,
      "p90": 1773,
      "most": 4199
     },
-    "red2": {
+    "blue2": {
      "n": 136,
      "damage": 901,
      "p90": 2309,
      "most": 3872
     },
-    "red3": {
+    "blue3": {
      "n": 134,
      "damage": 816,
      "p90": 1531,
      "most": 3186
     },
-    "cyan0": {
+    "red0": {
      "n": 266,
      "damage": 1653,
      "p90": 3608,
      "most": 4724
     },
-    "cyan1": {
+    "red1": {
      "n": 279,
      "damage": 1459,
      "p90": 3471,
      "most": 4804
     },
-    "cyan2": {
+    "red2": {
      "n": 241,
      "damage": 1233,
      "p90": 3181,
      "most": 5175
     },
-    "cyan3": {
+    "red3": {
      "n": 244,
      "damage": 1167,
      "p90": 3097,
      "most": 6264
     },
-    "blue0": {
+    "cyan0": {
      "n": 14,
      "damage": 1657,
      "p90": 4528,
      "most": 5537
     },
-    "blue1": {
+    "cyan1": {
      "n": 61,
      "damage": 1800,
      "p90": 5600,
      "most": 6655
     },
-    "blue2": {
+    "cyan2": {
      "n": 58,
      "damage": 1971,
      "p90": 4592,
      "most": 5229
     },
-    "blue3": {
+    "cyan3": {
      "n": 73,
      "damage": 1628,
      "p90": 4138,
@@ -15783,73 +15783,73 @@
    "combo_hits": 4.37,
    "combo_damage": 993,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 294,
      "damage": 1059,
      "p90": 2216,
      "most": 5302
     },
-    "red1": {
+    "blue1": {
      "n": 282,
      "damage": 908,
      "p90": 1854,
      "most": 3220
     },
-    "red2": {
+    "blue2": {
      "n": 271,
      "damage": 876,
      "p90": 1835,
      "most": 3525
     },
-    "red3": {
+    "blue3": {
      "n": 320,
      "damage": 845,
      "p90": 1773,
      "most": 3662
     },
-    "cyan0": {
+    "red0": {
      "n": 236,
      "damage": 1142,
      "p90": 2652,
      "most": 6103
     },
-    "cyan1": {
+    "red1": {
      "n": 380,
      "damage": 994,
      "p90": 2520,
      "most": 3928
     },
-    "cyan2": {
+    "red2": {
      "n": 311,
      "damage": 1041,
      "p90": 2568,
      "most": 4055
     },
-    "cyan3": {
+    "red3": {
      "n": 373,
      "damage": 988,
      "p90": 2546,
      "most": 4240
     },
-    "blue0": {
+    "cyan0": {
      "n": 14,
      "damage": 1141,
      "p90": 2877,
      "most": 3281
     },
-    "blue1": {
+    "cyan1": {
      "n": 28,
      "damage": 989,
      "p90": 2702,
      "most": 4672
     },
-    "blue2": {
+    "cyan2": {
      "n": 25,
      "damage": 1698,
      "p90": 4020,
      "most": 4616
     },
-    "blue3": {
+    "cyan3": {
      "n": 39,
      "damage": 1384,
      "p90": 4180,
@@ -15874,73 +15874,73 @@
    "taken_combo_damage_p90": 2500,
    "taken_combo_damage_max": 6015,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 279,
      "damage": 1214,
      "p90": 2651,
      "most": 4582
     },
-    "red1": {
+    "blue1": {
      "n": 135,
      "damage": 823,
      "p90": 1908,
      "most": 2895
     },
-    "red2": {
+    "blue2": {
      "n": 154,
      "damage": 857,
      "p90": 2215,
      "most": 3769
     },
-    "red3": {
+    "blue3": {
      "n": 238,
      "damage": 938,
      "p90": 2166,
      "most": 3581
     },
-    "cyan0": {
+    "red0": {
      "n": 414,
      "damage": 1236,
      "p90": 2742,
      "most": 4704
     },
-    "cyan1": {
+    "red1": {
      "n": 413,
      "damage": 1023,
      "p90": 2279,
      "most": 4987
     },
-    "cyan2": {
+    "red2": {
      "n": 254,
      "damage": 978,
      "p90": 1981,
      "most": 4489
     },
-    "cyan3": {
+    "red3": {
      "n": 494,
      "damage": 1006,
      "p90": 2305,
      "most": 5493
     },
-    "blue0": {
+    "cyan0": {
      "n": 61,
      "damage": 1359,
      "p90": 2798,
      "most": 6015
     },
-    "blue1": {
+    "cyan1": {
      "n": 149,
      "damage": 1405,
      "p90": 3661,
      "most": 5522
     },
-    "blue2": {
+    "cyan2": {
      "n": 153,
      "damage": 1279,
      "p90": 3324,
      "most": 5971
     },
-    "blue3": {
+    "cyan3": {
      "n": 302,
      "damage": 1255,
      "p90": 3583,
@@ -16496,73 +16496,73 @@
    "combo_hits": 5.16,
    "combo_damage": 1073,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 142,
      "damage": 1075,
      "p90": 2534,
      "most": 5400
     },
-    "red1": {
+    "blue1": {
      "n": 122,
      "damage": 982,
      "p90": 2507,
      "most": 4228
     },
-    "red2": {
+    "blue2": {
      "n": 94,
      "damage": 869,
      "p90": 1556,
      "most": 3664
     },
-    "red3": {
+    "blue3": {
      "n": 103,
      "damage": 905,
      "p90": 1903,
      "most": 3425
     },
-    "cyan0": {
+    "red0": {
      "n": 106,
      "damage": 1211,
      "p90": 2876,
      "most": 3798
     },
-    "cyan1": {
+    "red1": {
      "n": 185,
      "damage": 1116,
      "p90": 2631,
      "most": 3911
     },
-    "cyan2": {
+    "red2": {
      "n": 147,
      "damage": 1032,
      "p90": 2550,
      "most": 4340
     },
-    "cyan3": {
+    "red3": {
      "n": 129,
      "damage": 1051,
      "p90": 2658,
      "most": 5390
     },
-    "blue0": {
+    "cyan0": {
      "n": 4,
      "damage": 505,
      "p90": 753,
      "most": 820
     },
-    "blue1": {
+    "cyan1": {
      "n": 13,
      "damage": 1738,
      "p90": 3679,
      "most": 5283
     },
-    "blue2": {
+    "cyan2": {
      "n": 23,
      "damage": 1762,
      "p90": 4538,
      "most": 6659
     },
-    "blue3": {
+    "cyan3": {
      "n": 30,
      "damage": 1462,
      "p90": 3415,
@@ -16587,73 +16587,73 @@
    "taken_combo_damage_p90": 2617,
    "taken_combo_damage_max": 7455,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 143,
      "damage": 963,
      "p90": 2324,
      "most": 3083
     },
-    "red1": {
+    "blue1": {
      "n": 58,
      "damage": 928,
      "p90": 2141,
      "most": 2585
     },
-    "red2": {
+    "blue2": {
      "n": 77,
      "damage": 692,
      "p90": 1641,
      "most": 2495
     },
-    "red3": {
+    "blue3": {
      "n": 86,
      "damage": 825,
      "p90": 2446,
      "most": 5546
     },
-    "cyan0": {
+    "red0": {
      "n": 171,
      "damage": 1226,
      "p90": 2785,
      "most": 4360
     },
-    "cyan1": {
+    "red1": {
      "n": 214,
      "damage": 1116,
      "p90": 2736,
      "most": 4790
     },
-    "cyan2": {
+    "red2": {
      "n": 179,
      "damage": 920,
      "p90": 2247,
      "most": 5351
     },
-    "cyan3": {
+    "red3": {
      "n": 234,
      "damage": 926,
      "p90": 2254,
      "most": 5122
     },
-    "blue0": {
+    "cyan0": {
      "n": 13,
      "damage": 1151,
      "p90": 3469,
      "most": 4067
     },
-    "blue1": {
+    "cyan1": {
      "n": 38,
      "damage": 1069,
      "p90": 2780,
      "most": 4443
     },
-    "blue2": {
+    "cyan2": {
      "n": 87,
      "damage": 1307,
      "p90": 4079,
      "most": 5258
     },
-    "blue3": {
+    "cyan3": {
      "n": 154,
      "damage": 1213,
      "p90": 3527,
@@ -17211,73 +17211,73 @@
    "combo_hits": 3.97,
    "combo_damage": 942,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 1261,
      "damage": 1000,
      "p90": 2325,
      "most": 5302
     },
-    "red1": {
+    "blue1": {
      "n": 1294,
      "damage": 873,
      "p90": 2099,
      "most": 4555
     },
-    "red2": {
+    "blue2": {
      "n": 1295,
      "damage": 802,
      "p90": 1772,
      "most": 4091
     },
-    "red3": {
+    "blue3": {
      "n": 1597,
      "damage": 868,
      "p90": 1990,
      "most": 4248
     },
-    "cyan0": {
+    "red0": {
      "n": 943,
      "damage": 1019,
      "p90": 2738,
      "most": 6025
     },
-    "cyan1": {
+    "red1": {
      "n": 1257,
      "damage": 981,
      "p90": 2637,
      "most": 6171
     },
-    "cyan2": {
+    "red2": {
      "n": 1264,
      "damage": 948,
      "p90": 2546,
      "most": 4958
     },
-    "cyan3": {
+    "red3": {
      "n": 1463,
      "damage": 1025,
      "p90": 2761,
      "most": 5541
     },
-    "blue0": {
+    "cyan0": {
      "n": 31,
      "damage": 1152,
      "p90": 3337,
      "most": 3886
     },
-    "blue1": {
+    "cyan1": {
      "n": 81,
      "damage": 968,
      "p90": 2717,
      "most": 5556
     },
-    "blue2": {
+    "cyan2": {
      "n": 99,
      "damage": 1175,
      "p90": 3363,
      "most": 6132
     },
-    "blue3": {
+    "cyan3": {
      "n": 87,
      "damage": 1378,
      "p90": 4078,
@@ -17302,73 +17302,73 @@
    "taken_combo_damage_p90": 2676,
    "taken_combo_damage_max": 7607,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 1296,
      "damage": 1093,
      "p90": 2447,
      "most": 4726
     },
-    "red1": {
+    "blue1": {
      "n": 938,
      "damage": 944,
      "p90": 2155,
      "most": 4502
     },
-    "red2": {
+    "blue2": {
      "n": 853,
      "damage": 877,
      "p90": 2176,
      "most": 4326
     },
-    "red3": {
+    "blue3": {
      "n": 861,
      "damage": 983,
      "p90": 2252,
      "most": 4953
     },
-    "cyan0": {
+    "red0": {
      "n": 1793,
      "damage": 1303,
      "p90": 2971,
      "most": 6064
     },
-    "cyan1": {
+    "red1": {
      "n": 2102,
      "damage": 1147,
      "p90": 2629,
      "most": 5502
     },
-    "cyan2": {
+    "red2": {
      "n": 1455,
      "damage": 1088,
      "p90": 2588,
      "most": 6523
     },
-    "cyan3": {
+    "red3": {
      "n": 1579,
      "damage": 1153,
      "p90": 2745,
      "most": 6415
     },
-    "blue0": {
+    "cyan0": {
      "n": 159,
      "damage": 1311,
      "p90": 3094,
      "most": 6015
     },
-    "blue1": {
+    "cyan1": {
      "n": 492,
      "damage": 1208,
      "p90": 3093,
      "most": 5991
     },
-    "blue2": {
+    "cyan2": {
      "n": 618,
      "damage": 1276,
      "p90": 3413,
      "most": 7382
     },
-    "blue3": {
+    "cyan3": {
      "n": 691,
      "damage": 1463,
      "p90": 3786,
@@ -17958,73 +17958,73 @@
    "combo_hits": 5.22,
    "combo_damage": 1061,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 693,
      "damage": 1158,
      "p90": 2806,
      "most": 5400
     },
-    "red1": {
+    "blue1": {
      "n": 653,
      "damage": 949,
      "p90": 2237,
      "most": 4021
     },
-    "red2": {
+    "blue2": {
      "n": 688,
      "damage": 952,
      "p90": 2038,
      "most": 3901
     },
-    "red3": {
+    "blue3": {
      "n": 580,
      "damage": 916,
      "p90": 2072,
      "most": 4404
     },
-    "cyan0": {
+    "red0": {
      "n": 340,
      "damage": 1188,
      "p90": 3049,
      "most": 6103
     },
-    "cyan1": {
+    "red1": {
      "n": 702,
      "damage": 1116,
      "p90": 2704,
      "most": 4770
     },
-    "cyan2": {
+    "red2": {
      "n": 767,
      "damage": 1104,
      "p90": 2738,
      "most": 5829
     },
-    "cyan3": {
+    "red3": {
      "n": 595,
      "damage": 1095,
      "p90": 2851,
      "most": 4489
     },
-    "blue0": {
+    "cyan0": {
      "n": 8,
      "damage": 670,
      "p90": 1433,
      "most": 3357
     },
-    "blue1": {
+    "cyan1": {
      "n": 7,
      "damage": 1909,
      "p90": 4034,
      "most": 4130
     },
-    "blue2": {
+    "cyan2": {
      "n": 20,
      "damage": 1978,
      "p90": 4346,
      "most": 4875
     },
-    "blue3": {
+    "cyan3": {
      "n": 24,
      "damage": 1408,
      "p90": 3931,
@@ -18049,73 +18049,73 @@
    "taken_combo_damage_p90": 2878,
    "taken_combo_damage_max": 6948,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 376,
      "damage": 1087,
      "p90": 2617,
      "most": 4582
     },
-    "red1": {
+    "blue1": {
      "n": 235,
      "damage": 893,
      "p90": 1899,
      "most": 3320
     },
-    "red2": {
+    "blue2": {
      "n": 249,
      "damage": 973,
      "p90": 2527,
      "most": 3801
     },
-    "red3": {
+    "blue3": {
      "n": 194,
      "damage": 895,
      "p90": 2233,
      "most": 5546
     },
-    "cyan0": {
+    "red0": {
      "n": 510,
      "damage": 1271,
      "p90": 3006,
      "most": 5063
     },
-    "cyan1": {
+    "red1": {
      "n": 617,
      "damage": 1126,
      "p90": 2716,
      "most": 6025
     },
-    "cyan2": {
+    "red2": {
      "n": 535,
      "damage": 1148,
      "p90": 2773,
      "most": 6269
     },
-    "cyan3": {
+    "red3": {
      "n": 424,
      "damage": 1112,
      "p90": 2783,
      "most": 6523
     },
-    "blue0": {
+    "cyan0": {
      "n": 14,
      "damage": 1626,
      "p90": 4220,
      "most": 4606
     },
-    "blue1": {
+    "cyan1": {
      "n": 87,
      "damage": 1853,
      "p90": 4739,
      "most": 6567
     },
-    "blue2": {
+    "cyan2": {
      "n": 144,
      "damage": 1673,
      "p90": 4775,
      "most": 6318
     },
-    "blue3": {
+    "cyan3": {
      "n": 175,
      "damage": 1677,
      "p90": 4509,
@@ -18698,73 +18698,73 @@
    "combo_hits": 4.82,
    "combo_damage": 1074,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 429,
      "damage": 1086,
      "p90": 2497,
      "most": 4128
     },
-    "red1": {
+    "blue1": {
      "n": 378,
      "damage": 940,
      "p90": 2352,
      "most": 4331
     },
-    "red2": {
+    "blue2": {
      "n": 366,
      "damage": 974,
      "p90": 2185,
      "most": 4235
     },
-    "red3": {
+    "blue3": {
      "n": 393,
      "damage": 820,
      "p90": 1877,
      "most": 3632
     },
-    "cyan0": {
+    "red0": {
      "n": 455,
      "damage": 1126,
      "p90": 2846,
      "most": 4221
     },
-    "cyan1": {
+    "red1": {
      "n": 638,
      "damage": 1020,
      "p90": 2513,
      "most": 4753
     },
-    "cyan2": {
+    "red2": {
      "n": 654,
      "damage": 1081,
      "p90": 2738,
      "most": 6606
     },
-    "cyan3": {
+    "red3": {
      "n": 514,
      "damage": 1079,
      "p90": 2739,
      "most": 7743
     },
-    "blue0": {
+    "cyan0": {
      "n": 16,
      "damage": 1472,
      "p90": 4193,
      "most": 4228
     },
-    "blue1": {
+    "cyan1": {
      "n": 46,
      "damage": 1971,
      "p90": 5017,
      "most": 6674
     },
-    "blue2": {
+    "cyan2": {
      "n": 91,
      "damage": 1585,
      "p90": 4277,
      "most": 6381
     },
-    "blue3": {
+    "cyan3": {
      "n": 108,
      "damage": 1912,
      "p90": 4974,
@@ -18789,73 +18789,73 @@
    "taken_combo_damage_p90": 2651,
    "taken_combo_damage_max": 7416,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 353,
      "damage": 933,
      "p90": 2113,
      "most": 4057
     },
-    "red1": {
+    "blue1": {
      "n": 299,
      "damage": 869,
      "p90": 1825,
      "most": 3120
     },
-    "red2": {
+    "blue2": {
      "n": 303,
      "damage": 770,
      "p90": 1756,
      "most": 3405
     },
-    "red3": {
+    "blue3": {
      "n": 235,
      "damage": 1025,
      "p90": 2516,
      "most": 4179
     },
-    "cyan0": {
+    "red0": {
      "n": 459,
      "damage": 1252,
      "p90": 2766,
      "most": 5649
     },
-    "cyan1": {
+    "red1": {
      "n": 840,
      "damage": 1124,
      "p90": 2488,
      "most": 6249
     },
-    "cyan2": {
+    "red2": {
      "n": 747,
      "damage": 1162,
      "p90": 2578,
      "most": 6586
     },
-    "cyan3": {
+    "red3": {
      "n": 606,
      "damage": 1125,
      "p90": 2751,
      "most": 6274
     },
-    "blue0": {
+    "cyan0": {
      "n": 33,
      "damage": 1307,
      "p90": 3060,
      "most": 5283
     },
-    "blue1": {
+    "cyan1": {
      "n": 185,
      "damage": 1378,
      "p90": 3778,
      "most": 5512
     },
-    "blue2": {
+    "cyan2": {
      "n": 233,
      "damage": 1425,
      "p90": 3951,
      "most": 7416
     },
-    "blue3": {
+    "cyan3": {
      "n": 207,
      "damage": 1537,
      "p90": 4025,
@@ -19425,73 +19425,73 @@
    "combo_hits": 4.85,
    "combo_damage": 1029,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 349,
      "damage": 1101,
      "p90": 2731,
      "most": 3867
     },
-    "red1": {
+    "blue1": {
      "n": 332,
      "damage": 943,
      "p90": 2239,
      "most": 3413
     },
-    "red2": {
+    "blue2": {
      "n": 291,
      "damage": 837,
      "p90": 2035,
      "most": 3357
     },
-    "red3": {
+    "blue3": {
      "n": 271,
      "damage": 753,
      "p90": 1723,
      "most": 3740
     },
-    "cyan0": {
+    "red0": {
      "n": 361,
      "damage": 1183,
      "p90": 2917,
      "most": 4094
     },
-    "cyan1": {
+    "red1": {
      "n": 589,
      "damage": 1015,
      "p90": 2577,
      "most": 5405
     },
-    "cyan2": {
+    "red2": {
      "n": 515,
      "damage": 997,
      "p90": 2464,
      "most": 7084
     },
-    "cyan3": {
+    "red3": {
      "n": 491,
      "damage": 931,
      "p90": 2246,
      "most": 5976
     },
-    "blue0": {
+    "cyan0": {
      "n": 9,
      "damage": 697,
      "p90": 1357,
      "most": 1824
     },
-    "blue1": {
+    "cyan1": {
      "n": 40,
      "damage": 2032,
      "p90": 4646,
      "most": 5781
     },
-    "blue2": {
+    "cyan2": {
      "n": 77,
      "damage": 1587,
      "p90": 4253,
      "most": 5322
     },
-    "blue3": {
+    "cyan3": {
      "n": 105,
      "damage": 1694,
      "p90": 4489,
@@ -19516,73 +19516,73 @@
    "taken_combo_damage_p90": 2811,
    "taken_combo_damage_max": 8344,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 369,
      "damage": 1142,
      "p90": 2555,
      "most": 5009
     },
-    "red1": {
+    "blue1": {
      "n": 238,
      "damage": 930,
      "p90": 2099,
      "most": 3811
     },
-    "red2": {
+    "blue2": {
      "n": 292,
      "damage": 867,
      "p90": 1839,
      "most": 3872
     },
-    "red3": {
+    "blue3": {
      "n": 396,
      "damage": 899,
      "p90": 2282,
      "most": 4047
     },
-    "cyan0": {
+    "red0": {
      "n": 454,
      "damage": 1360,
      "p90": 3067,
      "most": 5302
     },
-    "cyan1": {
+    "red1": {
      "n": 549,
      "damage": 1194,
      "p90": 2625,
      "most": 6552
     },
-    "cyan2": {
+    "red2": {
      "n": 536,
      "damage": 1021,
      "p90": 2337,
      "most": 5175
     },
-    "cyan3": {
+    "red3": {
      "n": 743,
      "damage": 1090,
      "p90": 2822,
      "most": 5707
     },
-    "blue0": {
+    "cyan0": {
      "n": 33,
      "damage": 1206,
      "p90": 3444,
      "most": 4575
     },
-    "blue1": {
+    "cyan1": {
      "n": 115,
      "damage": 1739,
      "p90": 4814,
      "most": 6113
     },
-    "blue2": {
+    "cyan2": {
      "n": 162,
      "damage": 1586,
      "p90": 4575,
      "most": 6122
     },
-    "blue3": {
+    "cyan3": {
      "n": 351,
      "damage": 1427,
      "p90": 4118,
@@ -20152,73 +20152,73 @@
    "combo_hits": 4.83,
    "combo_damage": 978,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 203,
      "damage": 1118,
      "p90": 2722,
      "most": 5541
     },
-    "red1": {
+    "blue1": {
      "n": 262,
      "damage": 856,
      "p90": 1924,
      "most": 3408
     },
-    "red2": {
+    "blue2": {
      "n": 261,
      "damage": 851,
      "p90": 1824,
      "most": 3010
     },
-    "red3": {
+    "blue3": {
      "n": 167,
      "damage": 864,
      "p90": 1989,
      "most": 3342
     },
-    "cyan0": {
+    "red0": {
      "n": 199,
      "damage": 1158,
      "p90": 2814,
      "most": 3586
     },
-    "cyan1": {
+    "red1": {
      "n": 335,
      "damage": 922,
      "p90": 2227,
      "most": 4697
     },
-    "cyan2": {
+    "red2": {
      "n": 355,
      "damage": 990,
      "p90": 2513,
      "most": 3757
     },
-    "cyan3": {
+    "red3": {
      "n": 204,
      "damage": 1069,
      "p90": 2827,
      "most": 3686
     },
-    "blue0": {
+    "cyan0": {
      "n": 7,
      "damage": 766,
      "p90": 1747,
      "most": 2250
     },
-    "blue1": {
+    "cyan1": {
      "n": 22,
      "damage": 1213,
      "p90": 3782,
      "most": 4311
     },
-    "blue2": {
+    "cyan2": {
      "n": 17,
      "damage": 1344,
      "p90": 3713,
      "most": 4770
     },
-    "blue3": {
+    "cyan3": {
      "n": 18,
      "damage": 1234,
      "p90": 2763,
@@ -20243,73 +20243,73 @@
    "taken_combo_damage_p90": 2865,
    "taken_combo_damage_max": 6313,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 138,
      "damage": 944,
      "p90": 2104,
      "most": 3674
     },
-    "red1": {
+    "blue1": {
      "n": 108,
      "damage": 957,
      "p90": 2524,
      "most": 3896
     },
-    "red2": {
+    "blue2": {
      "n": 78,
      "damage": 868,
      "p90": 2314,
      "most": 3122
     },
-    "red3": {
+    "blue3": {
      "n": 80,
      "damage": 967,
      "p90": 2386,
      "most": 3479
     },
-    "cyan0": {
+    "red0": {
      "n": 259,
      "damage": 1093,
      "p90": 3062,
      "most": 4660
     },
-    "cyan1": {
+    "red1": {
      "n": 288,
      "damage": 1091,
      "p90": 2700,
      "most": 5771
     },
-    "cyan2": {
+    "red2": {
      "n": 197,
      "damage": 1100,
      "p90": 2551,
      "most": 5512
     },
-    "cyan3": {
+    "red3": {
      "n": 138,
      "damage": 1140,
      "p90": 2900,
      "most": 6083
     },
-    "blue0": {
+    "cyan0": {
      "n": 15,
      "damage": 2161,
      "p90": 4084,
      "most": 4650
     },
-    "blue1": {
+    "cyan1": {
      "n": 44,
      "damage": 1769,
      "p90": 4929,
      "most": 5600
     },
-    "blue2": {
+    "cyan2": {
      "n": 62,
      "damage": 1395,
      "p90": 4005,
      "most": 5971
     },
-    "blue3": {
+    "cyan3": {
      "n": 62,
      "damage": 1617,
      "p90": 4457,
@@ -20878,73 +20878,73 @@
    "combo_hits": 4.03,
    "combo_damage": 902,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 187,
      "damage": 880,
      "p90": 1747,
      "most": 3227
     },
-    "red1": {
+    "blue1": {
      "n": 172,
      "damage": 782,
      "p90": 1651,
      "most": 3193
     },
-    "red2": {
+    "blue2": {
      "n": 119,
      "damage": 840,
      "p90": 1703,
      "most": 3071
     },
-    "red3": {
+    "blue3": {
      "n": 107,
      "damage": 763,
      "p90": 1457,
      "most": 3405
     },
-    "cyan0": {
+    "red0": {
      "n": 196,
      "damage": 987,
      "p90": 2442,
      "most": 4018
     },
-    "cyan1": {
+    "red1": {
      "n": 348,
      "damage": 847,
      "p90": 2182,
      "most": 3689
     },
-    "cyan2": {
+    "red2": {
      "n": 248,
      "damage": 905,
      "p90": 2214,
      "most": 4753
     },
-    "cyan3": {
+    "red3": {
      "n": 136,
      "damage": 994,
      "p90": 2311,
      "most": 3855
     },
-    "blue0": {
+    "cyan0": {
      "n": 20,
      "damage": 1401,
      "p90": 3355,
      "most": 4221
     },
-    "blue1": {
+    "cyan1": {
      "n": 49,
      "damage": 916,
      "p90": 2700,
      "most": 4404
     },
-    "blue2": {
+    "cyan2": {
      "n": 45,
      "damage": 1213,
      "p90": 3191,
      "most": 4550
     },
-    "blue3": {
+    "cyan3": {
      "n": 38,
      "damage": 1194,
      "p90": 4218,
@@ -20969,73 +20969,73 @@
    "taken_combo_damage_p90": 2387,
    "taken_combo_damage_max": 7455,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 179,
      "damage": 1015,
      "p90": 2285,
      "most": 3979
     },
-    "red1": {
+    "blue1": {
      "n": 153,
      "damage": 846,
      "p90": 1779,
      "most": 4221
     },
-    "red2": {
+    "blue2": {
      "n": 112,
      "damage": 804,
      "p90": 2014,
      "most": 3259
     },
-    "red3": {
+    "blue3": {
      "n": 95,
      "damage": 823,
      "p90": 1686,
      "most": 3625
     },
-    "cyan0": {
+    "red0": {
      "n": 257,
      "damage": 1221,
      "p90": 2744,
      "most": 4614
     },
-    "cyan1": {
+    "red1": {
      "n": 245,
      "damage": 1142,
      "p90": 2399,
      "most": 6357
     },
-    "cyan2": {
+    "red2": {
      "n": 164,
      "damage": 863,
      "p90": 1876,
      "most": 4563
     },
-    "cyan3": {
+    "red3": {
      "n": 157,
      "damage": 1214,
      "p90": 2738,
      "most": 4465
     },
-    "blue0": {
+    "cyan0": {
      "n": 29,
      "damage": 1335,
      "p90": 3161,
      "most": 7123
     },
-    "blue1": {
+    "cyan1": {
      "n": 67,
      "damage": 1206,
      "p90": 3033,
      "most": 6801
     },
-    "blue2": {
+    "cyan2": {
      "n": 44,
      "damage": 1415,
      "p90": 3752,
      "most": 5595
     },
-    "blue3": {
+    "cyan3": {
      "n": 117,
      "damage": 1216,
      "p90": 3430,
@@ -21612,73 +21612,73 @@
    "combo_hits": 3.79,
    "combo_damage": 948,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 116,
      "damage": 873,
      "p90": 1733,
      "most": 3069
     },
-    "red1": {
+    "blue1": {
      "n": 91,
      "damage": 792,
      "p90": 1402,
      "most": 3152
     },
-    "red2": {
+    "blue2": {
      "n": 67,
      "damage": 893,
      "p90": 1669,
      "most": 2258
     },
-    "red3": {
+    "blue3": {
      "n": 76,
      "damage": 840,
      "p90": 1532,
      "most": 3227
     },
-    "cyan0": {
+    "red0": {
      "n": 180,
      "damage": 932,
      "p90": 2190,
      "most": 3423
     },
-    "cyan1": {
+    "red1": {
      "n": 187,
      "damage": 929,
      "p90": 2248,
      "most": 3466
     },
-    "cyan2": {
+    "red2": {
      "n": 115,
      "damage": 979,
      "p90": 2152,
      "most": 3542
     },
-    "cyan3": {
+    "red3": {
      "n": 108,
      "damage": 903,
      "p90": 1964,
      "most": 3488
     },
-    "blue0": {
+    "cyan0": {
      "n": 28,
      "damage": 1195,
      "p90": 2785,
      "most": 4299
     },
-    "blue1": {
+    "cyan1": {
      "n": 45,
      "damage": 1114,
      "p90": 2402,
      "most": 6108
     },
-    "blue2": {
+    "cyan2": {
      "n": 22,
      "damage": 1666,
      "p90": 4147,
      "most": 5117
     },
-    "blue3": {
+    "cyan3": {
      "n": 16,
      "damage": 1741,
      "p90": 3991,
@@ -21703,73 +21703,73 @@
    "taken_combo_damage_p90": 2963,
    "taken_combo_damage_max": 6562,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 104,
      "damage": 1065,
      "p90": 2238,
      "most": 3950
     },
-    "red1": {
+    "blue1": {
      "n": 99,
      "damage": 935,
      "p90": 2209,
      "most": 2968
     },
-    "red2": {
+    "blue2": {
      "n": 73,
      "damage": 983,
      "p90": 2130,
      "most": 4604
     },
-    "red3": {
+    "blue3": {
      "n": 38,
      "damage": 889,
      "p90": 1446,
      "most": 3120
     },
-    "cyan0": {
+    "red0": {
      "n": 177,
      "damage": 1378,
      "p90": 3156,
      "most": 4863
     },
-    "cyan1": {
+    "red1": {
      "n": 191,
      "damage": 1250,
      "p90": 2776,
      "most": 5497
     },
-    "cyan2": {
+    "red2": {
      "n": 152,
      "damage": 1306,
      "p90": 2963,
      "most": 5917
     },
-    "cyan3": {
+    "red3": {
      "n": 93,
      "damage": 1092,
      "p90": 2750,
      "most": 3674
     },
-    "blue0": {
+    "cyan0": {
      "n": 21,
      "damage": 1768,
      "p90": 4096,
      "most": 5869
     },
-    "blue1": {
+    "cyan1": {
      "n": 60,
      "damage": 1752,
      "p90": 4865,
      "most": 5825
     },
-    "blue2": {
+    "cyan2": {
      "n": 41,
      "damage": 2188,
      "p90": 4941,
      "most": 6318
     },
-    "blue3": {
+    "cyan3": {
      "n": 34,
      "damage": 1870,
      "p90": 5683,
@@ -22319,73 +22319,73 @@
    "combo_hits": 5.9,
    "combo_damage": 1186,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 81,
      "damage": 1010,
      "p90": 2492,
      "most": 3308
     },
-    "red1": {
+    "blue1": {
      "n": 102,
      "damage": 1158,
      "p90": 3093,
      "most": 3635
     },
-    "red2": {
+    "blue2": {
      "n": 60,
      "damage": 1108,
      "p90": 2503,
      "most": 3249
     },
-    "red3": {
+    "blue3": {
      "n": 43,
      "damage": 785,
      "p90": 1574,
      "most": 2727
     },
-    "cyan0": {
+    "red0": {
      "n": 110,
      "damage": 1232,
      "p90": 2869,
      "most": 4602
     },
-    "cyan1": {
+    "red1": {
      "n": 131,
      "damage": 1131,
      "p90": 2722,
      "most": 5356
     },
-    "cyan2": {
+    "red2": {
      "n": 143,
      "damage": 991,
      "p90": 2483,
      "most": 4338
     },
-    "cyan3": {
+    "red3": {
      "n": 90,
      "damage": 1159,
      "p90": 2969,
      "most": 3964
     },
-    "blue0": {
+    "cyan0": {
      "n": 6,
      "damage": 2257,
      "p90": 4345,
      "most": 4719
     },
-    "blue1": {
+    "cyan1": {
      "n": 20,
      "damage": 1897,
      "p90": 3630,
      "most": 5248
     },
-    "blue2": {
+    "cyan2": {
      "n": 14,
      "damage": 2573,
      "p90": 6258,
      "most": 7240
     },
-    "blue3": {
+    "cyan3": {
      "n": 33,
      "damage": 2148,
      "p90": 5001,
@@ -22410,73 +22410,73 @@
    "taken_combo_damage_p90": 2610,
    "taken_combo_damage_max": 6225,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 72,
      "damage": 1017,
      "p90": 2548,
      "most": 3601
     },
-    "red1": {
+    "blue1": {
      "n": 51,
      "damage": 838,
      "p90": 2020,
      "most": 2768
     },
-    "red2": {
+    "blue2": {
      "n": 57,
      "damage": 1223,
      "p90": 2570,
      "most": 3481
     },
-    "red3": {
+    "blue3": {
      "n": 67,
      "damage": 893,
      "p90": 2007,
      "most": 3686
     },
-    "cyan0": {
+    "red0": {
      "n": 84,
      "damage": 1116,
      "p90": 2261,
      "most": 4797
     },
-    "cyan1": {
+    "red1": {
      "n": 117,
      "damage": 914,
      "p90": 2148,
      "most": 3469
     },
-    "cyan2": {
+    "red2": {
      "n": 135,
      "damage": 1097,
      "p90": 2720,
      "most": 6064
     },
-    "cyan3": {
+    "red3": {
      "n": 116,
      "damage": 1130,
      "p90": 2555,
      "most": 5815
     },
-    "blue0": {
+    "cyan0": {
      "n": 14,
      "damage": 1013,
      "p90": 2698,
      "most": 3598
     },
-    "blue1": {
+    "cyan1": {
      "n": 36,
      "damage": 1629,
      "p90": 4202,
      "most": 6225
     },
-    "blue2": {
+    "cyan2": {
      "n": 47,
      "damage": 1627,
      "p90": 4415,
      "most": 5068
     },
-    "blue3": {
+    "cyan3": {
      "n": 46,
      "damage": 1122,
      "p90": 2876,
@@ -23032,73 +23032,73 @@
    "combo_hits": 4.93,
    "combo_damage": 955,
    "combo_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 102,
      "damage": 961,
      "p90": 2635,
      "most": 3393
     },
-    "red1": {
+    "blue1": {
      "n": 92,
      "damage": 792,
      "p90": 1439,
      "most": 3093
     },
-    "red2": {
+    "blue2": {
      "n": 57,
      "damage": 908,
      "p90": 1783,
      "most": 3230
     },
-    "red3": {
+    "blue3": {
      "n": 22,
      "damage": 537,
      "p90": 1285,
      "most": 1333
     },
-    "cyan0": {
+    "red0": {
      "n": 135,
      "damage": 906,
      "p90": 2456,
      "most": 3283
     },
-    "cyan1": {
+    "red1": {
      "n": 185,
      "damage": 853,
      "p90": 2174,
      "most": 3540
     },
-    "cyan2": {
+    "red2": {
      "n": 108,
      "damage": 995,
      "p90": 2556,
      "most": 3396
     },
-    "cyan3": {
+    "red3": {
      "n": 30,
      "damage": 1044,
      "p90": 2064,
      "most": 3276
     },
-    "blue0": {
+    "cyan0": {
      "n": 7,
      "damage": 1676,
      "p90": 3889,
      "most": 4519
     },
-    "blue1": {
+    "cyan1": {
      "n": 33,
      "damage": 1392,
      "p90": 3960,
      "most": 5400
     },
-    "blue2": {
+    "cyan2": {
      "n": 24,
      "damage": 1462,
      "p90": 4182,
      "most": 5829
     },
-    "blue3": {
+    "cyan3": {
      "n": 15,
      "damage": 1843,
      "p90": 4586,
@@ -23123,73 +23123,73 @@
    "taken_combo_damage_p90": 2896,
    "taken_combo_damage_max": 6904,
    "taken_by_resources": {
-    "red0": {
+    "blue0": {
      "n": 47,
      "damage": 903,
      "p90": 1718,
      "most": 3508
     },
-    "red1": {
+    "blue1": {
      "n": 38,
      "damage": 982,
      "p90": 1874,
      "most": 3012
     },
-    "red2": {
+    "blue2": {
      "n": 33,
      "damage": 1046,
      "p90": 2732,
      "most": 3571
     },
-    "red3": {
+    "blue3": {
      "n": 42,
      "damage": 1069,
      "p90": 2558,
      "most": 3813
     },
-    "cyan0": {
+    "red0": {
      "n": 76,
      "damage": 1074,
      "p90": 2333,
      "most": 6166
     },
-    "cyan1": {
+    "red1": {
      "n": 81,
      "damage": 1058,
      "p90": 2983,
      "most": 4372
     },
-    "cyan2": {
+    "red2": {
      "n": 64,
      "damage": 1100,
      "p90": 2177,
      "most": 5854
     },
-    "cyan3": {
+    "red3": {
      "n": 61,
      "damage": 1600,
      "p90": 3845,
      "most": 6904
     },
-    "blue0": {
+    "cyan0": {
      "n": 9,
      "damage": 949,
      "p90": 1802,
      "most": 1979
     },
-    "blue1": {
+    "cyan1": {
      "n": 33,
      "damage": 1102,
      "p90": 3050,
      "most": 4907
     },
-    "blue2": {
+    "cyan2": {
      "n": 14,
      "damage": 1928,
      "p90": 4417,
      "most": 6865
     },
-    "blue3": {
+    "cyan3": {
      "n": 14,
      "damage": 1687,
      "p90": 4303,
