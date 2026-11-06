@@ -370,3 +370,4 @@ the combo master's checkpoints are only there.
 | `team_check.py` | whether players' clones predict their players better than the clone of everyone |
 | `combo_starts.py` | where people's combos started, kept as a replay and a step |
 | `combo.py` | the combo master: trials from those starts, rewarded for the combo's damage |
+| `record_combos.py` | a combo master's most damaging combos in whole matches, as replays for EFZ's REPLAY menu, with where each combo is (`replays/combos/combos.txt`) |
