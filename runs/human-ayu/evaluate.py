@@ -493,8 +493,23 @@ def main():
     p.add_argument('--minutes', type=float, default=5)
     p.add_argument('--deterministic', action='store_true')
     p.add_argument('--json', help='write the results here')
+    p.add_argument('--p1-combo', help="combo_support.ComboSwitch: P1's combos played by this "
+                                      "model (combo.py's combo master)")
+    p.add_argument('--p1-confirm', default='seen', choices=('seen', 'now'),
+                   help="--p1-combo takes over once P1 sees its hit (its delay) or at once")
+    p.add_argument('--p1-lookahead', help="combo_support.lookahead: P1's routes tried on copies "
+                                          "from this library (combo_library.py's)")
     args = p.parse_args()
     p1 = make_agent(args.p1, args.deterministic)
+    if args.p1_combo and args.p1_lookahead:
+        p.error('--p1-combo or --p1-lookahead, not both')
+    if args.p1_combo or args.p1_lookahead:
+        import combo_support
+        if args.p1_lookahead:
+            p1 = combo_support.lookahead(args.data, args.p1, args.p1_lookahead)
+        if args.p1_combo:
+            p1 = combo_support.ComboSwitch(p1, make_agent(args.p1_combo, args.deterministic),
+                                           args.p1_confirm)
     p2 = 'cpu' if args.p2 == 'cpu' else make_agent(args.p2, args.deterministic)
     out = {}
     for level in (args.level if p2 == 'cpu' else [0]):
