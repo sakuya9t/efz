@@ -286,6 +286,26 @@ per-chunk evaluations against her stayed at 3-19% throughout. The level-4 CPU's 
 still never beaten. The evaluations of 32 matches swing by +-8%: the one against Mizuka
 went 31, 41, 34, 50, 62, 34, 44, 25, 59, 75% over the chunks.
 
+**Round 2** (6 November, on the Linux machine): new exploiters from the clones against a
+frozen `agent-league` at 50.4M (`target2.zip`; `mizukab/exploiter2/`, `kano/exploiter2/`,
+the same settings as the first). Mizuka's beat it 81% after 6.1M steps (by chunk, on 32
+matches: 12, 19, 28, 31, 38, 81%), Kano's 72% after 1M. On 64 matches
+(`agent-league/compare/agent-league-*2.json`):
+
+| `agent-league` against | Agent wins | Its guards / hits in the air a minute | Damage it takes a minute |
+|---|---|---|---|
+| Mizuka's exploiter 1 | 69% | 11.0 / 1.8 | 7,329 |
+| Mizuka's exploiter 2 | 23% | 17.3 / 2.3 | 8,928 |
+| Kano's exploiter 1 | 19% | 9.9 / 2.4 | 8,543 |
+| Kano's exploiter 2 | 19% | 9.6 / 2.7 | 8,638 |
+
+The new Mizuka plays the first one's trap pressure further: after her guarded strings the
+agent is a median of 10 frames minus (6 against the first), fights back after 13% of them
+(21%), and her objects are out 30% of the time (14%), setups in 44% of her free windows.
+The new Kano found the old hole (19 jumps a minute, anti-aired).
+`agent-league2/` (the exploiters 60% of the agent matches) and `agent-league2-kl/` (a
+pull of 0.05 toward the clone) continue `agent-league` against all four.
+
 Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
 clones were stopped (the system ran short of memory) and are next.
 
