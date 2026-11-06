@@ -98,6 +98,18 @@ def parse():
     p.add_argument('--promote', type=float, default=0.6,
                    help='share of wins against the CPU to move up a level')
     p.add_argument('--envs', type=int, default=64)
+    p.add_argument('--practice', type=int, default=0,
+                   help='of --envs, the environments of combo practice (practice.py): trials '
+                        'from a hit, resources preset, against a dummy')
+    p.add_argument('--practice-starts', default='own',
+                   help="'own' (the learner's first hits against agents) or combo_starts.py's "
+                        "folder (people's)")
+    p.add_argument('--practice-replays',
+                   help="the folder with index.csv for people's starts (default: the starts' parent)")
+    p.add_argument('--practice-rich', type=float, default=0.5,
+                   help='share of trials with resources drawn from the 12 groups')
+    p.add_argument('--practice-pool', type=int, default=400, help='starts held at once')
+    p.add_argument('--practice-limit', type=int, default=600, help='steps a trial lasts at most')
     p.add_argument('--cpu-share', type=float, default=0.5)
     p.add_argument('--history', type=int, default=16)
     p.add_argument('--delay', type=int, default=0,
@@ -141,10 +153,11 @@ def vs_counts(n, wins, power):
     return [int(c) for c in counts]
 
 
-def make_env(args, opponents, vs, seed, level, wins=None):
+def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     """opponents: the mirror ones (the learner's character); vs: [(opponent, char)];
-    wins: the learner's last wins against each of vs (for --pfsp)."""
-    n = args.envs
+    wins: the learner's last wins against each of vs (for --pfsp); pool: --practice's
+    starts (practice.StartPool), whose trials take the last --practice environments."""
+    n = args.envs - args.practice
     n_cpu = int(round(n * args.cpu_share))
     cpu_envs = np.arange(n) >= n - n_cpu
     agents = np.flatnonzero(~cpu_envs)
@@ -183,6 +196,13 @@ def make_env(args, opponents, vs, seed, level, wins=None):
     if args.focus:
         import focus
         env = focus.Focus(env, args.focus, args.focus_coef, args.char)
+    if args.practice:
+        import practice
+        from combo import ComboTrials
+        trials = ComboTrials(args.data, [], args.practice, args.delay, args.history,
+                             args.practice_limit, seed=seed, rich=args.practice_rich,
+                             sample=pool.sample, reward_scale=1 / 9999, bootstrap=True)
+        env = practice.Practice(env, trials, pool, harvest=~cpu_envs)
     return env
 
 
@@ -269,6 +289,9 @@ def main():
                        combo=args.combo and os.path.relpath(args.combo, REPO),
                        combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
                        lookahead=args.lookahead,
+                       practice=args.practice, practice_starts=args.practice_starts,
+                       practice_rich=args.practice_rich, practice_pool=args.practice_pool,
+                       practice_limit=args.practice_limit,
                        level=args.level, ppo=settings,
                        actions=[TABLE.describe(i) for i in range(len(TABLE))]), f, indent=1)
     prior = PPO.load(args.prior, device='cpu')
@@ -287,7 +310,17 @@ def main():
         team.append(frozen(master))
     opponents = lambda snapshot: [o for o in (snapshot, clone, old) if o is not None] + team
     vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
-    env = make_env(args, opponents(clone), vs, len(history), level)
+    pool = None
+    if args.practice:
+        import practice
+        if args.practice_starts == 'own':
+            pool = practice.StartPool(args.practice_pool, seed=len(history))
+        else:
+            replays = args.practice_replays or os.path.dirname(os.path.abspath(args.practice_starts))
+            pool = practice.StartPool.people(args.data, args.practice_starts, replays,
+                                             limit=args.practice_pool)
+            print(f"practice: {len(pool.starts)} of people's starts {pool.kinds()}", flush=True)
+    env = make_env(args, opponents(clone), vs, len(history), level, pool=pool)
     model = PPO.load(start, env=env, device='cpu', **settings)
     if args.prior_coef > 0:
         teacher = master.policy if master is not None and args.combo_teacher else None
@@ -301,8 +334,11 @@ def main():
         env.close()
         last = history[-1]['eval'] if history else {}
         wins = [last.get(f'vs{j}', {}).get('win') for j in range(len(vs))]
-        env = make_env(args, opponents(frozen(model)), vs, len(history) + 1, level, wins)
+        env = make_env(args, opponents(frozen(model)), vs, len(history) + 1, level, wins, pool)
         model.set_env(env)
+        if pool is not None and pool.growing and len(pool.starts) < 48:
+            n = practice.fill(pool, env.matches, model, mask=env.mask)
+            print(f'practice: {n} starts of its own to begin with {pool.kinds()}', flush=True)
         t = time.time()
         model.learn(int(args.chunk), reset_num_timesteps=False, callback=KLLog())
         seconds = time.time() - t
@@ -313,14 +349,22 @@ def main():
         returns = [e['r'] for e in model.ep_info_buffer]
         focus = env.take() if args.focus else None  # the focus' events, a minute of play
         focus_rate = focus['events'] / max(1, focus['steps']) * 3840 if focus else None
+        trials = None
+        if pool is not None:  # the practice of the chunk, and the pool it drew from
+            trials = dict(env.take_trials(), pool=len(pool.starts), kinds=pool.kinds())
         history.append(dict(steps=model.num_timesteps, level=level, train_seconds=seconds,
                             prior_kl=model.policy.prior_kl,
                             ep_return=float(np.mean(returns)) if returns else None,
-                            focus_per_min=focus_rate, eval=results))
+                            focus_per_min=focus_rate, practice=trials, eval=results))
         print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s, L{level}, '
               f'KL {model.policy.prior_kl:.3f}'
               + (f', {args.focus} {focus_rate:.2f}/min' if focus else '') + '] '
               + show(results), flush=True)
+        if trials and trials.get('trials'):
+            print(f"  practice: {trials['trials']} trials, combo {trials['damage']}/"
+                  f"{trials['damage_p90']}/{trials['damage_max']}, {trials['hits']} hits, IC "
+                  f"{trials['ic']:.0%}, special {trials['special']:.0%}; pool {trials['pool']}",
+                  flush=True)
         if results['cpu']['win'] >= args.promote and level < 4:
             level += 1
             print(f'promoted to level {level}', flush=True)

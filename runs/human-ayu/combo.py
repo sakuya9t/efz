@@ -154,11 +154,22 @@ def restore(data_dir, replays, starts, envs=32):
 
 class ComboTrials(VecEnv):
     """Combo trials as SB3's VecEnv: num_envs trials at once, each restarting from a start
-    drawn at random (or, with order, the starts in turn, each once)."""
+    drawn at random (or, with order, the starts in turn, each once; or with sample, a
+    function of the rng giving one).
+
+    A start: state (a save state at the attacker's first hit), side (the attacker's),
+    seen (its views up to the start, oldest first, at least delay + 1) and either inputs
+    (its controls before) or hist and prev (its input features, newest first, and last
+    control, as efz_env.history.InputHistory keeps them); damage, hits and file, its
+    player's combo from there, where known. reward_scale: the reward per HP dealt
+    (combo.py's 1/1000; a match's is 1/9999 a bar). bootstrap: a trial's end is a time
+    limit to SB3 (it values the state the combo left), for trials among matches
+    (practice.py), where what follows a combo is the match."""
 
     def __init__(self, data_dir, starts, num_envs, delay=14, history=16, limit=1200, seed=0,
                  order=False, focus=0.0, rich=0.0, gauges=None, juggle=0.0, meter_cost=0.0,
-                 gamma=0.99, leftover_cost=0.0):
+                 gamma=0.99, leftover_cost=0.0, reward_scale=1 / 1000.0, bootstrap=False,
+                 sample=None):
         self.env = EfzVecEnv(data_dir, num_envs, frame_skip=1, rounds_to_win=2,
                              max_frames=0, autoreset='disabled', reward_round=0.0,
                              reward_match=0.0)
@@ -168,12 +179,14 @@ class ComboTrials(VecEnv):
         self.focus = focus
         self.juggle, self.meter_cost, self.gamma = juggle, meter_cost, gamma
         self.leftover_cost = leftover_cost
+        self.reward_scale, self.bootstrap, self.sample = reward_scale, bootstrap, sample
+        self.recent = []  # the last trials' results, for a log (take_recent)
         self.proration = np.ones(num_envs)  # the attacker's, at its combo's last hit
         self.phi = np.zeros(num_envs)    # the juggle's potential now
         self.gauge = np.zeros(num_envs)  # the attacker's power gauge, last step
         self.rich = rich      # share of trials with resources drawn from the groups
         self.gauges = gauges  # a group ('cyan3'...): every trial with its resources
-        by_damage = np.argsort([st['damage'] for st in starts])
+        by_damage = np.argsort([st.get('damage', 0.0) for st in starts])
         self.best = by_damage[-max(1, len(starts) // 4):]  # the top quarter
         self.rng = np.random.default_rng(seed)
         self.table = ActionTable()
@@ -203,6 +216,8 @@ class ComboTrials(VecEnv):
                 return
             st = self.starts[self.next]
             self.next += 1
+        elif self.sample is not None:
+            st = self.sample(self.rng)
         elif self.rng.random() < self.focus:
             st = self.starts[self.best[self.rng.integers(len(self.best))]]
         else:
@@ -218,10 +233,14 @@ class ComboTrials(VecEnv):
             power, rf, blue = group_gauges(group, self.rng)
             self.env.set_gauges(i, s, power=power, rf=rf, blue=blue)
         self.guard[i] = BACK | (DOWN if self.rng.random() < 0.5 else 0)
-        inputs = st['inputs']
-        prev = np.concatenate([[0], inputs[:-1]]).astype(np.uint8)
-        self.hist[i] = input_features(inputs, prev)[::-1][:self.H]
-        self.prev[i] = inputs[-1]
+        if 'hist' in st:
+            self.hist[i] = st['hist'][:self.H]
+            self.prev[i] = st['prev']
+        else:
+            inputs = st['inputs']
+            prev = np.concatenate([[0], inputs[:-1]]).astype(np.uint8)
+            self.hist[i] = input_features(inputs, prev)[::-1][:self.H]
+            self.prev[i] = inputs[-1]
         self.seen[i] = st['seen'][::-1][:self.delay + 1]
         self.seen[i, 0] = self.env.obs[i, s]  # the start, with its gauges as set
         self.t[i] = 0
@@ -275,10 +294,10 @@ class ComboTrials(VecEnv):
             dealt = max(0.0, self.hp[i] - hp)
             self.hp[i] = hp
             self.dealt[i] += dealt
-            rewards[i] = dealt / 1000.0
+            rewards[i] = dealt * self.reward_scale
             gauge = float(obs[i, s, SELF_GAUGE]) * 3000
             if self.meter_cost:
-                rewards[i] -= self.meter_cost * max(0.0, self.gauge[i] - gauge) / 1000.0
+                rewards[i] -= self.meter_cost * max(0.0, self.gauge[i] - gauge) * self.reward_scale
             self.gauge[i] = gauge
             self.t[i] += 1
             hits = round(float(obs[i, s, COMBO_HITS]) * 30)
@@ -299,14 +318,19 @@ class ComboTrials(VecEnv):
                 dones[i] = True
                 st = self.current[i]
                 result = dict(damage=self.dealt[i], hits=int(self.max_hits[i]), ic=bool(self.ic[i]),
-                              special=bool(self.special[i]), human_damage=st['damage'],
-                              human_hits=st['hits'], file=st['file'], job=st.get('job'))
+                              special=bool(self.special[i]), human_damage=st.get('damage'),
+                              human_hits=st.get('hits'), file=st.get('file'), job=st.get('job'),
+                              kind=st.get('kind'))
                 infos[i] = dict(terminal_observation=self._view(i), combo=result,
-                                episode={'r': float(self.dealt[i] / 1000), 'l': int(self.t[i]),
-                                         't': 0.0},
-                                **{'TimeLimit.truncated': bool(self.t[i] >= self.limit)})
+                                **{'TimeLimit.truncated': bool(self.bootstrap or
+                                                               self.t[i] >= self.limit)})
+                if not self.bootstrap:  # (among matches, SB3's episodes are the matches)
+                    infos[i]['episode'] = {'r': float(self.dealt[i] * self.reward_scale),
+                                           'l': int(self.t[i]), 't': 0.0}
                 if self.order:
                     self.results.append(result)
+                self.recent.append(result)
+                del self.recent[:-2000]
                 self._load(i)
             views.append(self._view(i))
         return np.stack(views), rewards, dones, infos
