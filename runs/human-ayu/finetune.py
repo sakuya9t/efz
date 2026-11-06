@@ -110,6 +110,9 @@ def parse():
                    help='share of trials with resources drawn from the 12 groups')
     p.add_argument('--practice-pool', type=int, default=400, help='starts held at once')
     p.add_argument('--practice-limit', type=int, default=600, help='steps a trial lasts at most')
+    p.add_argument('--practice-scale', type=float, default=1.0,
+                   help="practice's reward per HP dealt, as a multiple of the match's (1/9999): "
+                        "combo.py's is about 10")
     p.add_argument('--cpu-share', type=float, default=0.5)
     p.add_argument('--history', type=int, default=16)
     p.add_argument('--delay', type=int, default=0,
@@ -201,7 +204,8 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
         from combo import ComboTrials
         trials = ComboTrials(args.data, [], args.practice, args.delay, args.history,
                              args.practice_limit, seed=seed, rich=args.practice_rich,
-                             sample=pool.sample, reward_scale=1 / 9999, bootstrap=True)
+                             sample=pool.sample, reward_scale=args.practice_scale / 9999,
+                             bootstrap=True)
         env = practice.Practice(env, trials, pool, harvest=~cpu_envs)
     return env
 
@@ -291,7 +295,7 @@ def main():
                        lookahead=args.lookahead,
                        practice=args.practice, practice_starts=args.practice_starts,
                        practice_rich=args.practice_rich, practice_pool=args.practice_pool,
-                       practice_limit=args.practice_limit,
+                       practice_limit=args.practice_limit, practice_scale=args.practice_scale,
                        level=args.level, ppo=settings,
                        actions=[TABLE.describe(i) for i in range(len(TABLE))]), f, indent=1)
     prior = PPO.load(args.prior, device='cpu')
