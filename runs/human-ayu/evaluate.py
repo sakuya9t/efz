@@ -499,12 +499,19 @@ def main():
                    help="--p1-combo takes over once P1 sees its hit (its delay) or at once")
     p.add_argument('--p1-lookahead', help="combo_support.lookahead: P1's routes tried on copies "
                                           "from this library (combo_library.py's)")
+    p.add_argument('--p1-assist', help="combo_support.FairComboAgent: the same once P1 sees its "
+                                       "hit (strong but fair), from this library")
     args = p.parse_args()
     p1 = make_agent(args.p1, args.deterministic)
-    if args.p1_combo and args.p1_lookahead:
-        p.error('--p1-combo or --p1-lookahead, not both')
-    if args.p1_combo or args.p1_lookahead:
+    if sum(bool(x) for x in (args.p1_combo, args.p1_lookahead, args.p1_assist)) > 1:
+        p.error('one of --p1-combo, --p1-lookahead, --p1-assist')
+    if args.p1_combo or args.p1_lookahead or args.p1_assist:
         import combo_support
+        if args.p1_assist:
+            import macros
+            import redteam
+            planner = redteam.Planner(args.data, macros.load_library(args.p1_assist, 300), p1.model)
+            p1 = combo_support.FairComboAgent(p1, planner)
         if args.p1_lookahead:
             p1 = combo_support.lookahead(args.data, args.p1, args.p1_lookahead)
         if args.p1_combo:

@@ -52,12 +52,20 @@ class Planner:
         self.width = model.observation_space.shape[0]
         self.H = history
 
-    def plan(self, state, side, starter, hist, prev):
-        """state: the game at the first hit; side: the attacker's; hist (H, 6), prev: its
-        input history then. Returns (actions of the chosen library combo, or None for
-        its own play; the most an option made; what its own play made)."""
-        cands = self.by_starter.get(starter, [])[:self.per_start]
+    def plan(self, state, side, starter, hist, prev, offset=0, seen=None, policy=None):
+        """state: the game at the first hit (or `offset` steps after it); side: the
+        attacker's; hist (H, 6), prev: its input history then. offset: the library combos
+        are played from that step of theirs (combo_support's fair assist plans when the
+        player sees its hit, `delay` steps after it). seen: the player's views up to now,
+        newest first ((delay + 1, dim): efz_env.history.Delay's buffer), for its own play
+        to see the copies as late as it sees the game; policy: its own play's (obs batch
+        -> actions), default the planner's model. Returns (actions of the chosen library
+        combo from offset, or None for its own play; the most an option made; what its
+        own play made)."""
+        cands = [m['actions'][offset:] for m in self.by_starter.get(starter, [])
+                 if len(m['actions']) > offset][:self.per_start]
         n = len(cands) + 1  # the last: its own play
+        delayed = None if seen is None else np.array(seen, np.float32)  # newest first
         sim = self.sim
         hp0 = np.zeros(n)
         for j in range(n):
@@ -69,13 +77,23 @@ class Planner:
         controls = np.zeros((sim.num_envs, 2), np.uint8)
         dealt = np.zeros(n)
         done = np.zeros(n, bool)
-        longest = min(self.limit, max([len(m['actions']) for m in cands] + [0]) + 60)
+        longest = min(self.limit, max([len(m) for m in cands] + [0]) + 60)
         longest = max(longest, 240)  # its own play's combo, at least this long
         for t in range(longest):
             for j, m in enumerate(cands):
-                controls[j, side] = TABLE.table[m['actions'][t]] if t < len(m['actions']) else 0
-            view = np.concatenate([sim.obs[n - 1, side], own_hist.features()[0]])[None, :self.width]
-            controls[n - 1, side] = TABLE.table[int(self.model.predict(view, deterministic=False)[0][0])]
+                controls[j, side] = TABLE.table[m[t]] if t < len(m) else 0
+            now = sim.obs[n - 1, side]
+            if delayed is not None:  # as late as the player sees the game
+                if t > 0:  # (seen holds the view of the state planned from already)
+                    delayed[1:] = delayed[:-1]
+                    delayed[0] = now
+                now = delayed[-1]
+            view = np.concatenate([now, own_hist.features()[0]])[None, :self.width]
+            if policy is not None:
+                own = int(np.asarray(policy(view))[0])
+            else:
+                own = int(self.model.predict(view, deterministic=False)[0][0])
+            controls[n - 1, side] = TABLE.table[own]
             controls[:n, 1 - side] = BACK
             obs, _, term, trunc, info = sim.step(controls)
             own_hist.push(info['input'][n - 1:n, side])
@@ -86,7 +104,7 @@ class Planner:
             if done.all():
                 break
         best = int(np.argmax(dealt))
-        chosen = cands[best]['actions'] if best < len(cands) and dealt[best] > dealt[-1] else None
+        chosen = cands[best] if best < len(cands) and dealt[best] > dealt[-1] else None
         return chosen, float(dealt.max()), float(dealt[-1])
 
 

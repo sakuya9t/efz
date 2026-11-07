@@ -110,6 +110,10 @@ def parse():
                    help='share of trials with resources drawn from the 12 groups')
     p.add_argument('--practice-pool', type=int, default=400, help='starts held at once')
     p.add_argument('--practice-limit', type=int, default=600, help='steps a trial lasts at most')
+    p.add_argument('--assist', help="built-in combos (combo_support.ComboAssist): once the learner "
+                                    "sees its hit, routes from this library (combo_library.py's) and "
+                                    "its own play are tried on copies and the best played; those "
+                                    "steps are kept out of the policy's loss")
     p.add_argument('--practice-scale', type=float, default=1.0,
                    help="practice's reward per HP dealt, as a multiple of the match's (1/9999): "
                         "combo.py's is about 10")
@@ -196,6 +200,9 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     for o in opponents:  # the lookahead red team saves this environment's games
         if hasattr(o, 'attach'):
             o.attach(env)
+    if args.assist:
+        import combo_support
+        env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'])
     if args.focus:
         import focus
         env = focus.Focus(env, args.focus, args.focus_coef, args.char)
@@ -208,6 +215,31 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
                              bootstrap=True)
         env = practice.Practice(env, trials, pool, harvest=~cpu_envs)
     return env
+
+
+class AssistMask(BaseCallback):
+    """--assist: the steps a route played (infos[i]['assisted']) out of the policy's loss:
+    their advantages 0, the rest normalised (PPO's own normalisation is off). The critic
+    learns from every step, so it learns what a hit is worth with the routes."""
+
+    def _on_rollout_start(self):
+        buf = self.model.rollout_buffer
+        self.mask = np.zeros((buf.buffer_size, buf.n_envs), bool)
+
+    def _on_step(self):
+        pos = self.model.rollout_buffer.pos
+        for e, info in enumerate(self.locals['infos']):
+            if info.get('assisted'):
+                self.mask[pos, e] = True
+        return True
+
+    def _on_rollout_end(self):
+        adv, m = self.model.rollout_buffer.advantages, self.mask
+        keep = adv[~m]
+        adv[~m] = (keep - keep.mean()) / (keep.std() + 1e-8)
+        adv[m] = 0.0
+        ASSIST['steps'] = ASSIST.get('steps', 0) + m.size
+        ASSIST['assisted'] = ASSIST.get('assisted', 0) + int(m.sum())
 
 
 class KLLog(BaseCallback):
@@ -224,6 +256,9 @@ def evaluate(args, model_path, level):
     a = A()
     a.data, a.minutes = args.data, args.minutes
     me = ev.Agent(model_path)
+    if args.assist:  # it plays with its built-in combos
+        import combo_support
+        me = combo_support.FairComboAgent(me, ASSIST['planner'])
     out = {}
     a.chars = (args.char, args.cpu_chars if level == 4 else 'random')  # tiers: level 4's
     out['cpu'] = ev.play(a, me, 'cpu', args.eval, level)
@@ -250,6 +285,7 @@ def evaluate(args, model_path, level):
 
 
 RED = {}  # the lookahead red team: its planner, opponent and agent
+ASSIST = {}  # --assist: its planner, the learner's own play on the copies, counts
 
 
 def show(results):
@@ -292,7 +328,7 @@ def main():
                        team=[os.path.relpath(t, REPO) for t in args.team],
                        combo=args.combo and os.path.relpath(args.combo, REPO),
                        combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
-                       lookahead=args.lookahead,
+                       lookahead=args.lookahead, assist=args.assist,
                        practice=args.practice, practice_starts=args.practice_starts,
                        practice_rich=args.practice_rich, practice_pool=args.practice_pool,
                        practice_limit=args.practice_limit, practice_scale=args.practice_scale,
@@ -314,6 +350,12 @@ def main():
         team.append(frozen(master))
     opponents = lambda snapshot: [o for o in (snapshot, clone, old) if o is not None] + team
     vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
+    if args.assist:
+        import macros
+        import redteam
+        ASSIST['planner'] = redteam.Planner(args.data, macros.load_library(args.assist, 300),
+                                            PPO.load(start, device='cpu'))
+        ASSIST['policy'] = None  # (set to each chunk's learner before its environment)
     pool = None
     if args.practice:
         import practice
@@ -326,6 +368,8 @@ def main():
             print(f"practice: {len(pool.starts)} of people's starts {pool.kinds()}", flush=True)
     env = make_env(args, opponents(clone), vs, len(history), level, pool=pool)
     model = PPO.load(start, env=env, device='cpu', **settings)
+    if args.assist:
+        model.normalize_advantage = False  # AssistMask normalises, the routes' steps left out
     if args.prior_coef > 0:
         teacher = master.policy if master is not None and args.combo_teacher else None
         model.policy.set_prior(prior.policy, args.prior_coef, args.ent_coef, combo=teacher)
@@ -338,13 +382,16 @@ def main():
         env.close()
         last = history[-1]['eval'] if history else {}
         wins = [last.get(f'vs{j}', {}).get('win') for j in range(len(vs))]
+        if args.assist:
+            ASSIST['policy'] = frozen(model)
         env = make_env(args, opponents(frozen(model)), vs, len(history) + 1, level, wins, pool)
         model.set_env(env)
         if pool is not None and pool.growing and len(pool.starts) < 48:
             n = practice.fill(pool, env.matches, model, mask=env.mask)
             print(f'practice: {n} starts of its own to begin with {pool.kinds()}', flush=True)
         t = time.time()
-        model.learn(int(args.chunk), reset_num_timesteps=False, callback=KLLog())
+        callbacks = [KLLog()] + ([AssistMask()] if args.assist else [])
+        model.learn(int(args.chunk), reset_num_timesteps=False, callback=callbacks)
         seconds = time.time() - t
         path = os.path.join(args.out, 'model.zip')
         model.save(path)
@@ -353,17 +400,26 @@ def main():
         returns = [e['r'] for e in model.ep_info_buffer]
         focus = env.take() if args.focus else None  # the focus' events, a minute of play
         focus_rate = focus['events'] / max(1, focus['steps']) * 3840 if focus else None
+        assist = None
+        if args.assist:  # the chunk's built-in combos: plans made, steps they played
+            assist = dict(env.assist.take_plans() if hasattr(env, 'assist') else {},
+                          assisted=round(ASSIST.pop('assisted', 0) / max(1, ASSIST.pop('steps', 1)), 4))
         trials = None
         if pool is not None:  # the practice of the chunk, and the pool it drew from
             trials = dict(env.take_trials(), pool=len(pool.starts), kinds=pool.kinds())
         history.append(dict(steps=model.num_timesteps, level=level, train_seconds=seconds,
                             prior_kl=model.policy.prior_kl,
                             ep_return=float(np.mean(returns)) if returns else None,
-                            focus_per_min=focus_rate, practice=trials, eval=results))
+                            focus_per_min=focus_rate, practice=trials, assist=assist,
+                            eval=results))
         print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s, L{level}, '
               f'KL {model.policy.prior_kl:.3f}'
               + (f', {args.focus} {focus_rate:.2f}/min' if focus else '') + '] '
               + show(results), flush=True)
+        if assist and assist.get('plans'):
+            print(f"  assist: {assist['plans']} plans, a route in {assist['route']:.0%}, best "
+                  f"{assist['best']} (own play {assist['own']}); {assist['assisted']:.1%} of steps",
+                  flush=True)
         if trials and trials.get('trials'):
             print(f"  practice: {trials['trials']} trials, combo {trials['damage']}/"
                   f"{trials['damage_p90']}/{trials['damage_max']}, {trials['hits']} hits, IC "
