@@ -359,6 +359,24 @@ the CPU 6.2 times a minute (people 11.7 against people), its other rates as befo
 KL to the clone 0.071, from 0.04). These are the exploiters it trained against: a third
 round of exploiters is what would say whether it is robust or only knows these four.
 
+**Round 3.** Fresh exploiters against `agent-league2-kl` (`target3.zip`): Kano's beat it
+94% after 3M steps (her round-2 one needed 1M against `agent-league`), with the old hole
+(on 64 matches the agent wins 12%: 20 jumps a minute, hit in the air 3.3); Mizuka's needed
+9.1M. `agent-league3` continued `agent-league2-kl` against five exploiters (Kano's third
+added) to 90.7M:
+
+| Agent | Level-4 CPU | Mizuka 1 / 2 / 3 | Kano 1 / 2 / 3 |
+|---|---|---|---|
+| `agent-league2-kl`, 70.5M | 0% / 62% / 90% | 84% / 75% / 53% | 59% / 62% / 12% |
+| `agent-league3`, 90.7M | 0% / 62% / 95% | 89% / 84% / **78%** | 67% / 61% / **12%** |
+
+It improved against Mizuka's third, which it never met (53% to 78%), but not against
+Kano's third, which it trained against (3-31% by chunk throughout; PFSP gave her 6 of the
+13 exploiter matches, some 2M steps). People's Ayu jumps more against Kano than against
+anyone (21.5 a minute, hit in the air 2.9): the agent's 20 is people's habit, and an
+exploiter with better anti-airs than any person farms it. Closing it means jumping less
+than people do.
+
 Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
 clones were stopped (the system ran short of memory) and are next.
 

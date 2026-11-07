@@ -1,0 +1,110 @@
+{
+ "frame_skip": 1,
+ "history": 16,
+ "delay": 14,
+ "chars": [
+  "ayu",
+  null
+ ],
+ "vs": [
+  [
+   "runs/human-ayu/mizukab/exploiter/model.zip",
+   "mizukab"
+  ],
+  [
+   "runs/human-ayu/kano/exploiter/model.zip",
+   "kano"
+  ],
+  [
+   "runs/human-ayu/mizukab/exploiter2/model.zip",
+   "mizukab"
+  ],
+  [
+   "runs/human-ayu/kano/exploiter2/model.zip",
+   "kano"
+  ]
+ ],
+ "vs_share": 0.4,
+ "focus": null,
+ "focus_coef": 0.02,
+ "prior": "runs/human-ayu/bc-d14.zip",
+ "prior_coef": 0.05,
+ "team": [
+  "runs/human-ayu/team/player473.zip",
+  "runs/human-ayu/team/player596.zip",
+  "runs/human-ayu/team/player208.zip",
+  "runs/human-ayu/team/player639.zip",
+  "runs/human-ayu/team/player143.zip",
+  "runs/human-ayu/team/player479.zip"
+ ],
+ "combo": "runs/human-ayu/combo-red3/combo.zip",
+ "combo_teacher": false,
+ "combo_delay": 0,
+ "lookahead": "/home/sakuya/data/efz-replays/combo-library.npz",
+ "practice": 16,
+ "practice_starts": "own",
+ "practice_rich": 0.5,
+ "practice_pool": 400,
+ "practice_limit": 600,
+ "practice_scale": 10.0,
+ "level": 4,
+ "ppo": {
+  "learning_rate": 0.0001,
+  "n_steps": 256,
+  "batch_size": 8192,
+  "n_epochs": 3,
+  "gamma": 0.999,
+  "gae_lambda": 0.98,
+  "ent_coef": 0.005,
+  "clip_range": 0.1,
+  "vf_coef": 0.5,
+  "max_grad_norm": 0.5
+ },
+ "actions": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "1A",
+  "2A",
+  "3A",
+  "4A",
+  "5A",
+  "6A",
+  "7A",
+  "8A",
+  "9A",
+  "1B",
+  "2B",
+  "3B",
+  "4B",
+  "5B",
+  "6B",
+  "7B",
+  "8B",
+  "9B",
+  "1C",
+  "2C",
+  "3C",
+  "4C",
+  "5C",
+  "6C",
+  "7C",
+  "8C",
+  "9C",
+  "1D",
+  "2D",
+  "3D",
+  "4D",
+  "5D",
+  "6D",
+  "7D",
+  "8D",
+  "9D"
+ ]
+}
