@@ -76,7 +76,7 @@ def lookahead(data_dir, path, library, per_start=12):
     from stable_baselines3 import PPO
     import macros
     import redteam
-    planner = redteam.Planner(data_dir, macros.load_library(library, 300),
+    planner = redteam.Planner(data_dir, macros.load_library(library),
                               PPO.load(path, device='cpu'), per_start=per_start)
     return redteam.RedTeamAgent(planner, path)
 

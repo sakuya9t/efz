@@ -5,7 +5,9 @@ A red team needn't be fair, so it needn't predict: when a hit of its lands (its 
 counter goes from 0 to 1), it saves the game and plays on copies of it, side by side,
 each library combo with that starter (people's, combo_library.py, as action sequences:
 macros.load_library) and its own play, the defender guarding once it can; then it plays
-the one that made the most, recorded inputs and all. That is "the most damaging combo
+the one that made the most, recorded inputs and all (with a library kept per victim,
+combo_library.py --per-victim, those landed on the character it faces first: combos hold
+on some characters and not others). That is "the most damaging combo
 whenever it can" (the user's), from whatever resources it has. Each plan also says what
 the hit was worth: the most any option made from it (its conversion potential), which is
 how much a hit there costs, the measure of an "easy location" (the user's: a hit from
@@ -41,6 +43,7 @@ from efz_env.history import FEATURES, InputHistory
 
 TABLE = ActionTable()
 COMBO_HITS, ACTION = 30, 18
+OPP_CHARACTER = 66  # opp_character, the efz_env.vec.character_names() index
 REWARD_PER_HP = 1 / 9999  # the match's reward (efz_env's): damage per full bar
 
 
@@ -74,6 +77,10 @@ class Planner:
         self.by_starter = {}
         for m in library:
             self.by_starter.setdefault(m['starter'], []).append(m)
+        # A library kept per victim: the combos landed on the character faced come first.
+        self.by_victim = any(m.get('kept_for') == 'victim' for m in library)
+        from efz_env.vec import character_names
+        self.names = character_names()
         self.sim = EfzVecEnv(data_dir, per_start + 1, frame_skip=1, rounds_to_win=2,
                              max_frames=0, autoreset='disabled')
         self.sim.reset()
@@ -93,11 +100,16 @@ class Planner:
         batch -> values), default the planner's model's. Returns (actions of the chosen
         library combo from offset, or None for its own play; the most an option made;
         what its own play made)."""
-        cands = [m['actions'][offset:] for m in self.by_starter.get(starter, [])
-                 if len(m['actions']) > offset][:self.per_start]
+        sim = self.sim
+        pool = self.by_starter.get(starter, [])
+        if self.by_victim:  # (each list is by damage: the victim's first, then the rest)
+            sim.load_state(0, state)
+            victim = self.names[int(round(float(sim.obs[0, side, OPP_CHARACTER])))]
+            pool = ([m for m in pool if m.get('opponent') == victim] +
+                    [m for m in pool if m.get('opponent') != victim])
+        cands = [m['actions'][offset:] for m in pool if len(m['actions']) > offset][:self.per_start]
         n = len(cands) + 1  # the last: its own play
         delayed = None if seen is None else np.array(seen, np.float32)  # newest first
-        sim = self.sim
         hp0 = np.zeros(n)
         for j in range(n):
             sim.load_state(j, state)

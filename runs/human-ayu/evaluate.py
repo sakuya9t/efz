@@ -580,7 +580,7 @@ def main():
         if args.p1_assist:
             import macros
             import redteam
-            planner = redteam.Planner(args.data, macros.load_library(args.p1_assist, 300), p1.model,
+            planner = redteam.Planner(args.data, macros.load_library(args.p1_assist), p1.model,
                                       score=args.assist_score)
             p1 = combo_support.FairComboAgent(p1, planner)
         if args.p1_lookahead:

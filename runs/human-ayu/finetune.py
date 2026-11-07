@@ -460,7 +460,7 @@ def main():
     if master is not None and args.lookahead:
         import macros
         import redteam
-        planner = redteam.Planner(args.data, macros.load_library(args.lookahead, 300), master)
+        planner = redteam.Planner(args.data, macros.load_library(args.lookahead), master)
         RED.update(opponent=redteam.RedTeamOpponent(planner, master),
                    agent=redteam.RedTeamAgent(planner, args.combo))
         team.append(RED['opponent'])
@@ -471,7 +471,7 @@ def main():
         import combo_support
         import macros
         import redteam
-        library = macros.load_library(args.vs_assist, 300)
+        library = macros.load_library(args.vs_assist)
         vs = []
         for p, c in args.vs:
             m = PPO.load(p, device='cpu')
@@ -482,7 +482,7 @@ def main():
     if args.assist:
         import macros
         import redteam
-        ASSIST['planner'] = redteam.Planner(args.data, macros.load_library(args.assist, 300),
+        ASSIST['planner'] = redteam.Planner(args.data, macros.load_library(args.assist),
                                             PPO.load(start, device='cpu'), score=args.assist_score)
         ASSIST['policy'] = None  # (set to each chunk's learner before its environment)
     pool = None

@@ -349,6 +349,22 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   combos faded; `finetune.py --assist-distill` makes them targets instead (after each
   update, the cross-entropy toward the routes' actions on their steps).
 
+  *Combos by victim* (the user's: some combos hold only on certain characters or take
+  another rhythm, and on Ayu, Mayu, Sayuri, Unknown and Kano they drop more easily;
+  `combo_victims.py`, `combo_victims.json`). People's Ayu lands its shortest combos on
+  Akiko, Sayuri, Ayu and Mayu (5.8-6.1 hits, 1,298-1,433 HP, against 6.5-8.9 hits
+  elsewhere); with Akane, Nagamori and Mishio they are also the ones teched out of most
+  (16-28% end in an air recovery, the rest 6-16%). Unknown is in the middle, and Kano's
+  sample is small (412 hits) and long. The agent combos about the same on everyone (4-5
+  hits, 1,220-1,470 HP against each level-4 CPU, 8 matches each:
+  `eval/combo-victims-league6-best.json`), except Kanna: 41% of its hits on her go on
+  to a combo (59-87% on the others) and 24% of its combos on her end with her teching
+  out (0-7%). People's library has no combos on her (11 hits in the dataset) and few on
+  Ayu, Kano and Unknown among its 300 most damaging (3, 7, 9), so a planner tried mostly
+  combos landed on others. `combo_library.py --per-victim 40` also keeps each victim's
+  40 most damaging (of 1,500 HP or more; 848 combos), and `redteam.Planner` tries the
+  ones landed on the character it faces first.
+
 ## Other characters: clones, exploiters, a league
 
 From 5 November the scripts take any character: `dataset.py --char`, `bc.py --char`,
@@ -570,6 +586,7 @@ the combo master's checkpoints are only there.
 | `bc.py` | the clone: the 45 actions people's inputs come to each frame, and the critic from their matches' returns; `--delay` for a reaction time, `--players` for one player's clone (from the clone of everyone, `--init`) |
 | `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones; any character (`--char`), opponents of other characters (`--vs`, shared by `--pfsp`), a focus (`--focus`), `--stop-win` |
 | `evaluate.py` | matches to the end, with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move, damage taken, and `tactics.py`'s); `--chars ayu tiers` for the level-4 CPU's tiers; plays language models too (`runs/llm-ayu`) |
+| `combo_victims.py` | combos by the character they land on: conversion, hits, damage, and how they ended (knockdown, air recovery, neither), for people's Ayu or an agent against each CPU character |
 | `kanna_study.py` | where an agent's HP goes against the level-4 CPU's Kanna (her attacks out of her combos, by move, and the damage of the combos each started), its reversals and how they went, and her RF gauge (236C) |
 | `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up and free time, both ways |
 | `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time |

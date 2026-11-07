@@ -50,7 +50,7 @@ def master_player(args):
     import macros
     import redteam
     model = PPO.load(args.master, device='cpu')
-    planner = redteam.Planner(args.data, macros.load_library(args.lookahead, 300), model)
+    planner = redteam.Planner(args.data, macros.load_library(args.lookahead), model)
     return redteam.RedTeamAgent(planner, args.master)
 
 

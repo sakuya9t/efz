@@ -4,6 +4,12 @@ used an Instant Charge (with the RF gauge red or cyan) or a super, and whether i
 inputs that made it, from the step after its first hit to its end (relative to facing,
 as an agent's), with the one before (prev: what the first of them presses follows from). Writes --out (npz: the --keep most damaging) and prints the best.
 
+Combos hold on some characters and not others, or take another rhythm on them (on Ayu,
+Mayu, Sayuri, Unknown and Kano they drop more easily: the user's), and the most damaging
+overall are seldom on those: --per-victim K also keeps each victim's K most damaging
+(each entry's kept_for: 'overall' or 'victim'), for a planner to try the combos landed
+on the character it faces first (redteam.Planner).
+
     python runs/human-ayu/combo_library.py --dataset D:/tasogare/efz-replays/datasets/ayu
 """
 
@@ -20,6 +26,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ACTION, GAUGE, RF, BLUE, OPP_X = 18, 9, 10, 11, 45
 HITS, DAMAGE = 30, 38
 IC = (0xa7, 0xab)
+PER_VICTIM_MIN = 1500  # --per-victim's least damage (people's Kanna: a few short ones)
 SUPERS = range(0x12c, 0x13e)
 
 
@@ -50,6 +57,8 @@ def main():
     p.add_argument('--out', default=os.path.join('D:/tasogare/efz-replays', 'combo-library.npz'))
     p.add_argument('--keep', type=int, default=300)
     p.add_argument('--show', type=int, default=25)
+    p.add_argument('--per-victim', type=int, default=0,
+                   help="also keep each victim's this many most damaging")
     args = p.parse_args()
     rows = [r for r in csv.DictReader(open(os.path.join(args.dataset, 'matches.csv'),
                                            encoding='utf-8')) if r['in_sync'] == '1']
@@ -88,7 +97,13 @@ def main():
               f"power {c['power']} RF {c['rf']}{' blue' if c['blue'] else ''}, IC {c['ic']}"
               f"{' (blue)' if c['ic_blue'] else ''}{', super' if c['super'] else ''}"
               f"{', corner' if c['corner'] else ''}, vs {c['opponent']} (replay {c['id']})")
-    keep = found[:args.keep]
+    keep = [dict(c, kept_for='overall') for c in found[:args.keep]]
+    if args.per_victim:
+        for victim in sorted({c['opponent'] for c in found}):
+            mine = [c for c in found[args.keep:] if c['opponent'] == victim and
+                    c['damage'] >= PER_VICTIM_MIN]
+            have = sum(c['opponent'] == victim for c in keep)
+            keep += [dict(c, kept_for='victim') for c in mine[:max(0, args.per_victim - have)]]
     meta = [{k: v for k, v in c.items() if k != 'inputs'} for c in keep]
     np.savez(args.out, meta=json.dumps(meta),
              **{f'inputs{k}': c['inputs'] for k, c in enumerate(keep)})

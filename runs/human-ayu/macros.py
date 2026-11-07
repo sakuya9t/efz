@@ -48,11 +48,11 @@ STARTER = 18
 LIMIT = 1200
 
 
-def load_library(path, top):
+def load_library(path, top=None):
     lib = np.load(path)
     meta = json.loads(str(lib['meta']))
     out, seen = [], set()
-    for k, m in enumerate(meta[:top]):
+    for k, m in enumerate(meta[:top]):  # (top None: all)
         inputs = lib[f'inputs{k}']
         acts = action_labels(np.concatenate([[m.get('prev', 0)], inputs]).astype(np.uint8),
                              TABLE)[1:]
