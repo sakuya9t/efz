@@ -377,6 +377,21 @@ anyone (21.5 a minute, hit in the air 2.9): the agent's 20 is people's habit, an
 exploiter with better anti-airs than any person farms it. Closing it means jumping less
 than people do.
 
+**Round 4.** The user's rule from here: people's statistics are a guide, human limits
+(the 14-step reaction time, input rates a person can make) the hard line. Two arms from
+`agent-league3` against all six exploiters (Mizuka's third added), to 110.7M:
+
+| Agent | Level-4 CPU | Mizuka 1 / 2 / 3 | Kano 1 / 2 / 3 | Presses a second |
+|---|---|---|---|---|
+| `agent-league3`, 90.7M | 0% / 62% / 95% | 89% / 84% / 78% | 67% / 61% / 12% | 1.77 |
+| `agent-league4` (pull 0.05) | 0% / 81% / 100% | 80% / 70% / 61% | 41% / 59% / 14% | 1.64 |
+| `agent-league4-kl02` (pull 0.02) | 0% / 81% / 100% | 91% / 88% / 95% | 83% / 83% / **41%** | 1.79 |
+
+The weaker pull is the better agent everywhere. Against Kano's third it jumps 12.9 times a
+minute (17.9 with 0.05; people's Ayu 21.5 against Kano) and is hit in the air 2.1 (3.2):
+it learnt the opponent's anti-air, away from people's habit. Its input rates stay a
+person's (1.79 presses a second, 45% of them while it can't move: buffered cancels).
+
 Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
 clones were stopped (the system ran short of memory) and are next.
 
