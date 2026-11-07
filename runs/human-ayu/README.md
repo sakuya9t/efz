@@ -442,6 +442,21 @@ Mizuka 4 (damage taken 10.4k a minute, `kl02` 14.8k). `finetune.py --vs-assist` 
 agent trained with routes as an exploiter's opponent with them
 (`combo_support.FairAssistOpponent`).
 
+The control, `agent-league5-base` (the same without routes), is the better agent:
+
+| Agent | Level-4 CPU | Mizuka 1 / 2 / 3 / 4 | Kano 1 / 2 / 3 / 4 | Exploiters | Presses a second |
+|---|---|---|---|---|---|
+| `kl02`, 110.9M | 0% / 81% / 100% | 91% / 88% / 95% / 38% | 83% / 83% / 41% / 36% | 69% | 1.79 |
+| `agent-league5-base`, 127.0M (`chunk008`, `best.zip`) | 0% / 95% / 100% | 98% / 95% / 100% / **94%** | 95% / 98% / **66%** / **59%** | **88%** | 1.64 |
+| `agent-league5-base`, 131.0M | 0% / 90% / 100% | 98% / 97% / 81% / 70% | 77% / 80% / 28% / 45% | 72% | 1.65 |
+
+Two chunks later it is back to 72%: PFSP moves the matches away from the exploiters it
+beats and it forgets them (Kano 3 by chunk: 6, 56, 50, 25, 38, 50, 31, 44, 38, 25%). The
+127.0M checkpoint, picked by its 16-match evaluation and confirmed on 64, is the target of
+round 5 (`kano/target5.zip`, `mizukab/target5.zip`, `misuzu/target.zip`). It jumps 13-16
+times a minute against Kano, guards the CPU 6.5 times a minute (people 11.7) and presses as
+a person does (48% of its presses while it can't move: buffered).
+
 Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
 clones were stopped (the system ran short of memory) and are next.
 
