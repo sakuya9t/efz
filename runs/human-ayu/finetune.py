@@ -126,6 +126,9 @@ def parse():
     p.add_argument('--budget', type=float, default=6e7)
     p.add_argument('--minutes', type=float, default=5)
     p.add_argument('--eval', type=int, default=48)
+    p.add_argument('--eval-every', type=int, default=1,
+                   help='evaluate after every this many chunks (and the last): --assist plans in '
+                        'every match evaluated, which is slow')
     p.add_argument('--cpu-chars', default='tiers', choices=('tiers', 'random'),
                    help="the level-4 CPU's characters in evaluations: a third per tier "
                         "(evaluate.TIERS) or drawn")
@@ -380,7 +383,7 @@ def main():
         history.append(dict(steps=0, level=level, eval=before))
     while model.num_timesteps < args.budget:
         env.close()
-        last = history[-1]['eval'] if history else {}
+        last = next((h['eval'] for h in reversed(history) if h.get('eval')), {})
         wins = [last.get(f'vs{j}', {}).get('win') for j in range(len(vs))]
         if args.assist:
             ASSIST['policy'] = frozen(model)
@@ -396,7 +399,8 @@ def main():
         path = os.path.join(args.out, 'model.zip')
         model.save(path)
         model.save(os.path.join(args.out, f'chunk{len(history):03d}.zip'))
-        results = evaluate(args, path, level)
+        due = len(history) % args.eval_every == 0 or model.num_timesteps >= args.budget
+        results = evaluate(args, path, level) if due else None
         returns = [e['r'] for e in model.ep_info_buffer]
         focus = env.take() if args.focus else None  # the focus' events, a minute of play
         focus_rate = focus['events'] / max(1, focus['steps']) * 3840 if focus else None
@@ -415,7 +419,7 @@ def main():
         print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s, L{level}, '
               f'KL {model.policy.prior_kl:.3f}'
               + (f', {args.focus} {focus_rate:.2f}/min' if focus else '') + '] '
-              + show(results), flush=True)
+              + (show(results) if results else 'not evaluated (--eval-every)'), flush=True)
         if assist and assist.get('plans'):
             print(f"  assist: {assist['plans']} plans, a route in {assist['route']:.0%}, best "
                   f"{assist['best']} (own play {assist['own']}); {assist['assisted']:.1%} of steps",
@@ -425,12 +429,12 @@ def main():
                   f"{trials['damage_p90']}/{trials['damage_max']}, {trials['hits']} hits, IC "
                   f"{trials['ic']:.0%}, special {trials['special']:.0%}; pool {trials['pool']}",
                   flush=True)
-        if results['cpu']['win'] >= args.promote and level < 4:
+        if results and results['cpu']['win'] >= args.promote and level < 4:
             level += 1
             print(f'promoted to level {level}', flush=True)
         with open(state_path, 'w') as f:
             json.dump(dict(level=level, history=history), f, indent=1)
-        if args.stop_win and args.vs and all(results[f'vs{j}']['win'] >= args.stop_win
+        if results and args.stop_win and args.vs and all(results[f'vs{j}']['win'] >= args.stop_win
                                              for j in range(len(args.vs))):
             print(f'beats every --vs opponent {args.stop_win:.0%} of the time: stopping', flush=True)
             break
