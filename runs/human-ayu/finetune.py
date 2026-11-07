@@ -232,9 +232,10 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     cpu_idx = list(np.flatnonzero(cpu_envs))
     for focus in args.cpu_focus:  # these CPU matches with one character
         name, share = focus.rsplit(':', 1)
-        for _ in range(int(round(np.sum(cpu_envs) * float(share)))):
-            if cpu_idx:
-                chars[cpu_idx.pop()] = (args.char, name)
+        k = min(len(cpu_idx), int(round(np.sum(cpu_envs) * float(share))))
+        for _ in range(k):
+            chars[cpu_idx.pop()] = (args.char, name)
+        print(f'--cpu-focus: {k} of the {int(np.sum(cpu_envs))} CPU matches with {name}', flush=True)
     opponents = list(opponents) + [o for o, _ in vs]
     # The combo master has a reaction time of its own.
     opponent_delay = np.where(assignment == red, min(args.combo_delay, args.delay), args.delay)
