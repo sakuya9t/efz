@@ -392,6 +392,29 @@ minute (17.9 with 0.05; people's Ayu 21.5 against Kano) and is hit in the air 2.
 it learnt the opponent's anti-air, away from people's habit. Its input rates stay a
 person's (1.79 presses a second, 45% of them while it can't move: buffered cancels).
 
+**Built-in combos** (the user's idea, after Hisoutensoku's scripted AIs; `combo_support.py`).
+Practice among matches (`finetune.py --practice`, from the agent's own first hits) didn't
+help: at the match's reward scale nothing changed, at ten times it lost matches. Routes
+did: once the agent sees its hit (14 steps late: "strong but fair", the user's choice),
+people's library combos with the move that hit and its own play are tried on copies and
+the best is played (`FairAssist`). `finetune.py --assist` trains with it, the routes' steps
+left out of the policy's loss (`AssistMask`), so its critic learns what a hit is worth.
+Against `agent-league3` (same settings, 90.7M; 63 matches against the CPU, 64 against each
+exploiter):
+
+| Agent | Level-4 CPU | Mizuka 2 / 3 | Kano 2 / 3 | Combos against the CPU | IC |
+|---|---|---|---|---|---|
+| `agent-league3`, no routes | 0% / 62% / 95% | 84% / 78% | 61% / 12% | 859 / 1,707 / 4,241 | 0.8% |
+| the same, routes at play time | 0% / 81% / 100% | 92% / 69% | 59% / 22% | 1,070 / 2,352 / 4,610 | 18% |
+| `agent-league3-assist`, trained with them | 0% / 90% / 100% | 67% / 83% | 75% / 31% | 1,078 / 2,534 / 4,534 | 25% |
+| people (against people) | | | | 970 / 2,357 / 7,421 | 16.5% |
+
+Fair routes make its combos people's (the 90th percentile and IC as theirs; the most,
+people's 3-bar cyan combos, not yet), and the middle tier of the level-4 CPU 81-90%
+(62%). Training with them adds a little against the CPU and Kano, less against Mizuka 2;
+`agent-league4-kl02` (no routes, the weaker pull) is better against the exploiters than
+either, so the next league has both.
+
 Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
 clones were stopped (the system ran short of memory) and are next.
 
