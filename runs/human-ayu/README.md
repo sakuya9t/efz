@@ -415,6 +415,33 @@ people's 3-bar cyan combos, not yet), and the middle tier of the level-4 CPU 81-
 `agent-league4-kl02` (no routes, the weaker pull) is better against the exploiters than
 either, so the next league has both.
 
+**Round 5.** Round-4 exploiters against `agent-league4-kl02` (Kano's beat it after 3M
+steps, Mizuka's after 12.2M) joined the league; `agent-league5` continued `kl02` with the
+routes trained in (`--assist`) against all eight, to 131.0M. On 64 matches each (63
+against the CPU), `<run>/compare/{<run>,assisted,value}-*.json`:
+
+| Agent | Level-4 CPU | Mizuka 1 / 2 / 3 / 4 | Kano 1 / 2 / 3 / 4 | Combos (CPU), IC |
+|---|---|---|---|---|
+| `kl02`, its own combos | 0% / 81% / 100% | 91% / 88% / 95% / 38% | 83% / 83% / 41% / 36% | 915, 0% |
+| `kl02`, routes at play time | 0% / 76% / 100% | 95% / 84% / 86% / 25% | 69% / 92% / 28% / 36% | 1,084, 17% |
+| `kl02`, routes chosen by value | 0% / 81% / 95% | 94% / 75% / 92% / 30% | 72% / 88% / 30% / 30% | 1,006, 12% |
+| `agent-league5`, its own combos | 0% / 57% / 95% | 84% / 52% / 58% / 33% | 14% / 41% / 2% / 0% | 688, 1% |
+| `agent-league5`, routes (as trained) | 0% / 90% / 100% | 94% / 80% / 80% / 38% | 59% / 70% / 19% / 28% | 1,114, 23% |
+
+Routes no longer help. `kl02` had learnt combos of its own that are worth as much a
+minute: a route deals more per combo (1,084 to 915) but takes longer, so it lands fewer
+(9.5 a minute against Kano 1, from 11.8), and the damage a minute is the same or less.
+Over the eight exploiters it wins 69% on its own, 64% with routes. Choosing the route by
+its worth to the agent (`--assist-score value`: the damage plus the critic's value of the
+game the route left, discounted by its length; `redteam.Planner(score='value')`) instead
+of its damage changes a different choice in more than half the plans but not the result.
+Trained with routes, `agent-league5` lost its own combos (the routes' steps are out of
+the policy's loss) and is no better with them than `kl02` without; it jumps 17-18 times
+a minute against Kano (`kl02` 11-13), the old hole. What improved is its guard against
+Mizuka 4 (damage taken 10.4k a minute, `kl02` 14.8k). `finetune.py --vs-assist` plays an
+agent trained with routes as an exploiter's opponent with them
+(`combo_support.FairAssistOpponent`).
+
 Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
 clones were stopped (the system ran short of memory) and are next.
 

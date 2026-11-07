@@ -29,7 +29,9 @@ another run), which play --vs-share of the matches against agents (1: only they)
 at ('setup': objects put out in free time, Mizuka's and Misuzu's traps; 'charge': Kano's
 charge moves in free time): an exploiter with a style, trained against a frozen agent
 (--vs) and kept close to its people's clone. --stop-win ends it once it beats every --vs
-opponent that often.
+opponent that often. --vs-assist plays the --vs opponents with built-in combos
+(combo_support.FairAssistOpponent), in training and evaluations: an agent trained with
+--assist, met as it plays.
 
     python runs/human-ayu/finetune.py --char kano --start runs/human-ayu/kano/bc-d14.zip \\
         --prior runs/human-ayu/kano/bc-d14.zip --delay 14 --out runs/human-ayu/kano/exploiter \\
@@ -114,6 +116,13 @@ def parse():
                                     "sees its hit, routes from this library (combo_library.py's) and "
                                     "its own play are tried on copies and the best played; those "
                                     "steps are kept out of the policy's loss")
+    p.add_argument('--assist-score', default='damage', choices=('damage', 'value'),
+                   help="--assist's and --vs-assist's choice of route: the most damaging, or the "
+                        "most worth to the player (damage plus its critic's value of the game it "
+                        "left: redteam.Planner)")
+    p.add_argument('--vs-assist', help="the --vs opponents play with built-in combos, routes from "
+                                       "this library (combo_support.FairAssistOpponent): agents "
+                                       "trained with --assist, met as they play")
     p.add_argument('--practice-scale', type=float, default=1.0,
                    help="practice's reward per HP dealt, as a multiple of the match's (1/9999): "
                         "combo.py's is about 10")
@@ -205,7 +214,8 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
             o.attach(env)
     if args.assist:
         import combo_support
-        env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'])
+        env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'],
+                                        ASSIST.get('value'))
     if args.focus:
         import focus
         env = focus.Focus(env, args.focus, args.focus_coef, args.char)
@@ -271,7 +281,11 @@ def evaluate(args, model_path, level):
         out['old'] = ev.play(a, me, ev.Agent(args.old), args.eval)
     for j, (path, char) in enumerate(args.vs):
         a.chars = (args.char, char)
-        out[f'vs{j}'] = ev.play(a, me, ev.Agent(path), args.eval)
+        them = ev.Agent(path)
+        if args.vs_assist:  # as it plays: with its built-in combos
+            import combo_support
+            them = combo_support.FairComboAgent(them, VS_ASSIST[j])
+        out[f'vs{j}'] = ev.play(a, me, them, args.eval)
     if args.combo:
         a.chars = (args.char, args.char)
         red = RED['agent'] if RED else ev.Agent(args.combo)
@@ -289,6 +303,7 @@ def evaluate(args, model_path, level):
 
 RED = {}  # the lookahead red team: its planner, opponent and agent
 ASSIST = {}  # --assist: its planner, the learner's own play on the copies, counts
+VS_ASSIST = []  # --vs-assist: each --vs opponent's planner
 
 
 def show(results):
@@ -331,7 +346,8 @@ def main():
                        team=[os.path.relpath(t, REPO) for t in args.team],
                        combo=args.combo and os.path.relpath(args.combo, REPO),
                        combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
-                       lookahead=args.lookahead, assist=args.assist,
+                       lookahead=args.lookahead, assist=args.assist, vs_assist=args.vs_assist,
+                       assist_score=args.assist_score,
                        practice=args.practice, practice_starts=args.practice_starts,
                        practice_rich=args.practice_rich, practice_pool=args.practice_pool,
                        practice_limit=args.practice_limit, practice_scale=args.practice_scale,
@@ -352,12 +368,23 @@ def main():
     elif master is not None:
         team.append(frozen(master))
     opponents = lambda snapshot: [o for o in (snapshot, clone, old) if o is not None] + team
-    vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
+    if args.vs_assist:
+        import combo_support
+        import macros
+        import redteam
+        library = macros.load_library(args.vs_assist, 300)
+        vs = []
+        for p, c in args.vs:
+            m = PPO.load(p, device='cpu')
+            VS_ASSIST.append(redteam.Planner(args.data, library, m, score=args.assist_score))
+            vs.append((combo_support.FairAssistOpponent(VS_ASSIST[-1], m), c))
+    else:
+        vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
     if args.assist:
         import macros
         import redteam
         ASSIST['planner'] = redteam.Planner(args.data, macros.load_library(args.assist, 300),
-                                            PPO.load(start, device='cpu'))
+                                            PPO.load(start, device='cpu'), score=args.assist_score)
         ASSIST['policy'] = None  # (set to each chunk's learner before its environment)
     pool = None
     if args.practice:
@@ -387,6 +414,9 @@ def main():
         wins = [last.get(f'vs{j}', {}).get('win') for j in range(len(vs))]
         if args.assist:
             ASSIST['policy'] = frozen(model)
+            if args.assist_score == 'value':
+                import redteam
+                ASSIST['value'] = redteam.critic(model)
         env = make_env(args, opponents(frozen(model)), vs, len(history) + 1, level, wins, pool)
         model.set_env(env)
         if pool is not None and pool.growing and len(pool.starts) < 48:
@@ -408,6 +438,9 @@ def main():
         if args.assist:  # the chunk's built-in combos: plans made, steps they played
             assist = dict(env.assist.take_plans() if hasattr(env, 'assist') else {},
                           assisted=round(ASSIST.pop('assisted', 0) / max(1, ASSIST.pop('steps', 1)), 4))
+        vs_plans = None
+        if args.vs_assist:  # the --vs opponents' built-in combos in the chunk's matches
+            vs_plans = [o.assist.take_plans() for o, _ in vs]
         trials = None
         if pool is not None:  # the practice of the chunk, and the pool it drew from
             trials = dict(env.take_trials(), pool=len(pool.starts), kinds=pool.kinds())
@@ -415,7 +448,7 @@ def main():
                             prior_kl=model.policy.prior_kl,
                             ep_return=float(np.mean(returns)) if returns else None,
                             focus_per_min=focus_rate, practice=trials, assist=assist,
-                            eval=results))
+                            vs_assist=vs_plans, eval=results))
         print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s, L{level}, '
               f'KL {model.policy.prior_kl:.3f}'
               + (f', {args.focus} {focus_rate:.2f}/min' if focus else '') + '] '
@@ -424,6 +457,10 @@ def main():
             print(f"  assist: {assist['plans']} plans, a route in {assist['route']:.0%}, best "
                   f"{assist['best']} (own play {assist['own']}); {assist['assisted']:.1%} of steps",
                   flush=True)
+        for j, v in enumerate(vs_plans or []):
+            if v.get('plans'):
+                print(f"  vs{j} assist: {v['plans']} plans, a route in {v['route']:.0%}, best "
+                      f"{v['best']} (own play {v['own']})", flush=True)
         if trials and trials.get('trials'):
             print(f"  practice: {trials['trials']} trials, combo {trials['damage']}/"
                   f"{trials['damage_p90']}/{trials['damage_max']}, {trials['hits']} hits, IC "

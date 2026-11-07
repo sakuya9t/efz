@@ -501,6 +501,9 @@ def main():
                                           "from this library (combo_library.py's)")
     p.add_argument('--p1-assist', help="combo_support.FairComboAgent: the same once P1 sees its "
                                        "hit (strong but fair), from this library")
+    p.add_argument('--assist-score', default='damage', choices=('damage', 'value'),
+                   help="--p1-assist's choice: the most damaging option, or the most worth to "
+                        "P1 (damage plus its critic's value of the game it left: redteam.Planner)")
     args = p.parse_args()
     p1 = make_agent(args.p1, args.deterministic)
     if sum(bool(x) for x in (args.p1_combo, args.p1_lookahead, args.p1_assist)) > 1:
@@ -510,7 +513,8 @@ def main():
         if args.p1_assist:
             import macros
             import redteam
-            planner = redteam.Planner(args.data, macros.load_library(args.p1_assist, 300), p1.model)
+            planner = redteam.Planner(args.data, macros.load_library(args.p1_assist, 300), p1.model,
+                                      score=args.assist_score)
             p1 = combo_support.FairComboAgent(p1, planner)
         if args.p1_lookahead:
             p1 = combo_support.lookahead(args.data, args.p1, args.p1_lookahead)
@@ -528,6 +532,10 @@ def main():
         if r['by_tier']:
             print('  by tier:', ', '.join(f"{t} {v['win']:.0%} of {v['matches']}"
                                           for t, v in r['by_tier'].items()), flush=True)
+    if args.p1_assist:  # its plans: how many, the share a route won, the damage options made
+        out['assist'] = dict(p1.assist.take_plans(), score=args.assist_score,
+                             changed=planner.changed)
+        print('assist', json.dumps(out['assist']), flush=True)
     if args.json:
         with open(args.json, 'w') as f:
             json.dump(out, f, indent=1)

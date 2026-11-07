@@ -18,6 +18,12 @@ which a big combo is likely).
 
 Both keep `plans`: per plan, the potential, what its own play made, and whether a
 library combo was chosen.
+
+score='value' (combo_support's built-in combos: Planner(..., score='value')) chooses by
+what an option is worth to the player rather than its damage: the damage (the match's
+reward, per full bar) plus its critic's value of the game the option left, discounted by
+the steps it took (gamma, PPO's). A route that deals a little more but takes long, spends
+the gauge or leaves the opponent free is then not chosen over the player's own play.
 """
 
 import os
@@ -35,13 +41,36 @@ from efz_env.history import FEATURES, InputHistory
 
 TABLE = ActionTable()
 COMBO_HITS, ACTION = 30, 18
+REWARD_PER_HP = 1 / 9999  # the match's reward (efz_env's): damage per full bar
+
+
+def critic(model):
+    """views (batch) -> `model`'s value of them: a copy of its critic as it is now."""
+    import torch
+    source = model.policy
+    policy = type(source)(**source._get_constructor_parameters()).to(source.device)
+    policy.load_state_dict(source.state_dict())
+    policy.set_training_mode(False)
+    width = policy.observation_space.shape[0]
+
+    def value(obs):
+        with torch.no_grad():
+            t = torch.as_tensor(np.asarray(obs, np.float32)[:, :width], device=policy.device)
+            return policy.predict_values(t).cpu().numpy().ravel()
+    return value
 
 
 class Planner:
     """Tries a hit's options on copies of the game and says which made the most."""
 
-    def __init__(self, data_dir, library, model, per_start=12, limit=900, history=16):
+    def __init__(self, data_dir, library, model, per_start=12, limit=900, history=16,
+                 score='damage', gamma=0.999):
+        if score not in ('damage', 'value'):
+            raise ValueError("score: 'damage' or 'value'")
         self.library, self.per_start, self.limit = library, per_start, limit
+        self.score, self.gamma = score, gamma
+        self.value = critic(model) if score == 'value' else None
+        self.changed = 0  # plans whose value choice differs from the most damaging
         self.by_starter = {}
         for m in library:
             self.by_starter.setdefault(m['starter'], []).append(m)
@@ -52,16 +81,18 @@ class Planner:
         self.width = model.observation_space.shape[0]
         self.H = history
 
-    def plan(self, state, side, starter, hist, prev, offset=0, seen=None, policy=None):
+    def plan(self, state, side, starter, hist, prev, offset=0, seen=None, policy=None,
+             value=None):
         """state: the game at the first hit (or `offset` steps after it); side: the
         attacker's; hist (H, 6), prev: its input history then. offset: the library combos
         are played from that step of theirs (combo_support's fair assist plans when the
         player sees its hit, `delay` steps after it). seen: the player's views up to now,
         newest first ((delay + 1, dim): efz_env.history.Delay's buffer), for its own play
         to see the copies as late as it sees the game; policy: its own play's (obs batch
-        -> actions), default the planner's model. Returns (actions of the chosen library
-        combo from offset, or None for its own play; the most an option made; what its
-        own play made)."""
+        -> actions), default the planner's model; value: its critic's (score='value': obs
+        batch -> values), default the planner's model's. Returns (actions of the chosen
+        library combo from offset, or None for its own play; the most an option made;
+        what its own play made)."""
         cands = [m['actions'][offset:] for m in self.by_starter.get(starter, [])
                  if len(m['actions']) > offset][:self.per_start]
         n = len(cands) + 1  # the last: its own play
@@ -79,6 +110,15 @@ class Planner:
         done = np.zeros(n, bool)
         longest = min(self.limit, max([len(m) for m in cands] + [0]) + 60)
         longest = max(longest, 240)  # its own play's combo, at least this long
+        track = self.score == 'value'
+        if track:  # every option's views (as late as the player sees) and inputs
+            views = np.repeat((delayed if delayed is not None else
+                               sim.obs[n - 1, side][None]).astype(np.float32)[None], n, 0)
+            hists = InputHistory((n,), self.H)
+            hists.buf[:] = hist
+            hists.prev[:] = prev
+            ends = np.zeros((n, self.width), np.float32)
+            steps = np.zeros(n)
         for t in range(longest):
             for j, m in enumerate(cands):
                 controls[j, side] = TABLE.table[m[t]] if t < len(m) else 0
@@ -97,14 +137,29 @@ class Planner:
             controls[:n, 1 - side] = BACK
             obs, _, term, trunc, info = sim.step(controls)
             own_hist.push(info['input'][n - 1:n, side])
+            if track:
+                views[:, 1:] = views[:, :-1]
+                views[:, 0] = obs[:n, side]
+                hists.push(info['input'][:n, side])
+                feats = hists.features()
             for j in np.flatnonzero(~done):
                 dealt[j] = max(dealt[j], hp0[j] - float(info['hp'][j, 1 - side]))
                 if round(float(obs[j, side, COMBO_HITS]) * 30) == 0 or term[j] or trunc[j]:
                     done[j] = True
+                if track and (done[j] or t == longest - 1):
+                    ends[j] = np.concatenate([views[j, -1], feats[j]])[:self.width]
+                    steps[j] = t + 1
             if done.all():
                 break
-        best = int(np.argmax(dealt))
-        chosen = cands[best] if best < len(cands) and dealt[best] > dealt[-1] else None
+        if track:  # (an option still going at the last step is valued there)
+            worth = (dealt * REWARD_PER_HP +
+                     self.gamma ** steps * (value or self.value)(ends))
+        else:
+            worth = dealt
+        best = int(np.argmax(worth))
+        chosen = cands[best] if best < len(cands) and worth[best] > worth[-1] else None
+        if track and best != int(np.argmax(dealt)):
+            self.changed += 1
         return chosen, float(dealt.max()), float(dealt[-1])
 
 

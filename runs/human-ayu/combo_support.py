@@ -23,7 +23,8 @@ it is then, people's library combos with the move that hit are tried from their 
 copies as late as it sees the game; the most damaging is played until it ends or drops.
 FairComboAgent plays an Agent so (evaluate.py --p1-assist), ComboAssist the learner of
 finetune.py --assist, marking the steps a route played (infos[i]['assisted']) for the
-policy's loss to leave out.
+policy's loss to leave out, FairAssistOpponent a frozen agent as an exploiter's opponent
+(finetune.py --vs-assist: an agent trained so is met as it plays).
 """
 
 import os
@@ -103,15 +104,17 @@ class FairAssist:
             self.playing.pop(i, None)
             self.prev_seen.pop(i, None)
 
-    def update(self, i, seen_view, now_view, save, seen, hist, prev, side, policy):
+    def update(self, i, seen_view, now_view, save, seen, hist, prev, side, policy, value=None):
         """Before environment i's next decision: plans if the player now sees its hit and
-        the combo goes on. seen_view: what it sees; now_view: the game as it is."""
+        the combo goes on. seen_view: what it sees; now_view: the game as it is; policy,
+        value: its own play's and its critic's (the planner's score='value')."""
         hits = _hits(seen_view)
         if (hits > 0 and self.prev_seen.get(i, 0) == 0 and _hits(now_view) > 0
                 and self.playing.get(i) is None):
             starter = int(round(float(seen_view[ACTION])))  # the move that hit
             chosen, best, own = self.planner.plan(save(), side, starter, hist, prev,
-                                                  offset=self.delay, seen=seen, policy=policy)
+                                                  offset=self.delay, seen=seen, policy=policy,
+                                                  value=value)
             self.plans.append((best, own, chosen is not None))
             self.playing[i] = [chosen, 0] if chosen is not None else None
         self.prev_seen[i] = hits
@@ -146,6 +149,10 @@ class FairComboAgent:
         from efz_env import ActionTable
         self.agent = agent
         self.assist = FairAssist(planner, agent.delay)
+        self.value = None
+        if getattr(planner, 'score', 'damage') == 'value':  # the agent's critic, not the planner's
+            import redteam
+            self.value = redteam.critic(agent.model)
         self.frame_skip, self.history = 1, agent.history
         self.table = ActionTable()
         self.env, self.side = None, 0
@@ -179,7 +186,8 @@ class FairComboAgent:
         for i in range(len(obs)):
             self.assist.update(i, seen[i, self.agent.delay], obs[i],
                                lambda i=i: self.env.save_state(i), seen[i].copy(),
-                               hist.buf[i].copy(), int(hist.prev[i]), self.side, self.policy)
+                               hist.buf[i].copy(), int(hist.prev[i]), self.side, self.policy,
+                               self.value)
             a = self.assist.action(i, _hits(obs[i]))
             if a is not None:
                 out[i] = self.table.table[a]
@@ -189,13 +197,54 @@ class FairComboAgent:
         self.agent.observe(controls)
 
 
+class FairAssistOpponent:
+    """EfzSB3VecEnv's opponent (player 2, seeing the game `delay` steps late) with
+    FairAssist: an agent trained with finetune.py --assist, played as it was trained, by
+    an exploiter's training (finetune.py --vs-assist). attach(venv) first."""
+    takes_index = True
+
+    def __init__(self, planner, model):
+        from efz_env.sb3 import frozen
+        self.inner = frozen(model)
+        self.planner = planner
+        self.venv = self.assist = None
+
+    @property
+    def plans(self):
+        return self.assist.plans if self.assist is not None else []
+
+    def attach(self, venv):
+        if venv.delay is None or venv.opponent_delay is not None and (
+                venv.opponent_delay != venv.delay.steps).any():
+            raise ValueError('FairAssistOpponent: player 2 sees the game delay steps late')
+        self.venv = venv
+        self.assist = FairAssist(self.planner, venv.delay.steps)
+
+    def __call__(self, obs, idx):
+        actions = np.asarray(self.inner(obs)).copy()
+        v, d = self.venv, self.assist.delay
+        for k, i in enumerate(idx):
+            i = int(i)
+            if v._length[i] == 0:  # a new match
+                self.assist.clear(i)
+            seen, now = v.delay.buf[i, 1], v.env.obs[i, 1]
+            self.assist.update(i, seen[d], now, lambda i=i: v.env.save_state(i), seen.copy(),
+                               v.history.buf[i, 1].copy(), int(v.history.prev[i, 1]), 1,
+                               self.inner)
+            a = self.assist.action(i, _hits(now))
+            if a is not None:
+                actions[k] = a
+        return actions
+
+
 class ComboAssist(VecEnv):
     """finetune.py's learner (player 1 of an EfzSB3VecEnv) with FairAssist, as a VecEnv:
     the steps a route plays carry infos[i]['assisted']. policy: its own play on the
-    copies (frozen(model), this chunk's)."""
+    copies (frozen(model), this chunk's); value: its critic's (redteam.critic(model), for
+    the planner's score='value')."""
 
-    def __init__(self, venv, planner, policy):
-        self.venv, self.policy = venv, policy
+    def __init__(self, venv, planner, policy, value=None):
+        self.venv, self.policy, self.value = venv, policy, value
         self.delay = venv.delay.steps
         self.assist = FairAssist(planner, self.delay)
         self.assisted = np.zeros(venv.num_envs, bool)
@@ -229,7 +278,8 @@ class ComboAssist(VecEnv):
                 continue
             self.assist.update(i, seen[i, self.delay], now[i],
                                lambda i=i: self.venv.env.save_state(i), seen[i].copy(),
-                               hist.buf[i, 0].copy(), int(hist.prev[i, 0]), 0, self.policy)
+                               hist.buf[i, 0].copy(), int(hist.prev[i, 0]), 0, self.policy,
+                               self.value)
         return obs, rewards, dones, infos
 
     def close(self):
