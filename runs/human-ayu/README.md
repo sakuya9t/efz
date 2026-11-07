@@ -273,6 +273,33 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   a diagnostic, not a target: a rise in it is to be checked against the agent's throws
   before it is believed.
 
+  *Short of winning* (7 November; the user's measure). Nothing has beaten her yet, so
+  `evaluate.py` also gives the share of the opponent's HP taken a round
+  (`opp_hp_taken`, its best round, rounds won: overall, by tier and by opponent), and
+  the agent's reversals (`reversals_per_min`: any invincible move of its, from
+  framedata.json; `reversal_hit`, `reversal_counter`: of them, the share that hit, and
+  that hit her in a move of her own). Without throws the way to beat her (the user's)
+  is big combos and invincible moves put out as she acts, overriding her slow, long
+  moves and starting a combo. Her attacks start in 4-16 steps (her supers 51 and 59),
+  so with the 14-step reaction an invincible move beats them only as a prediction, as a
+  player learns the CPU's habits; Ayu's quickest (0xf0, 0xfb) start in 2. Against
+  level-4 Kanna, 64 matches each (`eval/kanna/`):
+
+  | Agent | Her HP taken a round | Rounds won a match | Dealt / taken a minute | Reversals a minute (hit, counter-hit) | Throws a minute |
+  |---|---|---|---|---|---|
+  | the clone, `bc-d14` | 8.4% | 0 | 1.6k / 19.0k | 0.8 (57%, 24%) | 0.12 |
+  | `agent` | 17.9% | 0 | 2.8k / 17.0k | 2.3 (42%, 40%) | 0.03 |
+  | `agent-league` | 22.0% | 0 | 3.2k / 16.1k | 2.2 (36%, 32%) | 0.04 |
+  | `agent-league2-kl` | 29.8% | 0 | 3.9k / 14.8k | 3.2 (34%, 31%) | 0.01 |
+  | `agent-league3` | 34.3% | 0.02 | 4.1k / 13.4k | 3.0 (38%, 36%) | 0.02 |
+  | `agent-league4-kl02` | 36.7% | 0.02 | 4.3k / 13.3k | 3.9 (35%, 31%) | 0.04 |
+  | `agent-league5-base`, 127.0M | 39.3% | 0.02 | 4.5k / 12.9k | 3.9 (43%, 41%) | 0.02 |
+  | `agent-league5-base`, 131.0M | 40.9% | 0.06 | 5.1k / 13.1k | 4.0 (36%, 32%) | 0.01 |
+
+  Each league took more of her, without throwing: rounds now fall to it now and then.
+  It meets her in one CPU match in 23; `finetune.py --cpu-focus kanna:0.25` gives her a
+  quarter of them.
+
 ## Other characters: clones, exploiters, a league
 
 From 5 November the scripts take any character: `dataset.py --char`, `bc.py --char`,

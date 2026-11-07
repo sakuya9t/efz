@@ -89,6 +89,15 @@ MOVES = {
 RC_WINDOW = 90      # steps after the opponent's RG in which its counterattack is looked for
 PUNISH_WINDOW = 40  # steps after one's own RG in which a move of one's own is looked for
 HIT_WINDOW = 40     # steps after a move starts in which it can hit
+MAX_HP = 9999       # every character's, at each round's start
+
+
+def invincible_moves(char):
+    """A character's invincible moves (tactics.frame_data: framedata.json); none unknown."""
+    try:
+        return tactics.frame_data().get(tactics.names().index(char), (set(), []))[0]
+    except ValueError:
+        return set()
 
 def _prev(x, fill):
     return np.concatenate([[fill], x[:-1]])
@@ -113,6 +122,11 @@ class Events:
         of those, the share that hit;
     guess_<move>_counter: of the times it did the move (623A, 623B), the share that hit
         the opponent in a move of its own (the counter hit a right guess gets);
+    reversals_per_min: its invincible moves (any: framedata.py's, invulnerable in their
+        first frames) started; reversal_hit, reversal_counter: the share that hit, and that
+        hit the opponent in a move of its own, overriding it (how level-4 Kanna is beaten
+        without throws, the user's: her moves are slow and long, so an invincible move
+        put out when she acts, a prediction, wins and starts a combo);
     combos (one's own, from the combo counter): per minute, their hits and damage on
         average (in HP, 9999 a bar), at the 90th percentile and the most, the share of 3
         hits or more, the damage a minute;
@@ -153,7 +167,9 @@ class Events:
                 'presses_all', 'presses_busy', 'turns_all', 'turns_busy']
         for g in self.moves['guess']:
             keys += [f'guess_{g}', f'guess_{g}_counter']
+        keys += ['reversals', 'reversal_hit', 'reversal_counter']
         self.n = dict.fromkeys(keys, 0)
+        self.invincible = invincible_moves(char)
         self.n['presses'] = np.zeros(4)
         self.n['combo_list'] = []  # each combo's (hits, damage, resource group)
         self.n['proration_left'] = []  # at the end of each of 3 hits or more
@@ -295,6 +311,15 @@ class Events:
                 hits = np.flatnonzero(ohit[t:min(T, t + HIT_WINDOW)])
                 if len(hits) and oown[max(0, t + hits[0] - 1)]:
                     n[f'guess_{g}_counter'] += 1
+        # Reversals: any invincible move, and whether it hit, overriding a move of theirs.
+        if self.invincible:
+            for t in np.flatnonzero(enter & np.isin(a, list(self.invincible))):
+                n['reversals'] += 1
+                hits = np.flatnonzero(ohit[t:min(T, t + HIT_WINDOW)])
+                if len(hits):
+                    n['reversal_hit'] += 1
+                    if oown[max(0, t + hits[0] - 1)]:
+                        n['reversal_counter'] += 1
 
     def merge(self, other):
         for k, v in other.n.items():
@@ -327,6 +352,9 @@ class Events:
         for g in self.moves['guess']:
             out[f'guess_{g}_per_min'] = round(n[f'guess_{g}'] * per_min, 2)
             out[f'guess_{g}_counter'] = share(n[f'guess_{g}_counter'], n[f'guess_{g}'])
+        out['reversals_per_min'] = round(n['reversals'] * per_min, 2)
+        out['reversal_hit'] = share(n['reversal_hit'], n['reversals'])
+        out['reversal_counter'] = share(n['reversal_counter'], n['reversals'])
         c = n['combos']
         out['combos_per_min'] = round(c * per_min, 2)
         out['combo_hits'] = round(n['combo_hits'] / c, 2) if c else None
@@ -395,6 +423,11 @@ def play(args, p1, p2, matches, level=4, seed=7):
     seen = [[[] for _ in range(matches)] for _ in range(2)]  # per side: (cols, input)
     step = 0
     chars_played = np.zeros((matches, 2), int)
+    # P2's HP each round: the share P1 took (per round, 9999 a bar) and P1's rounds won.
+    cur_round = np.zeros(matches, int)
+    last_hp = np.full(matches, MAX_HP)
+    taken = [[] for _ in range(matches)]
+    rounds_won = np.zeros(matches, int)
     while not done.all():
         controls = np.zeros((matches, 2), np.uint8)
         for side, a in enumerate(agents):
@@ -408,11 +441,19 @@ def play(args, p1, p2, matches, level=4, seed=7):
         for s in range(2):
             for i in np.flatnonzero(live):
                 seen[s][i].append((view[i, s], info['input'][i, s]))
+        for i in np.flatnonzero(live):  # a new round: HP back to full on the same step
+            r = int(info['round'][i])
+            if cur_round[i] and r != cur_round[i]:
+                taken[i].append((MAX_HP - last_hp[i]) / MAX_HP)
+            cur_round[i] = r
+            last_hp[i] = int(info['hp'][i, 1])
         ended = (term | trunc) & live
         for i in np.flatnonzero(ended):
             w = int(info['winner'][i])
             result[i] = 1 if w == 0 else -1 if w == 1 else 0
             chars_played[i] = info['chars'][i]
+            taken[i].append((MAX_HP - last_hp[i]) / MAX_HP)
+            rounds_won[i] = int(info['rounds_won'][i, 0])
         done |= term | trunc
     env.close()
     events = []
@@ -421,11 +462,13 @@ def play(args, p1, p2, matches, level=4, seed=7):
         for match in seen[s]:
             e.add_match(np.array([c for c, _ in match]), np.array([u for _, u in match]))
         events.append(e)
+    hp = HpTaken(taken, rounds_won)
     return dict(win=float((result == 1).mean()), loss=float((result == -1).mean()),
-                cut=float((result == 0).mean()), matches=matches,
+                cut=float((result == 0).mean()), matches=matches, **hp.of(slice(None)),
                 sides=[e.report() for e in events],
-                by_tier=_by_tier(result, chars_played) if p2 == 'cpu' and level == 4 else {},
-                by_opponent=_by_opponent(result, chars_played))
+                by_tier=_by_tier(result, chars_played, hp) if p2 == 'cpu' and level == 4 else {},
+                by_opponent=_by_opponent(result, chars_played),
+                hp_by_opponent=_hp_by_opponent(chars_played, hp))
 
 
 # The level-4 CPU by how hard it is to beat (the user's): Kanna the hardest, then Ayu
@@ -448,7 +491,24 @@ def tier_opponents(n, seed=7):
             else rest[rng.integers(len(rest))] for i in range(n)]
 
 
-def _by_tier(result, chars):
+class HpTaken:
+    """Per match, the share of P2's HP P1 took in each round, and P1's rounds won: a
+    measure short of winning (level-4 Kanna is never beaten: the user's)."""
+
+    def __init__(self, taken, rounds_won):
+        self.taken, self.rounds_won = taken, np.asarray(rounds_won)
+
+    def of(self, which):
+        idx = np.arange(len(self.taken))[which]
+        rounds = [x for i in idx for x in self.taken[i]]
+        if not len(idx):
+            return {}
+        return dict(opp_hp_taken=round(float(np.mean(rounds)), 3) if rounds else None,
+                    opp_hp_taken_best=round(float(np.max(rounds)), 3) if rounds else None,
+                    rounds_won=round(float(self.rounds_won[idx].mean()), 3))
+
+
+def _by_tier(result, chars, hp=None):
     from efz_env.vec import character_names
     names = character_names()
     tiers = np.array([TIERS.get(names[c], 'rest') for c in chars[:, 1]])
@@ -458,8 +518,15 @@ def _by_tier(result, chars):
         if len(r):
             out[t] = dict(matches=len(r), win=round(float((r == 1).mean()), 3),
                           loss=round(float((r == -1).mean()), 3),
-                          cut=round(float((r == 0).mean()), 3))
+                          cut=round(float((r == 0).mean()), 3),
+                          **(hp.of(tiers == t) if hp is not None else {}))
     return out
+
+
+def _hp_by_opponent(chars, hp):
+    from efz_env.vec import character_names
+    names = character_names()
+    return {names[c]: hp.of(chars[:, 1] == c) for c in np.unique(chars[:, 1])}
 
 
 def _by_opponent(result, chars):
@@ -527,10 +594,12 @@ def main():
         r = play(args, p1, p2, args.matches, level)
         key = f'cpu{level}' if p2 == 'cpu' else 'vs'
         out[key] = r
-        print(key, json.dumps({k: v for k, v in r.items() if k not in ('by_opponent', 'sides')}),
+        print(key, json.dumps({k: v for k, v in r.items()
+                               if k not in ('by_opponent', 'hp_by_opponent', 'sides', 'by_tier')}),
               flush=True)
         if r['by_tier']:
-            print('  by tier:', ', '.join(f"{t} {v['win']:.0%} of {v['matches']}"
+            print('  by tier:', ', '.join(f"{t} {v['win']:.0%} of {v['matches']} (HP taken a round "
+                                          f"{v['opp_hp_taken']:.0%}, rounds {v['rounds_won']:.2f})"
                                           for t, v in r['by_tier'].items()), flush=True)
     if args.p1_assist:  # its plans: how many, the share a route won, the damage options made
         out['assist'] = dict(p1.assist.take_plans(), score=args.assist_score,

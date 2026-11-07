@@ -29,7 +29,10 @@ another run), which play --vs-share of the matches against agents (1: only they)
 at ('setup': objects put out in free time, Mizuka's and Misuzu's traps; 'charge': Kano's
 charge moves in free time): an exploiter with a style, trained against a frozen agent
 (--vs) and kept close to its people's clone. --stop-win ends it once it beats every --vs
-opponent that often. --vs-assist plays the --vs opponents with built-in combos
+opponent that often. best.zip is the chunk whose evaluation won most (the mean over the
+--vs opponents and the CPU), to be checked on more matches: a league forgets what it
+stops meeting. --pfsp-window shares the matches by the last few evaluations, not the
+last one alone. --vs-assist plays the --vs opponents with built-in combos
 (combo_support.FairAssistOpponent), in training and evaluations: an agent trained with
 --assist, met as it plays.
 
@@ -79,6 +82,9 @@ def parse():
     p.add_argument('--pfsp', type=float, default=0,
                    help='share out the --vs matches by (1 - the last evaluation\'s win) ** PFSP: '
                         'more against what it loses to (prioritized fictitious self-play; 0: evenly)')
+    p.add_argument('--pfsp-window', type=int, default=1,
+                   help='--pfsp by the average win of the last this many evaluations (a 16-match '
+                        'evaluation swings by about 12%%)')
     p.add_argument('--stop-win', type=float, default=0,
                    help='stop once winning this share against every --vs opponent (0: never)')
     p.add_argument('--start', default=os.path.join(HERE, 'bc.zip'))
@@ -127,6 +133,10 @@ def parse():
                    help="practice's reward per HP dealt, as a multiple of the match's (1/9999): "
                         "combo.py's is about 10")
     p.add_argument('--cpu-share', type=float, default=0.5)
+    p.add_argument('--cpu-focus', nargs='*', default=[], metavar='CHAR:SHARE',
+                   help="of the CPU's matches, SHARE with CHAR (the rest drawn from all 23): "
+                        "kanna:0.25 for more of level-4 Kanna, whom it meets once in 23 "
+                        "otherwise")
     p.add_argument('--history', type=int, default=16)
     p.add_argument('--delay', type=int, default=0,
                    help='steps late every player sees the game (the prior must be trained '
@@ -156,6 +166,24 @@ def ppo_settings(args):
     return dict(learning_rate=args.lr, n_steps=256, batch_size=8192, n_epochs=3,
                 gamma=0.999, gae_lambda=0.98, ent_coef=args.ent_coef, clip_range=0.1,
                 vf_coef=0.5, max_grad_norm=0.5)
+
+
+def recent_wins(history, k, window=1):
+    """The learner's win against each of the k --vs opponents, averaged over the last
+    `window` evaluations that played it (None where none did)."""
+    evals = [h['eval'] for h in history if h.get('eval')]
+    out = []
+    for j in range(k):
+        w = [e[f'vs{j}']['win'] for e in evals if f'vs{j}' in e][-window:]
+        out.append(float(np.mean(w)) if w else None)
+    return out
+
+
+def score(results, k):
+    """An evaluation's worth, for best.zip: the mean win against the --vs opponents and the
+    CPU, each counted once."""
+    wins = [results[f'vs{j}']['win'] for j in range(k)] + [results['cpu']['win']]
+    return float(np.mean(wins))
 
 
 def vs_counts(n, wins, power):
@@ -201,6 +229,12 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
         chars[i] = (args.char, args.char)
     for i in vs_envs:
         chars[i] = (args.char, vs[assignment[i] - len(opponents)][1])
+    cpu_idx = list(np.flatnonzero(cpu_envs))
+    for focus in args.cpu_focus:  # these CPU matches with one character
+        name, share = focus.rsplit(':', 1)
+        for _ in range(int(round(np.sum(cpu_envs) * float(share)))):
+            if cpu_idx:
+                chars[cpu_idx.pop()] = (args.char, name)
     opponents = list(opponents) + [o for o, _ in vs]
     # The combo master has a reaction time of its own.
     opponent_delay = np.where(assignment == red, min(args.combo_delay, args.delay), args.delay)
@@ -318,7 +352,10 @@ def show(results):
                      f"combo avg/p90/max {s.get('combo_damage')}/{s.get('combo_damage_p90')}/"
                      f"{s.get('combo_damage_max')} IC {s.get('combo_ic')}"
                      + (f", taken {r['sides'][1].get('combo_damage_per_min')}/min" if k == 'red' else '')
-                     + (' [' + ', '.join(f"{t} {v['win']:.0%}" for t, v in r['by_tier'].items()) + ']'
+                     + (' [' + ', '.join(f"{t} {v['win']:.0%}" + (
+                         f" (HP {v['opp_hp_taken']:.0%})" if t == 'hardest' and
+                         v.get('opp_hp_taken') is not None else '')
+                         for t, v in r['by_tier'].items()) + ']'
                         if k == 'cpu' and r.get('by_tier') else ''))
     return ' | '.join(parts)
 
@@ -341,6 +378,7 @@ def main():
     with open(os.path.join(args.out, 'config.json'), 'w') as f:
         json.dump(dict(frame_skip=1, history=args.history, delay=args.delay, chars=[args.char, None],
                        vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
+                       pfsp=args.pfsp, pfsp_window=args.pfsp_window, cpu_focus=args.cpu_focus,
                        focus=args.focus, focus_coef=args.focus_coef,
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
                        team=[os.path.relpath(t, REPO) for t in args.team],
@@ -407,11 +445,14 @@ def main():
     if not history:
         before = evaluate(args, start, level)
         print('before:', show(before), flush=True)
-        history.append(dict(steps=0, level=level, eval=before))
+        worth = score(before, len(args.vs)) if args.vs else None
+        if worth is not None:  # the start is the best so far
+            import shutil
+            shutil.copyfile(start, os.path.join(args.out, 'best.zip'))
+        history.append(dict(steps=0, level=level, score=worth, eval=before))
     while model.num_timesteps < args.budget:
         env.close()
-        last = next((h['eval'] for h in reversed(history) if h.get('eval')), {})
-        wins = [last.get(f'vs{j}', {}).get('win') for j in range(len(vs))]
+        wins = recent_wins(history, len(vs), args.pfsp_window)
         if args.assist:
             ASSIST['policy'] = frozen(model)
             if args.assist_score == 'value':
@@ -444,7 +485,16 @@ def main():
         trials = None
         if pool is not None:  # the practice of the chunk, and the pool it drew from
             trials = dict(env.take_trials(), pool=len(pool.starts), kinds=pool.kinds())
+        if results and args.vs:  # the best evaluated so far (best.zip; the 64-match check is after)
+            worth = score(results, len(args.vs))
+            best = max((h.get('score', -1) for h in history), default=-1)
+            if worth > best:
+                model.save(os.path.join(args.out, 'best.zip'))
+                print(f'best so far ({worth:.3f}): best.zip', flush=True)
+        else:
+            worth = None
         history.append(dict(steps=model.num_timesteps, level=level, train_seconds=seconds,
+                            score=worth,
                             prior_kl=model.policy.prior_kl,
                             ep_return=float(np.mean(returns)) if returns else None,
                             focus_per_min=focus_rate, practice=trials, assist=assist,
