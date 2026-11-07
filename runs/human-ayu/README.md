@@ -295,10 +295,40 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   | `agent-league4-kl02` | 36.7% | 0.02 | 4.3k / 13.3k | 3.9 (35%, 31%) | 0.04 |
   | `agent-league5-base`, 127.0M | 39.3% | 0.02 | 4.5k / 12.9k | 3.9 (43%, 41%) | 0.02 |
   | `agent-league5-base`, 131.0M | 40.9% | 0.06 | 5.1k / 13.1k | 4.0 (36%, 32%) | 0.01 |
+  | `agent-league6`, 145.1M (`best.zip`) | **47.5%** | 0.09 | 5.0k / 11.9k | 4.0 (39%, 36%) | 0.03 |
+  | `agent-league6`, 147.1M | 46.8% | 0.03 | 4.8k / 11.7k | 4.5 (34%, 32%) | 0.02 |
 
-  Each league took more of her, without throwing: rounds now fall to it now and then.
-  It meets her in one CPU match in 23; `finetune.py --cpu-focus kanna:0.25` gives her a
-  quarter of them.
+  Each league took more of her, without throwing. It met her in one CPU match in 23;
+  with a quarter of them (`finetune.py --cpu-focus kanna:0.25`, round 6) it took 8
+  points more, won a round in one match in ten, and its last checkpoint won its first
+  match against her (1 of 21 in the tiers evaluation).
+
+  *Where her damage comes from* (7 November; `kanna_study.py`, 64 matches each,
+  `eval/kanna-study/`; her moves by src/efz.h's `CKanna` names). `agent-league6`'s best
+  loses 12.0k HP a minute (127.0M 12.3k, the clone 20.2k):
+  - Her **236C**, an invincible beam (startup 7, reach 468) that costs 500 of her RF
+    gauge, starts 21% of the damage of her combos (2.4k a minute; 127.0M 24%, the clone
+    6%); 87% of them come while the agent is in a move of its own, and 76% hit. It is
+    her answer to a move (a tick's 0.1% chance while the opponent is in one, more after
+    her RG and on her neutral roll), and only while her RF gauge is red or cyan, which
+    the agent sees (`opp_rf_gauge`): 59% of the time. The agent starts twice as many
+    moves then (40.6 a minute against 20.4): its pressure fills her gauge as she guards.
+  - Her jump attacks (j.B, j.C) start 16% and hit 54% and 38% of the time; her 2A
+    (startup 4) 12%.
+  - Its reversals (4.2 a minute) counter-hit her 33% of the time: 52% against her
+    236A/B (startup 11, reach 340, her most common attack), 70% against 5B far; but a
+    third come while she isn't attacking (20% counter-hits, 14% punished), and against
+    her 41236A/B (a 99-hit shot) 61% are punished. A counter-hit leads to 865 HP on
+    average, under its usual combo on her (934; the 90th percentile 1.8k): the big
+    combo after the override is the short part. Nor does it spend for damage: with one
+    to three bars of power its combos on her average 816-1,023 (799 with none), and it
+    Instant Charges in 0.4% of them (people 16.5%).
+  - None of her normals or specials starts slowly enough to be beaten on sight (4-16
+    steps; a reversal needs 17 after the 14-step reaction), so overriding her is a read
+    of when she will act. Her routine sets that time: no neutral attack for 180 ticks
+    after she was last hit, guarding or knocked down, then a roll each tick by
+    distance. The agent sees the game 14 steps late and keeps 16 steps of its own
+    inputs: no memory long enough to count 180 ticks, as a person does.
 
 ## Other characters: clones, exploiters, a league
 
@@ -484,8 +514,27 @@ round 5 (`kano/target5.zip`, `mizukab/target5.zip`, `misuzu/target.zip`). It jum
 times a minute against Kano, guards the CPU 6.5 times a minute (people 11.7) and presses as
 a person does (48% of its presses while it can't move: buffered).
 
-Datasets of people's Misuzu (2,651 sides in sync) and Mishio (2,609) are made; their
-clones were stopped (the system ran short of memory) and are next.
+**Round 5's exploiters**, against 127.0M: Kano's fifth stopped at 66% after 4.1M steps
+(32 matches; 58% on 64), her third's and fourth's play, no new hole. Mizuka's fifth
+(24.4M steps) and the first exploiters of Misuzu and Mishio (from clones of people's
+Misuzu, 2,651 sides, and Mishio, 2,609; 24M steps each) never beat it (at most 12%, 16%
+and 19% of their evaluations).
+
+**Round 6** (`agent-league6`): from 127.0M, 20M steps against all twelve, PFSP over the
+last three evaluations (`--pfsp-window 3`), Kanna in a quarter of the CPU matches, the
+best checkpoint kept by its evaluation (the mean of the exploiters' and the CPU's wins:
+`best.zip`). 64 matches each (63 against the CPU):
+
+| Agent | Level-4 CPU | Kano 1 / 2 / 3 / 4 / 5 | Mizuka 1 / 2 / 3 / 4 / 5 | Misuzu / Mishio | 12 exploiters | Kanna's HP a round |
+|---|---|---|---|---|---|---|
+| `agent-league5-base`, 127.0M | 0% / 95% / 100% | 95 / 98 / 66 / 59 / 42% | 98 / 95 / 100 / 94 / 97% | 98 / 97% | 87% | 39.3% |
+| `agent-league6`, 145.1M (`best.zip`) | 0% / 86% / 100% | 97 / 100 / 64 / 72 / **62%** | 100 / 100 / 97 / 98 / 100% | 91 / 97% | **90%** | **47.5%** |
+| `agent-league6`, 147.1M | 5% / 81% / 100% | 88 / 94 / 53 / 77 / 50% | 98 / 97 / 98 / 89 / 100% | 98 / 97% | 87% | 46.8% |
+
+Keeping the best worked: the last checkpoint slipped back against Kano (PFSP's
+forgetting), the best kept its gains. Against the middle tier it lost 9 points (Ayu's
+CPU 8 of 11, from 10: few matches, to watch). The best is round 7's target
+(`kano/target6.zip`, `mizukab/target6.zip`, `misuzu/target2.zip`, `mishio/target2.zip`).
 
 ## The models
 
@@ -502,6 +551,7 @@ the combo master's checkpoints are only there.
 | `bc.py` | the clone: the 45 actions people's inputs come to each frame, and the critic from their matches' returns; `--delay` for a reaction time, `--players` for one player's clone (from the clone of everyone, `--init`) |
 | `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones; any character (`--char`), opponents of other characters (`--vs`, shared by `--pfsp`), a focus (`--focus`), `--stop-win` |
 | `evaluate.py` | matches to the end, with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move, damage taken, and `tactics.py`'s); `--chars ayu tiers` for the level-4 CPU's tiers; plays language models too (`runs/llm-ayu`) |
+| `kanna_study.py` | where an agent's HP goes against the level-4 CPU's Kanna (her attacks out of her combos, by move, and the damage of the combos each started), its reversals and how they went, and her RF gauge (236C) |
 | `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up and free time, both ways |
 | `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time |
 | `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames (`framedata.json`) |

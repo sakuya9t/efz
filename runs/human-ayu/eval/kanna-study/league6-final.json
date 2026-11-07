@@ -1,0 +1,657 @@
+{
+ "minutes": 108.2,
+ "hp_lost_per_min": 11640,
+ "her_attacks": {
+  "236A/B": {
+   "per_min": 3.19,
+   "startup": 11,
+   "hit": 0.281,
+   "guarded": 0.284,
+   "missed": 0.435
+  },
+  "j.B": {
+   "per_min": 2.24,
+   "startup": 8,
+   "hit": 0.562,
+   "guarded": 0.107,
+   "missed": 0.331
+  },
+  "236C": {
+   "per_min": 2.12,
+   "startup": 7,
+   "hit": 0.751,
+   "guarded": 0.127,
+   "missed": 0.122
+  },
+  "j.C": {
+   "per_min": 2.09,
+   "startup": 11,
+   "hit": 0.394,
+   "guarded": 0.111,
+   "missed": 0.496
+  },
+  "2B": {
+   "per_min": 1.59,
+   "startup": 9,
+   "hit": 0.331,
+   "guarded": 0.262,
+   "missed": 0.407
+  },
+  "41236A/B": {
+   "per_min": 1.58,
+   "startup": null,
+   "hit": 0.222,
+   "guarded": 0.673,
+   "missed": 0.105
+  },
+  "5B close": {
+   "per_min": 1.23,
+   "startup": 8,
+   "hit": 0.444,
+   "guarded": 0.256,
+   "missed": 0.301
+  },
+  "623": {
+   "per_min": 1.07,
+   "startup": 8,
+   "hit": 0.879,
+   "guarded": 0.086,
+   "missed": 0.034
+  },
+  "2A": {
+   "per_min": 1.03,
+   "startup": 4,
+   "hit": 0.604,
+   "guarded": 0.189,
+   "missed": 0.207
+  },
+  "5A": {
+   "per_min": 0.69,
+   "startup": 4,
+   "hit": 0.733,
+   "guarded": 0.133,
+   "missed": 0.133
+  },
+  "5B far": {
+   "per_min": 0.67,
+   "startup": 11,
+   "hit": 0.233,
+   "guarded": 0.466,
+   "missed": 0.301
+  },
+  "5C": {
+   "per_min": 0.62,
+   "startup": 15,
+   "hit": 0.015,
+   "guarded": 0.896,
+   "missed": 0.09
+  },
+  "214C": {
+   "per_min": 0.58,
+   "startup": null,
+   "hit": 0.19,
+   "guarded": 0.683,
+   "missed": 0.127
+  },
+  "214B": {
+   "per_min": 0.5,
+   "startup": null,
+   "hit": 0.13,
+   "guarded": 0.444,
+   "missed": 0.426
+  },
+  "41236C": {
+   "per_min": 0.43,
+   "startup": null,
+   "hit": 0.064,
+   "guarded": 0.362,
+   "missed": 0.574
+  },
+  "j.A": {
+   "per_min": 0.3,
+   "startup": 5,
+   "hit": 0.594,
+   "guarded": 0.094,
+   "missed": 0.312
+  },
+  "2C": {
+   "per_min": 0.14,
+   "startup": 11,
+   "hit": 0.533,
+   "guarded": 0.067,
+   "missed": 0.4
+  },
+  "j.236236B": {
+   "per_min": 0.08,
+   "startup": null,
+   "hit": 0.333,
+   "guarded": 0.0,
+   "missed": 0.667
+  },
+  "623C": {
+   "per_min": 0.07,
+   "startup": 3,
+   "hit": 0.625,
+   "guarded": 0.125,
+   "missed": 0.25
+  },
+  "214A": {
+   "per_min": 0.05,
+   "startup": null,
+   "hit": 0.6,
+   "guarded": 0.0,
+   "missed": 0.4
+  },
+  "236236B": {
+   "per_min": 0.02,
+   "startup": 51,
+   "hit": 0.5,
+   "guarded": 0.5,
+   "missed": 0.0
+  },
+  "j.236": {
+   "per_min": 0.02,
+   "startup": 11,
+   "hit": 0.0,
+   "guarded": 0.0,
+   "missed": 1.0
+  },
+  "236236A": {
+   "per_min": 0.01,
+   "startup": null,
+   "hit": 0.0,
+   "guarded": 0.0,
+   "missed": 1.0
+  }
+ },
+ "her_combo_moves_per_min": 24.46,
+ "agent_when_she_attacks": {
+  "5B close": {
+   "air": 0.391,
+   "own move": 0.301,
+   "free": 0.188,
+   "guarding": 0.12
+  },
+  "all": {
+   "own move": 0.434,
+   "free": 0.355,
+   "guarding": 0.137,
+   "air": 0.073
+  },
+  "236A/B": {
+   "own move": 0.501,
+   "free": 0.388,
+   "guarding": 0.11
+  },
+  "214B": {
+   "free": 0.481,
+   "guarding": 0.296,
+   "own move": 0.222
+  },
+  "623": {
+   "own move": 0.698,
+   "air": 0.276,
+   "free": 0.026
+  },
+  "41236A/B": {
+   "free": 0.532,
+   "guarding": 0.287,
+   "own move": 0.181
+  },
+  "2B": {
+   "own move": 0.541,
+   "free": 0.297,
+   "guarding": 0.163
+  },
+  "j.C": {
+   "free": 0.765,
+   "own move": 0.177,
+   "guarding": 0.04,
+   "air": 0.018
+  },
+  "j.B": {
+   "free": 0.55,
+   "own move": 0.372,
+   "air": 0.062,
+   "guarding": 0.017
+  },
+  "236C": {
+   "own move": 0.904,
+   "free": 0.061,
+   "air": 0.017,
+   "guarding": 0.017
+  },
+  "2A": {
+   "own move": 0.631,
+   "free": 0.333,
+   "guarding": 0.036
+  },
+  "j.236236B": {
+   "own move": 0.556,
+   "air": 0.444
+  },
+  "5A": {
+   "own move": 0.747,
+   "free": 0.253
+  },
+  "2C": {
+   "air": 0.867,
+   "own move": 0.133
+  },
+  "214C": {
+   "free": 0.698,
+   "guarding": 0.238,
+   "own move": 0.063
+  },
+  "5B far": {
+   "guarding": 0.425,
+   "own move": 0.288,
+   "free": 0.274,
+   "air": 0.014
+  },
+  "5C": {
+   "guarding": 1.0
+  },
+  "623C": {
+   "air": 0.625,
+   "guarding": 0.375
+  },
+  "j.A": {
+   "air": 0.938,
+   "own move": 0.062
+  },
+  "41236C": {
+   "own move": 0.447,
+   "guarding": 0.383,
+   "free": 0.17
+  },
+  "214A": {
+   "own move": 0.8,
+   "free": 0.2
+  },
+  "236236B": {
+   "own move": 0.5,
+   "air": 0.5
+  },
+  "236236A": {
+   "free": 1.0
+  },
+  "j.236": {
+   "own move": 1.0
+  }
+ },
+ "her_rf": {
+  "up_share": 0.602,
+  "agent_moves_per_min_up": 41.02,
+  "hit_after_up": 0.163,
+  "by_rf_move_after_up": 0.05,
+  "agent_moves_per_min_down": 21.39,
+  "hit_after_down": 0.161
+ },
+ "taken_by_starter": {
+  "236C": {
+   "combos_per_min": 1.55,
+   "damage_per_min": 2507,
+   "share": 0.226,
+   "avg": 1614
+  },
+  "j.B": {
+   "combos_per_min": 1.08,
+   "damage_per_min": 1177,
+   "share": 0.106,
+   "avg": 1088
+  },
+  "2A": {
+   "combos_per_min": 0.64,
+   "damage_per_min": 1000,
+   "share": 0.09,
+   "avg": 1568
+  },
+  "236A/B": {
+   "combos_per_min": 0.89,
+   "damage_per_min": 864,
+   "share": 0.078,
+   "avg": 974
+  },
+  "5A": {
+   "combos_per_min": 0.49,
+   "damage_per_min": 768,
+   "share": 0.069,
+   "avg": 1568
+  },
+  "623": {
+   "combos_per_min": 0.74,
+   "damage_per_min": 678,
+   "share": 0.061,
+   "avg": 916
+  },
+  "41236A/B": {
+   "combos_per_min": 0.58,
+   "damage_per_min": 608,
+   "share": 0.055,
+   "avg": 1043
+  },
+  "2B": {
+   "combos_per_min": 0.43,
+   "damage_per_min": 495,
+   "share": 0.045,
+   "avg": 1138
+  },
+  "j.C": {
+   "combos_per_min": 0.5,
+   "damage_per_min": 448,
+   "share": 0.04,
+   "avg": 898
+  },
+  "5B close (agent in the air)": {
+   "combos_per_min": 0.39,
+   "damage_per_min": 419,
+   "share": 0.038,
+   "avg": 1078
+  },
+  "common": {
+   "combos_per_min": 0.42,
+   "damage_per_min": 412,
+   "share": 0.037,
+   "avg": 990
+  },
+  "214C": {
+   "combos_per_min": 0.3,
+   "damage_per_min": 244,
+   "share": 0.022,
+   "avg": 824
+  },
+  "5B close": {
+   "combos_per_min": 0.16,
+   "damage_per_min": 203,
+   "share": 0.018,
+   "avg": 1293
+  },
+  "623 (agent in the air)": {
+   "combos_per_min": 0.22,
+   "damage_per_min": 203,
+   "share": 0.018,
+   "avg": 914
+  },
+  "5B far": {
+   "combos_per_min": 0.1,
+   "damage_per_min": 143,
+   "share": 0.013,
+   "avg": 1405
+  },
+  "j.A (agent in the air)": {
+   "combos_per_min": 0.16,
+   "damage_per_min": 130,
+   "share": 0.012,
+   "avg": 825
+  },
+  "214B": {
+   "combos_per_min": 0.11,
+   "damage_per_min": 87,
+   "share": 0.008,
+   "avg": 782
+  },
+  "41236A/B (agent in the air)": {
+   "combos_per_min": 0.08,
+   "damage_per_min": 79,
+   "share": 0.007,
+   "avg": 946
+  },
+  "623C (agent in the air)": {
+   "combos_per_min": 0.05,
+   "damage_per_min": 76,
+   "share": 0.007,
+   "avg": 1649
+  },
+  "common (agent in the air)": {
+   "combos_per_min": 0.08,
+   "damage_per_min": 74,
+   "share": 0.007,
+   "avg": 889
+  },
+  "j.236236B": {
+   "combos_per_min": 0.02,
+   "damage_per_min": 68,
+   "share": 0.006,
+   "avg": 3675
+  },
+  "2C (agent in the air)": {
+   "combos_per_min": 0.07,
+   "damage_per_min": 66,
+   "share": 0.006,
+   "avg": 887
+  },
+  "214C (agent in the air)": {
+   "combos_per_min": 0.06,
+   "damage_per_min": 45,
+   "share": 0.004,
+   "avg": 812
+  },
+  "j.236236B (agent in the air)": {
+   "combos_per_min": 0.01,
+   "damage_per_min": 35,
+   "share": 0.003,
+   "avg": 3814
+  },
+  "41236C": {
+   "combos_per_min": 0.03,
+   "damage_per_min": 35,
+   "share": 0.003,
+   "avg": 1246
+  },
+  "5C": {
+   "combos_per_min": 0.03,
+   "damage_per_min": 34,
+   "share": 0.003,
+   "avg": 1244
+  },
+  "236236B": {
+   "combos_per_min": 0.01,
+   "damage_per_min": 33,
+   "share": 0.003,
+   "avg": 3597
+  },
+  "2B (agent in the air)": {
+   "combos_per_min": 0.05,
+   "damage_per_min": 30,
+   "share": 0.003,
+   "avg": 652
+  },
+  "236236B (agent in the air)": {
+   "combos_per_min": 0.01,
+   "damage_per_min": 29,
+   "share": 0.003,
+   "avg": 3143
+  },
+  "j.B (agent in the air)": {
+   "combos_per_min": 0.06,
+   "damage_per_min": 27,
+   "share": 0.002,
+   "avg": 493
+  },
+  "236C (agent in the air)": {
+   "combos_per_min": 0.01,
+   "damage_per_min": 26,
+   "share": 0.002,
+   "avg": 2790
+  },
+  "236A/B (agent in the air)": {
+   "combos_per_min": 0.02,
+   "damage_per_min": 16,
+   "share": 0.001,
+   "avg": 856
+  },
+  "5A (agent in the air)": {
+   "combos_per_min": 0.01,
+   "damage_per_min": 12,
+   "share": 0.001,
+   "avg": 1269
+  },
+  "214B (agent in the air)": {
+   "combos_per_min": 0.02,
+   "damage_per_min": 11,
+   "share": 0.001,
+   "avg": 619
+  },
+  "j.C (agent in the air)": {
+   "combos_per_min": 0.01,
+   "damage_per_min": 5,
+   "share": 0.0,
+   "avg": 578
+  },
+  "214A": {
+   "combos_per_min": 0.01,
+   "damage_per_min": 5,
+   "share": 0.0,
+   "avg": 536
+  }
+ },
+ "reversals": {
+  "per_min": 4.46,
+  "counter": 0.276,
+  "hit": 0.019,
+  "missed_punished": 0.207,
+  "missed_safe": 0.498,
+  "combo_after_counter": 812,
+  "hp_lost_after_punished_miss": 705
+ },
+ "reversals_by_her_state": {
+  "free": {
+   "per_min": 1.42,
+   "counter": 0.24,
+   "hit": 0.019,
+   "punished": 0.182
+  },
+  "236A/B": {
+   "per_min": 0.58,
+   "counter": 0.381,
+   "hit": 0.016,
+   "punished": 0.079
+  },
+  "guarding": {
+   "per_min": 0.52,
+   "counter": 0.054,
+   "hit": 0.0,
+   "punished": 0.196
+  },
+  "41236A/B": {
+   "per_min": 0.3,
+   "counter": 0.188,
+   "hit": 0.031,
+   "punished": 0.625
+  },
+  "2B": {
+   "per_min": 0.28,
+   "counter": 0.233,
+   "hit": 0.033,
+   "punished": 0.1
+  },
+  "214B": {
+   "per_min": 0.27,
+   "counter": 0.517,
+   "hit": 0.0,
+   "punished": 0.241
+  },
+  "5B far": {
+   "per_min": 0.2,
+   "counter": 0.455,
+   "hit": 0.0,
+   "punished": 0.227
+  },
+  "41236C": {
+   "per_min": 0.15,
+   "counter": 0.375,
+   "hit": 0.125,
+   "punished": 0.125
+  },
+  "j.B": {
+   "per_min": 0.13,
+   "counter": 0.357,
+   "hit": 0.0,
+   "punished": 0.214
+  },
+  "214C": {
+   "per_min": 0.12,
+   "counter": 0.077,
+   "hit": 0.0,
+   "punished": 0.692
+  },
+  "2A": {
+   "per_min": 0.1,
+   "counter": 0.182,
+   "hit": 0.0,
+   "punished": 0.091
+  },
+  "j.C": {
+   "per_min": 0.08,
+   "counter": 0.333,
+   "hit": 0.0,
+   "punished": 0.333
+  },
+  "5B close": {
+   "per_min": 0.06,
+   "counter": 0.714,
+   "hit": 0.0,
+   "punished": 0.143
+  },
+  "5C": {
+   "per_min": 0.06,
+   "counter": 0.714,
+   "hit": 0.0,
+   "punished": 0.0
+  },
+  "236C": {
+   "per_min": 0.06,
+   "counter": 0.5,
+   "hit": 0.0,
+   "punished": 0.167
+  },
+  "hit": {
+   "per_min": 0.05,
+   "counter": 0.0,
+   "hit": 0.2,
+   "punished": 0.0
+  },
+  "5A": {
+   "per_min": 0.04,
+   "counter": 0.0,
+   "hit": 0.0,
+   "punished": 0.0
+  },
+  "214A": {
+   "per_min": 0.02,
+   "counter": 0.5,
+   "hit": 0.0,
+   "punished": 0.0
+  },
+  "623": {
+   "per_min": 0.02,
+   "counter": 0.0,
+   "hit": 0.0,
+   "punished": 0.5
+  }
+ },
+ "counter_hit_her_move": {
+  "236A/B": 50,
+  "j.B": 14,
+  "236C": 11,
+  "2B": 11,
+  "41236A/B": 10,
+  "5B far": 8,
+  "5B close": 6,
+  "2A": 5,
+  "41236C": 4,
+  "j.C": 4,
+  "5C": 4,
+  "214C": 2,
+  "5A": 2,
+  "214A": 1,
+  "214B": 1
+ },
+ "slow_attacks": {
+  "per_min": 0.02,
+  "answered": 0.0,
+  "answered_counter": 0.0,
+  "hit_agent": 0.5
+ }
+}
