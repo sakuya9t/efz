@@ -240,12 +240,15 @@ class FairAssistOpponent:
 class ComboAssist(VecEnv):
     """finetune.py's learner (player 1 of an EfzSB3VecEnv) with FairAssist, as a VecEnv:
     the steps a route plays carry infos[i]['assisted'] and the route's action,
-    infos[i]['route_action'] (finetune.py --assist-distill: a target). policy: its own play on the
+    infos[i]['route_action'] (finetune.py --assist-distill: a target); only (a mask of the
+    environments, default all): where routes are planned (finetune.py --assist-where cpu:
+    the CPU's matches, whose guarding the planner's defender is). policy: its own play on the
     copies (frozen(model), this chunk's); value: its critic's (redteam.critic(model), for
     the planner's score='value')."""
 
-    def __init__(self, venv, planner, policy, value=None):
+    def __init__(self, venv, planner, policy, value=None, only=None):
         self.venv, self.policy, self.value = venv, policy, value
+        self.only = np.ones(venv.num_envs, bool) if only is None else np.asarray(only, bool)
         self.delay = venv.delay.steps
         self.assist = FairAssist(planner, self.delay)
         self.assisted = np.zeros(venv.num_envs, bool)
@@ -278,7 +281,7 @@ class ComboAssist(VecEnv):
         now = self.venv.env.obs[:, 0]
         hist = self.venv.history
         for i in range(self.num_envs):
-            if dones[i]:
+            if dones[i] or not self.only[i]:
                 self.assist.clear(i)
                 continue
             self.assist.update(i, seen[i, self.delay], now[i],

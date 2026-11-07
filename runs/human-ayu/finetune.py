@@ -36,7 +36,9 @@ last one alone. --vs-assist plays the --vs opponents with built-in combos
 (combo_support.FairAssistOpponent), in training and evaluations: an agent trained with
 --assist, met as it plays. --assist-distill makes --assist's routes targets rather than
 steps left out: after each update the policy learns the routes' actions on the steps they
-played, so that its own combos become theirs (it is evaluated without them).
+played, so that its own combos become theirs (it is evaluated without them); with
+--assist-where cpu only in the CPU's matches, whose guarding the planner models, its own
+combos learning by reward against the agents.
 
     python runs/human-ayu/finetune.py --char kano --start runs/human-ayu/kano/bc-d14.zip \\
         --prior runs/human-ayu/kano/bc-d14.zip --delay 14 --out runs/human-ayu/kano/exploiter \\
@@ -128,6 +130,9 @@ def parse():
                    help="--assist's routes as targets: after each update, this times the "
                         "cross-entropy of the policy toward the routes' actions on the steps they "
                         "played, so that its own combos learn them (evaluated without routes)")
+    p.add_argument('--assist-where', default='all', choices=('all', 'cpu'),
+                   help="--assist's routes in every match, or only the CPU's (the planner's "
+                        "defender guards as the CPU does; agents escape otherwise)")
     p.add_argument('--assist-score', default='damage', choices=('damage', 'value'),
                    help="--assist's and --vs-assist's choice of route: the most damaging, or the "
                         "most worth to the player (damage plus its critic's value of the game it "
@@ -256,7 +261,8 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     if args.assist:
         import combo_support
         env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'],
-                                        ASSIST.get('value'))
+                                        ASSIST.get('value'),
+                                        only=cpu_envs if args.assist_where == 'cpu' else None)
     if args.focus:
         import focus
         env = focus.Focus(env, args.focus, args.focus_coef, args.char)
@@ -440,6 +446,7 @@ def main():
                        combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
                        lookahead=args.lookahead, assist=args.assist, vs_assist=args.vs_assist,
                        assist_score=args.assist_score, assist_distill=args.assist_distill,
+                       assist_where=args.assist_where,
                        practice=args.practice, practice_starts=args.practice_starts,
                        practice_rich=args.practice_rich, practice_pool=args.practice_pool,
                        practice_limit=args.practice_limit, practice_scale=args.practice_scale,
