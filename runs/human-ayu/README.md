@@ -363,7 +363,19 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   Ayu, Kano and Unknown among its 300 most damaging (3, 7, 9), so a planner tried mostly
   combos landed on others. `combo_library.py --per-victim 40` also keeps each victim's
   40 most damaging (of 1,500 HP or more; 848 combos), and `redteam.Planner` tries the
-  ones landed on the character it faces first.
+  ones landed on the character it faces first. Round 6's best with routes, 64 matches
+  each:
+
+  | Routes | Kano 3 | Unknown 4 | Kanna's HP a round | Its combos on Kanna |
+  |---|---|---|---|---|
+  | none (its own combos) | 64% | 98% | 47.5% | 934 / 1,791 |
+  | the 300 most damaging | 48% | 81% | 58.8% | 1,180 / 2,618 |
+  | kept per victim | **66%** | 89% | 58.2% | 1,280 / 2,866 |
+
+  The routes' cost against the exploiters was mostly combos landed on others: kept per
+  victim they beat its own play against Kano's third. On Kanna nothing changes, as
+  there are no people's combos on her to keep (4 matches won with the old library, none
+  with the new: within 64 matches' noise).
 
 ## Other characters: clones, exploiters, a league
 
