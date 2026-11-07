@@ -239,7 +239,8 @@ class FairAssistOpponent:
 
 class ComboAssist(VecEnv):
     """finetune.py's learner (player 1 of an EfzSB3VecEnv) with FairAssist, as a VecEnv:
-    the steps a route plays carry infos[i]['assisted']. policy: its own play on the
+    the steps a route plays carry infos[i]['assisted'] and the route's action,
+    infos[i]['route_action'] (finetune.py --assist-distill: a target). policy: its own play on the
     copies (frozen(model), this chunk's); value: its critic's (redteam.critic(model), for
     the planner's score='value')."""
 
@@ -248,6 +249,7 @@ class ComboAssist(VecEnv):
         self.delay = venv.delay.steps
         self.assist = FairAssist(planner, self.delay)
         self.assisted = np.zeros(venv.num_envs, bool)
+        self.route = np.zeros(venv.num_envs, int)
         super().__init__(venv.num_envs, venv.observation_space, venv.action_space)
 
     def reset(self):
@@ -263,12 +265,15 @@ class ComboAssist(VecEnv):
             if a is not None:
                 actions[i] = a
                 self.assisted[i] = True
+                self.route[i] = a
         self.venv.step_async(actions)
 
     def step_wait(self):
         obs, rewards, dones, infos = self.venv.step_wait()
         for i in range(self.num_envs):
             infos[i]['assisted'] = bool(self.assisted[i])
+            if self.assisted[i]:
+                infos[i]['route_action'] = int(self.route[i])
         seen = self.venv.delay.buf[:, 0]  # the learner's views, newest first
         now = self.venv.env.obs[:, 0]
         hist = self.venv.history

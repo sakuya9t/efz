@@ -34,7 +34,9 @@ opponent that often. best.zip is the chunk whose evaluation won most (the mean o
 stops meeting. --pfsp-window shares the matches by the last few evaluations, not the
 last one alone. --vs-assist plays the --vs opponents with built-in combos
 (combo_support.FairAssistOpponent), in training and evaluations: an agent trained with
---assist, met as it plays.
+--assist, met as it plays. --assist-distill makes --assist's routes targets rather than
+steps left out: after each update the policy learns the routes' actions on the steps they
+played, so that its own combos become theirs (it is evaluated without them).
 
     python runs/human-ayu/finetune.py --char kano --start runs/human-ayu/kano/bc-d14.zip \\
         --prior runs/human-ayu/kano/bc-d14.zip --delay 14 --out runs/human-ayu/kano/exploiter \\
@@ -122,6 +124,10 @@ def parse():
                                     "sees its hit, routes from this library (combo_library.py's) and "
                                     "its own play are tried on copies and the best played; those "
                                     "steps are kept out of the policy's loss")
+    p.add_argument('--assist-distill', type=float, default=0,
+                   help="--assist's routes as targets: after each update, this times the "
+                        "cross-entropy of the policy toward the routes' actions on the steps they "
+                        "played, so that its own combos learn them (evaluated without routes)")
     p.add_argument('--assist-score', default='damage', choices=('damage', 'value'),
                    help="--assist's and --vs-assist's choice of route: the most damaging, or the "
                         "most worth to the player (damage plus its critic's value of the game it "
@@ -268,26 +274,73 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
 class AssistMask(BaseCallback):
     """--assist: the steps a route played (infos[i]['assisted']) out of the policy's loss:
     their advantages 0, the rest normalised (PPO's own normalisation is off). The critic
-    learns from every step, so it learns what a hit is worth with the routes."""
+    learns from every step, so it learns what a hit is worth with the routes.
+
+    distill > 0 (--assist-distill): the routes' actions are also targets. Each rollout's
+    route steps (the views the learner had then, the route's action) are kept, and after
+    PPO's update (at the next rollout's start: one callback for the whole run) the policy
+    takes `epochs` steps of distill * cross-entropy toward them: its own combos learn the
+    routes, chosen once it saw its hit, from people's inputs (a teacher, as DAgger's: on
+    the states its own play reaches)."""
+
+    def __init__(self, distill=0.0, epochs=4, batch=4096):
+        super().__init__()
+        self.distill, self.epochs, self.batch = distill, epochs, batch
+        self.pairs = None
 
     def _on_rollout_start(self):
         buf = self.model.rollout_buffer
         self.mask = np.zeros((buf.buffer_size, buf.n_envs), bool)
+        self.route = np.zeros((buf.buffer_size, buf.n_envs), np.int64)
+        if self.pairs is not None:
+            self._learn_routes()
 
     def _on_step(self):
         pos = self.model.rollout_buffer.pos
         for e, info in enumerate(self.locals['infos']):
             if info.get('assisted'):
                 self.mask[pos, e] = True
+                self.route[pos, e] = info.get('route_action', 0)
         return True
 
     def _on_rollout_end(self):
-        adv, m = self.model.rollout_buffer.advantages, self.mask
+        buf = self.model.rollout_buffer
+        adv, m = buf.advantages, self.mask
         keep = adv[~m]
         adv[~m] = (keep - keep.mean()) / (keep.std() + 1e-8)
         adv[m] = 0.0
         ASSIST['steps'] = ASSIST.get('steps', 0) + m.size
         ASSIST['assisted'] = ASSIST.get('assisted', 0) + int(m.sum())
+        if self.distill > 0 and m.any():
+            self.pairs = (np.array(buf.observations[m], np.float32), self.route[m].copy())
+
+    def _learn_routes(self):
+        obs, act = self.pairs
+        self.pairs = None
+        policy = self.model.policy
+        policy.set_training_mode(True)
+        o = torch.as_tensor(obs, device=policy.device)
+        a = torch.as_tensor(act, device=policy.device)
+        with torch.no_grad():
+            d = policy.get_distribution(o)
+            ce0 = float(-d.log_prob(a).mean())
+            acc0 = float((d.distribution.probs.argmax(-1) == a).float().mean())
+        rng = np.random.default_rng()
+        for _ in range(self.epochs):
+            order = rng.permutation(len(a))
+            for k in range(0, len(a), self.batch):
+                idx = torch.as_tensor(order[k:k + self.batch], device=policy.device)
+                loss = -self.distill * policy.get_distribution(o[idx]).log_prob(a[idx]).mean()
+                policy.optimizer.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(policy.parameters(), self.model.max_grad_norm)
+                policy.optimizer.step()
+        policy.set_training_mode(False)
+        dist = ASSIST.setdefault('distill', dict(n=0, ce=0.0, acc=0.0, k=0))
+        dist['n'] += len(a)
+        dist['ce'] += ce0
+        dist['acc'] += acc0
+        dist['k'] += 1
 
 
 class KLLog(BaseCallback):
@@ -304,7 +357,7 @@ def evaluate(args, model_path, level):
     a = A()
     a.data, a.minutes = args.data, args.minutes
     me = ev.Agent(model_path)
-    if args.assist:  # it plays with its built-in combos
+    if args.assist and not args.assist_distill:  # it plays with its built-in combos
         import combo_support
         me = combo_support.FairComboAgent(me, ASSIST['planner'])
     out = {}
@@ -386,7 +439,7 @@ def main():
                        combo=args.combo and os.path.relpath(args.combo, REPO),
                        combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
                        lookahead=args.lookahead, assist=args.assist, vs_assist=args.vs_assist,
-                       assist_score=args.assist_score,
+                       assist_score=args.assist_score, assist_distill=args.assist_distill,
                        practice=args.practice, practice_starts=args.practice_starts,
                        practice_rich=args.practice_rich, practice_pool=args.practice_pool,
                        practice_limit=args.practice_limit, practice_scale=args.practice_scale,
@@ -442,6 +495,7 @@ def main():
     if args.prior_coef > 0:
         teacher = master.policy if master is not None and args.combo_teacher else None
         model.policy.set_prior(prior.policy, args.prior_coef, args.ent_coef, combo=teacher)
+    assist_cb = AssistMask(args.assist_distill) if args.assist else None  # (the whole run's)
     print('starting from', start, flush=True)
     if not history:
         before = evaluate(args, start, level)
@@ -465,7 +519,7 @@ def main():
             n = practice.fill(pool, env.matches, model, mask=env.mask)
             print(f'practice: {n} starts of its own to begin with {pool.kinds()}', flush=True)
         t = time.time()
-        callbacks = [KLLog()] + ([AssistMask()] if args.assist else [])
+        callbacks = [KLLog()] + ([assist_cb] if args.assist else [])
         model.learn(int(args.chunk), reset_num_timesteps=False, callback=callbacks)
         seconds = time.time() - t
         path = os.path.join(args.out, 'model.zip')
@@ -480,6 +534,10 @@ def main():
         if args.assist:  # the chunk's built-in combos: plans made, steps they played
             assist = dict(env.assist.take_plans() if hasattr(env, 'assist') else {},
                           assisted=round(ASSIST.pop('assisted', 0) / max(1, ASSIST.pop('steps', 1)), 4))
+            dist = ASSIST.pop('distill', None)
+            if dist and dist['k']:  # the routes' steps learnt from: before each update's steps
+                assist['distill'] = dict(pairs=dist['n'], ce=round(dist['ce'] / dist['k'], 3),
+                                         acc=round(dist['acc'] / dist['k'], 3))
         vs_plans = None
         if args.vs_assist:  # the --vs opponents' built-in combos in the chunk's matches
             vs_plans = [o.assist.take_plans() for o, _ in vs]
@@ -506,8 +564,10 @@ def main():
               + (show(results) if results else 'not evaluated (--eval-every)'), flush=True)
         if assist and assist.get('plans'):
             print(f"  assist: {assist['plans']} plans, a route in {assist['route']:.0%}, best "
-                  f"{assist['best']} (own play {assist['own']}); {assist['assisted']:.1%} of steps",
-                  flush=True)
+                  f"{assist['best']} (own play {assist['own']}); {assist['assisted']:.1%} of steps"
+                  + (f"; routes learnt: {assist['distill']['pairs']} steps, cross-entropy "
+                     f"{assist['distill']['ce']}, agreement {assist['distill']['acc']:.0%}"
+                     if assist.get('distill') else ''), flush=True)
         for j, v in enumerate(vs_plans or []):
             if v.get('plans'):
                 print(f"  vs{j} assist: {v['plans']} plans, a route in {v['route']:.0%}, best "

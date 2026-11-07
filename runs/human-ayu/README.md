@@ -305,30 +305,45 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
 
   *Where her damage comes from* (7 November; `kanna_study.py`, 64 matches each,
   `eval/kanna-study/`; her moves by src/efz.h's `CKanna` names). `agent-league6`'s best
-  loses 12.0k HP a minute (127.0M 12.3k, the clone 20.2k):
+  loses 12.2k HP a minute (127.0M 12.6k, the clone 19.2k):
   - Her **236C**, an invincible beam (startup 7, reach 468) that costs 500 of her RF
-    gauge, starts 21% of the damage of her combos (2.4k a minute; 127.0M 24%, the clone
-    6%); 87% of them come while the agent is in a move of its own, and 76% hit. It is
+    gauge, starts 22% of the damage of her combos (2.6k a minute; 127.0M 23%, the clone
+    5%); 89% of them come while the agent is in a move of its own, and 77% hit. It is
     her answer to a move (a tick's 0.1% chance while the opponent is in one, more after
     her RG and on her neutral roll), and only while her RF gauge is red or cyan, which
-    the agent sees (`opp_rf_gauge`): 59% of the time. The agent starts twice as many
-    moves then (40.6 a minute against 20.4): its pressure fills her gauge as she guards.
-  - Her jump attacks (j.B, j.C) start 16% and hit 54% and 38% of the time; her 2A
-    (startup 4) 12%.
-  - Its reversals (4.2 a minute) counter-hit her 33% of the time: 52% against her
-    236A/B (startup 11, reach 340, her most common attack), 70% against 5B far; but a
-    third come while she isn't attacking (20% counter-hits, 14% punished), and against
-    her 41236A/B (a 99-hit shot) 61% are punished. A counter-hit leads to 865 HP on
-    average, under its usual combo on her (934; the 90th percentile 1.8k): the big
-    combo after the override is the short part. Nor does it spend for damage: with one
-    to three bars of power its combos on her average 816-1,023 (799 with none), and it
-    Instant Charges in 0.4% of them (people 16.5%).
+    the agent sees (`opp_rf_gauge`): 57% of the time. The agent starts more moves then
+    (39.0 a minute against 22.4): its pressure fills her gauge as she guards.
+  - Her jump attacks (j.B, j.C) start 18% and hit 58% and 44% of the time; her 2A
+    (startup 4) 8%.
+  - Its reversals (4.1 a minute) counter-hit her 34% of the time: 64% against her
+    236A/B (startup 11, reach 340, her most common attack); but a third come while she
+    isn't attacking (26% counter-hits, 12% punished), and against her 41236A/B (a
+    99-hit shot) 67% are punished. A counter-hit leads to 840 HP on average, under its
+    usual combo on her (934; the 90th percentile 1.8k): the big combo after the
+    override is the short part. Nor does it spend for damage: with one to three bars of
+    power its combos on her average 816-1,023 (799 with none), and it Instant Charges in
+    0.4% of them (people 16.5%).
   - None of her normals or specials starts slowly enough to be beaten on sight (4-16
     steps; a reversal needs 17 after the 14-step reaction), so overriding her is a read
-    of when she will act. Her routine sets that time: no neutral attack for 180 ticks
-    after she was last hit, guarding or knocked down, then a roll each tick by
-    distance. The agent sees the game 14 steps late and keeps 16 steps of its own
-    inputs: no memory long enough to count 180 ticks, as a person does.
+    of when she will act. Her routine has a rhythm: no neutral attack for 180 ticks
+    after she was last hit, guarding or knocked down (`m_cpuHitCooldown`), then a roll
+    each tick by distance. The agent sees the game 14 steps late and keeps 16 steps of
+    its own inputs, too little to count 180 ticks, but the rhythm predicts less than it
+    seems: 44% of her attacks (out of her combos) and 57% of the damage come inside the
+    lock, from the routines it doesn't gate (anti-airs, answers to an RG or a move),
+    and of those after it 70% come more than 120 steps after it ended. What it would
+    tell the agent: its reversals inside the lock counter-hit her 27% of the time,
+    after it 40%.
+
+  *Bigger combos* (the user's other half). The same agent with the fair built-in routes
+  at play time (`evaluate.py --p1-assist`: once it sees its hit, people's library
+  combos are tried on copies and the best played) takes **58.8%** of her HP a round and
+  won 4 of 64 matches (0.31 rounds a match; combos 1,180 on average, 2,618 at the 90th
+  percentile, Instant Charge in 17%; throws 0.07 a minute). Damage per hit, more than
+  the neutral, stands between it and her. Trained with routes before (`--assist`), a
+  third of its steps were the routes', left out of the policy's loss, and its own
+  combos faded; `finetune.py --assist-distill` makes them targets instead (after each
+  update, the cross-entropy toward the routes' actions on their steps).
 
 ## Other characters: clones, exploiters, a league
 
