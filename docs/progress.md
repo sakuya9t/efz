@@ -1,7 +1,8 @@
-# Progress: human-like EFZ agents (to 5 November 2026)
+# Progress: human-like EFZ agents (to 7 November 2026)
 
-Where the agent work stands, what lives where, and how to pick it up on another machine
-(next: a Linux machine with an NVIDIA GPU). The plan behind it is
+Where the agent work stands, what lives where, and how to pick it up on another machine.
+Since 6 November it runs on a Linux machine with an NVIDIA GPU (below, "The Linux
+machine"). The plan behind it is
 [training.md](training.md) ("Human-like agents"); the details and every number are in
 [../runs/human-ayu/README.md](../runs/human-ayu/README.md) and
 [../runs/llm-ayu/README.md](../runs/llm-ayu/README.md).
@@ -23,13 +24,34 @@ Where the agent work stands, what lives where, and how to pick it up on another 
   free time (setups, charges), the CPU's tiers. People's numbers per character.
 - **Other characters**: datasets of Mizuka, Kano, Misuzu, Mishio; Mizuka and Kano cloned,
   each with an exploiter of the agent.
-- **A language-model agent** (`runs/llm-ayu`): built and smoke-tested on a CPU, not
-  trained; the CUDA machine's first job.
+- **A language-model agent** (`runs/llm-ayu`): SmolLM2-135M training on the GPU, one
+  epoch (77,120 steps); at 41% of it, held-out nll 0.340, below `bc-d14`'s 0.349, press
+  recall 5.4% (3%).
+- **Since 6 November** (the Linux machine): round 2 and 3 exploiters, and the league
+  against them: a weaker pull toward the clone (0.05) closed Kano's and Mizuka's second
+  holes (`agent-league2-kl`, `agent-league3`); Kano's third exploiter still wins (people's
+  own habit, jumping, farmed). The level-4 CPU's tiers explained from the source and each
+  character measured; throws counted (people's and the agents'); the RF gauge's colours
+  corrected (blue, red, cyan). Combo practice among matches (`--practice`) didn't help;
+  built-in combos (people's routes tried on copies once the agent sees its hit,
+  `--assist`) do at play time and are training.
 
 ## Where everything is
 
-**Code.** Branch `asm-session/28c0039a`, 32 commits ahead of `origin/main`, **not pushed**
-(no upstream): push it (or `git bundle`) to move it. Everything below is committed.
+**Code.** Branch `asm-session/7d5819c6` on the Linux machine (it carries the laptop's
+`asm-session/28c0039a` and what followed), ahead of `origin/main`, **not pushed**: push it
+(or `git bundle`) to move it. Everything below is committed.
+
+**The Linux machine.** RTX A3000 12 GB (a laptop GPU, 80 W, about 6 GB of it taken by other
+programs), Ryzen 9 7945HX (32 threads), 92 GB. The replays' data in `~/data/efz-replays`
+(`datasets/ayu`, `mizukab`, `kano`, `misuzu`, `mishio`, `players.csv`,
+`combo-library.npz`; checked against the laptop's SHA256SUMS); not yet `combo-starts/`
+and `replays/` (needed for people's combo starts). EFZ_DIR: the decompilation's
+`efz-unpacked/tasogare/EFZ`. `runs/llm-ayu/setup-linux.sh` worked with cmake from pip
+(the host has none), after a fix: the headless library failed to load after torch
+("cannot allocate memory in static TLS block"; port/guest.h now gives the static TLS
+model to the arena's two pointers only). New checkpoints since 6 November are only here,
+not yet on the Hub (`python runs/hub.py upload human-ayu`).
 
 **Checkpoints.** Hugging Face, https://huggingface.co/sakuya9t/efz, under the repository's
 paths: `python runs/hub.py download human-ayu` puts them back into `runs/human-ayu/`
@@ -90,9 +112,28 @@ to CUDA directly (`env.pin_memory(torch)`, docs/headless.md) if a policy moves t
 | `macros/` | a learnt selector of people's combos | helps only with full resources: why `redteam.py` looks ahead instead |
 | `mizukab/`, `kano/` | people's clones (`bc-d14`) and exploiters of `agent-red` at 22.2M | Mizuka's 84% after 3M steps (focus: setup), Kano's 100% after 1M (focus: charge) |
 | `misuzu/`, `mishio/` | datasets made | clones not made (the cloning job was stopped when the laptop ran short of memory) |
-| `runs/llm-ayu` | SmolLM2 / Qwen2.5 reading the game as text | smoke-tested on the CPU only |
+| `runs/llm-ayu/smollm135` | SmolLM2-135M reading the game as text (prompt `statetext-2`) | training on the GPU: 52 examples/s with `--compile`, length-grouped batches and `--grad-ckpt`, an epoch ~26 h; nll 0.340 at step 32,000 |
+| `mizukab/exploiter2`, `kano/exploiter2` | round 2, against `agent-league` at 50.4M | Mizuka's 81% after 6.1M, Kano's 72% after 1M; on 64 matches the agent wins 23% / 19% |
+| `agent-league2`, `agent-league2-kl` | from `agent-league`, four exploiters, to 70.5M: exploiters 60% of agent matches; pull 0.05 | the pull: Kano 1 / 2 59% / 62% (from 19% / 19%), Mizuka 2 75% (23%); guards 6.2 a minute against the CPU (9.6) |
+| `mizukab/exploiter3`, `kano/exploiter3` | round 3, against `agent-league2-kl` | Kano's 94% after 3M (12% on 64), Mizuka's after 9.1M |
+| `agent-league3` | from `agent-league2-kl`, five exploiters, to 90.7M | Mizuka 3 78% (never met), Kano 3 still 12%; level-4 CPU 0 / 62 / 95% |
+| `agent-league2-base`, `-own`, `-own10` | combo practice from its own hits, x1 and x10, against controls | no gain in matches; x10 much worse |
+| `eval/cpu4-chars/` | `agent-league` against each level-4 CPU | Kanna 0%, Unknown 28%, Ayu 31% ... Mishio 94% |
+| `eval/combo-support/` | built-in combos at play time on `agent-league2-kl` | lookahead: CPU's middle tier 81% (62%), Kano 2 91% (62%), combos 1,261 / 2,800 (820 / 1,646) |
+| `agent-league3-assist` | `agent-league3`'s settings with `--assist` (strong but fair) | training (slow: it plans at every confirm; `--eval-every 3`) |
 
-## What's next
+## What's next (7 November)
+
+0. **Built-in combos** (`--assist`): judge `agent-league3-assist` against `agent-league3`
+   (CPU tiers, the six exploiters, combos against people's) when it reaches 90.5M. Then
+   people's starts for the comparison the user asked for (practice from people's starts:
+   needs `combo-starts/` and `replays/` here), and Mizuka's third exploiter in the league.
+1. **Kano's third exploiter** wins by people's own habit (jumping into anti-airs): decide
+   with the user how far below people's jump rate the agent may go.
+2. **Clone Misuzu and Mishio** (their datasets are here now), then their exploiters.
+3. **The language model**: finish the epoch, play it (`evaluate.py`), then Qwen2.5-0.5B.
+
+The list below is from 5 November:
 
 1. **Train the language model** (`runs/llm-ayu/README.md`): SmolLM2-135M first (about
    2-3 hours an epoch on a 4090 or A100, estimated), then Qwen2.5-0.5B; compare its
@@ -151,3 +192,10 @@ continues a combo master.
 - A clone loads its whole dataset: about 6 GB for 2,600 sides.
 - People's combos are best compared from the hit after the first; combo damage needs
   its maximum and 90th percentile, not only the average, and its resources.
+- An EfzVecEnv's save folder is the process's: making another environment (a planner's)
+  sets it back to the game's, so replays recorded after went among the game's.
+- Practice among matches at the match's reward scale is too weak against the pull
+  toward the clone; at ten times it distorts the match. Built-in routes (tried on copies,
+  out of the policy's loss) worked where learning didn't.
+- An agent that plans in every evaluated match makes evaluations the slow part: evaluate
+  every few chunks.
