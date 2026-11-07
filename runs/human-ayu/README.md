@@ -297,11 +297,17 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   | `agent-league5-base`, 131.0M | 40.9% | 0.06 | 5.1k / 13.1k | 4.0 (36%, 32%) | 0.01 |
   | `agent-league6`, 145.1M (`best.zip`) | **47.5%** | 0.09 | 5.0k / 11.9k | 4.0 (39%, 36%) | 0.03 |
   | `agent-league6`, 147.1M | 46.8% | 0.03 | 4.8k / 11.7k | 4.5 (34%, 32%) | 0.02 |
+  | `agent-league7`, 157.2M (`best.zip`) | 49.9% | 0.08 | 5.0k / 10.9k | 4.7 (44%, 39%) | 0.03 |
+  | `agent-league7`, 165.2M | **54.1%** | 0.05 | 4.9k / 9.9k | 4.0 (48%, 45%) | 0 |
+  | `agent-league7-distill`, 165.2M | 48.8% | 0.02 | 5.1k / 11.2k | 4.3 (42%, 39%) | 0 |
 
   Each league took more of her, without throwing. It met her in one CPU match in 23;
   with a quarter of them (`finetune.py --cpu-focus kanna:0.25`, round 6) it took 8
   points more, won a round in one match in ten, and its last checkpoint won its first
-  match against her (1 of 21 in the tiers evaluation).
+  match against her (1 of 21 in the tiers evaluation). With 40% (round 7) its last
+  checkpoint took 54.1% of her HP a round and again won 1 of 21, never throwing; the gain
+  is its guard, not its damage (taken 9.9k a minute, from 11.9k; dealt 4.9k, as before),
+  so its rounds last longer, and its reversals counter-hit her 45% of the time (36%).
 
   *Where her damage comes from* (7 November; `kanna_study.py`, 64 matches each,
   `eval/kanna-study/`; her moves by src/efz.h's `CKanna` names; a rerun moves the
@@ -376,6 +382,21 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   victim they beat its own play against Kano's third. On Kanna nothing changes, as
   there are no people's combos on her to keep (4 matches won with the old library, none
   with the new: within 64 matches' noise).
+
+  *Routes learnt* (round 7, `agent-league7-distill`: `agent-league7` with the routes kept
+  per victim played in the CPU's matches, `--assist-where cpu`, and learnt,
+  `--assist-distill 1`). It learnt them (it chose the route's action on 90% of their
+  steps at first, 94% at the end) and lost: after its first 2M steps it won 17% of its
+  evaluation against the exploiters (83% before), and on 64 matches at the end 35% over
+  the sixteen (`agent-league7` 82%). Its own combos got smaller (808 HP against the
+  exploiters, 785 against the CPU; the plain arm 1,045 and 999), with Instant Charge in
+  9% of them (the plain arm 0.4%, people 16.5%); it jumps 13.1 times a minute against the
+  exploiters (9.0) and is hit in the air twice as often: what the routes do (jump
+  cancels, long strings) spread to its neutral. On Kanna 48.8% (54.1%). The weight was
+  too much: each rollout (16,384 steps) took 6 PPO steps and 4 full steps of
+  cross-entropy toward the routes, which all pull one way, from the 9% of its steps the
+  routes played. That makes twice that routes trained in cost the agent its own play
+  (round 5's `--assist`, and this); at play time they stay an option.
 
 ## Other characters: clones, exploiters, a league
 
@@ -582,6 +603,29 @@ Keeping the best worked: the last checkpoint slipped back against Kano (PFSP's
 forgetting), the best kept its gains. Against the middle tier it lost 9 points (Ayu's
 CPU 8 of 11, from 10: few matches, to watch). The best is round 7's target
 (`kano/target6.zip`, `mizukab/target6.zip`, `misuzu/target2.zip`, `mishio/target2.zip`).
+
+**Round 7's exploiters**, against 145.1M: Kano's sixth stopped at 88% after 11.2M steps
+and won 67% on 64 matches (the target jumps 15.4 times a minute against it and is hit in
+the air 3.8: the anti-air hole again). Mishio's second reached 53% (22.3M steps; 22% on
+64), Misuzu's second 28% (5%), Unknown's sixth 16% (0%).
+
+**Round 7** (`agent-league7`): from 145.1M, 20M steps against all sixteen (the new four
+at their best checkpoints), Kanna in 40% of the CPU matches; a second arm also learnt
+the routes (`agent-league7-distill`, above). 64 matches each (63 against the CPU):
+
+| Agent | Level-4 CPU | Kano 1-6 | Mizuka 1-6 | Misuzu 1 / 2, Mishio 1 / 2 | 12 old | 16 | Kanna's HP |
+|---|---|---|---|---|---|---|---|
+| `agent-league6`, 145.1M (`best.zip`) | 0% / 86% / 100% | 97 / 100 / 64 / 72 / 62 / 33% | 100 / 100 / 97 / 98 / 100 / 100% | 91 / 95, 97 / 78% | 90% | 87% | 47.5% |
+| `agent-league7`, 157.2M (`best.zip`) | 0% / **100%** / 100% | 98 / 97 / 77 / 83 / 70 / **66%** | 100 / 100 / 100 / 88 / 100 / 95% | 98 / 98, 98 / 91% | **92%** | **91%** | 49.9% |
+| `agent-league7`, 165.2M | 5% / 86% / 100% | 95 / 98 / 78 / 80 / 48 / 30% | 97 / 88 / 98 / 50 / 100 / 92% | 94 / 97, 95 / 72% | 85% | 82% | **54.1%** |
+| `agent-league7-distill`, 165.2M | 0% / 62% / 71% | 52 / 67 / 16 / 19 / 9 / 2% | 70 / 33 / 67 / 3 / 70 / 41% | 25 / 36, 48 / 8% | 40% | 35% | 48.8% |
+
+The best checkpoint closed Kano's sixth by its anti-air read, not by jumping less: hit
+in the air 1.7 times a minute (3.8), jumping 14.1 (15.4), damage taken 7.9k a minute
+(10.3k); and it won all the CPU's middle tier. The last checkpoint forgot Kano's sixth
+again (30%), as round 6's last did, while it took the most of Kanna yet. The best is
+round 8's target (`kano/target7.zip`, `mizukab/target7.zip`, `misuzu/target3.zip`,
+`mishio/target3.zip`).
 
 ## The models
 
