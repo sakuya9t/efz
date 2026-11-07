@@ -304,21 +304,25 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   match against her (1 of 21 in the tiers evaluation).
 
   *Where her damage comes from* (7 November; `kanna_study.py`, 64 matches each,
-  `eval/kanna-study/`; her moves by src/efz.h's `CKanna` names). `agent-league6`'s best
-  loses 12.2k HP a minute (127.0M 12.6k, the clone 19.2k):
+  `eval/kanna-study/`; her moves by src/efz.h's `CKanna` names; a rerun moves the
+  shares by a few points). `agent-league6`'s best loses 12.4k HP a minute (127.0M
+  12.7k, the clone 19.0k):
   - Her **236C**, an invincible beam (startup 7, reach 468) that costs 500 of her RF
-    gauge, starts 22% of the damage of her combos (2.6k a minute; 127.0M 23%, the clone
-    5%); 89% of them come while the agent is in a move of its own, and 77% hit. It is
+    gauge, starts 20% of the damage of her combos (2.3k a minute; 127.0M 24%, the clone
+    5%); 88% of them come while the agent is in a move of its own, and 76% hit. It is
     her answer to a move (a tick's 0.1% chance while the opponent is in one, more after
     her RG and on her neutral roll), and only while her RF gauge is red or cyan, which
     the agent sees (`opp_rf_gauge`): 57% of the time. The agent starts more moves then
-    (39.0 a minute against 22.4): its pressure fills her gauge as she guards.
-  - Her jump attacks (j.B, j.C) start 18% and hit 58% and 44% of the time; her 2A
-    (startup 4) 8%.
-  - Its reversals (4.1 a minute) counter-hit her 34% of the time: 64% against her
-    236A/B (startup 11, reach 340, her most common attack); but a third come while she
-    isn't attacking (26% counter-hits, 12% punished), and against her 41236A/B (a
-    99-hit shot) 67% are punished. A counter-hit leads to 840 HP on average, under its
+    (38.3 a minute against 21.0): its pressure fills her gauge as she guards.
+  - Her jump attacks (j.B, j.C) start 16% and hit 59% and 39% of the time; her 2A
+    (startup 4) 12%.
+  - It beats her attacks by overriding them, not by punishing misses (she rarely
+    misses): of her 236A/B 28% are hit out before they can hit, 5% punished after; of
+    her 2B 30% and 5%; her 236C almost never (1% and 4%).
+  - Its reversals (4.0 a minute) counter-hit her 32% of the time (40% against her
+    236A/B, startup 11, reach 340, her most common attack); but a third come while she
+    isn't attacking (27% counter-hits, 12% punished), and against her 41236A/B (a
+    99-hit shot) 54% are punished. A counter-hit leads to 785 HP on average, under its
     usual combo on her (934; the 90th percentile 1.8k): the big combo after the
     override is the short part. Nor does it spend for damage: with one to three bars of
     power its combos on her average 816-1,023 (799 with none), and it Instant Charges in
@@ -329,11 +333,11 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
     after she was last hit, guarding or knocked down (`m_cpuHitCooldown`), then a roll
     each tick by distance. The agent sees the game 14 steps late and keeps 16 steps of
     its own inputs, too little to count 180 ticks, but the rhythm predicts less than it
-    seems: 44% of her attacks (out of her combos) and 57% of the damage come inside the
+    seems: 42% of her attacks (out of her combos) and 55% of the damage come inside the
     lock, from the routines it doesn't gate (anti-airs, answers to an RG or a move),
-    and of those after it 70% come more than 120 steps after it ended. What it would
-    tell the agent: its reversals inside the lock counter-hit her 27% of the time,
-    after it 40%.
+    and of those after it 77% come more than 120 steps after it ended. What it would
+    tell the agent: its reversals inside the lock counter-hit her 24% of the time,
+    after it 38%.
 
   *Bigger combos* (the user's other half). The same agent with the fair built-in routes
   at play time (`evaluate.py --p1-assist`: once it sees its hit, people's library
