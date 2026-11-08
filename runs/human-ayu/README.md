@@ -385,7 +385,11 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   The routes' cost against the exploiters was mostly combos landed on others: kept per
   victim they beat its own play against Kano's third. On Kanna nothing changes, as
   there are no people's combos on her to keep (4 matches won with the old library, none
-  with the new: within 64 matches' noise).
+  with the new: within 64 matches' noise). Round 7's best with the routes kept per
+  victim takes **60.1%** of her HP a round and won 3 of 64 matches (0.28 rounds a match;
+  its own play 49.9% and none), throwing 0.06 times a minute; against Kano's sixth and
+  seventh they cost it 10 and 9 points (56% and 41%), as before: a route deals more a
+  combo, but the agent lands fewer.
 
   *Routes learnt* (round 7, `agent-league7-distill`: `agent-league7` with the routes kept
   per victim played in the CPU's matches, `--assist-where cpu`, and learnt,
