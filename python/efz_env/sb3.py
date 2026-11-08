@@ -24,7 +24,8 @@ delay: a reaction time, in steps: every view the environment gives (the agents' 
 the opponent's) is the game as it was that many steps before (efz_env.history.Delay);
 the input history stays current, as a player knows what it pressed. opponent_delay:
 the opponent's own, per match or for all, up to delay (0: it sees the game as it is, a
-red-team opponent without a person's limits).
+red-team opponent without a person's limits). delay_most: the agents' reaction time
+varies, drawn each match from delay to delay_most (the opponent's stays its own).
 
 Matches that end restart in the same step, as SB3 expects: infos[i] then holds
 'terminal_observation', 'TimeLimit.truncated' and 'episode' ({'r', 'l', 't'}, as SB3's
@@ -91,7 +92,8 @@ def mixture(policies, assignment):
 class EfzSB3VecEnv(VecEnv):
     def __init__(self, data_dir=None, num_envs=64, *, opponent='cpu', cpu_envs=None,
                  action_table=None, chars=(None, None), stage=None, char_pool=None,
-                 stage_pool=None, history=0, delay=0, opponent_delay=None, **config):
+                 stage_pool=None, history=0, delay=0, opponent_delay=None, delay_most=None,
+                 **config):
         if 'autoreset' in config and config['autoreset'] != 'same_step':
             raise ValueError("SB3 VecEnvs reset in the same step: leave autoreset alone")
         self.env = EfzVecEnv(data_dir, num_envs, autoreset='same_step', **config)
@@ -116,7 +118,8 @@ class EfzSB3VecEnv(VecEnv):
         self._length = np.zeros(num_envs, dtype=np.int64)
         self._start = time.time()
         self.history = InputHistory((num_envs, 2), history) if history else None
-        self.delay = Delay((num_envs, 2), delay, self.env.obs_dim) if delay else None
+        self.delay = (Delay((num_envs, 2), delay, self.env.obs_dim, most=delay_most,
+                            seed=config.get('seed')) if delay else None)
         self.opponent_delay = None
         if opponent_delay is not None and delay:
             d = np.broadcast_to(np.asarray(opponent_delay, dtype=int), (num_envs,)).copy()

@@ -76,37 +76,62 @@ class Delay:
     """A reaction time: what a player sees is the observation of `steps` steps before
     (its own inputs, above, it knows at once). For a batch (`shape`, e.g. (num_envs, 2))
     of observations of `dim` features; a new match's first view fills it (so a player
-    sees the start of the match for its first `steps` steps)."""
+    sees the start of the match for its first `steps` steps).
 
-    def __init__(self, shape, steps, dim):
+    most: a reaction time that varies, as people's does: each player's, each match, drawn
+    from steps to most (`each`); none, `steps` for all, as before."""
+
+    def __init__(self, shape, steps, dim, most=None, seed=None):
         self.shape = tuple(shape)
         self.steps = steps
-        self.buf = np.zeros(self.shape + (steps + 1, dim), dtype=np.float32)
+        self.most = steps if most is None else int(most)
+        if self.most < steps:
+            raise ValueError('Delay: most is at least steps')
+        self.rng = np.random.default_rng(seed)
+        self.each = np.full(self.shape, steps, dtype=np.int64)  # this match's, per player
+        self.buf = np.zeros(self.shape + (self.most + 1, dim), dtype=np.float32)
         self.fresh = np.ones(self.shape, dtype=bool)
+        if self.most > self.steps:
+            self.each[:] = self.rng.integers(self.steps, self.most + 1, self.shape)
 
     def clear(self, mask=None):
-        """A new match (where mask): the next view pushed fills the buffer."""
-        if mask is None:
-            self.fresh[:] = True
-        else:
-            self.fresh[np.asarray(mask, dtype=bool)] = True
+        """A new match (where mask): the next view pushed fills the buffer (and with a
+        varying reaction time, a new one is drawn)."""
+        mask = (np.ones(self.shape, dtype=bool) if mask is None
+                else np.asarray(mask, dtype=bool))
+        self.fresh[mask] = True
+        if self.most > self.steps:
+            self.each[mask] = self.rng.integers(self.steps, self.most + 1,
+                                                self.each[mask].shape)
+
+    def _lagged(self, lag):
+        """buf at each player's own lag (an array of self.shape)."""
+        idx = np.broadcast_to(lag[..., None, None], self.shape + (1, self.buf.shape[-1]))
+        return np.take_along_axis(self.buf, idx, axis=-2)[..., 0, :]
 
     def push(self, obs):
-        """This step's observations -> what is seen: those of `steps` steps before."""
+        """This step's observations -> what is seen: those of `steps` steps before (each
+        player's own number of steps, with most)."""
         obs = np.asarray(obs, dtype=np.float32)
         self.buf[..., 1:, :] = self.buf[..., :-1, :]
         self.buf[..., 0, :] = obs
         if self.fresh.any():
             self.buf[self.fresh] = obs[self.fresh][..., None, :]
             self.fresh[:] = False
-        return self.buf[..., self.steps, :].copy()
+        if self.most == self.steps:
+            return self.buf[..., self.steps, :].copy()
+        return self._lagged(self.each)
 
     def peek(self, obs):
         """What push(obs) would return, without pushing it (a match's last view)."""
         obs = np.asarray(obs, dtype=np.float32)
-        if self.steps == 0:
-            return obs.copy()
-        out = self.buf[..., self.steps - 1, :].copy()
+        if self.most == self.steps:
+            if self.steps == 0:
+                return obs.copy()
+            out = self.buf[..., self.steps - 1, :].copy()
+        else:
+            out = self._lagged(np.maximum(self.each - 1, 0))
+            out[self.each == 0] = obs[self.each == 0]
         out[self.fresh] = obs[self.fresh]
         return out
 

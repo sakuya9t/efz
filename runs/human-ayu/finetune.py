@@ -152,6 +152,10 @@ def parse():
     p.add_argument('--delay', type=int, default=0,
                    help='steps late every player sees the game (the prior must be trained '
                         'with the same: bc.py --delay)')
+    p.add_argument('--delay-most', type=int, default=None,
+                   help="a reaction time that varies, as people's does: each match's drawn "
+                        "from --delay to this (default: --delay always); the agent is "
+                        "evaluated at --delay")
     p.add_argument('--chunk', type=float, default=3e6)
     p.add_argument('--budget', type=float, default=6e7)
     p.add_argument('--minutes', type=float, default=5)
@@ -166,6 +170,11 @@ def parse():
     p.add_argument('--ent-coef', type=float, default=0.005)
     p.add_argument('--torch-threads', type=int, default=8)
     args = p.parse_args()
+    if args.delay_most is not None and args.delay_most != args.delay:
+        if args.delay_most < args.delay:
+            p.error('--delay-most: at least --delay')
+        if args.assist or args.vs_assist or args.practice:  # (they plan with one delay)
+            p.error('--delay-most: not with --assist, --vs-assist or --practice')
     if args.char != 'ayu' and args.old == OLD:  # the curriculum agent plays Ayu only
         args.old = ''
     args.vs = [tuple(v.rsplit(':', 1)) if ':' in os.path.basename(v) else (v, 'ayu')
@@ -256,6 +265,7 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     env = EfzSB3VecEnv(args.data, n, opponent=mixture(opponents, assignment),
                         cpu_envs=cpu_envs, chars=chars, frame_skip=1, history=args.history,
                         delay=args.delay, opponent_delay=opponent_delay if args.delay else None,
+                        delay_most=args.delay_most,
                         max_frames=int(args.minutes * 3840), cpu_level=level,
                         reward_round=0.0, reward_match=1.0, seed=seed)
     for o in opponents:  # the lookahead red team saves this environment's games
@@ -439,7 +449,8 @@ def main():
         print(f'continuing {args.out} after chunk {len(history)}', flush=True)
     settings = ppo_settings(args)
     with open(os.path.join(args.out, 'config.json'), 'w') as f:
-        json.dump(dict(frame_skip=1, history=args.history, delay=args.delay, chars=[args.char, None],
+        json.dump(dict(frame_skip=1, history=args.history, delay=args.delay,
+                       delay_most=args.delay_most, chars=[args.char, None],
                        vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
                        pfsp=args.pfsp, pfsp_window=args.pfsp_window, cpu_focus=args.cpu_focus,
                        focus=args.focus, focus_coef=args.focus_coef,
