@@ -199,8 +199,11 @@ def score(results, k):
 
 def vs_counts(n, wins, power):
     """n matches shared out among the --vs opponents: by (1 - win) ** power (PFSP), at
-    least one each, by largest remainder; evenly without wins or power."""
+    least one each, by largest remainder; evenly without wins or power. PFSP has only the
+    matches beyond one each to share (n == k: one each, whatever the wins)."""
     k = len(wins)
+    if n < k:
+        raise ValueError(f'{n} --vs matches for {k} --vs opponents: raise --vs-share or --envs')
     if not power or any(w is None for w in wins):
         return [n // k + (j < n % k) for j in range(k)]
     w = np.array([(1 - x) ** power + 0.02 for x in wins])

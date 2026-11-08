@@ -625,7 +625,16 @@ in the air 1.7 times a minute (3.8), jumping 14.1 (15.4), damage taken 7.9k a mi
 (10.3k); and it won all the CPU's middle tier. The last checkpoint forgot Kano's sixth
 again (30%), as round 6's last did, while it took the most of Kanna yet. The best is
 round 8's target (`kano/target7.zip`, `mizukab/target7.zip`, `misuzu/target3.zip`,
-`mishio/target3.zip`).
+`mishio/target3.zip`). Round 7 had 16 matches for its 16 exploiters (half of the 32
+against agents), so PFSP, which shares only the matches beyond one each, did nothing
+(round 6: 16 for 12); `vs_counts` now refuses fewer matches than opponents.
+
+**Round 8's exploiters**, against 157.2M: Kano's seventh stopped at 75% after 14.2M
+steps and won 50% on 64 matches, with no jumping hole (the target is hit in the air 1.0
+times a minute): a guard-heavy game (16.6 guards a minute, 2.0 presses a second) that
+trades damage even. Mishio's third won 27%, Unknown's seventh 16%, Misuzu's third 12%
+(24.4M steps each). Round 8 (`agent-league8`) meets all twenty, 24 matches for them
+(`--vs-share 0.75`), Kanna in 40% of the CPU matches; `agent-league8-kanna6` in 60%.
 
 ## The models
 
