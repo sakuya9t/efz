@@ -539,13 +539,14 @@ def _by_opponent(result, chars):
     return out
 
 
-def make_agent(path, deterministic=False):
-    """An SB3 model.zip's Agent, or a language model's folder's (llm.json) LLMAgent."""
+def make_agent(path, deterministic=False, delay=None):
+    """An SB3 model.zip's Agent, or a language model's folder's (llm.json) LLMAgent. delay:
+    how many steps late it sees the game, instead of its config's."""
     if os.path.isdir(path) and os.path.exists(os.path.join(path, 'llm.json')):
         sys.path.insert(0, os.path.join(REPO, 'runs', 'llm-ayu'))
         from llm import LLMAgent
         return LLMAgent(path, deterministic=deterministic)
-    return Agent(path, deterministic=deterministic)
+    return Agent(path, deterministic=deterministic, delay=delay)
 
 
 def main():
@@ -559,6 +560,10 @@ def main():
     p.add_argument('--matches', type=int, default=64)
     p.add_argument('--minutes', type=float, default=5)
     p.add_argument('--deterministic', action='store_true')
+    p.add_argument('--seed', type=int, default=7,
+                   help="the matches' seed (finetune.py's evaluations play seed 7)")
+    p.add_argument('--p1-delay', type=int,
+                   help="P1 sees the game this many steps late, instead of its config's")
     p.add_argument('--json', help='write the results here')
     p.add_argument('--p1-combo', help="combo_support.ComboSwitch: P1's combos played by this "
                                       "model (combo.py's combo master)")
@@ -575,7 +580,7 @@ def main():
                    help="--p1-assist's choice: the most damaging option, or the most worth to "
                         "P1 (damage plus its critic's value of the game it left: redteam.Planner)")
     args = p.parse_args()
-    p1 = make_agent(args.p1, args.deterministic)
+    p1 = make_agent(args.p1, args.deterministic, args.p1_delay)
     if sum(bool(x) for x in (args.p1_combo, args.p1_lookahead, args.p1_assist)) > 1:
         p.error('one of --p1-combo, --p1-lookahead, --p1-assist')
     if args.p1_combo or args.p1_lookahead or args.p1_assist:
@@ -594,7 +599,7 @@ def main():
     p2 = 'cpu' if args.p2 == 'cpu' else make_agent(args.p2, args.deterministic)
     out = {}
     for level in (args.level if p2 == 'cpu' else [0]):
-        r = play(args, p1, p2, args.matches, level)
+        r = play(args, p1, p2, args.matches, level, seed=args.seed)
         key = f'cpu{level}' if p2 == 'cpu' else 'vs'
         out[key] = r
         print(key, json.dumps({k: v for k, v in r.items()

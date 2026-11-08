@@ -50,8 +50,8 @@ and `replays/` (needed for people's combo starts). EFZ_DIR: the decompilation's
 `efz-unpacked/tasogare/EFZ`. `runs/llm-ayu/setup-linux.sh` worked with cmake from pip
 (the host has none), after a fix: the headless library failed to load after torch
 ("cannot allocate memory in static TLS block"; port/guest.h now gives the static TLS
-model to the arena's two pointers only). New checkpoints since 6 November are only here,
-not yet on the Hub (`python runs/hub.py upload human-ayu`).
+model to the arena's two pointers only). The checkpoints through round 8 are on the Hub
+since 8 November (`best.zip` and `model.zip` of each run; the `chunk*.zip` only here).
 
 **Checkpoints.** Hugging Face, https://huggingface.co/sakuya9t/efz, under the repository's
 paths: `python runs/hub.py download human-ayu` puts them back into `runs/human-ayu/`

@@ -679,19 +679,121 @@ each (63 against the CPU); the twenty exploiters' mean, and the sixteen before r
 No step forward. Round 8 learnt the new Mizuka and Mishio and lost Kano: its best jumps
 19.6 times a minute against Kano's sixth and is hit in the air 4.8 times (157.2M: 14.1
 and 1.7), the hole round 7 had closed. Its best checkpoint was picked by 16-match
-evaluations (Kano's sixth 75% there, 33% on 64): with 21 opponents and 11 checkpoints,
+evaluations (Kano's sixth 62% there, 33% on 64): with 21 opponents and 11 checkpoints,
 the best of noisy evaluations. Kanna in 60% of the CPU matches took no more of her (Kanna's HP
 46.9-51.2% against 46.0-50.7%; 64 matches tell apart about 4 points) and lost more to
 the exploiters. The routes learnt at a tenth of the weight (`agent-league8-distill01`,
 above under Kanna) lost to every exploiter more. `agent-league7`'s best stays the best
 agent.
 
+## Ayu's agent as other characters
+
+What it learnt for Ayu and what any character keeps (8 November; `eval/transfer/`): the
+best agent (`agent-league7`, 157.2M) and Ayu's clone (`bc-d14`) played as eight other
+characters, and those characters' own clones and exploiters as references, 63 matches
+each against the level-4 CPU's tiers (`evaluate.py --chars X tiers`). The obs carry
+the character it plays, which the agent only ever saw as Ayu; the actions are the same
+45 inputs for everyone.
+
+| As Ayu / as the others (mean of 8) | Ayu's clone | The agent | Own clones (4) | Exploiters (4) | Carried over |
+|---|---|---|---|---|---|
+| CPU's HP taken a round | 32% / 26% | 82% / 36% | 42% | 64% | 21% |
+| Jumps a minute | 18.8 / 31.3 | 7.8 / 14.1 | 15.1 | 11.8 | all |
+| Hit in the air a minute | 3.2 / 6.8 | 0.7 / 1.5 | 2.4 | 1.9 | all |
+| Air recoil guard | 9% / 5% | 12% / 10% | 9% | 7% | all |
+| Combos a minute | 5.5 / 4.2 | 10.3 / 6.8 | 6.3 | 8.8 | 55% |
+| Combo damage | 539 / 547 | 1,000 / 632 | 582 | 687 | 18% |
+| Reversals a minute | 0.9 / 1.3 | 4.2 / 2.5 | 1.1 | 0.8 | 35% |
+| Guards a minute (ground) | 16.0 / 4.6 | 8.4 / 16.2 | 18.9 | 14.3 | - |
+| Hit on the ground a minute | 10.5 / 6.6 | 8.7 / 16.7 | 10.7 | 9.4 | none |
+| Damage taken a minute | 9.2k / 8.7k | 8.0k / 11.9k | 8.7k | 8.2k | none |
+| Presses a second | 1.18 / 2.01 | 1.44 / 0.87 | 1.29 | 1.72 | - |
+
+(Carried over: the agent's gain over Ayu's clone as the others, as a share of its gain
+as Ayu.) As another character it wins almost nothing (0-10% of the easiest tier; Ayu's
+clone 0%, the others' clones up to 19%), but it takes more of the CPU than Ayu's clone
+there, as much as their own clones as Mishio, Sayuri and Nanase (40-52%).
+
+- **General** (any character keeps it): staying on the ground against anti-airs and not
+  being hit in the air (the lesson of Kano's exploiters), recoil-guarding in the air,
+  turning hits into combos more often, and putting out invincible moves (2.5 a minute,
+  their clones 1.1).
+- **Ayu's**: the damage of its combos (her routes) and its ground defence. As the others
+  it guards twice as often and is hit twice as often (16.7 a minute, its own clones 10.7),
+  taking more than any clone. Most likely holding guard was safe for Ayu because of her
+  ways out (a reversal that starts in 2 steps, her spacing), which other characters'
+  frame data don't give it, and it presses too little (0.87 a second) to make its own. Its CPU wins as Ayu (100% of the middle tier) are all hers.
+
+The exploiters, trained for 14-24M steps as their character against the agent and a
+quarter against the level-3 CPU, beat the level-4 CPU's middle tier 14-81% and take 58-72%
+of it: a run per character learns its character fast; the Ayu agent's general habits
+are a smaller part of its strength than its character's.
+
+`kano/transfer7`, `mizukab/transfer7`: Kano and Mizuka trained from the Ayu agent
+instead of their clones, round 8's exploiter recipe otherwise (their target
+`agent-league7`, their clone as the prior), against `kano/exploiter7` and
+`mizukab/exploiter7`: whether Ayu's agent is a better start for a character than
+people's play of it.
+
+## What is overfitted
+
+The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches each
+(`eval/overfit/`, `evaluate.py --seed`, `--p1-delay`):
+
+- **Its reaction time, most of all.** It trained seeing the game 14 steps late; seeing
+  it earlier, which gives it more, makes it worse, as does later:
+
+  | Steps late | 8 | 11 | **14** | 17 | 20 |
+  |---|---|---|---|---|---|
+  | Level-4 CPU (tiers) | 51% (0/62/90%) | 60% | **67%** (0/100/100%) | 52% | 46% |
+  | Kano's sixth | 23% | 52% | **66%** | 16% | 0% |
+  | Its combos on the CPU | 781 | 941 | **1,000** | 762 | 670 |
+
+  Its play, combos most, is timed against the lag itself: it continues a combo by the
+  step it sees the hit, and its anti-air reads by when it sees the jump. A person who
+  reacts faster plays better; it plays worse. People's reaction times vary from moment to
+  moment, and the training's delay doesn't. A delay drawn per match or per moment
+  (14-20 steps, the human limit and slower) should make it hold up and drop fewer combos.
+- **The evaluation seed, a little.** Its best checkpoints were picked on evaluations of
+  seed 7 (`finetune.py`'s, and `evaluate.py`'s default) and measured on seed 7: on
+  seeds 11 and 23 the CPU's middle tier 90% and 81% (100%), Unknown's fourth 80% and 81%
+  (88%), Kano's sixth 58% and 84% (66%), Kano's seventh 56% and 44% (50%): about 4
+  points flattering on average, within the noise for any one. Pick on one seed, measure
+  on others.
+- **The checkpoint pick:** over the exploiters, a best checkpoint's 16-match evaluation
+  against its 64-match measure: round 6 90.1% / 89.8%, round 7 90.2% / 91.2%, round 8
+  89.7% / 86.2%, `kanna6` 88.1% / 85.9%; the drops are on the hardest (Kano's fourth to
+  sixth, up to 29 points).
+- **Not overfitted:** people's play it never met (the clones of Kano, Mizuka, Misuzu and
+  Mishio: 100% each, 99% of their HP, taking 2.7-3.8k a minute where the same
+  characters' exploiters deal 6.7-10.1k); the CPU's lower levels (100%, 100%, 81% at
+  levels 1-3, so nothing is tied to level 4's patterns); and the exploiters don't
+  overfit their target either: each beats the older agents as well as, or better than,
+  the agent it was trained against (Kano's seventh beats round 5's best 67% and round
+  6's 61%, its target 50%; Mishio's third round 6's 31%, its target 27%). Their holes
+  are the lineage's, not one checkpoint's:
+
+  | Agent \ exploiter | Kano 3 / 4 / 5 / 6 / 7 | Mizuka 7 | Misuzu 3 | Mishio 3 |
+  |---|---|---|---|---|
+  | `agent-league5-base`, 127.0M | 66 / 59 / 42* / 42 / 33% | 81% | 83% | 95% |
+  | `agent-league6`, 145.1M | 64 / 72 / 62 / 33* / 39% | 84% | 70% | 69% |
+  | `agent-league7`, 157.2M | 77 / 83 / 70 / 66 / 50*% | 84%* | 88%* | 73%* |
+  | `agent-league8`, 169.3M | 72 / 70 / 67 / 33 / 39% | 95% | 92% | 95% |
+
+  (the agent's wins; * the exploiter's own target.) Round 7's best beats every Kano
+  exploiter better than the agents before it: real progress, not the last round's
+  answer only.
+
 ## The models
 
 On Hugging Face, https://huggingface.co/sakuya9t/efz, under the same paths:
 `python runs/hub.py download human-ayu` (the clones, the team, the agent's checkpoints,
 the combo master). The repository keeps the clones and the team too; the agent's and
-the combo master's checkpoints are only there.
+the combo master's checkpoints are only there. Uploaded 8 November: every run's
+`best.zip` and last `model.zip` (not the `chunk*.zip` between) through round 8, and the
+exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their targets
+(`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent is
+`agent-league7/best.zip`.
 
 ## The scripts
 
