@@ -110,7 +110,8 @@ class FairAssist:
         value: its own play's and its critic's (the planner's score='value')."""
         hits = _hits(seen_view)
         if (hits > 0 and self.prev_seen.get(i, 0) == 0 and _hits(now_view) > 0
-                and self.playing.get(i) is None):
+                and self.playing.get(i) is None
+                and self.planner.plans_against(seen_view)):
             starter = int(round(float(seen_view[ACTION])))  # the move that hit
             chosen, best, own = self.planner.plan(save(), side, starter, hist, prev,
                                                   offset=self.delay, seen=seen, policy=policy,

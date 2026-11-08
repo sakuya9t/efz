@@ -67,7 +67,7 @@ class Planner:
     """Tries a hit's options on copies of the game and says which made the most."""
 
     def __init__(self, data_dir, library, model, per_start=12, limit=900, history=16,
-                 score='damage', gamma=0.999):
+                 score='damage', gamma=0.999, victims=None):
         if score not in ('damage', 'value'):
             raise ValueError("score: 'damage' or 'value'")
         self.library, self.per_start, self.limit = library, per_start, limit
@@ -81,12 +81,23 @@ class Planner:
         self.by_victim = any(m.get('kept_for') == 'victim' for m in library)
         from efz_env.vec import character_names
         self.names = character_names()
+        # victims: the characters it plans against (None: all); against the rest the
+        # player's own play, as a person keeps routes for the characters they hold on.
+        self.victims = None if victims is None else set(victims)
+        unknown = (self.victims or set()) - set(self.names)
+        if unknown:
+            raise ValueError(f'victims: no such characters {sorted(unknown)}')
         self.sim = EfzVecEnv(data_dir, per_start + 1, frame_skip=1, rounds_to_win=2,
                              max_frames=0, autoreset='disabled')
         self.sim.reset()
         self.model = model
         self.width = model.observation_space.shape[0]
         self.H = history
+
+    def plans_against(self, view):
+        """Whether it plans against the character this view (the player's) faces."""
+        return (self.victims is None or
+                self.names[int(round(float(view[OPP_CHARACTER])))] in self.victims)
 
     def plan(self, state, side, starter, hist, prev, offset=0, seen=None, policy=None,
              value=None):

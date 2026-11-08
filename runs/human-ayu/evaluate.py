@@ -568,6 +568,9 @@ def main():
                                           "from this library (combo_library.py's)")
     p.add_argument('--p1-assist', help="combo_support.FairComboAgent: the same once P1 sees its "
                                        "hit (strong but fair), from this library")
+    p.add_argument('--assist-victims', nargs='+',
+                   help="--p1-assist only against these characters (its own play against "
+                        "the rest), e.g. kanna")
     p.add_argument('--assist-score', default='damage', choices=('damage', 'value'),
                    help="--p1-assist's choice: the most damaging option, or the most worth to "
                         "P1 (damage plus its critic's value of the game it left: redteam.Planner)")
@@ -581,7 +584,7 @@ def main():
             import macros
             import redteam
             planner = redteam.Planner(args.data, macros.load_library(args.p1_assist), p1.model,
-                                      score=args.assist_score)
+                                      score=args.assist_score, victims=args.assist_victims)
             p1 = combo_support.FairComboAgent(p1, planner)
         if args.p1_lookahead:
             p1 = combo_support.lookahead(args.data, args.p1, args.p1_lookahead)
@@ -603,7 +606,7 @@ def main():
                                           for t, v in r['by_tier'].items()), flush=True)
     if args.p1_assist:  # its plans: how many, the share a route won, the damage options made
         out['assist'] = dict(p1.assist.take_plans(), score=args.assist_score,
-                             changed=planner.changed)
+                             changed=planner.changed, victims=args.assist_victims)
         print('assist', json.dumps(out['assist']), flush=True)
     if args.json:
         with open(args.json, 'w') as f:

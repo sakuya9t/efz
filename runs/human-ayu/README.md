@@ -403,8 +403,28 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   cancels, long strings) spread to its neutral. On Kanna 48.8% (54.1%). The weight was
   too much: each rollout (16,384 steps) took 6 PPO steps and 4 full steps of
   cross-entropy toward the routes, which all pull one way, from the 9% of its steps the
-  routes played. That makes twice that routes trained in cost the agent its own play
-  (round 5's `--assist`, and this); at play time they stay an option.
+  routes played. A tenth of the weight (round 8, `agent-league8-distill01`:
+  `--assist-distill 0.1`, Kanna in 40% of the CPU matches, otherwise round 8's plain arm,
+  its control) did not collapse but went the same way: it kept the routes (91% agreement)
+  and its evaluation score (the exploiters' and the CPU's wins) fell from 0.85 to
+  0.57-0.68 (the control 0.80-0.88), so no checkpoint beat its start and `best.zip` is
+  `agent-league7`'s. At the end,
+  on 64 matches: 60% over the twenty exploiters (the control 85%; Kano's sixth and
+  seventh 9% and 3%), the level-4 CPU's hard tier 67%, Kanna 49.4% (the control 46.0%).
+  Its own combos 873 HP against the CPU, 844 against Kano's sixth (the control 1,024 and
+  1,118), Instant Charge in 3%, 2.3 presses a second (1.7), 16.6 jumps a minute against
+  Kano's sixth. That makes three times that routes trained in cost the agent its own play
+  (round 5's `--assist`, and these two); at play time they stay an option.
+
+  *Routes against Kanna only* (`evaluate.py --assist-victims kanna`,
+  `redteam.Planner(victims=...)`: the planner plans only against the characters named,
+  as a person keeps routes for the characters they hold on, and the agent plays its own
+  combos against the rest). Round 7's best so takes **58.8%** of Kanna's HP a round and
+  won 2 of 64 (combos 1,128 / 2,456, Instant Charge in 8%, throws 0.02 a minute), and
+  against Kano's sixth makes no plans and wins 70% (its own play 66%, the routes on
+  everyone 56%): Kanna's gain without Kano's cost. That is the agent to play against
+  her: `agent-league7/best.zip` with `--p1-assist combo-library-victims.npz
+  --assist-victims kanna`.
 
 ## Other characters: clones, exploiters, a league
 
@@ -654,6 +674,7 @@ each (63 against the CPU); the twenty exploiters' mean, and the sixteen before r
 | `agent-league8`, 177.3M | 0% / 90% / 100% | 53 / 34% | **98%** | 88% | 97% | 86% | 85% | 46.0% |
 | `agent-league8-kanna6`, 163.2M (`best.zip`) | 0% / 90% / 100% | 55 / 38% | 83% | 88% | 91% | 89% | 86% | 46.9% |
 | `agent-league8-kanna6`, 177.3M | 0% / 90% / 100% | 45 / 23% | 69% | 80% | 69% | 83% | 79% | 51.2% |
+| `agent-league8-distill01`, 177.3M | 0% / 67% / 95% | 9 / 3% | 36% | 62% | 66% | 65% | 60% | 49.4% |
 
 No step forward. Round 8 learnt the new Mizuka and Mishio and lost Kano: its best jumps
 19.6 times a minute against Kano's sixth and is hit in the air 4.8 times (157.2M: 14.1
@@ -661,7 +682,9 @@ and 1.7), the hole round 7 had closed. Its best checkpoint was picked by 16-matc
 evaluations (Kano's sixth 75% there, 33% on 64): with 21 opponents and 11 checkpoints,
 the best of noisy evaluations. Kanna in 60% of the CPU matches took no more of her (Kanna's HP
 46.9-51.2% against 46.0-50.7%; 64 matches tell apart about 4 points) and lost more to
-the exploiters. `agent-league7`'s best stays the best agent.
+the exploiters. The routes learnt at a tenth of the weight (`agent-league8-distill01`,
+above under Kanna) lost to every exploiter more. `agent-league7`'s best stays the best
+agent.
 
 ## The models
 
