@@ -300,6 +300,10 @@ The measures since 5 November, in `Events` (`evaluate.py`) and `tactics.py`, bot
   | `agent-league7`, 157.2M (`best.zip`) | 49.9% | 0.08 | 5.0k / 10.9k | 4.7 (44%, 39%) | 0.03 |
   | `agent-league7`, 165.2M | **54.1%** | 0.05 | 4.9k / 9.9k | 4.0 (48%, 45%) | 0 |
   | `agent-league7-distill`, 165.2M | 48.8% | 0.02 | 5.1k / 11.2k | 4.3 (42%, 39%) | 0 |
+  | `agent-league8`, 169.3M (`best.zip`) | 50.7% | 0.08 | 5.0k / 11.1k | 4.5 (39%, 37%) | 0.01 |
+  | `agent-league8`, 177.3M | 46.0% | 0.03 | 5.0k / 12.4k | 5.0 (30%, 26%) | 0.03 |
+  | `agent-league8-kanna6`, 163.2M (`best.zip`) | 46.9% | 0.06 | 4.4k / 10.5k | 3.9 (39%, 36%) | 0.01 |
+  | `agent-league8-kanna6`, 177.3M | 51.2% | 0.05 | 4.5k / 9.7k | 4.5 (45%, 40%) | 0.02 |
 
   Each league took more of her, without throwing. It met her in one CPU match in 23;
   with a quarter of them (`finetune.py --cpu-focus kanna:0.25`, round 6) it took 8
@@ -635,6 +639,25 @@ times a minute): a guard-heavy game (16.6 guards a minute, 2.0 presses a second)
 trades damage even. Mishio's third won 27%, Unknown's seventh 16%, Misuzu's third 12%
 (24.4M steps each). Round 8 (`agent-league8`) meets all twenty, 24 matches for them
 (`--vs-share 0.75`), Kanna in 40% of the CPU matches; `agent-league8-kanna6` in 60%.
+
+**Round 8** (`agent-league8`, `agent-league8-kanna6`): from 157.2M, 20M steps. 64 matches
+each (63 against the CPU); the twenty exploiters' mean, and the sixteen before round 8's:
+
+| Agent | Level-4 CPU | Kano 6 / 7 | Mizuka 7 | Misuzu 3 | Mishio 3 | 16 old | 20 | Kanna's HP |
+|---|---|---|---|---|---|---|---|---|
+| `agent-league7`, 157.2M (`best.zip`) | 0% / 100% / 100% | **66 / 50%** | 84% | 88% | 73% | **91%** | **88%** | 49.9% |
+| `agent-league8`, 169.3M (`best.zip`) | 0% / 100% / 100% | 33 / 39% | 95% | 92% | **95%** | 88% | 86% | 50.7% |
+| `agent-league8`, 177.3M | 0% / 90% / 100% | 53 / 34% | **98%** | 88% | 97% | 86% | 85% | 46.0% |
+| `agent-league8-kanna6`, 163.2M (`best.zip`) | 0% / 90% / 100% | 55 / 38% | 83% | 88% | 91% | 89% | 86% | 46.9% |
+| `agent-league8-kanna6`, 177.3M | 0% / 90% / 100% | 45 / 23% | 69% | 80% | 69% | 83% | 79% | 51.2% |
+
+No step forward. Round 8 learnt the new Mizuka and Mishio and lost Kano: its best jumps
+19.6 times a minute against Kano's sixth and is hit in the air 4.8 times (157.2M: 14.1
+and 1.7), the hole round 7 had closed. Its best checkpoint was picked by 16-match
+evaluations (Kano's sixth 75% there, 33% on 64): with 21 opponents and 11 checkpoints,
+the best of noisy evaluations. Kanna in 60% of the CPU matches took no more of her (Kanna's HP
+46.9-51.2% against 46.0-50.7%; 64 matches tell apart about 4 points) and lost more to
+the exploiters. `agent-league7`'s best stays the best agent.
 
 ## The models
 
