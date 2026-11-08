@@ -733,7 +733,20 @@ are a smaller part of its strength than its character's.
 instead of their clones, round 8's exploiter recipe otherwise (their target
 `agent-league7`, their clone as the prior), against `kano/exploiter7` and
 `mizukab/exploiter7`: whether Ayu's agent is a better start for a character than
-people's play of it.
+people's play of it. Per 1M-step chunk, its 32-match evaluation (a single run each):
+
+| | beats its target 60% | most vs target | level-3 CPU: most / last |
+|---|---|---|---|
+| Kano from the Ayu agent | 7.1M | 69% | 38% / 28% |
+| Kano from its clone (`exploiter7`) | 14.2M | 75% | 78% / 59% |
+| Mizuka from the Ayu agent | not in 24M | 38% | 59% / 59% |
+| Mizuka from its clone (`exploiter7`) | not in 24M | 34% | 62% / 53% |
+
+Started from the Ayu agent, Kano found the agent's holes in half the steps, but
+played the CPU far worse throughout (3% in its first chunk, at most 38%). What it brings is knowing
+the agent, its own line's habits, not playing Kano. Mizuka gained nothing either way: about the clone's numbers on
+both. A character's sparring partner is better started from people's play of it; the
+Ayu agent's start is worth it only to hunt the agent itself.
 
 ## What is overfitted
 
@@ -754,6 +767,9 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   reacts faster plays better; it plays worse. People's reaction times vary from moment to
   moment, and the training's delay doesn't. A delay drawn per match or per moment
   (14-20 steps, the human limit and slower) should make it hold up and drop fewer combos.
+  Round 9, `agent-league9-jitter` (in progress), tries it: round 8's settings (Kanna in
+  40% of the CPU matches) with each player's delay drawn per match from 14-20 steps
+  (`finetune.py --delay-most 20`), `agent-league8` its control.
 - **The evaluation seed, a little.** Its best checkpoints were picked on evaluations of
   seed 7 (`finetune.py`'s, and `evaluate.py`'s default) and measured on seed 7: on
   seeds 11 and 23 the CPU's middle tier 90% and 81% (100%), Unknown's fourth 80% and 81%
