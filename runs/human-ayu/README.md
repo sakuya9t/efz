@@ -686,6 +686,39 @@ the exploiters. The routes learnt at a tenth of the weight (`agent-league8-disti
 above under Kanna) lost to every exploiter more. `agent-league7`'s best stays the best
 agent.
 
+**Round 10's exploiters: reversals** (the user, playing round 8's: "a wake-up invincible,
+or an RG and an invincible during it"). `finetune.py --focus reversal` (`focus.py`: an
+invincible attack within 8 steps of rising or 20 of a recoil guard that hits first,
+weighted 0.05), against 157.2M: Ayu's (`ayu/reversal`, from her clone; 623C is
+invincible from its 2nd step) and Mishio's (`mishio/reversal`), 24.4M steps each, neither
+reaching the 60% stop. Round 7's best beats them 97% and 81% on 64 matches: they learnt
+the answer and little else. They rise with an invincible move at 22% and 17% of its
+wake-up attacks (people's clones 4-11%, the exploiters before them 0%) and it hits
+first 44% and 67% of the time; when they reverse, its meaty is worth -416 and -278 HP
+over the next 3 seconds, when they guard +587 and +418.
+
+**Round 10** (`agent-league10-kanna`; the user's rule from here: no level-4 CPU but
+Kanna, since the CPU's guard can't be mixed up, `--cpu-focus kanna:1 --cpu-chars kanna`,
+`best.zip` by the share of her HP taken): from 157.2M, 20M steps, round 8's settings
+otherwise (the twenty exploiters, `--vs-share 0.75`). 64 matches each (63 against the
+CPU's tiers, measured only):
+
+| Agent | Level-4 CPU | Kano 5 / 6 / 7 | Mizuka 7 | Misuzu 3 | Mishio 3 | 20 | Ayu / Mishio reversal | Kanna's HP |
+|---|---|---|---|---|---|---|---|---|
+| `agent-league7`, 157.2M (`best.zip`) | 0% / 100% / 100% | **70 / 66 / 50%** | 84% | 88% | 73% | **88%** | **97 / 81%** | 49.9% |
+| `agent-league8`, 169.3M (`best.zip`) | 0% / 100% / 100% | 67 / 33 / 39% | **95%** | **92%** | **95%** | 86% | | 50.7% |
+| `agent-league10-kanna`, 165.2M (`best.zip`) | 0% / 90% / 100% | 61 / 55 / 31% | 86% | 67% | 86% | 84% | 89 / 81% | 46.7% |
+| `agent-league10-kanna`, 177.3M | 0% / 90% / 95% | 14 / 22 / 20% | 88% | 89% | 80% | 75% | 81 / 69% | 48.4% |
+
+Worse, and no nearer Kanna (46.7-48.4% of her HP, a round in 3-6% of the matches;
+round 7's best 49.9%, 8%). It lost Kano as round 8 did: against her fifth to seventh it
+jumps 16-19 times a minute and is hit in the air 1.9-2.8 times (round 7's best 12-14
+and 0.9-1.7). Its habits barely moved (below, under "What is overfitted"), and the
+reversals hurt it more: against its last checkpoint they hit first 72% and 84% of the
+time (round 7's 44% and 67%). `agent-league7`'s best stays the best agent. Round 11
+(`agent-league11`, and `agent-league11-pull05` at the pull 0.05) goes on from round 10's
+best against the twenty and both reversal exploiters.
+
 ## Ayu's agent as other characters
 
 What it learnt for Ayu and what any character keeps (8 November; `eval/transfer/`): the
@@ -813,6 +846,11 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   | round 9's last (delay 14-20) | 58% (and 33% a mid) | 0 / 0% | 0 / 0% | 0 / 3% | 63 / 1% | 1.5% | 58% |
   | round 7's, against Kano's clone | 92% | 0 / 1% | 0 / 0% | 0 / 1% | 95 / 0% | 0.1% | 92% |
   | round 7's, against Kano's seventh | 92% | 0 / 1% | 0 / 0% | 0 / 2% | 96 / 0% | 0.2% | 92% |
+  | round 7's, against Kanna | 76% | 0 / 1% | 0 / 0% | 0 / 0% | 82 / 1% | 0.2% | 76% |
+  | round 10's last (no CPU but Kanna), level-4 CPU | 66% (and 23% a mid) | 0 / 0% | 0 / 0% | 0 / 7% | 76 / 1% | 0.9% | 66% |
+  | round 10's last, against Kanna | 16% (and 76% a mid, 5B 52%) | 0 / 0% | 0 / 0% | 1 / 3% | 20 / 2% | 0.2% | 72% |
+  | round 10's last, against Kano's clone | 85% | 0 / 0% | 0 / 0% | 0 / 3% | 89 / 0% | 0.1% | 85% |
+  | round 10's last, against Ayu's reversal exploiter | 79% | 0 / 1% | 0 / 0% | 0 / 10% | 90 / 0% | 0.2% | 79% |
 
   The clone keeps people's mix against every opponent (low 19-32%, high 15-38%); each
   round of training took more of it away. The level-4 CPU can't be mixed up: when it
@@ -828,7 +866,10 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   every time guards crouching or reverses, and the agent has no way to open that.
   Overfitted to opponents that don't adapt; the fix is one that does (a riser trained
   to punish its wake-up attack, kept in the league), not a CPU that guesses: against
-  any opponent that doesn't read it, one option is always the best.
+  any opponent that doesn't read it, one option is always the best. Round 10, with no
+  CPU but Kanna, bears that out: less 2A against the CPU's tiers, but against Kanna
+  one option traded for another (a 5B; both lose HP to her, -186 and -282 over the next
+  3 seconds), and against everyone else the 2A as before (79-85%).
 - **Its strings: one route, everywhere** (the user, playing round 8's: "2A-5B-2C-236A
   again and again, in free actions as well as combos"). `tactics.strings`: a player's
   moves one after another (each a button press made, at most 6 free steps apart), 64
@@ -845,6 +886,9 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   | round 8's, against Kano's clone | 2.89 | 23% | 79% | 9% | 11% |
   | round 8's, against Ayu's clone | 3.25 | 42% | 89% | 3% | 9% |
   | round 9's last | 2.46 | 13% | 71% | 2% | 26% |
+  | round 10's last (no CPU but Kanna) | 2.40 | 21% | 77% | 5% | 18% |
+  | round 10's last, against Kanna | 2.19 | 8% | 67% | 6% | 28% |
+  | round 10's last, against Kano's clone | 2.70 | 29% | 84% | 4% | 11% |
 
   In neutral it pokes with a lone 2A (14% of its strings; 74% whiff), a jB or a 236B/C
   that whiff; when a 2A connects (a normal cancels into the next only on contact) the
@@ -856,9 +900,10 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   invincible, or an RG and an invincible during it"), and against the agent nothing does:
   the exploiters recoil-guard its pressure 13-15% of the time (people 36%, Mishio's
   third 32%) and follow an RG with an invincible move never (the level-4 CPU: 35% of its
-  RGs, at random), and rise with one 0-6% of the time (people 11%). Answers being
-  trained: `focus.py --focus reversal` (an invincible attack at wake-up or after an RG
-  that hits), exploiters as Ayu (623C, invincible from its 2nd step) and Mishio.
+  RGs, at random), and rise with one 0-6% of the time (people 11%). Exploiters trained
+  for it (`focus.py --focus reversal`, Ayu's and Mishio's, round 10 above) found it at
+  once: they rise with an invincible move 17-22% of the time and it hits first 44-84%
+  of the time. Round 11 trains against them.
 - **Out of a guard, the same 2A** (the user: "under pressure, where its 2A is not as
   fast as the opponent's"). What round 8's best starts right after a guard
   (`escape_moves`, eval/guard): its invincible 236C most (9-33% of its guards, hitting
@@ -868,6 +913,9 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   is rarely under pressure (1.4-2.5 guards a minute; against the exploiters 5-6, people
   7.4), and against the exploiters that frame-trap it, it presses 2A less (4-9%): it
   adapts to an opponent's character, not to what this opponent did a moment ago.
+  Round 10's last much the same: its 2A out of a guard hit 42% of the time against the
+  CPU, 29% against Kano's clone, 61% against Mishio's third, 66% against Mishio's
+  reversal exploiter (round 7's best 50%).
 - **Not overfitted:** people's play it never met (the clones of Kano, Mizuka, Misuzu and
   Mishio: 100% each, 99% of their HP, taking 2.7-3.8k a minute where the same
   characters' exploiters deal 6.7-10.1k); the CPU's lower levels (100%, 100%, 81% at
@@ -897,7 +945,9 @@ the combo master's checkpoints are only there. Uploaded 8 November: every run's
 `best.zip` and last `model.zip` (not the `chunk*.zip` between) through round 8, and the
 exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their targets
 (`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent is
-`agent-league7/best.zip`.
+`agent-league7/best.zip`. Round 9 on (`agent-league9-jitter`, `agent-league10-kanna`,
+`agent-league11*`, the reversal exploiters, `kano/transfer7`, `mizukab/transfer7`) are
+only on the Linux machine until the next upload.
 
 ## The scripts
 

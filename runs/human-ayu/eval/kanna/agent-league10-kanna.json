@@ -1,0 +1,2666 @@
+{
+ "cpu4": {
+  "win": 0.0,
+  "loss": 1.0,
+  "cut": 0.0,
+  "matches": 64,
+  "opp_hp_taken": 0.484,
+  "opp_hp_taken_best": 0.992,
+  "rounds_won": 0.062,
+  "sides": [
+   {
+    "presses": {
+     "A": 0.0066,
+     "B": 0.0097,
+     "C": 0.0164,
+     "D": 0.0001
+    },
+    "presses_per_second": 2.1,
+    "jumps_per_min": 14.14,
+    "throws_per_min": 0.11,
+    "thrown_per_min": 0.0,
+    "guard_ground_per_min": 5.4,
+    "guard_air_per_min": 1.05,
+    "rg_ground_per_min": 1.01,
+    "rg_air_per_min": 0.29,
+    "hit_ground_per_min": 7.38,
+    "hit_air_per_min": 1.87,
+    "rg_ground": 0.074,
+    "rg_air": 0.09,
+    "rc": 0.039,
+    "rc_chances_per_min": 2.71,
+    "rg_move": 0.45,
+    "rg_punish": 0.141,
+    "rg_long": 0.161,
+    "rg_long_hit": 0.667,
+    "guess_623A_per_min": 0.02,
+    "guess_623A_counter": 0.0,
+    "guess_623B_per_min": 0.25,
+    "guess_623B_counter": 0.345,
+    "reversals_per_min": 4.24,
+    "reversal_hit": 0.386,
+    "reversal_counter": 0.313,
+    "combos_per_min": 5.66,
+    "combo_hits": 2.3,
+    "combo_damage": 841,
+    "combo_by_resources": {
+     "blue0": {
+      "n": 242,
+      "damage": 805,
+      "p90": 1524,
+      "most": 3989
+     },
+     "blue1": {
+      "n": 135,
+      "damage": 794,
+      "p90": 1316,
+      "most": 1830
+     },
+     "blue2": {
+      "n": 40,
+      "damage": 791,
+      "p90": 1291,
+      "most": 1776
+     },
+     "blue3": {
+      "n": 16,
+      "damage": 596,
+      "p90": 945,
+      "most": 1096
+     },
+     "red0": {
+      "n": 122,
+      "damage": 1052,
+      "p90": 2040,
+      "most": 3782
+     },
+     "red1": {
+      "n": 52,
+      "damage": 819,
+      "p90": 1597,
+      "most": 2053
+     },
+     "red2": {
+      "n": 20,
+      "damage": 819,
+      "p90": 1436,
+      "most": 1747
+     },
+     "red3": {
+      "n": 2,
+      "damage": 617,
+      "p90": 903,
+      "most": 974
+     },
+     "cyan0": {
+      "n": 17,
+      "damage": 725,
+      "p90": 1256,
+      "most": 2011
+     },
+     "cyan1": {
+      "n": 1,
+      "damage": 348,
+      "p90": 348,
+      "most": 348
+     }
+    },
+    "combo_damage_p90": 1546,
+    "combo_damage_max": 3989,
+    "combo_hits_p90": 5.0,
+    "combo_hits_max": 27,
+    "combo_proration_left": 0.821,
+    "combo_3plus": 0.309,
+    "combo_damage_per_min": 4759,
+    "combo_special": 0.291,
+    "combo_ic": 0.004,
+    "ic_per_min": 0.05,
+    "busy_presses": 0.44,
+    "busy_turns": 0.502,
+    "damage_taken_per_min": 11164,
+    "throw_damage": 654,
+    "throw_combo": 0.0,
+    "taken_combos_per_min": 9.28,
+    "taken_combo_damage": 1153,
+    "taken_combo_damage_p90": 2077,
+    "taken_combo_damage_max": 5334,
+    "taken_by_resources": {
+     "blue0": {
+      "n": 139,
+      "damage": 1481,
+      "p90": 2525,
+      "most": 3450
+     },
+     "blue1": {
+      "n": 131,
+      "damage": 1085,
+      "p90": 1867,
+      "most": 2735
+     },
+     "blue2": {
+      "n": 74,
+      "damage": 1231,
+      "p90": 2403,
+      "most": 4231
+     },
+     "blue3": {
+      "n": 148,
+      "damage": 1199,
+      "p90": 1967,
+      "most": 5334
+     },
+     "red0": {
+      "n": 90,
+      "damage": 1276,
+      "p90": 2269,
+      "most": 3797
+     },
+     "red1": {
+      "n": 95,
+      "damage": 941,
+      "p90": 1685,
+      "most": 2325
+     },
+     "red2": {
+      "n": 96,
+      "damage": 903,
+      "p90": 1573,
+      "most": 2618
+     },
+     "red3": {
+      "n": 147,
+      "damage": 940,
+      "p90": 1599,
+      "most": 2612
+     },
+     "cyan0": {
+      "n": 14,
+      "damage": 1636,
+      "p90": 3613,
+      "most": 4170
+     },
+     "cyan1": {
+      "n": 19,
+      "damage": 1371,
+      "p90": 2107,
+      "most": 3681
+     },
+     "cyan2": {
+      "n": 40,
+      "damage": 1066,
+      "p90": 1880,
+      "most": 3087
+     },
+     "cyan3": {
+      "n": 68,
+      "damage": 1261,
+      "p90": 2062,
+      "most": 3984
+     }
+    },
+    "strings": {
+     "per_min": 24.62,
+     "moves_per_string": 2.19,
+     "top": 0.072,
+     "repeat": 0.028,
+     "routes_for_half": 13,
+     "moves": {
+      "0xc9": 0.199,
+      "0xca": 0.14,
+      "0xce": 0.138,
+      "0xcc": 0.12,
+      "0x104": 0.066,
+      "0xd0": 0.055,
+      "0x107": 0.05,
+      "0x106": 0.05,
+      "0x105": 0.039,
+      "0xd1": 0.037
+     },
+     "routes": {
+      "0xcc": {
+       "share": 0.072,
+       "n": 204,
+       "hit": 0.025,
+       "guarded": 0.152,
+       "whiff": 0.824,
+       "from_free": 0.314,
+       "punished": 0.129
+      },
+      "0xd0": {
+       "share": 0.069,
+       "n": 194,
+       "hit": 0.015,
+       "guarded": 0.021,
+       "whiff": 0.964,
+       "from_free": 0.366,
+       "punished": 0.25
+      },
+      "0xca": {
+       "share": 0.053,
+       "n": 149,
+       "hit": 0.06,
+       "guarded": 0.013,
+       "whiff": 0.926,
+       "from_free": 0.262,
+       "punished": 0.5
+      },
+      "0xd1": {
+       "share": 0.046,
+       "n": 130,
+       "hit": 0.0,
+       "guarded": 0.0,
+       "whiff": 1.0,
+       "from_free": 0.592,
+       "punished": null
+      },
+      "0xc9": {
+       "share": 0.044,
+       "n": 123,
+       "hit": 0.081,
+       "guarded": 0.089,
+       "whiff": 0.829,
+       "from_free": 0.195,
+       "punished": 0.091
+      },
+      "0x106": {
+       "share": 0.038,
+       "n": 108,
+       "hit": 0.111,
+       "guarded": 0.046,
+       "whiff": 0.843,
+       "from_free": 0.287,
+       "punished": 0.2
+      },
+      "0x105": {
+       "share": 0.038,
+       "n": 106,
+       "hit": 0.0,
+       "guarded": 0.0,
+       "whiff": 1.0,
+       "from_free": 0.292,
+       "punished": null
+      },
+      "0xca-0xce": {
+       "share": 0.031,
+       "n": 87,
+       "hit": 0.517,
+       "guarded": 0.402,
+       "whiff": 0.08,
+       "from_free": 0.598,
+       "punished": 0.143
+      },
+      "0xcc-0xc9": {
+       "share": 0.03,
+       "n": 85,
+       "hit": 0.035,
+       "guarded": 0.412,
+       "whiff": 0.553,
+       "from_free": 0.388,
+       "punished": 0.143
+      },
+      "0x106-0x107": {
+       "share": 0.027,
+       "n": 75,
+       "hit": 0.653,
+       "guarded": 0.24,
+       "whiff": 0.107,
+       "from_free": 0.227,
+       "punished": 0.111
+      },
+      "0xc9-0xce": {
+       "share": 0.024,
+       "n": 68,
+       "hit": 0.118,
+       "guarded": 0.882,
+       "whiff": 0.0,
+       "from_free": 0.882,
+       "punished": 0.15
+      },
+      "0x13b": {
+       "share": 0.023,
+       "n": 65,
+       "hit": 0.0,
+       "guarded": 0.0,
+       "whiff": 1.0,
+       "from_free": 0.338,
+       "punished": null
+      }
+     }
+    },
+    "pressure": {
+     "guards_per_min": 15.02,
+     "strings_per_min": 7.73,
+     "guards_per_string": 1.94,
+     "contacts_per_guard": 1.92,
+     "advantage": 1.0,
+     "plus": 0.468,
+     "minus": 0.291,
+     "punishable": 0.25,
+     "next": {
+      "n": 1718,
+      "guard": 0.662,
+      "hit": 0.059,
+      "fought_back": 0.203,
+      "reset": 0.075
+     },
+     "next_when_plus": {
+      "n": 804,
+      "guard": 0.695,
+      "hit": 0.061,
+      "fought_back": 0.177,
+      "reset": 0.067
+     },
+     "next_when_even": {
+      "n": 414,
+      "guard": 0.734,
+      "hit": 0.036,
+      "fought_back": 0.179,
+      "reset": 0.051
+     },
+     "next_when_punishable": {
+      "n": 429,
+      "guard": 0.536,
+      "hit": 0.075,
+      "fought_back": 0.284,
+      "reset": 0.105
+     },
+     "next_when_minus_safe": {
+      "n": 71,
+      "guard": 0.634,
+      "hit": 0.085,
+      "fought_back": 0.155,
+      "reset": 0.127
+     },
+     "power_per_guard": 69.5,
+     "setup_when_plus": 0.009,
+     "gap": 14.0,
+     "gap_tight": 0.101,
+     "escapes": {
+      "invincible": {
+       "share": 0.137,
+       "n": 236,
+       "escaped": 0.809,
+       "trapped": 0.059,
+       "when_minus": 0.525
+      },
+      "move": {
+       "share": 0.123,
+       "n": 211,
+       "escaped": 0.597,
+       "trapped": 0.204,
+       "when_minus": 0.242
+      },
+      "jump": {
+       "share": 0.044,
+       "n": 75,
+       "escaped": 0.413,
+       "trapped": 0.24,
+       "when_minus": 0.4
+      },
+      "backdash": {
+       "share": 0.008,
+       "n": 14,
+       "escaped": 0.0,
+       "trapped": 0.071,
+       "when_minus": 0.143
+      },
+      "none": {
+       "share": 0.688,
+       "n": 1182,
+       "escaped": 0.001,
+       "trapped": 0.022,
+       "when_minus": 0.248
+      }
+     },
+     "escape_moves": {
+      "0xfb": {
+       "share": 0.084,
+       "n": 145,
+       "escaped": 0.807,
+       "trapped": 0.097,
+       "when_minus": 0.469
+      },
+      "0x100": {
+       "share": 0.052,
+       "n": 89,
+       "escaped": 0.82,
+       "trapped": 0.0,
+       "when_minus": 0.629
+      },
+      "0xcc": {
+       "share": 0.042,
+       "n": 73,
+       "escaped": 0.849,
+       "trapped": 0.082,
+       "when_minus": 0.274
+      },
+      "0xc8": {
+       "share": 0.02,
+       "n": 34,
+       "escaped": 0.882,
+       "trapped": 0.088,
+       "when_minus": 0.059
+      },
+      "0xc9": {
+       "share": 0.018,
+       "n": 31,
+       "escaped": 0.581,
+       "trapped": 0.194,
+       "when_minus": 0.226
+      },
+      "0xfa": {
+       "share": 0.013,
+       "n": 22,
+       "escaped": 0.136,
+       "trapped": 0.409,
+       "when_minus": 0.227
+      },
+      "0xcd": {
+       "share": 0.009,
+       "n": 15,
+       "escaped": 0.133,
+       "trapped": 0.4,
+       "when_minus": 0.4
+      },
+      "0xd0": {
+       "share": 0.008,
+       "n": 13,
+       "escaped": 0.538,
+       "trapped": 0.231,
+       "when_minus": 0.308
+      }
+     },
+     "rg": 0.356,
+     "after_rg": {
+      "n": 611,
+      "guard": 0.381,
+      "hit": 0.105,
+      "fought_back": 0.45,
+      "reset": 0.064
+     },
+     "rg_advantage": 0.0,
+     "rg_then": {
+      "invincible": {
+       "share": 0.306,
+       "n": 187,
+       "escaped": 0.834,
+       "trapped": 0.064
+      },
+      "move": {
+       "share": 0.267,
+       "n": 163,
+       "escaped": 0.675,
+       "trapped": 0.221
+      },
+      "jump": {
+       "share": 0.026,
+       "n": 16,
+       "escaped": 0.5,
+       "trapped": 0.312
+      },
+      "backdash": {
+       "share": 0.003,
+       "n": 2,
+       "escaped": 0.0,
+       "trapped": 0.0
+      },
+      "none": {
+       "share": 0.398,
+       "n": 243,
+       "escaped": 0.004,
+       "trapped": 0.045
+      }
+     },
+     "moves": {
+      "0x107": {
+       "n": 491,
+       "advantage": -9.0,
+       "punishable": 0.8,
+       "fought_back": 0.224
+      },
+      "0xc9": {
+       "n": 447,
+       "advantage": 1.0,
+       "punishable": 0.002,
+       "fought_back": 0.226
+      },
+      "0xce": {
+       "n": 358,
+       "advantage": 3.0,
+       "punishable": 0.025,
+       "fought_back": 0.115
+      },
+      "0xca": {
+       "n": 182,
+       "advantage": 12.0,
+       "punishable": 0.0,
+       "fought_back": 0.187
+      },
+      "0xcc": {
+       "n": 74,
+       "advantage": 2.0,
+       "punishable": 0.0,
+       "fought_back": 0.122
+      },
+      "0x104": {
+       "n": 30,
+       "advantage": 21.0,
+       "punishable": 0.0,
+       "fought_back": 0.267
+      },
+      "0xcb": {
+       "n": 27,
+       "advantage": 2.0,
+       "punishable": 0.148,
+       "fought_back": 0.296
+      },
+      "0xc8": {
+       "n": 16,
+       "advantage": 2.0,
+       "punishable": 0.062,
+       "fought_back": 0.062
+      },
+      "0xd3": {
+       "n": 13,
+       "advantage": 0.0,
+       "punishable": 0.077,
+       "fought_back": 0.154
+      },
+      "0x106": {
+       "n": 9,
+       "advantage": 2.0,
+       "punishable": 0.0,
+       "fought_back": 0.556
+      },
+      "0x13b": {
+       "n": 9,
+       "advantage": -13.0,
+       "punishable": 0.889,
+       "fought_back": 0.333
+      },
+      "0xd0": {
+       "n": 9,
+       "advantage": 10.0,
+       "punishable": 0.0,
+       "fought_back": 0.444
+      }
+     }
+    },
+    "under_pressure": {
+     "guards_per_min": 3.98,
+     "strings_per_min": 3.23,
+     "guards_per_string": 1.23,
+     "contacts_per_guard": 1.89,
+     "advantage": 3.0,
+     "plus": 0.514,
+     "minus": 0.295,
+     "punishable": 0.163,
+     "next": {
+      "n": 455,
+      "guard": 0.266,
+      "hit": 0.235,
+      "fought_back": 0.154,
+      "reset": 0.345
+     },
+     "next_when_plus": {
+      "n": 234,
+      "guard": 0.269,
+      "hit": 0.222,
+      "fought_back": 0.141,
+      "reset": 0.368
+     },
+     "next_when_even": {
+      "n": 87,
+      "guard": 0.287,
+      "hit": 0.264,
+      "fought_back": 0.138,
+      "reset": 0.31
+     },
+     "next_when_punishable": {
+      "n": 74,
+      "guard": 0.135,
+      "hit": 0.297,
+      "fought_back": 0.27,
+      "reset": 0.297
+     },
+     "next_when_minus_safe": {
+      "n": 60,
+      "guard": 0.383,
+      "hit": 0.167,
+      "fought_back": 0.083,
+      "reset": 0.367
+     },
+     "power_per_guard": -6.0,
+     "setup_when_plus": 0.415,
+     "gap": 14.0,
+     "gap_tight": 0.149,
+     "escapes": {
+      "invincible": {
+       "share": 0.149,
+       "n": 68,
+       "escaped": 0.632,
+       "trapped": 0.074,
+       "when_minus": 0.426
+      },
+      "move": {
+       "share": 0.266,
+       "n": 121,
+       "escaped": 0.207,
+       "trapped": 0.446,
+       "when_minus": 0.306
+      },
+      "jump": {
+       "share": 0.268,
+       "n": 122,
+       "escaped": 0.016,
+       "trapped": 0.115,
+       "when_minus": 0.246
+      },
+      "none": {
+       "share": 0.316,
+       "n": 144,
+       "escaped": 0.0,
+       "trapped": 0.236,
+       "when_minus": 0.264
+      }
+     },
+     "escape_moves": {
+      "0x106": {
+       "share": 0.136,
+       "n": 62,
+       "escaped": 0.694,
+       "trapped": 0.081,
+       "when_minus": 0.452
+      },
+      "0x105": {
+       "share": 0.07,
+       "n": 32,
+       "escaped": 0.219,
+       "trapped": 0.562,
+       "when_minus": 0.469
+      },
+      "0xc9": {
+       "share": 0.046,
+       "n": 21,
+       "escaped": 0.095,
+       "trapped": 0.429,
+       "when_minus": 0.476
+      },
+      "0xca": {
+       "share": 0.042,
+       "n": 19,
+       "escaped": 0.474,
+       "trapped": 0.263,
+       "when_minus": 0.211
+      },
+      "0xd1": {
+       "share": 0.04,
+       "n": 18,
+       "escaped": 0.0,
+       "trapped": 0.389,
+       "when_minus": 0.056
+      },
+      "0xd0": {
+       "share": 0.018,
+       "n": 8,
+       "escaped": 0.25,
+       "trapped": 0.375,
+       "when_minus": 0.25
+      },
+      "0xcb": {
+       "share": 0.013,
+       "n": 6,
+       "escaped": 0.167,
+       "trapped": 0.667,
+       "when_minus": 0.167
+      },
+      "0xd3": {
+       "share": 0.011,
+       "n": 5,
+       "escaped": 0.4,
+       "trapped": 0.6,
+       "when_minus": 0.2
+      }
+     },
+     "rg": 0.301,
+     "after_rg": {
+      "n": 137,
+      "guard": 0.241,
+      "hit": 0.299,
+      "fought_back": 0.212,
+      "reset": 0.248
+     },
+     "rg_advantage": 1.0,
+     "rg_then": {
+      "invincible": {
+       "share": 0.219,
+       "n": 30,
+       "escaped": 0.7,
+       "trapped": 0.067
+      },
+      "move": {
+       "share": 0.423,
+       "n": 58,
+       "escaped": 0.138,
+       "trapped": 0.517
+      },
+      "jump": {
+       "share": 0.139,
+       "n": 19,
+       "escaped": 0.0,
+       "trapped": 0.105
+      },
+      "none": {
+       "share": 0.219,
+       "n": 30,
+       "escaped": 0.0,
+       "trapped": 0.233
+      }
+     }
+    },
+    "okizeme": {
+     "per_min": 3.87,
+     "value": -197,
+     "result": {
+      "attacker": 0.041,
+      "defender": 0.29,
+      "none": 0.67
+     },
+     "setup_frames": 68.0,
+     "meaty": 0.74,
+     "airborne": 0.029,
+     "close": 0.891,
+     "objects": 0.032,
+     "contact": 0.864,
+     "contact_frames": 6.0,
+     "choices": {
+      "guard": {
+       "share": 0.706,
+       "n": 312,
+       "hit": 0.029,
+       "hit_back": 0.215,
+       "value": -146
+      },
+      "wait": {
+       "share": 0.215,
+       "n": 95,
+       "hit": 0.063,
+       "hit_back": 0.326,
+       "value": -226
+      },
+      "invincible": {
+       "share": 0.063,
+       "n": 28,
+       "hit": 0.036,
+       "hit_back": 0.893,
+       "value": -652
+      },
+      "move": {
+       "share": 0.005,
+       "n": 2,
+       "hit": 0.0,
+       "hit_back": 1.0,
+       "value": -1508
+      },
+      "jump": {
+       "share": 0.009,
+       "n": 4,
+       "hit": 0.25,
+       "hit_back": 0.75,
+       "value": 93
+      },
+      "backdash": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": 910
+      }
+     },
+     "okizeme": {
+      "0xc9": {
+       "share": 0.518,
+       "n": 229,
+       "hit": 0.026,
+       "hit_back": 0.275,
+       "value": -186,
+       "again": 0.54,
+       "invincible": 0.07
+      },
+      "0xcc": {
+       "share": 0.238,
+       "n": 105,
+       "hit": 0.057,
+       "hit_back": 0.286,
+       "value": -282,
+       "again": 0.06,
+       "invincible": 0.057
+      },
+      "0xca": {
+       "share": 0.095,
+       "n": 42,
+       "hit": 0.071,
+       "hit_back": 0.214,
+       "value": 9,
+       "again": 0.12,
+       "invincible": 0.0
+      },
+      "none": {
+       "share": 0.038,
+       "n": 17,
+       "hit": 0.059,
+       "hit_back": 0.412,
+       "value": -162,
+       "again": 0.0,
+       "invincible": 0.0
+      },
+      "0xc8": {
+       "share": 0.034,
+       "n": 15,
+       "hit": 0.0,
+       "hit_back": 0.467,
+       "value": -241,
+       "again": 0.0,
+       "invincible": 0.0
+      },
+      "0xd3": {
+       "share": 0.014,
+       "n": 6,
+       "hit": 0.0,
+       "hit_back": 0.167,
+       "value": -338,
+       "again": 0.0,
+       "invincible": 0.167
+      },
+      "0x106": {
+       "share": 0.011,
+       "n": 5,
+       "hit": 0.0,
+       "hit_back": 0.2,
+       "value": -223,
+       "again": 0.0,
+       "invincible": 0.0
+      },
+      "0x105": {
+       "share": 0.011,
+       "n": 5,
+       "hit": 0.2,
+       "hit_back": 0.4,
+       "value": -53,
+       "again": 0.0,
+       "invincible": 0.2
+      },
+      "0xcb": {
+       "share": 0.009,
+       "n": 4,
+       "hit": 0.0,
+       "hit_back": 0.5,
+       "value": -578,
+       "again": 0.0,
+       "invincible": 0.0
+      },
+      "0xd0": {
+       "share": 0.007,
+       "n": 3,
+       "hit": 0.333,
+       "hit_back": 0.333,
+       "value": -104,
+       "again": 0.0,
+       "invincible": 1.0
+      }
+     },
+     "mix": {
+      "top": 0.717,
+      "low": 0.201,
+      "high": 0.018,
+      "throw": 0.0,
+      "cross": 0.002
+     },
+     "mixups": {
+      "ground mid": {
+       "share": 0.717,
+       "n": 317,
+       "hit": 0.047,
+       "hit_back": 0.274,
+       "value": -135,
+       "invincible": 0.06
+      },
+      "ground low": {
+       "share": 0.163,
+       "n": 72,
+       "hit": 0.028,
+       "hit_back": 0.236,
+       "value": -322,
+       "invincible": 0.069
+      },
+      "jump low": {
+       "share": 0.029,
+       "n": 13,
+       "hit": 0.0,
+       "hit_back": 0.462,
+       "value": -677,
+       "invincible": 0.077
+      },
+      "jump mid": {
+       "share": 0.027,
+       "n": 12,
+       "hit": 0.0,
+       "hit_back": 0.417,
+       "value": -85,
+       "invincible": 0.083
+      },
+      "none": {
+       "share": 0.02,
+       "n": 9,
+       "hit": 0.0,
+       "hit_back": 0.556,
+       "value": -287,
+       "invincible": 0.0
+      },
+      "dash mid": {
+       "share": 0.011,
+       "n": 5,
+       "hit": 0.0,
+       "hit_back": 0.2,
+       "value": -296,
+       "invincible": 0.0
+      },
+      "ground high": {
+       "share": 0.009,
+       "n": 4,
+       "hit": 0.0,
+       "hit_back": 0.75,
+       "value": -799,
+       "invincible": 0.25
+      },
+      "jump high": {
+       "share": 0.007,
+       "n": 3,
+       "hit": 0.0,
+       "hit_back": 0.667,
+       "value": -800,
+       "invincible": 0.0
+      },
+      "fly mid": {
+       "share": 0.007,
+       "n": 3,
+       "hit": 0.0,
+       "hit_back": 0.0,
+       "value": 103,
+       "invincible": 0.0
+      },
+      "fly high": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 0.0,
+       "hit_back": 1.0,
+       "value": -1103,
+       "invincible": 1.0
+      },
+      "dash low": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 0.0,
+       "hit_back": 0.0,
+       "value": 0,
+       "invincible": 0.0
+      },
+      "fly low": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 0.0,
+       "hit_back": 1.0,
+       "value": -1420,
+       "invincible": 0.0
+      }
+     }
+    },
+    "wakeup": {
+     "per_min": 5.6,
+     "value": -10,
+     "result": {
+      "attacker": 0.297,
+      "defender": 0.4,
+      "none": 0.303
+     },
+     "setup_frames": 70.0,
+     "meaty": 0.748,
+     "airborne": 0.239,
+     "close": 0.452,
+     "objects": 0.72,
+     "contact": 0.466,
+     "contact_frames": 23.0,
+     "choices": {
+      "guard": {
+       "share": 0.166,
+       "n": 106,
+       "hit": 0.321,
+       "hit_back": 0.16,
+       "value": 149
+      },
+      "wait": {
+       "share": 0.086,
+       "n": 55,
+       "hit": 0.4,
+       "hit_back": 0.382,
+       "value": 242
+      },
+      "invincible": {
+       "share": 0.281,
+       "n": 180,
+       "hit": 0.183,
+       "hit_back": 0.678,
+       "value": -543
+      },
+      "move": {
+       "share": 0.292,
+       "n": 187,
+       "hit": 0.401,
+       "hit_back": 0.471,
+       "value": 155
+      },
+      "jump": {
+       "share": 0.166,
+       "n": 106,
+       "hit": 0.217,
+       "hit_back": 0.075,
+       "value": 305
+      },
+      "backdash": {
+       "share": 0.008,
+       "n": 5,
+       "hit": 0.4,
+       "hit_back": 0.0,
+       "value": 327
+      },
+      "dash": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": -396
+      }
+     },
+     "okizeme": {
+      "0xfa": {
+       "share": 0.163,
+       "n": 104,
+       "hit": 0.231,
+       "hit_back": 0.587,
+       "value": -341,
+       "again": 0.24,
+       "invincible": 0.433
+      },
+      "none": {
+       "share": 0.123,
+       "n": 79,
+       "hit": 0.253,
+       "hit_back": 0.405,
+       "value": -14,
+       "again": 0.0,
+       "invincible": 0.152
+      },
+      "0x10a": {
+       "share": 0.123,
+       "n": 79,
+       "hit": 0.329,
+       "hit_back": 0.089,
+       "value": 348,
+       "again": 0.1,
+       "invincible": 0.139
+      },
+      "0xcd": {
+       "share": 0.103,
+       "n": 66,
+       "hit": 0.197,
+       "hit_back": 0.636,
+       "value": -425,
+       "again": 0.08,
+       "invincible": 0.455
+      },
+      "0xd1": {
+       "share": 0.087,
+       "n": 56,
+       "hit": 0.429,
+       "hit_back": 0.429,
+       "value": -329,
+       "again": 0.11,
+       "invincible": 0.071
+      },
+      "0xd0": {
+       "share": 0.083,
+       "n": 53,
+       "hit": 0.472,
+       "hit_back": 0.396,
+       "value": 390,
+       "again": 0.3,
+       "invincible": 0.415
+      },
+      "0xcc": {
+       "share": 0.07,
+       "n": 45,
+       "hit": 0.244,
+       "hit_back": 0.622,
+       "value": -419,
+       "again": 0.04,
+       "invincible": 0.533
+      },
+      "0x108": {
+       "share": 0.055,
+       "n": 35,
+       "hit": 0.171,
+       "hit_back": 0.114,
+       "value": 97,
+       "again": 0.09,
+       "invincible": 0.057
+      },
+      "0x109": {
+       "share": 0.047,
+       "n": 30,
+       "hit": 0.167,
+       "hit_back": 0.1,
+       "value": 291,
+       "again": 0.13,
+       "invincible": 0.067
+      },
+      "0xc9": {
+       "share": 0.031,
+       "n": 20,
+       "hit": 0.3,
+       "hit_back": 0.6,
+       "value": 119,
+       "again": 0.05,
+       "invincible": 0.35
+      }
+     },
+     "mix": {
+      "top": 0.509,
+      "low": 0.197,
+      "high": 0.203,
+      "throw": 0.0,
+      "cross": 0.063
+     },
+     "mixups": {
+      "ground mid": {
+       "share": 0.509,
+       "n": 326,
+       "hit": 0.279,
+       "hit_back": 0.304,
+       "value": 117,
+       "invincible": 0.233
+      },
+      "jump high": {
+       "share": 0.161,
+       "n": 103,
+       "hit": 0.427,
+       "hit_back": 0.447,
+       "value": 82,
+       "invincible": 0.262
+      },
+      "ground low": {
+       "share": 0.155,
+       "n": 99,
+       "hit": 0.222,
+       "hit_back": 0.626,
+       "value": -394,
+       "invincible": 0.485
+      },
+      "none": {
+       "share": 0.086,
+       "n": 55,
+       "hit": 0.0,
+       "hit_back": 0.6,
+       "value": -449,
+       "invincible": 0.218
+      },
+      "jump high cross": {
+       "share": 0.025,
+       "n": 16,
+       "hit": 0.625,
+       "hit_back": 0.25,
+       "value": 280,
+       "invincible": 0.062
+      },
+      "ground mid cross": {
+       "share": 0.017,
+       "n": 11,
+       "hit": 0.727,
+       "hit_back": 0.0,
+       "value": 290,
+       "invincible": 0.0
+      },
+      "jump mid": {
+       "share": 0.017,
+       "n": 11,
+       "hit": 0.273,
+       "hit_back": 0.636,
+       "value": 219,
+       "invincible": 0.636
+      },
+      "jump low": {
+       "share": 0.014,
+       "n": 9,
+       "hit": 0.222,
+       "hit_back": 0.556,
+       "value": -1478,
+       "invincible": 0.444
+      },
+      "ground low cross": {
+       "share": 0.009,
+       "n": 6,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": 1464,
+       "invincible": 0.5
+      },
+      "jump mid cross": {
+       "share": 0.005,
+       "n": 3,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": 1114,
+       "invincible": 0.667
+      },
+      "jump low cross": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": 1806,
+       "invincible": 0.0
+      }
+     }
+    },
+    "free_time": {
+     "windows_per_min": 33.13,
+     "frames_per_min": 535,
+     "frames": 8.0,
+     "objects_out": 0.029,
+     "setup": {
+      "share": 0.006,
+      "frames": 7.0
+     },
+     "charge": {
+      "share": 0.0,
+      "frames": null
+     },
+     "move": {
+      "share": 0.518,
+      "frames": 9.0
+     },
+     "close_in": {
+      "share": 0.073,
+      "frames": 29.0
+     },
+     "wait": {
+      "share": 0.404,
+      "frames": 6.0
+     }
+    },
+    "opponent_free_time": {
+     "windows_per_min": 46.08,
+     "frames_per_min": 572,
+     "frames": 7.0,
+     "objects_out": 0.413,
+     "setup": {
+      "share": 0.302,
+      "frames": 11.0
+     },
+     "charge": {
+      "share": 0.0,
+      "frames": null
+     },
+     "move": {
+      "share": 0.085,
+      "frames": 5.0
+     },
+     "close_in": {
+      "share": 0.138,
+      "frames": 14.0
+     },
+     "wait": {
+      "share": 0.475,
+      "frames": 4.0
+     }
+    }
+   },
+   {
+    "presses": {
+     "A": 0.0048,
+     "B": 0.0203,
+     "C": 0.0041,
+     "D": 0.0077
+    },
+    "presses_per_second": 2.37,
+    "jumps_per_min": 11.89,
+    "throws_per_min": 0.0,
+    "thrown_per_min": 0.11,
+    "guard_ground_per_min": 18.41,
+    "guard_air_per_min": 0.08,
+    "rg_ground_per_min": 5.85,
+    "rg_air_per_min": 0.21,
+    "hit_ground_per_min": 3.88,
+    "hit_air_per_min": 1.91,
+    "rg_ground": 0.208,
+    "rg_air": 0.096,
+    "rc": 0.396,
+    "rc_chances_per_min": 0.46,
+    "rg_move": 0.4,
+    "rg_punish": 0.313,
+    "rg_long": 0.0,
+    "rg_long_hit": null,
+    "reversals_per_min": 4.26,
+    "reversal_hit": 0.591,
+    "reversal_counter": 0.532,
+    "combos_per_min": 9.28,
+    "combo_hits": 2.34,
+    "combo_damage": 1153,
+    "combo_by_resources": {
+     "blue0": {
+      "n": 139,
+      "damage": 1481,
+      "p90": 2525,
+      "most": 3450
+     },
+     "blue1": {
+      "n": 131,
+      "damage": 1085,
+      "p90": 1867,
+      "most": 2735
+     },
+     "blue2": {
+      "n": 74,
+      "damage": 1231,
+      "p90": 2403,
+      "most": 4231
+     },
+     "blue3": {
+      "n": 148,
+      "damage": 1199,
+      "p90": 1967,
+      "most": 5334
+     },
+     "red0": {
+      "n": 90,
+      "damage": 1276,
+      "p90": 2269,
+      "most": 3797
+     },
+     "red1": {
+      "n": 95,
+      "damage": 941,
+      "p90": 1685,
+      "most": 2325
+     },
+     "red2": {
+      "n": 96,
+      "damage": 903,
+      "p90": 1573,
+      "most": 2618
+     },
+     "red3": {
+      "n": 147,
+      "damage": 940,
+      "p90": 1599,
+      "most": 2612
+     },
+     "cyan0": {
+      "n": 14,
+      "damage": 1636,
+      "p90": 3613,
+      "most": 4170
+     },
+     "cyan1": {
+      "n": 19,
+      "damage": 1371,
+      "p90": 2107,
+      "most": 3681
+     },
+     "cyan2": {
+      "n": 40,
+      "damage": 1066,
+      "p90": 1880,
+      "most": 3087
+     },
+     "cyan3": {
+      "n": 68,
+      "damage": 1261,
+      "p90": 2062,
+      "most": 3984
+     }
+    },
+    "combo_damage_p90": 2077,
+    "combo_damage_max": 5334,
+    "combo_hits_p90": 5.0,
+    "combo_hits_max": 13,
+    "combo_proration_left": 0.764,
+    "combo_3plus": 0.322,
+    "combo_damage_per_min": 10695,
+    "combo_special": 0.0,
+    "combo_ic": 0.043,
+    "ic_per_min": 0.48,
+    "busy_presses": 0.598,
+    "busy_turns": 0.467,
+    "damage_taken_per_min": 5583,
+    "throw_damage": null,
+    "throw_combo": null,
+    "taken_combos_per_min": 5.66,
+    "taken_combo_damage": 841,
+    "taken_combo_damage_p90": 1546,
+    "taken_combo_damage_max": 3989,
+    "taken_by_resources": {
+     "blue0": {
+      "n": 242,
+      "damage": 805,
+      "p90": 1524,
+      "most": 3989
+     },
+     "blue1": {
+      "n": 135,
+      "damage": 794,
+      "p90": 1316,
+      "most": 1830
+     },
+     "blue2": {
+      "n": 40,
+      "damage": 791,
+      "p90": 1291,
+      "most": 1776
+     },
+     "blue3": {
+      "n": 16,
+      "damage": 596,
+      "p90": 945,
+      "most": 1096
+     },
+     "red0": {
+      "n": 122,
+      "damage": 1052,
+      "p90": 2040,
+      "most": 3782
+     },
+     "red1": {
+      "n": 52,
+      "damage": 819,
+      "p90": 1597,
+      "most": 2053
+     },
+     "red2": {
+      "n": 20,
+      "damage": 819,
+      "p90": 1436,
+      "most": 1747
+     },
+     "red3": {
+      "n": 2,
+      "damage": 617,
+      "p90": 903,
+      "most": 974
+     },
+     "cyan0": {
+      "n": 17,
+      "damage": 725,
+      "p90": 1256,
+      "most": 2011
+     },
+     "cyan1": {
+      "n": 1,
+      "damage": 348,
+      "p90": 348,
+      "most": 348
+     }
+    },
+    "strings": {
+     "per_min": 14.93,
+     "moves_per_string": 2.04,
+     "top": 0.092,
+     "repeat": 0.025,
+     "routes_for_half": 10,
+     "moves": {
+      "0xd0": 0.186,
+      "0xd1": 0.13,
+      "0xfa": 0.09,
+      "0xc9": 0.077,
+      "0xcc": 0.066,
+      "0xcd": 0.064,
+      "0xcb": 0.058,
+      "0xfb": 0.055,
+      "0xca": 0.051,
+      "0xcf": 0.044
+     },
+     "routes": {
+      "0xfb": {
+       "share": 0.092,
+       "n": 157,
+       "hit": 0.739,
+       "guarded": 0.038,
+       "whiff": 0.223,
+       "from_free": 0.032,
+       "punished": 0.0
+      },
+      "0xfa": {
+       "share": 0.08,
+       "n": 137,
+       "hit": 0.0,
+       "guarded": 0.007,
+       "whiff": 0.993,
+       "from_free": 0.226,
+       "punished": 0.0
+      },
+      "0xd0": {
+       "share": 0.057,
+       "n": 97,
+       "hit": 0.186,
+       "guarded": 0.01,
+       "whiff": 0.804,
+       "from_free": 0.309,
+       "punished": 1.0
+      },
+      "0xd1": {
+       "share": 0.054,
+       "n": 93,
+       "hit": 0.0,
+       "guarded": 0.0,
+       "whiff": 1.0,
+       "from_free": 0.634,
+       "punished": null
+      },
+      "0x100-0x103": {
+       "share": 0.054,
+       "n": 93,
+       "hit": 0.946,
+       "guarded": 0.043,
+       "whiff": 0.011,
+       "from_free": 0.011,
+       "punished": 0.0
+      },
+      "0xc9": {
+       "share": 0.049,
+       "n": 83,
+       "hit": 0.241,
+       "guarded": 0.024,
+       "whiff": 0.735,
+       "from_free": 0.096,
+       "punished": 0.5
+      },
+      "0xcd": {
+       "share": 0.043,
+       "n": 74,
+       "hit": 0.014,
+       "guarded": 0.0,
+       "whiff": 0.986,
+       "from_free": 0.135,
+       "punished": null
+      },
+      "0xcc": {
+       "share": 0.029,
+       "n": 49,
+       "hit": 0.102,
+       "guarded": 0.0,
+       "whiff": 0.898,
+       "from_free": 0.041,
+       "punished": null
+      },
+      "0x10a": {
+       "share": 0.026,
+       "n": 44,
+       "hit": 0.0,
+       "guarded": 0.0,
+       "whiff": 1.0,
+       "from_free": 0.227,
+       "punished": null
+      },
+      "0xd0-0xd1": {
+       "share": 0.022,
+       "n": 37,
+       "hit": 0.676,
+       "guarded": 0.108,
+       "whiff": 0.216,
+       "from_free": 0.405,
+       "punished": 0.25
+      },
+      "0xca": {
+       "share": 0.017,
+       "n": 29,
+       "hit": 0.0,
+       "guarded": 0.0,
+       "whiff": 1.0,
+       "from_free": 0.034,
+       "punished": null
+      },
+      "0xd1-0xfa": {
+       "share": 0.014,
+       "n": 24,
+       "hit": 0.167,
+       "guarded": 0.0,
+       "whiff": 0.833,
+       "from_free": 0.542,
+       "punished": null
+      }
+     }
+    },
+    "pressure": {
+     "guards_per_min": 3.98,
+     "strings_per_min": 3.23,
+     "guards_per_string": 1.23,
+     "contacts_per_guard": 1.89,
+     "advantage": 3.0,
+     "plus": 0.514,
+     "minus": 0.295,
+     "punishable": 0.163,
+     "next": {
+      "n": 455,
+      "guard": 0.266,
+      "hit": 0.235,
+      "fought_back": 0.154,
+      "reset": 0.345
+     },
+     "next_when_plus": {
+      "n": 234,
+      "guard": 0.269,
+      "hit": 0.222,
+      "fought_back": 0.141,
+      "reset": 0.368
+     },
+     "next_when_even": {
+      "n": 87,
+      "guard": 0.287,
+      "hit": 0.264,
+      "fought_back": 0.138,
+      "reset": 0.31
+     },
+     "next_when_punishable": {
+      "n": 74,
+      "guard": 0.135,
+      "hit": 0.297,
+      "fought_back": 0.27,
+      "reset": 0.297
+     },
+     "next_when_minus_safe": {
+      "n": 60,
+      "guard": 0.383,
+      "hit": 0.167,
+      "fought_back": 0.083,
+      "reset": 0.367
+     },
+     "power_per_guard": -6.0,
+     "setup_when_plus": 0.415,
+     "gap": 14.0,
+     "gap_tight": 0.149,
+     "escapes": {
+      "invincible": {
+       "share": 0.149,
+       "n": 68,
+       "escaped": 0.632,
+       "trapped": 0.074,
+       "when_minus": 0.426
+      },
+      "move": {
+       "share": 0.266,
+       "n": 121,
+       "escaped": 0.207,
+       "trapped": 0.446,
+       "when_minus": 0.306
+      },
+      "jump": {
+       "share": 0.268,
+       "n": 122,
+       "escaped": 0.016,
+       "trapped": 0.115,
+       "when_minus": 0.246
+      },
+      "none": {
+       "share": 0.316,
+       "n": 144,
+       "escaped": 0.0,
+       "trapped": 0.236,
+       "when_minus": 0.264
+      }
+     },
+     "escape_moves": {
+      "0x106": {
+       "share": 0.136,
+       "n": 62,
+       "escaped": 0.694,
+       "trapped": 0.081,
+       "when_minus": 0.452
+      },
+      "0x105": {
+       "share": 0.07,
+       "n": 32,
+       "escaped": 0.219,
+       "trapped": 0.562,
+       "when_minus": 0.469
+      },
+      "0xc9": {
+       "share": 0.046,
+       "n": 21,
+       "escaped": 0.095,
+       "trapped": 0.429,
+       "when_minus": 0.476
+      },
+      "0xca": {
+       "share": 0.042,
+       "n": 19,
+       "escaped": 0.474,
+       "trapped": 0.263,
+       "when_minus": 0.211
+      },
+      "0xd1": {
+       "share": 0.04,
+       "n": 18,
+       "escaped": 0.0,
+       "trapped": 0.389,
+       "when_minus": 0.056
+      },
+      "0xd0": {
+       "share": 0.018,
+       "n": 8,
+       "escaped": 0.25,
+       "trapped": 0.375,
+       "when_minus": 0.25
+      },
+      "0xcb": {
+       "share": 0.013,
+       "n": 6,
+       "escaped": 0.167,
+       "trapped": 0.667,
+       "when_minus": 0.167
+      },
+      "0xd3": {
+       "share": 0.011,
+       "n": 5,
+       "escaped": 0.4,
+       "trapped": 0.6,
+       "when_minus": 0.2
+      }
+     },
+     "rg": 0.301,
+     "after_rg": {
+      "n": 137,
+      "guard": 0.241,
+      "hit": 0.299,
+      "fought_back": 0.212,
+      "reset": 0.248
+     },
+     "rg_advantage": 1.0,
+     "rg_then": {
+      "invincible": {
+       "share": 0.219,
+       "n": 30,
+       "escaped": 0.7,
+       "trapped": 0.067
+      },
+      "move": {
+       "share": 0.423,
+       "n": 58,
+       "escaped": 0.138,
+       "trapped": 0.517
+      },
+      "jump": {
+       "share": 0.139,
+       "n": 19,
+       "escaped": 0.0,
+       "trapped": 0.105
+      },
+      "none": {
+       "share": 0.219,
+       "n": 30,
+       "escaped": 0.0,
+       "trapped": 0.233
+      }
+     },
+     "moves": {
+      "0x10a": {
+       "n": 153,
+       "advantage": 11.0,
+       "punishable": 0.026,
+       "fought_back": 0.118
+      },
+      "0xfa": {
+       "n": 71,
+       "advantage": 1.0,
+       "punishable": 0.113,
+       "fought_back": 0.211
+      },
+      "0x109": {
+       "n": 57,
+       "advantage": 19.0,
+       "punishable": 0.0,
+       "fought_back": 0.105
+      },
+      "0xfb": {
+       "n": 29,
+       "advantage": 1.0,
+       "punishable": 0.207,
+       "fought_back": 0.069
+      },
+      "0xcb": {
+       "n": 27,
+       "advantage": -12.0,
+       "punishable": 0.593,
+       "fought_back": 0.296
+      },
+      "0x108": {
+       "n": 26,
+       "advantage": -6.0,
+       "punishable": 0.0,
+       "fought_back": 0.077
+      },
+      "0xd0": {
+       "n": 16,
+       "advantage": -9.5,
+       "punishable": 0.688,
+       "fought_back": 0.125
+      },
+      "0x100": {
+       "n": 16,
+       "advantage": -13.0,
+       "punishable": 0.625,
+       "fought_back": 0.438
+      },
+      "0xd1": {
+       "n": 14,
+       "advantage": -46.0,
+       "punishable": 0.786,
+       "fought_back": 0.071
+      },
+      "0xca": {
+       "n": 10,
+       "advantage": 5.5,
+       "punishable": 0.4,
+       "fought_back": 0.3
+      },
+      "0xcd": {
+       "n": 8,
+       "advantage": 3.5,
+       "punishable": 0.125,
+       "fought_back": 0.375
+      },
+      "0xcf": {
+       "n": 6,
+       "advantage": 20.0,
+       "punishable": 0.0,
+       "fought_back": 0.0
+      }
+     }
+    },
+    "under_pressure": {
+     "guards_per_min": 15.02,
+     "strings_per_min": 7.73,
+     "guards_per_string": 1.94,
+     "contacts_per_guard": 1.92,
+     "advantage": 1.0,
+     "plus": 0.468,
+     "minus": 0.291,
+     "punishable": 0.25,
+     "next": {
+      "n": 1718,
+      "guard": 0.662,
+      "hit": 0.059,
+      "fought_back": 0.203,
+      "reset": 0.075
+     },
+     "next_when_plus": {
+      "n": 804,
+      "guard": 0.695,
+      "hit": 0.061,
+      "fought_back": 0.177,
+      "reset": 0.067
+     },
+     "next_when_even": {
+      "n": 414,
+      "guard": 0.734,
+      "hit": 0.036,
+      "fought_back": 0.179,
+      "reset": 0.051
+     },
+     "next_when_punishable": {
+      "n": 429,
+      "guard": 0.536,
+      "hit": 0.075,
+      "fought_back": 0.284,
+      "reset": 0.105
+     },
+     "next_when_minus_safe": {
+      "n": 71,
+      "guard": 0.634,
+      "hit": 0.085,
+      "fought_back": 0.155,
+      "reset": 0.127
+     },
+     "power_per_guard": 69.5,
+     "setup_when_plus": 0.009,
+     "gap": 14.0,
+     "gap_tight": 0.101,
+     "escapes": {
+      "invincible": {
+       "share": 0.137,
+       "n": 236,
+       "escaped": 0.809,
+       "trapped": 0.059,
+       "when_minus": 0.525
+      },
+      "move": {
+       "share": 0.123,
+       "n": 211,
+       "escaped": 0.597,
+       "trapped": 0.204,
+       "when_minus": 0.242
+      },
+      "jump": {
+       "share": 0.044,
+       "n": 75,
+       "escaped": 0.413,
+       "trapped": 0.24,
+       "when_minus": 0.4
+      },
+      "backdash": {
+       "share": 0.008,
+       "n": 14,
+       "escaped": 0.0,
+       "trapped": 0.071,
+       "when_minus": 0.143
+      },
+      "none": {
+       "share": 0.688,
+       "n": 1182,
+       "escaped": 0.001,
+       "trapped": 0.022,
+       "when_minus": 0.248
+      }
+     },
+     "escape_moves": {
+      "0xfb": {
+       "share": 0.084,
+       "n": 145,
+       "escaped": 0.807,
+       "trapped": 0.097,
+       "when_minus": 0.469
+      },
+      "0x100": {
+       "share": 0.052,
+       "n": 89,
+       "escaped": 0.82,
+       "trapped": 0.0,
+       "when_minus": 0.629
+      },
+      "0xcc": {
+       "share": 0.042,
+       "n": 73,
+       "escaped": 0.849,
+       "trapped": 0.082,
+       "when_minus": 0.274
+      },
+      "0xc8": {
+       "share": 0.02,
+       "n": 34,
+       "escaped": 0.882,
+       "trapped": 0.088,
+       "when_minus": 0.059
+      },
+      "0xc9": {
+       "share": 0.018,
+       "n": 31,
+       "escaped": 0.581,
+       "trapped": 0.194,
+       "when_minus": 0.226
+      },
+      "0xfa": {
+       "share": 0.013,
+       "n": 22,
+       "escaped": 0.136,
+       "trapped": 0.409,
+       "when_minus": 0.227
+      },
+      "0xcd": {
+       "share": 0.009,
+       "n": 15,
+       "escaped": 0.133,
+       "trapped": 0.4,
+       "when_minus": 0.4
+      },
+      "0xd0": {
+       "share": 0.008,
+       "n": 13,
+       "escaped": 0.538,
+       "trapped": 0.231,
+       "when_minus": 0.308
+      }
+     },
+     "rg": 0.356,
+     "after_rg": {
+      "n": 611,
+      "guard": 0.381,
+      "hit": 0.105,
+      "fought_back": 0.45,
+      "reset": 0.064
+     },
+     "rg_advantage": 0.0,
+     "rg_then": {
+      "invincible": {
+       "share": 0.306,
+       "n": 187,
+       "escaped": 0.834,
+       "trapped": 0.064
+      },
+      "move": {
+       "share": 0.267,
+       "n": 163,
+       "escaped": 0.675,
+       "trapped": 0.221
+      },
+      "jump": {
+       "share": 0.026,
+       "n": 16,
+       "escaped": 0.5,
+       "trapped": 0.312
+      },
+      "backdash": {
+       "share": 0.003,
+       "n": 2,
+       "escaped": 0.0,
+       "trapped": 0.0
+      },
+      "none": {
+       "share": 0.398,
+       "n": 243,
+       "escaped": 0.004,
+       "trapped": 0.045
+      }
+     }
+    },
+    "okizeme": {
+     "per_min": 5.6,
+     "value": -10,
+     "result": {
+      "attacker": 0.297,
+      "defender": 0.4,
+      "none": 0.303
+     },
+     "setup_frames": 70.0,
+     "meaty": 0.748,
+     "airborne": 0.239,
+     "close": 0.452,
+     "objects": 0.72,
+     "contact": 0.466,
+     "contact_frames": 23.0,
+     "choices": {
+      "guard": {
+       "share": 0.166,
+       "n": 106,
+       "hit": 0.321,
+       "hit_back": 0.16,
+       "value": 149
+      },
+      "wait": {
+       "share": 0.086,
+       "n": 55,
+       "hit": 0.4,
+       "hit_back": 0.382,
+       "value": 242
+      },
+      "invincible": {
+       "share": 0.281,
+       "n": 180,
+       "hit": 0.183,
+       "hit_back": 0.678,
+       "value": -543
+      },
+      "move": {
+       "share": 0.292,
+       "n": 187,
+       "hit": 0.401,
+       "hit_back": 0.471,
+       "value": 155
+      },
+      "jump": {
+       "share": 0.166,
+       "n": 106,
+       "hit": 0.217,
+       "hit_back": 0.075,
+       "value": 305
+      },
+      "backdash": {
+       "share": 0.008,
+       "n": 5,
+       "hit": 0.4,
+       "hit_back": 0.0,
+       "value": 327
+      },
+      "dash": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": -396
+      }
+     },
+     "okizeme": {
+      "0xfa": {
+       "share": 0.163,
+       "n": 104,
+       "hit": 0.231,
+       "hit_back": 0.587,
+       "value": -341,
+       "again": 0.24,
+       "invincible": 0.433
+      },
+      "none": {
+       "share": 0.123,
+       "n": 79,
+       "hit": 0.253,
+       "hit_back": 0.405,
+       "value": -14,
+       "again": 0.0,
+       "invincible": 0.152
+      },
+      "0x10a": {
+       "share": 0.123,
+       "n": 79,
+       "hit": 0.329,
+       "hit_back": 0.089,
+       "value": 348,
+       "again": 0.1,
+       "invincible": 0.139
+      },
+      "0xcd": {
+       "share": 0.103,
+       "n": 66,
+       "hit": 0.197,
+       "hit_back": 0.636,
+       "value": -425,
+       "again": 0.08,
+       "invincible": 0.455
+      },
+      "0xd1": {
+       "share": 0.087,
+       "n": 56,
+       "hit": 0.429,
+       "hit_back": 0.429,
+       "value": -329,
+       "again": 0.11,
+       "invincible": 0.071
+      },
+      "0xd0": {
+       "share": 0.083,
+       "n": 53,
+       "hit": 0.472,
+       "hit_back": 0.396,
+       "value": 390,
+       "again": 0.3,
+       "invincible": 0.415
+      },
+      "0xcc": {
+       "share": 0.07,
+       "n": 45,
+       "hit": 0.244,
+       "hit_back": 0.622,
+       "value": -419,
+       "again": 0.04,
+       "invincible": 0.533
+      },
+      "0x108": {
+       "share": 0.055,
+       "n": 35,
+       "hit": 0.171,
+       "hit_back": 0.114,
+       "value": 97,
+       "again": 0.09,
+       "invincible": 0.057
+      },
+      "0x109": {
+       "share": 0.047,
+       "n": 30,
+       "hit": 0.167,
+       "hit_back": 0.1,
+       "value": 291,
+       "again": 0.13,
+       "invincible": 0.067
+      },
+      "0xc9": {
+       "share": 0.031,
+       "n": 20,
+       "hit": 0.3,
+       "hit_back": 0.6,
+       "value": 119,
+       "again": 0.05,
+       "invincible": 0.35
+      }
+     },
+     "mix": {
+      "top": 0.509,
+      "low": 0.197,
+      "high": 0.203,
+      "throw": 0.0,
+      "cross": 0.063
+     },
+     "mixups": {
+      "ground mid": {
+       "share": 0.509,
+       "n": 326,
+       "hit": 0.279,
+       "hit_back": 0.304,
+       "value": 117,
+       "invincible": 0.233
+      },
+      "jump high": {
+       "share": 0.161,
+       "n": 103,
+       "hit": 0.427,
+       "hit_back": 0.447,
+       "value": 82,
+       "invincible": 0.262
+      },
+      "ground low": {
+       "share": 0.155,
+       "n": 99,
+       "hit": 0.222,
+       "hit_back": 0.626,
+       "value": -394,
+       "invincible": 0.485
+      },
+      "none": {
+       "share": 0.086,
+       "n": 55,
+       "hit": 0.0,
+       "hit_back": 0.6,
+       "value": -449,
+       "invincible": 0.218
+      },
+      "jump high cross": {
+       "share": 0.025,
+       "n": 16,
+       "hit": 0.625,
+       "hit_back": 0.25,
+       "value": 280,
+       "invincible": 0.062
+      },
+      "ground mid cross": {
+       "share": 0.017,
+       "n": 11,
+       "hit": 0.727,
+       "hit_back": 0.0,
+       "value": 290,
+       "invincible": 0.0
+      },
+      "jump mid": {
+       "share": 0.017,
+       "n": 11,
+       "hit": 0.273,
+       "hit_back": 0.636,
+       "value": 219,
+       "invincible": 0.636
+      },
+      "jump low": {
+       "share": 0.014,
+       "n": 9,
+       "hit": 0.222,
+       "hit_back": 0.556,
+       "value": -1478,
+       "invincible": 0.444
+      },
+      "ground low cross": {
+       "share": 0.009,
+       "n": 6,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": 1464,
+       "invincible": 0.5
+      },
+      "jump mid cross": {
+       "share": 0.005,
+       "n": 3,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": 1114,
+       "invincible": 0.667
+      },
+      "jump low cross": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": 1806,
+       "invincible": 0.0
+      }
+     }
+    },
+    "wakeup": {
+     "per_min": 3.87,
+     "value": -197,
+     "result": {
+      "attacker": 0.041,
+      "defender": 0.29,
+      "none": 0.67
+     },
+     "setup_frames": 68.0,
+     "meaty": 0.74,
+     "airborne": 0.029,
+     "close": 0.891,
+     "objects": 0.032,
+     "contact": 0.864,
+     "contact_frames": 6.0,
+     "choices": {
+      "guard": {
+       "share": 0.706,
+       "n": 312,
+       "hit": 0.029,
+       "hit_back": 0.215,
+       "value": -146
+      },
+      "wait": {
+       "share": 0.215,
+       "n": 95,
+       "hit": 0.063,
+       "hit_back": 0.326,
+       "value": -226
+      },
+      "invincible": {
+       "share": 0.063,
+       "n": 28,
+       "hit": 0.036,
+       "hit_back": 0.893,
+       "value": -652
+      },
+      "move": {
+       "share": 0.005,
+       "n": 2,
+       "hit": 0.0,
+       "hit_back": 1.0,
+       "value": -1508
+      },
+      "jump": {
+       "share": 0.009,
+       "n": 4,
+       "hit": 0.25,
+       "hit_back": 0.75,
+       "value": 93
+      },
+      "backdash": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 1.0,
+       "hit_back": 0.0,
+       "value": 910
+      }
+     },
+     "okizeme": {
+      "0xc9": {
+       "share": 0.518,
+       "n": 229,
+       "hit": 0.026,
+       "hit_back": 0.275,
+       "value": -186,
+       "again": 0.54,
+       "invincible": 0.07
+      },
+      "0xcc": {
+       "share": 0.238,
+       "n": 105,
+       "hit": 0.057,
+       "hit_back": 0.286,
+       "value": -282,
+       "again": 0.06,
+       "invincible": 0.057
+      },
+      "0xca": {
+       "share": 0.095,
+       "n": 42,
+       "hit": 0.071,
+       "hit_back": 0.214,
+       "value": 9,
+       "again": 0.12,
+       "invincible": 0.0
+      },
+      "none": {
+       "share": 0.038,
+       "n": 17,
+       "hit": 0.059,
+       "hit_back": 0.412,
+       "value": -162,
+       "again": 0.0,
+       "invincible": 0.0
+      },
+      "0xc8": {
+       "share": 0.034,
+       "n": 15,
+       "hit": 0.0,
+       "hit_back": 0.467,
+       "value": -241,
+       "again": 0.0,
+       "invincible": 0.0
+      },
+      "0xd3": {
+       "share": 0.014,
+       "n": 6,
+       "hit": 0.0,
+       "hit_back": 0.167,
+       "value": -338,
+       "again": 0.0,
+       "invincible": 0.167
+      },
+      "0x106": {
+       "share": 0.011,
+       "n": 5,
+       "hit": 0.0,
+       "hit_back": 0.2,
+       "value": -223,
+       "again": 0.0,
+       "invincible": 0.0
+      },
+      "0x105": {
+       "share": 0.011,
+       "n": 5,
+       "hit": 0.2,
+       "hit_back": 0.4,
+       "value": -53,
+       "again": 0.0,
+       "invincible": 0.2
+      },
+      "0xcb": {
+       "share": 0.009,
+       "n": 4,
+       "hit": 0.0,
+       "hit_back": 0.5,
+       "value": -578,
+       "again": 0.0,
+       "invincible": 0.0
+      },
+      "0xd0": {
+       "share": 0.007,
+       "n": 3,
+       "hit": 0.333,
+       "hit_back": 0.333,
+       "value": -104,
+       "again": 0.0,
+       "invincible": 1.0
+      }
+     },
+     "mix": {
+      "top": 0.717,
+      "low": 0.201,
+      "high": 0.018,
+      "throw": 0.0,
+      "cross": 0.002
+     },
+     "mixups": {
+      "ground mid": {
+       "share": 0.717,
+       "n": 317,
+       "hit": 0.047,
+       "hit_back": 0.274,
+       "value": -135,
+       "invincible": 0.06
+      },
+      "ground low": {
+       "share": 0.163,
+       "n": 72,
+       "hit": 0.028,
+       "hit_back": 0.236,
+       "value": -322,
+       "invincible": 0.069
+      },
+      "jump low": {
+       "share": 0.029,
+       "n": 13,
+       "hit": 0.0,
+       "hit_back": 0.462,
+       "value": -677,
+       "invincible": 0.077
+      },
+      "jump mid": {
+       "share": 0.027,
+       "n": 12,
+       "hit": 0.0,
+       "hit_back": 0.417,
+       "value": -85,
+       "invincible": 0.083
+      },
+      "none": {
+       "share": 0.02,
+       "n": 9,
+       "hit": 0.0,
+       "hit_back": 0.556,
+       "value": -287,
+       "invincible": 0.0
+      },
+      "dash mid": {
+       "share": 0.011,
+       "n": 5,
+       "hit": 0.0,
+       "hit_back": 0.2,
+       "value": -296,
+       "invincible": 0.0
+      },
+      "ground high": {
+       "share": 0.009,
+       "n": 4,
+       "hit": 0.0,
+       "hit_back": 0.75,
+       "value": -799,
+       "invincible": 0.25
+      },
+      "jump high": {
+       "share": 0.007,
+       "n": 3,
+       "hit": 0.0,
+       "hit_back": 0.667,
+       "value": -800,
+       "invincible": 0.0
+      },
+      "fly mid": {
+       "share": 0.007,
+       "n": 3,
+       "hit": 0.0,
+       "hit_back": 0.0,
+       "value": 103,
+       "invincible": 0.0
+      },
+      "fly high": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 0.0,
+       "hit_back": 1.0,
+       "value": -1103,
+       "invincible": 1.0
+      },
+      "dash low": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 0.0,
+       "hit_back": 0.0,
+       "value": 0,
+       "invincible": 0.0
+      },
+      "fly low": {
+       "share": 0.002,
+       "n": 1,
+       "hit": 0.0,
+       "hit_back": 1.0,
+       "value": -1420,
+       "invincible": 0.0
+      }
+     }
+    },
+    "free_time": {
+     "windows_per_min": 46.08,
+     "frames_per_min": 572,
+     "frames": 7.0,
+     "objects_out": 0.413,
+     "setup": {
+      "share": 0.302,
+      "frames": 11.0
+     },
+     "charge": {
+      "share": 0.0,
+      "frames": null
+     },
+     "move": {
+      "share": 0.085,
+      "frames": 5.0
+     },
+     "close_in": {
+      "share": 0.138,
+      "frames": 14.0
+     },
+     "wait": {
+      "share": 0.475,
+      "frames": 4.0
+     }
+    },
+    "opponent_free_time": {
+     "windows_per_min": 33.13,
+     "frames_per_min": 535,
+     "frames": 8.0,
+     "objects_out": 0.029,
+     "setup": {
+      "share": 0.006,
+      "frames": 7.0
+     },
+     "charge": {
+      "share": 0.0,
+      "frames": null
+     },
+     "move": {
+      "share": 0.518,
+      "frames": 9.0
+     },
+     "close_in": {
+      "share": 0.073,
+      "frames": 29.0
+     },
+     "wait": {
+      "share": 0.404,
+      "frames": 6.0
+     }
+    }
+   }
+  ],
+  "by_tier": {
+   "hardest": {
+    "matches": 64,
+    "win": 0.0,
+    "loss": 1.0,
+    "cut": 0.0,
+    "opp_hp_taken": 0.484,
+    "opp_hp_taken_best": 0.992,
+    "rounds_won": 0.062
+   }
+  },
+  "by_opponent": {
+   "kanna": [
+    0,
+    64,
+    0
+   ]
+  },
+  "hp_by_opponent": {
+   "kanna": {
+    "opp_hp_taken": 0.484,
+    "opp_hp_taken_best": 0.992,
+    "rounds_won": 0.062
+   }
+  }
+ }
+}
