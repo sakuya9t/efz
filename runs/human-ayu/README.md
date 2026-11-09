@@ -829,6 +829,36 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   Overfitted to opponents that don't adapt; the fix is one that does (a riser trained
   to punish its wake-up attack, kept in the league), not a CPU that guesses: against
   any opponent that doesn't read it, one option is always the best.
+- **Its strings: one route, everywhere** (the user, playing round 8's: "2A-5B-2C-236A
+  again and again, in free actions as well as combos"). `tactics.strings`: a player's
+  moves one after another (each a button press made, at most 6 free steps apart), 64
+  matches each (eval/strings; people: all their matches):
+
+  | | moves a string | the 2A > 5B > f5B > 2C > 236A route | 2A, 5B, f5B, 2C, 236A of all moves | jB | anything else |
+  |---|---|---|---|---|---|
+  | people's Ayu | 2.06 | 2% | 34% (236A 0%) | 20% | 45% |
+  | Ayu's clone, level-4 CPU | 1.37 | 0% | 38% | 16% | 48% |
+  | the first agent | 1.80 | 0% | 59% | 6% | 34% |
+  | round 1's | 2.03 | 9% | 68% | 6% | 27% |
+  | round 5's best | 2.43 | 18% | 76% | 6% | 18% |
+  | round 8's best | 2.39 | 18% | 78% | 5% | 17% |
+  | round 8's, against Kano's clone | 2.89 | 23% | 79% | 9% | 11% |
+  | round 8's, against Ayu's clone | 3.25 | 42% | 89% | 3% | 9% |
+  | round 9's last | 2.46 | 13% | 71% | 2% | 26% |
+
+  In neutral it pokes with a lone 2A (14% of its strings; 74% whiff), a jB or a 236B/C
+  that whiff; when a 2A connects (a normal cancels into the next only on contact) the
+  route follows, which hits 86% of the time against the CPU. People's Ayu plays the
+  route almost never and 236A not at all; their offence is jumps (jB 20%, jC 12% of
+  moves) and a spread of normals. Five moves went from a third of what Ayu does to
+  four fifths, the pull toward people's play lowered over the rounds (0.1 in round 1,
+  0.05 in round 3, 0.02 from round 5). A person reads it at once (the user: "a wake-up
+  invincible, or an RG and an invincible during it"), and against the agent nothing does:
+  the exploiters recoil-guard its pressure 13-15% of the time (people 36%, Mishio's
+  third 32%) and follow an RG with an invincible move never (the level-4 CPU: 35% of its
+  RGs, at random), and rise with one 0-6% of the time (people 11%). Answers being
+  trained: `focus.py --focus reversal` (an invincible attack at wake-up or after an RG
+  that hits), exploiters as Ayu (623C, invincible from its 2nd step) and Mishio.
 - **Not overfitted:** people's play it never met (the clones of Kano, Mizuka, Misuzu and
   Mishio: 100% each, 99% of their HP, taking 2.7-3.8k a minute where the same
   characters' exploiters deal 6.7-10.1k); the CPU's lower levels (100%, 100%, 81% at

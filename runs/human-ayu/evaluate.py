@@ -176,7 +176,8 @@ class Events:
         self.n['hp_lost'] = 0.0
         self.n['throw_list'] = []  # each throw landed: (HP the victim lost, of it after the throw)
         self.n['taken_list'] = []  # each of the opponent's combos on one: (damage, its group)
-        for k in ('press_off', 'press_def', 'oki_off', 'oki_def', 'free_self', 'free_opp'):
+        for k in ('press_off', 'press_def', 'oki_off', 'oki_def', 'free_self', 'free_opp',
+                  'strings'):
             self.n[k] = []  # tactics.measure()'s
 
     def add_match(self, cols, controls):
@@ -302,7 +303,8 @@ class Events:
                 n['taken_list'].append((float(dmg[b:e].max()), g))
         # Pressure, wake-up and free time, both ways (tactics.py).
         if cols.shape[1] >= TACTICS + len(tactics.OBS):
-            for k, v in tactics.measure(cols[:, TACTICS:TACTICS + len(tactics.OBS)]).items():
+            for k, v in tactics.measure(cols[:, TACTICS:TACTICS + len(tactics.OBS)],
+                                        controls).items():
                 n[k] += v
         # The guesses: a counter hit is a hit on an opponent in a move of its own.
         for g, acts in self.moves['guess'].items():

@@ -1,5 +1,5 @@
 """Tactics, measured from a player's views of a match, both ways (one's own and the
-opponent's): pressure, wake-up and free time. evaluate.py's Events reports them.
+opponent's): pressure, wake-up, strings and free time. evaluate.py's Events reports them.
 
 Pressure (pressure()): the defender's guard, in runs (its blockstun, RG included), each
 with its contacts (the guard pattern restarting). After a run, the frame advantage: the
@@ -21,6 +21,12 @@ setup: frames free before the rise, in a move as it rose (meaty), airborne, clos
 steps to the first contact, objects out (traps, projectiles); its okizeme (the move it
 was in or started first, and how often it pressed it again) and the mix-up that was
 (how it came in: ground, 66, flying, jumping; low, high or either way; a cross-up).
+
+Strings (strings(), with the player's inputs): its moves one after another (gatlings,
+links, a jump-in and a landing move), each move one a button press made, and how each
+string went (hit, guarded, whiffed; punished after a guard), from what (the opponent
+free, guarding, hit): how varied a player's offence is (the user's: an agent that plays
+one string again and again).
 
 Free time (free_time()): the runs of steps in which a player is free and the opponent
 isn't (in a guard, a hit, a knockdown, a move's recovery): the usable advantage, and
@@ -63,6 +69,9 @@ STRING_GAP = 24   # the guards of a blockstring: at most this many steps apart
 WAKE_CHOICE = 16  # steps after rising in which the riser's choice is looked for
 WAKE_RESULT = 96  # ... and who hits first
 APPROACH = 60     # steps before the attacker's move in which how it came in is looked for
+LINK_GAP = 6      # a string: its moves at most this many steps free apart
+PUNISH = 40       # steps after a guarded string in which a hit back is its punishment
+BUTTONS = 0xf0    # A B C D in a control byte
 VALUE = 192       # ... and the HP each loses in this many (3 s)
 PLUS, MINUS = 2, -2  # frame advantage bins: plus (>= 2), even, minus (<= -2)
 REACH_MARGIN = 25    # pixels: the target's body beyond its position
@@ -145,6 +154,7 @@ class Side:
         self.act = np.round(c[:, k]).astype(int)
         self.frame = np.round(c[:, 2 + k]).astype(int)
         stun = c[:, 4 + k] > 0
+        self.hitstun = stun
         self.hit = stun & ~_prev(stun, False)  # a hit reaction starts
         self.air = c[:, 6 + k] > 0
         self.inv_timer = c[:, 8 + k] > 0
@@ -217,6 +227,8 @@ def pressure(att, dfn, dx, live):
         out.append(dict(
             adv=int(adv), next=what, gap=int(nxt['guard'] - e) if what == 'guard' else -1,
             escape=(dfn.escape(t) or '') if t is not None else '',
+            escape_move=hex(int(dfn.act[t])) if t is not None and dfn.escape(t) in
+            ('invincible', 'move') else '',
             move=int(att.act[m0]), contacts=int(max(1, len(contacts))),
             rg=bool(np.isin(dfn.act[b:e], RG).any()), distance=round(dist),
             power=float(att.gauge[e] - att.gauge[max(0, b - 1)]),
@@ -324,13 +336,67 @@ def free_time(me, opp, dx, live):
     return out
 
 
-def measure(c):
-    """Both ways, for one player's match: c, its views' OBS columns (T, len(OBS))."""
+def strings(me, opp, live, controls):
+    """`me`'s strings: its moves one after another, each within LINK_GAP free steps of
+    the last (a gatling, a link, a jump-in and a landing move), a dict each: the moves (a
+    move is a start of its own that a button press made since the last: a follow-up of
+    one, 236A's ending, a throw's hit, is the same move), what the opponent was doing at
+    the first (free, guard, hit, down, busy), and how it went (hit: the opponent was hit
+    during it; guarded; whiff), and for a guarded one whether the opponent hit back
+    within PUNISH steps of its last move."""
+    T = len(me.act)
+    c = np.asarray(controls, np.int64)
+    press = (c & BUTTONS & ~_prev(c, 0) & BUTTONS) != 0
+    pressed = np.cumsum(press)  # presses up to and including each step
+    out, cur, last = [], None, -1
+    free_run = 0
+    ostate = np.where(opp.guard, 1, np.where(opp.hitstun, 2, np.where(np.isin(opp.act, DOWN), 3,
+                      np.where(opp.free, 0, 4))))
+    names = ('free', 'guard', 'hit', 'down', 'busy')
+
+    def close(st):
+        if st is None:
+            return
+        b, e = st['t0'], min(T, st['t1'] + 1)
+        hit = bool(opp.hit[b:e + 8].any())
+        guarded = bool(opp.contact[b:e + 8].any())
+        how = 'hit' if hit else 'guarded' if guarded else 'whiff'
+        free = _first(me.free, st['t1'], min(T, st['t1'] + 120))
+        back = how == 'guarded' and free is not None and \
+            _first(me.hit, st['t1'], min(T, free + PUNISH)) is not None
+        out.append(dict(moves='-'.join(hex(int(a)) for a in st['moves']), start=names[st['opp']],
+                        how=how, punished=bool(back)))
+    for t in range(T):
+        if me.free[t]:
+            free_run += 1
+            if cur is not None and free_run > LINK_GAP:
+                close(cur)
+                cur = None
+            continue
+        if me.move[t] and live[t] and (last < 0 or pressed[t] > pressed[last]):
+            if cur is None:
+                cur = dict(t0=t, moves=[], opp=int(ostate[t]))
+            cur['moves'].append(int(me.act[t]))
+            cur['t1'] = t
+            last = t
+        if not me.free[t]:
+            free_run = 0
+        if cur is not None and (me.hitstun[t] or not live[t]):  # it was hit, or the round ended
+            close(cur)
+            cur = None
+    close(cur)
+    return out
+
+
+def measure(c, controls=None):
+    """Both ways, for one player's match: c, its views' OBS columns (T, len(OBS));
+    controls (T,), its inputs: with them also its strings (strings())."""
     c = np.asarray(c, np.float32)
     me, opp = Side(c, 0), Side(c, 1)
     live = (c[:, 16] == 0) & (c[:, 17] == 0)
     dx = c[:, 18]
-    return dict(press_off=pressure(me, opp, dx, live), press_def=pressure(opp, me, dx, live),
+    extra = dict(strings=strings(me, opp, live, controls)) if controls is not None else {}
+    return dict(**extra, press_off=pressure(me, opp, dx, live), press_def=pressure(opp, me, dx, live),
                 oki_off=wakeup(opp, me, dx, live), oki_def=wakeup(me, opp, dx, live),
                 free_self=free_time(me, opp, dx, live), free_opp=free_time(opp, me, dx, live))
 
@@ -386,6 +452,19 @@ def pressure_report(recs, per_min, moves=False):
                 share=_mean(m), n=int(m.sum()),
                 escaped=_mean(what[m] == 'fought_back'), trapped=_mean(what[m] == 'hit'),
                 when_minus=_mean(adv[m] <= MINUS))
+    # Which moves it started out of the guard (the user's: an agent that presses its 2A
+    # under pressure, slower than the opponent's next attack), how each went, how often
+    # at a disadvantage.
+    em = np.array([r.get('escape_move', '') for r in recs])
+    by = collections.Counter(em[em != ''])
+    if by:
+        out['escape_moves'] = {}
+        for k, c in by.most_common(8):
+            m = em == k
+            out['escape_moves'][k] = dict(share=round(c / len(recs), 3), n=int(c),
+                                          escaped=_mean(what[m] == 'fought_back'),
+                                          trapped=_mean(what[m] == 'hit'),
+                                          when_minus=_mean(adv[m] <= MINUS))
     # RG and what came of it (the user's: RG and a move after it turn the pressure):
     # the advantage after it (the attacker's: minus, the defender acts first), what
     # the defender did, and how that went.
@@ -491,9 +570,37 @@ def free_report(recs, per_min):
     return out
 
 
+def strings_report(recs, per_min, top=12):
+    """strings()' records: how many, how long, how varied (`top`: the share of the
+    commonest; `repeat`: of a string the same as the one before), and the commonest
+    routes: how each went, from where."""
+    if not recs:
+        return None
+    moves = [r['moves'] for r in recs]
+    by = collections.Counter(moves)
+    singles = collections.Counter(m for r in moves for m in r.split('-'))
+    total = sum(singles.values())
+    out = dict(per_min=round(len(recs) * per_min, 2),
+               moves_per_string=round(total / len(recs), 2),
+               top=_mean([m == by.most_common(1)[0][0] for m in moves]),
+               repeat=_mean([a == b for a, b in zip(moves[1:], moves[:-1])]),
+               routes_for_half=next(k + 1 for k, c in enumerate(np.cumsum(
+                   [v for _, v in by.most_common()])) if c >= len(recs) / 2),
+               moves={m: round(v / total, 3) for m, v in singles.most_common(10)},
+               routes={})
+    for m, n in by.most_common(top):
+        rs = [r for r in recs if r['moves'] == m]
+        guarded = [r for r in rs if r['how'] == 'guarded']
+        out['routes'][m] = dict(share=round(n / len(recs), 3), n=n,
+                                **{k: _mean([r['how'] == k for r in rs]) for k in ('hit', 'guarded', 'whiff')},
+                                from_free=_mean([r['start'] == 'free' for r in rs]),
+                                punished=_mean([r['punished'] for r in guarded]) if guarded else None)
+    return out
+
+
 def report(n, per_min):
     """Events' lists (measure()'s, concatenated) -> its report's entries."""
-    return dict(pressure=pressure_report(n['press_off'], per_min, moves=True),
+    return dict(strings=strings_report(n.get('strings', []), per_min), pressure=pressure_report(n['press_off'], per_min, moves=True),
                 under_pressure=pressure_report(n['press_def'], per_min),
                 okizeme=wakeup_report(n['oki_off'], per_min),
                 wakeup=wakeup_report(n['oki_def'], per_min),

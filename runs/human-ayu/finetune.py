@@ -27,7 +27,8 @@ character. --vs MODEL:CHAR adds frozen opponents of their own characters (an age
 another run), which play --vs-share of the matches against agents (1: only they). With
 --focus the learner also gets focus.py's shaping reward for what it is meant to be good
 at ('setup': objects put out in free time, Mizuka's and Misuzu's traps; 'charge': Kano's
-charge moves in free time): an exploiter with a style, trained against a frozen agent
+charge moves in free time; 'reversal': an invincible attack at wake-up or after a recoil
+guard that hits): an exploiter with a style, trained against a frozen agent
 (--vs) and kept close to its people's clone. --stop-win ends it once it beats every --vs
 opponent that often. best.zip is the chunk whose evaluation won most (the mean over the
 --vs opponents and the CPU; with --cpu-chars a character, the share of its HP taken
@@ -82,7 +83,8 @@ def parse():
                    help='frozen opponents of other runs, MODEL.zip:CHAR (CHAR: ayu if left out)')
     p.add_argument('--vs-share', type=float, default=0.5,
                    help='share of the matches against agents that the --vs opponents play')
-    p.add_argument('--focus', choices=('setup', 'charge'), help="a shaping reward (focus.py)")
+    p.add_argument('--focus', choices=('setup', 'charge', 'reversal'),
+                   help="a shaping reward (focus.py)")
     p.add_argument('--focus-coef', type=float, default=0.02)
     p.add_argument('--pfsp', type=float, default=0,
                    help='share out the --vs matches by (1 - the last evaluation\'s win) ** PFSP: '
