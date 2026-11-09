@@ -76,7 +76,7 @@ def main():
         while queue:
             rid, split = queue.popleft()
             try:
-                env.play(i, os.path.join(args.replays, index[rid]['path']))
+                env.play(i, os.path.join(args.replays, *index[rid]['path'].split('\\')))
             except ValueError:
                 continue
             env.reset(mask=np.arange(n) == i)

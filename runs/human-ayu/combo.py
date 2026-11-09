@@ -121,7 +121,7 @@ def restore(data_dir, replays, starts, envs=32):
     def next_job(i):
         while queue:
             rid, sts = queue.popleft()
-            env.play(i, os.path.join(replays, index[rid]))
+            env.play(i, os.path.join(replays, *index[rid].split('\\')))
             env.reset(mask=np.arange(n) == i)
             steps = collections.defaultdict(list)
             for st in sts:

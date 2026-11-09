@@ -87,7 +87,7 @@ def main():
         while queue:
             r = queue.popleft()
             try:
-                env.play(i, os.path.join(args.replays, r['path']))
+                env.play(i, os.path.join(args.replays, *r['path'].split('\\')))
             except ValueError as e:
                 print(f"replay {r['id']}: {e}", flush=True)
                 continue
@@ -104,7 +104,7 @@ def main():
 
     for i in range(n):  # the first, all at once
         r = queue.popleft()
-        env.play(i, os.path.join(args.replays, r['path']))
+        env.play(i, os.path.join(args.replays, *r['path'].split('\\')))
         current[i] = r
     env.reset()
     for i in range(n):

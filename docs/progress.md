@@ -45,8 +45,12 @@ machine"). The plan behind it is
 **The Linux machine.** RTX A3000 12 GB (a laptop GPU, 80 W, about 6 GB of it taken by other
 programs), Ryzen 9 7945HX (32 threads), 92 GB. The replays' data in `~/data/efz-replays`
 (`datasets/ayu`, `mizukab`, `kano`, `misuzu`, `mishio`, `players.csv`,
-`combo-library.npz`; checked against the laptop's SHA256SUMS); not yet `combo-starts/`
-and `replays/` (needed for people's combo starts). EFZ_DIR: the decompilation's
+`combo-library.npz`; checked against the laptop's SHA256SUMS), and since 8 November all
+the rest (`index.csv`, `replays/`, `archives/`, `combo-starts/`, `player_names.csv`):
+every path in `index.csv` is there, replays play back as on the laptop (`dataset.py`'s
+views equal but for the frame count, which the policies drop; 80 of 80 combo starts
+rebuilt with the views kept). `index.csv`'s paths are Windows', split on `\` by
+`dataset.py`, `combo_starts.py` and `combo.py`. EFZ_DIR: the decompilation's
 `efz-unpacked/tasogare/EFZ`. `runs/llm-ayu/setup-linux.sh` worked with cmake from pip
 (the host has none), after a fix: the headless library failed to load after torch
 ("cannot allocate memory in static TLS block"; port/guest.h now gives the static TLS
@@ -59,8 +63,9 @@ paths: `python runs/hub.py download human-ayu` puts them back into `runs/human-a
 clones). The `.zip` files of those folders are ignored by git; the clones `bc.zip`,
 `bc-d14.zip` and `team/` are also in git.
 
-**Data outside the repository** (on the laptop under `D:/tasogare/efz-replays`; keep the
-layout, the scripts find `players.csv` beside the datasets' parent):
+**Data outside the repository** (on the laptop under `D:/tasogare/efz-replays`, on the
+Linux machine `~/data/efz-replays`; keep the layout, the scripts find `players.csv`
+beside the datasets' parent):
 
 | What | Size | Needed for |
 |---|---|---|
@@ -155,7 +160,7 @@ The list below is from 5 November:
 
 ## Resuming each run
 
-Every script takes `--data "$EFZ_DIR"`; `$REPLAYS` is the replays' folder (the laptop's `D:/tasogare/efz-replays`).
+Every script takes `--data "$EFZ_DIR"`; `$REPLAYS` is the replays' folder (the laptop's `D:/tasogare/efz-replays`, the Linux machine's `~/data/efz-replays`).
 
 ```sh
 # The league run: continues from runs/human-ayu/agent-league/finetune.json (raise --budget)
