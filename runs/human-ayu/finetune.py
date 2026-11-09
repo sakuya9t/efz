@@ -30,7 +30,8 @@ at ('setup': objects put out in free time, Mizuka's and Misuzu's traps; 'charge'
 charge moves in free time): an exploiter with a style, trained against a frozen agent
 (--vs) and kept close to its people's clone. --stop-win ends it once it beats every --vs
 opponent that often. best.zip is the chunk whose evaluation won most (the mean over the
---vs opponents and the CPU), to be checked on more matches: a league forgets what it
+--vs opponents and the CPU; with --cpu-chars a character, the share of its HP taken
+instead of its wins), to be checked on more matches: a league forgets what it
 stops meeting. --pfsp-window shares the matches by the last few evaluations, not the
 last one alone. --vs-assist plays the --vs opponents with built-in combos
 (combo_support.FairAssistOpponent), in training and evaluations: an agent trained with
@@ -163,9 +164,11 @@ def parse():
     p.add_argument('--eval-every', type=int, default=1,
                    help='evaluate after every this many chunks (and the last): --assist plans in '
                         'every match evaluated, which is slow')
-    p.add_argument('--cpu-chars', default='tiers', choices=('tiers', 'random'),
-                   help="the level-4 CPU's characters in evaluations: a third per tier "
-                        "(evaluate.TIERS) or drawn")
+    p.add_argument('--cpu-chars', default='tiers',
+                   help="the CPU's characters in evaluations: 'tiers' (level 4: a third per "
+                        "tier, evaluate.TIERS), 'random' (drawn), or one character, as the "
+                        "only CPU trained against (--cpu-focus CHAR:1): kanna; best.zip then "
+                        "counts the share of its HP taken, which moves where its wins don't"),
     p.add_argument('--lr', type=float, default=1e-4)
     p.add_argument('--ent-coef', type=float, default=0.005)
     p.add_argument('--torch-threads', type=int, default=8)
@@ -175,6 +178,10 @@ def parse():
             p.error('--delay-most: at least --delay')
         if args.assist or args.vs_assist or args.practice:  # (they plan with one delay)
             p.error('--delay-most: not with --assist, --vs-assist or --practice')
+    if args.cpu_chars not in ('tiers', 'random'):
+        from efz_env.vec import character_names
+        if args.cpu_chars not in character_names():
+            p.error(f'--cpu-chars: tiers, random or a character, not {args.cpu_chars}')
     if args.char != 'ayu' and args.old == OLD:  # the curriculum agent plays Ayu only
         args.old = ''
     args.vs = [tuple(v.rsplit(':', 1)) if ':' in os.path.basename(v) else (v, 'ayu')
@@ -199,10 +206,13 @@ def recent_wins(history, k, window=1):
     return out
 
 
-def score(results, k):
+def score(results, k, cpu_hp=False):
     """An evaluation's worth, for best.zip: the mean win against the --vs opponents and the
-    CPU, each counted once."""
-    wins = [results[f'vs{j}']['win'] for j in range(k)] + [results['cpu']['win']]
+    CPU, each counted once; cpu_hp: for the CPU the share of its HP taken instead (one
+    character it is never beaten as, level-4 Kanna: the user's measure)."""
+    cpu = results['cpu']
+    wins = [results[f'vs{j}']['win'] for j in range(k)] + [
+        (cpu.get('opp_hp_taken') or 0.0) if cpu_hp else cpu['win']]
     return float(np.mean(wins))
 
 
@@ -380,7 +390,8 @@ def evaluate(args, model_path, level):
         import combo_support
         me = combo_support.FairComboAgent(me, ASSIST['planner'])
     out = {}
-    a.chars = (args.char, args.cpu_chars if level == 4 else 'random')  # tiers: level 4's
+    a.chars = (args.char, args.cpu_chars if level == 4 or args.cpu_chars not in
+               ('tiers', 'random') else 'random')  # tiers: level 4's; one character: any
     out['cpu'] = ev.play(a, me, 'cpu', args.eval, level)
     out['cpu']['level'] = level
     if args.old and os.path.exists(args.old):
@@ -441,6 +452,7 @@ def main():
     os.makedirs(args.out, exist_ok=True)
     state_path = os.path.join(args.out, 'finetune.json')
     history, start, level = [], args.start, args.level
+    cpu_hp = args.cpu_chars not in ('tiers', 'random')  # best.zip: its HP taken, not wins
     if os.path.exists(state_path):
         with open(state_path) as f:
             saved = json.load(f)
@@ -521,7 +533,7 @@ def main():
     if not history:
         before = evaluate(args, start, level)
         print('before:', show(before), flush=True)
-        worth = score(before, len(args.vs)) if args.vs else None
+        worth = score(before, len(args.vs), cpu_hp) if args.vs else None
         if worth is not None:  # the start is the best so far
             import shutil
             shutil.copyfile(start, os.path.join(args.out, 'best.zip'))
@@ -566,7 +578,7 @@ def main():
         if pool is not None:  # the practice of the chunk, and the pool it drew from
             trials = dict(env.take_trials(), pool=len(pool.starts), kinds=pool.kinds())
         if results and args.vs:  # the best evaluated so far (best.zip; the 64-match check is after)
-            worth = score(results, len(args.vs))
+            worth = score(results, len(args.vs), cpu_hp)
             best = max((h.get('score', -1) for h in history), default=-1)
             if worth > best:
                 model.save(os.path.join(args.out, 'best.zip'))
