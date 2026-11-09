@@ -767,9 +767,24 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   reacts faster plays better; it plays worse. People's reaction times vary from moment to
   moment, and the training's delay doesn't. A delay drawn per match or per moment
   (14-20 steps, the human limit and slower) should make it hold up and drop fewer combos.
-  Round 9, `agent-league9-jitter` (in progress), tries it: round 8's settings (Kanna in
-  40% of the CPU matches) with each player's delay drawn per match from 14-20 steps
-  (`finetune.py --delay-most 20`), `agent-league8` its control.
+  Round 9, `agent-league9-jitter`, tried it: round 8's settings (Kanna in 40% of the CPU
+  matches) with each player's delay drawn per match from 14-20 steps (`finetune.py
+  --delay-most 20`), 20M steps from round 7's best. Its evaluations, at 14 steps, never
+  beat its start (0.63-0.82 against 0.854), so its `best.zip` is round 7's own; its last
+  checkpoint (`model.zip`, 177.3M):
+
+  | Steps late | 8 | 11 | **14** | 17 | 20 |
+  |---|---|---|---|---|---|
+  | Level-4 CPU (tiers) | 52% | 57% | 59% (0/76/100%) | 59% | 52% |
+  | Kano's sixth | 12% | 25% | 36% | 22% | 11% |
+  | Its combos on the CPU | 812 | 901 | 960 | 915 | 813 |
+
+  Flatter: at 17 and 20 steps, the slower people it may meet, it holds better than
+  round 7's best (the CPU 59% and 52% against 52% and 46%, its combos 915 and 813
+  against 762 and 670, Kano's sixth 22% and 11% against 16% and 0%), and worse at 14.
+  Round 8's best, its control, also lost Kano's sixth at 14 (33%, the CPU 67%), so most
+  of that is the round's, not the delay's; faster than 14, never trained, it is no
+  better. A reaction time that varies works, at a price where the league itself lost.
 - **The evaluation seed, a little.** Its best checkpoints were picked on evaluations of
   seed 7 (`finetune.py`'s, and `evaluate.py`'s default) and measured on seed 7: on
   seeds 11 and 23 the CPU's middle tier 90% and 81% (100%), Unknown's fourth 80% and 81%
@@ -795,7 +810,7 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   | round 3's | 57% | 0 / 1% | 0 / 0% | 1 / 6% | 65 / 1% | 1.4% | 56% |
   | round 5's best | 74% | 0 / 0% | 0 / 0% | 0 / 11% | 87 / 1% | 0% | 74% |
   | round 7's best | 89% | 0 / 1% | 0 / 0% | 0 / 3% | 95 / 0% | 0.6% | 89% |
-  | round 9's best (delay 14-20) | 88% | 0 / 0% | 0 / 0% | 0 / 3% | 93 / 0% | 1.3% | 87% |
+  | round 9's last (delay 14-20) | 58% (and 33% a mid) | 0 / 0% | 0 / 0% | 0 / 3% | 63 / 1% | 1.5% | 58% |
   | round 7's, against Kano's clone | 92% | 0 / 1% | 0 / 0% | 0 / 1% | 95 / 0% | 0.1% | 92% |
   | round 7's, against Kano's seventh | 92% | 0 / 1% | 0 / 0% | 0 / 2% | 96 / 0% | 0.2% | 92% |
 
