@@ -425,10 +425,12 @@ def play(args, p1, p2, matches, level=4, seed=7):
     seen = [[[] for _ in range(matches)] for _ in range(2)]  # per side: (cols, input)
     step = 0
     chars_played = np.zeros((matches, 2), int)
-    # P2's HP each round: the share P1 took (per round, 9999 a bar) and P1's rounds won.
+    # Each round, the share of P2's HP P1 took and of P1's P2 took (9999 a bar), and P1's
+    # rounds won.
     cur_round = np.zeros(matches, int)
-    last_hp = np.full(matches, MAX_HP)
+    last_hp = np.full((matches, 2), MAX_HP)
     taken = [[] for _ in range(matches)]
+    lost = [[] for _ in range(matches)]
     rounds_won = np.zeros(matches, int)
     while not done.all():
         controls = np.zeros((matches, 2), np.uint8)
@@ -446,15 +448,17 @@ def play(args, p1, p2, matches, level=4, seed=7):
         for i in np.flatnonzero(live):  # a new round: HP back to full on the same step
             r = int(info['round'][i])
             if cur_round[i] and r != cur_round[i]:
-                taken[i].append((MAX_HP - last_hp[i]) / MAX_HP)
+                taken[i].append((MAX_HP - last_hp[i, 1]) / MAX_HP)
+                lost[i].append((MAX_HP - last_hp[i, 0]) / MAX_HP)
             cur_round[i] = r
-            last_hp[i] = int(info['hp'][i, 1])
+            last_hp[i] = info['hp'][i]
         ended = (term | trunc) & live
         for i in np.flatnonzero(ended):
             w = int(info['winner'][i])
             result[i] = 1 if w == 0 else -1 if w == 1 else 0
             chars_played[i] = info['chars'][i]
-            taken[i].append((MAX_HP - last_hp[i]) / MAX_HP)
+            taken[i].append((MAX_HP - last_hp[i, 1]) / MAX_HP)
+            lost[i].append((MAX_HP - last_hp[i, 0]) / MAX_HP)
             rounds_won[i] = int(info['rounds_won'][i, 0])
         done |= term | trunc
     env.close()
@@ -464,7 +468,7 @@ def play(args, p1, p2, matches, level=4, seed=7):
         for match in seen[s]:
             e.add_match(np.array([c for c, _ in match]), np.array([u for _, u in match]))
         events.append(e)
-    hp = HpTaken(taken, rounds_won)
+    hp = HpTaken(taken, rounds_won, lost)
     return dict(win=float((result == 1).mean()), loss=float((result == -1).mean()),
                 cut=float((result == 0).mean()), matches=matches, **hp.of(slice(None)),
                 sides=[e.report() for e in events],
@@ -495,19 +499,25 @@ def tier_opponents(n, seed=7):
 
 class HpTaken:
     """Per match, the share of P2's HP P1 took in each round, and P1's rounds won: a
-    measure short of winning (level-4 Kanna is never beaten: the user's)."""
+    measure short of winning (level-4 Kanna is never beaten: the user's). And the share
+    of P1's own HP P2 took a round (self_hp_taken; with lost): a measure past winning,
+    telling hard wins from easy ones where P1 wins nearly always (the user's)."""
 
-    def __init__(self, taken, rounds_won):
-        self.taken, self.rounds_won = taken, np.asarray(rounds_won)
+    def __init__(self, taken, rounds_won, lost=None):
+        self.taken, self.rounds_won, self.lost = taken, np.asarray(rounds_won), lost
 
     def of(self, which):
         idx = np.arange(len(self.taken))[which]
         rounds = [x for i in idx for x in self.taken[i]]
         if not len(idx):
             return {}
-        return dict(opp_hp_taken=round(float(np.mean(rounds)), 3) if rounds else None,
-                    opp_hp_taken_best=round(float(np.max(rounds)), 3) if rounds else None,
-                    rounds_won=round(float(self.rounds_won[idx].mean()), 3))
+        out = dict(opp_hp_taken=round(float(np.mean(rounds)), 3) if rounds else None,
+                   opp_hp_taken_best=round(float(np.max(rounds)), 3) if rounds else None,
+                   rounds_won=round(float(self.rounds_won[idx].mean()), 3))
+        if self.lost is not None:
+            own = [x for i in idx for x in self.lost[i]]
+            out['self_hp_taken'] = round(float(np.mean(own)), 3) if own else None
+        return out
 
 
 def _by_tier(result, chars, hp=None):
@@ -609,7 +619,8 @@ def main():
               flush=True)
         if r['by_tier']:
             print('  by tier:', ', '.join(f"{t} {v['win']:.0%} of {v['matches']} (HP taken a round "
-                                          f"{v['opp_hp_taken']:.0%}, rounds {v['rounds_won']:.2f})"
+                                          f"{v['opp_hp_taken']:.0%}, its own lost "
+                                          f"{v['self_hp_taken']:.0%}, rounds {v['rounds_won']:.2f})"
                                           for t, v in r['by_tier'].items()), flush=True)
     if args.p1_assist:  # its plans: how many, the share a route won, the damage options made
         out['assist'] = dict(p1.assist.take_plans(), score=args.assist_score,

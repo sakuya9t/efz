@@ -430,7 +430,9 @@ def show(results):
     parts = []
     for k, r in results.items():
         s = r['sides'][0]
-        parts.append(f"{k}: win {r['win']:.0%} loss {r['loss']:.0%} cut {r['cut']:.0%}, "
+        lost = (f" (own HP lost {r['self_hp_taken']:.0%})"  # hard wins from easy ones
+                if r.get('self_hp_taken') is not None else '')
+        parts.append(f"{k}: win {r['win']:.0%}{lost} loss {r['loss']:.0%} cut {r['cut']:.0%}, "
                      f"{s['presses_per_second']} presses/s, per min {s['jumps_per_min']} jumps "
                      f"{s['guard_ground_per_min']} guards {s['hit_ground_per_min']}+"
                      f"{s['hit_air_per_min']} hits, RG {s['rg_ground']}/{s['rg_air']} "
