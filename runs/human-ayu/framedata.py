@@ -1,7 +1,10 @@
 """The characters' frame data, from the game's <name>/<name>.pat (as CPlayer::LoadPatterns
 reads them, src/player.cpp): per character and move, the steps before it is active
-(startup), how far its attack boxes reach, and whether it is invulnerable in its first
-steps (a frame with flagsB0 0x20, kStateInvulnerable: an invincible move, a reversal).
+(startup), how far its attack boxes reach, whether it is invulnerable in its first
+steps (a frame with flagsB0 0x20, kStateInvulnerable: an invincible move, a reversal),
+and how it is guarded (guard: the postures all its attack frames allow, flagsAA's
+stand and crouch bits: 'mid' either, 'high' standing only, 'low' crouching only,
+'unguardable' neither: a throw).
 
     python runs/human-ayu/framedata.py --data D:/tasogare/EFZ    # -> framedata.json
 
@@ -19,6 +22,10 @@ import struct
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 INVULNERABLE = 0x20  # flagsB0: kStateInvulnerable
+GUARD_STAND, GUARD_CROUCH = 0x1, 0x2  # flagsAA: kAttackGuardStand, kAttackGuardCrouch
+# How the whole move is guarded: the postures every attack frame of it allows.
+GUARDS = {GUARD_STAND | GUARD_CROUCH: 'mid', GUARD_STAND: 'high', GUARD_CROUCH: 'low',
+          0: 'unguardable'}
 FIRST_OWN = 0xc8
 FRAME_BYTES = 240    # 6 ints of sprite, 8 ints, 4 shorts, 4 ints, 10 rects of 16 bytes
 
@@ -50,7 +57,7 @@ def read_pat(path):
             attack = [rects[3]] + rects[7:10]
             attack = [r for r in attack if r[2] > r[0] and r[3] > r[1]]
             seq.append((duration & 0xffff, flags_b0 & 0xffff,  # frames: a step each
-                        damage, attack))
+                        damage, attack, flags_aa & 0xffff))
         out[action] = dict(level=level, cancel=cancel, frames=seq)
     if off != len(data):
         raise ValueError(f'{path}: read {off} of {len(data)} bytes')
@@ -65,17 +72,20 @@ def summarize(patterns, invincible_steps=8):
     for action, p in patterns.items():
         if action < FIRST_OWN:
             continue
-        t, startup, reach, inv = 0, None, 0, False
-        for steps, flags, damage, attack in p['frames']:
+        t, startup, reach, inv, guard = 0, None, 0, False, GUARD_STAND | GUARD_CROUCH
+        for steps, flags, damage, attack, flags_aa in p['frames']:
             if t < invincible_steps and flags & INVULNERABLE:
                 inv = True
             if attack and startup is None:
                 startup = t
+            if attack:
+                guard &= flags_aa
             for r in attack:
                 reach = max(reach, r[2])
             t += max(steps, 1)
         out[action] = dict(startup=startup, reach=reach, invincible=inv, steps=t,
-                           level=p['level'])
+                           level=p['level'],
+                           guard=GUARDS[guard] if startup is not None else None)
     return out
 
 

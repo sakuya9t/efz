@@ -18,7 +18,9 @@ a jump; a backdash) and how each went, and RG.
 Wake-up (wakeup()): each knockdown, the riser's choice (guard, wait, rising attack,
 escape()) and how it went (who hit first, the HP swing over 3 s), and the attacker's
 setup: frames free before the rise, in a move as it rose (meaty), airborne, close, the
-steps to the first contact, objects out (traps, projectiles).
+steps to the first contact, objects out (traps, projectiles); its okizeme (the move it
+was in or started first, and how often it pressed it again) and the mix-up that was
+(how it came in: ground, 66, flying, jumping; low, high or either way; a cross-up).
 
 Free time (free_time()): the runs of steps in which a player is free and the opponent
 isn't (in a guard, a hit, a knockdown, a move's recovery): the usable advantage, and
@@ -27,6 +29,7 @@ the way Mizuka and Misuzu play, the user's), a charge (a move that builds a reso
 of the character's own: Kano's magic, CHARGE), another move, closing in, or waiting.
 """
 
+import collections
 import functools
 import json
 import os
@@ -51,6 +54,7 @@ RG = [0xa8, 0xa9, 0xaa]
 DOWN = [0x60, 0x61, 0x62, 0x63]  # wake-up, the two knockdowns, lying
 WAKEUP_ATTACK = 0xa2             # rising with an attack (1000 power)
 DASH, BACKDASH = 0xa3, 0xa4
+AIRDASH = [0xa5, 0xa6]           # forward, back (Ayu's flight)
 FIRST_OWN = 0xc8                 # the character's own moves
 FIRST_OBJECT = 0x190             # patterns from here are its objects'
 
@@ -58,6 +62,7 @@ AFTER = 64        # steps after a guard ends in which what came next is looked f
 STRING_GAP = 24   # the guards of a blockstring: at most this many steps apart
 WAKE_CHOICE = 16  # steps after rising in which the riser's choice is looked for
 WAKE_RESULT = 96  # ... and who hits first
+APPROACH = 60     # steps before the attacker's move in which how it came in is looked for
 VALUE = 192       # ... and the HP each loses in this many (3 s)
 PLUS, MINUS = 2, -2  # frame advantage bins: plus (>= 2), even, minus (<= -2)
 REACH_MARGIN = 25    # pixels: the target's body beyond its position
@@ -121,6 +126,18 @@ def frame_data():
     return out
 
 
+@functools.lru_cache(maxsize=None)
+def guards():
+    """Per character number: {move: how it is guarded ('low', 'high', 'mid',
+    'unguardable')}, from framedata.json; {} without it (or before its guard field)."""
+    path = os.path.join(HERE, 'framedata.json')
+    if not os.path.exists(path):
+        return {}
+    data = json.load(open(path))
+    return {c: {int(k, 16): m['guard'] for k, m in data[name].items() if m.get('guard')}
+            for c, name in enumerate(names()) if name in data}
+
+
 class Side:
     """One player's columns over a match (k: 0 the viewer, 1 the opponent)."""
 
@@ -145,6 +162,7 @@ class Side:
         self.contact = self.guard & (~_prev(self.guard, False) | self.new |
                                      (self.frame < _prev(self.frame, 0)))
         self.inv_moves, self.punishers = frame_data().get(self.char, (set(), []))
+        self.heights = guards().get(self.char, {})
         name = names()[self.char] if 0 <= self.char < len(names()) else ''
         self.charge_moves = set(CHARGE.get(name, []))
 
@@ -235,7 +253,45 @@ def wakeup(dfn, att, dx, live):
         swing = (dfn.hp[w] - dfn.hp[w + VALUE]) - (att.hp[w] - att.hp[w + VALUE])
         f = _first(att.free, s, w + 1)
         contact = _first(guard_in | dfn.hit, w, w + WAKE_RESULT)
-        out.append(dict(choice=choice, result=result, swing=float(swing),
+        # The attacker's okizeme: the move it was in as the defender rose (a meaty), else
+        # what it started first within WAKE_CHOICE steps (a move, a jump, a dash), else
+        # 'none' (it waited, walked or guarded); and how many times it started that move
+        # again before the result window ended (pressing it over and over).
+        if att.act[w] >= FIRST_OWN:
+            oki = hex(int(att.act[w]))
+            m0 = int(np.flatnonzero(att.new[:w + 1])[-1])  # where it started
+        else:
+            m0 = _first(att.acts, w + 1, w + WAKE_CHOICE)
+            oki = 'none' if m0 is None else (
+                hex(int(att.act[m0])) if att.act[m0] >= FIRST_OWN else
+                'backdash' if att.act[m0] == BACKDASH else
+                'dash' if att.act[m0] == DASH else 'jump')
+        again = 0
+        if oki.startswith('0x'):
+            a = int(oki, 16)
+            again = int((att.new[m0 + 1:w + WAKE_RESULT] & (att.act[m0 + 1:w + WAKE_RESULT] == a)).sum())
+        # The mix-up it was (the user's, for Ayu: a 2A, low; 66 into an air B or a 2A,
+        # up or down; flying in (an air dash) and dropping with jB, in front or behind):
+        # the move that made the first contact (else the okizeme move), how it is guarded
+        # (frame data), how the attacker came in (fly: an air dash; dash: 66; jump: a jump
+        # or a move started in the air; else ground) and whether it struck from the other
+        # side than the riser rose to (a cross-up). 'none': no move of its own.
+        mix, t = 'none', contact if contact is not None else (m0 if oki.startswith('0x') else None)
+        starts = np.flatnonzero(att.move[s:t + 1]) if t is not None else []
+        if len(starts):
+            b = s + int(starts[-1])
+            lo = max(s, b - APPROACH)
+            seen = att.act[lo:b + 1]
+            way = ('fly' if np.isin(seen, AIRDASH).any() else
+                   'dash' if (seen == DASH).any() else
+                   'jump' if att.air[b] or (att.air[lo + 1:b + 1] & ~att.air[lo:b]).any() else
+                   'ground')
+            height = att.heights.get(int(att.act[b]), 'mid')
+            height = 'throw' if height == 'unguardable' else height
+            crossed = dx[w] != 0 and dx[t] != 0 and np.sign(dx[w]) != np.sign(dx[t])
+            mix = f'{way} {height}' + (' cross' if crossed else '')
+        out.append(dict(choice=choice, result=result, swing=float(swing), oki=oki,
+                        oki_again=again, mix=mix,
                         setup_frames=int(w - f) if f is not None else -1,
                         meaty=bool(att.act[w] >= FIRST_OWN), airborne=bool(att.air[w]),
                         distance=round(float(abs(dx[w]) * 640)),
@@ -381,6 +437,42 @@ def wakeup_report(recs, per_min):
                                      hit=_mean(result[m] == 'attacker'),
                                      hit_back=_mean(result[m] == 'defender'),
                                      value=round(float(swing[m].mean())))
+    # The attacker's okizeme, by what it did (a move by its number): how often, how it
+    # went, how many times it pressed it again, and how often the riser answered it
+    # with an invincible move.
+    oki = np.array([r.get('oki', '') for r in recs])
+    again = np.array([r.get('oki_again', 0) for r in recs], float)
+    by = collections.Counter(oki[oki != ''])
+    if by:
+        out['okizeme'] = {}
+        for k, n in by.most_common(10):
+            m = oki == k
+            out['okizeme'][k] = dict(share=_mean(m), n=int(n),
+                                     hit=_mean(result[m] == 'attacker'),
+                                     hit_back=_mean(result[m] == 'defender'),
+                                     value=round(float(swing[m].mean())),
+                                     again=round(float(again[m].mean()), 2),
+                                     invincible=_mean(choice[m] == 'invincible'))
+    # The mix-ups (wakeup()'s mix: how it came in, how the move is guarded, a cross-up):
+    # their shares and how each went, how often it struck low, high, from behind; and
+    # `top`, the share of the commonest: how predictable it is.
+    mix = np.array([r.get('mix', '') for r in recs])
+    by = collections.Counter(mix[mix != ''])
+    if by:
+        moved = (mix != '') & (mix != 'none')
+        out['mix'] = dict(top=_mean(mix[mix != ''] == by.most_common(1)[0][0]),
+                          low=_mean([' low' in x for x in mix[moved]]),
+                          high=_mean([' high' in x for x in mix[moved]]),
+                          throw=_mean([' throw' in x for x in mix[moved]]),
+                          cross=_mean([x.endswith(' cross') for x in mix[moved]]))
+        out['mixups'] = {}
+        for k, n in by.most_common(12):
+            m = mix == k
+            out['mixups'][k] = dict(share=_mean(m), n=int(n),
+                                    hit=_mean(result[m] == 'attacker'),
+                                    hit_back=_mean(result[m] == 'defender'),
+                                    value=round(float(swing[m].mean())),
+                                    invincible=_mean(choice[m] == 'invincible'))
     return out
 
 

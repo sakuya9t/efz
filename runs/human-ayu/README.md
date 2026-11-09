@@ -780,6 +780,40 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   against its 64-match measure: round 6 90.1% / 89.8%, round 7 90.2% / 91.2%, round 8
   89.7% / 86.2%, `kanna6` 88.1% / 85.9%; the drops are on the hardest (Kano's fourth to
   sixth, up to 29 points).
+- **Its wake-up attack: one option.** At the opponent's wake-up (`tactics.wakeup`: the
+  move that made the first contact, how Ayu came in before it, its guard height from
+  `framedata.json`'s new `guard`, and whether it struck from behind), people's Ayu
+  mixes (the user's: a 2A; 66 into an air B or a 2A, up or down; flying in and dropping
+  with jB, in front or behind); the agent plays a ground 2A, 2C at most, against
+  everyone (64 matches each, eval/oki; people: all 12.7k of their wake-ups):
+
+  | At the opponent's wake-up | ground low (2A) | 66 high / low | fly high / low | jump high / low | low / high in all | cross-ups | commonest |
+  |---|---|---|---|---|---|---|---|
+  | people's Ayu, against people | 17% | 4 / 1% | 9 / 7% | 21 / 11% | 40 / 38% | 4.1% | 19% |
+  | Ayu's clone, level-4 CPU | 10% | 2 / 0% | 6 / 2% | 12 / 4% | 26 / 31% | 5.0% | 28% |
+  | the first agent, level-4 CPU | 30% | 2 / 1% | 2 / 0% | 4 / 8% | 47 / 10% | 3.6% | 30% |
+  | round 3's | 57% | 0 / 1% | 0 / 0% | 1 / 6% | 65 / 1% | 1.4% | 56% |
+  | round 5's best | 74% | 0 / 0% | 0 / 0% | 0 / 11% | 87 / 1% | 0% | 74% |
+  | round 7's best | 89% | 0 / 1% | 0 / 0% | 0 / 3% | 95 / 0% | 0.6% | 89% |
+  | round 9's best (delay 14-20) | 88% | 0 / 0% | 0 / 0% | 0 / 3% | 93 / 0% | 1.3% | 87% |
+  | round 7's, against Kano's clone | 92% | 0 / 1% | 0 / 0% | 0 / 1% | 95 / 0% | 0.1% | 92% |
+  | round 7's, against Kano's seventh | 92% | 0 / 1% | 0 / 0% | 0 / 2% | 96 / 0% | 0.2% | 92% |
+
+  The clone keeps people's mix against every opponent (low 19-32%, high 15-38%); each
+  round of training took more of it away. The level-4 CPU can't be mixed up: when it
+  guards it takes the height the attack needs as it lands (`CPlayer::HoldsGuard`,
+  src/player.cpp:551-559), and it is half the agent's matches; so a high is worth no
+  more than a low against it, and the fastest, safest meaty, 2A (+2 guarded), is all
+  that pays. Nothing else it meets reads it either: people's clones and the exploiters
+  rise as people do, and its 2A hits first 41-61% of the time against them, +317 to
+  +549 HP over the next 3 seconds a wake-up (against the CPU +143), none of them
+  reversing (0-6%; people's risers 11%). People's own lows pay most (against people a
+  ground 2A +329, an empty jump into 2A +375, 66 into 2A +395; their highs +7 to +106),
+  but their highs are what keep a riser standing for them: a person who meets a 2A
+  every time guards crouching or reverses, and the agent has no way to open that.
+  Overfitted to opponents that don't adapt; the fix is one that does (a riser trained
+  to punish its wake-up attack, kept in the league), not a CPU that guesses: against
+  any opponent that doesn't read it, one option is always the best.
 - **Not overfitted:** people's play it never met (the clones of Kano, Mizuka, Misuzu and
   Mishio: 100% each, 99% of their HP, taking 2.7-3.8k a minute where the same
   characters' exploiters deal 6.7-10.1k); the CPU's lower levels (100%, 100%, 81% at
@@ -821,9 +855,9 @@ exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their
 | `evaluate.py` | matches to the end, with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move, damage taken, and `tactics.py`'s); `--chars ayu tiers` for the level-4 CPU's tiers; plays language models too (`runs/llm-ayu`) |
 | `combo_victims.py` | combos by the character they land on: conversion, hits, damage, and how they ended (knockdown, air recovery, neither), for people's Ayu or an agent against each CPU character |
 | `kanna_study.py` | where an agent's HP goes against the level-4 CPU's Kanna (her attacks out of her combos, by move, and the damage of the combos each started), its reversals and how they went, and her RF gauge (236C) |
-| `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up and free time, both ways |
+| `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up (the riser's choice, the attacker's okizeme and mix-up) and free time, both ways |
 | `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time |
-| `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames (`framedata.json`) |
+| `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames, guard height (`framedata.json`) |
 | `people.py` | the same measures of people, overall, by opponent and by player |
 | `compare.py` | people and agents side by side, as the tables here |
 | `team_check.py` | whether players' clones predict their players better than the clone of everyone |
