@@ -710,8 +710,9 @@ CPU's tiers, measured only):
 | `agent-league10-kanna`, 165.2M (`best.zip`) | 0% / 90% / 100% | 61 / 55 / 31% | 86% | 67% | 86% | 84% | 89 / 81% | 46.7% |
 | `agent-league10-kanna`, 177.3M | 0% / 90% / 95% | 14 / 22 / 20% | 88% | 89% | 80% | 75% | 81 / 69% | 48.4% |
 
-Worse, and no nearer Kanna (46.7-48.4% of her HP, a round in 3-6% of the matches;
-round 7's best 49.9%, 8%). It lost Kano as round 8 did: against her fifth to seventh it
+No better, and no nearer Kanna (46.7-48.4% of her HP, a round in 3-6% of the matches;
+round 7's best 49.9%, 8%). Its best is within the noise of round 7's (a second draw of
+both, below under "What is overfitted": 86% and 86%), its last checkpoint clearly worse. It lost Kano as round 8 did: against her fifth to seventh it
 jumps 16-19 times a minute and is hit in the air 1.9-2.8 times (round 7's best 12-14
 and 0.9-1.7). Its habits barely moved (below, under "What is overfitted"), and the
 reversals hurt it more: against its last checkpoint they hit first 72% and 84% of the
@@ -818,12 +819,18 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   Round 8's best, its control, also lost Kano's sixth at 14 (33%, the CPU 67%), so most
   of that is the round's, not the delay's; faster than 14, never trained, it is no
   better. A reaction time that varies works, at a price where the league itself lost.
-- **The evaluation seed, a little.** Its best checkpoints were picked on evaluations of
-  seed 7 (`finetune.py`'s, and `evaluate.py`'s default) and measured on seed 7: on
-  seeds 11 and 23 the CPU's middle tier 90% and 81% (100%), Unknown's fourth 80% and 81%
-  (88%), Kano's sixth 58% and 84% (66%), Kano's seventh 56% and 44% (50%): about 4
-  points flattering on average, within the noise for any one. Pick on one seed, measure
-  on others.
+- **The evaluation seed: noise, not a bias.** Its best checkpoints were picked on
+  evaluations of seed 7 (`finetune.py`'s, and `evaluate.py`'s default) and measured on
+  seed 7: on seeds 11 and 23 the CPU's middle tier 90% and 81% (100%), Unknown's fourth
+  80% and 81% (88%), Kano's sixth 58% and 84% (66%), Kano's seventh 56% and 44% (50%).
+  But until 9 November the seed fixed the game only: the agents draw their actions at
+  random (SB3's `predict`, torch's generator), and that draw wasn't seeded, so the same
+  64 matches played again were another sample. Round 7's best again against the
+  twenty: Kano's seventh 39% (50%), fifth 59% (70%), Mishio's third 86% (73%), the
+  mean 86% (88%). Seed 7 flattered nothing; any one opponent's win on 64 matches is
+  good to about ±12 points (95%, at 50%), the mean of twenty to about ±2. `evaluate.play`
+  now seeds the draw too (and gives training's generator back as it was), so a run
+  repeats exactly and a different seed is a different sample.
 - **The checkpoint pick:** over the exploiters, a best checkpoint's 16-match evaluation
   against its 64-match measure: round 6 90.1% / 89.8%, round 7 90.2% / 91.2%, round 8
   89.7% / 86.2%, `kanna6` 88.1% / 85.9%; the drops are on the hardest (Kano's fourth to

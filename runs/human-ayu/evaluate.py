@@ -405,6 +405,16 @@ class Events:
 
 
 def play(args, p1, p2, matches, level=4, seed=7):
+    """The matches played to the end. seed: the game's, and the agents' draws of their
+    actions (torch's generator, seeded here and given back as it was: the caller's,
+    finetune.py's training, goes on as if nothing were drawn), so a run is repeated."""
+    import torch
+    with torch.random.fork_rng(devices=[]):
+        torch.manual_seed(seed)
+        return _play(args, p1, p2, matches, level, seed)
+
+
+def _play(args, p1, p2, matches, level, seed):
     env = EfzVecEnv(args.data, matches, frame_skip=1, max_frames=int(args.minutes * 3840),
                     cpu_level=level, autoreset='disabled', seed=seed,
                     reward_round=0.0, reward_match=1.0)
