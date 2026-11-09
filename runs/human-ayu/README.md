@@ -859,6 +859,15 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
   RGs, at random), and rise with one 0-6% of the time (people 11%). Answers being
   trained: `focus.py --focus reversal` (an invincible attack at wake-up or after an RG
   that hits), exploiters as Ayu (623C, invincible from its 2nd step) and Mishio.
+- **Out of a guard, the same 2A** (the user: "under pressure, where its 2A is not as
+  fast as the opponent's"). What round 8's best starts right after a guard
+  (`escape_moves`, eval/guard): its invincible 236C most (9-33% of its guards, hitting
+  first 58-74% of the time), then 2A (4-39%), which is hit first more than people's:
+  hit 37% of the time against the CPU, 48% against Kano's clone, 59% against Mishio's
+  third (people's Ayu 28%), a quarter to a half of them pressed at a disadvantage. It
+  is rarely under pressure (1.4-2.5 guards a minute; against the exploiters 5-6, people
+  7.4), and against the exploiters that frame-trap it, it presses 2A less (4-9%): it
+  adapts to an opponent's character, not to what this opponent did a moment ago.
 - **Not overfitted:** people's play it never met (the clones of Kano, Mizuka, Misuzu and
   Mishio: 100% each, 99% of their HP, taking 2.7-3.8k a minute where the same
   characters' exploiters deal 6.7-10.1k); the CPU's lower levels (100%, 100%, 81% at
