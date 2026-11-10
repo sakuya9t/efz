@@ -87,6 +87,16 @@ def parse():
                    help="a red team's advantage: the damage the learner takes from hits in the "
                         "--vs opponents' matches, times this (one value for all, or one per --vs "
                         "opponent); training only, the evaluations are the game's")
+    p.add_argument('--vs-rg', type=float, nargs='*', default=[],
+                   help="a red team's advantage (advantages.py): the share of the --vs opponents' "
+                        "guards made recoil guards, as the game's CPU makes its own (one value, or "
+                        "one per --vs opponent); training only")
+    p.add_argument('--vs-reversal', type=float, nargs='*', default=[],
+                   help="and the share of their recoil guards followed by their fastest invincible "
+                        "move (motions.json), as a person's reversal")
+    p.add_argument('--vs-throw', type=float, nargs='*', default=[],
+                   help="and the share of their chances to throw (close, the learner free and not "
+                        "protected) in which they throw")
     p.add_argument('--focus', choices=('setup', 'charge', 'reversal'),
                    help="a shaping reward (focus.py)")
     p.add_argument('--focus-coef', type=float, default=0.02)
@@ -196,7 +206,19 @@ def parse():
         p.error(f'--vs-damage: one value above 0, or one per --vs opponent ({len(args.vs)})')
     if len(args.vs_damage) == 1:
         args.vs_damage = args.vs_damage * len(args.vs)
+    for name in ('vs_rg', 'vs_reversal', 'vs_throw'):
+        v = getattr(args, name)
+        if len(v) not in (0, 1, len(args.vs)) or any(not 0 <= x <= 1 for x in v):
+            p.error(f"--{name.replace('_', '-')}: one share (0-1), or one per --vs opponent")
+        setattr(args, name, v * len(args.vs) if len(v) == 1 else v)
     return args
+
+
+def vs_advantage(args, j):
+    """The --vs opponent j's advantages (advantages.parse's keys)."""
+    get = lambda v, default: v[j] if v else default
+    return dict(rg=get(args.vs_rg, 0.0), reversal=get(args.vs_reversal, 0.0),
+                throw=get(args.vs_throw, 0.0), damage=get(args.vs_damage, 1.0))
 
 
 def ppo_settings(args):
@@ -296,6 +318,10 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
         for i in vs_envs:
             env.env.set_damage_scale(int(i), 0, args.vs_damage[assignment[i] - n_mirror])
         print('--vs-damage:', ', '.join(f'{d:g}' for d in args.vs_damage), flush=True)
+    if args.vs_rg and len(vs_envs):  # and these recoil-guard more (player 2)
+        for i in vs_envs:
+            env.env.set_recoil_guard(int(i), 1, args.vs_rg[assignment[i] - n_mirror])
+        print('--vs-rg:', ', '.join(f'{d:g}' for d in args.vs_rg), flush=True)
     if args.assist:
         import combo_support
         env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'],
@@ -481,7 +507,8 @@ def main():
         json.dump(dict(frame_skip=1, history=args.history, delay=args.delay,
                        delay_most=args.delay_most, chars=[args.char, None],
                        vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
-                       vs_damage=args.vs_damage,
+                       vs_damage=args.vs_damage, vs_rg=args.vs_rg, vs_reversal=args.vs_reversal,
+                       vs_throw=args.vs_throw,
                        pfsp=args.pfsp, pfsp_window=args.pfsp_window, cpu_focus=args.cpu_focus,
                        focus=args.focus, focus_coef=args.focus_coef,
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
@@ -523,6 +550,11 @@ def main():
             vs.append((combo_support.FairAssistOpponent(VS_ASSIST[-1], m), c))
     else:
         vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
+    if args.vs_reversal or args.vs_throw:  # their inputs' advantages (advantages.py)
+        import advantages
+        vs = [(advantages.AdvantagedOpponent(o, c, vs_advantage(args, j), seed=j)
+               if vs_advantage(args, j)['reversal'] or vs_advantage(args, j)['throw'] else o, c)
+              for j, (o, c) in enumerate(vs)]
     if args.assist:
         import macros
         import redteam

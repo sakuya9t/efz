@@ -95,6 +95,9 @@ struct Globals {
     float damageTaken[2]; // a scale on the damage each player takes, set by the headless
                           // env (efz_env_set_damage_scale) for each step; 0 (an arena as
                           // NewArena makes it) is 1, the game's
+    float recoilGuard[2]; // the share of each player's guards made recoil guards, set the
+                          // same way (efz_env_set_recoil_guard); 0, the game's: none
+    uint32_t assistRng;   // RecoilAssistRoll's generator: the game's rand() runs as it would
 };
 
 inline Globals* G()
@@ -108,6 +111,20 @@ inline double DamageTaken(int side)
 {
     float s = G()->damageTaken[side & 1];
     return s > 0 ? (double)s : 1.0;
+}
+
+// Whether the headless env makes some of player `side`'s guards recoil guards (as the
+// game's CPU makes its own: CpuInput sets the window at random), and the draw for one
+// guard: a red team's advantage (CScene3::ResolvePlayerAttack, ResolveObjectAttack).
+inline bool RecoilAssistOn(int side)
+{
+    return G()->recoilGuard[side & 1] > 0;
+}
+inline bool RecoilAssistRoll(int side)
+{
+    uint32_t& s = G()->assistRng;
+    s = s * 1664525u + 1013904223u;
+    return (float)(s >> 8) * (1.0f / 16777216.0f) < G()->recoilGuard[side & 1];
 }
 
 // An arena of its own for another game: reserved, its first 64 KB and heap set up
@@ -126,6 +143,8 @@ uintptr_t ArenaUsed();
 void LoadArena(const void* bytes, uintptr_t size);
 #else
 inline double DamageTaken(int) { return 1.0; }
+inline bool RecoilAssistOn(int) { return false; }
+inline bool RecoilAssistRoll(int) { return false; }
 #endif
 
 // A pointer field of the game's structures: 4 bytes, used like a T*.

@@ -286,6 +286,19 @@ class EfzVecEnv:
             raise ValueError(f'efz_env: no damage scale {scale} for environment {index}, '
                              f'player {player}')
 
+    def set_recoil_guard(self, index, player, chance):
+        """Makes `chance` (0-1) of `player`'s guards in environment `index` recoil guards,
+        as the game's CPU makes its own (of the guards held the right way against a hit
+        that can be guarded): an advantage for a red team. From its next step on, in every
+        match after, until set again; replays are EFZ's. 0 is the game's."""
+        self._finish()
+        f = getattr(self._lib, 'efz_env_set_recoil_guard', None)
+        if f is None:
+            raise RuntimeError('efz_env: this library has no recoil-guard chance: rebuild it')
+        if f(self._h, int(index), int(player), float(chance)) != 0:
+            raise ValueError(f'efz_env: no recoil-guard chance {chance} for environment '
+                             f'{index}, player {player}')
+
     def seed(self, index, seed):
         """Seeds environment `index`: its following matches (characters and stages drawn
         from pools, the game's rand) follow from `seed` alone, from its next match on."""

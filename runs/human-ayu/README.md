@@ -755,6 +755,50 @@ of the 0.02 arm fell back to 88%, as in rounds 6-8 (PFSP moves the matches away 
 exploiters it beats). The CPU's middle tier, 76% (86%), is 21 matches a tier, within the
 noise. `agent-league11-r7/best.zip` is the best agent and the next round's target.
 
+**A red team's advantages** (the user, 9 November: "(1) very high RG-invincible rate, so
+that agent learns not to keep inputting (2) 100%-250% damage ... (3) red team can abuse
+throwing, so it won't keep guarding under pressure"; `advantages.py`). Since round 10 the
+league has no CPU to exaggerate habits for it, so any opponent can be given them, in
+training (`finetune.py --vs-rg`, `--vs-reversal`, `--vs-throw`, `--vs-damage`, one value
+or one per `--vs` opponent) and in evaluations (`evaluate.py --p2-advantage
+rg=0.5,reversal=1,throw=0.5,damage=1.5`). The agent's human limits stay; these are the
+opponent's, and the evaluations that pick and compare agents stay the plain game.
+
+- **rg**: a share of the opponent's guards made recoil guards, the way the game's CPU gets
+  its own (it opens the window at random, `CpuInput`): `efz_env_set_recoil_guard`, a hook
+  as the hit lands (`CScene3::ResolvePlayerAttack`, `ResolveObjectAttack`) with a generator
+  of its own, off in the game. At 1, about two thirds of its guards are recoil guards (a
+  hit during one is guarded plainly, the game's rule); at 0.5, a third (people 14-36%).
+- **reversal**: after a recoil guard, if the agent presses on (a move of its own within
+  30 steps: the user's "an RG and an invincible during it"), the opponent's invincible
+  move, input as a person would (`motions.py`: every motion the game reads tried from a
+  saved state for each character, `motions.json`; out of a recoil guard the game drops
+  the first 7-15 steps' inputs; only moves that come out of one and beat Ayu's 2A pressing
+  on; Minagi has none). The fastest isn't the best: Mayu's 236C, out of an RG, is hit
+  back 463 times in 517, her 623C wins.
+- **throw**: of its chances (both grounded, within 28 pixels, the agent in neither a hit nor
+  a guard reaction and past the game's 27 steps of throw protection after a guard), the
+  share in which it throws.
+- **damage**: the damage the agent takes from its hits, scaled (`efz_env_set_damage_scale`,
+  in `CPlayer::DefenseFactor`; chip damage the game's).
+
+Both hooks are off unless set: `tools/compat.py` passes all 254 cases in the game and the
+headless runner, and the library plays 8 x 6,000 steps the same as before them. Round
+11's best against exploiters given them (Mayu's and Sayuri's new ones, below), 64 seeded
+matches each (the agent's wins, its own HP lost a round):
+
+| Opponent | Plain | rg 0.5 | rg 0.5, reversal 1 | throw 0.5 | damage 2 | rg 0.5, reversal 1, throw 0.5, damage 1.5 |
+|---|---|---|---|---|---|---|
+| Mayu's exploiter | 77% (63%) | 61% (76%) | 55% (78%) | 80% (65%) | 25% (84%) | 39% (82%) |
+| Sayuri's | 56% (76%) | | 20% (88%) | | | |
+| Kano's seventh | 58% (71%) | | 84% (47%) | | | |
+| Mishio's third | 100% (48%) | | 91% (64%) | | | |
+
+Reversals after the agent presses on hit first 2.4 times in 3 for Mayu (268 / 110), 7 in 8
+for Sayuri; Kano's 236D comes out of only 124 of 821 tries (it wins when it does, 120 /
+1), and the tries cost her more than they win. Throws alone change little: the agent is
+rarely throwable near her. Not yet trained against.
+
 ## Ayu's agent as other characters
 
 What it learnt for Ayu and what any character keeps (8 November; `eval/transfer/`): the
@@ -1004,6 +1048,8 @@ exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their
 | `kanna_study.py` | where an agent's HP goes against the level-4 CPU's Kanna (her attacks out of her combos, by move, and the damage of the combos each started), its reversals and how they went, and her RF gauge (236C) |
 | `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up (the riser's choice, the attacker's okizeme and mix-up) and free time, both ways |
 | `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time |
+| `advantages.py` | a red team's advantages for any opponent: recoil guards, reversals after them, throws, damage (`finetune.py --vs-rg/--vs-reversal/--vs-throw/--vs-damage`, `evaluate.py --p2-advantage`) |
+| `motions.py` | the motion that starts each character's moves, tried from a saved state; which invincible ones come out of a recoil guard and win (`motions.json`) |
 | `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames, guard height (`framedata.json`) |
 | `people.py` | the same measures of people, overall, by opponent and by player |
 | `compare.py` | people and agents side by side, as the tables here |

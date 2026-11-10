@@ -208,6 +208,15 @@ EFZ_ENV_API int efz_env_set_gauges(EfzEnv* env, int32_t index, int32_t player, i
  * version 5: a library without it is otherwise the same. Returns -1 for a bad argument. */
 EFZ_ENV_API int efz_env_set_damage_scale(EfzEnv* env, int32_t index, int32_t player,
                                          float scale);
+/* Makes `chance` (0-1) of player `player`'s guards in environment `index` recoil guards,
+ * as the game's CPU makes its own (it opens the recoil-guard window at random): of the
+ * guards it holds the right way against a hit that can be guarded, decided as the hit
+ * lands, by a generator of its own (the game's rand() runs as it would). From its next
+ * step on, in every match after, until set again; not while a replay is played back or
+ * recorded; never for the game's CPU. 0 is the game's. An addition to version 5, as
+ * efz_env_set_damage_scale. Returns -1 for a bad argument. */
+EFZ_ENV_API int efz_env_set_recoil_guard(EfzEnv* env, int32_t index, int32_t player,
+                                         float chance);
 /* Where the game writes files (replays): `dir`, or the data folder for NULL. For the
  * process, as the data folder is. */
 EFZ_ENV_API int efz_env_set_save_dir(EfzEnv* env, const char* dir);

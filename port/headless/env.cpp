@@ -409,6 +409,7 @@ struct Slot {
     bool inputTaken = false; // input[] holds the step's first frame's
     uint8_t input[2] = {0, 0}; // EfzInfo.input
     float damageScale[2] = {1, 1}; // efz_env_set_damage_scale: kept over its matches
+    float recoilGuard[2] = {0, 0}; // efz_env_set_recoil_guard: the same
 };
 
 const uint32_t kStateMagic = 0x5a464545; // "EEFZ"
@@ -465,13 +466,15 @@ CScene3* Fight()
     return (CScene3*)Scene(3);
 }
 
-// The slot's damage scales into its game, bound: the game's own (1) while a replay
-// plays or is recorded, so that it stays the one EFZ plays.
-void ApplyDamageScale(const Slot& s)
+// The slot's advantages (damage scales, recoil guards) into its game, bound: the game's
+// own (none) while a replay plays or is recorded, so that it stays the one EFZ plays.
+void ApplyAdvantages(const Slot& s)
 {
     bool faithful = s.playing || s.recording;
-    for (int k = 0; k < 2; k++)
+    for (int k = 0; k < 2; k++) {
         G()->damageTaken[k] = faithful ? 1.0f : s.damageScale[k];
+        G()->recoilGuard[k] = faithful ? 0.0f : s.recoilGuard[k];
+    }
 }
 
 // The controls do something: no intro, no KO waiting for the next round.
@@ -948,7 +951,7 @@ void ResetOne(EfzEnv* env, int i)
     env->reward[2 * i] = env->reward[2 * i + 1] = 0;
     env->terminated[i] = env->truncated[i] = 0;
     if (StartMatch(env, s)) {
-        ApplyDamageScale(s);
+        ApplyAdvantages(s);
         WriteObs(env, s, ObsOf(env, env->obsOut, i));
         WriteInfo(s, env->info[i], -1, false);
     } else {
@@ -974,7 +977,7 @@ void StepOne(EfzEnv* env, int i)
         return;
     }
     BindArena(s.arena);
-    ApplyDamageScale(s);
+    ApplyAdvantages(s);
     int winner = -1;
     s.inputTaken = false;
     for (int k = 0; k < cfg.frame_skip && winner == -1; k++)
@@ -1353,6 +1356,16 @@ int efz_env_set_damage_scale(EfzEnv* env, int32_t index, int32_t player, float s
         return -1;
     Finish(env);
     env->slots[index].damageScale[player] = scale; // written into the game each step
+    return 0;
+}
+
+int efz_env_set_recoil_guard(EfzEnv* env, int32_t index, int32_t player, float chance)
+{
+    if (!env || index < 0 || index >= env->n || player < 0 || player > 1 ||
+        !(chance >= 0 && chance <= 1))
+        return -1;
+    Finish(env);
+    env->slots[index].recoilGuard[player] = chance;
     return 0;
 }
 

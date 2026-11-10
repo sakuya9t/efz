@@ -143,6 +143,8 @@ def _bind(lib):
     optional = {
         'efz_env_set_damage_scale': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32,
                                                     ctypes.c_float]),
+        'efz_env_set_recoil_guard': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32,
+                                                    ctypes.c_float]),
     }
     for name, (restype, argtypes) in optional.items():
         f = getattr(lib, name, None)

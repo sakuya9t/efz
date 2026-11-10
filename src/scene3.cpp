@@ -1102,6 +1102,13 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
             }
         }
         if (anyOverlap != 0) {
+            // The headless env's red-team advantage: this guard a recoil guard, as the
+            // CPU makes its own (never in the game: RecoilAssistOn is false there)
+            if (::efz::RecoilAssistOn(defender->m_side) && defender->m_cpu == 0 && defender->m_recoilGuardWindow < 30 &&
+                defender->m_noGuardTime == 0 && (attackerFrame.flagsAA & kAttackUnblockable) == 0 &&
+                defender->HoldsGuard(&attackerFrame) != 0 && ::efz::RecoilAssistRoll(defender->m_side)) {
+                defender->m_recoilGuardWindow = 60;
+            }
             contact = MakeRect(-10000, -10000, 20000, 20000);
             i = 0;
             for (; i < 4; i++) {
@@ -1469,6 +1476,13 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
             }
         }
         if (anyOverlap != 0) {
+            // The headless env's red-team advantage: this guard a recoil guard, as the
+            // CPU makes its own (never in the game: RecoilAssistOn is false there)
+            if (::efz::RecoilAssistOn(defender->m_side) && defender->m_cpu == 0 && defender->m_recoilGuardWindow < 30 &&
+                defender->m_noGuardTime == 0 && (objectFrame->flagsAA & kAttackUnblockable) == 0 &&
+                defender->HoldsGuard((PatternFrame*)objectFrame) != 0 && ::efz::RecoilAssistRoll(defender->m_side)) {
+                defender->m_recoilGuardWindow = 60;
+            }
             EffectDesc effect;
             contact = MakeRect(-10000, -10000, 20000, 20000);
             i = 0;
