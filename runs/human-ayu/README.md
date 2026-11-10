@@ -858,6 +858,96 @@ against Ex-Nanase's exploiter (plain 77%), 16% against Sayuri's (56%): near what
 did. Round 12 trains against them (`agent-league12-adv`, a quarter of the `--vs` matches,
 `--vs-adv-share 0.25`) and without them (`agent-league12`), both with the helpers.
 
+**Round 12** (the user, 10 November: "yes build it"): two arms of 20M steps from round
+11's best with its settings (the pull 0.02, no CPU but Kanna, `best.zip` by the 16-match
+score), the league grown to 39 opponents (the twenty, both reversal exploiters and the
+seventeen helpers; 96 environments, 58 `--vs` matches a chunk): the plain game
+(`agent-league12`) and the five advantages above in a quarter of the `--vs` matches
+(`agent-league12-adv`: rg 0.5, reversal 1, throw 0.5, bait 1, damage 1.5). Neither beat
+its start in the 16-match evaluations of training (0.847; the best, the adv arm's fourth
+chunk, 0.846), so both `best.zip` are round 11's best itself; below, each arm's fourth
+chunk (177.3M, the same step for both) and its last (189.4M). 64 seeded matches each,
+the plain game (`<run>/compare/`; in brackets, where it wins 90% or more, its own HP lost
+a round):
+
+| Agent | Level-4 CPU | Kano 5 / 6 / 7 | Mizuka 7 | Misuzu 3 | Mishio 3 | 20 (own HP lost) | Ayu / Mishio reversal | 17 helpers (own HP lost) | All 39 | Kanna's HP |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `agent-league11-r7`, 169.3M (`best.zip`) | 0% / 76% / 95% (42%) | **92 / 69 / 58%** | **97% (33%)** | 88% | **100% (48%)** | **93% (45%)** | 91 / **98%** | 76% (63%) | **86%** | 51.4% |
+| `agent-league12`, 177.3M | 0% / 71% / 100% (47%) | 33 / 31 / 5% | 69% | 75% | 98% (52%) | 76% (63%) | 86 / 92% | 75% (66%) | 76% | **60.9%** |
+| `agent-league12`, 189.4M | 0% / 62% / 100% (43%) | 48 / 39 / 17% | 59% | 78% | 92% (51%) | 82% (57%) | 91 / 89% | 75% (64%) | 79% | 56.7% |
+| `agent-league12-adv`, 177.3M | 0% / 57% / 100% (47%) | 59 / 61 / 28% | 92% (47%) | **89%** | 97% (51%) | 87% (52%) | **92** / 89% | **82% (62%)** | 85% | 53.9% |
+| `agent-league12-adv`, 189.4M | 0% / 81% / 100% (42%) | 34 / 25 / 9% | 67% | 77% | 67% | 71% (64%) | 75 / 73% | 66% (70%) | 69% | 53.9% |
+
+The helpers (wins, own HP lost a round):
+
+| Character | Round 11's best | `agent-league12`, 177.3M | 189.4M | `agent-league12-adv`, 177.3M | 189.4M |
+|---|---|---|---|---|---|
+| Nayuki (awake) | 41% (78%) | 28% (85%) | 56% (77%) | **64% (75%)** | 48% (81%) |
+| Shiori | 48% (78%) | 22% (86%) | 17% (87%) | **66% (70%)** | 28% (83%) |
+| Sayuri | 56% (76%) | 55% (78%) | 66% (73%) | 70% (70%) | **72% (75%)** |
+| Akiko | 58% (76%) | **69% (76%)** | 62% (75%) | 62% (77%) | 34% (84%) |
+| Ikumi | 58% (75%) | **91% (67%)** | 77% (72%) | 78% (68%) | 27% (84%) |
+| Makoto | 62% (68%) | 64% (72%) | 55% (77%) | **77% (68%)** | 61% (73%) |
+| Mio | 70% (68%) | 64% (73%) | 62% (76%) | **75% (73%)** | 50% (81%) |
+| Mayu | 77% (63%) | 80% (66%) | 80% (60%) | **84% (67%)** | 81% (67%) |
+| Ex-Nanase | 77% (66%) | 73% (74%) | 84% (59%) | **86% (64%)** | 75% (64%) |
+| Mai | **86% (62%)** | 86% (61%) | 77% (66%) | 78% (62%) | 66% (74%) |
+| Nayuki (asleep) | 86% (65%) | 92% (58%) | 75% (65%) | **94% (56%)** | 69% (72%) |
+| Kaori | 88% (53%) | 91% (49%) | **95% (40%)** | 94% (45%) | 91% (50%) |
+| Nanase | 91% (49%) | 95% (37%) | **100% (34%)** | 91% (42%) | 88% (47%) |
+| Minagi | 94% (55%) | 95% (63%) | 94% (55%) | **97% (55%)** | 91% (62%) |
+| Misaki | **97% (50%)** | 84% (65%) | 86% (60%) | 89% (56%) | 67% (74%) |
+| Nagamori | 97% (53%) | 95% (56%) | 97% (52%) | **100% (52%)** | 84% (66%) |
+| Akane | **100% (40%)** | 95% (47%) | 91% (53%) | 92% (47%) | 88% (58%) |
+
+Round 11's best stays the best agent: 86% over all 39, the adv arm's fourth chunk 85%, the
+others 69-79%. That chunk is the better agent against the helpers (82%, from 76%; the awake
+Nayuki 64% and Shiori 66%, from 41% and 48%) and as good against the reversal exploiters,
+but every round 12 checkpoint lost Kano (her seventh 5-28%, from 58%). PFSP gave her
+seventh exploiter the most matches of any (40 and 46 of about 640), but Kano's seven were
+7 of 22 opponents and are now 7 of 39. Against her seventh the plain arm's last checkpoint
+turned passive: it guards on the ground 23.8 times a minute (round 11's best 6.5) and deals
+5,100 damage a minute (9,200). That is not the jumping that lost Kano before (hit in the
+air 0.9 times a minute, from 2.0). Against Shiori it is: the plain arm is hit in the air 11.8
+times a minute (round 11's best 8.4, the adv arm's fourth chunk 6.0). The plain arm took
+more of Kanna's HP than any agent before (60.9% at its fourth chunk, 56.7% at its last;
+51.4%) while losing ground everywhere else.
+
+Between the arms, one round doesn't tell. At the same step the adv arm is ahead (85% to
+76% over the 39), at the last the plain one (79% to 69%). The adv arm's two checkpoints are
+16 points apart, further than the arms are at either step. With the five advantages (seven opponents, 64
+matches each; plain → advantaged):
+
+| Opponent | Round 11's best | `agent-league12`, 177.3M | 189.4M | `agent-league12-adv`, 177.3M | 189.4M |
+|---|---|---|---|---|---|
+| Mayu's exploiter | 77% → 31% | 80% → 34% | 80% → **47%** | 84% → 34% | 81% → 42% |
+| Sayuri's | 56% → 16% | 55% → 17% | 66% → 17% | 70% → **19%** | 72% → 6% |
+| Ex-Nanase's | 77% → 28% | 73% → 36% | 84% → 47% | 86% → **52%** | 75% → 44% |
+| The awake Nayuki's | 41% → **9%** | 28% → 5% | 56% → 5% | 64% → 0% | 48% → 3% |
+| Shiori's | 48% → **23%** | 22% → 8% | 17% → 3% | 66% → 16% | 28% → 20% |
+| Kano's seventh | 58% → **67%** | 5% → 12% | 17% → 44% | 28% → 31% | 9% → 9% |
+| Mishio's third | 100% → 50% | 98% → **73%** | 92% → 69% | 97% → 56% | 67% → 45% |
+
+Training against them didn't make the agent win more of these matches than its plain wins
+would predict. Summed over the seven advantaged opponents, what it does into them:
+
+| Agent | Their recoil guards | Pressed on after one | Their reversal hit first | Throw chances, thrown | Wake-up reversals, guarded through, punished | Wins |
+|---|---|---|---|---|---|---|
+| Round 11's best | 4,933 | 60% | 84% | 2,705, 1,328 | 580, 137, 58 | 32% |
+| `agent-league12`, 177.3M | 4,983 | 47% | 82% | 2,418, 1,170 | 942, 252, 124 | 27% |
+| `agent-league12`, 189.4M | 4,854 | 61% | 83% | 2,622, 1,262 | 719, 175, 86 | 33% |
+| `agent-league12-adv`, 177.3M | 5,147 | 51% | 84% | 2,946, 1,399 | 964, 246, 129 | 30% |
+| `agent-league12-adv`, 189.4M | 5,252 | **35%** | 77% | 2,633, 1,242 | **494, 131**, 83 | 24% |
+
+By its last checkpoint the adv arm learnt what the advantages were for: it presses on after
+an opponent's recoil guard a third of the time (round 11's best 60%) and rises with fewer
+reversals (494, from 580). It is also the weakest checkpoint of the round. In the plain game
+over the 39 it guards more on its wake-ups (44% of them, round 11's best 38%), still
+reverses on 16.5% (20%), and those reversals are still hit back about half the time (48%,
+54%). Throws didn't move in any arm: it gives about as many chances to be thrown in every
+row (2,400-2,900; the opponent takes half, its setting). The other three checkpoints reverse on more of their wake-ups than round 11's best (25-32%).
+`agent-league11-r7/best.zip` stays the best agent.
+
 ## Ayu's agent as other characters
 
 What it learnt for Ayu and what any character keeps (8 November; `eval/transfer/`): the
@@ -1092,8 +1182,9 @@ exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their
 (`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent,
 `agent-league11-r7/best.zip` (round 11), went up on its own on 9 November with its
 `config.json`, to be played against. The rest of round 9 on (`agent-league9-jitter`,
-`agent-league10-kanna`, the other `agent-league11*`, the reversal exploiters,
-`kano/transfer7`, `mizukab/transfer7`) is only on the Linux machine until the next upload.
+`agent-league10-kanna`, the other `agent-league11*`, `agent-league12*`, the reversal
+exploiters, the seventeen helpers' clones and exploiters, `kano/transfer7`,
+`mizukab/transfer7`) is only on the Linux machine until the next upload.
 
 ## The scripts
 
