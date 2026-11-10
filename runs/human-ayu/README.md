@@ -946,7 +946,20 @@ over the 39 it guards more on its wake-ups (44% of them, round 11's best 38%), s
 reverses on 16.5% (20%), and those reversals are still hit back about half the time (48%,
 54%). Throws didn't move in any arm: it gives about as many chances to be thrown in every
 row (2,400-2,900; the opponent takes half, its setting). The other three checkpoints reverse on more of their wake-ups than round 11's best (25-32%).
-`agent-league11-r7/best.zip` stays the best agent.
+`agent-league11-r7/best.zip` stays the best agent. Training's own score (16 matches against
+each of the 39 and Kanna's HP) ranked the checkpoints as these 64 did (0.847, 0.846, 0.821,
+0.733, 0.69 for 86%, 85%, 79%, 76%, 69% over the 39): it kept round 11's best because it
+was the better agent.
+
+Kano's share of the matches fell, and round 13 asks whether that is what lost her. Round
+11 gave her seven exploiters half the `--vs` matches
+(18.5 of its 64 environments, 29%), round 12 a quarter (14 of 96, 15%): the helpers, which
+beat the agent more, took PFSP's matches, and one a chunk for every opponent took 39 of
+the 58. **Round 13** (the user, 10 November: keep Kano's share, both arms) is round 12 with
+her seven keeping half the `--vs` matches (`finetune.py --vs-char-share kano:0.5`, PFSP
+within them and among the rest) in 128 environments: 38 of them hers (30%), the 32 other
+opponents one or more each. `agent-league13` plays the plain game, `agent-league13-adv`
+the five advantages in a quarter of its `--vs` matches.
 
 ## Ayu's agent as other characters
 
@@ -1192,7 +1205,7 @@ exploiters, the seventeen helpers' clones and exploiters, `kano/transfer7`,
 |---|---|
 | `dataset.py` | replays to data: per Ayu side, the views, inputs and rewards of each step |
 | `bc.py` | the clone: the 45 actions people's inputs come to each frame, and the critic from their matches' returns; `--delay` for a reaction time, `--players` for one player's clone (from the clone of everyone, `--init`) |
-| `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones; any character (`--char`), opponents of other characters (`--vs`, shared by `--pfsp`), a focus (`--focus`), `--stop-win` |
+| `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones; any character (`--char`), opponents of other characters (`--vs`, shared by `--pfsp`, a character's fixed share of them by `--vs-char-share`), a focus (`--focus`), `--stop-win` |
 | `evaluate.py` | matches to the end, the share of each side's HP the other took a round (`opp_hp_taken`, where it never wins, as against Kanna; `self_hp_taken`, its own lost, where it nearly always wins: hard wins from easy ones, the user's), with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move, damage taken, and `tactics.py`'s); `--chars ayu tiers` for the level-4 CPU's tiers; plays language models too (`runs/llm-ayu`) |
 | `combo_victims.py` | combos by the character they land on: conversion, hits, damage, and how they ended (knockdown, air recovery, neither), for people's Ayu or an agent against each CPU character |
 | `kanna_study.py` | where an agent's HP goes against the level-4 CPU's Kanna (her attacks out of her combos, by move, and the damage of the combos each started), its reversals and how they went, and her RF gauge (236C) |

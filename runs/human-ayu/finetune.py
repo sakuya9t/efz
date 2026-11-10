@@ -83,6 +83,10 @@ def parse():
                    help='frozen opponents of other runs, MODEL.zip:CHAR (CHAR: ayu if left out)')
     p.add_argument('--vs-share', type=float, default=0.5,
                    help='share of the matches against agents that the --vs opponents play')
+    p.add_argument('--vs-char-share', nargs='*', default=[],
+                   help="CHAR:SHARE: a character's --vs opponents together play this share of the "
+                        "--vs matches, --pfsp sharing them among themselves and the rest among the "
+                        "others (a league that grows doesn't dilute what it must keep meeting)")
     p.add_argument('--vs-damage', type=float, nargs='*', default=[],
                    help="a red team's advantage: the damage the learner takes from hits in the "
                         "--vs opponents' matches, times this (one value for all, or one per --vs "
@@ -217,6 +221,18 @@ def parse():
         if len(v) not in (0, 1, len(args.vs)) or any(not 0 <= x <= 1 for x in v):
             p.error(f"--{name.replace('_', '-')}: one share (0-1), or one per --vs opponent")
         setattr(args, name, v * len(args.vs) if len(v) == 1 else v)
+    shares = {}
+    for x in args.vs_char_share:
+        c, _, v = x.rpartition(':')
+        try:
+            shares[c] = float(v)
+        except ValueError:
+            p.error(f'--vs-char-share: CHAR:SHARE, not {x}')
+        if not any(ch == c for _, ch in args.vs) or not 0 < shares[c] < 1:
+            p.error(f'--vs-char-share: {c} has no --vs opponent, or {v} is not a share in (0, 1)')
+    if sum(shares.values()) >= 1:
+        p.error('--vs-char-share: the shares add up to 1 or more')
+    args.vs_char_share = shares
     return args
 
 
@@ -272,6 +288,27 @@ def vs_counts(n, wins, power):
     return [int(c) for c in counts]
 
 
+def vs_counts_shared(n, wins, power, chars, fixed):
+    """vs_counts, with the opponents of each character of fixed ({char: share}) playing that
+    share of the n matches together (rounded, at least one each) and the rest of them shared
+    among the others; within each, by vs_counts."""
+    if not fixed:
+        return vs_counts(n, wins, power)
+    counts = [0] * len(chars)
+    left = n
+    for c, share in fixed.items():
+        idx = [j for j, ch in enumerate(chars) if ch == c]
+        m = max(len(idx), int(round(n * share)))
+        left -= m
+        for j, k in zip(idx, vs_counts(m, [wins[j] for j in idx], power)):
+            counts[j] = k
+    rest = [j for j, ch in enumerate(chars) if ch not in fixed]
+    if rest:
+        for j, k in zip(rest, vs_counts(left, [wins[j] for j in rest], power)):
+            counts[j] = k
+    return counts
+
+
 def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     """opponents: the mirror ones (the learner's character); vs: [(opponent, char)];
     wins: the learner's last wins against each of vs (for --pfsp); pool: --practice's
@@ -293,7 +330,8 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
         others = len(opponents) - 1
         assignment[mirror] = [red if j < k else j % others for j in range(len(mirror))]
     if len(vs_envs):
-        counts = vs_counts(len(vs_envs), wins or [None] * len(vs), args.pfsp)
+        counts = vs_counts_shared(len(vs_envs), wins or [None] * len(vs), args.pfsp,
+                                  [c for _, c in vs], args.vs_char_share)
         which = np.repeat(np.arange(len(vs)), counts)
         assignment[vs_envs] = len(opponents) + which
         print('--vs matches:', ', '.join(f'{c}' for c in counts), flush=True)
@@ -523,6 +561,7 @@ def main():
         json.dump(dict(frame_skip=1, history=args.history, delay=args.delay,
                        delay_most=args.delay_most, chars=[args.char, None],
                        vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
+                       vs_char_share=args.vs_char_share,
                        vs_damage=args.vs_damage, vs_rg=args.vs_rg, vs_reversal=args.vs_reversal,
                        vs_throw=args.vs_throw, vs_bait=args.vs_bait,
                        vs_adv_share=args.vs_adv_share,
