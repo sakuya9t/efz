@@ -7,10 +7,29 @@ combo-red2/*.zip
 combo-red3/*.zip
 # Made from the game's .pat files on each machine (framedata.py): no game data here
 framedata.json
+# and from playing the game with them (motions.py)
+motions.json
 # The other characters' clones and exploiters too
 mizukab/**/*.zip
 kano/**/*.zip
 misuzu/**/*.zip
 mishio/**/*.zip
 ayu/**/*.zip
+sayuri/**/*.zip
+mayu/**/*.zip
+nayukib/**/*.zip
+nanase/**/*.zip
+akiko/**/*.zip
+exnanase/**/*.zip
+mio/**/*.zip
+kaori/**/*.zip
+ikumi/**/*.zip
+akane/**/*.zip
+misaki/**/*.zip
+nagamori/**/*.zip
+mai/**/*.zip
+shiori/**/*.zip
+makoto/**/*.zip
+minagi/**/*.zip
+nayuki/**/*.zip
 agent-league*/*.zip

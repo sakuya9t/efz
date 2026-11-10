@@ -755,6 +755,42 @@ of the 0.02 arm fell back to 88%, as in rounds 6-8 (PFSP moves the matches away 
 exploiters it beats). The CPU's middle tier, 76% (86%), is 21 matches a tier, within the
 noise. `agent-league11-r7/best.zip` is the best agent and the next round's target.
 
+**Helpers for the other seventeen characters** (the user, 9 November: "make helper agents
+for characters that are not available right now"). Since round 10 the league had no CPU
+but Kanna, so seventeen of the 23 characters the agent never met at all. For each, the
+recipe of Kano's, Mizuka's, Misuzu's and Mishio's: people's sides from the first 2,600
+replays with the character (`dataset.py --limit 2600`, about 7 GB each), the clone 14
+frames late (`<char>/bc-d14.zip`), people's measures (`<char>/people.json`), and an
+exploiter of round 11's best (`<char>/exploiter/`; `<char>/target.zip` its copy), a quarter
+of its matches against the level-3 CPU, a pull of 0.1 toward its clone, 24.4M steps or
+60% of 32 matches. Round 11's best against each (64 seeded matches,
+`agent-league11-r7/compare/best-<char>.json`):
+
+| Character | People's sides (in sync) | Clone: held-out nll, press recall | Exploiter: steps, most vs the agent (32) | Round 11's best against it: wins (own HP lost a round) |
+|---|---|---|---|---|
+| Nayuki (awake) | 2,776 | 0.317, 6.2% | 20.3M (stopped at 60%), 62% | 41% (78%) |
+| Shiori | 2,594 | 0.322, 2.8% | 23.4M (stopped at 60%), 66% | 48% (78%) |
+| Sayuri | 2,719 | 0.311, 3.1% | 8.1M (stopped at 60%), 62% | 56% (76%) |
+| Akiko | 2,688 | 0.282, 6.9% | 15.2M (stopped at 60%), 66% | 58% (76%) |
+| Ikumi | 2,727 | 0.309, 5.9% | 10.2M (stopped at 60%), 72% | 58% (75%) |
+| Makoto | 2,589 | 0.332, 4.7% | 24.4M, 50% | 62% (68%) |
+| Mio | 2,613 | 0.310, 4.7% | 24.4M, 59% | 70% (68%) |
+| Mayu | 2,553 | 0.299, 5.2% | 6.1M (stopped at 60%), 66% | 77% (63%) |
+| Ex-Nanase | 2,590 | 0.305, 6.1% | 20.3M (stopped at 60%), 62% | 77% (66%) |
+| Mai | 2,675 | 0.325, 4.8% | 24.4M, 47% | 86% (62%) |
+| Nayuki (asleep) | 2,080 | 0.337, 4.4% | 24.4M, 44% | 86% (65%) |
+| Kaori | 2,721 | 0.311, 7.9% | 24.4M, 44% | 88% (53%) |
+| Nanase | 2,579 | 0.301, 3.5% | 24.4M, 38% | 91% (49%) |
+| Minagi | 2,604 | 0.335, 3.9% | 24.4M, 31% | 94% (55%) |
+| Misaki | 2,618 | 0.317, 4.4% | 24.4M, 50% | 97% (50%) |
+| Nagamori | 2,546 | 0.334, 7.7% | 24.4M, 22% | 97% (53%) |
+| Akane | 2,541 | 0.325, 5.3% | 24.4M, 25% | 100% (40%) |
+
+It wins 76% over the seventeen, losing 63% of its HP a round (over the twenty exploiters
+of the four characters it trained against: 93%, 45%). Eight found a hole within 24M
+steps; the awake Nayuki and Shiori beat it more often than not. The clones predict
+people as well as the first four's (0.28-0.34 nats a frame). Round 12 has all seventeen.
+
 **A red team's advantages** (the user, 9 November: "(1) very high RG-invincible rate, so
 that agent learns not to keep inputting (2) 100%-250% damage ... (3) red team can abuse
 throwing, so it won't keep guarding under pressure"; `advantages.py`). Since round 10 the
@@ -784,7 +820,7 @@ opponent's, and the evaluations that pick and compare agents stay the plain game
 
 Both hooks are off unless set: `tools/compat.py` passes all 254 cases in the game and the
 headless runner, and the library plays 8 x 6,000 steps the same as before them. Round
-11's best against exploiters given them (Mayu's and Sayuri's new ones, below), 64 seeded
+11's best against exploiters given them (Mayu's and Sayuri's new ones, above), 64 seeded
 matches each (the agent's wins, its own HP lost a round):
 
 | Opponent | Plain | rg 0.5 | rg 0.5, reversal 1 | throw 0.5 | damage 2 | rg 0.5, reversal 1, throw 0.5, damage 1.5 |
@@ -1072,7 +1108,7 @@ exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their
 | `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up (the riser's choice, the attacker's okizeme and mix-up) and free time, both ways |
 | `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time |
 | `advantages.py` | a red team's advantages for any opponent: recoil guards, reversals after them, throws, damage (`finetune.py --vs-rg/--vs-reversal/--vs-throw/--vs-damage`, `evaluate.py --p2-advantage`) |
-| `motions.py` | the motion that starts each character's moves, tried from a saved state; which invincible ones come out of a recoil guard and win (`motions.json`) |
+| `motions.py` | the motion that starts each character's moves, tried from a saved state; which invincible ones come out of a recoil guard and win (`motions.json`, made on each machine as `framedata.json` is: not in the repository) |
 | `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames, guard height (`framedata.json`) |
 | `people.py` | the same measures of people, overall, by opponent and by player |
 | `compare.py` | people and agents side by side, as the tables here |
