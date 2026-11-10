@@ -716,9 +716,44 @@ both, below under "What is overfitted": 86% and 86%), its last checkpoint clearl
 jumps 16-19 times a minute and is hit in the air 1.9-2.8 times (round 7's best 12-14
 and 0.9-1.7). Its habits barely moved (below, under "What is overfitted"), and the
 reversals hurt it more: against its last checkpoint they hit first 72% and 84% of the
-time (round 7's 44% and 67%). `agent-league7`'s best stays the best agent. Round 11
-(`agent-league11`, and `agent-league11-pull05` at the pull 0.05) goes on from round 10's
-best against the twenty and both reversal exploiters.
+time (round 7's 44% and 67%). `agent-league7`'s best stays the best agent.
+
+**Round 11** (the user: "both, let them compete"): four arms of 20M steps, round 10's
+settings (no CPU but Kanna, 13 of the 64 matches, `best.zip` by her HP taken) with both
+reversal exploiters joining the twenty, from round 10's best (`agent-league11`) and from
+round 7's (`agent-league11-r7`), each with the pull toward people's play at 0.02 and at
+0.05 (`-pull05`). From here every evaluation is seeded, the game's and the agents' draws
+of their actions (`evaluate.play`), so a row repeats exactly and every row plays the same
+matches; the first two rows are a new draw of round 10's table. In brackets, where it
+wins 90% or more, the share of its own HP lost a round (the user's: hard wins from easy
+ones). 64 matches each (63 against the CPU's tiers, measured only):
+
+| Agent | Level-4 CPU | Kano 5 / 6 / 7 | Mizuka 7 | Misuzu 3 | Mishio 3 | 20 (own HP lost) | Ayu / Mishio reversal | Kanna's HP |
+|---|---|---|---|---|---|---|---|---|
+| `agent-league7`, 157.2M (`best.zip`) | 0% / 86% / 100% | 75 / 67 / 42% | 75% | 81% | 78% | 88% (51%) | 89 / 77% | 50.8% |
+| `agent-league10-kanna`, 165.2M (`best.zip`) | 0% / 81% / 100% | 66 / 62 / 55% | 91% (55%) | 75% | 78% | 85% (56%) | 80 / 67% | 48.0% |
+| `agent-league11`, 173.3M (`best.zip`) | 0% / 67% / 100% | 66 / 55 / 31% | 86% | 91% (54%) | 89% | 85% (51%) | 86 / 88% | 46.5% |
+| `agent-league11`, 185.4M | 0% / 62% / 100% | 38 / 36 / 20% | 86% | 77% | 84% | 79% (57%) | 78 / 75% | 50.0% |
+| `agent-league11-pull05`, 185.4M | 0% / 71% / 95% | 34 / 23 / 20% | 58% | 72% | 67% | 68% (67%) | 84 / 47% | 42.0% |
+| `agent-league11-r7`, 169.3M (`best.zip`) | 0% / 76% / 95% | **92 / 69 / 58%** | **97% (33%)** | 88% | **100% (48%)** | **93% (45%)** | **91 / 98%** | 51.4% |
+| `agent-league11-r7`, 177.3M | 0% / 62% / 100% | 64 / 55 / 45% | 89% | 92% (52%) | 94% (54%) | 88% (52%) | 97 / 83% | **52.7%** |
+| `agent-league11-r7-pull05`, 177.3M | 0% / 71% / 95% | 53 / 30 / 27% | 83% | 77% | 56% | 76% (63%) | 81 / 61% | 43.6% |
+
+From round 7's best at the pull 0.02, the step forward rounds 8 and 10 weren't: its best
+checkpoint wins 93% over the twenty (round 7's 88%; a mean of twenty is good to about +-2
+points) and loses less of its own HP doing it (45% a round, from 51%), better against
+every Kano (her fifth 92%, from 75%), Mizuka's seventh, Mishio's third and both
+reversal exploiters (91% and 98%, from 89% and 77%), and as near Kanna as before (51.4% of
+her HP, a round in 9% of the matches; round 7's best 50.8%, 5%). Against Kano it kept
+round 7's ground game: 14.0-15.6 jumps a minute against her fifth to seventh, hit in the
+air 1.6-2.4 times (round 7's best 12-13 and 1.0-1.5). From round 10's best both pulls lost
+Kano further (her seventh 20-31%), jumping 18-24 times a minute: the start carried the
+hole, and a round against the same exploiters didn't close it. The pull 0.05 is worse from
+either start (68% and 76% over the twenty); from round 7's it never beat its start in
+its 16-match evaluations, so its `best.zip` is round 7's best itself. The last checkpoint
+of the 0.02 arm fell back to 88%, as in rounds 6-8 (PFSP moves the matches away from the
+exploiters it beats). The CPU's middle tier, 76% (86%), is 21 matches a tier, within the
+noise. `agent-league11-r7/best.zip` is the best agent and the next round's target.
 
 ## Ayu's agent as other characters
 
@@ -951,10 +986,11 @@ the combo master). The repository keeps the clones and the team too; the agent's
 the combo master's checkpoints are only there. Uploaded 8 November: every run's
 `best.zip` and last `model.zip` (not the `chunk*.zip` between) through round 8, and the
 exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their targets
-(`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent is
-`agent-league7/best.zip`. Round 9 on (`agent-league9-jitter`, `agent-league10-kanna`,
-`agent-league11*`, the reversal exploiters, `kano/transfer7`, `mizukab/transfer7`) are
-only on the Linux machine until the next upload.
+(`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent on the
+Hub is `agent-league7/best.zip`; the best of all is `agent-league11-r7/best.zip` (round 11).
+Round 9 on (`agent-league9-jitter`, `agent-league10-kanna`, `agent-league11*`, the
+reversal exploiters, `kano/transfer7`, `mizukab/transfer7`) are only on the Linux machine
+until the next upload.
 
 ## The scripts
 
