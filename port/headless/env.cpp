@@ -408,6 +408,7 @@ struct Slot {
     bool playing = false;  // the game is reading its match's replay
     bool inputTaken = false; // input[] holds the step's first frame's
     uint8_t input[2] = {0, 0}; // EfzInfo.input
+    float damageScale[2] = {1, 1}; // efz_env_set_damage_scale: kept over its matches
 };
 
 const uint32_t kStateMagic = 0x5a464545; // "EEFZ"
@@ -462,6 +463,15 @@ namespace {
 CScene3* Fight()
 {
     return (CScene3*)Scene(3);
+}
+
+// The slot's damage scales into its game, bound: the game's own (1) while a replay
+// plays or is recorded, so that it stays the one EFZ plays.
+void ApplyDamageScale(const Slot& s)
+{
+    bool faithful = s.playing || s.recording;
+    for (int k = 0; k < 2; k++)
+        G()->damageTaken[k] = faithful ? 1.0f : s.damageScale[k];
 }
 
 // The controls do something: no intro, no KO waiting for the next round.
@@ -938,6 +948,7 @@ void ResetOne(EfzEnv* env, int i)
     env->reward[2 * i] = env->reward[2 * i + 1] = 0;
     env->terminated[i] = env->truncated[i] = 0;
     if (StartMatch(env, s)) {
+        ApplyDamageScale(s);
         WriteObs(env, s, ObsOf(env, env->obsOut, i));
         WriteInfo(s, env->info[i], -1, false);
     } else {
@@ -963,6 +974,7 @@ void StepOne(EfzEnv* env, int i)
         return;
     }
     BindArena(s.arena);
+    ApplyDamageScale(s);
     int winner = -1;
     s.inputTaken = false;
     for (int k = 0; k < cfg.frame_skip && winner == -1; k++)
@@ -1332,6 +1344,16 @@ int efz_env_set_gauges(EfzEnv* env, int32_t index, int32_t player, int32_t power
     }
     BindArena(nullptr);
     return ok;
+}
+
+int efz_env_set_damage_scale(EfzEnv* env, int32_t index, int32_t player, float scale)
+{
+    if (!env || index < 0 || index >= env->n || player < 0 || player > 1 ||
+        !(scale > 0 && scale <= 100))
+        return -1;
+    Finish(env);
+    env->slots[index].damageScale[player] = scale; // written into the game each step
+    return 0;
 }
 
 int efz_env_seed(EfzEnv* env, int32_t index, uint64_t seed)

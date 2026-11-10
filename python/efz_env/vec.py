@@ -272,6 +272,20 @@ class EfzVecEnv:
         if r != 0:
             raise RuntimeError(f'efz_env: environment {index} has no match to set')
 
+    def set_damage_scale(self, index, player, scale):
+        """Scales the damage `player` takes from hits in environment `index`, from its
+        next step on and in every match after until set again (guarded hits' chip damage
+        stays the game's; replays played back or recorded are EFZ's): an advantage for
+        the other side, e.g. a red team's hits worth what a person's combos are. 1 is the
+        game's."""
+        self._finish()
+        f = getattr(self._lib, 'efz_env_set_damage_scale', None)
+        if f is None:
+            raise RuntimeError('efz_env: this library has no damage scale: rebuild it')
+        if f(self._h, int(index), int(player), float(scale)) != 0:
+            raise ValueError(f'efz_env: no damage scale {scale} for environment {index}, '
+                             f'player {player}')
+
     def seed(self, index, seed):
         """Seeds environment `index`: its following matches (characters and stages drawn
         from pools, the game's rand) follow from `seed` alone, from its next match on."""

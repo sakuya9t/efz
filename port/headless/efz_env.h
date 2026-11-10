@@ -200,6 +200,14 @@ EFZ_ENV_API int efz_env_play(EfzEnv* env, int32_t index, const char* path);
  * observation and info are written again. Returns -1 if the environment has no match. */
 EFZ_ENV_API int efz_env_set_gauges(EfzEnv* env, int32_t index, int32_t player, int32_t power,
                                    double rf, int32_t blue);
+/* Scales the damage player `player` (0 or 1) of environment `index` takes from hits
+ * (CPlayer::DefenseFactor: guarded hits' chip damage is the game's), from its next step
+ * on and in every match after until set again: an advantage for the other side, a red
+ * team's (its hits worth what a person's combos are). 1 is the game's; 0 < scale <= 100.
+ * Not while a replay is played back or recorded (they stay EFZ's). An addition to
+ * version 5: a library without it is otherwise the same. Returns -1 for a bad argument. */
+EFZ_ENV_API int efz_env_set_damage_scale(EfzEnv* env, int32_t index, int32_t player,
+                                         float scale);
 /* Where the game writes files (replays): `dir`, or the data folder for NULL. For the
  * process, as the data folder is. */
 EFZ_ENV_API int efz_env_set_save_dir(EfzEnv* env, const char* dir);

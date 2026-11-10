@@ -986,11 +986,11 @@ the combo master). The repository keeps the clones and the team too; the agent's
 the combo master's checkpoints are only there. Uploaded 8 November: every run's
 `best.zip` and last `model.zip` (not the `chunk*.zip` between) through round 8, and the
 exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their targets
-(`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent on the
-Hub is `agent-league7/best.zip`; the best of all is `agent-league11-r7/best.zip` (round 11).
-Round 9 on (`agent-league9-jitter`, `agent-league10-kanna`, `agent-league11*`, the
-reversal exploiters, `kano/transfer7`, `mizukab/transfer7`) are only on the Linux machine
-until the next upload.
+(`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent,
+`agent-league11-r7/best.zip` (round 11), went up on its own on 9 November with its
+`config.json`, to be played against. The rest of round 9 on (`agent-league9-jitter`,
+`agent-league10-kanna`, the other `agent-league11*`, the reversal exploiters,
+`kano/transfer7`, `mizukab/transfer7`) is only on the Linux machine until the next upload.
 
 ## The scripts
 

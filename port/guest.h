@@ -92,11 +92,22 @@ struct Globals {
     uint8_t drawing;     // whether pictures are drawn (sprites decoded, blitters run)
     uint8_t quit;        // the game asked to close: WM_CLOSE, or a MessageBox
     uint32_t root[16];   // the platform's own handles: what WinMain kept in globals
+    float damageTaken[2]; // a scale on the damage each player takes, set by the headless
+                          // env (efz_env_set_damage_scale) for each step; 0 (an arena as
+                          // NewArena makes it) is 1, the game's
 };
 
 inline Globals* G()
 {
     return (Globals*)(g_arena + kGlobals);
+}
+
+// The scale on the damage player `side` takes (CPlayer::DefenseFactor): the game's 1
+// unless the headless env set one.
+inline double DamageTaken(int side)
+{
+    float s = G()->damageTaken[side & 1];
+    return s > 0 ? (double)s : 1.0;
 }
 
 // An arena of its own for another game: reserved, its first 64 KB and heap set up
@@ -113,6 +124,8 @@ inline void BindArena(char* arena)
 // another arena with LoadArena makes that one the same game.
 uintptr_t ArenaUsed();
 void LoadArena(const void* bytes, uintptr_t size);
+#else
+inline double DamageTaken(int) { return 1.0; }
 #endif
 
 // A pointer field of the game's structures: 4 bytes, used like a T*.

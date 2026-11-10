@@ -139,6 +139,16 @@ def _bind(lib):
         f = getattr(lib, name)
         f.restype = restype
         f.argtypes = argtypes
+    # Additions to the version that a library built before them lacks.
+    optional = {
+        'efz_env_set_damage_scale': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32,
+                                                    ctypes.c_float]),
+    }
+    for name, (restype, argtypes) in optional.items():
+        f = getattr(lib, name, None)
+        if f is not None:
+            f.restype = restype
+            f.argtypes = argtypes
     return lib
 
 

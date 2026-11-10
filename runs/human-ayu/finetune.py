@@ -83,6 +83,10 @@ def parse():
                    help='frozen opponents of other runs, MODEL.zip:CHAR (CHAR: ayu if left out)')
     p.add_argument('--vs-share', type=float, default=0.5,
                    help='share of the matches against agents that the --vs opponents play')
+    p.add_argument('--vs-damage', type=float, nargs='*', default=[],
+                   help="a red team's advantage: the damage the learner takes from hits in the "
+                        "--vs opponents' matches, times this (one value for all, or one per --vs "
+                        "opponent); training only, the evaluations are the game's")
     p.add_argument('--focus', choices=('setup', 'charge', 'reversal'),
                    help="a shaping reward (focus.py)")
     p.add_argument('--focus-coef', type=float, default=0.02)
@@ -188,6 +192,10 @@ def parse():
         args.old = ''
     args.vs = [tuple(v.rsplit(':', 1)) if ':' in os.path.basename(v) else (v, 'ayu')
                for v in args.vs]
+    if len(args.vs_damage) not in (0, 1, len(args.vs)) or any(d <= 0 for d in args.vs_damage):
+        p.error(f'--vs-damage: one value above 0, or one per --vs opponent ({len(args.vs)})')
+    if len(args.vs_damage) == 1:
+        args.vs_damage = args.vs_damage * len(args.vs)
     return args
 
 
@@ -240,6 +248,7 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     wins: the learner's last wins against each of vs (for --pfsp); pool: --practice's
     starts (practice.StartPool), whose trials take the last --practice environments."""
     n = args.envs - args.practice
+    n_mirror = len(opponents)
     n_cpu = int(round(n * args.cpu_share))
     cpu_envs = np.arange(n) >= n - n_cpu
     agents = np.flatnonzero(~cpu_envs)
@@ -283,6 +292,10 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     for o in opponents:  # the lookahead red team saves this environment's games
         if hasattr(o, 'attach'):
             o.attach(env)
+    if args.vs_damage and len(vs_envs):  # the learner (player 1) takes more from these
+        for i in vs_envs:
+            env.env.set_damage_scale(int(i), 0, args.vs_damage[assignment[i] - n_mirror])
+        print('--vs-damage:', ', '.join(f'{d:g}' for d in args.vs_damage), flush=True)
     if args.assist:
         import combo_support
         env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'],
@@ -468,6 +481,7 @@ def main():
         json.dump(dict(frame_skip=1, history=args.history, delay=args.delay,
                        delay_most=args.delay_most, chars=[args.char, None],
                        vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
+                       vs_damage=args.vs_damage,
                        pfsp=args.pfsp, pfsp_window=args.pfsp_window, cpu_focus=args.cpu_focus,
                        focus=args.focus, focus_coef=args.focus_coef,
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
