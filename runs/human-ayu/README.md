@@ -797,7 +797,30 @@ matches each (the agent's wins, its own HP lost a round):
 Reversals after the agent presses on hit first 2.4 times in 3 for Mayu (268 / 110), 7 in 8
 for Sayuri; Kano's 236D comes out of only 124 of 821 tries (it wins when it does, 120 /
 1), and the tries cost her more than they win. Throws alone change little: the agent is
-rarely throwable near her. Not yet trained against.
+rarely throwable near her.
+
+**The user's games** (9 November, `python/examples/play.py`, four matches of Ex-Nanase
+against round 11's best, all four the user's, 2 rounds of 8 the agent's) showed what no
+training opponent does: the user threw it 1.55 times a minute (Ex-Nanase's clone and
+exploiter 0.08), Instant-Charged 2.4 times a minute (0.51, 0.13) for combos of 2,491 at
+the 90th percentile (1,527, 1,743), and punished its wake-up reversal, which it rises
+with on a third of its wake-ups and is hit back on half (against the clone and the
+exploiter too: the habit loses everywhere and nothing in training has made it stop).
+Its own pressure leaves gaps (tight 1.4% of the time, the user's 25%). Against the same
+exploiter the agent wins 77%, against her clone 100%.
+
+- **bait**, the fifth advantage: of the agent's wake-up reversals the opponent isn't
+  committed against (it is free to act), the share it guards through, seeing it as it
+  starts, and punishes with a throw within reach or its fastest move that starts before
+  the agent recovers (its own play, 14 steps late, can't). Waiting on every wake-up
+  instead made it weaker (77% to 88% against Mayu's): it gave up its okizeme on the four
+  wake-ups in five the agent doesn't reverse on. Against committed meaties the reversal
+  still works, as against people.
+
+With all five (rg 0.5, reversal 1, throw 0.5, bait 1, damage 1.5) the agent wins 28%
+against Ex-Nanase's exploiter (plain 77%), 16% against Sayuri's (56%): near what the user
+did. Round 12 trains against them (`agent-league12-adv`, a quarter of the `--vs` matches,
+`--vs-adv-share 0.25`) and without them (`agent-league12`), both with the helpers.
 
 ## Ayu's agent as other characters
 

@@ -588,7 +588,7 @@ def main():
                    help="P1 sees the game this many steps late, instead of its config's")
     p.add_argument('--json', help='write the results here')
     p.add_argument('--p2-advantage', help="a red team's advantages for P2 (advantages.py), e.g. "
-                                          "rg=0.5,reversal=0.8,throw=0.3,damage=2")
+                                          "rg=0.5,reversal=0.8,throw=0.3,damage=2,bait=0.5")
     p.add_argument('--p1-combo', help="combo_support.ComboSwitch: P1's combos played by this "
                                       "model (combo.py's combo master)")
     p.add_argument('--p1-confirm', default='seen', choices=('seen', 'now'),
@@ -625,7 +625,8 @@ def main():
         import advantages
         if p2 == 'cpu' or args.chars[1] in ('random', 'tiers'):
             p.error('--p2-advantage: P2 an agent, of one character')
-        p2 = advantages.AdvantagedAgent(p2, args.chars[1], advantages.parse(args.p2_advantage))
+        p2 = advantages.AdvantagedAgent(p2, args.chars[1], advantages.parse(args.p2_advantage),
+                                        learner=args.chars[0])
     out = {}
     for level in (args.level if p2 == 'cpu' else [0]):
         r = play(args, p1, p2, args.matches, level, seed=args.seed)

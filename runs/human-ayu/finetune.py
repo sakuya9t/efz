@@ -97,6 +97,12 @@ def parse():
     p.add_argument('--vs-throw', type=float, nargs='*', default=[],
                    help="and the share of their chances to throw (close, the learner free and not "
                         "protected) in which they throw")
+    p.add_argument('--vs-adv-share', type=float, default=1.0,
+                   help="the share of the --vs matches that play with the advantages (--vs-rg ... "
+                        "--vs-damage), drawn anew each chunk; the rest the plain game")
+    p.add_argument('--vs-bait', type=float, nargs='*', default=[],
+                   help="and the share of the learner's knockdowns on which they guard its wake-up "
+                        "instead of attacking it: its wake-up reversal guarded, then punished")
     p.add_argument('--focus', choices=('setup', 'charge', 'reversal'),
                    help="a shaping reward (focus.py)")
     p.add_argument('--focus-coef', type=float, default=0.02)
@@ -206,7 +212,7 @@ def parse():
         p.error(f'--vs-damage: one value above 0, or one per --vs opponent ({len(args.vs)})')
     if len(args.vs_damage) == 1:
         args.vs_damage = args.vs_damage * len(args.vs)
-    for name in ('vs_rg', 'vs_reversal', 'vs_throw'):
+    for name in ('vs_rg', 'vs_reversal', 'vs_throw', 'vs_bait'):
         v = getattr(args, name)
         if len(v) not in (0, 1, len(args.vs)) or any(not 0 <= x <= 1 for x in v):
             p.error(f"--{name.replace('_', '-')}: one share (0-1), or one per --vs opponent")
@@ -218,7 +224,8 @@ def vs_advantage(args, j):
     """The --vs opponent j's advantages (advantages.parse's keys)."""
     get = lambda v, default: v[j] if v else default
     return dict(rg=get(args.vs_rg, 0.0), reversal=get(args.vs_reversal, 0.0),
-                throw=get(args.vs_throw, 0.0), damage=get(args.vs_damage, 1.0))
+                throw=get(args.vs_throw, 0.0), damage=get(args.vs_damage, 1.0),
+                bait=get(args.vs_bait, 0.0))
 
 
 def ppo_settings(args):
@@ -314,14 +321,23 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
     for o in opponents:  # the lookahead red team saves this environment's games
         if hasattr(o, 'attach'):
             o.attach(env)
+    # The --vs matches with the advantages (--vs-adv-share of them, drawn each chunk).
+    advantaged = np.zeros(n, bool)
+    advantaged[vs_envs] = np.random.default_rng(seed).random(len(vs_envs)) < args.vs_adv_share
     if args.vs_damage and len(vs_envs):  # the learner (player 1) takes more from these
-        for i in vs_envs:
+        for i in vs_envs[advantaged[vs_envs]]:
             env.env.set_damage_scale(int(i), 0, args.vs_damage[assignment[i] - n_mirror])
         print('--vs-damage:', ', '.join(f'{d:g}' for d in args.vs_damage), flush=True)
     if args.vs_rg and len(vs_envs):  # and these recoil-guard more (player 2)
-        for i in vs_envs:
+        for i in vs_envs[advantaged[vs_envs]]:
             env.env.set_recoil_guard(int(i), 1, args.vs_rg[assignment[i] - n_mirror])
         print('--vs-rg:', ', '.join(f'{d:g}' for d in args.vs_rg), flush=True)
+    for o in opponents:  # and their inputs' advantages, there only
+        if hasattr(o, 'only'):
+            o.only = advantaged
+    if args.vs_adv_share < 1 and len(vs_envs):
+        print(f'--vs-adv-share: {int(advantaged.sum())} of the {len(vs_envs)} --vs matches '
+              'with the advantages', flush=True)
     if args.assist:
         import combo_support
         env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'],
@@ -508,7 +524,8 @@ def main():
                        delay_most=args.delay_most, chars=[args.char, None],
                        vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
                        vs_damage=args.vs_damage, vs_rg=args.vs_rg, vs_reversal=args.vs_reversal,
-                       vs_throw=args.vs_throw,
+                       vs_throw=args.vs_throw, vs_bait=args.vs_bait,
+                       vs_adv_share=args.vs_adv_share,
                        pfsp=args.pfsp, pfsp_window=args.pfsp_window, cpu_focus=args.cpu_focus,
                        focus=args.focus, focus_coef=args.focus_coef,
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
@@ -550,10 +567,12 @@ def main():
             vs.append((combo_support.FairAssistOpponent(VS_ASSIST[-1], m), c))
     else:
         vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
-    if args.vs_reversal or args.vs_throw:  # their inputs' advantages (advantages.py)
+    if args.vs_reversal or args.vs_throw or args.vs_bait:  # their inputs' (advantages.py)
         import advantages
-        vs = [(advantages.AdvantagedOpponent(o, c, vs_advantage(args, j), seed=j)
-               if vs_advantage(args, j)['reversal'] or vs_advantage(args, j)['throw'] else o, c)
+        inputs = lambda a: a['reversal'] or a['throw'] or a['bait']
+        vs = [(advantages.AdvantagedOpponent(o, c, vs_advantage(args, j), seed=j,
+                                             learner=args.char)
+               if inputs(vs_advantage(args, j)) else o, c)
               for j, (o, c) in enumerate(vs)]
     if args.assist:
         import macros
