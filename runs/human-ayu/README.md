@@ -961,6 +961,47 @@ within them and among the rest) in 128 environments: 38 of them hers (30%), the 
 opponents one or more each. `agent-league13` plays the plain game, `agent-league13-adv`
 the five advantages in a quarter of its `--vs` matches.
 
+Again neither arm beat its start in training's evaluations (the best 0.825, the plain
+arm's third chunk, and 0.833, the adv arm's fourth), so both `best.zip` are round 11's best.
+The checkpoints training scored highest and the last, 64 seeded matches each:
+
+| Agent | Level-4 CPU | Kano 5 / 6 / 7 | Mizuka 7 | Misuzu 3 | Mishio 3 | 20 (own HP lost) | Ayu / Mishio reversal | 17 helpers (own HP lost) | All 39 | Kanna's HP |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `agent-league11-r7`, 169.3M (`best.zip`) | 0% / 76% / 95% (42%) | **92 / 69 / 58%** | **97% (33%)** | **88%** | **100% (48%)** | **93% (45%)** | **91 / 98%** | 76% (63%) | **86%** | 51.4% |
+| `agent-league12-adv`, 177.3M | 0% / 57% / 100% (47%) | 59 / 61 / 28% | 92% (47%) | 89% | 97% (51%) | 87% (52%) | 92 / 89% | **82% (62%)** | 85% | 53.9% |
+| `agent-league13`, 175.4M | 0% / 81% / 100% (42%) | 70 / 66 / 52% | 97% (42%) | 84% | 95% (46%) | 90% (49%) | 91 / 91% | 75% (65%) | 84% | 53.3% |
+| `agent-league13`, 185.5M | 0% / 81% / 100% (41%) | 58 / 53 / 34% | 92% (43%) | 70% | 89% | 86% (51%) | 89 / 86% | 81% (61%) | 84% | **56.4%** |
+| `agent-league13`, 189.6M | 0% / 81% / 95% (45%) | 52 / 67 / 25% | 88% | 70% | 89% | 83% (54%) | 86 / 88% | 74% (66%) | 79% | 54.0% |
+| `agent-league13-adv`, 177.4M | 0% / 62% / 100% (44%) | 52 / 47 / 31% | 89% | 73% | 94% (49%) | 84% (53%) | 86 / 88% | 74% (65%) | 80% | 56.1% |
+| `agent-league13-adv`, 189.6M | 0% / 62% / 100% (42%) | 47 / 39 / 34% | 89% | 84% | 84% | 84% (55%) | 89 / 81% | 71% (68%) | 78% | 48.1% |
+
+The hardest helpers (wins, own HP lost a round; every helper and the five advantages in
+`<run>/compare/`):
+
+| Character | Round 11's best | `agent-league12-adv`, 177.3M | `agent-league13`, 175.4M | 185.5M | 189.6M | `agent-league13-adv`, 177.4M | 189.6M |
+|---|---|---|---|---|---|---|---|
+| Nayuki (awake) | 41% (78%) | **64% (75%)** | 56% (76%) | 48% (78%) | 38% (83%) | 39% (84%) | 34% (83%) |
+| Shiori | 48% (78%) | **66% (70%)** | 58% (73%) | 53% (72%) | 58% (69%) | 28% (85%) | 45% (79%) |
+| Sayuri | 56% (76%) | **70% (70%)** | 55% (79%) | **70% (72%)** | 58% (82%) | 66% (73%) | 59% (77%) |
+| Akiko | 58% (76%) | 62% (77%) | 47% (81%) | 70% (72%) | 59% (76%) | **72% (72%)** | 55% (80%) |
+| Ikumi | 58% (75%) | 78% (68%) | 56% (75%) | **80% (64%)** | 62% (76%) | 72% (71%) | 70% (75%) |
+
+Keeping Kano's share held her better than round 12 did (her seventh 25-52%, from 5-28%),
+not as well as round 11's best (58%), and the helpers gained less (74-81%; round 12's adv
+arm's fourth chunk 82%). The best of round 13, the plain arm's third and eighth chunks, win 84% over
+the 39. The third keeps more of Kano (70 / 66 / 52%) and none of the helpers' gain (75%),
+the eighth the other way round (58 / 53 / 34%, 81%): along the checkpoints Kano and the
+helpers trade, and none has both. The advantages arm is again no better (80% and 78%), and
+with the advantages on no checkpoint does clearly better than round 11's best (Ex-Nanase's
+exploiter 33-52% against its 28%, Mayu's 6-36% against 31%, the awake Nayuki's 2-6%
+against 9%). The wake-up reversal grew in the plain arm (34.5% of its wake-ups by the
+last checkpoint, still hit back 45% of the time; round 11's best 20%, 54%).
+
+Every arm of rounds 11-13 loses ground in its first chunk (training's score 0.847 to
+0.77-0.84; round 11's arm from round 7's best 0.852 to 0.767). Round 11 then won it back and
+passed its start (0.914). In the league of 39, four arms of 20M steps never did, and
+`agent-league11-r7/best.zip` stays the best agent.
+
 ## Ayu's agent as other characters
 
 What it learnt for Ayu and what any character keeps (8 November; `eval/transfer/`): the
