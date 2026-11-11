@@ -36,6 +36,8 @@ def main():
     p.add_argument('--record', default='recordings')
     p.add_argument('--keys', help='JSON of key names: {"A": "a", "up": "w", ...}')
     p.add_argument('--scale', type=int, default=3)
+    p.add_argument('--volume', type=float, default=1.0, help='sounds and music, 0-1')
+    p.add_argument('--no-sound', action='store_true')
     args = p.parse_args()
     if not args.data:
         sys.exit('pass --data, the folder of an EFZ 4.02 install (or set EFZ_DATA)')
@@ -53,7 +55,8 @@ def main():
                        frame_skip=frame_skip or 4, record_dir=args.record,
                        agent_name=args.agent or f'cpu-{args.cpu_level}', scale=args.scale,
                        keys=json.loads(args.keys) if args.keys else None,
-                       cpu_level=args.cpu_level, rounds_to_win=args.rounds)
+                       cpu_level=args.cpu_level, rounds_to_win=args.rounds,
+                       sound=not args.no_sound, volume=args.volume)
     results = match.play(policy, matches=args.matches)
     match.close()
     print(f'matches: {len(results)}, you won {sum(r == -1 for r in results)}, '

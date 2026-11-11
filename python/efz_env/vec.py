@@ -356,6 +356,27 @@ class EfzVecEnv:
             raise RuntimeError('no frame drawn yet')
         return frame
 
+    def sound_log(self, on=True):
+        """Keeps the sounds the games ask for (every batch of the process), for
+        sound_events; the library plays none. Off by default."""
+        self._lib.efz_env_sound_log(1 if on else 0)
+
+    def sound_events(self, index=0):
+        """The sounds environment `index` asked for since the last call, oldest first:
+        (kind, slot, value, file) with kind 'play' (value 1: it loops), 'stop' or
+        'volume' (value in hundredths of a decibel), file the .wav relative to the data
+        folder with '/' separators ('' if not known). Needs sound_log()."""
+        self._finish()
+        events = (_native.SoundEvent * 64)()
+        out = []
+        while True:
+            n = self._lib.efz_env_sound_events(self._h, index, events, 64)
+            for e in events[:n]:
+                out.append((('play', 'stop', 'volume')[e.kind], e.slot, e.value,
+                            e.file.decode('ascii', 'replace').replace('\\', '/')))
+            if n < 64:
+                return out
+
     @property
     def ticks(self):
         """Simulation ticks run so far (three per game frame)."""

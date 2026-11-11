@@ -3,8 +3,9 @@
     python python/examples/play.py --agent runs/ppo/model.zip      # play it; each match is recorded
     python python/examples/train.py --opponent human --load runs/ppo/model.zip   # it learns from your games
 
-The window shows the game as the headless library draws it (no sound), at the game's
-speed: 64 frames a second. The human plays one side with the keyboard (default: arrows,
+The window shows the game as the headless library draws it, with its sounds and music
+(the library tells what the game played; pygame's mixer plays it), at the game's speed:
+64 frames a second. The human plays one side with the keyboard (default: arrows,
 Z X C V for A B C D) or the first gamepad (hat or left stick, buttons 0-3); Esc or
 closing the window stops. The other side is an agent, a policy acting every frame_skip
 frames as in its training, or the game's CPU. Every match is recorded to record_dir as
@@ -18,6 +19,7 @@ import datetime
 import json
 import os
 import time
+import wave
 
 import numpy as np
 
@@ -120,6 +122,151 @@ class Window:
         self.show(None, lines)
 
 
+def _gain(volume):
+    """DirectSound's volume (hundredths of a decibel, -10000 silent) as a gain."""
+    return 0.0 if volume <= -10000 else 10 ** (volume / 2000)
+
+
+class Sound:
+    """The game's sounds through pygame's mixer. The library plays none, but keeps what
+    the game asked for (EfzVecEnv.sound_log, sound_events): each sound slot's plays,
+    stops and volume, with its file, which this plays from the game's folder as the SDL3
+    game does (port/sound.cpp): a play restarts its slot; the sound effects and voices
+    at -500, the music at its own volume (its fades), looping at its cue points.
+
+    The music of a match that comes from the library's cache was asked for when the
+    match was first made, so start_match starts the stage's (CScene2: bgm<stage + 10>)
+    when the events of the reset don't."""
+
+    RATE = 22050  # the game's .wav files
+
+    def __init__(self, data_dir, volume=1.0):
+        import pygame
+        self.pygame = pygame
+        self.data_dir = data_dir
+        self.volume = volume
+        mixer = pygame.mixer
+        if mixer.get_init() != (self.RATE, -16, 2):
+            if mixer.get_init():
+                mixer.quit()
+            mixer.init(self.RATE, -16, 2, 512)
+        mixer.set_num_channels(32)
+        mixer.set_reserved(1)
+        self.music = mixer.Channel(0)
+        self.music_slot = None
+        self.music_loop = None  # the looping part, queued again as it is reached
+        self.cache = {}
+        self.channels = {}  # slot -> the Channel playing it
+        self.volumes = {}   # slot -> its volume, once set while playing
+
+    def _load(self, file):
+        if file not in self.cache:
+            path = os.path.join(self.data_dir, *file.split('/'))
+            try:
+                self.cache[file] = self.pygame.mixer.Sound(path)
+            except (FileNotFoundError, self.pygame.error):
+                self.cache[file] = None
+        return self.cache[file]
+
+    def _music_parts(self, file):
+        """(the music to its loop's end, the looping part) as the SDL3 game loops it
+        (CSound::LoadLoop: the 'cue ' and 'adtl' chunks in the file's last 0x140 bytes),
+        or (the whole of it, None) when it has no loop points."""
+        key = ('music', file)
+        if key not in self.cache:
+            path = os.path.join(self.data_dir, *file.split('/'))
+            parts = (None, None)
+            try:
+                with wave.open(path, 'rb') as w:
+                    same = (w.getframerate(), w.getnchannels(), w.getsampwidth()) == (self.RATE, 2, 2)
+                    pcm = w.readframes(w.getnframes())
+                with open(path, 'rb') as f:
+                    f.seek(0, 2)
+                    f.seek(max(0, f.tell() - 0x140))
+                    tail = f.read(0x140) + bytes(0x14)
+                cue = length = 0
+                for j in range(0x140):
+                    if tail[j:j + 3] == b'cue':
+                        cue = int.from_bytes(tail[j + 0x10:j + 0x14], 'little')
+                    elif tail[j:j + 4] == b'adtl':
+                        length = int.from_bytes(tail[j + 0x10:j + 0x14], 'little')
+                end, size = (cue + length) * 4, length * 4
+                Sound = self.pygame.mixer.Sound
+                if same and cue and length and end <= len(pcm):
+                    parts = (Sound(buffer=pcm[:end]), Sound(buffer=pcm[end - size:end]))
+                else:
+                    parts = (Sound(path), None)
+            except (OSError, EOFError, wave.Error, self.pygame.error):
+                pass
+            self.cache[key] = parts
+        return self.cache[key]
+
+    def _play_music(self, slot, file, loop):
+        self.music.stop()
+        self.music_slot, self.music_loop = slot, None
+        whole, part = self._music_parts(file)
+        if whole is None:
+            return
+        self.music.set_volume(self.volume)
+        if loop and part is not None:
+            self.music.play(whole)
+            self.music.queue(part)
+            self.music_loop = part
+        else:
+            self.music.play(whole, loops=-1 if loop else 0)
+
+    def handle(self, events):
+        """Plays what the game asked for since the last frame (EfzVecEnv.sound_events)."""
+        for kind, slot, value, file in events:
+            if slot == self.music_slot or file.startswith('wave/bgm/'):
+                if kind == 'play' and file:
+                    self._play_music(slot, file, value)
+                elif kind == 'stop':
+                    self.music.stop()
+                    self.music_loop = None
+                elif kind == 'volume':
+                    self.music.set_volume(_gain(value) * self.volume)
+                continue
+            if kind == 'play':
+                old = self.channels.pop(slot, None)
+                if old is not None:
+                    old.stop()
+                sound = self._load(file) if file else None
+                if sound is None:
+                    continue
+                channel = sound.play(loops=-1 if value else 0)
+                if channel is not None:
+                    channel.set_volume(_gain(self.volumes.get(slot, -500)) * self.volume)
+                    self.channels[slot] = channel
+            elif kind == 'stop':
+                channel = self.channels.pop(slot, None)
+                if channel is not None:
+                    channel.stop()
+            elif kind == 'volume':
+                self.volumes[slot] = value
+                channel = self.channels.get(slot)
+                if channel is not None:
+                    channel.set_volume(_gain(value) * self.volume)
+        if self.music_loop is not None and self.music.get_queue() is None:
+            if self.music.get_busy():
+                self.music.queue(self.music_loop)
+            else:
+                self.music.play(self.music_loop)
+
+    def start_match(self, events, stage):
+        """A match's first events, from its reset; the stage's music if they don't start
+        any."""
+        if not any(k == 'play' and f.startswith('wave/bgm/') for k, _, _, f in events):
+            self._play_music(None, f'wave/bgm/bgm{stage + 10:02d}.wav', True)
+        self.handle(events)
+
+    def stop(self):
+        self.pygame.mixer.stop()
+        self.channels.clear()
+        self.volumes.clear()
+        self.music_slot = self.music_loop = None
+
+
 class Clock:
     """Paces frames at FPS; falls back in step when far behind (a pause to learn)."""
 
@@ -148,14 +295,15 @@ class HumanMatch:
     does, frame by frame, in real time.
 
     controls: anything with screen_bits() (default: Controls(keys)); window: a Window,
-    or None to run without one (tests, or a program that draws itself).
+    or None to run without one (tests, or a program that draws itself). sound: the
+    game's sounds and music at `volume` (0-1) through pygame's mixer, with the window.
     """
 
     def __init__(self, data_dir=None, *, human=1, opponent='agent', chars=(None, None),
                  stage=None, char_pool=None, stage_pool=None, frame_skip=4,
                  action_table=None, record_dir='recordings', agent_name='', keys=None,
                  scale=3, window=True, controls=None, realtime=True, result_seconds=2.0,
-                 **config):
+                 sound=True, volume=1.0, **config):
         if human not in (0, 1):
             raise ValueError('human: 0 (player 1) or 1 (player 2)')
         if opponent not in ('agent', 'cpu'):
@@ -182,6 +330,13 @@ class HumanMatch:
         self._intro = names.index('intro')
         self._round_over = names.index('round_over')
         self.window = Window(scale) if window is True else (window or None)
+        self.sound = None
+        if sound and self.window is not None:
+            try:
+                self.sound = Sound(self.env.data_dir, volume)
+                self.env.sound_log(True)
+            except Exception as e:  # no audio device: play on without
+                print(f'no sound: {e}')
         self.controls = controls or Controls(keys)
         self.clock = Clock()
         self._controls = np.zeros((1, 2), dtype=np.uint8)
@@ -204,6 +359,8 @@ class HumanMatch:
         self._controls[0, self.side] = agent_bits
         before = obs.copy()
         _, reward, terminated, truncated, _ = self.env.step(self._controls)
+        if self.sound is not None:
+            self.sound.handle(self.env.sound_events(0))
         self._frames.append((before, self._controls[0].copy(), human_screen, decision,
                              reward[0].copy()))
         if self.window is not None:
@@ -217,7 +374,12 @@ class HumanMatch:
     def reset(self, seed=None):
         """Starts a match; returns the agent's view (obs_dim floats)."""
         self._frames = []
+        if self.sound is not None:
+            self.sound.stop()
+            self.env.sound_events(0)  # the last match's
         self.env.reset(seed=seed)
+        if self.sound is not None:
+            self.sound.start_match(self.env.sound_events(0), int(self.env.info[0]['stage']))
         self.clock = Clock()
         total, ended = 0.0, False
         while not ended and not self._actionable():  # the intro, in real time
@@ -313,6 +475,9 @@ class HumanMatch:
         return self.results
 
     def close(self):
+        if self.sound is not None:
+            self.env.sound_log(False)
+            self.sound.stop()
         self.env.close()
         if self.window is not None:
             self.window.pygame.quit()

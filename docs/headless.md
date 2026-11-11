@@ -195,6 +195,7 @@ it; both are documented where they are declared. In short:
 | Matches | `set_matches(chars, stage, cpu, palettes, char_pool, stage_pool)`: fixed, or drawn for each match from pools (default every playable character, 0-21 and 23, and every stage) |
 | Save states | `save_state(i)` and `load_state(i, state)`: the whole game, a few MB. A state loads into any environment of any batch of the same process (the game's objects hold the addresses of their C++ classes' tables) |
 | Pictures | `drawing=True`, then `render(i)`: the last frame, 320×240 RGB |
+| Sounds | `sound_log()`, then `sound_events(i)`: what environment i's game played, stopped or set the volume of since the last call, each with its `.wav` (sound effects, voices, music); nothing plays in the library. Off by default (process-wide) and free then. A match from the cache asked for its music when it was first made: its stage's is `wave/bgm/bgm<stage + 10>.wav` |
 | Replays | `record(i, page, slot)`: environment i's next match is recorded as the replay menu's record item records one, into `replay/data<page>-<slot>.rep` in the save folder (`save_dir`, default the EFZ folder), which EFZ's REPLAY menu plays back. The match is built from its start (loading and intro) with the game writing the file; when it is won the game plays on through the end of the match and closes it, as after a match. Both players must be the program's: a replay doesn't hold the CPU's decisions. The fight settings of `key.ini` (damage, rounds) aren't in a replay: record with the ones the EFZ that plays it has (the defaults are the game's own: damage 100%, two rounds). `examples/record_replay.py` records two agents. `play(i, path)`: environment i's next match plays a `.rep` back, as the replay menu's play item does (the game's own, or EfzRevival's: its block after the game's part is left unread). The match is built from the replay's characters, stage and palettes; each step the replay's inputs play, whatever the actions, and `info['input']` holds them, `info['replay']` set. It ends when won (`terminated`, as the original was) or when the replay runs out (`truncated`: cut short, or a showcase that just stops). Played back this way, the community's netplay replays end as they did, frame for frame (`runs/human-ayu/dataset.py`) |
 | Inputs | `info['input']`: each player's control byte on the step's first frame as the game read it (forward/back with `relative_actions`): the actions given, a replay's, or the CPU's (its directions and presses). `efz_env.history` turns them into features of each player's last steps of input, which a policy acting every frame needs to carry a motion through (`EfzSB3VecEnv(history=...)`), and labels a replay's inputs as actions of an `ActionTable`. `history.Delay`: a reaction time, the game seen some steps late, the inputs at once (`EfzSB3VecEnv(delay=...)`, for every view it gives). `efz_env.agent.Agent` plays a trained model as it was trained (its `config.json`: `frame_skip`, `history`, `delay`), in `play.py`, `record_replay.py` and `runs/human-ayu/evaluate.py` |
 | Frameworks | below |
@@ -234,8 +235,12 @@ python python/examples/record_replay.py --data "$EFZ_DIR" --p1 runs/pbt/best.zip
 
 `train.py` writes the run's folder: `model.zip` and checkpoints, `config.json` (the
 frame skip and actions `play.py` uses the model with) and TensorBoard logs if
-tensorboard is installed. The window is the headless library's drawing, so it has no
-sound. Each match played is recorded as `<time>.npz` and `.json`: every frame's views of
+tensorboard is installed. The window is the headless library's drawing, with the game's
+sounds and music (`--volume`, `--no-sound`): the library plays none, but with
+`sound_log()` it keeps each sound slot's plays, stops and volumes and the file each is
+of (`sound_events(i)`; C: `efz_env_sound_log`, `efz_env_sound_events`), and `human.py`
+plays them through pygame's mixer as the SDL3 game does (port/sound.cpp: the effects
+and voices at -500, the music looping at its cue points). Each match played is recorded as `<time>.npz` and `.json`: every frame's views of
 both players, the bytes both sent, your controls as on screen and the agent's choices,
 and the rewards; data for cloning the human side or for the agent's own learning later.
 Learning from your matches is slow (one match at the game's speed, against thousands a

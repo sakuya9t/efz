@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 5
+#define EFZ_ENV_VERSION 6
 
 /* What a step does when a match ends (EfzEnvConfig.autoreset). */
 #define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
@@ -223,6 +223,23 @@ EFZ_ENV_API int efz_env_load_state(EfzEnv* env, int32_t index, const void* state
 /* The frame last drawn by an environment, as EFZ_FRAME_WIDTH x EFZ_FRAME_HEIGHT RGB
  * triples. Needs config.drawing; returns 0 otherwise. */
 EFZ_ENV_API int efz_env_render(EfzEnv* env, int32_t index, uint8_t* rgb);
+
+/* The sounds the games asked for, for a program that plays them (the library plays none).
+ * efz_env_sound_log turns the log on (1) or off (0) for every batch of the process; it
+ * is off by default and costs nothing then. efz_env_sound_events moves up to `max` of an
+ * environment's events, oldest first, into `out` and returns how many; it keeps its last
+ * 256 until they are taken. A play restarts its slot; the sound effects and voices play
+ * at -500 (SetVolume after loading them), the music at 0 until a volume event for it. */
+typedef struct EfzSoundEvent {
+    int32_t kind;   /* 0 play, 1 stop, 2 volume */
+    int32_t slot;   /* the sound slot */
+    int32_t value;  /* play: 1 when it loops; volume: hundredths of a decibel (-10000 silent) */
+    char file[48];  /* the .wav relative to the data folder ("wave\se\05.wav",
+                       "ayu\wave\12.wav", "wave\bgm\bgm23.wav"); "" if not known */
+} EfzSoundEvent;
+EFZ_ENV_API void efz_env_sound_log(int32_t on);
+EFZ_ENV_API int32_t efz_env_sound_events(EfzEnv* env, int32_t index, EfzSoundEvent* out,
+                                         int32_t max);
 
 /* Ticks of the simulation run by this batch so far (three per frame). */
 EFZ_ENV_API uint64_t efz_env_ticks(const EfzEnv* env);

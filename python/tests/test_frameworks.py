@@ -212,6 +212,37 @@ class Playback(unittest.TestCase):
         env.close()
 
 
+class Sounds(unittest.TestCase):
+    def test_sound_events(self):
+        env = EfzVecEnv(DATA, 1, num_threads=1, frame_skip=1, skip_noninteractive=False,
+                        autoreset='disabled')
+        env.set_matches(chars=('ayu', 'kanna'), stage=13)
+        try:
+            env.sound_log(True)
+            env.reset()  # made from the start: its music asked for
+            first = env.sound_events(0)
+            music = [e for e in first if e[0] == 'play' and e[3].startswith('wave/bgm/')]
+            self.assertEqual([(e[2], e[3]) for e in music], [(1, 'wave/bgm/bgm23.wav')])
+            self.assertEqual(env.sound_events(0), [])  # taken
+            env.reset()  # from the cache: no music asked for
+            self.assertEqual(env.sound_events(0), [])
+            rng = np.random.default_rng(0)
+            played = []
+            for _ in range(600):
+                env.step(rng.integers(0, 256, size=(1, 2), dtype=np.uint8))
+                played += [e for e in env.sound_events(0) if e[0] == 'play']
+            self.assertTrue(played)
+            for _, _, _, f in played:  # sound effects and voices, each a file of the game
+                self.assertTrue(f.startswith(('wave/se/', 'ayu/wave/', 'kanna/wave/')), f)
+                self.assertTrue(os.path.isfile(os.path.join(DATA, f)), f)
+            env.sound_log(False)
+            env.step(rng.integers(0, 256, size=(1, 2), dtype=np.uint8))
+            self.assertEqual(env.sound_events(0), [])
+        finally:
+            env.sound_log(False)
+            env.close()
+
+
 class Seeding(unittest.TestCase):
     def rollout(self, env, seed, steps=150):
         rng = np.random.default_rng(0)

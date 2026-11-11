@@ -49,6 +49,21 @@ bool FrameRGB(uint8_t* out, int* width, int* height);
 // The game's messages (MessageBox) go to stderr; set false to keep them quiet.
 void SetMessages(bool show);
 
+// The sounds a game asked for, for a program that plays them itself (efz_env_sound_events):
+// nothing plays here, but while the log is on (for every game of the process, off by
+// default) each Play, Stop and SetVolume of a game is kept, with the file it is of.
+enum SoundKind { kSoundPlay, kSoundStop, kSoundVolume };
+struct SoundEvent {
+    int32_t kind;   // SoundKind
+    int32_t slot;   // the sound slot (CSound's ID)
+    int32_t value;  // play: 1 when it loops; volume: hundredths of a decibel
+    char file[48];  // the .wav, relative to the game's folder, or "" if not known
+};
+void SetSoundLog(bool on);
+// Moves up to `max` events of the bound arena's game, oldest first, into `out`; returns
+// how many. A game keeps its last 256 until they are taken.
+int TakeSoundEvents(SoundEvent* out, int max);
+
 } // namespace headless
 } // namespace efz
 

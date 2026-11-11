@@ -11,10 +11,14 @@
 //   IDs are the same, but nothing is loaded beyond the .wav header and nothing plays.
 // - The log (port/log.h): warnings and worse go to stderr; there is no session folder,
 //   fight record or crash report, which are the SDL3 game's (docs/logging.md).
+#include <atomic>
+#include <deque>
+#include <mutex>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unordered_map>
 
 #include "efz.h"
 #include "headless.h"
@@ -170,6 +174,113 @@ void RunFrame()
         Sound()->UpdateLoop(game->m_music);
         scene = s->Update();
     }
+}
+
+// --- The sound log.
+
+void LogSound(int kind, WORD id, int value);
+void SetMusicPath(const char* path);
+
+namespace {
+
+std::atomic<bool> g_soundLog{false};
+std::mutex g_soundLock;
+// Each arena's events; made on first use and never freed (outlives every arena).
+std::unordered_map<char*, std::deque<SoundEvent>>* g_soundEvents;
+// The path LoadLoop was given last on this thread: CGame::PlayMusic's, which plays it
+// next.
+EFZ_THREAD_LOCAL char g_musicPath[48];
+
+// The file a slot holds, from the game's own tables: its sound effects, the players'
+// voices and the music.
+void SlotFile(WORD id, char* out, size_t size)
+{
+    out[0] = 0;
+    CGame* game = G()->root[kRootGame] ? Game() : nullptr;
+    if (!game || id >= 0x96)
+        return;
+    if (id == game->m_music) {
+        // Its path is known when it starts (PlayMusic: LoadLoop, then Play); otherwise
+        // only that it is the music.
+        snprintf(out, size, "%s", g_musicPath[0] ? g_musicPath : "wave\\bgm\\");
+        return;
+    }
+    for (int j = 0; j < 0x41; j++) {
+        if (game->m_sounds[j] == id) {
+            snprintf(out, size, "wave\\se\\%02d.wav", j);
+            return;
+        }
+    }
+    PTR32(CPlayer)* players = G()->root[kRootPlayers] ? Players() : nullptr;
+    for (int side = 0; players && side < 2; side++) {
+        CPlayer* p = players[side];
+        if (!p)
+            continue;
+        for (int i = 0; i < 0x32; i++) {
+            if (p->m_voices[i] == (short)id) {
+                char name[0x11];
+                memcpy(name, p->m_name, 0x10);
+                name[0x10] = 0;
+                snprintf(out, size, "%s\\wave\\%02d.wav", name, i);
+                return;
+            }
+        }
+    }
+}
+
+} // namespace
+
+void SetSoundLog(bool on)
+{
+    g_soundLog = on;
+}
+
+void LogSound(int kind, WORD id, int value)
+{
+    if (!g_soundLog || id >= 0x96)
+        return;
+    SoundEvent e;
+    e.kind = kind;
+    e.slot = id;
+    e.value = value;
+    SlotFile(id, e.file, sizeof(e.file));
+    char* arena = g_arena;
+    BindArena(nullptr); // the containers are the process's, not the game's
+    {
+        std::lock_guard<std::mutex> lock(g_soundLock);
+        if (!g_soundEvents)
+            g_soundEvents = new std::unordered_map<char*, std::deque<SoundEvent>>;
+        std::deque<SoundEvent>& q = (*g_soundEvents)[arena];
+        q.push_back(e);
+        if (q.size() > 256)
+            q.pop_front();
+    }
+    BindArena(arena);
+}
+
+int TakeSoundEvents(SoundEvent* out, int max)
+{
+    char* arena = g_arena;
+    int n = 0;
+    BindArena(nullptr);
+    {
+        std::lock_guard<std::mutex> lock(g_soundLock);
+        if (g_soundEvents) {
+            auto it = g_soundEvents->find(arena);
+            for (; it != g_soundEvents->end() && n < max && !it->second.empty(); n++) {
+                out[n] = it->second.front();
+                it->second.pop_front();
+            }
+        }
+    }
+    BindArena(arena);
+    return n;
+}
+
+void SetMusicPath(const char* path)
+{
+    if (g_soundLog)
+        snprintf(g_musicPath, sizeof(g_musicPath), "%s", path);
 }
 
 } // namespace headless
@@ -360,12 +471,14 @@ WORD CSound::FindFreeSlot()
     return i;
 }
 
-void CSound::Stop(WORD)
+void CSound::Stop(WORD id)
 {
+    efz::headless::LogSound(efz::headless::kSoundStop, id, 0);
 }
 
-void CSound::Play(WORD, BOOL)
+void CSound::Play(WORD id, BOOL loop)
 {
+    efz::headless::LogSound(efz::headless::kSoundPlay, id, loop ? 1 : 0);
 }
 
 void CSound::Release(WORD id)
@@ -433,6 +546,7 @@ void CSound::LoadLoop(const char* name)
     DWORD len = 0;
     DWORD dw;
 
+    efz::headless::SetMusicPath(name);
     memset(buf, 0, sizeof(buf));
     HANDLE h = CreateFile(name, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (h == INVALID_HANDLE_VALUE || GetFileSize(h, NULL) == 0) {
@@ -460,6 +574,7 @@ void CSound::UpdateLoop(WORD)
 {
 }
 
-void CSound::SetVolume(WORD, int)
+void CSound::SetVolume(WORD id, int volume)
 {
+    efz::headless::LogSound(efz::headless::kSoundVolume, id, volume);
 }
