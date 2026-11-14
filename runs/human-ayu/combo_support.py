@@ -343,7 +343,8 @@ class LiveRoutes:
         """match: the HumanMatch; matches: set_matches's arguments, as it was given them."""
         env = match.env
         config = {k: int(getattr(env.config, k)) for k in
-                  ('max_frames', 'rounds_to_win', 'cpu_level', 'damage_level')}
+                  ('max_frames', 'rounds_to_win', 'cpu_level', 'damage_level',
+                   'first_intro')}  # (the copy starts where the match does)
         self.conn, child = self.mp.Pipe()
         self.worker = self.mp.Process(
             target=_live_worker, daemon=True,

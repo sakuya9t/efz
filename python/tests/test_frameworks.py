@@ -263,6 +263,42 @@ class Seeding(unittest.TestCase):
         env.close()
 
 
+class FirstIntro(unittest.TestCase):
+    def test_the_first_rounds_intro(self):
+        # With first_intro the match starts before its first round's intro, which plays
+        # with the frame count held at 0; then it is the game it is without first_intro.
+        zero = np.zeros((1, 2), np.uint8)
+        controls = np.random.default_rng(0).integers(0, 256, (300, 1, 2), dtype=np.uint8)
+        games, openings = [], []
+        for first_intro in (False, True):
+            env = EfzVecEnv(DATA, 1, num_threads=1, skip_noninteractive=False,
+                            autoreset='disabled', first_intro=first_intro)
+            env.set_matches(chars=('ayu', 'mai'), stage=0)
+            intro = env.observation_names.index('intro')
+            env.reset(seed=3)
+            opening = 0
+            while env.obs[0, 0, intro] and opening < 1000:
+                self.assertEqual(env.info[0]['frame'], 0)
+                env.step(zero)
+                opening += 1
+            self.assertEqual(env.info[0]['frame'], 0)
+            openings.append(opening)
+            games.append([env.obs.copy()] + [env.step(c)[0].copy() for c in controls])
+            self.assertEqual(env.info[0]['frame'], len(controls))
+            env.close()
+        self.assertEqual(openings[0], 0)
+        self.assertGreater(openings[1], 200)  # ROUND 1, GET READY?, ATTACK!!
+        np.testing.assert_array_equal(np.stack(games[0]), np.stack(games[1]))
+        # Run through within a step as the other intros are.
+        env = EfzVecEnv(DATA, 1, num_threads=1, first_intro=True)
+        env.set_matches(chars=('ayu', 'mai'), stage=0)
+        intro = env.observation_names.index('intro')
+        self.assertEqual(env.reset(seed=3)[0, 0, intro], 1)
+        self.assertEqual(env.step(zero)[0][0, 0, intro], 0)
+        self.assertEqual(env.info[0]['frame'], 0)
+        env.close()
+
+
 try:
     import gymnasium
 except ImportError:

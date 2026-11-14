@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 6
+#define EFZ_ENV_VERSION 7
 
 /* What a step does when a match ends (EfzEnvConfig.autoreset). */
 #define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
@@ -89,7 +89,12 @@ typedef struct EfzEnvConfig {
     uint64_t seed;              /* draws characters and stages, and seeds each match's rand */
     int32_t autoreset;          /* EFZ_AUTORESET_*: what a step does when a match ends;
                                    EFZ_AUTORESET_SAME_STEP */
-    int32_t reserved;
+    int32_t first_intro;        /* a match starts at the fight scene's start, before its
+                                   first round's intro, as the game shows it (to be watched,
+                                   with skip_noninteractive 0); the intro's frames don't
+                                   count in its frames (EfzInfo.frame, max_frames). 0: just
+                                   after the intro (it is run through once, when the match
+                                   is first made); 0 */
 } EfzEnvConfig;
 
 /* What an environment plays. Character and stage numbers -1 are drawn anew for each
@@ -106,7 +111,7 @@ typedef struct EfzMatch {
 
 /* Per environment, after each step and reset. */
 typedef struct EfzInfo {
-    int32_t frame;          /* frames into the match */
+    int32_t frame;          /* frames into the match (with first_intro: since its intro) */
     int32_t episode;        /* matches this environment has started */
     int16_t hp[2];          /* 0-9999 */
     int16_t gauge[2];       /* 0-3000 */

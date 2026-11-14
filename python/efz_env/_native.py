@@ -10,7 +10,7 @@ import glob
 import os
 import sys
 
-VERSION = 6
+VERSION = 7
 
 # EfzEnvConfig.autoreset
 AUTORESET_SAME_STEP = 0
@@ -43,7 +43,7 @@ class Config(ctypes.Structure):
         ('reward_match', ctypes.c_float),
         ('seed', ctypes.c_uint64),
         ('autoreset', ctypes.c_int32),
-        ('reserved', ctypes.c_int32),
+        ('first_intro', ctypes.c_int32),
     ]
 
 

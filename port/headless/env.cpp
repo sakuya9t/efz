@@ -8,7 +8,8 @@
 // asked for, a game is set up for it as the menus would and played through scene 2
 // (the loading) and the intro, and its arena saved (Snapshot); after that, starting
 // that match is copying the bytes back (LoadArena). A batch keeps the last cache_size
-// of these.
+// of these. With first_intro the copy is saved at the fight scene's start instead, and
+// the match plays its intro from there.
 //
 // Nothing here allocates while an arena is bound, except through Unbound: operator new
 // takes from the bound arena (arena.cpp), which must hold the game alone.
@@ -387,6 +388,7 @@ struct Episode {
     int32_t episode;
     int32_t prevHp[2];
     int8_t prevRounds[2];
+    int8_t opening; // first_intro: the first round's intro is playing; frame stays 0
     float ret[2];
     uint64_t rng;
 };
@@ -494,11 +496,13 @@ struct Build {
 };
 
 // Sets up the bound arena's game for `m` (a copy of env->init) and plays it through the
-// loading and the intro, as the menus would have started it: VS on the replay menu's
-// footing (mode 5, no replay), which keeps records and replays unwritten. With a page and
-// slot (1-9), as the replay menu's record item: the game writes the match's replay there
-// from the loading on. With a replay file, as its play item: the loader reads the
-// characters, stage and palettes from it (the same as m's), and the game its inputs.
+// loading and the intro (with first_intro: the loading and the fight scene's first frame,
+// its fade-in, the intro just begun), as the menus would have started it: VS on the
+// replay menu's footing (mode 5, no replay), which keeps records and replays unwritten.
+// With a page and slot (1-9), as the replay menu's record item: the game writes the
+// match's replay there from the loading on. With a replay file, as its play item: the
+// loader reads the characters, stage and palettes from it (the same as m's), and the game
+// its inputs.
 bool BuildMatch(EfzEnv* env, const Match& m, const Build& how = Build(), unsigned seed = 1)
 {
     env->init.Load();
@@ -552,7 +556,10 @@ bool BuildMatch(EfzEnv* env, const Match& m, const Build& how = Build(), unsigne
         }
         if (QuitRequested() || (SceneIndex() != 2 && SceneIndex() != 3))
             break;
-        if (Actionable()) {
+        // first_intro: the fight scene's first frame (CScene3::Update's m_enter, which
+        // takes the players and fades in) is run, its intro just begun.
+        bool fightStarted = SceneIndex() == 3 && Fight()->m_enter == 0;
+        if (cfg.first_intro ? fightStarted : Actionable()) {
             ok = true;
             break;
         }
@@ -658,6 +665,7 @@ bool StartMatch(EfzEnv* env, Slot& s)
     s.ep.episode++;
     s.ep.prevHp[0] = s.ep.prevHp[1] = 9999;
     s.ep.prevRounds[0] = s.ep.prevRounds[1] = 0;
+    s.ep.opening = !Actionable(); // first_intro
     s.ep.ret[0] = s.ep.ret[1] = 0;
     s.input[0] = s.input[1] = 0;
     s.started = true;
@@ -773,9 +781,14 @@ int Frame(EfzEnv* env, Slot& s, const uint8_t* act, float* reward)
     }
     RunFrame();
     env->ticks.fetch_add(fight->m_speed, std::memory_order_relaxed);
-    s.ep.frame++;
+    if (!s.ep.opening)
+        s.ep.frame++;
     if (SceneIndex() != 3)
         return -2;
+    // The intro first_intro showed is over: the match's frame 0, where it would have
+    // started without it.
+    if (s.ep.opening && Actionable())
+        s.ep.opening = 0;
     if (!s.inputTaken) {
         s.inputTaken = true;
         for (int p = 0; p < 2; p++)

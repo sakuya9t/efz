@@ -114,7 +114,10 @@ reference's log in all 254.
   (scene 2) and the intro, and saved; it is 5.5 MB (61 MB drawing). Starting that match
   again is copying it back. A batch keeps `cache_size` such matches (least recently used
   dropped). After the copy each match gets a `rand` seed of its own, so the CPU and the
-  effects differ from match to match.
+  effects differ from match to match. With `first_intro` the copy is saved at the fight
+  scene's start instead (its first frame, the fade-in, run), so that each match plays
+  its first round's intro as the game shows it; `play.py` starts its matches so. The
+  intro's frames don't count in the match's (`info['frame']`, `max_frames`).
 - **One pool of threads.** Each step is a job of one item per environment on a pool
   shared by every batch of the process; the calling thread helps. Its workers spin
   briefly between jobs, so steps coming back to back find them awake.
@@ -235,7 +238,8 @@ python python/examples/record_replay.py --data "$EFZ_DIR" --p1 runs/pbt/best.zip
 
 `train.py` writes the run's folder: `model.zip` and checkpoints, `config.json` (the
 frame skip and actions `play.py` uses the model with) and TensorBoard logs if
-tensorboard is installed. The window is the headless library's drawing, with the game's
+tensorboard is installed. A match starts as the game's do, with the first round's intro
+(`first_intro`). The window is the headless library's drawing, with the game's
 sounds and music (`--volume`, `--no-sound`): the library plays none, but with
 `sound_log()` it keeps each sound slot's plays, stops and volumes and the file each is
 of (`sound_events(i)`; C: `efz_env_sound_log`, `efz_env_sound_events`), and `human.py`

@@ -292,7 +292,8 @@ class HumanMatch:
     """Matches in a window: the human plays player `human` (0 or 1), the other side is
     an agent (agent_step's action every frame_skip frames) or the game's CPU
     (opponent='cpu'). Steps through intros and KOs as training's skip_noninteractive
-    does, frame by frame, in real time.
+    does, frame by frame, in real time: a match starts before its first round's intro
+    (the library's first_intro), as the game's do, unless first_intro=False.
 
     controls: anything with screen_bits() (default: Controls(keys)); window: a Window,
     or None to run without one (tests, or a program that draws itself). sound: the
@@ -303,7 +304,7 @@ class HumanMatch:
                  stage=None, char_pool=None, stage_pool=None, frame_skip=4,
                  action_table=None, record_dir='recordings', agent_name='', keys=None,
                  scale=3, window=True, controls=None, realtime=True, result_seconds=2.0,
-                 sound=True, volume=1.0, **config):
+                 sound=True, volume=1.0, first_intro=True, **config):
         if human not in (0, 1):
             raise ValueError('human: 0 (player 1) or 1 (player 2)')
         if opponent not in ('agent', 'cpu'):
@@ -320,7 +321,8 @@ class HumanMatch:
             config.pop(key, None)
         config.setdefault('num_threads', 1)
         self.env = EfzVecEnv(data_dir, 1, frame_skip=1, skip_noninteractive=False,
-                             drawing=True, autoreset='disabled', **config)
+                             drawing=True, autoreset='disabled', first_intro=first_intro,
+                             **config)
         cpu = [False, False]
         cpu[self.side] = opponent == 'cpu'
         self.env.set_matches(chars=chars, stage=stage, cpu=tuple(cpu), char_pool=char_pool,

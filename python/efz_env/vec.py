@@ -89,13 +89,17 @@ class EfzVecEnv:
         'disabled' (the environment stays ended until reset(mask) starts it again).
     save_dir: where the game writes files (replays: record()); default the data folder,
         where EFZ's replay menu reads them. For the whole process, as data_dir is.
+    first_intro: a match starts at the fight scene's start, before its first round's
+        intro, as the game shows it (to be watched: with skip_noninteractive=False; with
+        it the first step runs through the intro), not just after it. The intro's frames
+        don't count in the match's (info['frame'], max_frames).
     """
 
     def __init__(self, data_dir=None, num_envs=64, *, num_threads=0, frame_skip=1,
                  max_frames=0, rounds_to_win=2, cpu_level=2, damage_level=2,
                  skip_noninteractive=True, relative_actions=True, drawing=False,
                  cache_size=64, reward_damage=1.0, reward_round=0.0, reward_match=1.0,
-                 seed=0, autoreset='same_step', save_dir=None):
+                 seed=0, autoreset='same_step', save_dir=None, first_intro=False):
         if autoreset not in AUTORESET:
             raise ValueError(f'autoreset must be one of {sorted(AUTORESET)}')
         data_dir = data_dir or os.environ.get('EFZ_DATA') or os.environ.get('EFZ_DIR')
@@ -112,7 +116,8 @@ class EfzVecEnv:
                                 relative_actions=int(relative_actions), drawing=int(drawing),
                                 cache_size=cache_size, reward_damage=reward_damage,
                                 reward_round=reward_round, reward_match=reward_match,
-                                seed=seed, autoreset=AUTORESET[autoreset]).items():
+                                seed=seed, autoreset=AUTORESET[autoreset],
+                                first_intro=int(first_intro)).items():
             setattr(cfg, name, value)
         self.config = cfg
         error = ctypes.create_string_buffer(512)
