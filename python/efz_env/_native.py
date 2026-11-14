@@ -10,7 +10,7 @@ import glob
 import os
 import sys
 
-VERSION = 5
+VERSION = 6
 
 # EfzEnvConfig.autoreset
 AUTORESET_SAME_STEP = 0
@@ -89,6 +89,15 @@ class Buffers(ctypes.Structure):
     ]
 
 
+class SoundEvent(ctypes.Structure):
+    _fields_ = [
+        ('kind', ctypes.c_int32),
+        ('slot', ctypes.c_int32),
+        ('value', ctypes.c_int32),
+        ('file', ctypes.c_char * 48),
+    ]
+
+
 def _candidates():
     env = os.environ.get('EFZ_ENV_LIBRARY')
     if env:
@@ -133,6 +142,8 @@ def _bind(lib):
         'efz_env_load_state': (ctypes.c_int, [P, ctypes.c_int32, P, ctypes.c_size_t]),
         'efz_env_render': (ctypes.c_int, [P, ctypes.c_int32, P]),
         'efz_env_ticks': (ctypes.c_uint64, [P]),
+        'efz_env_sound_log': (None, [ctypes.c_int32]),
+        'efz_env_sound_events': (ctypes.c_int32, [P, ctypes.c_int32, P, ctypes.c_int32]),
         'efz_env_error': (ctypes.c_char_p, [P]),
     }
     for name, (restype, argtypes) in sig.items():

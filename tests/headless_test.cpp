@@ -243,6 +243,7 @@ void TestApi()
     CHECK(sizeof(EfzMatch) == 20);
     CHECK(sizeof(EfzInfo) == 36);
     CHECK(sizeof(EfzBuffers) == 6 * sizeof(void*));
+    CHECK(sizeof(EfzSoundEvent) == 60);
     CHECK(efz_env_version() == EFZ_ENV_VERSION);
     int dim = efz_env_obs_dim();
     CHECK(dim == 168);

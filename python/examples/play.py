@@ -46,6 +46,8 @@ def main():
     p.add_argument('--record', default='recordings')
     p.add_argument('--keys', help='JSON of key names: {"A": "a", "up": "w", ...}')
     p.add_argument('--scale', type=int, default=3)
+    p.add_argument('--volume', type=float, default=1.0, help='sounds and music, 0-1')
+    p.add_argument('--no-sound', action='store_true')
     p.add_argument('--assist', metavar='LIBRARY',
                    help="the agent's combos from the built-in routes of this library")
     p.add_argument('--assist-victims', nargs='+', metavar='CHAR',
@@ -86,7 +88,8 @@ def main():
                        ' (chooser)' * bool(args.chooser) if args.agent
                        else f'cpu-{args.cpu_level}', scale=args.scale,
                        keys=json.loads(args.keys) if args.keys else None,
-                       cpu_level=args.cpu_level, rounds_to_win=args.rounds)
+                       cpu_level=args.cpu_level, rounds_to_win=args.rounds,
+                       sound=not args.no_sound, volume=args.volume)
     if routes:  # (its planner follows the match: what set_matches was given)
         routes.attach(match, chars=chars, stage=args.stage, cpu=(False, False))
         policy = routes

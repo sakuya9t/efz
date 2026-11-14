@@ -1496,6 +1496,24 @@ int efz_env_render(EfzEnv* env, int32_t index, uint8_t* rgb)
     return 1;
 }
 
+void efz_env_sound_log(int32_t on)
+{
+    SetSoundLog(on != 0);
+}
+
+int32_t efz_env_sound_events(EfzEnv* env, int32_t index, EfzSoundEvent* out, int32_t max)
+{
+    static_assert(sizeof(EfzSoundEvent) == sizeof(SoundEvent), "EfzSoundEvent");
+    if (!env || index < 0 || index >= env->n || !out || max <= 0)
+        return 0;
+    BindArena(nullptr);
+    Finish(env);
+    BindArena(env->slots[index].arena);
+    int n = TakeSoundEvents((SoundEvent*)out, max);
+    BindArena(nullptr);
+    return n;
+}
+
 uint64_t efz_env_ticks(const EfzEnv* env)
 {
     return env ? env->ticks.load() : 0;
