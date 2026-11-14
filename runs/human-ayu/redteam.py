@@ -50,10 +50,8 @@ REWARD_PER_HP = 1 / 9999  # the match's reward (efz_env's): damage per full bar
 def critic(model):
     """views (batch) -> `model`'s value of them: a copy of its critic as it is now."""
     import torch
-    source = model.policy
-    policy = type(source)(**source._get_constructor_parameters()).to(source.device)
-    policy.load_state_dict(source.state_dict())
-    policy.set_training_mode(False)
+    from efz_env.sb3 import copy_policy
+    policy = copy_policy(model.policy)
     width = policy.observation_space.shape[0]
 
     def value(obs):
@@ -61,6 +59,17 @@ def critic(model):
             t = torch.as_tensor(np.asarray(obs, np.float32)[:, :width], device=policy.device)
             return policy.predict_values(t).cpu().numpy().ravel()
     return value
+
+
+def route_pool(by_starter, starter, victim, offset, per_start):
+    """The library combos tried from a hit of `starter`: of those long enough to be played
+    from their step `offset`, the first per_start (each starter's list is by damage); with
+    a victim (a library kept per victim), the combos landed on that character first."""
+    pool = by_starter.get(starter, [])
+    if victim is not None:
+        pool = ([m for m in pool if m.get('opponent') == victim] +
+                [m for m in pool if m.get('opponent') != victim])
+    return [m for m in pool if len(m['actions']) > offset][:per_start]
 
 
 class Planner:
@@ -112,13 +121,12 @@ class Planner:
         library combo from offset, or None for its own play; the most an option made;
         what its own play made)."""
         sim = self.sim
-        pool = self.by_starter.get(starter, [])
-        if self.by_victim:  # (each list is by damage: the victim's first, then the rest)
+        victim = None
+        if self.by_victim:
             sim.load_state(0, state)
             victim = self.names[int(round(float(sim.obs[0, side, OPP_CHARACTER])))]
-            pool = ([m for m in pool if m.get('opponent') == victim] +
-                    [m for m in pool if m.get('opponent') != victim])
-        cands = [m['actions'][offset:] for m in pool if len(m['actions']) > offset][:self.per_start]
+        picked = route_pool(self.by_starter, starter, victim, offset, self.per_start)
+        cands = [m['actions'][offset:] for m in picked]
         n = len(cands) + 1  # the last: its own play
         delayed = None if seen is None else np.array(seen, np.float32)  # newest first
         hp0 = np.zeros(n)
@@ -181,6 +189,8 @@ class Planner:
             worth = dealt
         best = int(np.argmax(worth))
         chosen = cands[best] if best < len(cands) and worth[best] > worth[-1] else None
+        # (the plan as tried, for combo_net.py: the combos, what each and its own play dealt)
+        self.last = dict(picked=picked, dealt=dealt[:n].copy())
         if track and best != int(np.argmax(dealt)):
             self.changed += 1
         return chosen, float(dealt.max()), float(dealt[-1])

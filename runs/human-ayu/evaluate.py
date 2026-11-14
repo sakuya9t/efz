@@ -591,6 +591,9 @@ def main():
                                           "rg=0.5,reversal=0.8,throw=0.3,damage=2,bait=0.5")
     p.add_argument('--p1-combo', help="combo_support.ComboSwitch: P1's combos played by this "
                                       "model (combo.py's combo master)")
+    p.add_argument('--p1-combo-deterministic', action='store_true',
+                   help="--p1-combo's likeliest action (combo_net.py's network: a route "
+                        "learnt is played, not drawn from)")
     p.add_argument('--p1-confirm', default='seen', choices=('seen', 'now'),
                    help="--p1-combo takes over once P1 sees its hit (its delay) or at once")
     p.add_argument('--p1-lookahead', help="combo_support.lookahead: P1's routes tried on copies "
@@ -603,6 +606,11 @@ def main():
     p.add_argument('--assist-score', default='damage', choices=('damage', 'value'),
                    help="--p1-assist's choice: the most damaging option, or the most worth to "
                         "P1 (damage plus its critic's value of the game it left: redteam.Planner)")
+    p.add_argument('--assist-chooser', metavar='CHOOSER.pt',
+                   help="--p1-assist's choice by combo_net.py's chooser (from P1's view when "
+                        "it sees its hit) instead of on copies of the game")
+    p.add_argument('--assist-margin', type=float, default=200.0,
+                   help="--assist-chooser: the HP a combo must promise over P1's own play")
     args = p.parse_args()
     p1 = make_agent(args.p1, args.deterministic, args.p1_delay)
     if sum(bool(x) for x in (args.p1_combo, args.p1_lookahead, args.p1_assist)) > 1:
@@ -612,14 +620,21 @@ def main():
         if args.p1_assist:
             import macros
             import redteam
-            planner = redteam.Planner(args.data, macros.load_library(args.p1_assist), p1.model,
-                                      score=args.assist_score, victims=args.assist_victims)
+            if args.assist_chooser:  # (no copies of the game: the chooser says)
+                import combo_net
+                planner = combo_net.NetPlanner(combo_net.load_routes(args.p1_assist), p1.model,
+                                               args.assist_chooser, margin=args.assist_margin)
+            else:
+                planner = redteam.Planner(args.data, macros.load_library(args.p1_assist),
+                                          p1.model, score=args.assist_score,
+                                          victims=args.assist_victims)
             p1 = combo_support.FairComboAgent(p1, planner)
         if args.p1_lookahead:
             p1 = combo_support.lookahead(args.data, args.p1, args.p1_lookahead)
         if args.p1_combo:
-            p1 = combo_support.ComboSwitch(p1, make_agent(args.p1_combo, args.deterministic),
-                                           args.p1_confirm)
+            p1 = combo_support.ComboSwitch(
+                p1, make_agent(args.p1_combo, args.deterministic or args.p1_combo_deterministic),
+                args.p1_confirm)
     p2 = 'cpu' if args.p2 == 'cpu' else make_agent(args.p2, args.deterministic)
     if args.p2_advantage:
         import advantages
@@ -645,7 +660,8 @@ def main():
         print('p2 advantage', json.dumps(out['p2_advantage']), flush=True)
     if args.p1_assist:  # its plans: how many, the share a route won, the damage options made
         out['assist'] = dict(p1.assist.take_plans(), score=args.assist_score,
-                             changed=planner.changed, victims=args.assist_victims)
+                             changed=planner.changed, victims=args.assist_victims,
+                             chooser=args.assist_chooser)
         print('assist', json.dumps(out['assist']), flush=True)
     if args.json:
         with open(args.json, 'w') as f:

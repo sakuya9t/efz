@@ -107,6 +107,16 @@ def parse():
     p.add_argument('--vs-bait', type=float, nargs='*', default=[],
                    help="and the share of the learner's knockdowns on which they guard its wake-up "
                         "instead of attacking it: its wake-up reversal guarded, then punished")
+    p.add_argument('--vs-patient', type=float, nargs='*', default=[],
+                   help="and the share of their guards' ends and their risings after which they hold "
+                        "a guard (crouching or standing, drawn) for 20 steps, pressing nothing "
+                        "(advantages.py patient: a person's defence, docs/training-v2.md)")
+    p.add_argument('--vs-wake', type=float, nargs='*', default=[],
+                   help="and the share of their risings on which they put out an invincible move "
+                        "as soon as the game takes it (advantages.py wake)")
+    p.add_argument('--vs-jumpin', type=float, nargs='*', default=[],
+                   help="and the share of the learner's knockdowns they jump in on, timed to its "
+                        "rise (advantages.py jumpin)")
     p.add_argument('--focus', choices=('setup', 'charge', 'reversal'),
                    help="a shaping reward (focus.py)")
     p.add_argument('--focus-coef', type=float, default=0.02)
@@ -196,6 +206,23 @@ def parse():
                         "only CPU trained against (--cpu-focus CHAR:1): kanna; best.zip then "
                         "counts the share of its HP taken, which moves where its wins don't"),
     p.add_argument('--lr', type=float, default=1e-4)
+    p.add_argument('--lr-end', type=float, default=None,
+                   help='the learning rate falls linearly from --lr to this over the run, from '
+                        "its start's steps to --budget (docs/training-v2.md: the spread of the "
+                        "chunks' wandering shrinks with the step)")
+    p.add_argument('--average', action='store_true',
+                   help="keep a running mean of the chunks' weights (avg.zip): it is what is "
+                        "evaluated after each chunk, best.zip and PFSP's shares come from it, it "
+                        "is the run's result; the learner trains on as before")
+    p.add_argument('--seed', type=int, default=0,
+                   help="torch's generator and the environments' seeds (a replicate run: the "
+                        "same command with another --seed); 0: as before")
+    p.add_argument('--n-steps', type=int, default=256, help="PPO's rollout, steps per environment")
+    p.add_argument('--eval-workers', type=int, default=1,
+                   help="the evaluation's pairings in this many processes (seeded: the same "
+                        "results as one after another); the red team's stays in this one")
+    p.add_argument('--eval-old', type=int, default=1,
+                   help='0: leave the curriculum agent (--old) out of the evaluations')
     p.add_argument('--ent-coef', type=float, default=0.005)
     p.add_argument('--torch-threads', type=int, default=8)
     args = p.parse_args()
@@ -216,7 +243,8 @@ def parse():
         p.error(f'--vs-damage: one value above 0, or one per --vs opponent ({len(args.vs)})')
     if len(args.vs_damage) == 1:
         args.vs_damage = args.vs_damage * len(args.vs)
-    for name in ('vs_rg', 'vs_reversal', 'vs_throw', 'vs_bait'):
+    for name in ('vs_rg', 'vs_reversal', 'vs_throw', 'vs_bait', 'vs_patient', 'vs_wake',
+                 'vs_jumpin'):
         v = getattr(args, name)
         if len(v) not in (0, 1, len(args.vs)) or any(not 0 <= x <= 1 for x in v):
             p.error(f"--{name.replace('_', '-')}: one share (0-1), or one per --vs opponent")
@@ -241,11 +269,12 @@ def vs_advantage(args, j):
     get = lambda v, default: v[j] if v else default
     return dict(rg=get(args.vs_rg, 0.0), reversal=get(args.vs_reversal, 0.0),
                 throw=get(args.vs_throw, 0.0), damage=get(args.vs_damage, 1.0),
-                bait=get(args.vs_bait, 0.0))
+                bait=get(args.vs_bait, 0.0), patient=get(args.vs_patient, 0.0),
+                wake=get(args.vs_wake, 0.0), jumpin=get(args.vs_jumpin, 0.0))
 
 
 def ppo_settings(args):
-    return dict(learning_rate=args.lr, n_steps=256, batch_size=8192, n_epochs=3,
+    return dict(learning_rate=args.lr, n_steps=args.n_steps, batch_size=8192, n_epochs=3,
                 gamma=0.999, gae_lambda=0.98, ent_coef=args.ent_coef, clip_range=0.1,
                 vf_coef=0.5, max_grad_norm=0.5)
 
@@ -475,30 +504,119 @@ class KLLog(BaseCallback):
         return True
 
 
+class TrainLog(BaseCallback):
+    """A chunk's PPO numbers (SB3 records them in train() and finetune.py never printed
+    them): the means over its updates of approx_kl, clip_fraction, entropy_loss,
+    value_loss, explained_variance, learning_rate; and its drift, how far the weights went
+    over the length of a random walk of its updates: |sum of steps| / sqrt(sum of |step|^2)
+    (1: as a random walk; more: a direction), with the mean cosine of consecutive steps."""
+    KEYS = ('approx_kl', 'clip_fraction', 'entropy_loss', 'value_loss', 'explained_variance',
+            'learning_rate', 'policy_gradient_loss')
+
+    def __init__(self):
+        super().__init__()
+        self.sums, self.n = {}, 0
+        self.first = self.last = self.prev_step = None
+        self.sq, self.cos, self.steps = 0.0, [], 0
+
+    def _flat(self):
+        return torch.cat([p.detach().reshape(-1) for p in self.model.policy.parameters()]).clone()
+
+    def _read(self):
+        values = self.model.logger.name_to_value
+        if 'train/approx_kl' not in values:
+            return
+        for k in self.KEYS:
+            if f'train/{k}' in values:
+                self.sums[k] = self.sums.get(k, 0.0) + float(values[f'train/{k}'])
+        self.n += 1
+        now = self._flat()
+        if self.last is not None:
+            step = now - self.last
+            self.sq += float(step.pow(2).sum())
+            if self.prev_step is not None:
+                self.cos.append(float(torch.nn.functional.cosine_similarity(step, self.prev_step, dim=0)))
+            self.prev_step = step
+            self.steps += 1
+        self.last = now
+
+    def _on_training_start(self):
+        self.first = self.last = self._flat()
+
+    def _on_rollout_start(self):
+        self._read()
+
+    def _on_training_end(self):
+        self._read()
+
+    def _on_step(self):
+        return True
+
+    def take(self):
+        out = {k: v / self.n for k, v in self.sums.items()} if self.n else {}
+        if self.steps and self.sq > 0:
+            out['updates'] = self.steps
+            out['moved'] = float((self.last - self.first).norm())
+            out['drift'] = out['moved'] / float(np.sqrt(self.sq))
+            out['step_cos'] = float(np.mean(self.cos)) if self.cos else None
+        return out
+
+
+class _Eval:
+    pass
+
+
+def _eval_one(job):
+    """One pairing of evaluate()'s in a worker process: (key, result)."""
+    key, data, minutes, chars, model_path, opponent, matches, level = job[:8]
+    torch.set_num_threads(1)
+    a = _Eval()
+    a.data, a.minutes, a.chars = data, minutes, chars
+    them = 'cpu' if opponent == 'cpu' else ev.Agent(opponent)
+    me = ev.Agent(model_path)
+    if len(job) > 8:  # --assist: with its built-in combos (the worker's own planner)
+        import combo_support
+        library, how = job[8:]
+        if 'planner' not in ASSIST:
+            import macros
+            import redteam
+            ASSIST['planner'] = redteam.Planner(data, macros.load_library(library), me.model,
+                                                score=how)
+        me = combo_support.FairComboAgent(me, ASSIST['planner'])
+    return key, ev.play(a, me, them, matches, level)
+
+
 def evaluate(args, model_path, level):
-    class A:
-        pass
-    a = A()
+    a = _Eval()
     a.data, a.minutes = args.data, args.minutes
     me = ev.Agent(model_path)
     if args.assist and not args.assist_distill:  # it plays with its built-in combos
         import combo_support
         me = combo_support.FairComboAgent(me, ASSIST['planner'])
     out = {}
-    a.chars = (args.char, args.cpu_chars if level == 4 or args.cpu_chars not in
-               ('tiers', 'random') else 'random')  # tiers: level 4's; one character: any
-    out['cpu'] = ev.play(a, me, 'cpu', args.eval, level)
-    out['cpu']['level'] = level
-    if args.old and os.path.exists(args.old):
-        a.chars = (args.char, 'ayu')
-        out['old'] = ev.play(a, me, ev.Agent(args.old), args.eval)
-    for j, (path, char) in enumerate(args.vs):
-        a.chars = (args.char, char)
-        them = ev.Agent(path)
-        if args.vs_assist:  # as it plays: with its built-in combos
-            import combo_support
-            them = combo_support.FairComboAgent(them, VS_ASSIST[j])
-        out[f'vs{j}'] = ev.play(a, me, them, args.eval)
+    cpu_chars = (args.char, args.cpu_chars if level == 4 or args.cpu_chars not in
+                 ('tiers', 'random') else 'random')  # tiers: level 4's; one character: any
+    jobs = [('cpu', cpu_chars, 'cpu', level)]
+    if args.old and os.path.exists(args.old) and args.eval_old:
+        jobs.append(('old', (args.char, 'ayu'), args.old, 4))
+    jobs += [(f'vs{j}', (args.char, char), path, 4) for j, (path, char) in enumerate(args.vs)]
+    pool = None
+    if args.eval_workers > 1 and not args.vs_assist and not (args.assist and
+                                                             args.assist_score == 'value'):
+        import multiprocessing as mp
+        pool = mp.get_context('spawn').Pool(min(args.eval_workers, len(jobs)))
+        routes = (args.assist, args.assist_score) if args.assist and not args.assist_distill \
+            else ()
+        pending = pool.map_async(_eval_one, [(k, args.data, args.minutes, c, model_path, o,
+                                              args.eval, lv) + routes for k, c, o, lv in jobs])
+    else:
+        for key, chars, opponent, lv in jobs:
+            a.chars = chars
+            them = 'cpu' if opponent == 'cpu' else ev.Agent(opponent)
+            if args.vs_assist and key.startswith('vs'):  # as it plays: its built-in combos
+                import combo_support
+                them = combo_support.FairComboAgent(them, VS_ASSIST[int(key[2:])])
+            out[key] = ev.play(a, me, them, args.eval, lv)
     if args.combo:
         a.chars = (args.char, args.char)
         red = RED['agent'] if RED else ev.Agent(args.combo)
@@ -511,6 +629,14 @@ def evaluate(args, model_path, level):
                 own=float(np.mean([p[1] for p in plans])) if plans else None,
                 library=float(np.mean([p[2] for p in plans])) if plans else None,
                 big=float(np.mean([p[0] >= 3000 for p in plans])) if plans else None)
+    if pool is not None:  # the workers' pairings, in their order (the red team's played meanwhile)
+        red = out.pop('red', None)
+        out.update(dict(pending.get()))
+        pool.close()
+        pool.join()
+        if red is not None:
+            out['red'] = red
+    out['cpu']['level'] = level
     return out
 
 
@@ -546,9 +672,12 @@ def main():
     if not args.data:
         sys.exit('pass --data, the folder of an EFZ 4.02 install (or set EFZ_DATA)')
     torch.set_num_threads(args.torch_threads)
+    if args.seed:
+        torch.manual_seed(args.seed)
     os.makedirs(args.out, exist_ok=True)
     state_path = os.path.join(args.out, 'finetune.json')
     history, start, level = [], args.start, args.level
+    saved = {}
     cpu_hp = args.cpu_chars not in ('tiers', 'random')  # best.zip: its HP taken, not wins
     if os.path.exists(state_path):
         with open(state_path) as f:
@@ -557,13 +686,15 @@ def main():
         start = os.path.join(args.out, 'model.zip')
         print(f'continuing {args.out} after chunk {len(history)}', flush=True)
     settings = ppo_settings(args)
+    seeds = lambda k: k + 1000 * args.seed  # chunk k's environments' seed
     with open(os.path.join(args.out, 'config.json'), 'w') as f:
         json.dump(dict(frame_skip=1, history=args.history, delay=args.delay,
                        delay_most=args.delay_most, chars=[args.char, None],
                        vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
                        vs_char_share=args.vs_char_share,
                        vs_damage=args.vs_damage, vs_rg=args.vs_rg, vs_reversal=args.vs_reversal,
-                       vs_throw=args.vs_throw, vs_bait=args.vs_bait,
+                       vs_throw=args.vs_throw, vs_bait=args.vs_bait, vs_patient=args.vs_patient,
+                       vs_wake=args.vs_wake, vs_jumpin=args.vs_jumpin,
                        vs_adv_share=args.vs_adv_share,
                        pfsp=args.pfsp, pfsp_window=args.pfsp_window, cpu_focus=args.cpu_focus,
                        focus=args.focus, focus_coef=args.focus_coef,
@@ -577,7 +708,8 @@ def main():
                        practice=args.practice, practice_starts=args.practice_starts,
                        practice_rich=args.practice_rich, practice_pool=args.practice_pool,
                        practice_limit=args.practice_limit, practice_scale=args.practice_scale,
-                       level=args.level, ppo=settings,
+                       level=args.level, ppo=settings, lr_end=args.lr_end, average=args.average,
+                       seed=args.seed, cpu_share=args.cpu_share,
                        actions=[TABLE.describe(i) for i in range(len(TABLE))]), f, indent=1)
     prior = PPO.load(args.prior, device='cpu')
     clone = frozen(prior)
@@ -606,10 +738,12 @@ def main():
             vs.append((combo_support.FairAssistOpponent(VS_ASSIST[-1], m), c))
     else:
         vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
-    if args.vs_reversal or args.vs_throw or args.vs_bait:  # their inputs' (advantages.py)
+    if (args.vs_reversal or args.vs_throw or args.vs_bait or args.vs_patient or args.vs_wake
+            or args.vs_jumpin):  # their inputs' (advantages.py)
         import advantages
-        inputs = lambda a: a['reversal'] or a['throw'] or a['bait']
-        vs = [(advantages.AdvantagedOpponent(o, c, vs_advantage(args, j), seed=j,
+        inputs = lambda a: (a['reversal'] or a['throw'] or a['bait'] or a['patient'] or a['wake']
+                            or a['jumpin'])
+        vs = [(advantages.AdvantagedOpponent(o, c, vs_advantage(args, j), seed=seeds(j),
                                              learner=args.char)
                if inputs(vs_advantage(args, j)) else o, c)
               for j, (o, c) in enumerate(vs)]
@@ -629,13 +763,30 @@ def main():
             pool = practice.StartPool.people(args.data, args.practice_starts, replays,
                                              limit=args.practice_pool)
             print(f"practice: {len(pool.starts)} of people's starts {pool.kinds()}", flush=True)
-    env = make_env(args, opponents(clone), vs, len(history), level, pool=pool)
+    env = make_env(args, opponents(clone), vs, seeds(len(history)), level, pool=pool)
     model = PPO.load(start, env=env, device='cpu', **settings)
     if args.assist:
         model.normalize_advantage = False  # AssistMask normalises, the routes' steps left out
     if args.prior_coef > 0:
         teacher = master.policy if master is not None and args.combo_teacher else None
         model.policy.set_prior(prior.policy, args.prior_coef, args.ent_coef, combo=teacher)
+    # --lr-end: the step falls linearly over the run, from its start's steps to --budget.
+    t0 = saved.get('start_steps')
+    if t0 is None:
+        t0 = model.num_timesteps if len(history) < 2 else history[1]['steps'] - int(args.chunk)
+    span = max(1.0, args.budget - t0)
+
+    def set_lr():  # each chunk's, at its middle (SB3's schedule is saved with the model)
+        if args.lr_end is not None:
+            frac = min(1.0, max(0.0, (model.num_timesteps + args.chunk / 2 - t0) / span))
+            model.learning_rate = args.lr + (args.lr_end - args.lr) * frac
+            model._setup_lr_schedule()
+    # --average: the running mean of the chunks' weights (avg.zip), what is evaluated.
+    avg_path = os.path.join(args.out, 'avg.zip')
+    avg_state, avg_n = None, saved.get('average_n', 0)
+    if args.average and avg_n and os.path.exists(avg_path):
+        avg_state = {k: v.clone() for k, v in
+                     PPO.load(avg_path, device='cpu').policy.state_dict().items()}
     assist_cb = AssistMask(args.assist_distill) if args.assist else None  # (the whole run's)
     print('starting from', start, flush=True)
     if not history:
@@ -654,20 +805,37 @@ def main():
             if args.assist_score == 'value':
                 import redteam
                 ASSIST['value'] = redteam.critic(model)
-        env = make_env(args, opponents(frozen(model)), vs, len(history) + 1, level, wins, pool)
+        env = make_env(args, opponents(frozen(model)), vs, seeds(len(history) + 1), level, wins,
+                       pool)
         model.set_env(env)
         if pool is not None and pool.growing and len(pool.starts) < 48:
             n = practice.fill(pool, env.matches, model, mask=env.mask)
             print(f'practice: {n} starts of its own to begin with {pool.kinds()}', flush=True)
         t = time.time()
-        callbacks = [KLLog()] + ([assist_cb] if args.assist else [])
+        train_log = TrainLog()
+        set_lr()
+        callbacks = [KLLog(), train_log] + ([assist_cb] if args.assist else [])
         model.learn(int(args.chunk), reset_num_timesteps=False, callback=callbacks)
         seconds = time.time() - t
         path = os.path.join(args.out, 'model.zip')
         model.save(path)
         model.save(os.path.join(args.out, f'chunk{len(history):03d}.zip'))
+        eval_path = path
+        if args.average:  # the running mean, with the learner's own weights put back after
+            cur = {k: v.detach().clone() for k, v in model.policy.state_dict().items()}
+            avg_n += 1
+            avg_state = cur if avg_state is None else {
+                k: avg_state[k] + (cur[k] - avg_state[k]) / avg_n if cur[k].is_floating_point()
+                else cur[k] for k in cur}
+            model.policy.load_state_dict(avg_state)
+            model.save(avg_path)
+            model.policy.load_state_dict(cur)
+            eval_path = avg_path
         due = len(history) % args.eval_every == 0 or model.num_timesteps >= args.budget
-        results = evaluate(args, path, level) if due else None
+        t_eval = time.time()
+        results = evaluate(args, eval_path, level) if due else None
+        eval_seconds = time.time() - t_eval
+        ppo = train_log.take()
         returns = [e['r'] for e in model.ep_info_buffer]
         focus = env.take() if args.focus else None  # the focus' events, a minute of play
         focus_rate = focus['events'] / max(1, focus['steps']) * 3840 if focus else None
@@ -689,18 +857,25 @@ def main():
             worth = score(results, len(args.vs), cpu_hp)
             best = max((h.get('score', -1) for h in history), default=-1)
             if worth > best:
-                model.save(os.path.join(args.out, 'best.zip'))
-                print(f'best so far ({worth:.3f}): best.zip', flush=True)
+                import shutil
+                shutil.copyfile(eval_path, os.path.join(args.out, 'best.zip'))
+                print(f'best so far ({worth:.3f}): best.zip' +
+                      (f' (the mean of {avg_n} chunks)' if args.average else ''), flush=True)
         else:
             worth = None
         history.append(dict(steps=model.num_timesteps, level=level, train_seconds=seconds,
-                            score=worth,
-                            prior_kl=model.policy.prior_kl,
+                            eval_seconds=round(eval_seconds, 1), score=worth,
+                            prior_kl=model.policy.prior_kl, ppo=ppo,
+                            average_n=avg_n if args.average else None,
                             ep_return=float(np.mean(returns)) if returns else None,
                             focus_per_min=focus_rate, practice=trials, assist=assist,
                             vs_assist=vs_plans, eval=results))
-        print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s, L{level}, '
-              f'KL {model.policy.prior_kl:.3f}'
+        print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s + eval {eval_seconds:.0f}s, '
+              f'L{level}, KL {model.policy.prior_kl:.3f}'
+              + (f', lr {ppo.get("learning_rate", 0):.2e}, approx_kl {ppo.get("approx_kl", 0):.5f}, '
+                 f'clipped {ppo.get("clip_fraction", 0):.3f}, value EV {ppo.get("explained_variance", 0):.3f}, '
+                 f'drift {ppo.get("drift", 0):.2f} over {ppo.get("updates", 0)} updates' if ppo else '')
+              + (f', score of the mean of {avg_n}: {worth:.3f}' if args.average and worth is not None else '')
               + (f', {args.focus} {focus_rate:.2f}/min' if focus else '') + '] '
               + (show(results) if results else 'not evaluated (--eval-every)'), flush=True)
         if assist and assist.get('plans'):
@@ -722,7 +897,7 @@ def main():
             level += 1
             print(f'promoted to level {level}', flush=True)
         with open(state_path, 'w') as f:
-            json.dump(dict(level=level, history=history), f, indent=1)
+            json.dump(dict(level=level, history=history, start_steps=t0, average_n=avg_n), f, indent=1)
         if results and args.stop_win and args.vs and all(results[f'vs{j}']['win'] >= args.stop_win
                                              for j in range(len(args.vs))):
             print(f'beats every --vs opponent {args.stop_win:.0%} of the time: stopping', flush=True)
