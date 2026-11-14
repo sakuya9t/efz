@@ -13,6 +13,8 @@
 efz-pack/
 efz-unpacked/
 uploads/
+# Packs made to carry models and data to another machine by hand (models, the combo library)
+/tmp/
 
 # Generated analysis output
 inventory.json

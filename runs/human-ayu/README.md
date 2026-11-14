@@ -1002,6 +1002,279 @@ Every arm of rounds 11-13 loses ground in its first chunk (training's score 0.84
 passed its start (0.914). In the league of 39, four arms of 20M steps never did, and
 `agent-league11-r7/best.zip` stays the best agent.
 
+**Round 14** (the user, 11 November: "Document the plan and execute the full plan
+autonomously"; the plan, its reasons and the calibration are in `docs/training-v2.md`).
+Three changes, from what rounds 11-13 and the user's 10 November games showed:
+
+- **The loop.** A chunk's checkpoint is a noisy sample of where PPO is; the mean of a run's
+  chunks is the better agent. `average.py` made `agent-league11-avg`, the mean of
+  `agent-league11-r7`'s ten. Against round 11's best it wins 90% of the 39 (own HP lost
+  50%) from 86% (53%), the helpers 86% from 76%. It is round 14's start. `finetune.py`
+  now decays the learning rate (`--lr 1e-4 --lr-end 1e-5`). It keeps a running mean of
+  the chunks (`--average`) and evaluates that mean. It takes longer rollouts
+  (`--n-steps 1024`) and seeds (`--seed`). Kanna has a tenth of the matches
+  (`--cpu-share 0.1`). The frozen opponents' forward passes are batched
+  (`efz_env.sb3.mixture`), and evaluation runs in parallel (`--eval-workers`).
+- **Opponents that defend like people** (`advantages.py`'s `patient`, `wake`, `jumpin`,
+  the profile `person`). They guard a string out for 20 steps after the first guard, and
+  rise guarding for 40. They put out a wake-up reversal buffered in the rising animation,
+  when the agent is committed to a meaty. And they jump in on the agent's rise, timed to
+  land 4 steps after its first free one. Against the start, its measures under `person`
+  land near the user's games (`docs/training-v2.md`, "Phase 1 as built"): 47% wins
+  against the person set, 83% in the plain game.
+- **A weaker pull** (0.01), the one change rounds 4 and 11 found to help.
+
+Three arms of 20M steps, two seeds each, from `agent-league11-avg`, judged by each run's
+mean of ten chunks (`avg.zip`) on 64 seeded matches (`scorecard.py`):
+
+- **A** (`agent-league14-s1`/`-s2`) is the league of 39 as round 13.
+- **B** (`agent-league14-person-s1`/`-s2`) has `person` in half its `--vs` matches.
+- **C** (`agent-league14-person-pull01-s1`/`-s2`) is B with the pull 0.01.
+
+The person set is the exploiters of the characters the user played, and Shiori's, with
+`person` on.
+
+| | Start | A s1 | A s2 | B s1 | B s2 | **C s1** | C s2 |
+|---|---|---|---|---|---|---|---|
+| All 39 (own HP lost) | 90% (50%) | 89% (51%) | 90% (49%) | 85% (57%) | 84% (57%) | **90% (51%)** | 90% (50%) |
+| The twenty | 93% (44%) | 92% (46%) | 92% (43%) | 88% (53%) | 87% (54%) | 92% (46%) | 93% (44%) |
+| 17 helpers | 86% (57%) | 85% (57%) | 88% (55%) | 81% (62%) | 80% (61%) | 87% (56%) | 86% (56%) |
+| Kano 1-7 | 84% (56%) | 80% (59%) | 83% (56%) | 77% (62%) | 73% (66%) | 80% (61%) | 82% (58%) |
+| The person set, `person` on | 40% (80%) | 46% (79%) | 46% (78%) | 48% (76%) | 54% (76%) | **58% (73%)** | 54% (75%) |
+| The advantaged seven, `adv` on | 42% (77%) | 46% (76%) | 47% (76%) | 39% (81%) | 40% (80%) | **49% (76%)** | 42% (79%) |
+| Level-4 CPU: Kanna / hard / rest | 0 / 100 / 100% | 0 / 71 / 100% | 5 / 95 / 100% | 5 / 95 / 100% | 0 / 81 / 100% | 0 / 67 / 100% | 0 / 81 / 100% |
+| Kanna's HP taken | **61.9%** | 52.7% | 57.0% | 56.1% | 56.0% | 58.8% | 57.0% |
+| Presses a second; while unable to move | 1.55; 54% | 1.70; 52% | 1.60; 53% | 1.71; 51% | 1.68; 52% | 1.82; 54% | 1.87; 55% |
+| Its okizeme high / low; throws a minute (`person`) | 1 / 90%; 0.01 | 1 / 89%; 0.01 | 2 / 89%; 0.01 | 2 / 86%; 0.01 | 2 / 85%; 0.01 | 1 / 89%; 0.00 | 2 / 87%; 0.01 |
+| Its string guarded, then its hit (`person`) | 11% | 12% | 11% | 14% | 15% | 15% | 14% |
+| HP a minute dealt / taken (`person`) | 8,041 / 9,132 | 8,374 / 9,087 | 8,226 / 8,666 | 8,560 / 8,755 | 8,698 / 8,622 | 8,963 / 8,388 | 8,593 / 8,523 |
+
+The person set one by one (wins, own HP lost a round):
+
+| Opponent, `person` on | Start | A s1 | A s2 | B s1 | B s2 | C s1 | C s2 |
+|---|---|---|---|---|---|---|---|
+| Ex-Nanase | 9% (95%) | 22% (92%) | 11% (92%) | 16% (93%) | 22% (90%) | 22% (89%) | 16% (93%) |
+| Nanase | 97% (46%) | 98% (43%) | 98% (44%) | 98% (43%) | 98% (43%) | 100% (38%) | 98% (40%) |
+| Nagamori | 64% (78%) | 69% (80%) | 52% (80%) | 67% (77%) | 70% (80%) | 72% (74%) | 77% (77%) |
+| Mishio 3 | 34% (85%) | 36% (84%) | 41% (81%) | 25% (86%) | 47% (80%) | 36% (84%) | 48% (82%) |
+| Sayuri | 11% (92%) | 22% (90%) | 33% (90%) | 31% (88%) | 27% (88%) | 48% (83%) | 31% (85%) |
+| Kano 7 | 53% (70%) | 62% (65%) | 64% (66%) | 89% (50%) | 80% (55%) | 81% (50%) | 66% (59%) |
+| Mizuka 7 | 41% (86%) | 42% (88%) | 48% (81%) | 38% (84%) | 45% (84%) | 62% (78%) | 59% (79%) |
+| Shiori | 11% (92%) | 14% (93%) | 23% (93%) | 20% (89%) | 41% (87%) | 41% (85%) | 33% (84%) |
+
+The rule, fixed before the runs: an arm beats A only if both its seeds beat both of A's on
+the person set, and neither loses more than two points over the 39. A beats its start the
+same way.
+
+- A beats its start (46% and 46% against 40%; 89% and 90% over the 39). The loop learns
+  now.
+- B doesn't beat A. It beats A on the person set (48%, 54%) and loses five and six points
+  over the 39 (85%, 84%).
+- C beats A (58% and 54%; 90% and 90%).
+- **`agent-league14-person-pull01-s1/avg.zip` is round 14's agent.** It wins 58% of the
+  person set (A's 46%), 90% of the 39 and 49% of the advantaged seven. It deals more HP
+  than it takes against people's defence: 8,963 / 8,388 a minute, from the start's
+  8,041 / 9,132.
+
+Training's own score (16 matches a chunk, the 39 and Kanna, the running mean) told the
+same story. A stayed at its start's 0.87-0.90. B fell to 0.83-0.84. C passed its start,
+reaching 0.92 and 0.89, the first arm in the league of 39 to do so. Its KL to the clone
+rose from 0.12 to 0.15; A's and B's stayed at 0.12. With the pull at 0.02, training
+against people's defence costs the plain game. With 0.01 the agent learns both.
+
+What it didn't learn: the okizeme is still 1% high and 89% low, and it doesn't throw
+(round 14's targets were 15% high and 0.1 throws a minute). Its gain against `person` is
+in the guarded string, which is followed by a hit 15% of the time (from 11%). It is not
+in the mix-up. It lost Kanna's HP (58.8% from 61.9%) and the level-4 CPU's hard tier
+(67% of 21 from 100%; round 11's best 76%), neither trained against beyond Kanna's tenth.
+Kano's seventh in the plain game fell to 44% from 55%. Its input rates stay a person's:
+1.82 presses a second (the start 1.55; people's Ayu players 1.22-2.06, the 13 with 40
+matches or more), 54% of them while it can't move (54%).
+
+**Round 14's exploiters** (`CHAR/exploiter14`, against `CHAR/target14.zip`, round 14's
+agent). There is one for each character the user played: Ex-Nanase, Nanase, Nagamori,
+Mishio, Sayuri, Kano (her charge focus), Mizuka (her setup focus). Each uses the recipe
+of the helpers: from the clone, the pull 0.1, a quarter of its matches against the
+level-3 CPU, 24M steps or 60% wins. Kano's reached 62% of 16 at 11.2M steps; the rest
+stopped at 24M, the best of their chunks scoring 28-52%. Round 14's agent and its start
+against each (`best.zip`, 64 seeded matches), beside the agent against the old exploiter
+of that character (Mishio's, Kano's and Mizuka's seventh / third):
+
+| Exploiter | Round 14's agent | with `person` | Its start | with `person` | Round 14's agent vs the old one | with `person` |
+|---|---|---|---|---|---|---|
+| Ex-Nanase | **70% (68%)** | 12% (94%) | 56% (75%) | 3% (95%) | 89% (58%) | 22% (89%) |
+| Nanase | 97% (40%) | 98% (37%) | 91% (56%) | 94% (48%) | 94% (36%) | 100% (38%) |
+| Nagamori | 95% (58%) | 66% (76%) | 97% (54%) | 55% (80%) | 98% (47%) | 72% (74%) |
+| Mishio | 95% (50%) | 59% (78%) | 98% (44%) | 56% (75%) | 91% (53%) | 36% (84%) |
+| Sayuri | 97% (55%) | 50% (85%) | 92% (55%) | 39% (86%) | 86% (61%) | 48% (83%) |
+| Kano | **41% (78%)** | 73% (61%) | 61% (71%) | 47% (74%) | 44% (75%) | 81% (50%) |
+| Mizuka | 100% (30%) | 81% (76%) | 100% (30%) | 66% (81%) | 100% (38%) | 62% (78%) |
+
+Two found something in the plain game:
+
+- **Kano's** wins 59% against round 14's agent and 39% against its start: a hole round 14
+  opened (Kano's seventh also fell to 44% from 55%). She jumps 7.6 times a minute,
+  charges, and hits the agent in the air 1.6 times a minute.
+- **Ex-Nanase's** wins 30% against round 14's agent (the old one 11%) and 44% against
+  the start. It isn't new to round 14.
+
+The other five win 3-5% in the plain game, the old exploiters' level or less. The new
+exploiters press 1.6-2.4 times a second, above people of their characters (Nanase's
+people 1.19), as the old ones did (Nanase's 2.33). The next league takes them in with
+`person` on.
+
+**Round 15** (12-13 November; the user: the combo's percentage "is basically a free
+resource the agents fail to use", and then "do all" of three steps: the routes when the
+user plays, a round trained with them, the combos in a network of their own;
+`docs/training-v2.md`, "Round 15"). It found a bug that every league round had trained
+under.
+
+*The copies' bug.* `efz_env.sb3.frozen()` makes every frozen opponent of
+`finetune.py`: the `--vs` exploiters, the mirror, the team, the red team's own play, the
+routes' own play on the planner's copies. SB3's `_get_constructor_parameters` leaves
+`share_features_extractor` out, so since 3 November each copy had one extractor for actor
+and critic, and loading the weights wrote the critic's over the actor's: the copy played
+with the wrong embeddings of moves and characters. `evaluate.py` and `play.py` load the
+models themselves and were right. Round 14's agent on 64 seeded matches against the model
+itself and against the copy training met: Kano's exploiter 14, 41% (own HP lost 78%) and
+100% (15%); Kano's seventh 44% (75%) and 100% (6%); Ex-Nanase's exploiter 14, 70% (68%)
+and 100% (4%); Mishio's third 91% (53%) and 100% (2%). A copy of the agent, which is what
+the exploiters trained against, wins 0-2% against them. So in every round the league's
+opponents were pushovers in training and themselves in evaluation. `copy_policy` fixes it
+and checks every copy's weights against the source's; fixed copies give the models' own
+results to the match.
+
+*Three arms*, 20M steps, two seeds each, from round 14's agent with round 14's loop and
+settings (`person` in half the `--vs` matches, the pull 0.01), the league of 39 and round
+14's seven exploiters (46), judged by `avg.zip` on 64 seeded matches:
+
+- **old** (`agent-league15-old-s1`/`-s2`): the copies as before, run from a copy of the
+  code taken before the fix. The control.
+- **fixed** (`agent-league15-s1`/`-s2`): the copies fixed.
+- **routes** (`agent-league15-routes-s1`/`-s2`): fixed, and the learner plays with the
+  built-in routes (`--assist`), their steps left out of the policy's loss.
+
+| | Round 14's agent | old s1 | old s2 | **fixed s1** | fixed s2 | routes s1 | routes s2 |
+|---|---|---|---|---|---|---|---|
+| The person set, `person` on (own HP lost) | 58% (73%) | 63% (68%) | 64% (69%) | **69% (68%)** | 73% (68%) | 69% (70%) | 71% (68%) |
+| The same, played with the routes | 65% (70%) | - | - | **81% (64%)** | 81% (63%) | 80% (63%) | 81% (63%) |
+| The 46, plain | 89% (51%) | 89% (53%) | 90% (52%) | **97% (39%)** | 97% (42%) | 95% (45%) | 95% (46%) |
+| The 46, played with the routes | 90% (53%) | - | - | **97% (42%)** | 97% (44%) | 98% (43%) | 97% (45%) |
+| of the 46: the 39 | 90% (51%) | 89% (53%) | 90% (51%) | 98% (38%) | 97% (42%) | 96% (44%) | 95% (46%) |
+| of the 46: Kano 1-7 | 80% (61%) | 77% (63%) | 84% (57%) | 98% (38%) | 98% (41%) | 96% (43%) | 97% (48%) |
+| of the 46: round 14's seven exploiters | 85% (54%) | 87% (55%) | 90% (53%) | 96% (42%) | 99% (43%) | 94% (49%) | 94% (47%) |
+| Level-4 CPU: Kanna / hard / rest | 0 / 67 / 100% | 0 / 71 / 100% | 5 / 67 / 100% | 0 / 86 / 100% | 0 / 76 / 100% | 0 / 95 / 100% | 0 / 71 / 100% |
+| Kanna's HP taken | 58.8% | 53.0% | 53.2% | 53.4% | 53.0% | 54.2% | 51.0% |
+| Presses a second; while unable to move | 1.82; 54% | 2.11; 51% | 2.11; 52% | 2.02; 51% | 2.16; 51% | 1.97; 51% | 2.17; 52% |
+| HP a minute dealt / taken (`person`) | 8,963 / 8,388 | 10,009 / 8,259 | 9,678 / 8,123 | 9,287 / 7,381 | 9,495 / 7,556 | 8,966 / 7,421 | 9,382 / 7,404 |
+
+The person set one by one, own combos / played with the routes:
+
+| Opponent, `person` on | Round 14's agent | fixed s1 | fixed s2 |
+|---|---|---|---|
+| Ex-Nanase | 22% (89%) / 30% (88%) | 33% (88%) / 48% (83%) | 33% (89%) / 52% (80%) |
+| Nanase | 100% (38%) / 100% (40%) | 100% (34%) / 100% (38%) | 100% (39%) / 98% (38%) |
+| Nagamori | 72% (74%) / 80% (71%) | 64% (76%) / 78% (70%) | 69% (79%) / 84% (68%) |
+| Mishio 3 | 36% (84%) / 52% (80%) | 69% (74%) / 83% (74%) | 77% (68%) / 86% (69%) |
+| Sayuri | 48% (83%) / 58% (79%) | 47% (82%) / 62% (73%) | 59% (81%) / 55% (76%) |
+| Kano 7 | 81% (50%) / 83% (55%) | 100% (36%) / 98% (40%) | 94% (39%) / 95% (38%) |
+| Mizuka 7 | 62% (78%) / 70% (70%) | 83% (73%) / 92% (64%) | 77% (75%) / 89% (64%) |
+| Shiori | 41% (85%) / 50% (79%) | 58% (83%) / 83% (70%) | 73% (77%) / 89% (66%) |
+
+The rules, fixed before the runs ended (`docs/training-v2.md`): an arm beats another if
+both its seeds beat both of the other's on the person set and neither loses more than two
+points over the 46; the routes arm against the fixed one with both played with the routes.
+
+- **Fixed beats old**: 69% and 73% against 63% and 64% on the person set, 97% and 97%
+  against 89% and 90% over the 46. In the plain game the holes of round 14 close: Kano's
+  seventh 95% and 92% (old 47%, 56%; round 14's agent 44%), Kano's exploiter 14, 95% and
+  98% (44%, 58%; 41%), Shiori 95% and 95% (61%, 72%; 63%). The old arm gains on the person
+  set (63% from 58%) and nothing over the 46: what a round learnt under the bug came from
+  the scripted `person` behaviour, the pull and the CPU, not from the league.
+- **Routes doesn't beat fixed**, played with the routes: 80% and 81% against 81% and 81%
+  on the person set, the same over the 46. Training with the routes on adds nothing to
+  an agent that is given them when it plays. It costs little: two points over the 46
+  when played without them (95% against 97%), none with them. In rounds 5, 7 and 8,
+  which lost their neutral to it, the planner's own play was a broken copy (in a test
+  149 HP a hit against the model's 1,031; a route taken in 54% of this league's hits
+  before the fix, 41% in these two runs).
+- **`agent-league15-s1/avg.zip` is round 15's agent**, of the fixed arm's two: it loses
+  the least HP over the 46 (39%) and presses least (2.02 a second; s2 2.16; people's Ayu
+  players 1.22-2.06). s2 is 4 points ahead on the person set with its own combos and
+  level with the routes: within the seeds' noise. Played with the routes it wins 81% of
+  the person set (round 14's agent 65%, and 58% with its own combos) and 97% of the 46.
+
+The combos themselves didn't change: its own are 969 HP with 74% of the percentage left
+and an Instant Charge in 0.5%, as round 14's agent's (987, 74%, 0.6%). With the routes:
+1,240 HP, 66% left, an Instant Charge in 19% (people: 64% left, 16.5%), 10,234 HP a
+minute dealt against 7,318 taken. The okizeme with the routes is 12% high (3% without:
+where the routes' enders leave it), and it presses 2.14 times a second over the 39, just
+above people's fastest. Still not learnt: throws (0.01 a minute), Kanna (0 of 64, her HP
+53%).
+
+What the numbers don't say: the 46 are the opponents the agent now truly trained
+against, and all of them were themselves trained against a broken copy of their target.
+An exploiter trained against the model itself hasn't been made yet; round 15's agent has
+not met one, nor the user.
+
+*The routes against a person* (`python/examples/play.py --assist LIBRARY`,
+`combo_support.LiveRoutes`). A plan takes 50-400 ms and a frame has 16. The agent sees
+its hit 14 steps late, and what it will see during those steps it has seen already, so
+its inputs for them are chosen at the hit and a planner in a process of its own (a copy
+of the match, not drawn, fed the same inputs every frame) plans meanwhile from where they
+lead. The route starts on the step the agent sees its hit; if the game isn't where the
+plan expected, the plan is dropped. In real time against scripted players the game
+waited 0.1 ms for a plan at the median and 45 ms at most, and no plan of 190 was dropped.
+
+*The combos in a network of their own* (`combo_net.py`), so that the agent needs no
+copies of the game for them and its own network isn't touched. Three designs, each
+measured on the person set with `person` on (64 matches an opponent, seed 7; the data
+from matches of another seed):
+
+| Round 14's agent, its combos by | Person set | HP a combo | Left | Instant Charge |
+|---|---|---|---|---|
+| itself | 58% (73%) | 987 | 74% | 0.6% |
+| the routes (the planner) | 65% (70%) | 1,250 | 66% | 19.5% |
+| 1. a copy of its network taught the routes' steps | 47% (78%) | 975 | 74% | 8% |
+| 2. the same with a clock and its combo's actions | 52% (76%) | 996 | 73% | 7% |
+| 3. a chooser, the chosen combo played from memory | 60-62% (72-73%) | 1,140 | 68% | 16% |
+
+1. *Step by step* (`train`, `evaluate.py --p1-combo`). 5.0M steps on which the agent
+   saw its combo running, 61% of them a route's; a copy of the agent's network learns the
+   route's action there and the agent's own probabilities elsewhere. On held-out matches
+   its likeliest action is the route's on 96% of a route's steps, and it plays worse than
+   the agent's own combos. Where: 99% right on the steps a route holds its action, 75% on
+   the steps it changes it, 59% on its first; 2% of the routes come out whole.
+2. *With a clock* (`train-clock`, `play --combo`): the count of steps since it saw the
+   combo and the last 64 actions it played on them, added to the agent's own
+   log-probabilities. 94% on the changes, 23% of the routes whole, 64% on the first
+   step, and still below the agent's own combos. Both start routes that don't connect
+   from where the agent stands (the planner's copies are what tells) and are punished for
+   the miss.
+3. *A chooser* (`train-chooser`, `evaluate.py --p1-assist LIBRARY --assist-chooser`,
+   `play.py --assist LIBRARY --chooser`). Each plan kept: the agent's view on the step
+   it sees its hit, the library combos tried, what each dealt and what its own play
+   dealt. A network (the agent's features, copied) learns what each of the library's 848
+   combos would deal from that view; the most promising is played from the recording, as
+   the planner's is, if it promises 200 HP more than its own play (with no margin it
+   takes a route in two hits of three and wins 56%). On held-out matches its choices
+   deal 858 HP a hit (the planner's 957, its own play always 606).
+
+For round 15's agent the chooser has twice the plans (119,880: its own and round 14's
+agent's; what a combo deals is the game's): 901 HP a hit held out (the planner 980, its
+own play 616).
+
+| Round 15's agent, its combos by | Person set | The 46, plain | HP a combo | Left | Instant Charge |
+|---|---|---|---|---|---|
+| itself | 69% (68%) | 97% (39%) | 969 | 74% | 0.5% |
+| the routes (the planner) | 81% (64%) | 97% (42%) | 1,240 | 66% | 19% |
+| the chooser (`combo-chooser15/chooser.pt`) | 78% (65%) | 96% (44%) | 1,170 | 67% | 17.5% |
+
+The chooser gets three quarters of the planner's gain on the person set with no copies
+of the game and no second process. The planner stays the stronger of the two and is what
+`play.py --assist` uses unless `--chooser` is given. In the plain game against the league
+neither adds wins: the combos matter against a defence that guards strings out.
+
 ## Ayu's agent as other characters
 
 What it learnt for Ayu and what any character keeps (8 November; `eval/transfer/`): the
@@ -1238,7 +1511,9 @@ exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their
 `config.json`, to be played against. The rest of round 9 on (`agent-league9-jitter`,
 `agent-league10-kanna`, the other `agent-league11*`, `agent-league12*`, the reversal
 exploiters, the seventeen helpers' clones and exploiters, `kano/transfer7`,
-`mizukab/transfer7`) is only on the Linux machine until the next upload.
+`mizukab/transfer7`, round 14's `agent-league11-avg`, `agent-league14*` and the
+`exploiter14`s, and round 15's `agent-league15*`, `combo-net14*` and `combo-chooser14`/`15`)
+is only on the Linux machine until the next upload.
 
 ## The scripts
 
@@ -1246,18 +1521,22 @@ exploiters, the seventeen helpers' clones and exploiters, `kano/transfer7`,
 |---|---|
 | `dataset.py` | replays to data: per Ayu side, the views, inputs and rewards of each step |
 | `bc.py` | the clone: the 45 actions people's inputs come to each frame, and the critic from their matches' returns; `--delay` for a reaction time, `--players` for one player's clone (from the clone of everyone, `--init`) |
-| `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones; any character (`--char`), opponents of other characters (`--vs`, shared by `--pfsp`, a character's fixed share of them by `--vs-char-share`), a focus (`--focus`), `--stop-win` |
+| `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones; any character (`--char`), opponents of other characters (`--vs`, shared by `--pfsp`, a character's fixed share of them by `--vs-char-share`), a focus (`--focus`), `--stop-win`; the loop of round 14: the learning rate decayed per chunk (`--lr-end`), a running mean of the chunks evaluated and kept (`--average`), `--seed`, `--n-steps`, evaluation in parallel (`--eval-workers`), PPO's numbers and the drift of its updates in `finetune.json` |
+| `average.py` | the mean of a run's chunk checkpoints as one model (`agent-league11-avg`, round 14's start) |
+| `scorecard.py` | checkpoints' 64-match comparisons side by side: the 39 by group, round 14's seven exploiters and all 46, each advantage profile's set, the level-4 CPU's tiers, Kanna, the human limits, the agent's okizeme and strings against a profile; `NAME=PREFIX@routes` for an agent played with the routes |
 | `evaluate.py` | matches to the end, the share of each side's HP the other took a round (`opp_hp_taken`, where it never wins, as against Kanna; `self_hp_taken`, its own lost, where it nearly always wins: hard wins from easy ones, the user's), with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move, damage taken, and `tactics.py`'s); `--chars ayu tiers` for the level-4 CPU's tiers; plays language models too (`runs/llm-ayu`) |
 | `combo_victims.py` | combos by the character they land on: conversion, hits, damage, and how they ended (knockdown, air recovery, neither), for people's Ayu or an agent against each CPU character |
 | `kanna_study.py` | where an agent's HP goes against the level-4 CPU's Kanna (her attacks out of her combos, by move, and the damage of the combos each started), its reversals and how they went, and her RF gauge (236C) |
 | `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up (the riser's choice, the attacker's okizeme and mix-up) and free time, both ways |
 | `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time |
-| `advantages.py` | a red team's advantages for any opponent: recoil guards, reversals after them, throws, damage (`finetune.py --vs-rg/--vs-reversal/--vs-throw/--vs-damage`, `evaluate.py --p2-advantage`) |
-| `motions.py` | the motion that starts each character's moves, tried from a saved state; which invincible ones come out of a recoil guard and win (`motions.json`, made on each machine as `framedata.json` is: not in the repository) |
+| `advantages.py` | a red team's advantages for any opponent: recoil guards, reversals after them, throws, damage, the wake-up bait, and a person's defence: guarding a string out, rising guarded or with a buffered reversal into a meaty, jump-ins on the rise (`finetune.py --vs-rg/--vs-reversal/--vs-throw/--vs-damage/--vs-patient/--vs-wake/--vs-jumpin`, `evaluate.py --p2-advantage`) |
+| `motions.py` | the motion that starts each character's moves, tried from a saved state; which invincible ones come out of a recoil guard and win; with `--add wake jump meaty`, each character's rise, the reversals that beat a meaty 2A when buffered while rising, and the jump-ins that land on a rise (`motions.json`, made on each machine as `framedata.json` is: not in the repository) |
 | `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames, guard height (`framedata.json`) |
 | `people.py` | the same measures of people, overall, by opponent and by player |
 | `compare.py` | people and agents side by side, as the tables here |
 | `team_check.py` | whether players' clones predict their players better than the clone of everyone |
+| `combo_support.py` | the built-in routes: an agent's combos from people's library combos tried on copies of the game once it sees its hit (`FairAssist`; `evaluate.py --p1-assist`, `finetune.py --assist`), against a person in real time with the planner in a process of its own (`LiveRoutes`, `play.py --assist`) or with the chooser (`ChosenRoutes`, `play.py --assist --chooser`) |
+| `combo_net.py` | the routes without the copies: `collect` an agent's plans (and steps) with the routes, `train-chooser` a network that says from the agent's view what each library combo would deal (`evaluate.py --assist-chooser`, `play.py --chooser`); `train`, `train-clock`, `play`: the two step-by-step networks that didn't work |
 | `combo_starts.py` | where people's combos started, kept as a replay and a step |
 | `combo.py` | the combo master: trials from those starts, rewarded for the combo's damage |
 | `record_combos.py` | a combo master's most damaging combos in whole matches, as replays for EFZ's REPLAY menu, with where each combo is (`replays/combos/combos.txt`) |
