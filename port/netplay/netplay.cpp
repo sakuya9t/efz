@@ -3,7 +3,8 @@
 // match.
 //
 // The screens, drawn over the title with SDL's own small font:
-//   setup    host or join, the address to join, the UDP port, the name; START
+//   setup    host or join, the address to join, the UDP port, the name, who plays this
+//            side (you, or an agent: agents.h); START
 //   connect  waiting for a player, or for the host; then measuring the connection
 //   delay    the input delay to start with (the recommended one chosen)
 //   match    the game runs the match; the screen shows the names, wins, ping and delay
@@ -22,6 +23,7 @@
 #include "../platform.h"
 #include "../log.h"
 #include "../record.h"
+#include "../agents.h"
 #include "protocol.h"
 #include "session.h"
 
@@ -39,7 +41,17 @@ using netplay::Settings;
 
 enum Screen { kOff, kSetup, kConnect, kDelay, kMatch, kEnded };
 // The setup screen's rows.
-enum Row { kRowMode, kRowAddress, kRowPort, kRowName, kRowSide, kRowStart, kRowBack, kRowCount };
+enum Row {
+    kRowMode,
+    kRowAddress,
+    kRowPort,
+    kRowName,
+    kRowSide,
+    kRowAgent,
+    kRowStart,
+    kRowBack,
+    kRowCount
+};
 
 struct Menu {
     Screen screen = kOff;
@@ -49,6 +61,8 @@ struct Menu {
     std::string port = "10800";
     std::string name = "Player";
     int side = 0; // 0 P1, 1 P2, 2 random
+    int agent = -1;        // who plays this side: -1 you, else an agent (agents.h)
+    std::string agentFile; // that agent's file name, as netplay.ini keeps it
     std::string error;
     std::string ended;
     int delay = 0;
@@ -100,6 +114,8 @@ void LoadSettings()
             g_menu.name = value;
         else if (key == "side")
             g_menu.side = std::max(0, std::min(atoi(value.c_str()), 2));
+        else if (key == "agent")
+            g_menu.agentFile = value;
     }
     fclose(f);
 }
@@ -109,8 +125,9 @@ void SaveSettings()
     FILE* f = OpenGameFile("netplay.ini", "wb");
     if (!f)
         return;
-    fprintf(f, "mode=%s\naddress=%s\nport=%s\nname=%s\nside=%d\n", g_menu.host ? "host" : "join",
-            g_menu.address.c_str(), g_menu.port.c_str(), g_menu.name.c_str(), g_menu.side);
+    fprintf(f, "mode=%s\naddress=%s\nport=%s\nname=%s\nside=%d\nagent=%s\n",
+            g_menu.host ? "host" : "join", g_menu.address.c_str(), g_menu.port.c_str(),
+            g_menu.name.c_str(), g_menu.side, g_menu.agentFile.c_str());
     fclose(f);
 }
 
@@ -141,6 +158,9 @@ void StartMatch()
     SuspendRecorder(true);
     RestartGame();
     SetHooks(true);
+    const char* error = nullptr;
+    if (!NetplayAgentStart(g_menu.agent, g_protocol.localPlayer, &error))
+        LogError("net", "the agent can't play: %s; you play", error);
     g_session.Start(&g_protocol);
     g_menu.screen = kMatch;
     g_menu.escDown = (KeyboardState()[1] & 0x80) != 0;
@@ -155,6 +175,7 @@ void EndMatch(const std::string& why)
         g_protocol.Quit(why);
     if (wasRunning) {
         g_session.Stop();
+        NetplayAgentStop();
         SetHooks(false);
         RestartGame();
         SuspendRecorder(false);
@@ -183,6 +204,20 @@ void Begin()
     if (!g_menu.host && g_menu.address.empty()) {
         g_menu.error = "Type the address of the computer to join";
         return;
+    }
+    if (g_menu.agent >= 0) {
+        // Read now, so that a file that can't play is said here, not in the match.
+        const char* why = nullptr;
+        bool ok = NetplayAgentStart(g_menu.agent, -1, &why);
+        NetplayAgentStop();
+        if (!ok) {
+            g_menu.error = std::string("The agent can't play: ") + why;
+            if (g_menu.automatic) {
+                LogError("net", "%s", g_menu.error.c_str());
+                RequestQuit();
+            }
+            return;
+        }
     }
     Settings s;
     s.host = g_menu.host;
@@ -215,8 +250,16 @@ void CloseMenu()
     SDL_StopTextInput(Window());
 }
 
+// The agents in the folders again, and the one netplay.ini names among them.
+void FindAgents()
+{
+    RescanAgents();
+    g_menu.agent = FindAgent(g_menu.agentFile.c_str());
+}
+
 void OpenMenu()
 {
+    FindAgents();
     g_menu.screen = kSetup;
     g_menu.row = kRowStart;
     g_menu.error.clear();
@@ -260,6 +303,11 @@ void Act(Action a)
             g_menu.host = !g_menu.host;
         } else if ((a == kLeft || a == kRight) && g_menu.row == kRowSide) {
             g_menu.side = (g_menu.side + (a == kLeft ? 2 : 1)) % 3;
+        } else if ((a == kLeft || a == kRight) && g_menu.row == kRowAgent) {
+            // You, then each agent found.
+            int n = AgentCount() + 1;
+            g_menu.agent = (g_menu.agent + 1 + (a == kLeft ? n - 1 : 1)) % n - 1;
+            g_menu.agentFile = g_menu.agent >= 0 ? AgentFile(g_menu.agent) : "";
         } else if (a == kErase) {
             if (std::string* text = RowText(g_menu.row)) {
                 if (!text->empty())
@@ -272,6 +320,8 @@ void Act(Action a)
                 CloseMenu();
             else if (g_menu.row == kRowMode)
                 g_menu.host = !g_menu.host;
+            else if (g_menu.row == kRowAgent)
+                Act(kRight);
             else
                 Act(kDown);
         } else if (a == kBack) {
@@ -450,7 +500,7 @@ void DrawSetup(SDL_Renderer* r)
 {
     Panel(r, "NET PLAY");
     static const char* const labels[kRowCount] = {"MODE", "ADDRESS", "PORT", "NAME",
-                                                  "YOUR SIDE", "START", "BACK"};
+                                                  "YOUR SIDE", "PLAYED BY", "START", "BACK"};
     float y = kPanelY + 64;
     bool blink = (SDL_GetTicks() / 400) % 2 == 0;
     for (int row = 0; row < kRowCount; row++) {
@@ -474,13 +524,21 @@ void DrawSetup(SDL_Renderer* r)
         case kRowSide:
             value = g_menu.side == 0 ? "< P1 >" : g_menu.side == 1 ? "< P2 >" : "< RANDOM >";
             break;
+        case kRowAgent:
+            value = g_menu.agent >= 0 ? std::string("< ") + AgentLabel(g_menu.agent) + " >"
+                    : AgentCount() ? "< YOU >"
+                                   : "YOU (no agents found)";
+            break;
         default:
             value = *RowText(row);
             if (at && blink)
                 value += "_";
             break;
         }
-        Text(r, kPanelX + 200, y, value, 2, at ? kWhite : Color{200, 200, 200, 255});
+        // A long value (an agent's name) in the small letters.
+        float scale = Width(value, 2) > kPanelW - 216 ? 1.0f : 2.0f;
+        Text(r, kPanelX + 200, y + (scale < 2 ? 4 : 0), value, scale,
+             at ? kWhite : Color{200, 200, 200, 255});
         y += 30;
     }
     if (!g_menu.error.empty()) {
@@ -593,6 +651,8 @@ void DrawMatch(SDL_Renderer* r)
     if (g_session.ShowInfo()) {
         for (int p = 0; p < 2; p++) {
             std::string name = g_protocol.names[p];
+            if (p == g_protocol.localPlayer && NetplayAgentName())
+                name += std::string(" [agent ") + NetplayAgentName() + "]";
             std::string text = p == 0 ? "Wins: " + std::to_string(g_session.Wins(0)) + "  " + name
                                       : name + "  Wins: " + std::to_string(g_session.Wins(1));
             float x = p == 0 ? 10 : 630 - Width(text, 1);
@@ -663,6 +723,13 @@ void InitNetplay(const NetplayOptions& options)
         if (options.name)
             g_menu.name = options.name;
         g_menu.side = 0;
+        RescanAgents();
+        g_menu.agent = -1;
+        if (options.agent && (g_menu.agent = FindAgent(options.agent)) < 0) {
+            LogError("net", "--agent %s: no such agent file", options.agent);
+            RequestQuit();
+            return;
+        }
         Begin();
     }
 }

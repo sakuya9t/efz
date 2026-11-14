@@ -33,6 +33,7 @@ On the title, NET PLAY (after VS HUMAN) opens netplay's screen over the title:
 | PORT | The UDP port: the host's to listen on, or the joiner's default for an address without one. 10800, as Revival's |
 | NAME | What the other player sees, up to 20 characters |
 | YOUR SIDE | The host's: P1, P2 or at random. The joiner gets the other |
+| PLAYED BY | YOU, or an agent file of the `agents` folder, which then plays this computer's side: it picks its character, you pick the stage, it plays the fights ([agents.md](agents.md)) |
 | START | Host or join |
 
 The arrow keys move and change, typing edits, Enter starts, Esc goes back; P1's controls
@@ -74,9 +75,13 @@ In a match:
 From the command line, without the menus (the game quits when the match ends):
 
 ```sh
-efz --data DIR --host [--port 10800] [--name NAME] [--delay N]
-efz --data DIR --join HOST[:PORT] [--name NAME] [--delay N]
+efz --data DIR --host [--port 10800] [--name NAME] [--delay N] [--agent FILE]
+efz --data DIR --join HOST[:PORT] [--name NAME] [--delay N] [--agent FILE]
 ```
+
+An agent playing this side (PLAYED BY, `--agent`) gives the session this side's input
+each frame in place of the controls, and nothing else: the other side, EfzRevival 1.02h
+or this game, sees a player ([agents.md](agents.md), "Over the network").
 
 ## How it works
 

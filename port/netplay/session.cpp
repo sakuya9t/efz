@@ -10,6 +10,7 @@
 #include "efz.h"
 #include "../platform.h"
 #include "../log.h"
+#include "../agents.h"
 
 // src/scene3.cpp: whether an F-key was down on the last frame (efz.exe's word that
 // Revival's save states keep).
@@ -294,6 +295,10 @@ void Session::RunFightFrames(int count)
         SaveFrameState();
         scene_ = Scene();
         RunFrame();
+        // The frame drawn, the one the player sees: an agent playing this side sees it
+        // too (once, not again when a rollback runs it again).
+        if (i == count - 1)
+            NetplayAgentShown();
         if (frame_ > lastFrame_) {
             lastFrame_ = frame_;
             Played(frame_).clear();
@@ -582,6 +587,11 @@ void Session::FightKeys(char* keys)
 FrameInput Session::ReadInput()
 {
     char input = (char)LocalControls();
+    // An agent playing this side: its input, decided once for this frame of input. Out
+    // of a fight the inputs take effect after the ping's frames.
+    unsigned char agent = 0;
+    if (NetplayAgentInput(Scene(), (int)ceil(PingFrames(ping_.maximum)), &agent))
+        input = (char)agent;
     const unsigned char* keyboard = KeyboardState();
     char keys = 0;
     for (int key = 0; key < 5; key++)

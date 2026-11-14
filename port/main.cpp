@@ -34,6 +34,14 @@
 //   --port N          the UDP port (default 10800, EfzRevival's)
 //   --name NAME       the name the other player sees
 //   --delay N         the input delay (default: the recommended one)
+//   --agent FILE      this computer's side is played by the agent file FILE (NET PLAY's
+//                     PLAYED BY)
+//
+// Agents (docs/agents.md): an agent file (.efzagent) in the agents folder of the game's
+// folder or of the save folder plays a side of VS HUMAN, chosen on character select (F5
+// for P1, F6 for P2), or this computer's side of a network match.
+//   --agent-p1 FILE, --agent-p2 FILE
+//                     VS HUMAN's P1 or P2 played by the agent file FILE from the start
 //
 // For tests, which run it without a display (SDL_VIDEO_DRIVER=offscreen):
 //   --frames N        quit after N frames
@@ -52,6 +60,7 @@
 #include "log.h"
 #include "netplay.h"
 #include "record.h"
+#include "agents.h"
 
 namespace {
 
@@ -307,7 +316,8 @@ static void Usage(const char* name)
             "[--record | --no-record] "
             "[--replay-fight FILE] [--seed N] [--crash-test KIND] [--frames N] [--fast] "
             "[--keys SCRIPT] [--dump DIR] [--dump-every N] "
-            "[--host | --join ADDRESS] [--port N] [--name NAME] [--delay N]\n",
+            "[--host | --join ADDRESS] [--port N] [--name NAME] [--delay N] [--agent FILE] "
+            "[--agent-p1 FILE] [--agent-p2 FILE]\n",
             name);
 }
 
@@ -328,6 +338,7 @@ int EfzMain(int argc, char** argv)
         efz::ParseLogLevel(env, &fileLevel);
     std::vector<ScriptedKey> keys;
     efz::NetplayOptions netOptions;
+    efz::AgentOptions agentOptions;
     for (int i = 1; i < argc; i++) {
         std::string a = argv[i];
         bool more = i + 1 < argc;
@@ -378,6 +389,12 @@ int EfzMain(int argc, char** argv)
             netOptions.name = argv[++i];
         else if (a == "--delay" && more)
             netOptions.delay = atoi(argv[++i]);
+        else if (a == "--agent" && more)
+            netOptions.agent = argv[++i];
+        else if (a == "--agent-p1" && more)
+            agentOptions.p1 = argv[++i];
+        else if (a == "--agent-p2" && more)
+            agentOptions.p2 = argv[++i];
         else {
             Usage(argv[0]);
             return 2;
@@ -527,8 +544,11 @@ int EfzMain(int argc, char** argv)
     }
     // Netplay: the title's NET PLAY, or a match from the command line. Not under the
     // compatibility test's harness, whose fights mustn't see a NET PLAY row.
-    if (!harness && replay.empty())
+    // The agents too: they play through the controls, which the harness gives.
+    if (!harness && replay.empty()) {
+        efz::InitAgents(agentOptions);
         efz::InitNetplay(netOptions);
+    }
     efz::StartWatchdog(15);
 
     // 64 frames a second, which the original's timer thread approached by adjusting its
@@ -569,6 +589,7 @@ int EfzMain(int argc, char** argv)
         }
         efz::SetLogFrame(n, g_scene);
         efz::RecorderFrameStart(n, g_scene);
+        efz::AgentsFrame();
         g_game->m_oddFrame = !g_game->m_oddFrame;
         BYTE scene = g_scene;
         Uint64 start = SDL_GetTicksNS();

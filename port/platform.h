@@ -84,6 +84,9 @@ tagPALETTEENTRY* ScreenPalette(CGraphics* graphics);
 
 // win32.cpp: where the game's files are read from and written to.
 void SetDataDir(const char* data, const char* save);
+// The folders themselves (as SetDataDir was given them).
+const char* DataDir();
+const char* SaveDir();
 FILE* OpenGameFile(const char* name, const char* mode);
 FILE* OpenForUpdate(const char* name, bool create);
 // A file opened elsewhere as a handle of the game's (CreateFile's), which CloseHandle

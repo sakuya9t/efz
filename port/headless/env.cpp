@@ -42,6 +42,8 @@
 #include "efz.h"
 #include "efz_env.h"
 #include "headless.h"
+#include "agent/observe.h"
+#include "agent/policy.h"
 #include "platform.h"
 
 using namespace efz;
@@ -49,96 +51,15 @@ using namespace efz::headless;
 
 namespace {
 
-// --- Observations: per environment, each player's view, self first.
+// --- Observations: per environment, each player's view, self first (agent/observe.h,
+// which the game's agents see too).
 
-const int kGlobalFeatures = 8;
-const int kPlayerFeatures = 32;
-const int kObjects = 8; // per player: the active ones nearest the viewer
-const int kObjectFeatures = 6;
-const int kObsDim = kGlobalFeatures + 2 * kPlayerFeatures + 2 * kObjects * kObjectFeatures;
-
-const char* const kGlobalNames[kGlobalFeatures] = {
-    "frame",       // frames into the match / max_frames (or / 10000)
-    "round",       // the round being played, from 1
-    "intro",       // a round's intro is running: the controls do nothing
-    "round_over",  // a KO happened and the next round hasn't started
-    "dx",          // the opponent's x minus the viewer's, / 640
-    "dy",          // the opponent's y minus the viewer's, / 240
-    "side",        // the viewer is player 1 (0) or 2 (1)
-    "rounds_to_win",
-};
-
-const char* const kPlayerNames[kPlayerFeatures] = {
-    "hp",            // / 9999
-    "gauge",         // / 3000: a level per 1000
-    "rf_gauge",      // / 1000
-    "rf_blue",       // the RF gauge filled and turned blue
-    "guard_gauge",   // / 360
-    "x",             // (x - 320) / 320: the stage is 0-640
-    "y",             // / 240: 0 on the ground, negative in the air
-    "vx",            // / 20
-    "vy",            // / 20
-    "facing",        // 1 right, -1 left
-    "action",        // the action (pattern) number: categorical, 0-~600
-    "action_frame",  // the frame of the action's animation
-    "hitstun",       // in a hit reaction
-    "guarding",
-    "dashing",
-    "hitstop",       // / 30
-    "freeze",        // a super's flash stops the opponent
-    "invulnerable",
-    "no_guard",
-    "armor",
-    "throw_protected",
-    "untech",        // ticks before an air recovery, / 100
-    "combo_hits",    // / 30
-    "proration",     // / 10000
-    "rounds_won",
-    "air_actions",   // double jumps and air dashes used
-    "character",     // 0-24: categorical
-    "own_action",    // the action is the character's own (a move), not common
-    "cpu",           // the game's CPU plays this side
-    "sealed",        // Akiko's seal level
-    "combo_damage",  // / 9999, while a combo goes on
-    "airborne",
-};
-
-const char* const kObjectNames[kObjectFeatures] = {
-    "active", "x", "y", "vx", "vy", "can_hit",
-};
-
-const char* const kCharacterNames[EFZ_CHARACTERS] = {
-    "nanase", "ayu", "mai", "makoto", "akane", "mayu", "nagamori", "misaki", "shiori",
-    "sayuri", "nayuki", "mio", "exnanase", "kaori", "ikumi", "mishio", "akiko", "nayukib",
-    "mizukab", "kanna", "kano", "minagi", "nayuki2", "misuzu", "mizuka",
-};
+using agent::kObsDim;
 
 // Characters drawn when a match's pool is 0: all but 22 (a second Nayuki) and 24 (the
 // boss Mizuka, not on the select screen).
 const uint32_t kDefaultCharPool = ((1u << EFZ_CHARACTERS) - 1) & ~(1u << 22) & ~(1u << 24);
 const uint32_t kDefaultStagePool = (1u << EFZ_STAGES) - 1;
-
-std::once_flag g_namesOnce;
-char g_names[kObsDim][40];
-
-void MakeNames()
-{
-    int n = 0;
-    for (int i = 0; i < kGlobalFeatures; i++)
-        snprintf(g_names[n++], sizeof(g_names[0]), "%s", kGlobalNames[i]);
-    for (int p = 0; p < 2; p++) {
-        for (int i = 0; i < kPlayerFeatures; i++)
-            snprintf(g_names[n++], sizeof(g_names[0]), "%s_%s", p ? "opp" : "self",
-                     kPlayerNames[i]);
-    }
-    for (int p = 0; p < 2; p++) {
-        for (int k = 0; k < kObjects; k++) {
-            for (int i = 0; i < kObjectFeatures; i++)
-                snprintf(g_names[n++], sizeof(g_names[0]), "%s_obj%d_%s", p ? "opp" : "self", k,
-                         kObjectNames[i]);
-        }
-    }
-}
 
 // --- Saved games.
 
@@ -717,7 +638,7 @@ bool LoadMatch(EfzEnv* env, Slot& s, const Match& m)
     if (!entry->ready) {
         char text[96];
         snprintf(text, sizeof(text), "the match %s vs %s on stage %d could not be started",
-                 kCharacterNames[m.chars[0]], kCharacterNames[m.chars[1]], m.stage);
+                 agent::CharacterName(m.chars[0]), agent::CharacterName(m.chars[1]), m.stage);
         env->SetError(text);
         s.broken = true;
         return false;
@@ -823,107 +744,10 @@ int Frame(EfzEnv* env, Slot& s, const uint8_t* act, float* reward)
     return winner;
 }
 
-float Clamp(double v, double lo, double hi)
-{
-    return (float)(v < lo ? lo : v > hi ? hi : v);
-}
-
-void WritePlayer(float* o, CPlayer* p)
-{
-    o[0] = p->m_hp / 9999.0f;
-    o[1] = p->m_gauge / 3000.0f;
-    o[2] = (float)(p->m_rfGauge / 1000.0);
-    o[3] = p->m_rfBlue != 0;
-    o[4] = (float)p->m_guardGauge / 360.0f;
-    o[5] = (float)((p->x - 320.0) / 320.0);
-    o[6] = (float)(p->y / 240.0);
-    o[7] = Clamp(p->vx / 20.0, -10, 10);
-    o[8] = Clamp(p->vy / 20.0, -10, 10);
-    o[9] = p->facing;
-    o[10] = p->pattern;
-    o[11] = p->frame;
-    o[12] = p->IsInHitstun() != 0;
-    o[13] = p->IsGuarding() != 0;
-    o[14] = p->IsDashing() != 0;
-    o[15] = p->m_hitstop / 30.0f;
-    o[16] = p->m_freezeTime > 0;
-    o[17] = p->m_invulTime > 0;
-    o[18] = p->m_noGuardTime > 0;
-    o[19] = p->m_armorTime > 0;
-    o[20] = p->m_throwProtect > 0;
-    o[21] = p->m_untechTime / 100.0f;
-    o[22] = p->m_comboHits / 30.0f;
-    o[23] = (float)(p->m_proration / 10000.0);
-    o[24] = p->m_roundsWon;
-    o[25] = p->m_airActions;
-    o[26] = p->m_charId;
-    o[27] = p->pattern >= kFirstCharacterAction;
-    o[28] = p->m_cpu != 0;
-    o[29] = (float)p->m_sealLevel;
-    o[30] = p->m_comboHits > 0 ? p->m_comboDamage / 9999.0f : 0.0f;
-    o[31] = p->y < 0.0;
-}
-
-// The `owner`'s active objects nearest the viewer, nearest first.
-void WriteObjects(float* o, CPlayer* owner, CPlayer* viewer)
-{
-    int slots[0x40];
-    double dist[0x40];
-    int n = 0;
-    for (int k = 0; k < 0x40; k++) {
-        if (!owner->m_objectActive[k])
-            continue;
-        const PlayerObject& obj = owner->m_objects[k];
-        slots[n] = k;
-        dist[n] = fabs(obj.x - viewer->x) + fabs(obj.y - viewer->y);
-        n++;
-    }
-    for (int k = 0; k < kObjects; k++, o += kObjectFeatures) {
-        if (k >= n) {
-            memset(o, 0, kObjectFeatures * sizeof(float));
-            continue;
-        }
-        int best = k;
-        for (int j = k + 1; j < n; j++) {
-            if (dist[j] < dist[best])
-                best = j;
-        }
-        std::swap(slots[k], slots[best]);
-        std::swap(dist[k], dist[best]);
-        const PlayerObject& obj = owner->m_objects[slots[k]];
-        o[0] = 1.0f;
-        o[1] = (float)((obj.x - viewer->x) / 320.0);
-        o[2] = (float)(obj.y / 240.0);
-        o[3] = Clamp(obj.vx / 20.0, -10, 10);
-        o[4] = Clamp(obj.vy / 20.0, -10, 10);
-        o[5] = obj.hitsLeft > 0;
-    }
-}
-
 void WriteObs(EfzEnv* env, const Slot& s, float* out)
 {
-    CScene3* fight = Fight();
-    CGame* game = Game();
-    for (int v = 0; v < 2; v++) {
-        float* o = out + v * kObsDim;
-        CPlayer* self = fight->m_players[v];
-        CPlayer* opp = fight->m_players[1 - v];
-        int max = env->cfg.max_frames > 0 ? env->cfg.max_frames : 10000;
-        o[0] = (float)s.ep.frame / max;
-        o[1] = game->m_round;
-        o[2] = game->m_intro != 0;
-        o[3] = game->m_roundOver != 0;
-        o[4] = (float)((opp->x - self->x) / 640.0);
-        o[5] = (float)((opp->y - self->y) / 240.0);
-        o[6] = (float)v;
-        o[7] = game->m_roundsToWin;
-        o += kGlobalFeatures;
-        WritePlayer(o, self);
-        WritePlayer(o + kPlayerFeatures, opp);
-        o += 2 * kPlayerFeatures;
-        WriteObjects(o, self, self);
-        WriteObjects(o + kObjects * kObjectFeatures, opp, self);
-    }
+    for (int v = 0; v < 2; v++)
+        agent::WriteView(out + v * kObsDim, Fight(), Game(), v, s.ep.frame, env->cfg.max_frames);
 }
 
 void WriteInfo(const Slot& s, EfzInfo& info, int winner, bool ended)
@@ -1088,13 +912,12 @@ int32_t efz_env_obs_dim(void)
 
 const char* efz_env_obs_name(int32_t i)
 {
-    std::call_once(g_namesOnce, MakeNames);
-    return i >= 0 && i < kObsDim ? g_names[i] : nullptr;
+    return agent::ObservationName(i);
 }
 
 const char* efz_env_character_name(int32_t c)
 {
-    return c >= 0 && c < EFZ_CHARACTERS ? kCharacterNames[c] : nullptr;
+    return c >= 0 && c < EFZ_CHARACTERS ? agent::CharacterName(c) : nullptr;
 }
 
 EfzEnv* efz_env_create(const char* dataDir, const EfzEnvConfig* config, char* error,
@@ -1535,6 +1358,78 @@ uint64_t efz_env_ticks(const EfzEnv* env)
 const char* efz_env_error(const EfzEnv* env)
 {
     return env ? env->error.c_str() : "";
+}
+
+// --- Agents (port/agent/policy.h), outside any game: no arena is bound.
+
+struct EfzAgent {
+    agent::Policy policy;
+    std::unique_ptr<agent::Player> player;
+};
+
+EfzAgent* efz_env_agent_load(const char* path, char* error, size_t errorSize)
+{
+    BindArena(nullptr);
+    std::unique_ptr<EfzAgent> a(new EfzAgent);
+    std::string why;
+    if (!path || !a->policy.Load(path, &why)) {
+        if (error && errorSize)
+            snprintf(error, errorSize, "%s", path ? why.c_str() : "no path");
+        return nullptr;
+    }
+    a->player.reset(new agent::Player(&a->policy, 1));
+    return a.release();
+}
+
+void efz_env_agent_free(EfzAgent* a)
+{
+    BindArena(nullptr);
+    delete a;
+}
+
+void efz_env_agent_info(const EfzAgent* a, EfzAgentInfo* info)
+{
+    if (!a || !info)
+        return;
+    memset(info, 0, sizeof(*info));
+    info->width = a->policy.Width();
+    info->actions = a->policy.Actions();
+    info->frame_skip = a->policy.frameSkip;
+    info->history = a->policy.history;
+    info->delay = a->policy.delay;
+    info->character = a->policy.character;
+    snprintf(info->name, sizeof(info->name), "%s", a->policy.name.c_str());
+}
+
+void efz_env_agent_log_probs(const EfzAgent* a, const float* views, int32_t n, float* out)
+{
+    if (!a || !views || !out)
+        return;
+    BindArena(nullptr);
+    int w = a->policy.Width(), k = a->policy.Actions();
+    for (int32_t i = 0; i < n; i++)
+        a->policy.LogProbs(views + (size_t)i * w, out + (size_t)i * k);
+}
+
+void efz_env_agent_reset(EfzAgent* a, uint64_t seed)
+{
+    if (!a)
+        return;
+    BindArena(nullptr);
+    a->player.reset(new agent::Player(&a->policy, seed));
+}
+
+uint8_t efz_env_agent_step(EfzAgent* a, const float* view, int32_t actionable, int32_t deterministic)
+{
+    if (!a || !view)
+        return 0;
+    BindArena(nullptr);
+    return a->player->Step(view, actionable != 0, deterministic != 0);
+}
+
+int32_t efz_env_agent_last_action(const EfzAgent* a)
+{
+    return a ? a->player->LastAction() : -1;
 }
 
 } // extern "C"

@@ -13,6 +13,7 @@
 #include "log.h"
 #include "netplay.h"
 #include "record.h"
+#include "agents.h"
 
 namespace {
 
@@ -397,6 +398,10 @@ BYTE CInput::GetInput(BYTE player)
         }
         binding++;
     }
+    // An agent's side (out of netplay, where the session takes this computer's input from
+    // the agent itself).
+    if (!efz::g_netplay.active)
+        efz::AgentInput(player, &result);
     efz::NoteInput(player, result);
     // A network match: the input of this frame for that player, local or remote, in
     // place of the controls (EfzRevival's hook at the end of CInput::GetInput, efz.exe

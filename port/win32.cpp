@@ -130,6 +130,16 @@ void SetDataDir(const char* data, const char* save)
     g_saveDir = save ? save : data;
 }
 
+const char* DataDir()
+{
+    return g_dataDir.c_str();
+}
+
+const char* SaveDir()
+{
+    return g_saveDir.c_str();
+}
+
 void SetReplayFile(const char* path)
 {
     t_replayFile = path;

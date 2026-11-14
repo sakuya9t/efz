@@ -68,6 +68,12 @@ set(EFZ_PORT_SOURCES)
 foreach(f arena graphics layout win32 x87)
   list(APPEND EFZ_PORT_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
 endforeach()
+# Trained agents: their view of a fight and their network (port/agent/, docs/agents.md),
+# in the game and the training library alike.
+set(EFZ_AGENT_SOURCES)
+foreach(f observe policy)
+  list(APPEND EFZ_AGENT_SOURCES ${CMAKE_SOURCE_DIR}/port/agent/${f}.cpp)
+endforeach()
 set(EFZ_SDL_SOURCES)
 foreach(f main sdlmain input sound video log crash record)
   list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
@@ -76,6 +82,8 @@ endforeach()
 foreach(f net protocol session titleitem netplay)
   list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/netplay/${f}.cpp)
 endforeach()
+# Agents playing in the game: on character select and in netplay (docs/agents.md).
+list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/agent/play.cpp)
 
 # What every target compiling the game needs. The recovered code reads every structure
 # through casts of other types, so the compiler may not assume the types keep apart;
@@ -104,7 +112,8 @@ function(efz_game_target target)
 endfunction()
 
 if(EFZ_GAME)
-  add_executable(efz WIN32 MACOSX_BUNDLE ${EFZ_GAME_SOURCES} ${EFZ_PORT_SOURCES} ${EFZ_SDL_SOURCES})
+  add_executable(efz WIN32 MACOSX_BUNDLE ${EFZ_GAME_SOURCES} ${EFZ_PORT_SOURCES} ${EFZ_AGENT_SOURCES}
+                 ${EFZ_SDL_SOURCES})
   efz_game_target(efz)
   target_link_libraries(efz PRIVATE SDL3::SDL3)
   if(EFZ_COVERAGE)
@@ -138,7 +147,8 @@ if(EFZ_HEADLESS)
   set(EFZ_HEADLESS_SOURCES
       ${CMAKE_SOURCE_DIR}/port/headless/platform.cpp
       ${CMAKE_SOURCE_DIR}/port/headless/env.cpp)
-  add_library(efz_headless OBJECT ${EFZ_GAME_SOURCES} ${EFZ_PORT_SOURCES} ${EFZ_HEADLESS_SOURCES})
+  add_library(efz_headless OBJECT ${EFZ_GAME_SOURCES} ${EFZ_PORT_SOURCES} ${EFZ_AGENT_SOURCES}
+              ${EFZ_HEADLESS_SOURCES})
   efz_game_target(efz_headless)
   target_include_directories(efz_headless PRIVATE ${CMAKE_SOURCE_DIR}/port/headless)
   target_compile_definitions(efz_headless PRIVATE EFZ_MULTI_INSTANCE EFZ_ENV_BUILD)

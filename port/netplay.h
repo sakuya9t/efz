@@ -21,6 +21,7 @@ struct NetplayOptions {
     int port = 0;               // 0: Revival's 10800
     const char* name = nullptr;
     int delay = -1;             // -1: the recommended
+    const char* agent = nullptr; // an agent file playing this computer's side (agents.h)
 };
 void InitNetplay(const NetplayOptions& options);
 // Whether netplay's screens or a match have this frame instead of the game's own loop,

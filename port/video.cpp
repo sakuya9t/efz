@@ -7,6 +7,7 @@
 #include "platform.h"
 #include "log.h"
 #include "netplay.h"
+#include "agents.h"
 
 namespace {
 
@@ -89,6 +90,7 @@ void Present(IDirectDrawSurface* back, const PALETTEENTRY* pal)
     SDL_RenderTexture(g_renderer, g_texture, nullptr, nullptr);
     DrawWatermark();
     DrawNetplay(g_renderer); // its screens and a match's information, over the frame
+    DrawAgents(g_renderer);  // who plays each side of VS HUMAN
     // For tests: EFZ_DUMP_WINDOW=DIR writes the window as shown, overlays included, every
     // EFZ_DUMP_WINDOW_EVERY (default 30) frames shown, to DIR/wNNNNNN.bmp.
     static const char* windowDump = getenv("EFZ_DUMP_WINDOW");

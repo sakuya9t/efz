@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 7
+#define EFZ_ENV_VERSION 8
 
 /* What a step does when a match ends (EfzEnvConfig.autoreset). */
 #define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
@@ -267,6 +267,38 @@ EFZ_ENV_API int32_t efz_env_sound_events(EfzEnv* env, int32_t index, EfzSoundEve
 EFZ_ENV_API uint64_t efz_env_ticks(const EfzEnv* env);
 /* The last error, as text. */
 EFZ_ENV_API const char* efz_env_error(const EfzEnv* env);
+
+/* Trained agents as the game plays them (port/agent/policy.h, docs/agents.md): an agent
+ * file that python/examples/export_agent.py writes from a model.zip, its network run
+ * here, with no Python machine learning. For checking an exported agent against its
+ * model, and for playing one as the game would. */
+typedef struct EfzAgent EfzAgent;
+typedef struct EfzAgentInfo {
+    int32_t width;      /* the numbers its network takes: a view, then its input history */
+    int32_t actions;
+    int32_t frame_skip; /* frames each decision is held for */
+    int32_t history;    /* steps of its own inputs it sees */
+    int32_t delay;      /* decisions late it sees the game */
+    int32_t character;  /* the character it plays (0-24), -1 any */
+    char name[64];
+} EfzAgentInfo;
+/* NULL on failure, with the reason in error. */
+EFZ_ENV_API EfzAgent* efz_env_agent_load(const char* path, char* error, size_t error_size);
+EFZ_ENV_API void efz_env_agent_free(EfzAgent* agent);
+EFZ_ENV_API void efz_env_agent_info(const EfzAgent* agent, EfzAgentInfo* info);
+/* The log-probability of each action for n views of `width` numbers: out[n][actions]. */
+EFZ_ENV_API void efz_env_agent_log_probs(const EfzAgent* agent, const float* views, int32_t n,
+                                     float* out);
+/* The agent playing a side as the game plays it: efz_env_agent_reset at a match's start (its
+ * draws seeded), then each frame the player's view (efz_env_obs_dim numbers, as a step
+ * gives them) and whether the controls do anything (no intro, no KO); the frame's control
+ * byte, forward and back relative to where the player faces. deterministic: the likeliest
+ * action instead of a draw. */
+EFZ_ENV_API void efz_env_agent_reset(EfzAgent* agent, uint64_t seed);
+EFZ_ENV_API uint8_t efz_env_agent_step(EfzAgent* agent, const float* view, int32_t actionable,
+                                   int32_t deterministic);
+/* The action of its last decision; -1 before the first. */
+EFZ_ENV_API int32_t efz_env_agent_last_action(const EfzAgent* agent);
 
 #ifdef __cplusplus
 }

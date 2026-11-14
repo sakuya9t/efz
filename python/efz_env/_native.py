@@ -10,7 +10,7 @@ import glob
 import os
 import sys
 
-VERSION = 7
+VERSION = 8
 
 # EfzEnvConfig.autoreset
 AUTORESET_SAME_STEP = 0
@@ -98,6 +98,18 @@ class SoundEvent(ctypes.Structure):
     ]
 
 
+class AgentInfo(ctypes.Structure):
+    _fields_ = [
+        ('width', ctypes.c_int32),
+        ('actions', ctypes.c_int32),
+        ('frame_skip', ctypes.c_int32),
+        ('history', ctypes.c_int32),
+        ('delay', ctypes.c_int32),
+        ('character', ctypes.c_int32),
+        ('name', ctypes.c_char * 64),
+    ]
+
+
 def _candidates():
     env = os.environ.get('EFZ_ENV_LIBRARY')
     if env:
@@ -145,6 +157,13 @@ def _bind(lib):
         'efz_env_sound_log': (None, [ctypes.c_int32]),
         'efz_env_sound_events': (ctypes.c_int32, [P, ctypes.c_int32, P, ctypes.c_int32]),
         'efz_env_error': (ctypes.c_char_p, [P]),
+        'efz_env_agent_load': (P, [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_size_t]),
+        'efz_env_agent_free': (None, [P]),
+        'efz_env_agent_info': (None, [P, ctypes.POINTER(AgentInfo)]),
+        'efz_env_agent_log_probs': (None, [P, P, ctypes.c_int32, P]),
+        'efz_env_agent_reset': (None, [P, ctypes.c_uint64]),
+        'efz_env_agent_step': (ctypes.c_uint8, [P, P, ctypes.c_int32, ctypes.c_int32]),
+        'efz_env_agent_last_action': (ctypes.c_int32, [P]),
     }
     for name, (restype, argtypes) in sig.items():
         f = getattr(lib, name)
