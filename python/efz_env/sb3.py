@@ -43,18 +43,190 @@ from .history import Delay, InputHistory
 from .vec import EfzVecEnv
 
 
+def copy_policy(source):
+    """A copy of an SB3 policy as it is now, in evaluation mode.
+
+    SB3's _get_constructor_parameters leaves share_features_extractor out, so a policy
+    made from it alone shares one extractor between actor and critic whatever the source
+    does; loading the source's weights then writes the critic's extractor over the
+    actor's, and the copy plays with the wrong embeddings (until 12 November 2026 every
+    frozen() copy did: the true agent beat such a copy of an exploiter 100% of the time
+    and the exploiter itself 41%). The copy's weights are checked against the source's."""
+    import torch
+    kwargs = source._get_constructor_parameters()
+    if hasattr(source, 'share_features_extractor'):
+        kwargs['share_features_extractor'] = source.share_features_extractor
+    policy = type(source)(**kwargs).to(source.device)
+    state = source.state_dict()
+    policy.load_state_dict(state)
+    for name, value in policy.state_dict().items():
+        if not torch.equal(value, state[name]):
+            raise RuntimeError(f"copy_policy: the copy's {name} is not the source's")
+    policy.set_training_mode(False)
+    return policy
+
+
 def frozen(model, deterministic=False):
     """An opponent for EfzSB3VecEnv: a copy of `model`'s policy as it is now."""
-    source = model.policy
-    policy = type(source)(**source._get_constructor_parameters()).to(source.device)
-    policy.load_state_dict(source.state_dict())
-    policy.set_training_mode(False)
+    policy = copy_policy(model.policy)
     width = policy.observation_space.shape[0]
 
     def act(obs):
         actions, _ = policy.predict(obs[:, :width], deterministic=deterministic)
         return actions
+    # What mixture() needs to call it together with others of its architecture.
+    act.policy, act.width, act.deterministic = policy, width, deterministic
     return act
+
+
+_ACTOR = []  # the class, made once (torch is imported only when stacking)
+
+
+def _actor(policy):
+    """An ActorCriticPolicy's actor path (features, policy MLP, action head) as one
+    module: its logits for observations of its own width."""
+    if not _ACTOR:
+        import torch
+
+        class Actor(torch.nn.Module):
+            def __init__(self, p):
+                super().__init__()
+                self.features = p.pi_features_extractor if not p.share_features_extractor \
+                    else p.features_extractor
+                self.mlp = p.mlp_extractor.policy_net
+                self.head = p.action_net
+
+            def forward(self, x):
+                return self.head(self.mlp(self.features(x)))
+        _ACTOR.append(Actor)
+    return _ACTOR[0](policy)
+
+
+def _stackable(policy):
+    """The frozen() policy behind a mixture member (itself, or the `inner` of a member
+    with a `post` step, such as advantages.AdvantagedOpponent), or None."""
+    if getattr(policy, 'policy', None) is not None and hasattr(policy, 'width'):
+        return policy
+    inner = getattr(policy, 'inner', None)
+    if hasattr(policy, 'post') and getattr(inner, 'policy', None) is not None:
+        return inner
+    return None
+
+
+class _Stack:
+    """Frozen policies of one architecture called as one: their weights stacked
+    (torch.func.stack_module_state), each on its own matches' rows, padded to the most
+    rows any of them has (a bucket keeps that close to their own). The same logits as
+    each policy's own predict; the actions are drawn from them the same way."""
+
+    def __init__(self, members):
+        import copy
+        import torch
+        from torch.func import functional_call, stack_module_state, vmap
+        self.members = members  # [(member, its frozen policy, idx)]
+        actors = [_actor(f.policy) for _, f, _ in members]
+        self.width = members[0][1].width
+        self.deterministic = members[0][1].deterministic
+        size = max(len(idx) for _, _, idx in members)
+        self.gather = np.stack([np.resize(idx, size) for _, _, idx in members])  # repeats rows to pad
+        self.efz = _EfzStack.make(actors)  # the policies of efz_env.policy: batched by hand
+        if self.efz is None:
+            self.params, self.buffers = stack_module_state(actors)
+            base = copy.deepcopy(actors[0]).to('meta')
+            self.fn = vmap(lambda p, b, x: functional_call(base, (p, b), (x,)))
+
+    def logits(self, obs):
+        import torch
+        x = torch.as_tensor(np.asarray(obs, np.float32)[self.gather][:, :, :self.width])
+        with torch.no_grad():
+            if self.efz is not None:
+                return self.efz(x)
+            return self.fn(self.params, self.buffers, x)
+
+    def __call__(self, obs):
+        import torch
+        logits = self.logits(obs)
+        with torch.no_grad():
+            a = (logits.argmax(-1) if self.deterministic else
+                 torch.distributions.Categorical(logits=logits).sample())
+        a = a.numpy()
+        return [a[m, :len(idx)] for m, (_, _, idx) in enumerate(self.members)]
+
+
+class _EfzStack:
+    """The actors of efz_env.policy.EfzPolicy (EfzFeatures, a ReLU MLP, a linear head),
+    stacked, as batched matrix products: torch.func's vmap does the same, its dispatch
+    costing more than the arithmetic at a league's few rows per policy."""
+
+    @classmethod
+    def make(cls, actors):
+        import torch
+        from .policy import EfzFeatures
+        a0 = actors[0]
+        if not isinstance(a0.features, EfzFeatures):
+            return None
+        layers = list(a0.mlp) if isinstance(a0.mlp, torch.nn.Sequential) else None
+        if not layers or not all(isinstance(m, (torch.nn.Linear, torch.nn.ReLU)) for m in layers):
+            return None
+        if not all(torch.equal(a.features.cont, a0.features.cont) for a in actors):
+            return None
+        return cls(actors, [type(m) for m in layers])
+
+    def __init__(self, actors, kinds):
+        import torch
+        from . import policy as P
+        st = lambda get: torch.stack([get(a).detach() for a in actors])
+        f = lambda a: a.features
+        self.cont = actors[0].features.cont
+        self.mean, self.scale = st(lambda a: f(a).mean)[:, None], st(lambda a: f(a).scale)[:, None]
+        self.action, self.own = st(lambda a: f(a).action.weight), st(lambda a: f(a).own_action.weight)
+        self.char = st(lambda a: f(a).char.weight)
+        self.layers = []
+        for k, kind in enumerate(kinds):
+            if kind is torch.nn.Linear:
+                self.layers.append((st(lambda a: a.mlp[k].weight).transpose(1, 2).contiguous(),
+                                    st(lambda a: a.mlp[k].bias)[:, None]))
+            else:
+                self.layers.append(None)  # ReLU
+        self.head = (st(lambda a: a.head.weight).transpose(1, 2).contiguous(),
+                     st(lambda a: a.head.bias)[:, None])
+        self.m = torch.arange(len(actors))[:, None]
+        self.cols = (P.SELF_ACTION, P.SELF_CHAR, P.OPP_ACTION, P.OPP_CHAR)
+        self.n_actions, self.n_chars = P.ACTIONS, P.CHARACTERS
+
+    def __call__(self, x):
+        import torch
+        m = self.m
+        parts = [((x[..., self.cont] - self.mean) * self.scale).clamp(-10, 10)]
+        sa, sc, oa, oc = self.cols
+        chars = {}
+        for a_col, c_col in ((sa, sc), (oa, oc)):
+            act = x[..., a_col].round().long().clamp(0, self.n_actions - 1)
+            char = x[..., c_col].round().long().clamp(0, self.n_chars - 1)
+            chars[c_col] = char
+            parts += [self.action[m, act], self.own[m, char * self.n_actions + act]]
+        parts += [self.char[m, chars[sc]], self.char[m, chars[oc]]]
+        h = torch.cat(parts, dim=-1)
+        for layer in self.layers:
+            h = torch.relu(h) if layer is None else torch.baddbmm(layer[1], h, layer[0])
+        return torch.baddbmm(self.head[1], h, self.head[0])
+
+
+def _stacks(groups):
+    """groups [(policy, idx)] -> (stacks, the rest): the stackable members with matches,
+    by architecture and observation width, in buckets of up to twice as many rows as the
+    fewest among them."""
+    keyed, rest = {}, []
+    for policy, idx in groups:
+        f = _stackable(policy) if policy is not None and len(idx) else None
+        if f is None:
+            rest.append((policy, idx))
+            continue
+        shapes = tuple((k, tuple(v.shape)) for k, v in f.policy.state_dict().items())
+        key = (type(f.policy), shapes, f.width, f.deterministic,
+               int(np.ceil(np.log2(len(idx)))))
+        keyed.setdefault(key, []).append((policy, f, idx))
+    return [_Stack(m) for m in keyed.values()], rest
 
 
 def held(opponent, steps):
@@ -70,16 +242,25 @@ def held(opponent, steps):
     return act
 
 
-def mixture(policies, assignment):
+def mixture(policies, assignment, stack=True):
     """An opponent of several policies: match i is played by policies[assignment[i]]
     (each a callable as EfzSB3VecEnv's opponent; None for matches the CPU plays). A
-    policy with takes_index set is given its matches' indices too: policy(obs, idx)."""
+    policy with takes_index set is given its matches' indices too: policy(obs, idx).
+
+    stack: frozen() policies of one architecture are called together, once a step
+    (_Stack: their separate predict calls were half of a league's training time), as
+    are the frozen policies inside members with a `post` step (post(actions, idx): the
+    member's own change to them, advantages.AdvantagedOpponent's)."""
     assignment = np.asarray(assignment)
     groups = [(p, np.flatnonzero(assignment == k)) for k, p in enumerate(policies)]
+    stacks, rest = _stacks(groups) if stack else ([], groups)
 
     def act(obs):
         actions = np.zeros(len(obs), dtype=np.int64)
-        for policy, idx in groups:
+        for st in stacks:
+            for (member, f, idx), a in zip(st.members, st(obs)):
+                actions[idx] = member.post(a.copy(), idx) if member is not f else a
+        for policy, idx in rest:
             if policy is not None and len(idx):
                 if getattr(policy, 'takes_index', False):
                     actions[idx] = policy(obs[idx], idx)
