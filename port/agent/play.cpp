@@ -18,6 +18,9 @@
 #include <string.h>
 #include <algorithm>
 #include <memory>
+// Before efz.h, whose x87.h makes sin, cos and atan2 macros: agent/policy.h needs it,
+// and the <cmath> it brings does not compile after them.
+#include <random>
 #include <string>
 #include <vector>
 
