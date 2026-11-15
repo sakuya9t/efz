@@ -76,7 +76,7 @@ class Planner:
     """Tries a hit's options on copies of the game and says which made the most."""
 
     def __init__(self, data_dir, library, model, per_start=12, limit=900, history=16,
-                 score='damage', gamma=0.999, victims=None):
+                 score='damage', gamma=0.999, victims=None, replan=False):
         if score not in ('damage', 'value'):
             raise ValueError("score: 'damage' or 'value'")
         self.library, self.per_start, self.limit = library, per_start, limit
@@ -86,6 +86,20 @@ class Planner:
         self.by_starter = {}
         for m in library:
             self.by_starter.setdefault(m['starter'], []).append(m)
+        # replan: combo_support's FairAssist plans again at each new move's hit it sees,
+        # with the rest of the route it is on as one more option, and the combos can be
+        # joined where one of their moves first hit (their marks: combo_library.py
+        # --marks): from there their inputs are what followed that move, worth the
+        # damage the recording made after it.
+        self.replan = replan
+        if replan:
+            for m in library:
+                for step, move, before, _ in m.get('marks', [])[1:]:
+                    self.by_starter.setdefault(move, []).append(dict(
+                        m, actions=m['actions'][step:], starter=move, joined=step,
+                        damage=m['damage'] - before))
+            for pool in self.by_starter.values():
+                pool.sort(key=lambda m: -m['damage'])
         # A library kept per victim: the combos landed on the character faced come first.
         self.by_victim = any(m.get('kept_for') == 'victim' for m in library)
         from efz_env.vec import character_names
@@ -96,7 +110,7 @@ class Planner:
         unknown = (self.victims or set()) - set(self.names)
         if unknown:
             raise ValueError(f'victims: no such characters {sorted(unknown)}')
-        self.sim = EfzVecEnv(data_dir, per_start + 1, frame_skip=1, rounds_to_win=2,
+        self.sim = EfzVecEnv(data_dir, per_start + 2, frame_skip=1, rounds_to_win=2,
                              max_frames=0, autoreset='disabled')
         self.sim.reset()
         self.model = model
@@ -109,7 +123,7 @@ class Planner:
                 self.names[int(round(float(view[OPP_CHARACTER])))] in self.victims)
 
     def plan(self, state, side, starter, hist, prev, offset=0, seen=None, policy=None,
-             value=None):
+             value=None, extra=None):
         """state: the game at the first hit (or `offset` steps after it); side: the
         attacker's; hist (H, 6), prev: its input history then. offset: the library combos
         are played from that step of theirs (combo_support's fair assist plans when the
@@ -117,9 +131,10 @@ class Planner:
         newest first ((delay + 1, dim): efz_env.history.Delay's buffer), for its own play
         to see the copies as late as it sees the game; policy: its own play's (obs batch
         -> actions), default the planner's model; value: its critic's (score='value': obs
-        batch -> values), default the planner's model's. Returns (actions of the chosen
-        library combo from offset, or None for its own play; the most an option made;
-        what its own play made)."""
+        batch -> values), default the planner's model's. extra: one more option, actions
+        from this state on (the rest of the route being played, at a replan). Returns
+        (actions of the chosen library combo from offset, or None for its own play; the
+        most an option made; what its own play made)."""
         sim = self.sim
         victim = None
         if self.by_victim:
@@ -127,6 +142,8 @@ class Planner:
             victim = self.names[int(round(float(sim.obs[0, side, OPP_CHARACTER])))]
         picked = route_pool(self.by_starter, starter, victim, offset, self.per_start)
         cands = [m['actions'][offset:] for m in picked]
+        if extra is not None and len(extra):
+            cands.append(np.asarray(extra))
         n = len(cands) + 1  # the last: its own play
         delayed = None if seen is None else np.array(seen, np.float32)  # newest first
         hp0 = np.zeros(n)
@@ -190,7 +207,8 @@ class Planner:
         best = int(np.argmax(worth))
         chosen = cands[best] if best < len(cands) and worth[best] > worth[-1] else None
         # (the plan as tried, for combo_net.py: the combos, what each and its own play dealt)
-        self.last = dict(picked=picked, dealt=dealt[:n].copy())
+        self.last = dict(picked=picked, dealt=np.append(dealt[:len(picked)], dealt[n - 1]),
+                         kept=float(dealt[len(picked)]) if n > len(picked) + 1 else None)
         if track and best != int(np.argmax(dealt)):
             self.changed += 1
         return chosen, float(dealt.max()), float(dealt[-1])

@@ -1275,6 +1275,49 @@ of the game and no second process. The planner stays the stronger of the two and
 `play.py --assist` uses unless `--chooser` is given. In the plain game against the league
 neither adds wins: the combos matter against a defence that guards strings out.
 
+*Routes that fit where the players are* (14 November; the user, after 20 matches against
+round 15's agent with the routes: "it hits a lot, but sometimes it drops because the
+conditions are different (mid screen vs corner) but it still tries the same combo"). In
+those matches 136 routes can be recognised: 9% were played to their end, and the route
+started most often (a corner recording of 22 hits, from 2A) was started 23 times and
+never finished. The league's plans say the same (59,854 of them, `combo_net.py collect`):
+the chosen route deals 1,833 HP of the 4,287 its recording made, and 9% reach four
+fifths of it. The cause is not the corner (trying only recordings made at the same end
+of the screen first adds 1%): a recording played blind from its 14th step fits the
+position it was made in and almost no other, and the planner only chose the least bad
+of twelve, once.
+
+So the plan is made again (`redteam.Planner(replan=True)`, `evaluate.py
+--assist-replan`, `play.py --assist` by default): at each new move's hit the agent sees,
+the options are the rest of the route it is on, its own play, and the library's combos
+joined where that move hit in them (`combo_library.py --marks`: the first hit of each
+new move inside each recording, 10,958 of them in the library's 848 combos, kept beside
+the library as `.marks.json`). Nothing else changes: it plans from what it has seen, 14
+steps late. Round 15's agent on the `person` set, 64 seeded matches against each of the
+eight:
+
+| Its combos by | Wins (own HP lost) | HP a combo | 90th percentile | Hits a combo | Left | Plans a match |
+|---|---|---|---|---|---|---|
+| itself | 69% (68%) | 969 | 1,770 | 3.0 | 74% | - |
+| the routes: 12 tried, at the first hit | 81% (64%) | 1,240 | 2,670 | 4.9 | 66% | 16 |
+| 48 tried, at the first hit | 86% (61%) | 1,370 | 2,970 | 5.8 | 62% | 15 |
+| planned again, 12 tried | 86% (58%) | 1,440 | 3,210 | 6.3 | 60% | 67 |
+| planned again, 24 tried | 90% (55%) | 1,530 | 3,460 | 7.3 | 56% | 72 |
+| planned again, 48 tried | 91% (55%) | 1,600 | 3,650 | 8.0 | 52% | 76 |
+
+Better against each of the eight but the two it already beat every time (Ex-Nanase 48%
+to 72%, Sayuri 62% to 81%, Nagamori 78% to 91% with 24 tried). Against a person
+(`combo_support.LiveRoutes(replan=True)`) one plan is made at a time, in the 14 steps
+before the agent sees the hit: a hit that lands while a plan is awaited is planned on
+when that plan is in, the combos joined that many steps further in, and if a plan is
+dropped the route goes on. At the game's speed, 24 tried: a plan takes 129 ms at the
+median and the game waited for one 0.1 ms at the median, 45 ms at most; with 48, 9 ms at
+the 90th percentile and 103 ms at most, so `play.py` tries 24 (`--assist-routes`;
+`--assist-once` for the plan at the first hit only).
+The game waits a tenth of a second at most for a combo's first plan and half a frame
+for a later one, then goes on with what it has (the route it is on, or its own play): on
+the machine busy with eleven training runs most plans come late and nothing stalls.
+
 ## Ayu's agent as other characters
 
 What it learnt for Ayu and what any character keeps (8 November; `eval/transfer/`): the
@@ -1535,7 +1578,7 @@ is only on the Linux machine until the next upload.
 | `people.py` | the same measures of people, overall, by opponent and by player |
 | `compare.py` | people and agents side by side, as the tables here |
 | `team_check.py` | whether players' clones predict their players better than the clone of everyone |
-| `combo_support.py` | the built-in routes: an agent's combos from people's library combos tried on copies of the game once it sees its hit (`FairAssist`; `evaluate.py --p1-assist`, `finetune.py --assist`), against a person in real time with the planner in a process of its own (`LiveRoutes`, `play.py --assist`) or with the chooser (`ChosenRoutes`, `play.py --assist --chooser`) |
+| `combo_support.py` | the built-in routes: an agent's combos from people's library combos tried on copies of the game once it sees its hit, and again at each new move's hit (`FairAssist`; `evaluate.py --p1-assist [--assist-replan]`, `finetune.py --assist`), against a person in real time with the planner in a process of its own (`LiveRoutes`, `play.py --assist`) or with the chooser (`ChosenRoutes`, `play.py --assist --chooser`) |
 | `combo_net.py` | the routes without the copies: `collect` an agent's plans (and steps) with the routes, `train-chooser` a network that says from the agent's view what each library combo would deal (`evaluate.py --assist-chooser`, `play.py --chooser`); `train`, `train-clock`, `play`: the two step-by-step networks that didn't work |
 | `combo_starts.py` | where people's combos started, kept as a replay and a step |
 | `combo.py` | the combo master: trials from those starts, rewarded for the combo's damage |

@@ -135,7 +135,8 @@ def collect(args):
             return out
 
     agent = ev.make_agent(args.agent)
-    planner = redteam.Planner(args.data, load_routes(args.library), agent.model)
+    planner = redteam.Planner(args.data, load_routes(args.library), agent.model,
+                              per_start=args.per_start)
     p1 = Recorder(agent, planner)
     p2 = 'cpu' if args.p2 == 'cpu' else ev.make_agent(args.p2)
     if args.p2_advantage:
@@ -707,6 +708,9 @@ def main():
     c.add_argument('--minutes', type=float, default=5)
     c.add_argument('--seed', type=int, default=101, help="not evaluate.py's 7")
     c.add_argument('--out', required=True)
+    c.add_argument('--per-start', type=int, default=12,
+                   help="the library combos tried at a hit (the planner's 12; more: how"
+                        ' much a wider choice would make)')
     c.add_argument('--plans-only', action='store_true',
                    help="keep the plans (train-chooser's), not the steps")
     t = sub.add_parser('train')

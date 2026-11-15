@@ -51,6 +51,8 @@ LIMIT = 1200
 def load_library(path, top=None):
     lib = np.load(path)
     meta = json.loads(str(lib['meta']))
+    marks = os.path.splitext(path)[0] + '.marks.json'  # combo_library.py --marks
+    marks = json.load(open(marks)) if os.path.exists(marks) else {}
     out, seen = [], set()
     for k, m in enumerate(meta[:top]):  # (top None: all)
         inputs = lib[f'inputs{k}']
@@ -60,7 +62,7 @@ def load_library(path, top=None):
         if key in seen:  # the same combo played again (a player's series)
             continue
         seen.add(key)
-        out.append(dict(m, actions=acts))
+        out.append(dict(m, actions=acts, marks=marks.get(str(k), [])))
     return out
 
 

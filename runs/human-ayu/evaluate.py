@@ -48,6 +48,9 @@ COLUMNS = [18, 20, 39, 50, 52, 67, 30, 38, 23, 35,  # + self_hitstop, self_own_a
            ] + tactics.OBS  # + what tactics.py reads
 TAKEN = 14  # where those start
 TACTICS = 20  # and tactics.OBS
+# Where a press is made (presses_where): hit or guarding; the opponent in its combo; the
+# opponent guarding; neither.
+WHERE = ('defending', 'combo', 'pressure', 'neutral')
 INSTANT_CHARGE = [0xa7, 0xab]  # 22C on the ground and in the air: cancels a move that hit
 
 
@@ -153,6 +156,7 @@ class Events:
         and how each went, the attacker's setup; free_time and opponent_free_time: the
         steps free while the other can't act, and what they were used for (a setup: an
         object out, a trap; a move; closing in; waiting);
+    presses_where: its presses a second, and the share of the time, in each of WHERE;
     busy_presses, busy_turns: the share of its presses, and of its changes of direction,
         made while it couldn't move (in a move of its own, or in hitstop): what a cancel
         is made of, a motion buffered for the moment the move connects.
@@ -171,6 +175,7 @@ class Events:
         self.n = dict.fromkeys(keys, 0)
         self.invincible = invincible_moves(char)
         self.n['presses'] = np.zeros(4)
+        self.n['press_where'] = np.zeros((len(WHERE), 2))  # presses, steps in each of WHERE
         self.n['combo_list'] = []  # each combo's (hits, damage, resource group)
         self.n['proration_left'] = []  # at the end of each of 3 hits or more
         self.n['hp_lost'] = 0.0
@@ -303,6 +308,13 @@ class Events:
                 n['taken_list'].append((float(dmg[b:e].max()), g))
         # Pressure, wake-up and free time, both ways (tactics.py).
         if cols.shape[1] >= TACTICS + len(tactics.OBS):
+            tc = cols[:, TACTICS:TACTICS + len(tactics.OBS)]
+            me, op = tactics.Side(tc, 0), tactics.Side(tc, 1)
+            where = np.where(me.hitstun | me.guard, 0, np.where(op.hitstun, 1,
+                                                                 np.where(op.guard, 2, 3)))
+            count = input_features(controls, prev_c)[:, 2:].sum(1)
+            for w in range(len(WHERE)):
+                n['press_where'][w] += count[where == w].sum(), (where == w).sum()
             for k, v in tactics.measure(cols[:, TACTICS:TACTICS + len(tactics.OBS)],
                                         controls).items():
                 n[k] += v
@@ -383,6 +395,11 @@ class Events:
         out['ic_per_min'] = round(n['ic'] * per_min, 2)
         out['busy_presses'] = share(n['presses_busy'], n['presses_all'])
         out['busy_turns'] = share(n['turns_busy'], n['turns_all'])
+        pw = n['press_where']
+        if pw[:, 1].sum():  # where: [presses a second there, the share of the time there]
+            out['presses_where'] = {w: [round(float(pw[i, 0] / max(1, pw[i, 1]) * 64), 2),
+                                        round(float(pw[i, 1] / pw[:, 1].sum()), 3)]
+                                    for i, w in enumerate(WHERE)}
         out['damage_taken_per_min'] = round(n['hp_lost'] * per_min)
         th = n['throw_list']
         out['throw_damage'] = round(float(np.mean([x[0] for x in th]))) if th else None
@@ -606,6 +623,12 @@ def main():
     p.add_argument('--assist-score', default='damage', choices=('damage', 'value'),
                    help="--p1-assist's choice: the most damaging option, or the most worth to "
                         "P1 (damage plus its critic's value of the game it left: redteam.Planner)")
+    p.add_argument('--assist-per-start', type=int, default=12,
+                   help="--p1-assist: the library combos tried at a hit")
+    p.add_argument('--assist-replan', action='store_true',
+                   help="--p1-assist plans again at each new move's hit P1 sees, the combos "
+                        "joined where that move hit in them (the library's marks: "
+                        "combo_library.py --marks)")
     p.add_argument('--assist-chooser', metavar='CHOOSER.pt',
                    help="--p1-assist's choice by combo_net.py's chooser (from P1's view when "
                         "it sees its hit) instead of on copies of the game")
@@ -627,7 +650,9 @@ def main():
             else:
                 planner = redteam.Planner(args.data, macros.load_library(args.p1_assist),
                                           p1.model, score=args.assist_score,
-                                          victims=args.assist_victims)
+                                          victims=args.assist_victims,
+                                          per_start=args.assist_per_start,
+                                          replan=args.assist_replan)
             p1 = combo_support.FairComboAgent(p1, planner)
         if args.p1_lookahead:
             p1 = combo_support.lookahead(args.data, args.p1, args.p1_lookahead)
@@ -661,7 +686,8 @@ def main():
     if args.p1_assist:  # its plans: how many, the share a route won, the damage options made
         out['assist'] = dict(p1.assist.take_plans(), score=args.assist_score,
                              changed=planner.changed, victims=args.assist_victims,
-                             chooser=args.assist_chooser)
+                             chooser=args.assist_chooser, per_start=args.assist_per_start,
+                             replan=args.assist_replan)
         print('assist', json.dumps(out['assist']), flush=True)
     if args.json:
         with open(args.json, 'w') as f:

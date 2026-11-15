@@ -11,6 +11,11 @@ overall are seldom on those: --per-victim K also keeps each victim's K most dama
 on the character it faces first (redteam.Planner).
 
     python runs/human-ayu/combo_library.py --dataset D:/tasogare/efz-replays/datasets/ayu
+
+--marks LIBRARY: for a library written already, where each of its combos can be joined
+(LIBRARY.marks.json beside it: the first hit of each new move inside the combo, with the
+damage and the hits before it), for a planner that plans again at each new move's hit
+(redteam.Planner(replan=True)).
 """
 
 import argparse
@@ -51,15 +56,54 @@ def combos_of(obs, inputs):
                    prev=int(inputs[b - 1]) if b > 0 else 0, inputs=inputs[b:e].copy())
 
 
+def marks_of(obs, start, end):
+    """Where a combo's moves first hit: [step from its start, the move, the combo's damage
+    and hits before it] for each hit that a move other than the one before made. A combo
+    can be joined there (redteam.Planner's suffixes): its inputs from that step are what
+    its player did after that move connected."""
+    hits = np.round(obs[start:end, HITS].astype(np.float32) * 30).astype(int)
+    act = np.round(obs[start:end, ACTION].astype(np.float32)).astype(int)
+    dmg = obs[start:end, DAMAGE].astype(np.float32) * 9999
+    out, last = [], None
+    for t in range(len(hits)):
+        if hits[t] > (hits[t - 1] if t else 0) and act[t] != last:
+            last = int(act[t])
+            out.append([t, last, round(float(dmg[t - 1]), 1) if t else 0.0,
+                        int(hits[t - 1]) if t else 0])
+    return out
+
+
+def write_marks(library, dataset):
+    """LIBRARY.marks.json: each of the library's combos' marks_of, by its place in the
+    library's list (macros.load_library reads the file if it is there)."""
+    meta = json.loads(str(np.load(library)['meta']))
+    out, cache = {}, {}
+    for k, m in enumerate(meta):
+        name = f"{m['id']}-{m['side']}.npz"
+        if name not in cache:
+            with np.load(os.path.join(dataset, name)) as z:
+                cache[name] = z['obs']
+        out[k] = marks_of(cache[name], m['start'], m['end'])
+    path = os.path.splitext(library)[0] + '.marks.json'
+    json.dump(out, open(path, 'w'))
+    n = np.array([len(v) for v in out.values()])
+    print(f'{path}: {len(out)} combos, {int(n.sum())} marks (a combo: median {np.median(n):.0f}, '
+          f'most {n.max()})')
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--dataset', required=True)
+    p.add_argument('--marks', metavar='LIBRARY',
+                   help='write LIBRARY.marks.json (where each combo can be joined) and stop')
     p.add_argument('--out', default=os.path.join('D:/tasogare/efz-replays', 'combo-library.npz'))
     p.add_argument('--keep', type=int, default=300)
     p.add_argument('--show', type=int, default=25)
     p.add_argument('--per-victim', type=int, default=0,
                    help="also keep each victim's this many most damaging")
     args = p.parse_args()
+    if args.marks:
+        return write_marks(args.marks, args.dataset)
     rows = [r for r in csv.DictReader(open(os.path.join(args.dataset, 'matches.csv'),
                                            encoding='utf-8')) if r['in_sync'] == '1']
     found = []

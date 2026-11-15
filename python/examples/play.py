@@ -13,6 +13,10 @@ You are player 2 unless --side 1. Matches go to --record (default recordings/) a
 LiveRoutes): once it sees its hit, as late as it sees everything, people's combos from the
 library (runs/human-ayu/combo_library.py's) that begin with the move that hit are tried on
 copies of the game and the most damaging is played, if it beats the agent's own play.
+It plans again at each new move's hit it sees, the rest of the route it is on one of the
+options and the library's combos joined where that move hit in them (the library's
+.marks.json beside it), so a route that doesn't fit where the players are is left for one
+that does; --assist-once for a plan at the first hit only.
 With --chooser (runs/human-ayu/combo_net.py's chooser.pt, trained for that agent and
 library) nothing is tried on copies: a network says from the agent's view which combo to
 play (ChosenRoutes): no second process, a little less damage.
@@ -92,6 +96,10 @@ def main():
                    help="the agent's combos from the built-in routes of this library")
     p.add_argument('--assist-victims', nargs='+', metavar='CHAR',
                    help='--assist only against these characters')
+    p.add_argument('--assist-routes', type=int, default=24, metavar='N',
+                   help='the combos tried at a plan (more: better combos, a slower plan)')
+    p.add_argument('--assist-once', action='store_true',
+                   help='a plan at the first hit only, not again at each new move')
     p.add_argument('--chooser', metavar='CHOOSER.pt', nargs='?', const=True,
                    help="--assist's combo chosen by this network, not on copies of the game "
                         "(alone: a pack's chooser)")
@@ -136,7 +144,9 @@ def main():
                     combo_net.load_routes(args.assist), policy.model, args.chooser))
             else:
                 routes = combo_support.LiveRoutes(policy, args.data, args.assist,
-                                                  victims=args.assist_victims)
+                                                  victims=args.assist_victims,
+                                                  per_start=args.assist_routes,
+                                                  replan=not args.assist_once)
     chars = tuple(None if c == 'any' else c for c in args.chars) if args.chars else (None, None)
     match = HumanMatch(args.data, human=args.side - 1,
                        opponent='cpu' if args.cpu else 'agent', chars=chars, stage=args.stage,

@@ -94,32 +94,46 @@ class FairAssist:
         if delay <= 0:
             raise ValueError('FairAssist plans when the player sees its hit: delay > 0')
         self.planner, self.delay = planner, delay
+        # (a planner with replan: a plan again at each new move's hit it sees)
+        self.replan = bool(getattr(planner, 'replan', False))
         self.playing = {}    # env -> [actions, step]
         self.prev_seen = {}  # env -> combo hits it saw last step
+        self.planned = {}    # env -> the move whose hit it planned on last
         self.plans = []      # (the most an option made, its own play's, a route chosen)
 
     def clear(self, i=None):
         if i is None:
             self.playing.clear()
             self.prev_seen.clear()
+            self.planned.clear()
         else:
             self.playing.pop(i, None)
             self.prev_seen.pop(i, None)
+            self.planned.pop(i, None)
 
     def update(self, i, seen_view, now_view, save, seen, hist, prev, side, policy, value=None):
         """Before environment i's next decision: plans if the player now sees its hit and
         the combo goes on. seen_view: what it sees; now_view: the game as it is; policy,
         value: its own play's and its critic's (the planner's score='value')."""
         hits = _hits(seen_view)
-        if (hits > 0 and self.prev_seen.get(i, 0) == 0 and _hits(now_view) > 0
-                and self.playing.get(i) is None
+        before = self.prev_seen.get(i, 0)
+        starter = int(round(float(seen_view[ACTION])))  # the move that hit
+        route = self.playing.get(i)
+        first = hits > 0 and before == 0 and route is None
+        again = self.replan and hits > before > 0 and starter != self.planned.get(i)
+        if hits == 0:
+            self.planned.pop(i, None)
+        if ((first or again) and _hits(now_view) > 0
                 and self.planner.plans_against(seen_view)):
-            starter = int(round(float(seen_view[ACTION])))  # the move that hit
+            more = {}
+            if again and route is not None:  # the route it is on: one of the options
+                more = dict(extra=route[0][route[1]:])
             chosen, best, own = self.planner.plan(save(), side, starter, hist, prev,
                                                   offset=self.delay, seen=seen, policy=policy,
-                                                  value=value)
+                                                  value=value, **more)
             self.plans.append((best, own, chosen is not None))
             self.playing[i] = [chosen, 0] if chosen is not None else None
+            self.planned[i] = starter
         self.prev_seen[i] = hits
 
     def action(self, i, now_hits):
@@ -214,7 +228,7 @@ def sampler(model, deterministic=False):
 
 
 def _live_worker(conn, data_dir, model_path, library, env_config, deterministic, victims,
-                 per_start):
+                 per_start, replan):
     """LiveRoutes's planner, a process of its own: a copy of the match (not drawn), played
     the same inputs frame by frame, and redteam's planner on copies of that."""
     import time
@@ -228,7 +242,7 @@ def _live_worker(conn, data_dir, model_path, library, env_config, deterministic,
     try:
         model = PPO.load(model_path, device='cpu')
         planner = redteam.Planner(data_dir, macros.load_library(library), model,
-                                  per_start=per_start, victims=victims)
+                                  per_start=per_start, victims=victims, replan=replan)
         shadow = EfzVecEnv(data_dir, 1, frame_skip=1, skip_noninteractive=False,
                            autoreset='disabled', **env_config)
         policy, table, sim = sampler(model, deterministic), ActionTable().table, planner.sim
@@ -254,22 +268,24 @@ def _live_worker(conn, data_dir, model_path, library, env_config, deterministic,
             return
         elif kind == 'plan':
             t0 = time.perf_counter()
-            key, side, starter, actions, hist, prev, now = arg
+            key, side, starter, actions, hist, prev, now, late, extra = arg
             if not np.array_equal(shadow.obs[0], now):  # not the game the person plays
                 conn.send(('plan', (key, 'apart', None, 0, 0, None, 0)))
                 continue
             if not planner.plans_against(now[side]):
                 conn.send(('plan', (key, 'own', None, 0, 0, None, 0)))
                 continue
-            # The steps until the player sees its hit: its own inputs, chosen already.
+            # The steps until the player sees its hit: its inputs, chosen already (its
+            # own, or the route's it is on; `late`: steps since the hit, extra: the rest
+            # of that route after them, one of the options).
             sim.load_state(0, shadow.save_state(0))
             seen = [sim.obs[0, side].copy()]
             for a in actions:
                 pre[0, side], pre[0, 1 - side] = table[a], BACK
                 seen.insert(0, sim.step(pre)[0][0, side].copy())
             chosen, best, own = planner.plan(sim.save_state(0), side, starter, hist, prev,
-                                             offset=len(actions), seen=np.stack(seen),
-                                             policy=policy)
+                                             offset=len(actions) + late, seen=np.stack(seen),
+                                             policy=policy, extra=extra)
             conn.send(('plan', (key, 'planned', chosen, best, own, seen[0],
                                 time.perf_counter() - t0)))
 
@@ -315,29 +331,45 @@ class LiveRoutes:
     there after `delay` steps (the opponent did something else and it mattered), the plan
     is dropped and the player plays on by itself.
 
+    replan (as redteam.Planner's, FairAssist's): a plan again at each new move's hit, the
+    rest of the route it is on one of the options. Until it sees that hit it plays that
+    route on (its own play where the route has ended), and if the plan is dropped, on
+    after that. One plan at a time: a hit that lands while a plan is awaited is planned
+    on when that plan is in, the later by those steps (the combos joined that much
+    further in). The game waits `patience` seconds for a combo's first plan and
+    `patience_again` (half a frame) for a later one: on a machine too slow for the
+    planner the combo goes on as it was and the game doesn't stall (stats(): dropped,
+    'late').
+
     stats(): the plans (as FairAssist.take_plans), those dropped, the planner's seconds a
     plan and the seconds the game waited for one."""
 
-    def __init__(self, agent, data_dir, library, victims=None, per_start=12, patience=1.0):
+    def __init__(self, agent, data_dir, library, victims=None, per_start=12, patience=0.1,
+                 replan=False, patience_again=0.008):
         import multiprocessing
         if agent.frame_skip != 1 or not agent.delay or agent.hist is None:
             raise ValueError('LiveRoutes: an agent deciding every frame, with a delay and '
                              'its input history')
         self.agent, self.delay, self.patience = agent, agent.delay, patience
+        self.patience_again, self.waits = patience_again, patience
         self.frame_skip, self.history = 1, agent.history
         self.sample = sampler(agent.model, agent.deterministic)
         self.table = agent.table
         self.data_dir, self.library = data_dir, library
-        self.victims, self.per_start = victims, per_start
+        self.victims, self.per_start, self.replan = victims, per_start, replan
         self.mp = multiprocessing.get_context('spawn')
         self.conn = self.worker = self.env = None
         self.side = 0
         self.key = 0
         self.plans, self.dropped, self.took, self.waited = [], {}, [], []
+        self.again = 0  # plans made on a later move's hit
         self._clear()
 
     def _clear(self):
         self.queue, self.pending, self.route, self.prev_hits = [], None, None, 0
+        self.kept = None       # the route it was on when it asked for a plan, after the wait
+        self.planned = None    # the move whose hit it planned on last, this combo
+        self.hit_move, self.hit_age = None, 0  # its last hit's move, the steps since
 
     def attach(self, match, **matches):
         """match: the HumanMatch; matches: set_matches's arguments, as it was given them."""
@@ -349,7 +381,7 @@ class LiveRoutes:
         self.worker = self.mp.Process(
             target=_live_worker, daemon=True,
             args=(child, self.data_dir, self.agent.path, self.library, config,
-                  self.agent.deterministic, self.victims, self.per_start))
+                  self.agent.deterministic, self.victims, self.per_start, self.replan))
         self.worker.start()
         child.close()
         kind, error = self.conn.recv()
@@ -363,32 +395,47 @@ class LiveRoutes:
         self.agent.reset()
         self._clear()
 
-    def _begin(self, obs):
-        """At its hit: its inputs for the `delay` steps until it sees it, chosen now from
-        what it will see then (the views it has, oldest first), and the plan asked for."""
+    def _begin(self):
+        """At its hit (or hit_age steps after: a plan was awaited): its inputs for the
+        `delay` steps until it sees it, chosen now, and the plan asked for. The inputs: the
+        route's it is on, then its own play's from what it will see then (the views it
+        has, oldest first)."""
         import copy
         seen, hist = self.agent.seen.buf[0], copy.deepcopy(self.agent.hist)
+        rest = self.route[0][self.route[1]:] if self.route is not None else ()
         actions = []
         for k in range(self.delay):
-            view = np.concatenate([seen[self.delay - k], hist.features()[0]])
-            a = int(self.sample(view[None, :self.agent.width])[0])
+            if k < len(rest):
+                a = int(rest[k])
+            else:
+                view = np.concatenate([seen[self.delay - k], hist.features()[0]])
+                a = int(self.sample(view[None, :self.agent.width])[0])
             actions.append(a)
             hist.push(self.table.to_bytes(np.array([a])))
         self.key += 1
-        self.conn.send(('plan', (self.key, self.side, int(round(float(obs[ACTION]))), actions,
-                                 hist.buf[0].copy(), int(hist.prev[0]), self.env.obs[0].copy())))
-        self.queue, self.pending = actions, self.key
+        self.again += self.planned is not None
+        self.waits = self.patience if self.planned is None else self.patience_again
+        self.kept = [rest, self.delay] if len(rest) > self.delay else None
+        self.conn.send(('plan', (self.key, self.side, self.hit_move, actions,
+                                 hist.buf[0].copy(), int(hist.prev[0]), self.env.obs[0].copy(),
+                                 self.hit_age, None if self.kept is None else
+                                 np.asarray(rest[self.delay:]))))
+        self.queue, self.pending, self.route = actions, self.key, None
+        self.planned = self.hit_move
 
     def _result(self, obs):
         """`delay` steps after its hit: the plan, if the game is where it was planned from."""
         import time
         t0, got = time.perf_counter(), None
-        while got is None and self.conn.poll(max(0.0, self.patience - (time.perf_counter() - t0))):
+        while got is None and self.conn.poll(max(0.0, self.waits - (time.perf_counter() - t0))):
             kind, got = self.conn.recv()
             if got[0] != self.pending:  # an earlier one, dropped since
                 got = None
         self.waited.append(time.perf_counter() - t0)
         self.pending = None
+        kept, self.kept = self.kept, None
+        if _hits(obs) > 0:  # until a plan says otherwise: on with the route it was on
+            self.route = kept
         if got is None:
             return self._drop('late')
         _, state, chosen, best, own, expected, took = got
@@ -409,28 +456,35 @@ class LiveRoutes:
         obs = np.asarray(obs, np.float32)
         view = self.agent.view(obs[None])  # (its view of this step, `delay` steps old)
         hits = _hits(obs)
+        if hits > self.prev_hits:
+            self.hit_move, self.hit_age = int(round(float(obs[ACTION]))), 0
+        else:
+            self.hit_age += 1
+        if hits == 0:
+            self.planned = None
         if self.pending is not None and not self.queue:
             self._result(obs)
+        if self.route is not None and ((hits == 0 and self.route[1] > 0) or
+                                       self.route[1] >= len(self.route[0])):
+            self.route = None  # it ended, or dropped
+        if self.pending is None and hits > 0 and (
+                self.hit_move != self.planned if self.replan else
+                self.prev_hits == 0 and self.route is None):
+            self._begin()
         if self.queue:
             action = self.queue.pop(0)
-        elif self.route is not None and not (hits == 0 and self.route[1] > 0) \
-                and self.route[1] < len(self.route[0]):
+        elif self.route is not None:
             action = int(self.route[0][self.route[1]])
             self.route[1] += 1
         else:
-            self.route = None
-            if hits > 0 and self.prev_hits == 0 and self.pending is None:
-                self._begin(obs)
-                action = self.queue.pop(0)
-            else:
-                action = int(self.sample(view)[0])
+            action = int(self.sample(view)[0])
         self.prev_hits = hits
         self.agent.observe(self.table.to_bytes(np.array([action])))
         return action
 
     def stats(self):
         p = self.plans
-        out = dict(plans=len(p), dropped=dict(self.dropped))
+        out = dict(plans=len(p), again=self.again, dropped=dict(self.dropped))
         if p:
             out.update(route=round(float(np.mean([x[2] for x in p])), 3),
                        best=round(float(np.mean([x[0] for x in p]))),
