@@ -646,6 +646,14 @@ void SetRevivalRandState(uint32_t state)
 {
     g_minstd = state;
 }
+
+void SetRandState(uint32_t state)
+{
+    if (g_revivalRand)
+        g_minstd = state;
+    else
+        g_holdrand = state;
+}
 #endif
 
 } // namespace efz

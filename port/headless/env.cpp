@@ -18,11 +18,17 @@
 #include <string.h>
 #include <algorithm>
 #include <atomic>
+#include <chrono>
 #include <condition_variable>
+#include <deque>
 #include <functional>
 #include <list>
+#include <map>
 #include <memory>
 #include <mutex>
+// Before efz.h, whose x87.h makes sin, cos and atan2 macros: agent/policy.h and
+// agent/routes.h need these, and the <cmath> they bring does not compile after them.
+#include <random>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -44,6 +50,7 @@
 #include "headless.h"
 #include "agent/observe.h"
 #include "agent/policy.h"
+#include "agent/routes.h"
 #include "platform.h"
 
 using namespace efz;
@@ -662,29 +669,10 @@ uint8_t Mirror(uint8_t bits, bool relative, int facing)
     return bits;
 }
 
-// The controls `p` played on the frame just run, as CPlayer::ReadInput read them: its
-// directions on the screen and its buttons held (or pressed: the CPU presses them
-// without holding).
+// The controls `p` played on the frame just run (the agent's view's, observe.h).
 uint8_t ControlsRead(CPlayer* p)
 {
-    uint8_t bits = 0;
-    if (p->m_inputX == 1)
-        bits |= EFZ_RIGHT;
-    else if (p->m_inputX == -1)
-        bits |= EFZ_LEFT;
-    if (p->m_inputY == 1)
-        bits |= EFZ_DOWN;
-    else if (p->m_inputY == -1)
-        bits |= EFZ_UP;
-    if (p->m_holdA || p->m_pressA)
-        bits |= EFZ_A;
-    if (p->m_holdB || p->m_pressB)
-        bits |= EFZ_B;
-    if (p->m_holdC || p->m_pressC)
-        bits |= EFZ_C;
-    if (p->m_holdD || p->m_pressD)
-        bits |= EFZ_D;
-    return bits;
+    return agent::ControlsRead(p);
 }
 
 // One frame with the players' controls (relative to their facing, if so configured);
@@ -1367,6 +1355,90 @@ struct EfzAgent {
     std::unique_ptr<agent::Player> player;
 };
 
+namespace {
+
+// A slot's game as the routes' planner sees it (agent/routes.h): its arena bound only
+// inside each call, so that what the planner allocates is the C library's, not the
+// game's (a game loaded back over its arena would take it).
+class EnvWorld : public agent::World {
+public:
+    explicit EnvWorld(Slot& s) : s_(s) {}
+    void Save(agent::Snapshot* out) override
+    {
+        BindArena(s_.arena);
+        size_t n = ArenaUsed();
+        BindArena(nullptr);
+        out->bytes.resize(n);
+        memcpy(out->bytes.data(), s_.arena, n);
+        out->valid = true;
+    }
+    bool Load(const agent::Snapshot& in) override
+    {
+        if (!in.valid)
+            return false;
+        BindArena(s_.arena);
+        LoadArena(in.bytes.data(), in.bytes.size());
+        BindArena(nullptr);
+        return true;
+    }
+    bool Step(const uint8_t input[2]) override
+    {
+        BindArena(s_.arena);
+        G()->input[0] = input[0];
+        G()->input[1] = input[1];
+        RunFrame();
+        bool ok = SceneIndex() == 3 && !QuitRequested();
+        BindArena(nullptr);
+        return ok;
+    }
+    void View(int side, float* out) override
+    {
+        BindArena(s_.arena);
+        agent::WriteView(out, Fight(), Game(), side, 0, 0);
+        BindArena(nullptr);
+    }
+    int Facing(int p) override
+    {
+        BindArena(s_.arena);
+        int f = Fight()->m_players[p]->facing;
+        BindArena(nullptr);
+        return f;
+    }
+    int Hp(int p) override
+    {
+        BindArena(s_.arena);
+        int hp = Fight()->m_players[p]->m_hp;
+        BindArena(nullptr);
+        return hp > 0 ? hp : 0;
+    }
+    int ComboHits(int p) override
+    {
+        BindArena(s_.arena);
+        int n = Fight()->m_players[p]->m_comboHits;
+        BindArena(nullptr);
+        return n;
+    }
+    uint8_t Read(int p) override
+    {
+        BindArena(s_.arena);
+        uint8_t c = agent::ControlsRead(Fight()->m_players[p]);
+        BindArena(nullptr);
+        return c;
+    }
+    bool Over() override
+    {
+        BindArena(s_.arena);
+        bool over = Game()->m_roundOver != 0 || Fight()->m_leave == 2;
+        BindArena(nullptr);
+        return over;
+    }
+
+private:
+    Slot& s_;
+};
+
+} // namespace
+
 EfzAgent* efz_env_agent_load(const char* path, char* error, size_t errorSize)
 {
     BindArena(nullptr);
@@ -1398,6 +1470,7 @@ void efz_env_agent_info(const EfzAgent* a, EfzAgentInfo* info)
     info->history = a->policy.history;
     info->delay = a->policy.delay;
     info->character = a->policy.character;
+    info->routes = (int32_t)a->policy.routes.list.size();
     snprintf(info->name, sizeof(info->name), "%s", a->policy.name.c_str());
 }
 
@@ -1430,6 +1503,57 @@ uint8_t efz_env_agent_step(EfzAgent* a, const float* view, int32_t actionable, i
 int32_t efz_env_agent_last_action(const EfzAgent* a)
 {
     return a ? a->player->LastAction() : -1;
+}
+
+int32_t efz_env_agent_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side,
+                           int32_t starter, const int32_t* actions, int32_t count,
+                           const float* history, uint8_t prev, int32_t deterministic,
+                           uint64_t seed, EfzPlan* out)
+{
+    if (!a || !env || !out || index < 0 || index >= env->n || side < 0 || side > 1 ||
+        count < 0 || (count && !actions) || (a->policy.history && !history))
+        return -1;
+    BindArena(nullptr);
+    memset(out, 0, sizeof(*out));
+    if (a->policy.routes.Empty()) {
+        env->SetError("the agent has no routes");
+        return -1;
+    }
+    for (int32_t k = 0; k < count; k++) {
+        if (actions[k] < 0 || actions[k] >= a->policy.Actions()) {
+            env->SetError("an action out of range");
+            return -1;
+        }
+    }
+    Finish(env);
+    int stackMark;
+    SetStack(&stackMark);
+    Slot& s = env->slots[index];
+    BindArena(s.arena);
+    bool fighting = SceneIndex() == 3 && Fight()->m_enter == 0;
+    BindArena(nullptr);
+    if (!fighting) {
+        env->SetError("the environment isn't in a fight");
+        return -1;
+    }
+    EnvWorld world(s);
+    agent::Planner planner(&a->policy, &world, seed);
+    float view[kObsDim];
+    world.View(side, view);
+    planner.Begin(side, starter, std::vector<int>(actions, actions + count), history, prev,
+                  deterministic != 0, view);
+    planner.Work(agent::Planner::Clock::time_point::max());
+    out->outcome = (int32_t)planner.outcome;
+    out->chosen = planner.chosen;
+    out->frames = (int32_t)planner.frames;
+    out->options = (int32_t)std::min<size_t>(planner.tried.size(), 64);
+    for (int32_t j = 0; j < out->options; j++) {
+        out->route[j] = planner.tried[j];
+        out->dealt[j] = planner.dealt[j];
+    }
+    memcpy(out->expected, planner.expected, sizeof(out->expected));
+    out->ms = planner.ms;
+    return 0;
 }
 
 } // extern "C"

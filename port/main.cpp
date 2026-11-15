@@ -546,6 +546,7 @@ int EfzMain(int argc, char** argv)
     // compatibility test's harness, whose fights mustn't see a NET PLAY row.
     // The agents too: they play through the controls, which the harness gives.
     if (!harness && replay.empty()) {
+        agentOptions.fast = fast;
         efz::InitAgents(agentOptions);
         efz::InitNetplay(netOptions);
     }
@@ -580,6 +581,7 @@ int EfzMain(int argc, char** argv)
             next += frame;
             if (fast)
                 continue;
+            efz::AgentsIdle(next); // the agents' plans, in the time left
             Uint64 now = SDL_GetTicksNS();
             if (now < next)
                 SDL_DelayPrecise(next - now);
@@ -629,6 +631,7 @@ int EfzMain(int argc, char** argv)
         next += frame;
         if (fast)
             continue;
+        efz::AgentsIdle(next); // the agents' plans, in the time left
         Uint64 now = SDL_GetTicksNS();
         if (now < next)
             SDL_DelayPrecise(next - now);
@@ -638,6 +641,7 @@ int EfzMain(int argc, char** argv)
     if (!why)
         why = n == frames ? "--frames" : g_quitWhy;
     efz::LogInfo("main", "quitting after %ld frames: %s", n, why);
+    efz::StopAgents();
     efz::ShutdownNetplay();
     efz::StopWatchdog();
     efz::StopRecorder();

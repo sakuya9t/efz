@@ -108,6 +108,9 @@ uint32_t RandState();
 void SetRevivalRand(bool on);
 void SeedRevivalRand(uint32_t seed);
 void SetRevivalRandState(uint32_t state);
+// RandState's state back, of whichever generator plays (an agent's plans: copies of a
+// fight written back, port/agent/play.cpp).
+void SetRandState(uint32_t state);
 #endif
 
 } // namespace efz

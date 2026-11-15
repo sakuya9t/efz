@@ -5,7 +5,10 @@
 #ifndef EFZ_AGENT_OBSERVE_H
 #define EFZ_AGENT_OBSERVE_H
 
+#include <stdint.h>
+
 class CGame;
+class CPlayer;
 class CScene3;
 
 namespace efz {
@@ -25,6 +28,10 @@ void WriteView(float* out, CScene3* fight, CGame* game, int viewer, int frame, i
 const char* ObservationName(int i);
 // The game's character numbers' names (0 "nanase" .. 24 "mizuka"); nullptr out of range.
 const char* CharacterName(int c);
+// The controls `p` played on the frame just run, as CPlayer::ReadInput read them: its
+// directions on the screen and its buttons held (or pressed: the CPU presses them
+// without holding). The control byte's bits: right 1, left 2, down 4, up 8, A-D 0x10-0x80.
+uint8_t ControlsRead(CPlayer* p);
 
 } // namespace agent
 } // namespace efz

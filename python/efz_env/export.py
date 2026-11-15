@@ -11,11 +11,15 @@ with no machine learning library.
 
 The file holds the actor of the model's policy (python/efz_env/policy.py's EfzPolicy, or
 SB3's MlpPolicy) and what efz_env.agent.Agent reads from config.json: frame_skip,
-history, delay. Its layout is port/agent/policy.h's.
+history, delay. With a combo library (export_agent(..., library=...)), also its routes:
+the game then plays the agent's combos as play.py --assist does (runs/human-ayu/
+combo_support.py's LiveRoutes), trying them on copies of the fight at each hit
+(port/agent/routes.h). Its layout is port/agent/policy.h's.
 """
 
 import ctypes
 import datetime
+import json
 import os
 import struct
 
@@ -27,6 +31,31 @@ from .agent import load_config
 
 MAGIC = b'EFZAGENT'
 FORMAT = 1
+# The planner's settings, runs/human-ayu/redteam.py's Planner as LiveRoutes makes it.
+PER_START, LIMIT = 12, 900
+
+
+def load_routes(path):
+    """A combo library (runs/human-ayu/combo_library.py's .npz) as the planner reads it
+    (runs/human-ayu/macros.py's load_library): each combo's starter (the action of the
+    move that hit), the character it was landed on, whether it was kept for that victim,
+    and its inputs as actions of ActionTable(), a combo played again left out."""
+    from .history import action_labels
+    table = ActionTable()
+    lib = np.load(path)
+    meta = json.loads(str(lib['meta']))
+    out, seen = [], set()
+    for k, m in enumerate(meta):
+        inputs = lib[f'inputs{k}']
+        acts = action_labels(np.concatenate([[m.get('prev', 0)], inputs]).astype(np.uint8),
+                             table)[1:]
+        key = (m['starter'], acts.tobytes())
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(dict(starter=int(m['starter']), opponent=m.get('opponent'),
+                        kept_for=m.get('kept_for'), actions=acts))
+    return out
 
 
 def _character_index(c):
@@ -42,10 +71,46 @@ def _character_index(c):
 
 
 def _tensor(name, array, integer=False):
-    a = np.ascontiguousarray(np.asarray(array), dtype='<i4' if integer else '<f4')
+    """integer: False float32 (type 0), True int32 (1), 'u8' uint8 (2)."""
+    kind = 2 if integer == 'u8' else int(bool(integer))
+    a = np.ascontiguousarray(np.asarray(array), dtype=('<f4', '<i4', 'u1')[kind])
     key = name.encode()
-    return (struct.pack('<H', len(key)) + key + struct.pack('<BB', int(integer), a.ndim) +
+    return (struct.pack('<H', len(key)) + key + struct.pack('<BB', kind, a.ndim) +
             struct.pack(f'<{a.ndim}I', *a.shape) + a.tobytes())
+
+
+def _route_parts(routes, victims, history, delay, frame_skip):
+    """The routes' keys and tensors for the agent file."""
+    from .vec import character_names
+    if frame_skip != 1 or delay <= 0 or history <= 0:
+        raise ValueError('routes: an agent deciding every frame (frame_skip 1), with a delay '
+                         'and its input history, as LiveRoutes plays one')
+    names = character_names()
+    if victims:
+        unknown = set(victims) - set(names)
+        if unknown:
+            raise ValueError(f'victims: no such characters {sorted(unknown)}')
+    acts = [np.asarray(m['actions'], np.int64) for m in routes]
+    if any(len(a) and (a.min() < 0 or a.max() > 255) for a in acts):
+        raise ValueError('routes: actions out of 0-255')
+    offsets = np.concatenate([[0], np.cumsum([len(a) for a in acts])]).astype(np.int64)
+    if offsets[-1] >= 2 ** 31:
+        raise ValueError('routes: too many inputs')
+    keys = {
+        'routes': len(routes),
+        'route_per_start': PER_START,
+        'route_limit': LIMIT,
+        'route_by_victim': int(any(m.get('kept_for') == 'victim' for m in routes)),
+        'route_victims': ','.join(str(names.index(v)) for v in victims or []),
+    }
+    tensors = [
+        ('routes.starter', [m['starter'] for m in routes], True),
+        ('routes.opponent', [names.index(m['opponent']) if m.get('opponent') in names else -1
+                             for m in routes], True),
+        ('routes.offset', offsets, True),
+        ('routes.actions', np.concatenate(acts) if acts else np.zeros(0, np.uint8), 'u8'),
+    ]
+    return keys, tensors
 
 
 def _actor(policy):
@@ -107,12 +172,16 @@ def sample_views(width, n=256, seed=0):
     return v
 
 
-def export_agent(model_path, out_path, name=None, character=None, check=True):
+def export_agent(model_path, out_path, name=None, character=None, check=True, library=None,
+                 victims=None):
     """Writes model_path (a model.zip, with its config.json) as an agent file at out_path.
     name: what the game shows (default: the model's folder for avg.zip / model.zip, else
     its file name). character: the one it plays (a name or 0-24; default the first of
-    config.json's chars, else any). check: run the file in the library and compare its
-    log-probabilities with the model's (the largest difference is returned)."""
+    config.json's chars, else any). library: a combo library (.npz, or load_routes's
+    list) whose routes the game plays the agent's combos from, as play.py --assist does;
+    victims: the characters it plans against (play.py --assist-victims; None all).
+    check: run the file in the library and compare its log-probabilities with the
+    model's (the largest difference is returned)."""
     from stable_baselines3 import PPO
     cfg = load_config(model_path)
     model = PPO.load(model_path, device='cpu')
@@ -149,11 +218,20 @@ def export_agent(model_path, out_path, name=None, character=None, check=True):
         'source': os.path.basename(model_path),
         'exported': datetime.datetime.now().isoformat(timespec='seconds'),
     }
+    route_tensors = []
+    if library is not None:
+        routes = load_routes(library) if isinstance(library, (str, os.PathLike)) else library
+        route_keys, route_tensors = _route_parts(routes, victims, keys['history'],
+                                                 keys['delay'], keys['frame_skip'])
+        keys.update(route_keys)
+        if isinstance(library, (str, os.PathLike)):
+            keys['route_source'] = os.path.basename(os.fspath(library))
     text = ''.join(f'{k}={v}\n' for k, v in keys.items()).encode()
     tensors = list(feature_tensors)
     for k, (w, b) in enumerate(layers):
         tensors += [(f'pi.{k}.weight', w, False), (f'pi.{k}.bias', b, False)]
     tensors += [('action.weight', out[0], False), ('action.bias', out[1], False)]
+    tensors += route_tensors
     blob = [MAGIC, struct.pack('<I', FORMAT), struct.pack('<I', len(text)), text,
             struct.pack('<I', len(tensors))] + [_tensor(*t) for t in tensors]
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
@@ -188,6 +266,7 @@ class NativeAgent:
         self.width, self.actions = info.width, info.actions
         self.frame_skip, self.history, self.delay = info.frame_skip, info.history, info.delay
         self.character = info.character
+        self.routes = info.routes
         self.deterministic = deterministic
         self.reset(seed)
 
@@ -213,6 +292,32 @@ class NativeAgent:
     @property
     def last_action(self):
         return int(self._lib.efz_env_agent_last_action(self._h))
+
+    def plan(self, env, index, side, starter, actions, history, prev, deterministic=True,
+             seed=0):
+        """One plan of its routes as the game makes it at its hit (port/agent/routes.h),
+        on EfzVecEnv `env`'s game `index` as it is (left as it was): player `side` plays
+        `actions` (its inputs until it sees the hit), the opponent holding back, then the
+        routes of `starter` and its own play are tried on copies. history (history, 6) and
+        prev: its input history after those actions. A dict: outcome ('planned', 'own':
+        not this opponent, 'apart'), chosen (a route's index, or None), tried (the routes,
+        then -1 for its own play), dealt (each one's most), expected (its view once it
+        sees the hit), frames, ms."""
+        env._finish()
+        acts = np.ascontiguousarray(actions, np.int32)
+        hist = np.ascontiguousarray(history, np.float32).reshape(-1)
+        out = _native.Plan()
+        r = self._lib.efz_env_agent_plan(self._h, env._h, int(index), int(side), int(starter),
+                                         acts.ctypes.data, len(acts), hist.ctypes.data,
+                                         int(prev), int(bool(deterministic)), int(seed),
+                                         ctypes.byref(out))
+        if r != 0:
+            raise ValueError(f'efz_env_agent_plan: {self._lib.efz_env_error(env._h).decode()}')
+        n = out.options
+        return dict(outcome={1: 'planned', 2: 'own', 3: 'apart'}.get(out.outcome, 'none'),
+                    chosen=None if out.chosen < 0 else int(out.chosen),
+                    tried=list(out.route[:n]), dealt=np.array(out.dealt[:n], np.float32),
+                    expected=np.array(out.expected, np.float32), frames=out.frames, ms=out.ms)
 
     def close(self):
         if getattr(self, '_h', None):

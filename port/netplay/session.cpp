@@ -17,6 +17,40 @@
 extern int g_fkeyHeld;
 
 namespace efz {
+// The size of a player's object, by its character class (CScene2::CreateCharacter):
+// platform.h.
+size_t PlayerSize(CPlayer* p)
+{
+    switch (p->m_charId) {
+    case 0: return sizeof(CNanase);
+    case 1: return sizeof(CAyu);
+    case 2: return sizeof(CMai);
+    case 3: return sizeof(CMakoto);
+    case 4: return sizeof(CAkane);
+    case 5: return sizeof(CMayu);
+    case 6: return sizeof(CNagamori);
+    case 7: return sizeof(CMisaki);
+    case 8: return sizeof(CShiori);
+    case 9: return sizeof(CSayuri);
+    case 0xa: return sizeof(CNayuki);
+    case 0xb: return sizeof(CMio);
+    case 0xc: return sizeof(CEXNanase);
+    case 0xd: return sizeof(CKaori);
+    case 0xe: return sizeof(CIkumi);
+    case 0xf: return sizeof(CMishio);
+    case 0x10: return sizeof(CAkiko);
+    case 0x11: return sizeof(CNayukiB);
+    case 0x12: return sizeof(CMizukaB);
+    case 0x13: return sizeof(CKanna);
+    case 0x14: return sizeof(CKano);
+    case 0x15: return sizeof(CMinagi);
+    case 0x16: return sizeof(CNayuki);
+    case 0x17: return sizeof(CMisuzu);
+    case 0x18: return sizeof(CMizuka);
+    }
+    return sizeof(CPlayer);
+}
+
 namespace netplay {
 
 namespace {
@@ -55,38 +89,6 @@ CPlayer* Player(int i)
     return ref ? (CPlayer*)*ref : nullptr;
 }
 
-// The size of a player's object, by its character class (CScene2::CreateCharacter).
-size_t PlayerSize(CPlayer* p)
-{
-    switch (p->m_charId) {
-    case 0: return sizeof(CNanase);
-    case 1: return sizeof(CAyu);
-    case 2: return sizeof(CMai);
-    case 3: return sizeof(CMakoto);
-    case 4: return sizeof(CAkane);
-    case 5: return sizeof(CMayu);
-    case 6: return sizeof(CNagamori);
-    case 7: return sizeof(CMisaki);
-    case 8: return sizeof(CShiori);
-    case 9: return sizeof(CSayuri);
-    case 0xa: return sizeof(CNayuki);
-    case 0xb: return sizeof(CMio);
-    case 0xc: return sizeof(CEXNanase);
-    case 0xd: return sizeof(CKaori);
-    case 0xe: return sizeof(CIkumi);
-    case 0xf: return sizeof(CMishio);
-    case 0x10: return sizeof(CAkiko);
-    case 0x11: return sizeof(CNayukiB);
-    case 0x12: return sizeof(CMizukaB);
-    case 0x13: return sizeof(CKanna);
-    case 0x14: return sizeof(CKano);
-    case 0x15: return sizeof(CMinagi);
-    case 0x16: return sizeof(CNayuki);
-    case 0x17: return sizeof(CMisuzu);
-    case 0x18: return sizeof(CMizuka);
-    }
-    return sizeof(CPlayer);
-}
 
 // The names Revival gives the characters in replay file names (Game::characterName).
 const char* CharacterName(int c)

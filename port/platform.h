@@ -8,6 +8,7 @@
 #ifndef EFZ_PLATFORM_H
 #define EFZ_PLATFORM_H
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -19,6 +20,7 @@ class CScene;
 class CGraphics;
 class CInput;
 class CSound;
+class CPlayer;
 
 namespace efz {
 
@@ -81,6 +83,9 @@ unsigned char LocalControls();
 // setRendering(false) does). The screen's palette, as Flip shows it.
 extern bool g_skipDrawing;
 tagPALETTEENTRY* ScreenPalette(CGraphics* graphics);
+// netplay/session.cpp: the size of a player's object, by its character's class, for
+// copies of a fight (netplay's rollback, an agent's plans).
+size_t PlayerSize(CPlayer* p);
 
 // win32.cpp: where the game's files are read from and written to.
 void SetDataDir(const char* data, const char* save);

@@ -18,12 +18,13 @@ class Layout(unittest.TestCase):
     def test_structures_match_the_header(self):
         # port/headless/efz_env.h; tests/headless_test.cpp checks the C side.
         self.assertEqual(ctypes.sizeof(_native.Config), 72)
-        self.assertEqual(_native.VERSION, 8)
+        self.assertEqual(_native.VERSION, 9)
         self.assertEqual(ctypes.sizeof(_native.Match), 20)
         self.assertEqual(ctypes.sizeof(_native.Info), 36)
         self.assertEqual(ctypes.sizeof(_native.Buffers), 6 * ctypes.sizeof(ctypes.c_void_p))
         self.assertEqual(ctypes.sizeof(_native.SoundEvent), 60)
-        self.assertEqual(ctypes.sizeof(_native.AgentInfo), 88)
+        self.assertEqual(ctypes.sizeof(_native.AgentInfo), 92)
+        self.assertEqual(ctypes.sizeof(_native.Plan), 16 + 64 * 8 + 168 * 4 + 8)
 
     def test_library(self):
         lib = _native.library()

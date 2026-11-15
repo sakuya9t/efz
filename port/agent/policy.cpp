@@ -4,11 +4,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
+#include <chrono>
 #include <map>
+#include <random>
 
 #include "platform.h"
 #include "agent/observe.h"
 #include "agent/policy.h"
+#include "agent/routes.h"
 
 namespace efz {
 namespace agent {
@@ -18,12 +21,20 @@ namespace {
 const char kMagic[8] = {'E', 'F', 'Z', 'A', 'G', 'E', 'N', 'T'};
 const uint32_t kVersion = 1;
 const int kInputFeatures = 6; // per step of history: forward-back, up-down, A B C D pressed
+const int kComboHits = 30;    // the view's self_combo_hits (/ 30)
+const int kSelfAction = 18;   // self_action: the move that hit
+
+int Hits(const float* view)
+{
+    return (int)nearbyintf(view[kComboHits] * 30);
+}
 
 struct Tensor {
-    int type = 0; // 0 float32, 1 int32
+    int type = 0; // 0 float32, 1 int32, 2 uint8
     std::vector<uint32_t> dims;
     std::vector<float> f;
     std::vector<int32_t> i;
+    std::vector<uint8_t> u;
     size_t Count() const
     {
         size_t n = 1;
@@ -167,7 +178,7 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         }
         tname.resize(nameSize);
         if ((nameSize && !r.Bytes(&tname[0], nameSize)) || !r.Get(&type) || !r.Get(&ndim) ||
-            type > 1 || ndim > 4) {
+            type > 2 || ndim > 4) {
             *error = "the agent file is damaged";
             return false;
         }
@@ -188,9 +199,12 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         if (type == 0) {
             t.f.resize(n);
             ok = r.Bytes(t.f.data(), n * 4);
-        } else {
+        } else if (type == 1) {
             t.i.resize(n);
             ok = r.Bytes(t.i.data(), n * 4);
+        } else {
+            t.u.resize(n);
+            ok = r.Bytes(t.u.data(), n);
         }
         if (!ok) {
             *error = "the agent file is cut short";
@@ -302,6 +316,61 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
                  std::to_string(table.size()) + " control bytes for them";
         return false;
     }
+
+    // The routes (routes.h), if the file has a combo library.
+    routes = Routes();
+    int routeCount = ToInt(keys, "routes", 0);
+    if (routeCount > 0) {
+        if (frameSkip != 1 || delay <= 0 || history <= 0) {
+            *error = "the agent's routes need it to decide every frame, with a delay and its "
+                     "input history";
+            return false;
+        }
+        Tensor starter, opponent, offset, actions;
+        if (!take("routes.starter", 1, 1, &starter) || !take("routes.opponent", 1, 1, &opponent) ||
+            !take("routes.offset", 1, 1, &offset) || !take("routes.actions", 2, 1, &actions))
+            return false;
+        if (starter.i.size() != (size_t)routeCount || opponent.i.size() != (size_t)routeCount ||
+            offset.i.size() != (size_t)routeCount + 1 || offset.i[0] != 0 ||
+            (size_t)offset.i[routeCount] != actions.u.size()) {
+            *error = "the agent's routes don't fit together";
+            return false;
+        }
+        for (int k = 0; k < routeCount; k++) {
+            if (offset.i[k + 1] < offset.i[k]) {
+                *error = "the agent's routes don't fit together";
+                return false;
+            }
+            Routes::Route r;
+            r.starter = starter.i[k];
+            r.opponent = opponent.i[k];
+            r.begin = (uint32_t)offset.i[k];
+            r.size = (uint32_t)(offset.i[k + 1] - offset.i[k]);
+            routes.list.push_back(r);
+            routes.byStarter[r.starter].push_back(k);
+        }
+        for (uint8_t a : actions.u) {
+            if (a >= table.size()) {
+                *error = "the agent's routes play actions it hasn't got";
+                return false;
+            }
+        }
+        routes.actions = std::move(actions.u);
+        routes.perStart = std::max(1, ToInt(keys, "route_per_start", 12));
+        routes.limit = std::max(1, ToInt(keys, "route_limit", 900));
+        routes.byVictim = ToInt(keys, "route_by_victim", 0) != 0;
+        const std::string& victims = keys["route_victims"];
+        for (size_t at = 0; at < victims.size();) {
+            size_t end = victims.find(',', at);
+            if (end == std::string::npos)
+                end = victims.size();
+            int c = atoi(victims.substr(at, end - at).c_str());
+            if (c >= 0 && c < kCharacters)
+                routes.victims.push_back(c);
+            at = end + 1;
+        }
+        routes.source = keys["route_source"];
+    }
     return true;
 }
 
@@ -379,6 +448,25 @@ void Player::Reset()
     held_ = 0;
     last_ = -1;
     bytes_ = 0;
+    queue_.clear();
+    pending_ = false;
+    route_ = -1;
+    routeAt_ = 0;
+    prevHits_ = 0;
+    stats_ = RouteStats();
+    if (planner_)
+        planner_->Cancel();
+}
+
+void Player::SetPlanner(Planner* planner, int side, double patienceMs)
+{
+    const Policy& p = *policy_;
+    if (planner && (p.routes.Empty() || p.frameSkip != 1 || p.delay <= 0 || p.history <= 0))
+        planner = nullptr;
+    planner_ = planner;
+    side_ = side;
+    patienceMs_ = patienceMs;
+    Reset();
 }
 
 // efz_env.history.InputHistory.push: the newest step first.
@@ -394,6 +482,104 @@ void Player::PushInput(uint8_t c)
     for (int b = 0; b < 4; b++)
         f[2 + b] = (float)((pressed >> b) & 1);
     prev_ = c;
+}
+
+int Player::Sample(const float* in, bool deterministic)
+{
+    policy_->LogProbs(in, probs_.data());
+    int n = policy_->Actions();
+    if (deterministic)
+        return (int)(std::max_element(probs_.begin(), probs_.end()) - probs_.begin());
+    double u = std::uniform_real_distribution<double>(0.0, 1.0)(rng_), sum = 0;
+    for (int a = 0; a < n; a++) {
+        sum += exp((double)probs_[a]);
+        if (u < sum)
+            return a;
+    }
+    return n - 1;
+}
+
+// LiveRoutes._begin: at its hit, its inputs for the `delay` frames until it sees the hit,
+// chosen now from what it will see then (the views it has), and the plan asked for.
+void Player::Begin(const float* view, bool deterministic)
+{
+    const int delay = policy_->delay;
+    std::vector<float> hist = inputs_, in(in_.size());
+    uint8_t prev = prev_;
+    std::vector<int> actions;
+    for (int k = 0; k < delay; k++) {
+        std::copy(seen_.begin() + (size_t)(delay - k) * kObsDim,
+                  seen_.begin() + (size_t)(delay - k + 1) * kObsDim, in.begin());
+        std::copy(hist.begin(), hist.end(), in.begin() + kObsDim);
+        int a = Sample(in.data(), deterministic);
+        actions.push_back(a);
+        // (the history's push, as PushInput's)
+        uint8_t c = policy_->table[a];
+        std::copy_backward(hist.begin(), hist.end() - kInputFeatures, hist.end());
+        float* f = hist.data();
+        f[0] = (float)((c & 0x01) != 0) - (float)((c & 0x02) != 0);
+        f[1] = (float)((c & 0x08) != 0) - (float)((c & 0x04) != 0);
+        unsigned pressed = (unsigned)(c & ~prev) >> 4;
+        for (int b = 0; b < 4; b++)
+            f[2 + b] = (float)((pressed >> b) & 1);
+        prev = c;
+    }
+    planner_->Begin(side_, (int)nearbyintf(view[kSelfAction]), actions, hist.data(), prev,
+                    deterministic, view);
+    queue_.assign(actions.begin(), actions.end());
+    pending_ = true;
+}
+
+// LiveRoutes._result: `delay` frames after its hit, the plan, if the game is where it was
+// planned from and the combo goes on.
+void Player::Result(const float* view)
+{
+    typedef Planner::Clock Clock;
+    pending_ = false;
+    Clock::time_point t0 = Clock::now();
+    bool done = planner_->Done();
+    if (!done) {
+        Clock::time_point until = patienceMs_ < 0 ? Clock::time_point::max()
+            : t0 + std::chrono::duration_cast<Clock::duration>(
+                       std::chrono::duration<double, std::milli>(patienceMs_));
+        done = planner_->Work(until);
+    }
+    double waited = std::chrono::duration<double, std::milli>(Clock::now() - t0).count();
+    stats_.waitedMs += waited;
+    stats_.waitedMsMost = std::max(stats_.waitedMsMost, waited);
+    if (!done) {
+        planner_->Cancel();
+        stats_.late++;
+        return;
+    }
+    stats_.planMs += planner_->ms;
+    stats_.planMsMost = std::max(stats_.planMsMost, planner_->ms);
+    Planner::Outcome outcome = planner_->outcome;
+    planner_->outcome = Planner::kNone;
+    if (outcome == Planner::kOwn) {
+        stats_.own++;
+        return;
+    }
+    if (outcome != Planner::kPlanned) {
+        stats_.apart++;
+        return;
+    }
+    if (Hits(view) == 0) {
+        stats_.over++;
+        return;
+    }
+    for (int i = 0; i < kObsDim; i++) {
+        if (!(planner_->expected[i] == view[i])) {
+            stats_.elsewhere++;
+            return;
+        }
+    }
+    stats_.plans++;
+    if (planner_->chosen >= 0) {
+        stats_.routes++;
+        route_ = planner_->chosen;
+        routeAt_ = planner_->offset;
+    }
 }
 
 uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
@@ -418,21 +604,34 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
     std::copy(seen_.begin() + (size_t)delay * kObsDim, seen_.begin() + (size_t)(delay + 1) * kObsDim,
               in_.begin());
     std::copy(inputs_.begin(), inputs_.end(), in_.begin() + kObsDim);
-    policy_->LogProbs(in_.data(), probs_.data());
-    int n = policy_->Actions();
-    int action = 0;
-    if (deterministic) {
-        action = (int)(std::max_element(probs_.begin(), probs_.end()) - probs_.begin());
+    int action;
+    if (!planner_) {
+        action = Sample(in_.data(), deterministic);
     } else {
-        double u = std::uniform_real_distribution<double>(0.0, 1.0)(rng_), sum = 0;
-        action = n - 1;
-        for (int a = 0; a < n; a++) {
-            sum += exp((double)probs_[a]);
-            if (u < sum) {
-                action = a;
-                break;
+        // LiveRoutes.__call__: the inputs chosen at its hit, then the route chosen (until
+        // its actions run out or the combo is over), else its own play; a hit of its own
+        // (its combo counter, as the game is) starts a plan.
+        int hits = Hits(view);
+        if (pending_ && queue_.empty())
+            Result(view);
+        const Routes& routes = policy_->routes;
+        if (!queue_.empty()) {
+            action = queue_.front();
+            queue_.pop_front();
+        } else if (route_ >= 0 && !(hits == 0 && routeAt_ > planner_->offset) &&
+                   routeAt_ < (int)routes.list[route_].size) {
+            action = routes.actions[routes.list[route_].begin + routeAt_++];
+        } else {
+            route_ = -1;
+            if (hits > 0 && prevHits_ == 0 && !pending_) {
+                Begin(view, deterministic);
+                action = queue_.front();
+                queue_.pop_front();
+            } else {
+                action = Sample(in_.data(), deterministic);
             }
         }
+        prevHits_ = hits;
     }
     last_ = action;
     bytes_ = policy_->table[action];

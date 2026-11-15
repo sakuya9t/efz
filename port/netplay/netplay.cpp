@@ -699,7 +699,11 @@ void InitNetplay(const NetplayOptions& options)
         g_menu.titleY = y;
     };
     g_netplay.openMenu = [] { OpenMenu(); };
-    g_netplay.fightKeys = [](char* keys) { g_session.FightKeys(keys); };
+    // (not in the frames of an agent's plan: copies of the fight, which see no keys)
+    g_netplay.fightKeys = [](char* keys) {
+        if (!AgentPlanning())
+            g_session.FightKeys(keys);
+    };
     g_netplay.matchLeft = [] { g_session.MatchLeft(); };
     g_netplay.replayOpen = [] { g_session.ReplayOpen(); };
     g_netplay.replayWrite = [](short value) { g_session.ReplayWrite(value); };

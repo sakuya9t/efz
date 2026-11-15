@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 8
+#define EFZ_ENV_VERSION 9
 
 /* What a step does when a match ends (EfzEnvConfig.autoreset). */
 #define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
@@ -280,6 +280,7 @@ typedef struct EfzAgentInfo {
     int32_t history;    /* steps of its own inputs it sees */
     int32_t delay;      /* decisions late it sees the game */
     int32_t character;  /* the character it plays (0-24), -1 any */
+    int32_t routes;     /* its combo library's routes (0: it plays its own combos) */
     char name[64];
 } EfzAgentInfo;
 /* NULL on failure, with the reason in error. */
@@ -299,6 +300,30 @@ EFZ_ENV_API uint8_t efz_env_agent_step(EfzAgent* agent, const float* view, int32
                                    int32_t deterministic);
 /* The action of its last decision; -1 before the first. */
 EFZ_ENV_API int32_t efz_env_agent_last_action(const EfzAgent* agent);
+
+/* An agent with routes (export_agent.py --library): one plan as the game makes it at the
+ * agent's hit (port/agent/routes.h), on environment `index`'s game as it is (left as it
+ * was): the agent (player `side`) plays `actions` (count, its inputs until it sees the
+ * hit), the opponent holding back, then the agent's routes that begin with `starter` and
+ * its own play (history: its input history after those actions, history x 6, newest
+ * first; prev: its last control byte) are played on copies, the opponent guarding once
+ * it can. For checking the game's planner against runs/human-ayu/redteam.py's. 0, or -1
+ * (efz_env_error: no routes, not in a fight). */
+typedef struct EfzPlan {
+    int32_t outcome;       /* 1 planned, 2 not (the opponent isn't a victim), 3 the copies
+                              couldn't be played */
+    int32_t chosen;        /* the route chosen (its index in the agent's), -1 its own play */
+    int32_t options;       /* the routes tried, then its own play: route[], dealt[] */
+    int32_t frames;        /* frames played on copies */
+    int32_t route[64];
+    float dealt[64];       /* the most each dealt (HP) */
+    float expected[168];   /* the agent's view once it sees its hit, after `actions` */
+    double ms;
+} EfzPlan;
+EFZ_ENV_API int32_t efz_env_agent_plan(EfzAgent* agent, EfzEnv* env, int32_t index,
+                                       int32_t side, int32_t starter, const int32_t* actions,
+                                       int32_t count, const float* history, uint8_t prev,
+                                       int32_t deterministic, uint64_t seed, EfzPlan* out);
 
 #ifdef __cplusplus
 }

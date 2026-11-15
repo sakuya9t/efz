@@ -8,22 +8,51 @@
 //     frame_skip, history, delay, width, actions, table, features, activation, layers,
 //     and the feature columns below)
 //   uint32 count, then that many tensors: uint16 name size, the name, uint8 type (0
-//     float32, 1 int32), uint8 dimensions, uint32 each, the values
+//     float32, 1 int32, 2 uint8), uint8 dimensions, uint32 each, the values
 // The network is the actor of Stable-Baselines3's ActorCriticPolicy: its features
 // (features=efz: python/efz_env/policy.py's EfzFeatures, the continuous columns scaled
 // and the actions and characters embedded; features=flat: the view as it is), `layers`
 // hidden layers (pi.K.weight, pi.K.bias) each followed by the activation, and the action
 // layer (action.weight, action.bias), whose softmax is the policy.
+//
+// A file with a combo library (export_agent.py --library, or a pack's) also has its
+// routes (routes.h): keys routes (their count), route_per_start, route_limit,
+// route_by_victim, route_victims (character numbers, comma-separated; none: all),
+// route_source; tensors routes.starter and routes.opponent (int32, a route each: the
+// action that hit, the character it was landed on or -1), routes.offset (int32, count +
+// 1: where each route's actions begin in routes.actions) and routes.actions (uint8).
 #ifndef EFZ_AGENT_POLICY_H
 #define EFZ_AGENT_POLICY_H
 
 #include <stdint.h>
+#include <deque>
+#include <map>
 #include <random>
 #include <string>
 #include <vector>
 
 namespace efz {
 namespace agent {
+
+class Planner;
+
+// People's combos the agent plays at its hits (routes.h), as action sequences.
+struct Routes {
+    struct Route {
+        int starter = 0;   // the action (pattern) of the move that hit
+        int opponent = -1; // the character it was landed on
+        uint32_t begin = 0, size = 0; // its actions in `actions`
+    };
+    std::vector<Route> list;               // as the library had them (by damage)
+    std::map<int, std::vector<int>> byStarter; // indices into list
+    std::vector<uint8_t> actions;
+    int perStart = 12;     // routes tried at a hit
+    int limit = 900;       // frames a copy is played for at most
+    bool byVictim = false; // a library kept per victim: those landed on the opponent first
+    std::vector<int> victims; // the characters planned against (empty: all)
+    std::string source;
+    bool Empty() const { return list.empty(); }
+};
 
 class Policy {
 public:
@@ -47,6 +76,7 @@ public:
     int history = 0;    // steps of its own inputs it sees
     int delay = 0;      // steps late it sees the game (its reaction time)
     std::vector<uint8_t> table; // per action, the control byte (forward/back relative)
+    Routes routes;      // its combos' routes; empty: it plays its own
 
 private:
     struct Dense {
@@ -70,16 +100,33 @@ private:
     Dense out_;
 };
 
+// What an agent's routes did: plans made (and of those, a route chosen), plans dropped
+// and why, the time planning took and the time the game waited for a plan.
+struct RouteStats {
+    int plans = 0, routes = 0;
+    int late = 0, elsewhere = 0, over = 0, own = 0, apart = 0;
+    double planMs = 0, planMsMost = 0, waitedMs = 0, waitedMsMost = 0;
+    int dropped() const { return late + elsewhere + over + own + apart; }
+};
+
 // An agent playing one side of a match: each frame, the view of its player and whether
 // the controls do anything (no intro, no KO, no pause), and it gives that frame's control
 // byte (forward/back relative to where the player faces), as play.py's HumanMatch runs
 // it: a decision on a frame the controls do something, held for frameSkip frames, the
 // game seen `delay` decisions late, its own last `history` inputs seen at once; nothing
 // pressed while the controls do nothing.
+//
+// With a planner (SetPlanner: the agent file's routes), its combos are played as
+// play.py --assist plays them (runs/human-ayu/combo_support.py's LiveRoutes): at the
+// frame its hit lands it chooses its inputs for the `delay` frames until it sees the hit
+// (from what it has seen already), the planner tries the routes from where those leave
+// the game, and once it sees the hit it plays the route chosen, if the game is where the
+// plan expected and the combo goes on.
 class Player {
 public:
     Player(const Policy* policy, uint64_t seed);
-    // A new match: no inputs yet, the next view seen as the delay's whole past.
+    // A new match (or fight): no inputs yet, the next view seen as the delay's whole
+    // past, no plan, its routes' stats from 0.
     void Reset();
     // This frame's control byte. deterministic: the likeliest action instead of a draw.
     uint8_t Step(const float* view, bool actionable, bool deterministic = false);
@@ -87,8 +134,18 @@ public:
     int LastAction() const { return last_; }
     const Policy* policy() const { return policy_; }
 
+    // Its combos from the routes, planned by `planner` for player `side` (nullptr: its
+    // own). patienceMs: how long a frame waits for a plan not done when the agent sees its
+    // hit (< 0: until it is done), before the agent plays on by itself.
+    void SetPlanner(Planner* planner, int side, double patienceMs);
+    const RouteStats& Stats() const { return stats_; }
+    bool Planning() const { return planner_ != nullptr; }
+
 private:
     void PushInput(uint8_t controls);
+    int Sample(const float* in, bool deterministic);
+    void Begin(const float* view, bool deterministic);
+    void Result(const float* view);
 
     const Policy* policy_;
     std::mt19937_64 rng_;
@@ -100,6 +157,16 @@ private:
     int last_ = -1;
     uint8_t bytes_ = 0;
     std::vector<float> in_, probs_;
+
+    // The routes (LiveRoutes's state).
+    Planner* planner_ = nullptr;
+    int side_ = 0;
+    double patienceMs_ = 50;
+    std::deque<int> queue_; // its inputs chosen at the hit, for the frames until it sees it
+    bool pending_ = false;  // a plan asked for
+    int route_ = -1, routeAt_ = 0; // the route being played (an index into routes.list)
+    int prevHits_ = 0;
+    RouteStats stats_;
 };
 
 } // namespace agent

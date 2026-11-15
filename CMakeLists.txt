@@ -68,10 +68,10 @@ set(EFZ_PORT_SOURCES)
 foreach(f arena graphics layout win32 x87)
   list(APPEND EFZ_PORT_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
 endforeach()
-# Trained agents: their view of a fight and their network (port/agent/, docs/agents.md),
-# in the game and the training library alike.
+# Trained agents: their view of a fight, their network and their routes (port/agent/,
+# docs/agents.md), in the game and the training library alike.
 set(EFZ_AGENT_SOURCES)
-foreach(f observe policy)
+foreach(f observe policy routes)
   list(APPEND EFZ_AGENT_SOURCES ${CMAKE_SOURCE_DIR}/port/agent/${f}.cpp)
 endforeach()
 set(EFZ_SDL_SOURCES)

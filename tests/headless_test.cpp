@@ -21,6 +21,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <chrono>
+#include <deque>
+#include <map>
+#include <random>
 #include <string>
 #include <thread>
 #include <vector>
@@ -30,6 +34,7 @@
 #include "headless.h"
 #include "agent/observe.h"
 #include "agent/policy.h"
+#include "agent/routes.h"
 
 using namespace efz;
 
@@ -253,7 +258,8 @@ void TestApi()
     CHECK(sizeof(EfzInfo) == 36);
     CHECK(sizeof(EfzBuffers) == 6 * sizeof(void*));
     CHECK(sizeof(EfzSoundEvent) == 60);
-    CHECK(sizeof(EfzAgentInfo) == 88);
+    CHECK(sizeof(EfzAgentInfo) == 92);
+    CHECK(sizeof(EfzPlan) == 16 + 64 * 4 + 64 * 4 + 168 * 4 + 8);
     CHECK(efz_env_version() == EFZ_ENV_VERSION);
     int dim = efz_env_obs_dim();
     CHECK(dim == 168);
@@ -281,7 +287,9 @@ void TestApi()
 // An agent file of a network without hidden layers, two actions (control bytes 0x01
 // and 0x10): logit 0 = 2 * view[5] (the global "dx"... any column) + 0.5, logit 1 =
 // view[kObsDim] (its last input's forward-back) * 3.
-std::vector<unsigned char> TinyAgent(int frameSkip, int history, int delay)
+// routes: each route's actions, all with starter 5 (none: an agent without routes).
+std::vector<unsigned char> TinyAgent(int frameSkip, int history, int delay,
+                                     const std::vector<std::vector<uint8_t>>& routes = {})
 {
     using efz::agent::kObsDim;
     int width = kObsDim + 6 * history;
@@ -289,6 +297,9 @@ std::vector<unsigned char> TinyAgent(int frameSkip, int history, int delay)
                        "\nhistory=" + std::to_string(history) + "\ndelay=" +
                        std::to_string(delay) + "\nwidth=" + std::to_string(width) +
                        "\nactions=2\ntable=0110\nfeatures=flat\nactivation=relu\nlayers=0\n";
+    if (!routes.empty())
+        text += "routes=" + std::to_string(routes.size()) + "\nroute_per_start=12\n"
+                "route_limit=900\nroute_by_victim=0\nroute_victims=\n";
     std::vector<unsigned char> b;
     auto put = [&](const void* p, size_t n) {
         b.insert(b.end(), (const unsigned char*)p, (const unsigned char*)p + n);
@@ -298,16 +309,19 @@ std::vector<unsigned char> TinyAgent(int frameSkip, int history, int delay)
     u32(1);
     u32((uint32_t)text.size());
     put(text.data(), text.size());
-    u32(2);
-    auto tensor = [&](const char* name, std::vector<uint32_t> dims, const std::vector<float>& v) {
+    u32(routes.empty() ? 2 : 6);
+    auto header = [&](const char* name, unsigned char type, std::vector<uint32_t> dims) {
         uint16_t n = (uint16_t)strlen(name);
         put(&n, 2);
         put(name, n);
-        unsigned char type = 0, ndim = (unsigned char)dims.size();
+        unsigned char ndim = (unsigned char)dims.size();
         put(&type, 1);
         put(&ndim, 1);
         for (uint32_t d : dims)
             u32(d);
+    };
+    auto tensor = [&](const char* name, std::vector<uint32_t> dims, const std::vector<float>& v) {
+        header(name, 0, dims);
         put(v.data(), v.size() * 4);
     };
     std::vector<float> w(2 * width, 0.0f);
@@ -316,7 +330,182 @@ std::vector<unsigned char> TinyAgent(int frameSkip, int history, int delay)
         w[width + kObsDim] = 3.0f;
     tensor("action.weight", {2, (uint32_t)width}, w);
     tensor("action.bias", {2}, {0.5f, 0.0f});
+    if (!routes.empty()) {
+        uint32_t n = (uint32_t)routes.size();
+        std::vector<int32_t> starter(n, 5), opponent(n, -1), offset(1, 0);
+        std::vector<uint8_t> actions;
+        for (const auto& r : routes) {
+            actions.insert(actions.end(), r.begin(), r.end());
+            offset.push_back((int32_t)actions.size());
+        }
+        header("routes.starter", 1, {n});
+        put(starter.data(), n * 4);
+        header("routes.opponent", 1, {n});
+        put(opponent.data(), n * 4);
+        header("routes.offset", 1, {n + 1});
+        put(offset.data(), (n + 1) * 4);
+        header("routes.actions", 2, {(uint32_t)actions.size()});
+        put(actions.data(), actions.size());
+    }
     return b;
+}
+
+// A game of a few numbers for the routes' planner: player 0's button (A-D) hits, each
+// hit 100 HP and its combo goes on; two frames in a row without one drop the combo.
+// The view shows its combo's hits, the move (5) and the frame; `twist` adds what player
+// 1 pressed last, so that a plan made with it holding back finds the game elsewhere.
+class FakeWorld : public efz::agent::World {
+public:
+    struct State {
+        int frame = 0, hits = 0, idle = 0, hp = 1000000, oppLast = 0;
+        uint8_t last[2] = {0, 0};
+    } g;
+    bool twist = false;
+    int steps = 0;
+
+    void Save(efz::agent::Snapshot* s) override
+    {
+        s->bytes.assign((const char*)&g, (const char*)&g + sizeof(g));
+        s->valid = true;
+    }
+    bool Load(const efz::agent::Snapshot& s) override
+    {
+        if (!s.valid || s.bytes.size() != sizeof(g))
+            return false;
+        memcpy(&g, s.bytes.data(), sizeof(g));
+        return true;
+    }
+    bool Step(const uint8_t input[2]) override
+    {
+        steps++;
+        g.frame++;
+        g.last[0] = input[0];
+        g.last[1] = input[1];
+        g.oppLast = input[1];
+        if (input[0] & 0xf0) {
+            g.hits++;
+            g.hp -= 100;
+            g.idle = 0;
+        } else if (g.hits > 0 && ++g.idle >= 2) {
+            g.hits = 0;
+        }
+        return true;
+    }
+    void View(int, float* out) override
+    {
+        memset(out, 0, efz::agent::kObsDim * sizeof(float));
+        out[30] = g.hits / 30.0f;
+        out[18] = 5;
+        out[1] = (float)g.frame;
+        if (twist)
+            out[100] = (float)g.oppLast;
+    }
+    int Facing(int) override { return 1; }
+    int Hp(int p) override { return p == 1 ? g.hp : 9999; }
+    int ComboHits(int p) override { return p == 0 ? g.hits : 0; }
+    uint8_t Read(int p) override { return g.last[p]; }
+    bool Over() override { return g.hp <= 0; }
+};
+
+void TestRoutes()
+{
+    using efz::agent::kObsDim;
+    std::string error;
+    // Route 0: A every frame (100 a frame); route 1: forward only (drops at once). Its
+    // own play alternates forward and A (100 every other frame) for as long as the longest
+    // route and a second more: route 0 is chosen.
+    std::vector<uint8_t> allA(400, 1), forward(40, 0);
+    std::vector<unsigned char> file = TinyAgent(1, 1, 2, {allA, forward});
+    efz::agent::Policy p;
+    CHECK(p.Parse(file.data(), file.size(), &error));
+    CHECK(p.routes.list.size() == 2 && p.routes.byStarter[5].size() == 2);
+
+    // The agent, as the game plays it: each frame its view, its byte, the frame run with
+    // the opponent holding back (left: 0x02, facing right).
+    auto play = [&](FakeWorld& world, efz::agent::Player& a, int frames, std::vector<uint8_t>* out) {
+        float view[kObsDim];
+        for (int f = 0; f < frames; f++) {
+            world.View(0, view);
+            uint8_t input[2] = {a.Step(view, true, true), 0x02};
+            if (world.twist && f % 2)
+                input[1] = 0x04;
+            out->push_back(input[0]);
+            world.Step(input);
+        }
+    };
+    {
+        FakeWorld world;
+        efz::agent::Planner planner(&p, &world, 3);
+        efz::agent::Player a(&p, 7);
+        a.SetPlanner(&planner, 0, -1);
+        CHECK(a.Planning());
+        std::vector<uint8_t> out;
+        play(world, a, 40, &out);
+        // forward, A (the hit), then the two inputs chosen at the hit (forward, A), then
+        // route 0 from its third action: A.
+        CHECK(out[0] == 0x01 && out[1] == 0x10 && out[2] == 0x01 && out[3] == 0x10);
+        for (int f = 4; f < 40; f++)
+            CHECK(out[f] == 0x10);
+        CHECK(a.Stats().plans == 1 && a.Stats().routes == 1 && a.Stats().dropped() == 0);
+        CHECK(planner.tried.size() == 3 && planner.tried[2] == -1);
+        CHECK(planner.dealt[0] > planner.dealt[2] && planner.dealt[1] == 0);
+        // The real game is as the agent's inputs left it: the planner's copies didn't
+        // reach it (its HP: 100 a hit landed, here).
+        int hits = 0;
+        for (uint8_t b : out)
+            hits += (b & 0xf0) != 0;
+        CHECK(world.g.hp == 1000000 - 100 * hits);
+    }
+    {
+        // The opponent did something else than hold back: the game isn't where the plan
+        // expected, and the agent plays on by itself.
+        FakeWorld world;
+        world.twist = true;
+        efz::agent::Planner planner(&p, &world, 3);
+        efz::agent::Player a(&p, 7);
+        a.SetPlanner(&planner, 0, -1);
+        std::vector<uint8_t> out;
+        play(world, a, 12, &out);
+        CHECK(a.Stats().plans == 0 && a.Stats().elsewhere == 1);
+        CHECK(out[4] == 0x01); // its own play again: forward after A
+    }
+    {
+        // No time to plan (patience 0, no work between frames): dropped as late.
+        FakeWorld world;
+        efz::agent::Planner planner(&p, &world, 3);
+        efz::agent::Player a(&p, 7);
+        a.SetPlanner(&planner, 0, 0);
+        std::vector<uint8_t> out;
+        play(world, a, 12, &out);
+        CHECK(a.Stats().plans == 0 && a.Stats().late == 1);
+    }
+    {
+        // Worked on in pieces, as between the game's frames: the same plan.
+        FakeWorld world;
+        efz::agent::Planner planner(&p, &world, 3);
+        efz::agent::Player a(&p, 7);
+        a.SetPlanner(&planner, 0, -1);
+        float view[kObsDim];
+        std::vector<uint8_t> out;
+        for (int f = 0; f < 40; f++) {
+            world.View(0, view);
+            uint8_t input[2] = {a.Step(view, true, true), 0x02};
+            out.push_back(input[0]);
+            world.Step(input);
+            // a piece of work: a deadline already past still plays a frame's prelude,
+            // then a few frames at a time.
+            for (int k = 0; k < 3 && planner.Busy(); k++)
+                planner.Work(efz::agent::Planner::Clock::now() + std::chrono::microseconds(30));
+        }
+        CHECK(a.Stats().plans == 1 && a.Stats().routes == 1);
+        for (int f = 4; f < 40; f++)
+            CHECK(out[f] == 0x10);
+    }
+    // An agent without a delay can't have routes.
+    file = TinyAgent(1, 1, 0, {allA});
+    efz::agent::Policy q;
+    CHECK(!q.Parse(file.data(), file.size(), &error) && error.find("routes") != std::string::npos);
+    printf("routes: planned, played, dropped when the game is elsewhere or the plan late\n");
 }
 
 void TestAgent()
@@ -397,6 +586,7 @@ int main()
     TestSprites();
     TestApi();
     TestAgent();
+    TestRoutes();
     if (g_failures) {
         fprintf(stderr, "%d checks failed\n", g_failures);
         return 1;

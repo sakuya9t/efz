@@ -207,5 +207,27 @@ const char* CharacterName(int c)
     return c >= 0 && c < kCharacters ? kCharacterNames[c] : nullptr;
 }
 
+uint8_t ControlsRead(CPlayer* p)
+{
+    uint8_t bits = 0;
+    if (p->m_inputX == 1)
+        bits |= 0x01;
+    else if (p->m_inputX == -1)
+        bits |= 0x02;
+    if (p->m_inputY == 1)
+        bits |= 0x04;
+    else if (p->m_inputY == -1)
+        bits |= 0x08;
+    if (p->m_holdA || p->m_pressA)
+        bits |= 0x10;
+    if (p->m_holdB || p->m_pressB)
+        bits |= 0x20;
+    if (p->m_holdC || p->m_pressC)
+        bits |= 0x40;
+    if (p->m_holdD || p->m_pressD)
+        bits |= 0x80;
+    return bits;
+}
+
 } // namespace agent
 } // namespace efz

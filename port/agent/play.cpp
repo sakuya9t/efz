@@ -12,14 +12,26 @@
 // On character select it picks its own character (the one the file says it was trained
 // to play) by moving the cursor and pressing A as a person would, then leaves the stage
 // to the person. In a fight it acts as play.py's HumanMatch runs it (policy.h's Player).
+//
+// An agent file with routes plans its combos as play.py --assist does (agent/routes.h):
+// on copies of the fight, saved and written back as netplay's rollback does it (the
+// regions Revival copies, and rand's state), worked on between frames (AgentsIdle). The
+// copies' frames run with the drawing off, no sound (sound.cpp), no keys (input.cpp, the
+// network match's function keys), no replay written, the fight recorder's tick hooks
+// set aside and the controls the plan's: when the fight is written back, nothing of
+// them is left, and nothing of them was sent anywhere.
 #include <SDL3/SDL.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <algorithm>
+#include <chrono>
+#include <deque>
+#include <map>
 #include <memory>
-// Before efz.h, whose x87.h makes sin, cos and atan2 macros: agent/policy.h needs it,
-// and the <cmath> it brings does not compile after them.
+// Before efz.h, whose x87.h makes sin, cos and atan2 macros: agent/policy.h and
+// agent/routes.h need these, and the <cmath> they bring does not compile after them.
 #include <random>
 #include <string>
 #include <vector>
@@ -27,13 +39,185 @@
 #include "efz.h"
 #include "agents.h"
 #include "log.h"
+#include "netplay.h"
 #include "platform.h"
 #include "agent/observe.h"
 #include "agent/policy.h"
+#include "agent/routes.h"
+
+extern int g_fkeyHeld; // src/scene3.cpp
 
 namespace efz {
 
 namespace {
+
+bool g_planning = false;
+BYTE g_planInput[2];
+
+// The plan's controls, in place of CInput::GetInput's (the harness's input hook).
+int PlanInput(BYTE player, BYTE* input)
+{
+    *input = player < 2 ? g_planInput[player] : 0;
+    return 1;
+}
+
+// The native game's fight as the routes' planner plays it (agent/routes.h).
+class GameWorld : public agent::World {
+public:
+    // A fight begins: copies of another are no good in it.
+    void NewFight()
+    {
+        fight_++;
+        shown_.valid = false;
+    }
+    // Netplay: a plan starts from the frame shown (CaptureShown), not from the game as
+    // it is when the session reads the input (its last confirmed frame).
+    void SetShown(bool on)
+    {
+        shownMode_ = on;
+        shown_.valid = false;
+    }
+    void CaptureShown() { Save(&shown_); }
+
+    void Enter() override
+    {
+        hooks_ = g_traceHooks;
+        memset(&g_traceHooks, 0, sizeof(g_traceHooks));
+        g_traceHooks.input = PlanInput;
+        drawing_ = g_skipDrawing;
+        g_skipDrawing = true;
+        g_planning = true;
+        GameObjects o = Objects();
+        back_ = o.graphics ? o.graphics->m_back : nullptr;
+        if (back_)
+            backBytes_.assign((char*)back_->pixels,
+                              (char*)back_->pixels + (size_t)back_->pitch * back_->height);
+    }
+    void Leave() override
+    {
+        if (back_ && Objects().graphics && Objects().graphics->m_back == back_)
+            memcpy(back_->pixels, backBytes_.data(), backBytes_.size());
+        g_traceHooks = hooks_;
+        g_skipDrawing = drawing_;
+        g_planning = false;
+    }
+    void Save(agent::Snapshot* s) override
+    {
+        Regions(&s->regions);
+        size_t total = 0;
+        for (agent::Snapshot::Region& r : s->regions) {
+            r.offset = total;
+            total += r.size;
+        }
+        s->bytes.resize(total);
+        for (const agent::Snapshot::Region& r : s->regions)
+            memcpy(s->bytes.data() + r.offset, r.at, r.size);
+        s->rng = RandState();
+        s->tag = fight_;
+        s->valid = true;
+    }
+    bool Load(const agent::Snapshot& s) override
+    {
+        if (!s.valid || s.tag != fight_)
+            return false;
+        Regions(&check_);
+        if (check_.size() != s.regions.size())
+            return false;
+        for (size_t i = 0; i < check_.size(); i++) {
+            if (check_[i].at != s.regions[i].at || check_[i].size != s.regions[i].size)
+                return false;
+        }
+        for (const agent::Snapshot::Region& r : s.regions)
+            memcpy(r.at, s.bytes.data() + r.offset, r.size);
+        SetRandState(s.rng);
+        return true;
+    }
+    void Now(agent::Snapshot* s) override
+    {
+        if (shownMode_)
+            *s = shown_;
+        else
+            Save(s);
+    }
+    bool Step(const uint8_t input[2]) override
+    {
+        g_planInput[0] = input[0];
+        g_planInput[1] = input[1];
+        GameObjects o = Objects();
+        CScene3* fight = (CScene3*)o.scenes[3];
+        // Not recorded into the match's replay (CReplayFile::Write, mode 2), which the
+        // game's play doesn't otherwise read.
+        char mode = o.game->m_replayMode;
+        o.game->m_replayMode = 0;
+        if (!g_netplay.active) // WinMain's, every frame (a network match's: once a real one)
+            o.game->m_oddFrame = !o.game->m_oddFrame;
+        BYTE next = fight->Update();
+        o.game->m_replayMode = mode;
+        return next == 3 && fight->m_enter == 0;
+    }
+    void View(int side, float* out) override
+    {
+        GameObjects o = Objects();
+        agent::WriteView(out, (CScene3*)o.scenes[3], o.game, side, 0, 0);
+    }
+    int Facing(int p) override { return P(p)->facing; }
+    int Hp(int p) override { return P(p)->m_hp > 0 ? P(p)->m_hp : 0; }
+    int ComboHits(int p) override { return P(p)->m_comboHits; }
+    uint8_t Read(int p) override { return agent::ControlsRead(P(p)); }
+    bool Over() override
+    {
+        GameObjects o = Objects();
+        return o.game->m_roundOver != 0 || ((CScene3*)o.scenes[3])->m_leave == 2;
+    }
+
+private:
+    static CPlayer* P(int p) { return ((CScene3*)Objects().scenes[3])->m_players[p]; }
+    // What netplay's SaveState copies (session.cpp), less the back buffer (the copies
+    // don't draw; Enter and Leave keep it all the same).
+    void Regions(std::vector<agent::Snapshot::Region>* out)
+    {
+        out->clear();
+        GameObjects o = Objects();
+        CScene3* fight = (CScene3*)o.scenes[3];
+        auto add = [&](void* at, size_t size) {
+            agent::Snapshot::Region r;
+            r.at = (char*)at;
+            r.size = size;
+            r.offset = 0;
+            out->push_back(r);
+        };
+        add(&g_fkeyHeld, sizeof(g_fkeyHeld));
+        if (!fight)
+            return;
+        add(fight, sizeof(CScene3));
+        add(o.game, sizeof(CGame));
+        for (int i = 0; i < 2; i++) {
+            if (CPlayer* p = fight->m_players[i])
+                add(p, PlayerSize(p));
+        }
+        if (PALETTEENTRY* palette = ScreenPalette(o.graphics))
+            add(palette, 0x100 * sizeof(PALETTEENTRY));
+        if (CAnimBg* bg = o.game->m_background) {
+            if (bg->m_objects)
+                add((BgObject*)bg->m_objects, bg->m_number == 16 ? 0x1c0 : 0xe0);
+        }
+    }
+
+    uint32_t fight_ = 1;
+    bool shownMode_ = false;
+    agent::Snapshot shown_;
+    std::vector<agent::Snapshot::Region> check_;
+    TraceHooks hooks_;
+    bool drawing_ = false;
+    IDirectDrawSurface* back_ = nullptr;
+    std::vector<char> backBytes_;
+};
+
+GameWorld g_world;
+bool g_fast = false;
+// How long a frame waits for a plan not done when the agent sees its hit (ms): a local
+// match can stutter a little, a network match should not.
+const double kPatienceLocal = 40, kPatienceNet = 8;
 
 const unsigned char kRight = 0x01, kLeft = 0x02, kDown = 0x04, kUp = 0x08, kA = 0x10, kC = 0x40;
 const int kDikF5 = 0x3f, kDikF6 = 0x40;
@@ -59,6 +243,7 @@ struct Side {
     std::string name;
     std::shared_ptr<agent::Policy> policy;
     std::unique_ptr<agent::Player> player;
+    std::unique_ptr<agent::Planner> planner; // its routes', if it has some
     unsigned char input = 0; // this frame's
     bool playing = false;    // this frame's input is the agent's
     int wait = 0;            // character select: frames before the next press
@@ -163,8 +348,28 @@ int IndexOf(const std::string& path)
     return -1;
 }
 
+// What an agent's routes did, for the log.
+void LogRoutes(const char* who, const Side& s)
+{
+    if (!s.player || !s.player->Planning())
+        return;
+    const agent::RouteStats& r = s.player->Stats();
+    int asked = r.plans + r.dropped();
+    if (!asked)
+        return;
+    LogInfo("agent", "%s's routes: %d plans, a route chosen in %d; %d dropped (late %d, the "
+                     "game elsewhere %d, the combo over %d, not this opponent %d, the fight "
+                     "over %d); planning %.1f ms a plan (at most %.1f), the game waited %.2f "
+                     "ms a plan (at most %.1f)",
+            who, r.plans, r.routes, r.dropped(), r.late, r.elsewhere, r.over, r.own, r.apart,
+            r.planMs / std::max(1, asked - r.late - r.own), r.planMsMost, r.waitedMs / asked,
+            r.waitedMsMost);
+}
+
 // Has the side played by the agent at `path` (empty: a person); false with *error.
-bool Choose(Side* s, const std::string& path, std::string* error)
+// player: the side it plays (its routes planned for it); -1 only to read it. net: in a
+// network match.
+bool Choose(Side* s, const std::string& path, std::string* error, int player, bool net = false)
 {
     *s = Side();
     if (path.empty())
@@ -183,14 +388,24 @@ bool Choose(Side* s, const std::string& path, std::string* error)
         }
         e.policy = p;
         LogInfo("agent", "%s: \"%s\", %s, deciding every %d frame(s), %d frames late, %d "
-                         "inputs of history",
+                         "inputs of history; %s",
                 e.path.c_str(), p->name.c_str(), CharacterLabel(p->character).c_str(),
-                p->frameSkip, p->delay, p->history);
+                p->frameSkip, p->delay, p->history,
+                p->routes.Empty() ? "its own combos"
+                                  : ("its combos from " + std::to_string(p->routes.list.size()) +
+                                     " routes (" + p->routes.source + ")").c_str());
     }
     s->path = e.path;
     s->name = e.name;
     s->policy = e.policy;
     s->player.reset(new agent::Player(s->policy.get(), Seed()));
+    if (player >= 0 && !s->policy->routes.Empty()) {
+        s->planner.reset(new agent::Planner(s->policy.get(), &g_world, Seed()));
+        double patience = g_fast ? -1 : net ? kPatienceNet : kPatienceLocal;
+        s->player->SetPlanner(s->planner.get(), player, patience);
+        if (!s->player->Planning())
+            s->planner.reset();
+    }
     return true;
 }
 
@@ -289,11 +504,11 @@ void Cycle(int side)
     std::string error;
     for (int next = at + 1;; next++) {
         if (next >= (int)g_agents.size()) {
-            Choose(&s, "", &error);
+            Choose(&s, "", &error, side);
             Note(std::string(side ? "P2" : "P1") + ": a person");
             return;
         }
-        if (Choose(&s, g_agents[next].path, &error)) {
+        if (Choose(&s, g_agents[next].path, &error, side)) {
             Note(std::string(side ? "P2" : "P1") + ": " + g_labels[next]);
             return;
         }
@@ -331,6 +546,7 @@ const SDL_Color kYellow = {255, 220, 110, 255};
 void InitAgents(const AgentOptions& options)
 {
     g_on = true;
+    g_fast = options.fast;
     Scan();
     LogInfo("agent", "%d agent(s) in the agents folders", (int)g_agents.size());
     const char* given[2] = {options.p1, options.p2};
@@ -339,7 +555,7 @@ void InitAgents(const AgentOptions& options)
             continue;
         int at = FindAgent(given[side]);
         std::string error = std::string("no agent file ") + given[side];
-        if (at < 0 || !Choose(&g_sides[side], g_agents[at].path, &error))
+        if (at < 0 || !Choose(&g_sides[side], g_agents[at].path, &error, side))
             LogError("agent", "%s", error.c_str());
         else
             LogInfo("agent", "P%d is played by %s", side + 1, g_labels[at].c_str());
@@ -360,11 +576,19 @@ void AgentsFrame()
             Cycle(k);
         g_keyDown[k] = down;
     }
+    if (scene == 3 && g_lastScene != 3)
+        g_world.NewFight();
     for (int side = 0; side < 2; side++) {
         Side& s = g_sides[side];
         s.playing = false;
         s.input = 0;
-        if (!s.player || !vs)
+        if (!s.player)
+            continue;
+        if (g_lastScene == 3 && scene != 3) {
+            LogRoutes(side ? "P2" : "P1", s);
+            s.player->Reset(); // (its plan dropped with the fight)
+        }
+        if (!vs)
             continue;
         if (scene == 1) {
             if (g_lastScene != 1)
@@ -398,6 +622,47 @@ void AgentInput(int player, unsigned char* input)
         *input |= LocalControls();
 }
 
+bool AgentPlanning()
+{
+    return g_planning;
+}
+
+void StopAgents()
+{
+    if (!g_on)
+        return;
+    if (g_lastScene == 3) {
+        LogRoutes("P1", g_sides[0]);
+        LogRoutes("P2", g_sides[1]);
+    }
+    for (Side& s : g_sides) {
+        if (s.planner)
+            s.planner->Cancel();
+    }
+}
+
+void AgentsIdle(uint64_t deadlineNs)
+{
+    if (!g_on)
+        return;
+    GameObjects o = Objects();
+    CScene3* fight = (CScene3*)o.scenes[3];
+    if (*o.scene != 3 || !fight || fight->m_enter != 0)
+        return;
+    // A little of the time left kept back, for the frame's own work.
+    const uint64_t margin = 1500000;
+    uint64_t now = SDL_GetTicksNS();
+    if (deadlineNs <= now + margin)
+        return;
+    agent::Planner::Clock::time_point until =
+        agent::Planner::Clock::now() + std::chrono::nanoseconds(deadlineNs - now - margin);
+    Side* sides[3] = {&g_sides[0], &g_sides[1], &g_net};
+    for (Side* s : sides) {
+        if (s->planner && s->planner->Busy())
+            s->planner->Work(until);
+    }
+}
+
 void DrawAgents(SDL_Renderer* r)
 {
     if (!g_on)
@@ -411,7 +676,8 @@ void DrawAgents(SDL_Renderer* r)
             if (scene == 3 && !s.player)
                 continue;
             std::string text = std::string(side ? "P2 " : "P1 ") +
-                               (s.player ? "AGENT " + s.name : std::string("PLAYER"));
+                               (s.player ? "AGENT " + s.name : std::string("PLAYER")) +
+                               (s.planner ? " +routes" : "");
             // Character select: at the bottom; a fight: at the top, over the life bars
             // (where netplay writes the names).
             float x = side ? 634 - Width(text, 1) : 6;
@@ -482,25 +748,33 @@ bool NetplayAgentStart(int index, int localPlayer, const char** error)
     NetplayAgentStop();
     if (index < 0)
         return true;
-    if (index >= (int)g_agents.size() || !Choose(&g_net, g_agents[index].path, &why)) {
+    if (index >= (int)g_agents.size() ||
+        !Choose(&g_net, g_agents[index].path, &why, localPlayer, true)) {
         if (index >= (int)g_agents.size())
             why = "no such agent";
         *error = why.c_str();
         return false;
     }
     g_netLocal = localPlayer;
-    if (localPlayer >= 0)
+    if (localPlayer >= 0) {
         LogInfo("agent", "this computer's side (P%d) is played by %s", localPlayer + 1,
                 g_labels[index].c_str());
+        g_world.SetShown(true);
+    } else {
+        g_net = Side();
+    }
     return true;
 }
 
 void NetplayAgentStop()
 {
+    if (g_netScene == 3) // (a fight going on; one over has said already)
+        LogRoutes("this computer's agent", g_net);
     g_net = Side();
     g_netLocal = -1;
     g_netScene = -1;
     g_shownValid = false;
+    g_world.SetShown(false);
 }
 
 bool NetplayAgentInput(int scene, int menuDelay, unsigned char* input)
@@ -508,8 +782,11 @@ bool NetplayAgentInput(int scene, int menuDelay, unsigned char* input)
     if (!g_net.player || g_netLocal < 0)
         return false;
     if (scene != g_netScene) {
+        if (g_netScene == 3)
+            LogRoutes("this computer's agent", g_net);
         if (scene == 3)
-            g_net.player->Reset();
+            g_world.NewFight();
+        g_net.player->Reset(); // (its plan dropped: another scene)
         g_net.wait = 0;
         g_shownValid = false;
         g_netScene = scene;
@@ -533,6 +810,9 @@ void NetplayAgentShown()
     if (!g_net.player || g_netLocal < 0 || *Objects().scene != 3)
         return;
     g_shownValid = View(g_netLocal, g_shown, &g_shownActionable, &g_shownFacing);
+    // Its hit, perhaps: a plan would start from this frame, the one the player sees.
+    if (g_shownValid && g_net.planner && nearbyintf(g_shown[30] * 30) > 0)
+        g_world.CaptureShown();
 }
 
 const char* NetplayAgentName()

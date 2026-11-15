@@ -11,6 +11,7 @@
 #include "efz.h"
 #include "platform.h"
 #include "netplay.h"
+#include "agents.h"
 
 namespace {
 
@@ -224,6 +225,8 @@ WORD CSound::FindFreeSlot()
 
 void CSound::Stop(WORD id)
 {
+    if (efz::AgentPlanning()) // a frame of an agent's plan, on a copy of the fight
+        return;
     if (id < 0x96 && m_buffers[id]) {
         AudioLock lock;
         m_buffers[id]->playing = false;
@@ -232,6 +235,10 @@ void CSound::Stop(WORD id)
 
 void CSound::Play(WORD id, BOOL loop)
 {
+    // A frame of an agent's plan, on a copy of the fight: nothing is heard, and netplay
+    // doesn't count it.
+    if (efz::AgentPlanning())
+        return;
     // A network match's rollback runs frames again: netplay plays each sound once
     // (EfzRevival's hook of CSound::Play, efz.exe 0x40de80).
     if (efz::NetplaySound(id, loop))

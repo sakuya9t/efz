@@ -122,8 +122,8 @@ struct Keyboard : IDirectInputDevice7 {
         DWORD n = size < sizeof(g_keys) ? size : sizeof(g_keys);
         // In a network match the game sees no keys of its own: the function keys it acts
         // on come from both players' inputs (efz::NetplayHooks::fightKeys), and netplay
-        // reads Esc itself.
-        if (efz::g_netplay.active) {
+        // reads Esc itself. Nor do the frames of an agent's plan, on copies of the fight.
+        if (efz::g_netplay.active || efz::AgentPlanning()) {
             memset(data, 0, n);
             return DI_OK;
         }
