@@ -3,6 +3,8 @@ of, registered by importing this: what an agent.json's "code": "agent_modules" n
 what play.py --module and evaluate.py --p1-module know.
 
     routes    combo_support.py: its combos from people's library, once it sees its hit
+    oki       okizeme.py: people's okizeme (the clone's play) while it sees the opponent down
 """
 
 import combo_support  # noqa: F401  (registers 'routes')
+import okizeme  # noqa: F401  (registers 'oki')
