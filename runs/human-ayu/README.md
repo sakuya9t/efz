@@ -1318,6 +1318,34 @@ The game waits a tenth of a second at most for a combo's first plan and half a f
 for a later one, then goes on with what it has (the route it is on, or its own play): on
 the machine busy with eleven training runs most plans come late and nothing stalls.
 
+*The routes as a module, and what a module is* (14 November; the user: "Do we have a
+standard that can be compatible if we add more modules in the future?"). The routes
+patch the agent: its network is untouched, and something beside it takes its inputs over
+while its own combo runs. That was written five times (the evaluations' player, a
+person's match with the planner, the same with the chooser, the learner in training, an
+opponent in training), each with its own calls, and one at a time. Now there is one way
+to write such a part and one host for each place an agent plays
+(`python/efz_env/modules.py`):
+
+| | |
+|---|---|
+| `Module` | a part of an agent: every step it is shown each environment's step (`watch(i, ctx)`) and asked for its action (`act(i, ctx)`): an action, or None, "not mine". `ctx` is what the host knows: `ctx.view`, what the player sees, `delay` steps old (a module keeps the human limits by deciding from it); its input history; and for planning on copies of the game `ctx.save()` and `ctx.now` |
+| `Stack` | several modules in order: the first that wants the step has it, the agent's own play the last; a module that was playing sees in `ctx.last` that another took the step |
+| `ModularAgent` | an `Agent` with modules, for evaluations (a batch) and for a person's match (`play.py`) |
+| `ModularOpponent`, `efz_env.sb3.ModularLearner` | the same for an opponent and for the learner of `finetune.py`'s environment (a module's steps marked for the loss to leave out, as the routes' were) |
+| `agent.json` | what an agent is made of, beside its model (and in a pack): the model, the modules in the order they are asked, each one's files and options. `play.py` reads it (a pack without one is its model and, if it holds a library, the routes); `--module KIND:key=value,...` and `--no-module KIND` change it, `evaluate.py --p1-module` adds one |
+
+A kind of module is registered by the file that writes it (`agent_modules.py` imports
+them all): the routes are the kind `routes`, `FairAssist` where the game can be copied at
+once and `LiveRoutes` in a person's match, the classes above kept by their names as the
+hosts with the routes alone. Nothing changed in what is played: three seeded evaluations
+(round 15's agent against Kaori's `exploiter15`: its own combos, the routes, the routes
+planned again, 3,947 plans) and the chooser's give the same files to the last digit
+before and after, and a seeded rollout of `finetune.py --assist --vs-assist` the same log
+(29 plans the learner's, 10 the opponent's); `play.py` with round 15's pack plays as it
+did (62 plans a match at the game's speed, 5 late). `python/tests/test_modules.py` holds
+the order, the interruptions and the manifest.
+
 ## Ayu's agent as other characters
 
 What it learnt for Ayu and what any character keeps (8 November; `eval/transfer/`): the
@@ -1578,7 +1606,8 @@ is only on the Linux machine until the next upload.
 | `people.py` | the same measures of people, overall, by opponent and by player |
 | `compare.py` | people and agents side by side, as the tables here |
 | `team_check.py` | whether players' clones predict their players better than the clone of everyone |
-| `combo_support.py` | the built-in routes: an agent's combos from people's library combos tried on copies of the game once it sees its hit, and again at each new move's hit (`FairAssist`; `evaluate.py --p1-assist [--assist-replan]`, `finetune.py --assist`), against a person in real time with the planner in a process of its own (`LiveRoutes`, `play.py --assist`) or with the chooser (`ChosenRoutes`, `play.py --assist --chooser`) |
+| `combo_support.py` | the built-in routes: an agent's combos from people's library combos tried on copies of the game once it sees its hit, and again at each new move's hit (`FairAssist`; `evaluate.py --p1-assist [--assist-replan]`, `finetune.py --assist`), against a person in real time with the planner in a process of its own (`LiveRoutes`, `play.py --assist`) or with the chooser (`play.py --assist --chooser`); the module `routes` of `python/efz_env/modules.py` |
+| `agent_modules.py` | the kinds of module an agent here can be made of (an `agent.json`'s `"code"`): importing it registers them |
 | `combo_net.py` | the routes without the copies: `collect` an agent's plans (and steps) with the routes, `train-chooser` a network that says from the agent's view what each library combo would deal (`evaluate.py --assist-chooser`, `play.py --chooser`); `train`, `train-clock`, `play`: the two step-by-step networks that didn't work |
 | `combo_starts.py` | where people's combos started, kept as a replay and a step |
 | `combo.py` | the combo master: trials from those starts, rewarded for the combo's damage |

@@ -634,6 +634,10 @@ def main():
                         "it sees its hit) instead of on copies of the game")
     p.add_argument('--assist-margin', type=float, default=200.0,
                    help="--assist-chooser: the HP a combo must promise over P1's own play")
+    p.add_argument('--p1-module', action='append', default=[], metavar='KIND:key=value,...',
+                   help="a module of P1 (python/efz_env/modules.py; the kinds: "
+                        "agent_modules.py), asked after --p1-assist's routes and those "
+                        "named before it; a value that is a file's path is one of its files")
     args = p.parse_args()
     p1 = make_agent(args.p1, args.deterministic, args.p1_delay)
     if sum(bool(x) for x in (args.p1_combo, args.p1_lookahead, args.p1_assist)) > 1:
@@ -660,6 +664,18 @@ def main():
             p1 = combo_support.ComboSwitch(
                 p1, make_agent(args.p1_combo, args.deterministic or args.p1_combo_deterministic),
                 args.p1_confirm)
+    if args.p1_module:
+        from efz_env import modules
+        import agent_modules  # noqa: F401  (the kinds)
+        if args.p1_combo or args.p1_lookahead:
+            p.error('--p1-module: not with --p1-combo or --p1-lookahead')
+        base = p1.agent if isinstance(p1, modules.ModularAgent) else p1
+        more = modules.build(base, [modules.parse_spec(m) for m in args.p1_module], 'batch',
+                             data=args.data)
+        if isinstance(p1, modules.ModularAgent):
+            p1.stack = modules.Stack(p1.modules + more)
+        else:
+            p1 = modules.ModularAgent(p1, more)
     p2 = 'cpu' if args.p2 == 'cpu' else make_agent(args.p2, args.deterministic)
     if args.p2_advantage:
         import advantages
@@ -689,6 +705,9 @@ def main():
                              chooser=args.assist_chooser, per_start=args.assist_per_start,
                              replan=args.assist_replan)
         print('assist', json.dumps(out['assist']), flush=True)
+    if args.p1_module:  # what each module did, and the share of P1's decisions it made
+        out['modules'] = p1.stats()
+        print('modules', json.dumps(out['modules']), flush=True)
     if args.json:
         with open(args.json, 'w') as f:
             json.dump(out, f, indent=1)

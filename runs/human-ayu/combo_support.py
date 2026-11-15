@@ -27,6 +27,14 @@ chooser in the planner's place (play.py --assist --chooser), ComboAssist the lea
 finetune.py --assist, marking the steps a route played (infos[i]['assisted']) for the
 policy's loss to leave out, FairAssistOpponent a frozen agent as an exploiter's opponent
 (finetune.py --vs-assist: an agent trained so is met as it plays).
+
+The routes are a module of the agent (python/efz_env/modules.py: what a module is, and the
+hosts that play an agent with its modules): FairAssist is the module where the game can
+be copied at once (evaluations, training; with combo_net.py's chooser anywhere), LiveRoutes
+the same module for a person's match, its planner beside the game. The classes named above
+are those hosts with the routes alone, kept by their names; an agent with more modules is
+efz_env.modules.ModularAgent([routes, ...]) (the kind 'routes' of an agent.json: routes()
+below).
 """
 
 import os
@@ -36,7 +44,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'python'))
 
 import numpy as np
-from stable_baselines3.common.vec_env.base_vec_env import VecEnv
+
+from efz_env import modules
+from efz_env.modules import Module, ModularAgent, ModularOpponent, sampler
+from efz_env.sb3 import ModularLearner
 
 COMBO_HITS, ACTION = 30, 18  # self_combo_hits (/ 30), self_action
 
@@ -87,8 +98,10 @@ def _hits(view):
     return int(round(float(view[COMBO_HITS]) * 30))
 
 
-class FairAssist:
-    """The routes being played and the plans made, per environment."""
+class FairAssist(Module):
+    """The routes being played and the plans made, per environment: the module 'routes'
+    (watch: update, act: action)."""
+    name = 'routes'
 
     def __init__(self, planner, delay):
         if delay <= 0:
@@ -110,6 +123,26 @@ class FairAssist:
             self.playing.pop(i, None)
             self.prev_seen.pop(i, None)
             self.planned.pop(i, None)
+
+    def reset(self, mask=None):
+        if mask is None:
+            self.clear()
+        else:
+            for i in np.flatnonzero(mask):
+                self.clear(int(i))
+
+    def watch(self, i, ctx):
+        self.update(i, ctx.view, ctx.now, ctx.save, ctx.seen, ctx.hist, ctx.prev, ctx.side,
+                    ctx.policy, ctx.value)
+
+    def act(self, i, ctx):
+        return self.action(i, _hits(ctx.now))
+
+    def stats(self):
+        """The plans so far (take_plans: since the last call, and forgets them)."""
+        p, out = self.plans, self.take_plans()
+        self.plans = p
+        return out
 
     def update(self, i, seen_view, now_view, save, seen, hist, prev, side, policy, value=None):
         """Before environment i's next decision: plans if the player now sees its hit and
@@ -159,72 +192,23 @@ class FairAssist:
                     own=round(float(np.mean([x[1] for x in p]))))
 
 
-class FairComboAgent:
-    """An efz_env Agent with FairAssist, for evaluate.py (attach(env, side) first)."""
+class FairComboAgent(ModularAgent):
+    """An efz_env Agent with FairAssist alone, for evaluate.py (attach(env, side) first)."""
 
     def __init__(self, agent, planner):
-        from efz_env import ActionTable
-        self.agent = agent
-        self.assist = FairAssist(planner, agent.delay)
-        self.value = None
+        value = None
         if getattr(planner, 'score', 'damage') == 'value':  # the agent's critic, not the planner's
             import redteam
-            self.value = redteam.critic(agent.model)
-        self.frame_skip, self.history = 1, agent.history
-        self.table = ActionTable()
-        self.env, self.side = None, 0
+            value = redteam.critic(agent.model)
+        super().__init__(agent, [FairAssist(planner, agent.delay)], value)
+
+    @property
+    def assist(self):
+        return self.stack.get('routes')
 
     @property
     def plans(self):
         return self.assist.plans
-
-    def policy(self, view):
-        return self.agent.model.predict(view, deterministic=self.agent.deterministic)[0]
-
-    def attach(self, env, side):
-        self.env, self.side = env, side
-
-    def batch(self, n):
-        self.agent.batch(n)
-        self.assist.clear()
-
-    def reset(self, mask=None):
-        self.agent.reset(mask)
-        if mask is None:
-            self.assist.clear()
-        else:
-            for i in np.flatnonzero(mask):
-                self.assist.clear(int(i))
-
-    def controls(self, obs, step):
-        out = self.agent.controls(obs, step).copy()  # (it pushes obs into its view)
-        seen = self.agent.seen.buf                  # (n, delay + 1, dim), newest first
-        hist = self.agent.hist
-        for i in range(len(obs)):
-            self.assist.update(i, seen[i, self.agent.delay], obs[i],
-                               lambda i=i: self.env.save_state(i), seen[i].copy(),
-                               hist.buf[i].copy(), int(hist.prev[i]), self.side, self.policy,
-                               self.value)
-            a = self.assist.action(i, _hits(obs[i]))
-            if a is not None:
-                out[i] = self.table.table[a]
-        return out
-
-    def observe(self, controls):
-        self.agent.observe(controls)
-
-
-def sampler(model, deterministic=False):
-    """views (batch, width) -> `model`'s actions, as predict's but without its overhead."""
-    import torch
-    policy = model.policy
-    policy.set_training_mode(False)
-
-    def act(view):
-        with torch.no_grad():
-            t = torch.as_tensor(np.asarray(view, np.float32), device=policy.device)
-            return policy._predict(t, deterministic=deterministic).cpu().numpy()
-    return act
 
 
 def _live_worker(conn, data_dir, model_path, library, env_config, deterministic, victims,
@@ -315,10 +299,10 @@ class _Mirror:
         return self._env.step(controls)
 
 
-class LiveRoutes:
-    """An efz_env Agent with the fair built-in routes against a person, in real time
-    (python/examples/play.py --assist): HumanMatch's policy (obs -> an action, once a
-    frame). attach(match, **what set_matches got) first; close() at the end.
+class LiveRoutes(Module):
+    """The fair built-in routes against a person, in real time (python/examples/play.py
+    --assist): the module 'routes' of a ModularAgent that is HumanMatch's policy (its
+    attach_match(match, **what set_matches got) first, its close() at the end).
 
     As FairAssist: the routes are tried from the game as it is when the player sees its
     hit, `delay` steps after it, and played from then. A plan takes 50-400 ms, which a
@@ -343,6 +327,7 @@ class LiveRoutes:
 
     stats(): the plans (as FairAssist.take_plans), those dropped, the planner's seconds a
     plan and the seconds the game waited for one."""
+    name = 'routes'
 
     def __init__(self, agent, data_dir, library, victims=None, per_start=12, patience=0.1,
                  replan=False, patience_again=0.008):
@@ -371,8 +356,13 @@ class LiveRoutes:
         self.planned = None    # the move whose hit it planned on last, this combo
         self.hit_move, self.hit_age = None, 0  # its last hit's move, the steps since
 
-    def attach(self, match, **matches):
-        """match: the HumanMatch; matches: set_matches's arguments, as it was given them."""
+    def attach(self, host):
+        """host: the ModularAgent, attached to a HumanMatch (the planner's copy of the
+        match is told what the match is told from here on: host.matches first)."""
+        match, matches = host.match, host.matches
+        if match is None:
+            raise ValueError('LiveRoutes: a person\'s match (ModularAgent.attach_match); '
+                             'FairAssist elsewhere')
         env = match.env
         config = {k: int(getattr(env.config, k)) for k in
                   ('max_frames', 'rounds_to_win', 'cpu_level', 'damage_level',
@@ -391,8 +381,7 @@ class LiveRoutes:
         self.env = match.env = _Mirror(env, self.conn.send)
         self.env.set_matches(**matches)
 
-    def reset(self):
-        self.agent.reset()
+    def reset(self, mask=None):
         self._clear()
 
     def _begin(self):
@@ -452,9 +441,8 @@ class LiveRoutes:
     def _drop(self, why):
         self.dropped[why] = self.dropped.get(why, 0) + 1
 
-    def __call__(self, obs):
-        obs = np.asarray(obs, np.float32)
-        view = self.agent.view(obs[None])  # (its view of this step, `delay` steps old)
+    def watch(self, i, ctx):
+        obs = ctx.now
         hits = _hits(obs)
         if hits > self.prev_hits:
             self.hit_move, self.hit_age = int(round(float(obs[ACTION]))), 0
@@ -471,16 +459,16 @@ class LiveRoutes:
                 self.hit_move != self.planned if self.replan else
                 self.prev_hits == 0 and self.route is None):
             self._begin()
+        self.prev_hits = hits
+
+    def act(self, i, ctx):
         if self.queue:
-            action = self.queue.pop(0)
-        elif self.route is not None:
+            return self.queue.pop(0)
+        if self.route is not None:
             action = int(self.route[0][self.route[1]])
             self.route[1] += 1
-        else:
-            action = int(self.sample(view)[0])
-        self.prev_hits = hits
-        self.agent.observe(self.table.to_bytes(np.array([action])))
-        return action
+            return action
+        return None
 
     def stats(self):
         p = self.plans
@@ -509,102 +497,39 @@ class LiveRoutes:
             self.conn = None
 
 
-class ChosenRoutes:
-    """The fair built-in routes against a person with combo_net.py's chooser in the
-    planner's place (python/examples/play.py --assist LIBRARY --chooser CHOOSER.pt):
-    HumanMatch's policy. Nothing is tried on copies of the game, so there is nothing to
-    wait for and no second process: on the step the agent sees its hit the chooser says,
-    from that view, which library combo to play from memory, or its own play
-    (FairAssist, with combo_net.NetPlanner). stats(): the plans, as FairAssist's."""
-
-    def __init__(self, agent, planner):
-        if agent.frame_skip != 1 or not agent.delay or agent.hist is None:
-            raise ValueError('ChosenRoutes: an agent deciding every frame, with a delay and '
-                             'its input history')
-        self.agent = agent
-        self.assist = FairAssist(planner, agent.delay)
-        self.frame_skip, self.history = 1, agent.history
-        self.sample = sampler(agent.model, agent.deterministic)
-        self.table = agent.table
-        self.plans = []
-
-    def attach(self, match, **matches):
-        pass
-
-    def reset(self):
-        self.agent.reset()
-        self.assist.clear()
-
-    def __call__(self, obs):
-        obs = np.asarray(obs, np.float32)
-        a = self.agent
-        view = a.view(obs[None])  # (its view of this step, `delay` steps old)
-        self.assist.update(0, a.seen.buf[0, a.delay], obs, lambda: None, a.seen.buf[0].copy(),
-                           a.hist.buf[0].copy(), int(a.hist.prev[0]), 0, None)
-        action = self.assist.action(0, _hits(obs))
-        if action is None:
-            action = int(self.sample(view)[0])
-        a.observe(self.table.to_bytes(np.array([action])))
-        return action
-
-    def stats(self):
-        self.plans += self.assist.plans
-        self.assist.plans = []
-        p = self.plans
-        out = dict(plans=len(p))
-        if p:
-            out.update(route=round(float(np.mean([x[2] for x in p])), 3),
-                       best=round(float(np.mean([x[0] for x in p]))),
-                       own=round(float(np.mean([x[1] for x in p]))))
-        return out
-
-    def close(self):
-        pass
+def chosen_routes(agent, planner):
+    """The fair built-in routes with combo_net.py's chooser in the planner's place
+    (planner: combo_net.NetPlanner; play.py --assist LIBRARY --chooser CHOOSER.pt): nothing
+    is tried on copies of the game, so there is nothing to wait for and no second process:
+    on the step the agent sees its hit the chooser says, from that view, which library
+    combo to play from memory, or its own play. FairAssist, for any host."""
+    if agent.frame_skip != 1 or not agent.delay or agent.hist is None:
+        raise ValueError('the routes: an agent deciding every frame, with a delay and its '
+                         'input history')
+    return FairAssist(planner, agent.delay)
 
 
-class FairAssistOpponent:
+class FairAssistOpponent(ModularOpponent):
     """EfzSB3VecEnv's opponent (player 2, seeing the game `delay` steps late) with
-    FairAssist: an agent trained with finetune.py --assist, played as it was trained, by
-    an exploiter's training (finetune.py --vs-assist). attach(venv) first."""
-    takes_index = True
+    FairAssist alone: an agent trained with finetune.py --assist, played as it was trained,
+    by an exploiter's training (finetune.py --vs-assist). attach(venv) first."""
 
     def __init__(self, planner, model):
-        from efz_env.sb3 import frozen
-        self.inner = frozen(model)
+        super().__init__(model, lambda venv: [FairAssist(planner, venv.delay.steps)])
         self.planner = planner
-        self.venv = self.assist = None
+
+    @property
+    def assist(self):
+        return self.stack.get('routes') if self.stack is not None else None
 
     @property
     def plans(self):
         return self.assist.plans if self.assist is not None else []
 
-    def attach(self, venv):
-        if venv.delay is None or venv.opponent_delay is not None and (
-                venv.opponent_delay != venv.delay.steps).any():
-            raise ValueError('FairAssistOpponent: player 2 sees the game delay steps late')
-        self.venv = venv
-        self.assist = FairAssist(self.planner, venv.delay.steps)
 
-    def __call__(self, obs, idx):
-        actions = np.asarray(self.inner(obs)).copy()
-        v, d = self.venv, self.assist.delay
-        for k, i in enumerate(idx):
-            i = int(i)
-            if v._length[i] == 0:  # a new match
-                self.assist.clear(i)
-            seen, now = v.delay.buf[i, 1], v.env.obs[i, 1]
-            self.assist.update(i, seen[d], now, lambda i=i: v.env.save_state(i), seen.copy(),
-                               v.history.buf[i, 1].copy(), int(v.history.prev[i, 1]), 1,
-                               self.inner)
-            a = self.assist.action(i, _hits(now))
-            if a is not None:
-                actions[k] = a
-        return actions
-
-
-class ComboAssist(VecEnv):
-    """finetune.py's learner (player 1 of an EfzSB3VecEnv) with FairAssist, as a VecEnv:
-    the steps a route plays carry infos[i]['assisted'] and the route's action,
+class ComboAssist(ModularLearner):
+    """finetune.py's learner (player 1 of an EfzSB3VecEnv) with FairAssist alone, as a
+    VecEnv: the steps a route plays carry infos[i]['assisted'] and the route's action,
     infos[i]['route_action'] (finetune.py --assist-distill: a target); only (a mask of the
     environments, default all): where routes are planned (finetune.py --assist-where cpu:
     the CPU's matches, whose guarding the planner's defender is). policy: its own play on the
@@ -612,61 +537,39 @@ class ComboAssist(VecEnv):
     the planner's score='value')."""
 
     def __init__(self, venv, planner, policy, value=None, only=None):
-        self.venv, self.policy, self.value = venv, policy, value
-        self.only = np.ones(venv.num_envs, bool) if only is None else np.asarray(only, bool)
-        self.delay = venv.delay.steps
-        self.assist = FairAssist(planner, self.delay)
-        self.assisted = np.zeros(venv.num_envs, bool)
-        self.route = np.zeros(venv.num_envs, int)
-        super().__init__(venv.num_envs, venv.observation_space, venv.action_space)
+        super().__init__(venv, [FairAssist(planner, venv.delay.steps)], policy, value, only)
 
-    def reset(self):
-        self.assist.clear()
-        return self.venv.reset()
+    @property
+    def assist(self):
+        return self.stack.get('routes')
 
-    def step_async(self, actions):
-        actions = np.array(actions).copy()
-        now = self.venv.env.obs[:, 0]
-        self.assisted[:] = False
-        for i in range(self.num_envs):
-            a = self.assist.action(i, _hits(now[i]))
-            if a is not None:
-                actions[i] = a
-                self.assisted[i] = True
-                self.route[i] = a
-        self.venv.step_async(actions)
 
-    def step_wait(self):
-        obs, rewards, dones, infos = self.venv.step_wait()
-        for i in range(self.num_envs):
-            infos[i]['assisted'] = bool(self.assisted[i])
-            if self.assisted[i]:
-                infos[i]['route_action'] = int(self.route[i])
-        seen = self.venv.delay.buf[:, 0]  # the learner's views, newest first
-        now = self.venv.env.obs[:, 0]
-        hist = self.venv.history
-        for i in range(self.num_envs):
-            if dones[i] or not self.only[i]:
-                self.assist.clear(i)
-                continue
-            self.assist.update(i, seen[i, self.delay], now[i],
-                               lambda i=i: self.venv.env.save_state(i), seen[i].copy(),
-                               hist.buf[i, 0].copy(), int(hist.prev[i, 0]), 0, self.policy,
-                               self.value)
-        return obs, rewards, dones, infos
-
-    def close(self):
-        self.venv.close()
-
-    def get_attr(self, attr_name, indices=None):
-        return [getattr(self, attr_name)] * len(self._get_indices(indices))
-
-    def set_attr(self, attr_name, value, indices=None):
-        setattr(self, attr_name, value)
-
-    def env_method(self, method_name, *args, indices=None, **kwargs):
-        result = getattr(self, method_name)(*args, **kwargs)
-        return [result] * len(self._get_indices(indices))
-
-    def env_is_wrapped(self, wrapper_class, indices=None):
-        return [False] * len(self._get_indices(indices))
+@modules.register('routes')
+def routes(agent, where, files, options, data):
+    """The kind 'routes' of an agent.json. files: library (a combo library .npz, its
+    .marks.json beside it), chooser (combo_net.py's chooser.pt, optional). options: replan
+    (default true), per_start (24), victims, by ('planner', the default: the combos tried
+    on copies; 'chooser': the chooser picks, nothing is tried), margin (the chooser's,
+    200), score;
+    a person's match: patience, patience_again (LiveRoutes's: the seconds the game waits
+    for a plan)."""
+    library, o = files['library'], dict(options)
+    if o.get('by', 'planner') not in ('planner', 'chooser'):
+        raise ValueError(f"routes: by 'planner' or 'chooser', not {o['by']!r}")
+    if o.get('by') == 'chooser':
+        import combo_net
+        if not files.get('chooser'):
+            raise ValueError("routes: by the chooser, and no chooser.pt among its files")
+        return chosen_routes(agent, combo_net.NetPlanner(
+            combo_net.load_routes(library), agent.model, files['chooser'],
+            margin=o.get('margin', 200.0)))
+    per_start, replan = int(o.get('per_start', 24)), bool(o.get('replan', True))
+    if where == 'play':
+        waits = {k: float(o[k]) for k in ('patience', 'patience_again') if k in o}
+        return LiveRoutes(agent, data, library, victims=o.get('victims'), per_start=per_start,
+                          replan=replan, **waits)
+    import macros
+    import redteam
+    return FairAssist(redteam.Planner(data, macros.load_library(library), agent.model,
+                                      score=o.get('score', 'damage'), victims=o.get('victims'),
+                                      per_start=per_start, replan=replan), agent.delay)

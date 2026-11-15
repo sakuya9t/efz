@@ -414,3 +414,86 @@ class EfzSB3VecEnv(VecEnv):
 
     def env_is_wrapped(self, wrapper_class, indices=None):
         return [False] * len(self._get_indices(indices))
+
+
+class ModularLearner(VecEnv):
+    """The learner of an EfzSB3VecEnv (player 1) with modules (efz_env.modules), as a
+    VecEnv: a step a module plays carries infos[i]['assisted'], the module's name
+    (infos[i]['module']) and its action (infos[i]['route_action']), for the policy's loss
+    to leave out or learn from. only (a mask of the environments, default all): where the
+    modules play. policy: its own play on a module's copies of the game (frozen(model),
+    this chunk's); value: its critic's."""
+
+    def __init__(self, venv, modules, policy, value=None, only=None):
+        from .modules import Stack
+        self.venv, self.policy, self.value = venv, policy, value
+        self.env, self.side, self.agent = venv.env, 0, None
+        self.only = np.ones(venv.num_envs, bool) if only is None else np.asarray(only, bool)
+        self.delay = venv.delay.steps
+        self.stack = modules if isinstance(modules, Stack) else Stack(modules)
+        for m in self.stack:
+            m.attach(self)
+        self.contexts = [None] * venv.num_envs  # each environment's step, as last watched
+        self.assisted = np.zeros(venv.num_envs, bool)
+        self.route = np.zeros(venv.num_envs, int)
+        self.by = [None] * venv.num_envs
+        super().__init__(venv.num_envs, venv.observation_space, venv.action_space)
+
+    def reset(self):
+        self.stack.reset()
+        self.contexts = [None] * self.num_envs
+        return self.venv.reset()
+
+    def step_async(self, actions):
+        actions = np.array(actions).copy()
+        self.assisted[:] = False
+        for i, ctx in enumerate(self.contexts):
+            a = None if ctx is None else self.stack.act(i, ctx)
+            if a is not None:
+                actions[i] = a
+                self.assisted[i] = True
+                self.route[i] = a
+                self.by[i] = self.stack.owner[i]
+        self.venv.step_async(actions)
+
+    def step_wait(self):
+        from .modules import Context
+        obs, rewards, dones, infos = self.venv.step_wait()
+        for i in range(self.num_envs):
+            infos[i]['assisted'] = bool(self.assisted[i])
+            if self.assisted[i]:
+                infos[i]['route_action'] = int(self.route[i])
+                infos[i]['module'] = self.by[i]
+        seen = self.venv.delay.buf[:, 0]  # the learner's views, newest first
+        now = self.venv.env.obs[:, 0]
+        hist = self.venv.history
+        for m in self.stack:  # (the controls it played on the step, then the next step)
+            m.observe(hist.prev[:, 0])
+            m.see(now, None)
+        for i in range(self.num_envs):
+            if dones[i] or not self.only[i]:
+                self.stack.reset_one(i, self.num_envs)
+                self.contexts[i] = None
+                continue
+            ctx = Context(seen[i, self.delay], now[i], seen[i].copy(), hist.buf[i, 0].copy(),
+                          int(hist.prev[i, 0]), lambda i=i: self.venv.env.save_state(i), 0,
+                          self.policy, self.value)
+            self.stack.watch(i, ctx)
+            self.contexts[i] = ctx
+        return obs, rewards, dones, infos
+
+    def close(self):
+        self.venv.close()
+
+    def get_attr(self, attr_name, indices=None):
+        return [getattr(self, attr_name)] * len(self._get_indices(indices))
+
+    def set_attr(self, attr_name, value, indices=None):
+        setattr(self, attr_name, value)
+
+    def env_method(self, method_name, *args, indices=None, **kwargs):
+        result = getattr(self, method_name)(*args, **kwargs)
+        return [result] * len(self._get_indices(indices))
+
+    def env_is_wrapped(self, wrapper_class, indices=None):
+        return [False] * len(self._get_indices(indices))

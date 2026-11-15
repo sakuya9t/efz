@@ -27,6 +27,14 @@ play (ChosenRoutes): no second process, a little less damage.
 plays with the pack's routes unless --no-assist; --chooser alone means the pack's.
 
     python python/examples/play.py --agent tmp/efz-round15-pack.zip --chars ayu kano
+
+The routes are a module of the agent (python/efz_env/modules.py): a part that takes its
+inputs over in some situation. A pack says what its agent is made of in its agent.json
+(the model, the modules in the order they are asked, their files); a pack without one is
+its model and, if it holds a library, the routes. --module KIND:key=value,... adds a module
+(or replaces the pack's of that kind; a value that is a file's path is one of its files),
+--no-module KIND leaves one out; --assist, --chooser and --no-assist are the routes' own
+words for the same. The kinds are runs/human-ayu/agent_modules.py's.
 """
 
 import argparse
@@ -43,9 +51,9 @@ from efz_env.human import HumanMatch
 
 
 def unpack(path):
-    """A pack's model, combo library and chooser (see above; None where it has none),
-    unpacked into the folder of the pack's name beside it; None if `path` is not a pack
-    (a model's zip has `data`)."""
+    """A pack's model, combo library, chooser and agent.json (see above; None where it has
+    none), unpacked into the folder of the pack's name beside it; None if `path` is not a
+    pack (a model's zip has `data`)."""
     if not zipfile.is_zipfile(path):
         return None
     with zipfile.ZipFile(path) as z:
@@ -68,9 +76,15 @@ def unpack(path):
                 with z.open(n) as src, open(dest, 'wb') as f:
                     shutil.copyfileobj(src, f)
             kind = ('model' if n == models[0] else 'library' if n.endswith('.npz') else
-                    'chooser' if n.endswith('chooser.pt') else None)
+                    'chooser' if n.endswith('chooser.pt') else
+                    'manifest' if n == root + 'agent.json' else None)
             found.setdefault(kind, dest)
-    return found['model'], found.get('library'), found.get('chooser')
+    return found['model'], found.get('library'), found.get('chooser'), found.get('manifest')
+
+
+def routes_spec(specs):
+    """The routes' spec among `specs` (None if they have none)."""
+    return next((s for s in specs if s['kind'] == 'routes'), None)
 
 
 def main():
@@ -96,8 +110,9 @@ def main():
                    help="the agent's combos from the built-in routes of this library")
     p.add_argument('--assist-victims', nargs='+', metavar='CHAR',
                    help='--assist only against these characters')
-    p.add_argument('--assist-routes', type=int, default=24, metavar='N',
-                   help='the combos tried at a plan (more: better combos, a slower plan)')
+    p.add_argument('--assist-routes', type=int, default=None, metavar='N',
+                   help='the combos tried at a plan (more: better combos, a slower plan; '
+                        "default: the pack's, or 24)")
     p.add_argument('--assist-once', action='store_true',
                    help='a plan at the first hit only, not again at each new move')
     p.add_argument('--chooser', metavar='CHOOSER.pt', nargs='?', const=True,
@@ -105,6 +120,10 @@ def main():
                         "(alone: a pack's chooser)")
     p.add_argument('--no-assist', action='store_true',
                    help="a pack's agent with its own combos, not the pack's routes")
+    p.add_argument('--module', action='append', default=[], metavar='KIND:key=value,...',
+                   help='a module of the agent (in place of the pack\'s of that kind)')
+    p.add_argument('--no-module', action='append', default=[], metavar='KIND',
+                   help="the pack's agent without this module")
     args = p.parse_args()
     if not args.data:
         sys.exit('pass --data, the folder of an EFZ 4.02 install (or set EFZ_DATA)')
@@ -112,59 +131,85 @@ def main():
         sys.exit('pass --agent model.zip, or --cpu')
     if args.assist and not args.agent:
         sys.exit('--assist: the combos of an --agent')
+    from efz_env import modules
+    # What the agent is made of: the pack's agent.json (or its library: the routes), then
+    # this command line's words.
+    specs, chooser = [], None
     pack = unpack(args.agent) if args.agent and os.path.isfile(args.agent) else None
     if pack:
-        args.agent, library, chooser = pack
-        if not args.no_assist:
-            args.assist = args.assist or library
-        if args.chooser is True:
-            args.chooser = chooser or sys.exit('--chooser: the pack has no chooser.pt')
-        if args.no_assist:
-            args.assist = args.chooser = None
-        print(f'pack: {args.agent}, ' + (
-            'its own combos' if not args.assist else f'its combos from the routes of '
-            f'{args.assist}' + f', chosen by {args.chooser}' * bool(args.chooser)))
-    if args.chooser is True:
-        sys.exit('--chooser: name a chooser.pt (alone it means a pack\'s)')
-    if args.chooser and not args.assist:
-        sys.exit("--chooser: with --assist LIBRARY (the chooser's library)")
-    policy, routes, frame_skip = None, None, args.frame_skip
+        args.agent, library, chooser, manifest = pack
+        if manifest:
+            made = modules.load_manifest(manifest)
+            args.agent, specs = made['model'], made['modules']
+            chooser = (routes_spec(specs) or {}).get('files', {}).get('chooser', chooser)
+        elif library:
+            specs = [dict(kind='routes', code='agent_modules', options={},
+                          files=dict(library=library, **({'chooser': chooser} if chooser else {})))]
+    if args.assist:  # this library's routes, not the pack's
+        spec = routes_spec(specs) or dict(kind='routes', code='agent_modules', files={}, options={})
+        spec['files']['library'] = args.assist
+        specs = [s for s in specs if s['kind'] != 'routes'] + [spec]
+    if args.no_assist:
+        specs = [s for s in specs if s['kind'] != 'routes']
+    spec = routes_spec(specs)
+    if args.chooser:
+        if spec is None:
+            sys.exit("--chooser: with --assist LIBRARY (the chooser's library)")
+        if args.chooser is True and not chooser:
+            sys.exit('--chooser: ' + ('the pack has no chooser.pt' if pack else
+                                      "name a chooser.pt (alone it means a pack's)"))
+        spec['files']['chooser'] = chooser if args.chooser is True else args.chooser
+        spec['options']['by'] = 'chooser'
+    if spec is not None:
+        if args.assist_once:
+            spec['options']['replan'] = False
+        if args.assist_routes:
+            spec['options']['per_start'] = args.assist_routes
+        spec['options'].setdefault('per_start', 24)
+        if args.assist_victims:
+            spec['options']['victims'] = args.assist_victims
+    for text in args.module:
+        new = modules.parse_spec(text)
+        new['code'] = new['options'].pop('code', 'agent_modules')
+        specs = [s for s in specs if s['kind'] != new['kind']] + [new]
+    specs = [s for s in specs if s['kind'] not in args.no_module]
+    if pack or specs:
+        print(f'agent: {args.agent}' + ''.join(
+            f"\n  {s['kind']}: " + ', '.join(
+                [f'{k} {v}' for k, v in s['files'].items()
+                 if k != 'chooser' or s['options'].get('by') == 'chooser'] +
+                [f'{k}={v}' for k, v in s['options'].items()]) for s in specs))
+    policy, agent, frame_skip = None, None, args.frame_skip
     if args.agent:
         # As trained: deciding every frame_skip frames, with its input history.
         from efz_env.agent import Agent
         policy = Agent(args.agent, deterministic=args.deterministic, frame_skip=frame_skip)
         frame_skip = policy.frame_skip
-        if args.assist:
+        if specs:
             sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'runs',
                                             'human-ayu'))
-            import combo_support
-            if args.chooser:
-                import combo_net
-                routes = combo_support.ChosenRoutes(policy, combo_net.NetPlanner(
-                    combo_net.load_routes(args.assist), policy.model, args.chooser))
-            else:
-                routes = combo_support.LiveRoutes(policy, args.data, args.assist,
-                                                  victims=args.assist_victims,
-                                                  per_start=args.assist_routes,
-                                                  replan=not args.assist_once)
+            agent = modules.ModularAgent(policy, modules.build(policy, specs, 'play',
+                                                               data=args.data))
     chars = tuple(None if c == 'any' else c for c in args.chars) if args.chars else (None, None)
     match = HumanMatch(args.data, human=args.side - 1,
                        opponent='cpu' if args.cpu else 'agent', chars=chars, stage=args.stage,
                        frame_skip=frame_skip or 4, record_dir=args.record,
-                       agent_name=args.agent + ' +routes' * bool(routes) +
-                       ' (chooser)' * bool(args.chooser) if args.agent
+                       agent_name=args.agent + ''.join(' +' + s['kind'] for s in specs) +
+                       ' (chooser)' * any(s['options'].get('by') == 'chooser' for s in specs)
+                       if args.agent
                        else f'cpu-{args.cpu_level}', scale=args.scale,
                        keys=json.loads(args.keys) if args.keys else None,
                        cpu_level=args.cpu_level, rounds_to_win=args.rounds,
                        sound=not args.no_sound, volume=args.volume)
-    if routes:  # (its planner follows the match: what set_matches was given)
-        routes.attach(match, chars=chars, stage=args.stage, cpu=(False, False))
-        policy = routes
+    if agent:  # (the routes' planner follows the match: what set_matches was given)
+        agent.attach_match(match, chars=chars, stage=args.stage, cpu=(False, False))
+        policy = agent
     results = match.play(policy, matches=args.matches)
     match.close()
-    if routes:
-        routes.close()
-        print('routes:', json.dumps(routes.stats()))
+    if agent:
+        agent.close()
+        for name, what in agent.stats().items():
+            print(f'{name}:', json.dumps(what))
     print(f'matches: {len(results)}, you won {sum(r == -1 for r in results)}, '
           f'lost {sum(r == 1 for r in results)}; recorded in {args.record}')
 
