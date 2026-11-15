@@ -23,10 +23,23 @@ from .actions import ActionTable
 from .history import Delay, InputHistory
 
 
+def is_agent_file(path):
+    return os.fspath(path).lower().endswith('.efzagent')
+
+
+def model_file(path):
+    """A model's zip: `path`, or for an agent file (.efzagent) the model it carries,
+    unpacked for this process (efz_env.export.unpacked_model)."""
+    if is_agent_file(path):
+        from .export import unpacked_model
+        return unpacked_model(path)
+    return path
+
+
 def load_config(path):
     """The settings of a model: <name>.config.json beside <name>.zip if there is one, else
-    the folder's config.json, else {}."""
-    path = os.path.abspath(path)
+    the folder's config.json, else {}. Of an agent file (.efzagent): the ones it carries."""
+    path = os.path.abspath(model_file(path))
     stem = path[:-4] if path.endswith('.zip') else path
     for p in (stem + '.config.json', os.path.join(os.path.dirname(path), 'config.json')):
         if os.path.exists(p):
@@ -41,7 +54,7 @@ class Agent:
         from stable_baselines3 import PPO
         cfg = load_config(path)
         self.path = path
-        self.model = PPO.load(path, device='cpu')
+        self.model = PPO.load(model_file(path), device='cpu')  # (a packed agent: its model)
         self.frame_skip = int(frame_skip or cfg.get('frame_skip', 4))
         self.history = int(history if history is not None else cfg.get('history', 0))
         self.delay = int(delay if delay is not None else cfg.get('delay', 0))

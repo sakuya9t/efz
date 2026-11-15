@@ -8,6 +8,7 @@ agent can go to anyone who has the game.
 | Source | What it is |
 |---|---|
 | `python/efz_env/export.py`, `python/examples/export_agent.py` | A pack (or a model.zip and its config.json) written as one agent file (`.efzagent`), checked against what it came from |
+| `python/examples/unpack_agent.py` (`export.py`'s `unpack_agent`) | An agent file back as a model.zip, its config.json and its combo library: to train it further or work on it |
 | `port/agent/observe.cpp` | The agent's view of a fight, 168 numbers: the training library's observation, one file for both |
 | `port/agent/policy.cpp` | The agent file read (its modules checked), its networks run, and an agent playing a side as `play.py` plays it |
 | `port/agent/routes.cpp` | Its combos from a library's routes, planned on copies of the fight as `play.py --assist` plans them |
@@ -79,10 +80,60 @@ does"). The header also says where each part came from (`source.pack`, `source.m
 `source.library`, `source.marks`, `source.chooser`: its name and SHA-256), the exporter
 and its revision, when, and what of the pack was dropped; the game writes those to
 `efz.log` when it first plays the file, and the menus show the version beside the name.
-The critic, the optimiser and everything else of the training are left out. The game
+Beside its modules a file carries its training part, which a game doesn't read (below,
+"Working on from an agent file"). The game
 still reads the first files (format 1, before November 15: the policy and perhaps its
 routes); a game from before then can't read format 2 ("an agent file of another
 version").
+
+## Working on from an agent file
+
+An agent file is also how an agent is released: one file to play in the game, to train
+further, and to measure. So it carries, beside the modules a game plays, a **training
+part**: the rest of the model (the critic: its features, layers and value), the model's
+`config.json` (`train.config`: how it sees the game and what it was trained against; the
+home folder written as `~`), PPO's settings (`train.sb3`), and with `--optimizer` Adam's
+moments. The routes carry what the planner in Python reads beyond the game's (each one's
+damage, whether it was kept for its victim, its join points). These are keys and tensors
+of no module (`train`, `train.*`, `routes.damage`, `routes.kept`, `routes.marks*`): a game
+reads past them, so a game that played the file before plays it now, and
+`export_agent.py --no-train` writes a file without them (half the size, to play only).
+Round 16's agent with 848 routes: 5.2 MB to play only, 9.6 MB with its training part,
+27 MB with the optimizer's moments.
+
+```sh
+python python/examples/unpack_agent.py agents/ayu.efzagent --out work/ayu
+#   work/ayu/model.zip: the file's model, the critic too (log-probabilities within 4e-05 of the file's)
+#   work/ayu/config.json: its settings
+#   work/ayu/combo-library.npz: its routes, as a combo library (--assist)
+python runs/human-ayu/finetune.py --start work/ayu/model.zip --out runs/mine ...
+python runs/human-ayu/evaluate.py --p1 work/ayu/model.zip --p1-assist work/ayu/combo-library.npz ...
+python python/examples/export_agent.py runs/mine/avg.zip --parts-from agents/ayu.efzagent
+```
+
+- **Unpacking** makes the model anew from the file's numbers and its JSON: a
+  Stable-Baselines3 PPO model with the file's weights (round 16's agent: all 27 tensors
+  the same to the last bit, its steps and PPO's settings too), its `config.json`, and
+  the routes as a combo library with its join points (`load_routes` reads the same 848
+  routes from it as from the library they came from). Nothing in the file is run or
+  unpickled, so a file from anyone can be unpacked. `packed.json` beside them says which
+  file they came from.
+- **The tools take the file itself** where they take a model.zip: `efz_env.agent.Agent`
+  (so `evaluate.py --p1 FILE.efzagent`, `play.py --agent`), and `finetune.py`'s `--start`
+  (unpacked into the run's folder), `--vs`, `--team`, `--prior`, `--old`, `--combo`:
+  released agents as the start of a run, or as its opponents. An evaluation of the file
+  is the model's: 12 seeded matches gave the same results to the last count.
+- **Packing again**: `export_agent.py MODEL --library ...` as before, or `--parts-from
+  FILE.efzagent` for a model trained further without the library at hand: the file's
+  routes and chooser go into the new one as they are (`--keep routes`: without the
+  chooser, which was trained for the agent it came with).
+- **Older files** (written before 15 November, or with `--no-train`) hold only the actor:
+  unpacked, the critic is new (its features the actor's) and training has to teach the
+  value again first; their routes stay in the file (no damage kept: `--parts-from`
+  carries them over, a combo library isn't written).
+- Not carried: the chooser as `combo_net.py`'s `chooser.pt` (it goes from file to file
+  with `--parts-from`), a run's history (`finetune.json`), and the prior a run pulled
+  toward.
 
 ## Playing against one
 

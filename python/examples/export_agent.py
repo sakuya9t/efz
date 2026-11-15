@@ -21,6 +21,13 @@ A model is a model.zip from train.py or finetune.py, with its config.json beside
 points beside it), --chooser that library's chooser, --replan planned again at each new
 move's hit.
 
+The file also carries what training needs beyond what a game plays (the critic, the
+model's config.json, PPO's settings; --optimizer: Adam's moments too, three times the size),
+so that anyone can unpack it and train it further (unpack_agent.py); --no-train leaves that
+out (half the size, a file only to play). --parts-from FILE.efzagent: the routes and chooser
+of that agent file, as they are, for a model without its library at hand (a packed agent
+trained further and packed again; --keep routes: without its chooser).
+
 The file goes to --out (default beside the model or pack, as NAME-VERSION.efzagent); copy it
 into the `agents` folder of the game's folder (or of its save folder). It is checked: run in
 the library, its log-probabilities must be the model's, its chooser's values the chooser's.
@@ -45,7 +52,7 @@ def show(path):
     skip = {'table'}
     for k, v in keys.items():
         if k not in skip:
-            print(f'  {k} = {v}')
+            print(f'  {k} = {v if len(v) <= 200 else v[:200] + f"... ({len(v)} characters)"}')
     print(f'  {len(tensors)} tensors: ' +
           ', '.join(f'{n} {"x".join(map(str, d))}' for n, d in tensors.items()))
 
@@ -76,6 +83,15 @@ def main():
                       help='planned once, at the first hit (round 15\'s)')
     p.add_argument('--per-start', type=int, help='routes tried a plan (default 12, '
                                                  'replanning 24)')
+    p.add_argument('--no-train', dest='train', action='store_false',
+                   help="without the training part (the critic, config.json, PPO's settings): "
+                        "a file to play, not to train further")
+    p.add_argument('--optimizer', action='store_true',
+                   help="the training part with Adam's moments too")
+    p.add_argument('--parts-from', metavar='FILE.efzagent',
+                   help="a model's routes and chooser from this agent file, as they are")
+    p.add_argument('--keep', nargs='+', choices=('routes', 'chooser'),
+                   default=['routes', 'chooser'], help='--parts-from: which of them')
     args = p.parse_args()
     if args.show:
         return show(args.model)
@@ -86,15 +102,16 @@ def main():
     except ValueError:
         pack = False
     if pack:
-        if args.library or args.chooser or args.victims:
-            sys.exit('--library, --chooser, --victims: a pack has its own (--drop to leave '
-                     'them out)')
+        if args.library or args.chooser or args.victims or args.parts_from:
+            sys.exit('--library, --chooser, --victims, --parts-from: a pack has its own '
+                     '(--drop to leave them out)')
         print(f'{args.model}, a pack:')
         try:
             out, check, _ = export_pack(args.model, args.out, name=args.name,
                                         version=args.version, character=args.char,
                                         drop=args.drop, replan=args.replan,
-                                        per_start=args.per_start)
+                                        per_start=args.per_start, train=args.train,
+                                        optimizer=args.optimizer)
         except ValueError as e:
             sys.exit(str(e))
     else:
@@ -104,6 +121,9 @@ def main():
             sys.exit('--chooser: the chooser of a --library')
         if args.victims and not args.library:
             sys.exit('--victims: the routes of a --library')
+        if args.parts_from and (args.library or args.chooser):
+            sys.exit('--parts-from: the routes and chooser of that file, or --library and '
+                     '--chooser, not both')
         model = args.model
         name = args.name
         if name is None:
@@ -115,7 +135,9 @@ def main():
         check = export_agent(model, out, name=name, character=args.char, library=args.library,
                              victims=args.victims, replan=bool(args.replan),
                              per_start=args.per_start, chooser=args.chooser,
-                             version=args.version)
+                             version=args.version, train=args.train,
+                             optimizer=args.optimizer, parts_from=args.parts_from,
+                             keep=tuple(args.keep))
     bad = []
     if check['policy'] > POLICY_MOST:
         bad.append(f"its log-probabilities differ from the model's by up to {check['policy']:.2g}")
@@ -137,8 +159,10 @@ def main():
     sure = f"log-probabilities within {check['policy']:.1g}"
     if check['chooser'] is not None:
         sure += f", the chooser's values within {check['chooser']:.1g} HP"
-    print(f'{out} ({os.path.getsize(out) / 1e6:.1f} MB): "{label}", {agent.modules}; {combos}. '
-          f'The same as the model ({sure}). Copy it into the game\'s agents folder.')
+    work = ('with its training part (unpack_agent.py: to train it further)' if args.train
+            else 'without its training part (to play only)')
+    print(f'{out} ({os.path.getsize(out) / 1e6:.1f} MB): "{label}", {agent.modules}, {work}; '
+          f'{combos}. The same as the model ({sure}). Copy it into the game\'s agents folder.')
     agent.close()
 
 

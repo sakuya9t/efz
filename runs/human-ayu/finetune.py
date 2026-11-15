@@ -273,6 +273,21 @@ def vs_advantage(args, j):
                 wake=get(args.vs_wake, 0.0), jumpin=get(args.vs_jumpin, 0.0))
 
 
+def unpacked(start, out):
+    """`start`, or if it is an agent file (.efzagent: a released agent, docs/agents.md) the
+    model it carries, unpacked into the run's folder (start-unpacked/)."""
+    if not start.lower().endswith('.efzagent'):
+        return start
+    from efz_env.export import unpack_agent
+    got = unpack_agent(start, os.path.join(out, 'start-unpacked'))
+    print(f"--start: {start} unpacked: {got['model']}" +
+          (' (the critic too)' if got['critic'] == 'file' else
+           ' (the actor only: the file has no training part, its critic is new and has '
+           'the value to learn again)') +
+          (f"; its routes: {got['library']}" if got['library'] else ''), flush=True)
+    return got['model']
+
+
 def ppo_settings(args):
     return dict(learning_rate=args.lr, n_steps=args.n_steps, batch_size=8192, n_epochs=3,
                 gamma=0.999, gae_lambda=0.98, ent_coef=args.ent_coef, clip_range=0.1,
@@ -676,7 +691,15 @@ def main():
         torch.manual_seed(args.seed)
     os.makedirs(args.out, exist_ok=True)
     state_path = os.path.join(args.out, 'finetune.json')
-    history, start, level = [], args.start, args.level
+    # The other models may be agent files too (released agents as opponents, a prior):
+    # each one's model, unpacked for this run.
+    from efz_env.agent import model_file
+    given = dict(vs=list(args.vs), team=list(args.team))  # (as named, for the run's record)
+    args.prior, args.old, args.combo = (model_file(p) if p else p
+                                        for p in (args.prior, args.old, args.combo))
+    args.team = [model_file(p) for p in args.team]
+    args.vs = [(model_file(p), c) for p, c in args.vs]
+    history, start, level = [], unpacked(args.start, args.out), args.level
     saved = {}
     cpu_hp = args.cpu_chars not in ('tiers', 'random')  # best.zip: its HP taken, not wins
     if os.path.exists(state_path):
@@ -690,7 +713,7 @@ def main():
     with open(os.path.join(args.out, 'config.json'), 'w') as f:
         json.dump(dict(frame_skip=1, history=args.history, delay=args.delay,
                        delay_most=args.delay_most, chars=[args.char, None],
-                       vs=[[os.path.relpath(p, REPO), c] for p, c in args.vs], vs_share=args.vs_share,
+                       vs=[[os.path.relpath(p, REPO), c] for p, c in given['vs']], vs_share=args.vs_share,
                        vs_char_share=args.vs_char_share,
                        vs_damage=args.vs_damage, vs_rg=args.vs_rg, vs_reversal=args.vs_reversal,
                        vs_throw=args.vs_throw, vs_bait=args.vs_bait, vs_patient=args.vs_patient,
@@ -699,7 +722,7 @@ def main():
                        pfsp=args.pfsp, pfsp_window=args.pfsp_window, cpu_focus=args.cpu_focus,
                        focus=args.focus, focus_coef=args.focus_coef,
                        prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
-                       team=[os.path.relpath(t, REPO) for t in args.team],
+                       team=[os.path.relpath(t, REPO) for t in given['team']],
                        combo=args.combo and os.path.relpath(args.combo, REPO),
                        combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
                        lookahead=args.lookahead, assist=args.assist, vs_assist=args.vs_assist,

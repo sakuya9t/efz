@@ -28,6 +28,30 @@ The file (port/agent/policy.h's layout, format 2) is made of modules, each of a 
 
 and records where each part came from (source.*: the file and its SHA-256), the exporter's
 revision, and a version to show (export_agent(..., version=)).
+
+An agent file is also how a trained agent is released and worked on from (the user's, 15
+November: "released checkpoints should be packed and published into the .efzagent format
+... tools to unpack the checkpoint and finetuning and further working on any packed
+version"). So beside its modules, which a game plays, a file carries a training part,
+which a game doesn't read and doesn't need (keys and tensors of no module: an older game
+plays the file as before):
+
+    train    the rest of the model a game leaves out: the critic (its features, layers and
+             value), the model's config.json (train.config) and PPO's settings
+             (train.sb3); with optimizer=True Adam's moments too. The routes carry what
+             the planner in Python needs beyond the game's (each one's damage, whether it
+             was kept for its victim, its join points).
+
+    from efz_env.export import unpack_agent
+    got = unpack_agent('agents/ayu.efzagent', 'work/ayu')   # needs SB3, torch
+    # work/ayu/model.zip + config.json (finetune.py --start, evaluate.py, play.py), and
+    # work/ayu/combo-library.npz + .marks.json (their --assist) if the file has routes
+
+unpack_agent makes the model anew from the file's numbers and JSON: nothing of the file
+is run or unpickled, so a file from anyone can be unpacked. efz_env.agent.Agent takes an
+agent file where it takes a model.zip (it unpacks it), and so do the tools that use it.
+export_agent(..., parts_from=FILE) writes a model with the routes and chooser of an
+agent file as they are: a packed agent trained further and packed again.
 """
 
 import ctypes
@@ -50,6 +74,10 @@ MAGIC = b'EFZAGENT'
 FORMAT = 2
 # The modules this exporter writes, each's version (port/agent/policy.h's kModules).
 MODULES = {'policy': 1, 'routes': 1, 'chooser': 1}
+TRAIN = 1  # the training part's version (key train)
+# PPO's settings a file keeps (train.sb3) and unpack_agent makes the model with.
+HYPER = ('n_steps', 'batch_size', 'n_epochs', 'gamma', 'gae_lambda', 'ent_coef', 'vf_coef',
+         'max_grad_norm', 'normalize_advantage')
 # The planner's settings, redteam.py's Planner as play.py --assist makes it: round 15's
 # (one plan at the first hit) 12 routes a plan; round 15b's (replan) 24.
 PER_START, PER_START_REPLAN, LIMIT = 12, 24, 900
@@ -177,6 +205,17 @@ def _route_parts(routes, victims, history, delay, frame_skip, replan=False, per_
         p = np.array(pool, np.int64)
         tensors += [('routes.pool.route', p[:, 0], True), ('routes.pool.at', p[:, 1], True),
                     ('routes.pool.starter', p[:, 2], True)]
+    # What the planner in Python reads beyond these (unpack_agent's library): each route's
+    # damage, whether it was kept for its victim, and its join points (step, move, the
+    # damage before it, hits), all the routes' one after another.
+    if routes and all(m.get('damage') is not None for m in routes):
+        marks = [np.asarray(m.get('marks') or np.zeros((0, 4)), np.float32).reshape(-1, 4)
+                 for m in routes]
+        tensors += [('routes.damage', [m['damage'] for m in routes], False),
+                    ('routes.kept', [m.get('kept_for') == 'victim' for m in routes], 'u8'),
+                    ('routes.marks.offset',
+                     np.concatenate([[0], np.cumsum([len(x) for x in marks])]), True),
+                    ('routes.marks', np.concatenate(marks) if marks else np.zeros((0, 4)), False)]
     return keys, tensors
 
 
@@ -264,6 +303,144 @@ def _actor(policy):
             (out.weight.detach().cpu().numpy(), out.bias.detach().cpu().numpy()))
 
 
+def _line(obj):
+    """An object as one line of JSON for the header, the home folder written as ~ (a
+    file goes to other people)."""
+    text = json.dumps(obj, separators=(',', ':'))
+    home = os.path.expanduser('~')
+    return text.replace(home, '~') if len(home) > 1 else text
+
+
+def _number(x):
+    """A setting as JSON keeps it (None: not a plain number)."""
+    if isinstance(x, (bool, np.bool_)):
+        return bool(x)
+    if isinstance(x, (int, np.integer)):
+        return int(x)
+    if isinstance(x, (float, np.floating)):
+        return float(x)
+    return None
+
+
+def _train_parts(model, cfg, optimizer=False):
+    """The training part's keys and tensors: what of the model a game leaves out."""
+    import torch as th
+    policy = model.policy
+    shared = bool(getattr(policy, 'share_features_extractor', True))
+    tensors = []
+    if not shared:
+        tensors += _features(policy.vf_features_extractor, 'train.vf.')[1]
+    k = 0
+    for m in policy.mlp_extractor.value_net:
+        if isinstance(m, th.nn.Linear):
+            tensors += [(f'train.vf.{k}.weight', m.weight.detach().cpu().numpy(), False),
+                        (f'train.vf.{k}.bias', m.bias.detach().cpu().numpy(), False)]
+            k += 1
+    tensors += [('train.value.weight', policy.value_net.weight.detach().cpu().numpy(), False),
+                ('train.value.bias', policy.value_net.bias.detach().cpu().numpy(), False)]
+    sb3 = dict(policy=type(policy).__name__, share_features_extractor=shared,
+               ortho_init=bool(getattr(policy, 'ortho_init', True)), vf_layers=k,
+               num_timesteps=int(model.num_timesteps),
+               optimizer=type(policy.optimizer).__name__,
+               optimizer_kwargs={k: v for k, v in (policy.optimizer_kwargs or {}).items()
+                                 if _number(v) is not None})
+    for name in HYPER:
+        v = _number(getattr(model, name, None))
+        if v is not None:
+            sb3[name] = v
+    lr = _number(model.learning_rate)
+    if lr is not None:
+        sb3['learning_rate'] = lr
+    try:
+        sb3['clip_range'] = float(model.clip_range(1.0))
+    except TypeError:
+        if _number(model.clip_range) is not None:
+            sb3['clip_range'] = _number(model.clip_range)
+    if optimizer:
+        if type(policy.optimizer).__name__ != 'Adam':
+            raise ValueError(f"optimizer: the model's is {type(policy.optimizer).__name__}; "
+                             'an agent file keeps Adam\'s')
+        state = policy.optimizer.state_dict()['state']
+        params = list(policy.parameters())
+        if len(state) == len(params):  # (none before the first update)
+            sb3['adam_step'] = int(max(float(v['step']) for v in state.values()))
+            for j in range(len(params)):
+                tensors += [(f'train.adam.{j}.m', state[j]['exp_avg'].cpu().numpy(), False),
+                            (f'train.adam.{j}.v', state[j]['exp_avg_sq'].cpu().numpy(), False)]
+    keys = {'train': TRAIN, 'train.config': _line(cfg), 'train.sb3': _line(sb3)}
+    return keys, tensors
+
+
+def read_agent(path):
+    """An agent file whole: (its format, its header's keys, {tensor name: its array})."""
+    with open(path, 'rb') as f:
+        data = f.read()
+    if data[:8] != MAGIC:
+        raise ValueError(f'{path}: not an agent file')
+    fmt, size = struct.unpack_from('<II', data, 8)
+    keys = {}
+    for line in data[16:16 + size].decode('utf-8', errors='replace').split('\n'):
+        if '=' in line:
+            k, v = line.split('=', 1)
+            keys[k] = v
+    at = 16 + size
+    (count,) = struct.unpack_from('<I', data, at)
+    at += 4
+    tensors = {}
+    for _ in range(count):
+        (n,) = struct.unpack_from('<H', data, at)
+        tname = data[at + 2:at + 2 + n].decode()
+        at += 2 + n
+        kind, ndim = struct.unpack_from('<BB', data, at)
+        if kind > 2 or ndim > 4:
+            raise ValueError(f'{path}: damaged (the tensor {tname})')
+        at += 2
+        dims = struct.unpack_from(f'<{ndim}I', data, at)
+        at += 4 * ndim
+        dtype = np.dtype(('<f4', '<i4', 'u1')[kind])
+        total = int(np.prod(dims, dtype=np.int64)) * dtype.itemsize
+        if at + total > len(data):
+            raise ValueError(f'{path}: cut short (the tensor {tname})')
+        tensors[tname] = np.frombuffer(data, dtype, total // dtype.itemsize, at).reshape(dims).copy()
+        at += total
+    return fmt, keys, tensors
+
+
+def _modules(keys, fmt):
+    """The modules a file's header names: {name: version}."""
+    text = keys.get('modules') or ('policy:1,routes:1' if int(keys.get('routes', 0) or 0) > 0
+                                   else 'policy:1')
+    out = {}
+    for item in filter(None, text.split(',')):
+        name, _, version = item.partition(':')
+        out[name] = int(version or 1)
+    return out
+
+
+def _carried(path, keep):
+    """The parts of the agent file `path` another file takes as they are (keep: of
+    'routes', 'chooser'): (modules, keys, tensors as _tensor takes them)."""
+    fmt, keys, tensors = read_agent(path)
+    has = _modules(keys, fmt)
+    modules, out_keys, out_tensors = [], {}, []
+    prefixes = {'routes': ('routes', 'route_', 'source.library', 'source.marks'),
+                'chooser': ('chooser_', 'source.chooser')}
+    for part in ('routes', 'chooser'):
+        if part not in keep or part not in has:
+            continue
+        if part == 'chooser' and 'routes' not in modules:
+            continue  # (it chooses among the routes)
+        modules.append(part)
+        for k, v in keys.items():
+            if k == part or any(k.startswith(x) for x in prefixes[part]):
+                out_keys[k] = v
+        for name, a in tensors.items():
+            if name.startswith(part + '.'):
+                out_tensors.append((name, a, 'u8' if a.dtype == np.uint8 else
+                                    a.dtype.kind == 'i'))
+    return modules, out_keys, out_tensors
+
+
 def torch_log_probs(policy, views):
     """The model's own log-probabilities of each action for views (n, width)."""
     import torch as th
@@ -316,7 +493,8 @@ def _one_line(v):
 
 def export_agent(model_path, out_path, name=None, character=None, check=True, library=None,
                  victims=None, replan=False, per_start=None, chooser=None,
-                 margin=CHOOSER_MARGIN, version=None, sources=None, dropped=()):
+                 margin=CHOOSER_MARGIN, version=None, sources=None, dropped=(), train=True,
+                 optimizer=False, parts_from=None, keep=('routes', 'chooser')):
     """Writes model_path (a model.zip, with its config.json) as an agent file at out_path.
     name: what the game shows (default: the model's folder for avg.zip / model.zip, else
     its file name). character: the one it plays (a name or 0-24; default the first of
@@ -330,6 +508,11 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
     play (HP). version: what the game shows beside the name. sources: {part: (label,
     sha256)} where each part came from (default: the files given); dropped: what of its
     pack was left out, for the record.
+    train: the file carries its training part too (the critic, config.json, PPO's
+    settings), so that it can be unpacked and trained further (unpack_agent); optimizer:
+    Adam's moments as well (three times the size: a fine-tune starts well without).
+    parts_from: an agent file whose routes and chooser (keep: which) go into this one as
+    they are, for a model without its library at hand: a packed agent trained further.
     check: run the file in the library and compare it with the model: {'policy': the
     largest difference of the log-probabilities, 'chooser': of the chooser's values (HP),
     None without one; 'routes', 'pool': the file's as the library reads them} (None if not
@@ -352,9 +535,16 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         name = folder if stem in ('avg', 'model', 'best') and folder else stem
     if chooser is not None and library is None:
         raise ValueError('chooser: it chooses among the routes of a library')
+    carried = ([], {}, [])
+    if parts_from is not None:
+        if library is not None or chooser is not None:
+            raise ValueError('parts_from: the routes and chooser of that file, or a library '
+                             'and chooser given, not both')
+        carried = _carried(parts_from, keep)
     features, feature_tensors, activation, layers, out = _actor(policy)
     from .policy import OPP_ACTION, OPP_CHAR, SELF_ACTION, SELF_CHAR, ACTIONS, CHARACTERS
-    modules = ['policy'] + ['routes'] * (library is not None) + ['chooser'] * (chooser is not None)
+    modules = (['policy'] + ['routes'] * (library is not None) +
+               ['chooser'] * (chooser is not None) + carried[0])
     keys = {
         'modules': ','.join(f'{m}:{MODULES[m]}' for m in modules),
         'name': _one_line(name),
@@ -388,6 +578,18 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         chooser_keys, chooser_tensors, chooser_values = _chooser_parts(model, chooser, routes,
                                                                        margin)
         keys.update(chooser_keys)
+    if carried[0]:
+        if 'routes' in carried[0] and (keys['frame_skip'] != 1 or keys['delay'] <= 0 or
+                                       keys['history'] <= 0):
+            raise ValueError('parts_from: routes are for an agent deciding every frame, with '
+                             'a delay and its input history')
+        keys.update(carried[1])
+        route_tensors = carried[2]
+        keys['parts_from'] = _one_line(os.path.basename(os.fspath(parts_from)))
+    train_tensors = []
+    if train:
+        train_keys, train_tensors = _train_parts(model, cfg, optimizer)
+        keys.update(train_keys)
     # Where it came from.
     if sources is None:
         sources = {'model': (os.path.basename(model_path), sha256(model_path))}
@@ -399,7 +601,7 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         if chooser is not None:
             sources['chooser'] = (os.path.basename(os.fspath(chooser)), sha256(chooser))
     for part, (label, digest) in sources.items():
-        keys[f'source.{part}'] = _one_line(f'{label} sha256:{digest}')
+        keys.setdefault(f'source.{part}', _one_line(f'{label} sha256:{digest}'))
     keys['exporter'] = _one_line(exporter())
     keys['exported'] = datetime.datetime.now().isoformat(timespec='seconds')
     if dropped:
@@ -409,7 +611,7 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
     for k, (w, b) in enumerate(layers):
         tensors += [(f'pi.{k}.weight', w, False), (f'pi.{k}.bias', b, False)]
     tensors += [('action.weight', out[0], False), ('action.bias', out[1], False)]
-    tensors += route_tensors + chooser_tensors
+    tensors += route_tensors + chooser_tensors + train_tensors
     blob = [MAGIC, struct.pack('<I', FORMAT), struct.pack('<I', len(text)), text,
             struct.pack('<I', len(tensors))] + [_tensor(*t) for t in tensors]
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
@@ -429,9 +631,12 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         want_routes = want_pool = 0
         if routes is not None:  # (no pool written: the routes themselves)
             want_routes, want_pool = len(routes), route_keys['route_pool'] or len(routes)
+        elif 'routes' in carried[0]:
+            want_routes = int(carried[1]['routes'])
+            want_pool = int(carried[1].get('route_pool', 0) or 0) or want_routes
         if native.routes != want_routes or native.pool != want_pool:
             raise ValueError(f'{out_path}: the file has {native.routes} routes and a pool of '
-                             f'{native.pool}; it was written with {len(routes or [])} and '
+                             f'{native.pool}; it was written with {want_routes} and '
                              f'{want_pool}')
         return result
     finally:
@@ -505,7 +710,8 @@ def pack_name(path):
 
 
 def export_pack(path, out_path=None, name=None, version=None, character=None, drop=(),
-                replan=None, per_start=None, check=True, log=print):
+                replan=None, per_start=None, check=True, log=print, train=True,
+                optimizer=False):
     """Writes a pack (read_pack) as one agent file: its model, its library's routes with
     their join points, its chooser, as its play.py plays them (an agent.json says how;
     without one, round 15b's packs' way when the library has join points: planned again at
@@ -514,7 +720,8 @@ def export_pack(path, out_path=None, name=None, version=None, character=None, dr
     left out: drop, file names in the pack or parts ('routes', 'chooser', 'marks'). replan,
     per_start: as export_agent's (None: as the pack plays). version: default the pack's name
     (pack_name). out_path: default beside the pack, NAME-VERSION.efzagent. log: each file's
-    fate, a line each. Returns (out_path, export_agent's check, {file: its fate})."""
+    fate, a line each. train, optimizer: export_agent's (the training part). Returns
+    (out_path, export_agent's check, {file: its fate})."""
     kinds = read_pack(path)
     drop = set(drop)
     parts = {'routes', 'chooser', 'marks'}
@@ -649,10 +856,226 @@ def export_pack(path, out_path=None, name=None, version=None, character=None, dr
                               victims=options.get('victims'), replan=replan,
                               per_start=per_start, chooser=chooser_file,
                               margin=float(options.get('margin', CHOOSER_MARGIN)),
-                              version=version, sources=sources, dropped=dropped)
+                              version=version, sources=sources, dropped=dropped,
+                              train=train, optimizer=optimizer)
     for n, f in fate.items():
         log(f'  {n}: {f}')
     return out_path, result, fate
+
+
+class _Spaces:
+    """Only the spaces, for making a model (unpack_agent)."""
+
+    def __new__(cls, width, actions):
+        import gymnasium
+
+        class Spaces(gymnasium.Env):
+            observation_space = gymnasium.spaces.Box(-np.inf, np.inf, (width,), np.float32)
+            action_space = gymnasium.spaces.Discrete(actions)
+
+            def reset(self, seed=None, options=None):
+                return np.zeros((width,), np.float32), {}
+
+            def step(self, action):
+                return np.zeros((width,), np.float32), 0.0, True, False, {}
+
+        return Spaces()
+
+
+def _library(keys, tensors):
+    """A file's routes as a combo library (combo_library.py's .npz as load_routes and
+    macros.load_library read it: (its arrays, its join points)), or None if the file
+    doesn't keep their damage (one written before the training part)."""
+    from .vec import character_names
+    if 'routes.damage' not in tensors:
+        return None
+    names = character_names()
+    table = ActionTable()
+    offsets, acts = tensors['routes.offset'], tensors['routes.actions']
+    at = tensors.get('routes.marks.offset')
+    meta, arrays, marks = [], {}, {}
+    for k in range(len(tensors['routes.starter'])):
+        opp = int(tensors['routes.opponent'][k])
+        meta.append(dict(starter=int(tensors['routes.starter'][k]),
+                         opponent=names[opp] if 0 <= opp < len(names) else None,
+                         kept_for='victim' if tensors['routes.kept'][k] else 'overall',
+                         damage=float(tensors['routes.damage'][k]), prev=0, id=f'route{k}'))
+        arrays[f'inputs{k}'] = table.to_bytes(
+            acts[offsets[k]:offsets[k + 1]].astype(np.int64)).astype(np.uint8)
+        if at is not None and at[k + 1] > at[k]:
+            # (the damage before a join point to a tenth of HP, as combo_library.py writes it)
+            marks[str(k)] = [[int(a), int(b), round(float(c), 1), int(d)]
+                             for a, b, c, d in tensors['routes.marks'][at[k]:at[k + 1]]]
+    arrays['meta'] = np.array(json.dumps(meta))
+    return arrays, marks
+
+
+def unpack_agent(path, out_dir, check=True):
+    """An agent file as the files it was made from, in out_dir: model.zip (a
+    Stable-Baselines3 PPO model: finetune.py --start, evaluate.py, play.py) with its
+    config.json, and, if the file has routes and keeps their damage, combo-library.npz
+    with its join points (.marks.json) for the tools' --assist. The model is made anew
+    from the file's numbers and its JSON, nothing of the file is run or unpickled: a file
+    from anyone can be unpacked.
+
+    A file with its training part (export_agent's train) gives the model whole, the critic
+    too, and with optimizer=True Adam's moments. One without (written before 15 November,
+    or with train=False) has only the actor: the critic is made new (its features the
+    actor's), and training from it has to teach the value again first.
+
+    Returns {'model', 'config', 'library' (None without), 'critic' ('file' or 'new'),
+    'optimizer' (its moments were in the file), 'policy' (check: the largest difference
+    between the model's log-probabilities and the file's as the library runs it)}."""
+    import warnings
+    import torch as th
+    from stable_baselines3 import PPO
+    from stable_baselines3.common.policies import ActorCriticPolicy
+    from .policy import EfzFeatures, EfzPolicy
+    fmt, keys, tensors = read_agent(path)
+    width, actions = int(keys['width']), int(keys['actions'])
+    sb3 = json.loads(keys['train.sb3']) if 'train.sb3' in keys else {}
+    has_train = 'train.value.weight' in tensors
+    activation = {'relu': th.nn.ReLU, 'tanh': th.nn.Tanh}[keys['activation']]
+    pi = [int(tensors[f'pi.{k}.bias'].shape[0]) for k in range(int(keys['layers']))]
+    vf = ([int(tensors[f'train.vf.{k}.bias'].shape[0]) for k in range(int(sb3['vf_layers']))]
+          if has_train else list(pi))
+    kwargs = dict(net_arch=dict(pi=pi, vf=vf), activation_fn=activation)
+    efz = keys['features'] == 'efz'
+    if efz:
+        shared = bool(sb3.get('share_features_extractor', False))
+        kwargs.update(features_extractor_class=EfzFeatures,
+                      features_extractor_kwargs=dict(
+                          action_embed=int(tensors['features.action'].shape[1]),
+                          char_embed=int(tensors['features.char'].shape[1])),
+                      share_features_extractor=shared,
+                      ortho_init=bool(sb3.get('ortho_init', False)))
+    elif keys['features'] != 'flat':
+        raise ValueError(f"{path}: features {keys['features']!r}: efz or flat")
+    else:
+        shared = bool(sb3.get('share_features_extractor', True))
+        kwargs.update(share_features_extractor=shared, ortho_init=bool(sb3.get('ortho_init', True)))
+    if sb3.get('optimizer_kwargs'):
+        kwargs['optimizer_kwargs'] = {k: float(v) for k, v in sb3['optimizer_kwargs'].items()}
+    classes = {'EfzPolicy': EfzPolicy, 'ActorCriticPolicy': ActorCriticPolicy}
+    policy_class = classes.get(sb3.get('policy'), EfzPolicy if efz else ActorCriticPolicy)
+    hyper = {k: sb3[k] for k in HYPER + ('learning_rate', 'clip_range') if k in sb3}
+    hyper.setdefault('n_steps', 64)
+    hyper.setdefault('batch_size', 64)
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        model = PPO(policy_class, _Spaces(width, actions), policy_kwargs=kwargs, device='cpu',
+                    **hyper)
+    policy = model.policy
+    state = policy.state_dict()
+
+    def put(name, array):
+        if name not in state or tuple(state[name].shape) != tuple(array.shape):
+            raise ValueError(f'{path}: {name} is {tuple(array.shape)}, the model\'s '
+                             f'{tuple(state[name].shape) if name in state else "nothing"}')
+        state[name] = th.as_tensor(np.asarray(array, np.float32))
+
+    def put_features(prefix, source):
+        if not efz:
+            return
+        cont = tensors[source + 'cont'].astype(np.int64)
+        mine = getattr(policy, prefix).cont.cpu().numpy()
+        if len(cont) != len(mine) or (cont != mine).any():
+            raise ValueError(f"{path}: its features' columns are not this library's "
+                             '(efz_env.policy.continuous_columns)')
+        for a, b in (('mean', 'mean'), ('scale', 'scale'), ('action', 'action.weight'),
+                     ('own_action', 'own_action.weight'), ('char', 'char.weight')):
+            put(f'{prefix}.{b}', tensors[source + a])
+
+    for prefix in ('features_extractor', 'pi_features_extractor'):
+        put_features(prefix, 'features.')
+    # (unshared: the critic's own, the file's or, without a training part, the actor's)
+    if not shared:
+        put_features('vf_features_extractor',
+                     'train.vf.features.' if has_train else 'features.')
+    linear = lambda net: [k for k, m in enumerate(net) if isinstance(m, th.nn.Linear)]
+    for k, j in enumerate(linear(policy.mlp_extractor.policy_net)):
+        put(f'mlp_extractor.policy_net.{j}.weight', tensors[f'pi.{k}.weight'])
+        put(f'mlp_extractor.policy_net.{j}.bias', tensors[f'pi.{k}.bias'])
+    put('action_net.weight', tensors['action.weight'])
+    put('action_net.bias', tensors['action.bias'])
+    if has_train:
+        for k, j in enumerate(linear(policy.mlp_extractor.value_net)):
+            put(f'mlp_extractor.value_net.{j}.weight', tensors[f'train.vf.{k}.weight'])
+            put(f'mlp_extractor.value_net.{j}.bias', tensors[f'train.vf.{k}.bias'])
+        put('value_net.weight', tensors['train.value.weight'])
+        put('value_net.bias', tensors['train.value.bias'])
+    policy.load_state_dict(state)
+    model.num_timesteps = int(sb3.get('num_timesteps', 0))
+    params = list(policy.parameters())
+    adam = 'adam_step' in sb3 and all(f'train.adam.{j}.m' in tensors for j in range(len(params)))
+    if adam:
+        opt = policy.optimizer.state_dict()
+        opt['state'] = {}
+        for j, prm in enumerate(params):
+            m, v = tensors[f'train.adam.{j}.m'], tensors[f'train.adam.{j}.v']
+            if tuple(m.shape) != tuple(prm.shape):
+                raise ValueError(f"{path}: the optimizer's moments don't fit the model")
+            opt['state'][j] = dict(step=th.tensor(float(sb3['adam_step'])),
+                                   exp_avg=th.as_tensor(m), exp_avg_sq=th.as_tensor(v))
+        policy.optimizer.load_state_dict(opt)
+    os.makedirs(out_dir, exist_ok=True)
+    model_path = os.path.join(out_dir, 'model.zip')
+    model.save(model_path)
+    cfg = json.loads(keys['train.config']) if 'train.config' in keys else {}
+    for k in ('frame_skip', 'history', 'delay'):
+        cfg[k] = int(keys[k])
+    if 'chars' not in cfg:
+        from .vec import character_names
+        c, names = int(keys.get('character', -1)), character_names()
+        cfg['chars'] = [names[c] if 0 <= c < len(names) else None, None]
+    config_path = os.path.join(out_dir, 'config.json')
+    with open(config_path, 'w') as f:
+        json.dump(cfg, f, indent=1)
+    library_path = None
+    lib = _library(keys, tensors) if 'routes.starter' in tensors else None
+    if lib is not None:
+        library_path = os.path.join(out_dir, 'combo-library.npz')
+        np.savez_compressed(library_path, **lib[0])
+        with open(marks_path(library_path), 'w') as f:
+            json.dump(lib[1], f)
+    with open(os.path.join(out_dir, 'packed.json'), 'w') as f:
+        json.dump(dict(file=os.path.basename(os.fspath(path)), sha256=sha256(path),
+                       format=fmt, modules=keys.get('modules', ''), name=keys.get('name', ''),
+                       version=keys.get('version', ''), critic='file' if has_train else 'new',
+                       optimizer=bool(adam),
+                       routes=dict(per_start=int(keys.get('route_per_start', 0) or 0),
+                                   replan=bool(int(keys.get('route_replan', 0) or 0)),
+                                   victims=keys.get('route_victims', ''))
+                       if 'routes.starter' in tensors else None), f, indent=1)
+    result = dict(model=model_path, config=config_path, library=library_path,
+                  critic='file' if has_train else 'new', optimizer=bool(adam), policy=None)
+    if check:
+        views = sample_views(width)
+        native = NativeAgent(path)
+        try:
+            result['policy'] = float(np.abs(native.log_probs(views) -
+                                            torch_log_probs(policy, views)).max())
+        finally:
+            native.close()
+    return result
+
+
+_UNPACKED = {}  # agent file (its path, size, time) -> its model, unpacked for this process
+
+
+def unpacked_model(path):
+    """The model.zip of the agent file `path`, unpacked (once a process, into a folder
+    that goes with it): what efz_env.agent.Agent loads where it is given an agent file."""
+    import atexit
+    import shutil
+    path = os.path.abspath(path)
+    st = os.stat(path)
+    key = (path, st.st_size, st.st_mtime_ns)
+    if key not in _UNPACKED:
+        folder = tempfile.mkdtemp(prefix='efzagent-')
+        atexit.register(shutil.rmtree, folder, ignore_errors=True)
+        _UNPACKED[key] = unpack_agent(path, folder, check=False)['model']
+    return _UNPACKED[key]
 
 
 def read_header(path):

@@ -21,6 +21,10 @@ With --chooser (runs/human-ayu/combo_net.py's chooser.pt, trained for that agent
 library) nothing is tried on copies: a network says from the agent's view which combo to
 play (ChosenRoutes): no second process, a little less damage.
 
+--agent also takes an agent file (.efzagent: a released agent, the file the game plays,
+docs/agents.md): unpacked once into the folder of its name beside it, and played with the
+file's routes as the file plans them, unless --no-assist.
+
 --agent also takes a pack: a zip made to carry an agent by hand, holding its model
 (FOLDER/avg.zip with its config.json) and, for its combos, a library (.npz) and a chooser
 (chooser.pt). It is unpacked once into the folder of its name beside it, and the agent
@@ -82,6 +86,25 @@ def unpack(path):
     return found['model'], found.get('library'), found.get('chooser'), found.get('manifest')
 
 
+def unpack_agent_file(path):
+    """An agent file (.efzagent: a released agent, docs/agents.md) as a pack: its model
+    and its routes' library (None without), unpacked into the folder of its name beside
+    it, and how the file plans (the routes' options)."""
+    from efz_env.export import unpack_agent
+    from efz_env.vec import character_names
+    out = os.path.splitext(path)[0]
+    got = unpack_agent(path, out, check=False)
+    with open(os.path.join(out, 'packed.json')) as f:
+        routes = json.load(f).get('routes') or {}
+    options = {}
+    if got['library']:
+        options = dict(per_start=routes.get('per_start') or 24, replan=bool(routes.get('replan')))
+        if routes.get('victims'):
+            names = character_names()
+            options['victims'] = [names[int(c)] for c in routes['victims'].split(',')]
+    return got['model'], got['library'], options
+
+
 def routes_spec(specs):
     """The routes' spec among `specs` (None if they have none)."""
     return next((s for s in specs if s['kind'] == 'routes'), None)
@@ -136,7 +159,13 @@ def main():
     # this command line's words.
     specs, chooser = [], None
     pack = unpack(args.agent) if args.agent and os.path.isfile(args.agent) else None
-    if pack:
+    if args.agent and args.agent.lower().endswith('.efzagent'):  # a released agent: as a pack
+        args.agent, library, options = unpack_agent_file(args.agent)
+        pack = True
+        if library:
+            specs = [dict(kind='routes', code='agent_modules', options=options,
+                          files=dict(library=library))]
+    elif pack:
         args.agent, library, chooser, manifest = pack
         if manifest:
             made = modules.load_manifest(manifest)

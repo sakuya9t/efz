@@ -38,7 +38,11 @@
 //   in thousands of HP).
 //
 // Keys of no module say where the file came from (version, source.*, exporter, exported,
-// dropped): the menus show the version, the log the rest.
+// dropped): the menus show the version, the log the rest. A file may also carry what a game
+// doesn't play and reads past: its training part (key train, keys and tensors train.*:
+// the model's critic and settings, python/efz_env/export.py's unpack_agent makes the model
+// to train further from them) and the routes' record for the planner in Python (tensors
+// routes.damage, routes.kept, routes.marks, routes.marks.offset).
 #ifndef EFZ_AGENT_POLICY_H
 #define EFZ_AGENT_POLICY_H
 
