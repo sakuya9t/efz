@@ -10,7 +10,7 @@ import glob
 import os
 import sys
 
-VERSION = 9
+VERSION = 10
 
 # EfzEnvConfig.autoreset
 AUTORESET_SAME_STEP = 0
@@ -107,7 +107,13 @@ class AgentInfo(ctypes.Structure):
         ('delay', ctypes.c_int32),
         ('character', ctypes.c_int32),
         ('routes', ctypes.c_int32),
+        ('pool', ctypes.c_int32),
+        ('replan', ctypes.c_int32),
+        ('chooser', ctypes.c_int32),
+        ('format', ctypes.c_int32),
         ('name', ctypes.c_char * 64),
+        ('version', ctypes.c_char * 64),
+        ('modules', ctypes.c_char * 64),
     ]
 
 
@@ -118,6 +124,7 @@ class Plan(ctypes.Structure):
         ('options', ctypes.c_int32),
         ('frames', ctypes.c_int32),
         ('route', ctypes.c_int32 * 64),
+        ('at', ctypes.c_int32 * 64),
         ('dealt', ctypes.c_float * 64),
         ('expected', ctypes.c_float * 168),
         ('ms', ctypes.c_double),
@@ -181,7 +188,9 @@ def _bind(lib):
         'efz_env_agent_plan': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32,
                                                 ctypes.c_int32, P, ctypes.c_int32, P,
                                                 ctypes.c_uint8, ctypes.c_int32, ctypes.c_uint64,
+                                                ctypes.c_int32, P, ctypes.c_int32,
                                                 ctypes.POINTER(Plan)]),
+        'efz_env_agent_choose': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32, P]),
     }
     for name, (restype, argtypes) in sig.items():
         f = getattr(lib, name)

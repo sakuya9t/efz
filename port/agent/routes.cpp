@@ -1,5 +1,5 @@
 // The routes' planner (routes.h): runs/human-ayu/combo_support.py's _live_worker and
-// redteam.py's Planner.plan, the same steps in the same order.
+// redteam.py's Planner.plan (round 15b's, with replan), the same steps in the same order.
 #include <math.h>
 #include <string.h>
 #include <algorithm>
@@ -75,17 +75,20 @@ void Planner::Finish(Outcome why)
 }
 
 void Planner::Begin(int side, int starter, const std::vector<int>& actions, const float* history,
-                    uint8_t prev, bool deterministic, const float* view)
+                    uint8_t prev, bool deterministic, const float* view, int late,
+                    const std::vector<int>& extra)
 {
     Cancel();
     side_ = side;
     starter_ = starter;
     actions_ = actions;
+    extra_ = extra;
     history_.assign(history, history + (size_t)policy_->history * kInputFeatures);
     prev_ = prev;
     deterministic_ = deterministic;
     chosen = -1;
-    offset = (int)actions.size();
+    route.clear();
+    offset = (int)actions.size() + std::max(0, late);
     tried.clear();
     dealt.clear();
     best = own = 0;
@@ -129,37 +132,46 @@ bool Planner::Prelude()
     world_->Save(&afterDelay_);
     hp0_ = world_->Hp(1 - side_);
 
-    // Redteam's route_pool: of the routes with this starter (by damage), those landed on
-    // this opponent first if the library was kept per victim; those long enough to be
-    // played from `offset`; the first per_start.
+    // Redteam's route_pool: of the pool's entries with this starter (by damage), those
+    // landed on this opponent first if the library was kept per victim; those long enough
+    // to be played from `offset`; the first per_start. Then the extra option.
     const Routes& routes = policy_->routes;
+    auto size = [&](int e) {
+        return (int)routes.list[routes.pool[e].route].size - routes.pool[e].at;
+    };
     std::vector<int> pool;
-    auto it = routes.byStarter.find(starter_);
-    if (it != routes.byStarter.end()) {
+    auto it = routes.poolByStarter.find(starter_);
+    if (it != routes.poolByStarter.end()) {
         std::vector<int> order = it->second;
         if (routes.byVictim) {
             int victim = (int)nearbyintf(seen_[kOppCharacter]);
-            std::stable_partition(order.begin(), order.end(), [&](int r) {
-                return routes.list[r].opponent == victim;
+            std::stable_partition(order.begin(), order.end(), [&](int e) {
+                return routes.list[routes.pool[e].route].opponent == victim;
             });
         }
-        for (int r : order) {
-            if ((int)routes.list[r].size > offset && (int)pool.size() < routes.perStart)
-                pool.push_back(r);
+        for (int e : order) {
+            if (size(e) > offset && (int)pool.size() < routes.perStart)
+                pool.push_back(e);
         }
     }
     int longest = 0;
-    for (int r : pool)
-        longest = std::max(longest, (int)routes.list[r].size - offset);
+    for (int e : pool)
+        longest = std::max(longest, size(e) - offset);
+    longest = std::max(longest, (int)extra_.size());
     longest_ = std::max(std::min(routes.limit, longest + kTail), kShortest);
     options_.clear();
-    for (int r : pool) {
+    for (int e : pool) {
         Option o;
-        o.route = r;
+        o.entry = e;
+        options_.push_back(std::move(o));
+    }
+    if (!extra_.empty()) {
+        Option o;
+        o.entry = kExtra;
         options_.push_back(std::move(o));
     }
     Option self;
-    self.route = -1;
+    self.entry = kOwnPlay;
     options_.push_back(std::move(self));
     current_ = 0;
     return true;
@@ -170,10 +182,10 @@ bool Planner::Prelude()
 bool Planner::Play(Option& o, Clock::time_point deadline)
 {
     const Routes& routes = policy_->routes;
-    const int delay = offset;
+    const int delay = (int)actions_.size();
     if (!o.started) {
         o.started = true;
-        if (o.route < 0) {
+        if (o.entry == kOwnPlay) {
             o.delayed = seen_;
             o.history = history_;
             o.prev = prev_;
@@ -184,11 +196,15 @@ bool Planner::Play(Option& o, Clock::time_point deadline)
         if (Clock::now() >= deadline)
             return false;
         uint8_t bits = 0;
-        if (o.route >= 0) {
-            const Routes::Route& r = routes.list[o.route];
-            int at = offset + o.t;
+        if (o.entry >= 0) {
+            const Routes::Entry& e = routes.pool[o.entry];
+            const Routes::Route& r = routes.list[e.route];
+            int at = e.at + offset + o.t;
             if (at < (int)r.size)
                 bits = policy_->table[routes.actions[r.begin + at]];
+        } else if (o.entry == kExtra) {
+            if (o.t < (int)extra_.size())
+                bits = policy_->table[extra_[o.t]];
         } else {
             // As late as the player sees the game: the view `delay` frames old (the first
             // frame's is the hit's, which `delayed` has already).
@@ -224,7 +240,7 @@ bool Planner::Play(Option& o, Clock::time_point deadline)
         if (!world_->Step(input))
             return true;
         frames++;
-        if (o.route < 0) // its history: the controls the game read (info['input'])
+        if (o.entry == kOwnPlay) // its history: the controls the game read (info['input'])
             Push(o.history, o.prev, ToScreen(world_->Read(side_), facing[side_]));
         o.dealt = std::max(o.dealt, (float)(hp0_ - world_->Hp(1 - side_)));
         o.t++;
@@ -242,14 +258,24 @@ void Planner::Choose()
     size_t n = options_.size();
     size_t top = 0;
     for (size_t j = 0; j < n; j++) {
-        tried.push_back(options_[j].route);
+        tried.push_back(options_[j].entry);
         dealt.push_back(options_[j].dealt);
         if (options_[j].dealt > options_[top].dealt)
             top = j;
     }
     best = options_[top].dealt;
     own = options_[n - 1].dealt;
-    chosen = top + 1 < n && options_[top].dealt > own ? options_[top].route : -1;
+    chosen = top + 1 < n && options_[top].dealt > own ? (int)top : -1;
+    route.clear();
+    if (chosen >= 0 && options_[top].entry == kExtra) {
+        route = extra_;
+    } else if (chosen >= 0) {
+        const Routes& routes = policy_->routes;
+        const Routes::Entry& e = routes.pool[options_[top].entry];
+        const Routes::Route& r = routes.list[e.route];
+        route.assign(routes.actions.begin() + r.begin + e.at + offset,
+                     routes.actions.begin() + r.begin + r.size);
+    }
     Finish(kPlanned);
 }
 

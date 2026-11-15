@@ -1471,7 +1471,13 @@ void efz_env_agent_info(const EfzAgent* a, EfzAgentInfo* info)
     info->delay = a->policy.delay;
     info->character = a->policy.character;
     info->routes = (int32_t)a->policy.routes.list.size();
+    info->pool = (int32_t)a->policy.routes.pool.size();
+    info->replan = a->policy.routes.replan;
+    info->chooser = !a->policy.chooser.Empty();
+    info->format = a->policy.format;
     snprintf(info->name, sizeof(info->name), "%s", a->policy.name.c_str());
+    snprintf(info->version, sizeof(info->version), "%s", a->policy.version.c_str());
+    snprintf(info->modules, sizeof(info->modules), "%s", a->policy.modules.c_str());
 }
 
 void efz_env_agent_log_probs(const EfzAgent* a, const float* views, int32_t n, float* out)
@@ -1508,10 +1514,12 @@ int32_t efz_env_agent_last_action(const EfzAgent* a)
 int32_t efz_env_agent_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side,
                            int32_t starter, const int32_t* actions, int32_t count,
                            const float* history, uint8_t prev, int32_t deterministic,
-                           uint64_t seed, EfzPlan* out)
+                           uint64_t seed, int32_t late, const int32_t* extra, int32_t extraCount,
+                           EfzPlan* out)
 {
     if (!a || !env || !out || index < 0 || index >= env->n || side < 0 || side > 1 ||
-        count < 0 || (count && !actions) || (a->policy.history && !history))
+        count < 0 || (count && !actions) || (a->policy.history && !history) || late < 0 ||
+        extraCount < 0 || (extraCount && !extra))
         return -1;
     BindArena(nullptr);
     memset(out, 0, sizeof(*out));
@@ -1519,8 +1527,9 @@ int32_t efz_env_agent_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side
         env->SetError("the agent has no routes");
         return -1;
     }
-    for (int32_t k = 0; k < count; k++) {
-        if (actions[k] < 0 || actions[k] >= a->policy.Actions()) {
+    for (int32_t k = 0; k < count + extraCount; k++) {
+        int32_t v = k < count ? actions[k] : extra[k - count];
+        if (v < 0 || v >= a->policy.Actions()) {
             env->SetError("an action out of range");
             return -1;
         }
@@ -1541,19 +1550,35 @@ int32_t efz_env_agent_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side
     float view[kObsDim];
     world.View(side, view);
     planner.Begin(side, starter, std::vector<int>(actions, actions + count), history, prev,
-                  deterministic != 0, view);
+                  deterministic != 0, view, late, std::vector<int>(extra, extra + extraCount));
     planner.Work(agent::Planner::Clock::time_point::max());
     out->outcome = (int32_t)planner.outcome;
-    out->chosen = planner.chosen;
+    out->chosen = planner.chosen < 64 ? planner.chosen : -1;
     out->frames = (int32_t)planner.frames;
     out->options = (int32_t)std::min<size_t>(planner.tried.size(), 64);
+    const agent::Routes& routes = a->policy.routes;
     for (int32_t j = 0; j < out->options; j++) {
-        out->route[j] = planner.tried[j];
+        int e = planner.tried[j];
+        out->route[j] = e >= 0 ? routes.pool[e].route : e;
+        out->at[j] = e >= 0 ? routes.pool[e].at : 0;
         out->dealt[j] = planner.dealt[j];
     }
     memcpy(out->expected, planner.expected, sizeof(out->expected));
     out->ms = planner.ms;
     return 0;
+}
+
+int32_t efz_env_agent_choose(const EfzAgent* a, const float* input, int32_t starter,
+                             int32_t offset, float* values)
+{
+    if (!a || !input || a->policy.chooser.Empty())
+        return -2;
+    BindArena(nullptr);
+    std::vector<float> v;
+    int r = a->policy.Choose(input, starter, offset, &v);
+    if (values)
+        memcpy(values, v.data(), v.size() * sizeof(float));
+    return r;
 }
 
 } // extern "C"

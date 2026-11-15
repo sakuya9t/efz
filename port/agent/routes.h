@@ -8,6 +8,9 @@
 // its own play (seeing the copy as late as it sees the game) are played on copies, the
 // opponent guarding once it can, until each combo ends. The one that dealt the most is
 // chosen if it beats its own play. The Player (policy.h) plays it once it sees its hit.
+// Planned again at a later move's hit of the combo (routes.replan, round 15b's), the
+// routes are also joined where that move hit in them (the pool's entries), and the rest
+// of the route being played is one more option.
 //
 // The copies are of the World: the native game's own fight (port/agent/play.cpp), saved
 // and written back as netplay's rollback does, or a headless environment's (efz_env's
@@ -90,9 +93,13 @@ public:
     // (its view's action); actions: its inputs (actions) for the frames until it sees the
     // hit; history, prev: its input history after them (Policy::history x 6, newest first)
     // and its last control byte; deterministic: its own play's choice on the copies;
-    // view: its player's view of the game now (whose opponent says if it plans).
+    // view: its player's view of the game now (whose opponent says if it plans). late:
+    // the frames since the hit (a plan awaited when it landed): the routes are played from
+    // that much further in. extra: one more option, actions from where `actions` leave
+    // the game (the rest of the route being played).
     void Begin(int side, int starter, const std::vector<int>& actions, const float* history,
-               uint8_t prev, bool deterministic, const float* view);
+               uint8_t prev, bool deterministic, const float* view, int late = 0,
+               const std::vector<int>& extra = std::vector<int>());
     // Works on the plan until `deadline`, or until it is done; true once done.
     bool Work(Clock::time_point deadline);
     bool Busy() const { return phase_ == kPrelude || phase_ == kOptions; }
@@ -100,10 +107,13 @@ public:
     void Cancel();
 
     // A plan done:
+    enum { kOwnPlay = -1, kExtra = -2 };
     Outcome outcome = kNone;
-    int chosen = -1;          // the route (an index into Policy::routes.list), -1 its own play
-    int offset = 0;           // the route's actions are played from this one (the delay)
-    std::vector<int> tried;   // the routes tried, then -1 for its own play
+    int chosen = -1;          // the option chosen (an index into tried), -1 its own play
+    std::vector<int> route;   // its actions, from where `actions` leave the game
+    int offset = 0;           // the routes' actions are played from this one (delay + late)
+    std::vector<int> tried;   // the options: pool entries (Policy::routes.pool), kExtra,
+                              // then kOwnPlay
     std::vector<float> dealt; // the most each dealt (HP), in that order
     float best = 0, own = 0;  // the most any option dealt, its own play's
     float expected[kObsDim];  // the agent's view when it sees its hit, on the copy
@@ -113,7 +123,7 @@ public:
 private:
     enum Phase { kIdle, kPrelude, kOptions, kDone };
     struct Option {
-        int route = -1; // -1: its own play
+        int entry = kOwnPlay; // a pool entry, kExtra or kOwnPlay
         bool started = false;
         int t = 0;
         float dealt = 0;
@@ -136,7 +146,7 @@ private:
     Phase phase_ = kIdle;
     int side_ = 0, starter_ = 0;
     bool deterministic_ = false;
-    std::vector<int> actions_;
+    std::vector<int> actions_, extra_;
     std::vector<float> history_;
     uint8_t prev_ = 0;
     Snapshot start_, afterDelay_, real_;

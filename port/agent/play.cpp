@@ -215,9 +215,10 @@ private:
 
 GameWorld g_world;
 bool g_fast = false;
-// How long a frame waits for a plan not done when the agent sees its hit (ms): a local
-// match can stutter a little, a network match should not.
-const double kPatienceLocal = 40, kPatienceNet = 8;
+// How long a frame waits for a combo's first plan not done when the agent sees its hit
+// (ms): a local match can stutter a little, a network match should not; for a later plan
+// of the combo (replan), half a frame: the combo goes on with its route meanwhile.
+const double kPatienceLocal = 40, kPatienceNet = 8, kPatienceAgain = 8;
 
 const unsigned char kRight = 0x01, kLeft = 0x02, kDown = 0x04, kUp = 0x08, kA = 0x10, kC = 0x40;
 const int kDikF5 = 0x3f, kDikF6 = 0x40;
@@ -229,6 +230,7 @@ struct Entry {
     std::string file; // its file name
     std::string name;
     int character = -1;
+    std::string version;
     bool added = false; // from the command line, not the folders
     std::shared_ptr<agent::Policy> policy; // read when first played
 };
@@ -292,10 +294,17 @@ std::string FileName(const std::string& path)
     return slash == std::string::npos ? path : path.substr(slash + 1);
 }
 
+// What the menus show: its name, version and character.
+std::string Label(const Entry& e)
+{
+    return e.name + (e.version.empty() ? "" : " " + e.version) + " (" +
+           CharacterLabel(e.character) + ")";
+}
+
 bool Peek(Entry* e)
 {
     std::string error;
-    if (!agent::Policy::Peek(e->path.c_str(), &e->name, &e->character, &error)) {
+    if (!agent::Policy::Peek(e->path.c_str(), &e->name, &e->character, &e->version, &error)) {
         LogWarn("agent", "%s: %s", e->path.c_str(), error.c_str());
         return false;
     }
@@ -336,7 +345,7 @@ void Scan()
     g_agents.swap(found);
     g_labels.clear();
     for (const Entry& e : g_agents)
-        g_labels.push_back(e.name + " (" + CharacterLabel(e.character) + ")");
+        g_labels.push_back(Label(e));
 }
 
 int IndexOf(const std::string& path)
@@ -357,13 +366,14 @@ void LogRoutes(const char* who, const Side& s)
     int asked = r.plans + r.dropped();
     if (!asked)
         return;
-    LogInfo("agent", "%s's routes: %d plans, a route chosen in %d; %d dropped (late %d, the "
-                     "game elsewhere %d, the combo over %d, not this opponent %d, the fight "
-                     "over %d); planning %.1f ms a plan (at most %.1f), the game waited %.2f "
-                     "ms a plan (at most %.1f)",
-            who, r.plans, r.routes, r.dropped(), r.late, r.elsewhere, r.over, r.own, r.apart,
-            r.planMs / std::max(1, asked - r.late - r.own), r.planMsMost, r.waitedMs / asked,
-            r.waitedMsMost);
+    LogInfo("agent", "%s's routes: %d plans asked (%d at a later move's hit of a combo): %d "
+                     "made, a route chosen in %d; %d dropped (late %d, of them %d a combo's "
+                     "first played by the chooser's route; the game elsewhere %d, the combo "
+                     "over %d, not this opponent %d, the fight over %d); planning %.1f ms a "
+                     "plan (at most %.1f), the game waited %.2f ms a plan (at most %.1f)",
+            who, asked, r.again, r.plans, r.routes, r.dropped(), r.late, r.chooser, r.elsewhere,
+            r.over, r.own, r.apart, r.planMs / std::max(1, asked - r.late - r.own), r.planMsMost,
+            r.waitedMs / asked, r.waitedMsMost);
 }
 
 // Has the side played by the agent at `path` (empty: a person); false with *error.
@@ -387,22 +397,31 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
             return false;
         }
         e.policy = p;
-        LogInfo("agent", "%s: \"%s\", %s, deciding every %d frame(s), %d frames late, %d "
-                         "inputs of history; %s",
-                e.path.c_str(), p->name.c_str(), CharacterLabel(p->character).c_str(),
-                p->frameSkip, p->delay, p->history,
-                p->routes.Empty() ? "its own combos"
-                                  : ("its combos from " + std::to_string(p->routes.list.size()) +
-                                     " routes (" + p->routes.source + ")").c_str());
+        std::string combos = "its own combos";
+        if (!p->routes.Empty()) {
+            combos = "its combos from " + std::to_string(p->routes.list.size()) + " routes (" +
+                     p->routes.source + "), planned " +
+                     (p->routes.replan ? "again at each new move's hit" : "at the first hit") +
+                     ", " + std::to_string(p->routes.perStart) + " tried" +
+                     (p->chooser.Empty() ? "" : "; the chooser's when a plan is late");
+        }
+        LogInfo("agent", "%s: \"%s\"%s, %s, format %d (%s), deciding every %d frame(s), %d "
+                         "frames late, %d inputs of history; %s",
+                e.path.c_str(), p->name.c_str(),
+                p->version.empty() ? "" : (" " + p->version).c_str(),
+                CharacterLabel(p->character).c_str(), p->format, p->modules.c_str(), p->frameSkip,
+                p->delay, p->history, combos.c_str());
+        for (const auto& kv : p->about)
+            LogInfo("agent", "%s: %s %s", e.file.c_str(), kv.first.c_str(), kv.second.c_str());
     }
     s->path = e.path;
-    s->name = e.name;
+    s->name = e.name + (e.version.empty() ? "" : " " + e.version);
     s->policy = e.policy;
     s->player.reset(new agent::Player(s->policy.get(), Seed()));
     if (player >= 0 && !s->policy->routes.Empty()) {
         s->planner.reset(new agent::Planner(s->policy.get(), &g_world, Seed()));
         double patience = g_fast ? -1 : net ? kPatienceNet : kPatienceLocal;
-        s->player->SetPlanner(s->planner.get(), player, patience);
+        s->player->SetPlanner(s->planner.get(), player, patience, kPatienceAgain);
         if (!s->player->Planning())
             s->planner.reset();
     }
@@ -738,7 +757,7 @@ int FindAgent(const char* nameOrPath)
     if (!Peek(&e))
         return -1;
     g_agents.push_back(e);
-    g_labels.push_back(e.name + " (" + CharacterLabel(e.character) + ")");
+    g_labels.push_back(Label(e));
     return (int)g_agents.size() - 1;
 }
 

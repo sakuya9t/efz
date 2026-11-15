@@ -40,10 +40,11 @@ the network, rollback and all, with EfzRevival 1.02h's protocol and rules, recov
 from its binaries and made native (no launcher, no injected DLL). See
 [docs/netplay.md](docs/netplay.md).
 
-**And trained agents to play:** an agent trained here, written as an agent file, plays
-a side of VS HUMAN (chosen on character select) or this computer's side of a network
-match, run by the game itself, no Python needed, its combos from people's routes if the
-file has a combo library. See [docs/agents.md](docs/agents.md).
+**And trained agents to play:** an agent trained here, written as one agent file (its
+network, its combo library's routes, their join points and its chooser), plays a side of
+VS HUMAN (chosen on character select) or this computer's side of a network match, run by
+the game itself, no Python needed, its combos from people's routes planned on copies of
+the fight. See [docs/agents.md](docs/agents.md).
 
 **And headless, for training agents:** `efz_env`, a library (C API, and a Python
 package) that runs batches of matches without a window or sound on every core, 3,000
@@ -211,8 +212,9 @@ efz --data DIR --join 192.168.1.5          # join it
 ```
 
 A trained agent plays in the game too: export it (`python python/examples/export_agent.py
-MODEL.zip`, or a pack, whose combo library comes along: its combos from the library's
-routes, as `play.py --assist` plays them), put the `.efzagent` file in the game's `agents`
+PACK.zip`, the whole pack in one file: its model, its combo library's routes and their
+join points, its chooser, played as the pack's `play.py --assist` plays them; or
+`MODEL.zip`), put the `.efzagent` file in the game's `agents`
 folder, and on VS HUMAN's character select F5 or F6 has it play P1 or P2; NET PLAY's
 PLAYED BY has it play your side of a network match ([docs/agents.md](docs/agents.md)).
 

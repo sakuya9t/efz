@@ -13,7 +13,13 @@
 // - an agent file (port/agent/policy.h) is read and its network run, and an agent plays
 //   a side as play.py's HumanMatch runs one: its decisions held frame_skip frames,
 //   nothing pressed while the controls do nothing, the game seen `delay` decisions late,
-//   its own inputs at once; a file cut short is refused.
+//   its own inputs at once; a file cut short is refused; its modules (format 2) are
+//   checked, one this game doesn't play refused by name, and a format 1 file still read;
+// - its routes are planned (port/agent/routes.h) and played as LiveRoutes plays them: at
+//   the first hit, and with replan again at each new move's hit (the rest of the route
+//   one of the options, routes joined where that move hit in them); a plan dropped when
+//   the game is elsewhere or the plan late, the chooser's pick played for a late first
+//   plan.
 //
 // The game itself, with its data, is the compatibility suite's (tools/compat.py check
 // runs it in both the game and the headless runner).
@@ -258,8 +264,8 @@ void TestApi()
     CHECK(sizeof(EfzInfo) == 36);
     CHECK(sizeof(EfzBuffers) == 6 * sizeof(void*));
     CHECK(sizeof(EfzSoundEvent) == 60);
-    CHECK(sizeof(EfzAgentInfo) == 92);
-    CHECK(sizeof(EfzPlan) == 16 + 64 * 4 + 64 * 4 + 168 * 4 + 8);
+    CHECK(sizeof(EfzAgentInfo) == 11 * 4 + 3 * 64);
+    CHECK(sizeof(EfzPlan) == 16 + 3 * 64 * 4 + 168 * 4 + 8);
     CHECK(efz_env_version() == EFZ_ENV_VERSION);
     int dim = efz_env_obs_dim();
     CHECK(dim == 168);
@@ -284,32 +290,68 @@ void TestApi()
     CHECK(efz_env_seed(nullptr, 0, 1) == -1);
 }
 
-// An agent file of a network without hidden layers, two actions (control bytes 0x01
-// and 0x10): logit 0 = 2 * view[5] (the global "dx"... any column) + 0.5, logit 1 =
-// view[kObsDim] (its last input's forward-back) * 3.
-// routes: each route's actions, all with starter 5 (none: an agent without routes).
-std::vector<unsigned char> TinyAgent(int frameSkip, int history, int delay,
-                                     const std::vector<std::vector<uint8_t>>& routes = {})
+// An agent file of a network without hidden layers: logit 0 = 2 * view[5] (the global
+// "dx"... any column) + bias[0], logit 1 = view[kObsDim] (its last input's forward-back) *
+// 3 + bias[1], and the others' their bias. table: each action's control byte.
+// routes: each route's actions and its starter (none: an agent without routes). pool: the
+// planner's entries (route, at, starter), none: the routes. chooser: what the chooser says
+// each route and its own play would deal (thousands of HP), whatever it sees (none: no
+// chooser). format 1 or 2; modules: format 2's (empty: those it has).
+struct Tiny {
+    int frameSkip = 1, history = 1, delay = 0;
+    std::vector<uint8_t> table = {0x01, 0x10};
+    std::vector<float> bias = {0.5f, 0.0f};
+    std::vector<std::vector<uint8_t>> routes;
+    std::vector<int> starters; // (default 5)
+    std::vector<std::vector<int>> pool;
+    bool replan = false;
+    std::vector<float> chooser;
+    int format = 1;
+    std::string modules;
+};
+
+std::vector<unsigned char> TinyFile(const Tiny& t)
 {
     using efz::agent::kObsDim;
-    int width = kObsDim + 6 * history;
-    std::string text = "name=tiny\ncharacter=1\nframe_skip=" + std::to_string(frameSkip) +
-                       "\nhistory=" + std::to_string(history) + "\ndelay=" +
-                       std::to_string(delay) + "\nwidth=" + std::to_string(width) +
-                       "\nactions=2\ntable=0110\nfeatures=flat\nactivation=relu\nlayers=0\n";
-    if (!routes.empty())
-        text += "routes=" + std::to_string(routes.size()) + "\nroute_per_start=12\n"
-                "route_limit=900\nroute_by_victim=0\nroute_victims=\n";
+    int width = kObsDim + 6 * t.history;
+    uint32_t actions = (uint32_t)t.table.size();
+    std::string table;
+    for (uint8_t c : t.table) {
+        char hex[3];
+        snprintf(hex, sizeof(hex), "%02x", c);
+        table += hex;
+    }
+    std::string text = "name=tiny\ncharacter=1\nframe_skip=" + std::to_string(t.frameSkip) +
+                       "\nhistory=" + std::to_string(t.history) + "\ndelay=" +
+                       std::to_string(t.delay) + "\nwidth=" + std::to_string(width) +
+                       "\nactions=" + std::to_string(actions) + "\ntable=" + table +
+                       "\nfeatures=flat\nactivation=relu\nlayers=0\n";
+    if (!t.routes.empty())
+        text += "routes=" + std::to_string(t.routes.size()) + "\nroute_per_start=12\n"
+                "route_limit=900\nroute_by_victim=0\nroute_victims=\nroute_replan=" +
+                std::to_string(t.replan) + "\nroute_pool=" + std::to_string(t.pool.size()) + "\n";
+    if (!t.chooser.empty())
+        text += "chooser_features=flat\nchooser_activation=relu\nchooser_layers=0\n"
+                "chooser_per_start=12\nchooser_margin=200\n";
+    if (t.format >= 2) {
+        std::string modules = t.modules;
+        if (modules.empty())
+            modules = std::string("policy:1") + (t.routes.empty() ? "" : ",routes:1") +
+                      (t.chooser.empty() ? "" : ",chooser:1");
+        if (modules != "none")
+            text += "modules=" + modules + "\n";
+        text += "version=test\nsource.model=model.zip sha256:00\n";
+    }
     std::vector<unsigned char> b;
     auto put = [&](const void* p, size_t n) {
         b.insert(b.end(), (const unsigned char*)p, (const unsigned char*)p + n);
     };
     auto u32 = [&](uint32_t v) { put(&v, 4); };
     put("EFZAGENT", 8);
-    u32(1);
+    u32((uint32_t)t.format);
     u32((uint32_t)text.size());
     put(text.data(), text.size());
-    u32(routes.empty() ? 2 : 6);
+    u32(2 + (t.routes.empty() ? 0 : 4) + (t.pool.empty() ? 0 : 3) + (t.chooser.empty() ? 0 : 2));
     auto header = [&](const char* name, unsigned char type, std::vector<uint32_t> dims) {
         uint16_t n = (uint16_t)strlen(name);
         put(&n, 2);
@@ -324,43 +366,77 @@ std::vector<unsigned char> TinyAgent(int frameSkip, int history, int delay,
         header(name, 0, dims);
         put(v.data(), v.size() * 4);
     };
-    std::vector<float> w(2 * width, 0.0f);
+    auto ints = [&](const char* name, const std::vector<int32_t>& v) {
+        header(name, 1, {(uint32_t)v.size()});
+        put(v.data(), v.size() * 4);
+    };
+    std::vector<float> w(actions * width, 0.0f);
     w[5] = 2.0f;
-    if (history)
+    if (t.history)
         w[width + kObsDim] = 3.0f;
-    tensor("action.weight", {2, (uint32_t)width}, w);
-    tensor("action.bias", {2}, {0.5f, 0.0f});
-    if (!routes.empty()) {
-        uint32_t n = (uint32_t)routes.size();
+    tensor("action.weight", {actions, (uint32_t)width}, w);
+    std::vector<float> bias = t.bias;
+    bias.resize(actions, -100.0f);
+    tensor("action.bias", {actions}, bias);
+    if (!t.routes.empty()) {
+        uint32_t n = (uint32_t)t.routes.size();
         std::vector<int32_t> starter(n, 5), opponent(n, -1), offset(1, 0);
-        std::vector<uint8_t> actions;
-        for (const auto& r : routes) {
-            actions.insert(actions.end(), r.begin(), r.end());
-            offset.push_back((int32_t)actions.size());
+        for (size_t k = 0; k < t.starters.size() && k < n; k++)
+            starter[k] = t.starters[k];
+        std::vector<uint8_t> acts;
+        for (const auto& r : t.routes) {
+            acts.insert(acts.end(), r.begin(), r.end());
+            offset.push_back((int32_t)acts.size());
         }
-        header("routes.starter", 1, {n});
-        put(starter.data(), n * 4);
-        header("routes.opponent", 1, {n});
-        put(opponent.data(), n * 4);
-        header("routes.offset", 1, {n + 1});
-        put(offset.data(), (n + 1) * 4);
-        header("routes.actions", 2, {(uint32_t)actions.size()});
-        put(actions.data(), actions.size());
+        ints("routes.starter", starter);
+        ints("routes.opponent", opponent);
+        ints("routes.offset", offset);
+        header("routes.actions", 2, {(uint32_t)acts.size()});
+        put(acts.data(), acts.size());
+    }
+    if (!t.pool.empty()) {
+        std::vector<int32_t> route, at, by;
+        for (const auto& e : t.pool) {
+            route.push_back(e[0]);
+            at.push_back(e[1]);
+            by.push_back(e[2]);
+        }
+        ints("routes.pool.route", route);
+        ints("routes.pool.at", at);
+        ints("routes.pool.starter", by);
+    }
+    if (!t.chooser.empty()) {
+        uint32_t n = (uint32_t)t.chooser.size();
+        tensor("chooser.out.weight", {n, (uint32_t)width}, std::vector<float>(n * width, 0.0f));
+        tensor("chooser.out.bias", {n}, t.chooser);
     }
     return b;
 }
 
-// A game of a few numbers for the routes' planner: player 0's button (A-D) hits, each
-// hit 100 HP and its combo goes on; two frames in a row without one drop the combo.
-// The view shows its combo's hits, the move (5) and the frame; `twist` adds what player
-// 1 pressed last, so that a plan made with it holding back finds the game elsewhere.
+std::vector<unsigned char> TinyAgent(int frameSkip, int history, int delay,
+                                     const std::vector<std::vector<uint8_t>>& routes = {})
+{
+    Tiny t;
+    t.frameSkip = frameSkip;
+    t.history = history;
+    t.delay = delay;
+    t.routes = routes;
+    return TinyFile(t);
+}
+
+// A game of a few numbers for the routes' planner: player 0's button hits (A 100 HP, move
+// 5; B 300, move 6; C as A, move 7) and its combo goes on; `drop` frames in a row without
+// one drop the combo. The view shows its combo's hits, the move that hit last and the
+// frame; `twist` adds what player 1 pressed last, so that a plan made with it holding
+// back finds the game elsewhere.
 class FakeWorld : public efz::agent::World {
 public:
     struct State {
-        int frame = 0, hits = 0, idle = 0, hp = 1000000, oppLast = 0;
+        int frame = 0, hits = 0, idle = 0, hp = 1000000, oppLast = 0, move = 5;
         uint8_t last[2] = {0, 0};
     } g;
     bool twist = false;
+    int drop = 2;
     int steps = 0;
 
     void Save(efz::agent::Snapshot* s) override
@@ -384,9 +460,10 @@ public:
         g.oppLast = input[1];
         if (input[0] & 0xf0) {
             g.hits++;
-            g.hp -= 100;
+            g.hp -= input[0] & 0x20 ? 300 : 100;
+            g.move = input[0] & 0x20 ? 6 : input[0] & 0x40 ? 7 : 5;
             g.idle = 0;
-        } else if (g.hits > 0 && ++g.idle >= 2) {
+        } else if (g.hits > 0 && ++g.idle >= drop) {
             g.hits = 0;
         }
         return true;
@@ -395,7 +472,7 @@ public:
     {
         memset(out, 0, efz::agent::kObsDim * sizeof(float));
         out[30] = g.hits / 30.0f;
-        out[18] = 5;
+        out[18] = (float)g.move;
         out[1] = (float)g.frame;
         if (twist)
             out[100] = (float)g.oppLast;
@@ -508,6 +585,187 @@ void TestRoutes()
     printf("routes: planned, played, dropped when the game is elsewhere or the plan late\n");
 }
 
+// Round 15b's replanning, and the chooser for a first plan late. The agent's own play is
+// A every frame (100 a frame); B deals 300 and is another move (6). Route 0: A x 4, then
+// B x 100; route 1: A x 3, then B x `tail`, joined where its B first hit (step 3, move 6).
+void TestReplan()
+{
+    using efz::agent::kObsDim;
+    typedef efz::agent::Planner Planner;
+    std::string error;
+    auto make = [](int tail) {
+        Tiny t;
+        t.history = 1;
+        t.delay = 2;
+        t.table = {0x01, 0x10, 0x20};
+        t.bias = {-100.0f, 5.0f, -100.0f};
+        std::vector<uint8_t> r0(4, 1), r1(3, 1);
+        r0.resize(104, 2);
+        r1.resize(3 + tail, 2);
+        t.routes = {r0, r1};
+        t.pool = {{0, 0, 5}, {1, 3, 6}};
+        t.replan = true;
+        t.format = 2;
+        return t;
+    };
+    auto play = [&](FakeWorld& world, efz::agent::Player& a, int frames, std::vector<uint8_t>* out) {
+        float view[kObsDim];
+        for (int f = 0; f < frames; f++) {
+            world.View(0, view);
+            uint8_t input[2] = {a.Step(view, true, true), 0x02};
+            out->push_back(input[0]);
+            world.Step(input);
+        }
+    };
+    auto run = [&](const efz::agent::Policy& p, double patience, double again, int frames,
+                   std::vector<uint8_t>* out, Planner** last) {
+        static FakeWorld* world;
+        static Planner* planner;
+        static efz::agent::Player* a;
+        delete a;
+        delete planner;
+        delete world;
+        world = new FakeWorld;
+        planner = new Planner(&p, world, 3);
+        a = new efz::agent::Player(&p, 7);
+        a->SetPlanner(planner, 0, patience, again);
+        play(*world, *a, frames, out);
+        *last = planner;
+        return a->Stats();
+    };
+    {
+        // The first plan (at A's hit, frame 1): route 0 from its third step (A, A, then
+        // its B's: 30,200) beats its own play (240 frames of A: 24,000). At its first B's
+        // hit (frame 5), planned again: route 1 joined there (298 B's) beats the rest of
+        // route 0 (97 B's) and its own play.
+        efz::agent::Policy p;
+        std::vector<unsigned char> file = TinyFile(make(300));
+        CHECK(p.Parse(file.data(), file.size(), &error));
+        CHECK(p.format == 2 && p.routes.replan && p.routes.pool.size() == 2 &&
+              p.routes.poolByStarter[6].size() == 1 && p.version == "test");
+        std::vector<uint8_t> out;
+        Planner* planner;
+        efz::agent::RouteStats st = run(p, -1, -1, 200, &out, &planner);
+        CHECK(st.plans == 2 && st.again == 1 && st.routes == 2 && st.dropped() == 0);
+        CHECK(out[0] == 0x10 && out[1] == 0x10 && out[2] == 0x10 && out[3] == 0x10 && out[4] == 0x10);
+        for (int f = 5; f < 200; f++)
+            CHECK(out[f] == 0x20);
+        CHECK(planner->tried.size() == 3 && planner->tried[0] == 1 &&
+              planner->tried[1] == Planner::kExtra && planner->tried[2] == Planner::kOwnPlay);
+        CHECK(planner->chosen == 0 && planner->dealt[0] == 298 * 300 && planner->dealt[1] == 97 * 300);
+    }
+    {
+        // Route 1 short (5 B's): the rest of route 0 is chosen, played to its end.
+        efz::agent::Policy p;
+        std::vector<unsigned char> file = TinyFile(make(5));
+        CHECK(p.Parse(file.data(), file.size(), &error));
+        std::vector<uint8_t> out;
+        Planner* planner;
+        efz::agent::RouteStats st = run(p, -1, -1, 140, &out, &planner);
+        CHECK(st.plans >= 2 && st.again >= 1 && st.routes >= 2);
+        for (int f = 5; f < 105; f++) // (route 0's 100 B's)
+            CHECK(out[f] == 0x20);
+        CHECK(out[105] == 0x10); // its own play again
+    }
+    {
+        // Once (no replan): the first plan's route 0 played to its end, B's and all (route 1
+        // another move's: not tried).
+        Tiny t = make(300);
+        t.replan = false;
+        t.pool.clear();
+        t.starters = {5, 7};
+        efz::agent::Policy p;
+        std::vector<unsigned char> file = TinyFile(t);
+        CHECK(p.Parse(file.data(), file.size(), &error) && !p.routes.replan);
+        std::vector<uint8_t> out;
+        Planner* planner;
+        efz::agent::RouteStats st = run(p, -1, -1, 140, &out, &planner);
+        CHECK(st.plans == 1 && st.again == 0 && st.routes == 1);
+        for (int f = 5; f < 105; f++)
+            CHECK(out[f] == 0x20);
+        CHECK(out[105] == 0x10);
+    }
+    {
+        // A first plan late (no time to plan): the chooser's pick, route 0 from where the
+        // agent sees its hit; one promising less than its margin more than its own play
+        // isn't played.
+        Tiny t = make(300);
+        t.replan = false;
+        t.pool.clear();
+        t.chooser = {50.0f, 0.0f, 0.0f};
+        efz::agent::Policy p;
+        std::vector<unsigned char> file = TinyFile(t);
+        CHECK(p.Parse(file.data(), file.size(), &error) && !p.chooser.Empty());
+        CHECK(p.modules == "policy:1,routes:1,chooser:1");
+        std::vector<float> values;
+        std::vector<float> in(p.Width(), 0.0f);
+        CHECK(p.Choose(in.data(), 5, 2, &values) == 0 && values.size() == 3 && values[0] == 50000);
+        CHECK(p.Choose(in.data(), 5, 200, &values) == -1); // too short for that offset
+        CHECK(p.Choose(in.data(), 6, 2, &values) == -1);   // no route of that starter
+        std::vector<uint8_t> out;
+        Planner* planner;
+        efz::agent::RouteStats st = run(p, 0, 0, 120, &out, &planner);
+        CHECK(st.late == 1 && st.chooser == 1 && st.plans == 0);
+        for (int f = 5; f < 105; f++)
+            CHECK(out[f] == 0x20);
+        t.chooser = {0.1f, 0.0f, 0.0f};
+        file = TinyFile(t);
+        efz::agent::Policy q;
+        CHECK(q.Parse(file.data(), file.size(), &error));
+        out.clear();
+        st = run(q, 0, 0, 120, &out, &planner);
+        CHECK(st.late == 1 && st.chooser == 0);
+        for (int f = 3; f < 120; f++)
+            CHECK(out[f] == 0x10);
+    }
+    printf("routes: planned again at a new move's hit, joined, the route kept, the chooser's "
+           "when late\n");
+}
+
+// Format 2's modules: a module this game doesn't play is refused by name; format 1 read.
+void TestFormat()
+{
+    std::string error;
+    Tiny t;
+    t.delay = 2;
+    t.routes = {std::vector<uint8_t>(10, 1)};
+    t.chooser = {1.0f, 0.0f};
+    t.format = 2;
+    std::vector<unsigned char> file = TinyFile(t);
+    efz::agent::Policy p;
+    CHECK(p.Parse(file.data(), file.size(), &error));
+    CHECK(p.about.count("source.model") && p.about["source.model"] == "model.zip sha256:00");
+    auto refused = [&](const Tiny& x, const char* why) {
+        std::vector<unsigned char> f = TinyFile(x);
+        efz::agent::Policy q;
+        std::string e;
+        bool no = !q.Parse(f.data(), f.size(), &e);
+        if (!no || e.find(why) == std::string::npos)
+            fprintf(stderr, "  (refused for '%s'? %s)\n", why, e.c_str());
+        return no && e.find(why) != std::string::npos;
+    };
+    Tiny x = t;
+    x.modules = "policy:1,routes:1,chooser:1,oki:1";
+    CHECK(refused(x, "oki:1"));
+    x.modules = "policy:1,routes:2,chooser:1";
+    CHECK(refused(x, "routes:2"));
+    x.modules = "none";
+    CHECK(refused(x, "modules"));
+    x.modules = "policy:1,chooser:1"; // its routes not listed
+    CHECK(refused(x, "modules"));
+    x = t;
+    x.format = 3;
+    CHECK(refused(x, "newer game"));
+    x = t;
+    x.format = 1; // format 1: no chooser then
+    x.chooser.clear();
+    std::vector<unsigned char> old = TinyFile(x);
+    efz::agent::Policy q;
+    CHECK(q.Parse(old.data(), old.size(), &error) && q.format == 1 &&
+          q.modules == "policy:1,routes:1" && q.routes.pool.size() == 1 && !q.routes.replan);
+    printf("agent files: format 2's modules checked, format 1 read\n");
+}
+
 void TestAgent()
 {
     using efz::agent::kObsDim;
@@ -587,6 +845,8 @@ int main()
     TestApi();
     TestAgent();
     TestRoutes();
+    TestReplan();
+    TestFormat();
     if (g_failures) {
         fprintf(stderr, "%d checks failed\n", g_failures);
         return 1;

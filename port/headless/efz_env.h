@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define EFZ_ENV_VERSION 9
+#define EFZ_ENV_VERSION 10
 
 /* What a step does when a match ends (EfzEnvConfig.autoreset). */
 #define EFZ_AUTORESET_SAME_STEP 0 /* the next match starts in the same step: obs is its first
@@ -281,7 +281,14 @@ typedef struct EfzAgentInfo {
     int32_t delay;      /* decisions late it sees the game */
     int32_t character;  /* the character it plays (0-24), -1 any */
     int32_t routes;     /* its combo library's routes (0: it plays its own combos) */
+    int32_t pool;       /* the planner's entries: the routes, and with replan those joined
+                           where a later move of theirs hit */
+    int32_t replan;     /* 1: planned again at each new move's hit of a combo */
+    int32_t chooser;    /* 1: it has a chooser (played when a combo's first plan is late) */
+    int32_t format;     /* the file's */
     char name[64];
+    char version[64];   /* as exported (export_agent.py --version), "" none */
+    char modules[64];   /* what it is made of, as "policy:1,routes:1,chooser:1" */
 } EfzAgentInfo;
 /* NULL on failure, with the reason in error. */
 EFZ_ENV_API EfzAgent* efz_env_agent_load(const char* path, char* error, size_t error_size);
@@ -307,15 +314,18 @@ EFZ_ENV_API int32_t efz_env_agent_last_action(const EfzAgent* agent);
  * hit), the opponent holding back, then the agent's routes that begin with `starter` and
  * its own play (history: its input history after those actions, history x 6, newest
  * first; prev: its last control byte) are played on copies, the opponent guarding once
- * it can. For checking the game's planner against runs/human-ayu/redteam.py's. 0, or -1
- * (efz_env_error: no routes, not in a fight). */
+ * it can. late: the frames since the hit (the routes played that much further in);
+ * extra (extra_count): one more option, actions from where `actions` leave the game (at a
+ * replan, the rest of the route being played). For checking the game's planner against
+ * runs/human-ayu/redteam.py's. 0, or -1 (efz_env_error: no routes, not in a fight). */
 typedef struct EfzPlan {
     int32_t outcome;       /* 1 planned, 2 not (the opponent isn't a victim), 3 the copies
                               couldn't be played */
-    int32_t chosen;        /* the route chosen (its index in the agent's), -1 its own play */
-    int32_t options;       /* the routes tried, then its own play: route[], dealt[] */
+    int32_t chosen;        /* the option chosen (an index into route[]), -1 its own play */
+    int32_t options;       /* the options tried: route[], at[], dealt[] */
     int32_t frames;        /* frames played on copies */
-    int32_t route[64];
+    int32_t route[64];     /* a route (its index in the agent's), -2 the extra, -1 its own play */
+    int32_t at[64];        /* the route's step it was joined at (0: from its start) */
     float dealt[64];       /* the most each dealt (HP) */
     float expected[168];   /* the agent's view once it sees its hit, after `actions` */
     double ms;
@@ -323,7 +333,15 @@ typedef struct EfzPlan {
 EFZ_ENV_API int32_t efz_env_agent_plan(EfzAgent* agent, EfzEnv* env, int32_t index,
                                        int32_t side, int32_t starter, const int32_t* actions,
                                        int32_t count, const float* history, uint8_t prev,
-                                       int32_t deterministic, uint64_t seed, EfzPlan* out);
+                                       int32_t deterministic, uint64_t seed, int32_t late,
+                                       const int32_t* extra, int32_t extra_count, EfzPlan* out);
+/* An agent with a chooser: what it says from `input` (the agent's network's: a view, then
+ * its input history; on the frame it sees its hit of `starter`), its routes played from
+ * step `offset`: the route it picks (its index in the agent's), -1 its own play, -2 no
+ * chooser; values (routes + 1, or NULL): what it says each route and its own play (the
+ * last) would deal, in HP. */
+EFZ_ENV_API int32_t efz_env_agent_choose(const EfzAgent* agent, const float* input,
+                                         int32_t starter, int32_t offset, float* values);
 
 #ifdef __cplusplus
 }

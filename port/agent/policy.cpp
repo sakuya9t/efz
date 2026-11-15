@@ -19,10 +19,17 @@ namespace agent {
 namespace {
 
 const char kMagic[8] = {'E', 'F', 'Z', 'A', 'G', 'E', 'N', 'T'};
-const uint32_t kVersion = 1;
+const uint32_t kFormat = 2;   // the newest format read (1 is read too)
 const int kInputFeatures = 6; // per step of history: forward-back, up-down, A B C D pressed
 const int kComboHits = 30;    // the view's self_combo_hits (/ 30)
 const int kSelfAction = 18;   // self_action: the move that hit
+const int kOppCharacter = 66; // opp_character
+
+// The modules this game plays, each up to its version.
+const struct {
+    const char* name;
+    int version;
+} kModules[] = {{"policy", 1}, {"routes", 1}, {"chooser", 1}};
 
 int Hits(const float* view)
 {
@@ -44,6 +51,9 @@ struct Tensor {
     }
 };
 
+typedef std::map<std::string, std::string> Keys;
+typedef std::map<std::string, Tensor> Tensors;
+
 class Reader {
 public:
     Reader(const unsigned char* p, size_t n) : p_(p), end_(p + n) {}
@@ -62,10 +72,188 @@ private:
     const unsigned char* end_;
 };
 
-int ToInt(const std::map<std::string, std::string>& keys, const char* key, int fallback)
+int ToInt(const Keys& keys, const std::string& key, int fallback)
 {
     auto it = keys.find(key);
     return it == keys.end() || it->second.empty() ? fallback : atoi(it->second.c_str());
+}
+
+float ToFloat(const Keys& keys, const std::string& key, float fallback)
+{
+    auto it = keys.find(key);
+    return it == keys.end() || it->second.empty() ? fallback : (float)strtod(it->second.c_str(), nullptr);
+}
+
+// The text's "key=value" lines.
+Keys ReadKeys(const std::string& text)
+{
+    Keys keys;
+    for (size_t at = 0; at < text.size();) {
+        size_t end = text.find('\n', at);
+        if (end == std::string::npos)
+            end = text.size();
+        std::string line = text.substr(at, end - at);
+        at = end + 1;
+        size_t eq = line.find('=');
+        if (eq != std::string::npos)
+            keys[line.substr(0, eq)] = line.substr(eq + 1);
+    }
+    return keys;
+}
+
+std::string Playable()
+{
+    std::string s;
+    for (const auto& m : kModules)
+        s += (s.empty() ? "" : ", ") + std::string(m.name) + ":" + std::to_string(m.version);
+    return s;
+}
+
+// A module list ("policy:1,routes:1"): its names, and the first module this game doesn't
+// play, or not in that version ("" if it plays them all).
+std::string Unplayable(const std::string& list, std::vector<std::string>* names)
+{
+    for (size_t at = 0; at < list.size();) {
+        size_t end = list.find(',', at);
+        if (end == std::string::npos)
+            end = list.size();
+        std::string item = list.substr(at, end - at);
+        at = end + 1;
+        if (item.empty())
+            continue;
+        size_t colon = item.find(':');
+        std::string name = item.substr(0, colon);
+        int version = colon == std::string::npos ? 1 : atoi(item.c_str() + colon + 1);
+        names->push_back(name);
+        bool known = false;
+        for (const auto& m : kModules)
+            known = known || (name == m.name && version >= 1 && version <= m.version);
+        if (!known)
+            return item;
+    }
+    return "";
+}
+
+bool Has(const std::vector<std::string>& names, const char* name)
+{
+    return std::find(names.begin(), names.end(), name) != names.end();
+}
+
+// A network of the file (policy.h's Net): its features (keys prefix + "features",
+// tensors under tprefix + "features."), activation, hidden layers (keys prefix +
+// "layers", tensors layer + ".K"), its output layer `outName`; it takes `width` numbers.
+bool ReadNet(Net* net, const Keys& keys, Tensors& tensors, const std::string& prefix,
+             const std::string& tprefix, const std::string& layer, const std::string& outName,
+             int width, const std::string& whose, std::string* error)
+{
+    auto key = [&](const std::string& k) {
+        auto it = keys.find(prefix + k);
+        return it == keys.end() ? std::string() : it->second;
+    };
+    net->width = width;
+    std::string features = key("features"), activation = key("activation");
+    net->efzFeatures = features == "efz";
+    if (!net->efzFeatures && features != "flat") {
+        *error = whose + " features are '" + features + "': this game knows efz and flat";
+        return false;
+    }
+    net->tanh = activation == "tanh";
+    if (!net->tanh && activation != "relu") {
+        *error = whose + " activation is '" + activation + "': this game knows relu and tanh";
+        return false;
+    }
+    auto take = [&](const std::string& tname, int type, size_t dims, Tensor* out) {
+        auto it = tensors.find(tname);
+        if (it == tensors.end() || it->second.type != type || it->second.dims.size() != dims) {
+            *error = "the agent file has no " + tname + " of the right shape";
+            return false;
+        }
+        *out = std::move(it->second);
+        tensors.erase(it);
+        return true;
+    };
+    int in = width;
+    if (net->efzFeatures) {
+        net->selfAction = ToInt(keys, "self_action", 18);
+        net->oppAction = ToInt(keys, "opp_action", 50);
+        net->selfChar = ToInt(keys, "self_char", 34);
+        net->oppChar = ToInt(keys, "opp_char", 66);
+        net->actionVocab = ToInt(keys, "action_vocab", 1024);
+        net->characters = ToInt(keys, "characters", 25);
+        const std::string f = tprefix + "features.";
+        Tensor cont, mean, scale, action, own, chr;
+        if (!take(f + "cont", 1, 1, &cont) || !take(f + "mean", 0, 1, &mean) ||
+            !take(f + "scale", 0, 1, &scale) || !take(f + "action", 0, 2, &action) ||
+            !take(f + "own_action", 0, 2, &own) || !take(f + "char", 0, 2, &chr))
+            return false;
+        size_t n = cont.i.size();
+        if (mean.f.size() != n || scale.f.size() != n ||
+            action.dims[0] != (uint32_t)net->actionVocab ||
+            own.dims[0] != (uint32_t)(net->actionVocab * net->characters) ||
+            own.dims[1] != action.dims[1] || chr.dims[0] != (uint32_t)net->characters) {
+            *error = whose + " features don't fit together";
+            return false;
+        }
+        for (int32_t c : cont.i) {
+            if (c < 0 || c >= width) {
+                *error = whose + " features read past its view";
+                return false;
+            }
+        }
+        for (int c : {net->selfAction, net->oppAction, net->selfChar, net->oppChar}) {
+            if (c < 0 || c >= width) {
+                *error = whose + " features read past its view";
+                return false;
+            }
+        }
+        net->cont = std::move(cont.i);
+        net->mean = std::move(mean.f);
+        net->scale = std::move(scale.f);
+        net->actionDim = (int)action.dims[1];
+        net->charDim = (int)chr.dims[1];
+        net->action = std::move(action.f);
+        net->ownAction = std::move(own.f);
+        net->chr = std::move(chr.f);
+        in = (int)net->cont.size() + 4 * net->actionDim + 2 * net->charDim;
+    }
+    int layers = ToInt(keys, prefix + "layers", 0);
+    if (layers < 0 || layers > 16) {
+        *error = whose + " network has " + std::to_string(layers) + " layers";
+        return false;
+    }
+    net->layers.assign(layers, Net::Dense());
+    for (int k = 0; k <= layers; k++) {
+        Net::Dense& d = k < layers ? net->layers[k] : net->out;
+        std::string base = k < layers ? layer + "." + std::to_string(k) : outName;
+        Tensor w, b;
+        if (!take(base + ".weight", 0, 2, &w) || !take(base + ".bias", 0, 1, &b))
+            return false;
+        if (w.dims[1] != (uint32_t)in || b.dims[0] != w.dims[0]) {
+            *error = whose + " layer " + base + " doesn't fit the one before";
+            return false;
+        }
+        d.in = in;
+        d.out = (int)w.dims[0];
+        d.weight = std::move(w.f);
+        d.bias = std::move(b.f);
+        in = d.out;
+    }
+    return true;
+}
+
+// efz_env.history.InputHistory.push: the newest step first.
+void Push(std::vector<float>& h, uint8_t& prev, uint8_t c)
+{
+    if (h.empty())
+        return;
+    std::copy_backward(h.begin(), h.end() - kInputFeatures, h.end());
+    float* f = h.data();
+    f[0] = (float)((c & 0x01) != 0) - (float)((c & 0x02) != 0); // forward, back
+    f[1] = (float)((c & 0x08) != 0) - (float)((c & 0x04) != 0); // up, down
+    unsigned pressed = (unsigned)(c & ~prev) >> 4;
+    for (int b = 0; b < 4; b++)
+        f[2 + b] = (float)((pressed >> b) & 1);
+    prev = c;
 }
 
 } // namespace
@@ -86,7 +274,8 @@ bool Policy::Load(const char* path, std::string* error)
     return Parse(data.data(), data.size(), error);
 }
 
-bool Policy::Peek(const char* path, std::string* name, int* character, std::string* error)
+bool Policy::Peek(const char* path, std::string* name, int* character, std::string* version,
+                  std::string* error)
 {
     FILE* f = OpenPath(path, "rb");
     if (!f) {
@@ -95,35 +284,27 @@ bool Policy::Peek(const char* path, std::string* name, int* character, std::stri
     }
     unsigned char head[16];
     bool ok = fread(head, 1, 16, f) == 16 && memcmp(head, kMagic, 8) == 0;
-    uint32_t version = 0, size = 0;
+    uint32_t format = 0, size = 0;
     if (ok) {
-        memcpy(&version, head + 8, 4);
+        memcpy(&format, head + 8, 4);
         memcpy(&size, head + 12, 4);
-        ok = version == kVersion && size < (1u << 16);
+        ok = format >= 1 && format <= kFormat && size < (1u << 20);
     }
     std::string text(ok ? size : 0, '\0');
     ok = ok && (size == 0 || fread(&text[0], 1, size, f) == size);
     fclose(f);
     if (!ok) {
-        *error = version && version != kVersion ? "an agent file of another version"
-                                                : "not an agent file";
+        *error = format > kFormat ? "an agent file of format " + std::to_string(format) +
+                                        ": a newer game plays it"
+                                  : std::string("not an agent file");
         return false;
     }
-    *name = "agent";
-    *character = -1;
-    for (size_t at = 0; at < text.size();) {
-        size_t end = text.find('\n', at);
-        if (end == std::string::npos)
-            end = text.size();
-        std::string line = text.substr(at, end - at);
-        at = end + 1;
-        if (line.compare(0, 5, "name=") == 0)
-            *name = line.substr(5);
-        else if (line.compare(0, 10, "character=") == 0)
-            *character = atoi(line.c_str() + 10);
-    }
+    Keys keys = ReadKeys(text);
+    *name = keys.count("name") ? keys["name"] : std::string("agent");
+    *character = ToInt(keys, "character", -1);
     if (*character < -1 || *character >= kCharacters)
         *character = -1;
+    *version = keys["version"];
     return true;
 }
 
@@ -131,16 +312,17 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
 {
     Reader r(data, size);
     char magic[8];
-    uint32_t version = 0, textSize = 0, count = 0;
+    uint32_t fileFormat = 0, textSize = 0, count = 0;
     if (!r.Bytes(magic, 8) || memcmp(magic, kMagic, 8) != 0) {
         *error = "not an agent file (export one with python/examples/export_agent.py)";
         return false;
     }
-    if (!r.Get(&version) || version != kVersion) {
-        *error = "an agent file of version " + std::to_string(version) + "; this game reads " +
-                 std::to_string(kVersion);
+    if (!r.Get(&fileFormat) || fileFormat < 1 || fileFormat > kFormat) {
+        *error = "an agent file of format " + std::to_string(fileFormat) + "; this game reads 1 to " +
+                 std::to_string(kFormat) + (fileFormat > kFormat ? ": a newer game plays it" : "");
         return false;
     }
+    format = (int)fileFormat;
     std::string text;
     if (!r.Get(&textSize) || textSize > size) {
         *error = "the agent file is cut short";
@@ -151,18 +333,8 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         *error = "the agent file is cut short";
         return false;
     }
-    std::map<std::string, std::string> keys;
-    for (size_t at = 0; at < text.size();) {
-        size_t end = text.find('\n', at);
-        if (end == std::string::npos)
-            end = text.size();
-        std::string line = text.substr(at, end - at);
-        at = end + 1;
-        size_t eq = line.find('=');
-        if (eq != std::string::npos)
-            keys[line.substr(0, eq)] = line.substr(eq + 1);
-    }
-    std::map<std::string, Tensor> tensors;
+    Keys keys = ReadKeys(text);
+    Tensors tensors;
     if (!r.Get(&count)) {
         *error = "the agent file is cut short";
         return false;
@@ -213,7 +385,38 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         tensors[tname] = std::move(t);
     }
 
+    // What it is made of: format 2 says; format 1 was the policy and perhaps its routes.
+    int routeCount = ToInt(keys, "routes", 0);
+    if (format >= 2) {
+        modules = keys["modules"];
+        if (modules.empty()) {
+            *error = "the agent file doesn't say what it is made of (its modules)";
+            return false;
+        }
+    } else {
+        modules = routeCount > 0 ? "policy:1,routes:1" : "policy:1";
+    }
+    std::vector<std::string> names;
+    std::string unplayable = Unplayable(modules, &names);
+    if (!unplayable.empty()) {
+        *error = "the agent has the module " + unplayable + ", which this game doesn't play (it "
+                 "plays " + Playable() + "): a newer game does";
+        return false;
+    }
+    bool hasRoutes = Has(names, "routes"), hasChooser = Has(names, "chooser");
+    if (!Has(names, "policy") || hasRoutes != (routeCount > 0) || (hasChooser && !hasRoutes)) {
+        *error = "the agent file's parts don't fit its modules (" + modules + ")";
+        return false;
+    }
+
     name = keys.count("name") ? keys["name"] : std::string("agent");
+    version = keys["version"];
+    about.clear();
+    for (const auto& kv : keys) {
+        if (kv.first.compare(0, 7, "source.") == 0 || kv.first == "exporter" ||
+            kv.first == "exported" || kv.first == "dropped")
+            about[kv.first] = kv.second;
+    }
     character = ToInt(keys, "character", -1);
     if (character < -1 || character >= kCharacters)
         character = -1;
@@ -230,14 +433,13 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
                  " numbers: more than its view and its history";
         return false;
     }
-    efzFeatures_ = keys["features"] == "efz";
-    if (!efzFeatures_ && keys["features"] != "flat") {
-        *error = "the agent's features are '" + keys["features"] + "': this game knows efz and flat";
+
+    // policy:1
+    if (!ReadNet(&net_, keys, tensors, "", "", "pi", "action", width_, "the agent's", error))
         return false;
-    }
-    tanh_ = keys["activation"] == "tanh";
-    if (!tanh_ && keys["activation"] != "relu") {
-        *error = "the agent's activation is '" + keys["activation"] + "': this game knows relu and tanh";
+    if (net_.Outputs() != (int)table.size() || table.empty()) {
+        *error = "the agent has " + std::to_string(net_.Outputs()) + " actions and " +
+                 std::to_string(table.size()) + " control bytes for them";
         return false;
     }
 
@@ -250,77 +452,10 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         *out = std::move(it->second);
         return true;
     };
-    int features = width_;
-    if (efzFeatures_) {
-        selfAction_ = ToInt(keys, "self_action", 18);
-        oppAction_ = ToInt(keys, "opp_action", 50);
-        selfChar_ = ToInt(keys, "self_char", 34);
-        oppChar_ = ToInt(keys, "opp_char", 66);
-        actionVocab_ = ToInt(keys, "action_vocab", 1024);
-        characters_ = ToInt(keys, "characters", 25);
-        Tensor cont, mean, scale, action, own, chr;
-        if (!take("features.cont", 1, 1, &cont) || !take("features.mean", 0, 1, &mean) ||
-            !take("features.scale", 0, 1, &scale) || !take("features.action", 0, 2, &action) ||
-            !take("features.own_action", 0, 2, &own) || !take("features.char", 0, 2, &chr))
-            return false;
-        size_t n = cont.i.size();
-        if (mean.f.size() != n || scale.f.size() != n || action.dims[0] != (uint32_t)actionVocab_ ||
-            own.dims[0] != (uint32_t)(actionVocab_ * characters_) || own.dims[1] != action.dims[1] ||
-            chr.dims[0] != (uint32_t)characters_) {
-            *error = "the agent's features don't fit together";
-            return false;
-        }
-        for (int32_t c : cont.i) {
-            if (c < 0 || c >= width_) {
-                *error = "the agent's features read past its view";
-                return false;
-            }
-        }
-        for (int c : {selfAction_, oppAction_, selfChar_, oppChar_}) {
-            if (c < 0 || c >= width_) {
-                *error = "the agent's features read past its view";
-                return false;
-            }
-        }
-        cont_ = std::move(cont.i);
-        mean_ = std::move(mean.f);
-        scale_ = std::move(scale.f);
-        actionDim_ = (int)action.dims[1];
-        charDim_ = (int)chr.dims[1];
-        action_ = std::move(action.f);
-        ownAction_ = std::move(own.f);
-        char_ = std::move(chr.f);
-        features = (int)cont_.size() + 4 * actionDim_ + 2 * charDim_;
-    }
-    int layers = ToInt(keys, "layers", 0);
-    layers_.assign(layers, Dense());
-    int in = features;
-    for (int k = 0; k <= layers; k++) {
-        Dense& d = k < layers ? layers_[k] : out_;
-        std::string base = k < layers ? "pi." + std::to_string(k) : std::string("action");
-        Tensor w, b;
-        if (!take(base + ".weight", 0, 2, &w) || !take(base + ".bias", 0, 1, &b))
-            return false;
-        if (w.dims[1] != (uint32_t)in || b.dims[0] != w.dims[0]) {
-            *error = "the agent's layer " + base + " doesn't fit the one before";
-            return false;
-        }
-        d.in = in;
-        d.out = (int)w.dims[0];
-        d.weight = std::move(w.f);
-        d.bias = std::move(b.f);
-        in = d.out;
-    }
-    if (out_.out != (int)table.size() || table.empty()) {
-        *error = "the agent has " + std::to_string(out_.out) + " actions and " +
-                 std::to_string(table.size()) + " control bytes for them";
-        return false;
-    }
 
-    // The routes (routes.h), if the file has a combo library.
+    // routes:1 (routes.h)
     routes = Routes();
-    int routeCount = ToInt(keys, "routes", 0);
-    if (routeCount > 0) {
+    if (hasRoutes) {
         if (frameSkip != 1 || delay <= 0 || history <= 0) {
             *error = "the agent's routes need it to decide every frame, with a delay and its "
                      "input history";
@@ -341,13 +476,13 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
                 *error = "the agent's routes don't fit together";
                 return false;
             }
-            Routes::Route r;
-            r.starter = starter.i[k];
-            r.opponent = opponent.i[k];
-            r.begin = (uint32_t)offset.i[k];
-            r.size = (uint32_t)(offset.i[k + 1] - offset.i[k]);
-            routes.list.push_back(r);
-            routes.byStarter[r.starter].push_back(k);
+            Routes::Route rt;
+            rt.starter = starter.i[k];
+            rt.opponent = opponent.i[k];
+            rt.begin = (uint32_t)offset.i[k];
+            rt.size = (uint32_t)(offset.i[k + 1] - offset.i[k]);
+            routes.list.push_back(rt);
+            routes.byStarter[rt.starter].push_back(k);
         }
         for (uint8_t a : actions.u) {
             if (a >= table.size()) {
@@ -356,9 +491,39 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
             }
         }
         routes.actions = std::move(actions.u);
+        // The planner's pool: the file's (routes joined at their moves' hits, in the order
+        // the planner takes them), else the routes themselves.
+        int poolCount = ToInt(keys, "route_pool", 0);
+        if (poolCount > 0) {
+            Tensor route, at, by;
+            if (!take("routes.pool.route", 1, 1, &route) || !take("routes.pool.at", 1, 1, &at) ||
+                !take("routes.pool.starter", 1, 1, &by))
+                return false;
+            if (route.i.size() != (size_t)poolCount || at.i.size() != (size_t)poolCount ||
+                by.i.size() != (size_t)poolCount) {
+                *error = "the agent's routes don't fit together";
+                return false;
+            }
+            for (int k = 0; k < poolCount; k++) {
+                int rk = route.i[k];
+                if (rk < 0 || rk >= routeCount || at.i[k] < 0 ||
+                    (uint32_t)at.i[k] >= routes.list[rk].size) {
+                    *error = "the agent's routes don't fit together";
+                    return false;
+                }
+                routes.pool.push_back(Routes::Entry{rk, at.i[k]});
+                routes.poolByStarter[by.i[k]].push_back(k);
+            }
+        } else {
+            for (int k = 0; k < routeCount; k++) {
+                routes.pool.push_back(Routes::Entry{k, 0});
+                routes.poolByStarter[routes.list[k].starter].push_back(k);
+            }
+        }
         routes.perStart = std::max(1, ToInt(keys, "route_per_start", 12));
         routes.limit = std::max(1, ToInt(keys, "route_limit", 900));
         routes.byVictim = ToInt(keys, "route_by_victim", 0) != 0;
+        routes.replan = ToInt(keys, "route_replan", 0) != 0;
         const std::string& victims = keys["route_victims"];
         for (size_t at = 0; at < victims.size();) {
             size_t end = victims.find(',', at);
@@ -371,28 +536,41 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         }
         routes.source = keys["route_source"];
     }
+
+    // chooser:1
+    chooser = Chooser();
+    if (hasChooser) {
+        if (!ReadNet(&chooser.net, keys, tensors, "chooser_", "chooser.", "chooser.layer",
+                     "chooser.out", width_, "the chooser's", error))
+            return false;
+        if (chooser.net.Outputs() != routeCount + 1) {
+            *error = "the agent's chooser is of " + std::to_string(chooser.net.Outputs() - 1) +
+                     " routes, its library of " + std::to_string(routeCount);
+            return false;
+        }
+        chooser.perStart = std::max(1, ToInt(keys, "chooser_per_start", 12));
+        chooser.margin = ToFloat(keys, "chooser_margin", 200);
+    }
     return true;
 }
 
-void Policy::Forward(const Dense& d, const float* x, float* y) const
+void Net::Forward(const float* view, float* outputs) const
 {
-    for (int o = 0; o < d.out; o++) {
-        const float* w = &d.weight[(size_t)o * d.in];
-        double sum = 0;
-        for (int i = 0; i < d.in; i++)
-            sum += (double)w[i] * x[i];
-        y[o] = (float)(sum + d.bias[o]);
-    }
-}
-
-void Policy::LogProbs(const float* view, float* out) const
-{
+    auto apply = [](const Dense& d, const float* x, float* y) {
+        for (int o = 0; o < d.out; o++) {
+            const float* w = &d.weight[(size_t)o * d.in];
+            double sum = 0;
+            for (int i = 0; i < d.in; i++)
+                sum += (double)w[i] * x[i];
+            y[o] = (float)(sum + d.bias[o]);
+        }
+    };
     std::vector<float> x, y;
-    if (efzFeatures_) {
+    if (efzFeatures) {
         // python/efz_env/policy.py's EfzFeatures.forward.
-        x.reserve(cont_.size() + 4 * actionDim_ + 2 * charDim_);
-        for (size_t i = 0; i < cont_.size(); i++) {
-            float v = (view[cont_[i]] - mean_[i]) * scale_[i];
+        x.reserve(cont.size() + 4 * actionDim + 2 * charDim);
+        for (size_t i = 0; i < cont.size(); i++) {
+            float v = (view[cont[i]] - mean[i]) * scale[i];
             x.push_back(std::min(10.0f, std::max(-10.0f, v)));
         }
         auto index = [&](int column, int count) {
@@ -402,33 +580,73 @@ void Policy::LogProbs(const float* view, float* out) const
         auto append = [&](const std::vector<float>& table, int row, int dim) {
             x.insert(x.end(), table.begin() + (size_t)row * dim, table.begin() + (size_t)(row + 1) * dim);
         };
-        int pairs[2][2] = {{selfAction_, selfChar_}, {oppAction_, oppChar_}};
+        int pairs[2][2] = {{selfAction, selfChar}, {oppAction, oppChar}};
         for (auto& pair : pairs) {
-            int act = index(pair[0], actionVocab_);
-            int chr = index(pair[1], characters_);
-            append(action_, act, actionDim_);
-            append(ownAction_, chr * actionVocab_ + act, actionDim_);
+            int act = index(pair[0], actionVocab);
+            int c = index(pair[1], characters);
+            append(action, act, actionDim);
+            append(ownAction, c * actionVocab + act, actionDim);
         }
-        append(char_, index(selfChar_, characters_), charDim_);
-        append(char_, index(oppChar_, characters_), charDim_);
+        append(chr, index(selfChar, characters), charDim);
+        append(chr, index(oppChar, characters), charDim);
     } else {
-        x.assign(view, view + width_);
+        x.assign(view, view + width);
     }
-    for (const Dense& d : layers_) {
+    for (const Dense& d : layers) {
         y.resize(d.out);
-        Forward(d, x.data(), y.data());
+        apply(d, x.data(), y.data());
         for (float& v : y)
-            v = tanh_ ? tanhf(v) : std::max(0.0f, v);
+            v = tanh ? tanhf(v) : std::max(0.0f, v);
         x.swap(y);
     }
-    Forward(out_, x.data(), out);
-    float most = *std::max_element(out, out + out_.out);
+    apply(out, x.data(), outputs);
+}
+
+void Policy::LogProbs(const float* view, float* out) const
+{
+    net_.Forward(view, out);
+    int n = net_.Outputs();
+    float most = *std::max_element(out, out + n);
     double sum = 0;
-    for (int a = 0; a < out_.out; a++)
+    for (int a = 0; a < n; a++)
         sum += exp((double)out[a] - most);
     float logSum = (float)(most + log(sum));
-    for (int a = 0; a < out_.out; a++)
+    for (int a = 0; a < n; a++)
         out[a] -= logSum;
+}
+
+// combo_net.NetPlanner.plan: of the routes redteam's route_pool takes (the whole routes of
+// the starter, by the library's order; those landed on this opponent first if it was kept
+// per victim; long enough to be played from `offset`; the first per_start), the one it
+// says deals the most, if that is more than its own play by the margin.
+int Policy::Choose(const float* in, int starter, int offset, std::vector<float>* values) const
+{
+    values->assign(chooser.net.Outputs(), 0.0f);
+    if (chooser.Empty())
+        return -1;
+    chooser.net.Forward(in, values->data());
+    for (float& v : *values)
+        v *= 1000.0f;
+    float own = values->back();
+    auto it = routes.byStarter.find(starter);
+    if (it == routes.byStarter.end())
+        return -1;
+    std::vector<int> order = it->second;
+    if (routes.byVictim) {
+        int victim = (int)nearbyintf(in[kOppCharacter]);
+        std::stable_partition(order.begin(), order.end(),
+                              [&](int r) { return routes.list[r].opponent == victim; });
+    }
+    int best = -1, taken = 0;
+    for (int r : order) {
+        if ((int)routes.list[r].size <= offset)
+            continue;
+        if (taken++ >= chooser.perStart)
+            break;
+        if (best < 0 || (*values)[r] > (*values)[best])
+            best = r;
+    }
+    return best >= 0 && (*values)[best] > own + chooser.margin ? best : -1;
 }
 
 Player::Player(const Policy* policy, uint64_t seed) : policy_(policy), rng_(seed)
@@ -449,16 +667,21 @@ void Player::Reset()
     last_ = -1;
     bytes_ = 0;
     queue_.clear();
-    pending_ = false;
-    route_ = -1;
+    pending_ = pendingFirst_ = false;
+    route_.clear();
     routeAt_ = 0;
+    routeOn_ = false;
+    kept_.clear();
+    keptOn_ = false;
+    planned_ = false;
+    hitMove_ = hitAge_ = 0;
     prevHits_ = 0;
     stats_ = RouteStats();
     if (planner_)
         planner_->Cancel();
 }
 
-void Player::SetPlanner(Planner* planner, int side, double patienceMs)
+void Player::SetPlanner(Planner* planner, int side, double patienceMs, double againMs)
 {
     const Policy& p = *policy_;
     if (planner && (p.routes.Empty() || p.frameSkip != 1 || p.delay <= 0 || p.history <= 0))
@@ -466,22 +689,13 @@ void Player::SetPlanner(Planner* planner, int side, double patienceMs)
     planner_ = planner;
     side_ = side;
     patienceMs_ = patienceMs;
+    againMs_ = patienceMs < 0 ? patienceMs : againMs;
     Reset();
 }
 
-// efz_env.history.InputHistory.push: the newest step first.
 void Player::PushInput(uint8_t c)
 {
-    if (inputs_.empty())
-        return;
-    std::copy_backward(inputs_.begin(), inputs_.end() - kInputFeatures, inputs_.end());
-    float* f = inputs_.data();
-    f[0] = (float)((c & 0x01) != 0) - (float)((c & 0x02) != 0); // forward, back
-    f[1] = (float)((c & 0x08) != 0) - (float)((c & 0x04) != 0); // up, down
-    unsigned pressed = (unsigned)(c & ~prev_) >> 4;
-    for (int b = 0; b < 4; b++)
-        f[2 + b] = (float)((pressed >> b) & 1);
-    prev_ = c;
+    Push(inputs_, prev_, c);
 }
 
 int Player::Sample(const float* in, bool deterministic)
@@ -499,39 +713,53 @@ int Player::Sample(const float* in, bool deterministic)
     return n - 1;
 }
 
-// LiveRoutes._begin: at its hit, its inputs for the `delay` frames until it sees the hit,
-// chosen now from what it will see then (the views it has), and the plan asked for.
+// LiveRoutes._begin: at its hit (or hitAge_ frames after: a plan was awaited), its inputs
+// for the `delay` frames until it sees the hit, chosen now: the route's it is on, then
+// its own play's from what it will see then (the views it has); and the plan asked for,
+// the rest of that route after them one of the options.
 void Player::Begin(const float* view, bool deterministic)
 {
     const int delay = policy_->delay;
+    std::vector<int> rest;
+    if (routeOn_)
+        rest.assign(route_.begin() + routeAt_, route_.end());
     std::vector<float> hist = inputs_, in(in_.size());
     uint8_t prev = prev_;
     std::vector<int> actions;
     for (int k = 0; k < delay; k++) {
-        std::copy(seen_.begin() + (size_t)(delay - k) * kObsDim,
-                  seen_.begin() + (size_t)(delay - k + 1) * kObsDim, in.begin());
-        std::copy(hist.begin(), hist.end(), in.begin() + kObsDim);
-        int a = Sample(in.data(), deterministic);
+        int a;
+        if (k < (int)rest.size()) {
+            a = rest[k];
+        } else {
+            std::copy(seen_.begin() + (size_t)(delay - k) * kObsDim,
+                      seen_.begin() + (size_t)(delay - k + 1) * kObsDim, in.begin());
+            std::copy(hist.begin(), hist.end(), in.begin() + kObsDim);
+            a = Sample(in.data(), deterministic);
+        }
         actions.push_back(a);
-        // (the history's push, as PushInput's)
-        uint8_t c = policy_->table[a];
-        std::copy_backward(hist.begin(), hist.end() - kInputFeatures, hist.end());
-        float* f = hist.data();
-        f[0] = (float)((c & 0x01) != 0) - (float)((c & 0x02) != 0);
-        f[1] = (float)((c & 0x08) != 0) - (float)((c & 0x04) != 0);
-        unsigned pressed = (unsigned)(c & ~prev) >> 4;
-        for (int b = 0; b < 4; b++)
-            f[2 + b] = (float)((pressed >> b) & 1);
-        prev = c;
+        Push(hist, prev, policy_->table[a]);
     }
-    planner_->Begin(side_, (int)nearbyintf(view[kSelfAction]), actions, hist.data(), prev,
-                    deterministic, view);
+    stats_.again += planned_;
+    pendingFirst_ = !planned_;
+    waitMs_ = planned_ ? againMs_ : patienceMs_;
+    keptOn_ = (int)rest.size() > delay;
+    std::vector<int> extra;
+    if (keptOn_)
+        extra.assign(rest.begin() + delay, rest.end());
+    kept_ = keptOn_ ? rest : std::vector<int>();
+    planner_->Begin(side_, hitMove_, actions, hist.data(), prev, deterministic, view, hitAge_, extra);
+    pendingMove_ = hitMove_;
+    pendingOffset_ = delay + hitAge_;
     queue_.assign(actions.begin(), actions.end());
     pending_ = true;
+    routeOn_ = false;
+    planned_ = true;
+    plannedMove_ = hitMove_;
 }
 
 // LiveRoutes._result: `delay` frames after its hit, the plan, if the game is where it was
-// planned from and the combo goes on.
+// planned from and the combo goes on. Until a plan says otherwise, on with the route it
+// was on; a combo's first plan late: the chooser's pick.
 void Player::Result(const float* view)
 {
     typedef Planner::Clock Clock;
@@ -539,17 +767,39 @@ void Player::Result(const float* view)
     Clock::time_point t0 = Clock::now();
     bool done = planner_->Done();
     if (!done) {
-        Clock::time_point until = patienceMs_ < 0 ? Clock::time_point::max()
+        Clock::time_point until = waitMs_ < 0 ? Clock::time_point::max()
             : t0 + std::chrono::duration_cast<Clock::duration>(
-                       std::chrono::duration<double, std::milli>(patienceMs_));
+                       std::chrono::duration<double, std::milli>(waitMs_));
         done = planner_->Work(until);
     }
     double waited = std::chrono::duration<double, std::milli>(Clock::now() - t0).count();
     stats_.waitedMs += waited;
     stats_.waitedMsMost = std::max(stats_.waitedMsMost, waited);
+    int hits = Hits(view);
+    bool kept = keptOn_;
+    keptOn_ = false;
+    if (hits > 0 && kept) {
+        route_.swap(kept_);
+        routeAt_ = (size_t)policy_->delay;
+        routeOn_ = true;
+    }
+    kept_.clear();
     if (!done) {
         planner_->Cancel();
         stats_.late++;
+        // (the chooser sees what the agent sees now: its hit)
+        if (pendingFirst_ && hits > 0 && !policy_->chooser.Empty()) {
+            int r = policy_->Choose(in_.data(), pendingMove_, pendingOffset_, &values_);
+            if (r >= 0) {
+                const Routes& routes = policy_->routes;
+                const Routes::Route& rt = routes.list[r];
+                route_.assign(routes.actions.begin() + rt.begin + pendingOffset_,
+                              routes.actions.begin() + rt.begin + rt.size);
+                routeAt_ = 0;
+                routeOn_ = true;
+                stats_.chooser++;
+            }
+        }
         return;
     }
     stats_.planMs += planner_->ms;
@@ -564,7 +814,7 @@ void Player::Result(const float* view)
         stats_.apart++;
         return;
     }
-    if (Hits(view) == 0) {
+    if (hits == 0) {
         stats_.over++;
         return;
     }
@@ -577,8 +827,11 @@ void Player::Result(const float* view)
     stats_.plans++;
     if (planner_->chosen >= 0) {
         stats_.routes++;
-        route_ = planner_->chosen;
-        routeAt_ = planner_->offset;
+        route_ = planner_->route;
+        routeAt_ = 0;
+        routeOn_ = true;
+    } else {
+        routeOn_ = false;
     }
 }
 
@@ -610,26 +863,32 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
     } else {
         // LiveRoutes.__call__: the inputs chosen at its hit, then the route chosen (until
         // its actions run out or the combo is over), else its own play; a hit of its own
-        // (its combo counter, as the game is) starts a plan.
+        // (its combo counter, as the game is) starts a plan: the combo's first, and with
+        // replan each new move's.
         int hits = Hits(view);
+        if (hits > prevHits_) {
+            hitMove_ = (int)nearbyintf(view[kSelfAction]);
+            hitAge_ = 0;
+        } else {
+            hitAge_++;
+        }
+        if (hits == 0)
+            planned_ = false;
         if (pending_ && queue_.empty())
             Result(view);
-        const Routes& routes = policy_->routes;
+        if (routeOn_ && ((hits == 0 && routeAt_ > 0) || routeAt_ >= route_.size()))
+            routeOn_ = false; // it ended, or dropped
+        bool again = policy_->routes.replan ? !(planned_ && hitMove_ == plannedMove_)
+                                            : prevHits_ == 0 && !routeOn_;
+        if (!pending_ && hits > 0 && again)
+            Begin(view, deterministic);
         if (!queue_.empty()) {
             action = queue_.front();
             queue_.pop_front();
-        } else if (route_ >= 0 && !(hits == 0 && routeAt_ > planner_->offset) &&
-                   routeAt_ < (int)routes.list[route_].size) {
-            action = routes.actions[routes.list[route_].begin + routeAt_++];
+        } else if (routeOn_) {
+            action = route_[routeAt_++];
         } else {
-            route_ = -1;
-            if (hits > 0 && prevHits_ == 0 && !pending_) {
-                Begin(view, deterministic);
-                action = queue_.front();
-                queue_.pop_front();
-            } else {
-                action = Sample(in_.data(), deterministic);
-            }
+            action = Sample(in_.data(), deterministic);
         }
         prevHits_ = hits;
     }
