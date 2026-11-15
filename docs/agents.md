@@ -147,6 +147,13 @@ the opponent's inputs, or a rollback, change the frames it was made for.
   `_live_worker` runs it, on the same game with a library of random routes: the same
   routes tried, the same damage from each and from its own play, the same route chosen,
   the same view expected; and the game left byte for byte as it was.
+- Round 15's agent and its library (848 routes), at its hits against the CPU's Mai,
+  Nayuki (B) and Misaki: 40 plans of the game's planner beside `redteam.py`'s, as
+  `_live_worker` makes them. Every route dealt the same, but 5 KOs before the last round
+  (above); the same route chosen in all 36 that could be compared; its own play on the
+  copies the same in 36 of 38 (two near-ties of its likeliest action, which the network's
+  float differences from PyTorch, 5e-5, tip). A plan took 77 ms at the median in the
+  library (whose copies are whole games), the Python planner's 139.
 - `tests/headless_test.cpp`: the routes read from an agent file, and the player and planner
   on a game of a few numbers: the inputs chosen at the hit, then the route that deals the
   most; dropped when the game is elsewhere, or when there's no time to plan; the same plan
