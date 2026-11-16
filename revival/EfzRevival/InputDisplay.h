@@ -15,37 +15,37 @@
 inline std::wstring inputString(BYTE input)
 {
     std::wstring text(L"");
-    if ((input & 2) && (input & 8))
+    if ((input & kInputLeft) && (input & kInputUp))
         text.append(L"\x2196 ");
-    else if ((input & 2) && (input & 4))
+    else if ((input & kInputLeft) && (input & kInputDown))
         text.append(L"\x2199 ");
-    else if ((input & 1) && (input & 8))
+    else if ((input & kInputRight) && (input & kInputUp))
         text.append(L"\x2197 ");
-    else if ((input & 1) && (input & 4))
+    else if ((input & kInputRight) && (input & kInputDown))
         text.append(L"\x2198 ");
-    else if (input & 8)
+    else if (input & kInputUp)
         text.append(L"\x2191 ");
-    else if (input & 2)
+    else if (input & kInputLeft)
         text.append(L"\x2190 ");
-    else if (input & 4)
+    else if (input & kInputDown)
         text.append(L"\x2193 ");
-    else if (input & 1)
+    else if (input & kInputRight)
         text.append(L"\x2192 ");
     else
         text.append(L"  ");
-    if (input & 0x10)
+    if (input & kInputA)
         text.append(L"A");
     else
         text.append(L" ");
-    if (input & 0x20)
+    if (input & kInputB)
         text.append(L"B");
     else
         text.append(L" ");
-    if (input & 0x40)
+    if (input & kInputC)
         text.append(L"C");
     else
         text.append(L" ");
-    if (input & 0x80)
+    if (input & kInputD)
         text.append(L"D");
     return text;
 }

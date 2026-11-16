@@ -1,0 +1,68 @@
+--vs matches: 48
+/home/sakuya/.local/share/asm/worktrees/7d5819c6-6711-43ef-94f0-eec81ecbecb4/.venv-llm/lib/python3.11/site-packages/stable_baselines3/common/vec_env/base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+starting from runs/human-ayu/agent-league7/best.zip
+before: cpu: win 0% loss 100% cut 0%, 1.04 presses/s, per min 11.81 jumps 11.03 guards 16.52+1.36 hits, RG 0.052/0.142 RC 0.052, after RG move/hit 0.358/0.108, combo avg/p90/max 468/858/2156 IC 0.0 | vs0: win 0% loss 100% cut 0%, 1.11 presses/s, per min 15.56 jumps 18.44 guards 14.54+0.07 hits, RG 0.062/0.0 RC 0.0, after RG move/hit 0.21/0.048, combo avg/p90/max 480/760/1396 IC 0.0
+--vs matches: 48
+[158.2M steps, 221s, L3, KL 0.069, setup 12.19/min] cpu: win 0% loss 100% cut 0%, 1.32 presses/s, per min 9.65 jumps 21.94 guards 12.2+1.26 hits, RG 0.042/0.063 RC 0.052, after RG move/hit 0.329/0.091, combo avg/p90/max 432/757/3391 IC 0.0 | vs0: win 0% loss 100% cut 0%, 1.6 presses/s, per min 5.6 jumps 37.49 guards 6.29+0.11 hits, RG 0.032/0.111 RC 0.095, after RG move/hit 0.178/0.099, combo avg/p90/max 397/687/1551 IC 0.0
+--vs matches: 48
+/home/sakuya/.local/share/asm/worktrees/7d5819c6-6711-43ef-94f0-eec81ecbecb4/.venv-llm/lib/python3.11/site-packages/stable_baselines3/common/vec_env/base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+best so far (0.109): best.zip
+[159.2M steps, 183s, L3, KL 0.071, setup 17.02/min] cpu: win 22% loss 62% cut 16%, 1.6 presses/s, per min 7.98 jumps 17.39 guards 9.31+0.86 hits, RG 0.033/0.112 RC 0.058, after RG move/hit 0.266/0.073, combo avg/p90/max 561/1109/1684 IC 0.0 | vs0: win 0% loss 100% cut 0%, 1.99 presses/s, per min 6.76 jumps 26.36 guards 7.71+0.1 hits, RG 0.022/0.222 RC 0.067, after RG move/hit 0.167/0.125, combo avg/p90/max 648/1226/1586 IC 0.0
+--vs matches: 48
+best so far (0.156): best.zip
+[160.2M steps, 110s, L3, KL 0.064, setup 25.03/min] cpu: win 28% loss 62% cut 9%, 1.78 presses/s, per min 6.97 jumps 16.39 guards 10.02+1.0 hits, RG 0.044/0.036 RC 0.098, after RG move/hit 0.459/0.156, combo avg/p90/max 602/1150/1650 IC 0.0 | vs0: win 3% loss 97% cut 0%, 2.15 presses/s, per min 7.96 jumps 25.91 guards 9.35+0.0 hits, RG 0.028/0.5 RC 0.115, after RG move/hit 0.327/0.192, combo avg/p90/max 717/1247/1587 IC 0.0
+--vs matches: 48
+best so far (0.172): best.zip
+[161.3M steps, 115s, L3, KL 0.068, setup 26.08/min] cpu: win 31% loss 53% cut 16%, 1.79 presses/s, per min 7.07 jumps 18.32 guards 9.81+1.01 hits, RG 0.036/0.053 RC 0.047, after RG move/hit 0.442/0.163, combo avg/p90/max 610/1153/1500 IC 0.005 | vs0: win 3% loss 97% cut 0%, 1.96 presses/s, per min 7.97 jumps 28.25 guards 9.54+0.06 hits, RG 0.031/0.0 RC 0.167, after RG move/hit 0.323/0.21, combo avg/p90/max 722/1254/1433 IC 0.0
+--vs matches: 48
+[162.3M steps, 139s, L3, KL 0.068, setup 28.13/min] cpu: win 28% loss 69% cut 3%, 1.78 presses/s, per min 7.76 jumps 14.84 guards 11.49+1.28 hits, RG 0.052/0.025 RC 0.041, after RG move/hit 0.415/0.169, combo avg/p90/max 565/1126/3854 IC 0.0 | vs0: win 6% loss 94% cut 0%, 1.82 presses/s, per min 7.76 jumps 25.91 guards 8.06+0.09 hits, RG 0.063/0.0 RC 0.133, after RG move/hit 0.246/0.131, combo avg/p90/max 723/1230/1585 IC 0.0
+--vs matches: 48
+best so far (0.219): best.zip
+[163.3M steps, 141s, L3, KL 0.061, setup 30.00/min] cpu: win 25% loss 66% cut 9%, 1.89 presses/s, per min 7.05 jumps 16.32 guards 10.11+1.04 hits, RG 0.037/0.05 RC 0.024, after RG move/hit 0.421/0.103, combo avg/p90/max 605/1152/1607 IC 0.0 | vs0: win 19% loss 81% cut 0%, 2.05 presses/s, per min 6.65 jumps 25.5 guards 7.73+0.05 hits, RG 0.038/0.0 RC 0.059, after RG move/hit 0.244/0.064, combo avg/p90/max 727/1241/1471 IC 0.0
+--vs matches: 48
+[164.3M steps, 143s, L3, KL 0.068, setup 32.37/min] cpu: win 22% loss 66% cut 12%, 2.03 presses/s, per min 6.78 jumps 16.31 guards 10.33+0.8 hits, RG 0.048/0.078 RC 0.042, after RG move/hit 0.511/0.209, combo avg/p90/max 611/1171/1583 IC 0.002 | vs0: win 16% loss 84% cut 0%, 2.09 presses/s, per min 6.8 jumps 25.15 guards 8.12+0.05 hits, RG 0.051/0.25 RC 0.083, after RG move/hit 0.126/0.019, combo avg/p90/max 724/1246/1417 IC 0.0
+--vs matches: 48
+best so far (0.250): best.zip
+[165.3M steps, 117s, L3, KL 0.074, setup 32.90/min] cpu: win 44% loss 50% cut 6%, 2.0 presses/s, per min 7.09 jumps 17.03 guards 10.05+0.75 hits, RG 0.052/0.045 RC 0.016, after RG move/hit 0.396/0.174, combo avg/p90/max 626/1157/1489 IC 0.004 | vs0: win 6% loss 94% cut 0%, 2.07 presses/s, per min 7.54 jumps 24.39 guards 8.15+0.08 hits, RG 0.058/0.0 RC 0.182, after RG move/hit 0.192/0.042, combo avg/p90/max 800/1241/1521 IC 0.0
+--vs matches: 48
+best so far (0.266): best.zip
+[166.3M steps, 110s, L3, KL 0.066, setup 31.75/min] cpu: win 38% loss 56% cut 6%, 1.97 presses/s, per min 6.76 jumps 15.85 guards 10.36+1.0 hits, RG 0.046/0.045 RC 0.051, after RG move/hit 0.417/0.165, combo avg/p90/max 617/1157/1584 IC 0.002 | vs0: win 16% loss 84% cut 0%, 1.95 presses/s, per min 6.73 jumps 24.49 guards 7.97+0.07 hits, RG 0.066/0.143 RC 0.0, after RG move/hit 0.176/0.076, combo avg/p90/max 752/1233/1428 IC 0.003
+--vs matches: 48
+best so far (0.281): best.zip
+[167.3M steps, 108s, L3, KL 0.068, setup 32.47/min] cpu: win 41% loss 50% cut 9%, 1.74 presses/s, per min 6.91 jumps 16.72 guards 10.47+0.89 hits, RG 0.045/0.042 RC 0.03, after RG move/hit 0.341/0.119, combo avg/p90/max 635/1180/1556 IC 0.0 | vs0: win 16% loss 84% cut 0%, 1.73 presses/s, per min 6.09 jumps 27.56 guards 6.97+0.04 hits, RG 0.073/0.0 RC 0.0, after RG move/hit 0.152/0.071, combo avg/p90/max 778/1256/1952 IC 0.0
+--vs matches: 48
+[168.4M steps, 102s, L3, KL 0.066, setup 32.80/min] cpu: win 34% loss 53% cut 12%, 1.69 presses/s, per min 6.88 jumps 19.9 guards 9.17+0.88 hits, RG 0.056/0.1 RC 0.018, after RG move/hit 0.407/0.164, combo avg/p90/max 626/1184/1578 IC 0.009 | vs0: win 12% loss 88% cut 0%, 1.72 presses/s, per min 5.82 jumps 31.39 guards 6.24+0.13 hits, RG 0.089/0.091 RC 0.217, after RG move/hit 0.163/0.053, combo avg/p90/max 755/1240/1413 IC 0.003
+--vs matches: 48
+best so far (0.344): best.zip
+[169.4M steps, 106s, L3, KL 0.065, setup 32.68/min] cpu: win 44% loss 53% cut 3%, 2.02 presses/s, per min 7.61 jumps 14.79 guards 9.16+1.2 hits, RG 0.044/0.04 RC 0.032, after RG move/hit 0.491/0.164, combo avg/p90/max 630/1180/1475 IC 0.004 | vs0: win 25% loss 75% cut 0%, 1.94 presses/s, per min 6.25 jumps 26.82 guards 6.54+0.11 hits, RG 0.06/0.1 RC 0.0, after RG move/hit 0.168/0.047, combo avg/p90/max 750/1217/1545 IC 0.0
+--vs matches: 48
+best so far (0.359): best.zip
+[170.4M steps, 116s, L3, KL 0.071, setup 34.65/min] cpu: win 50% loss 38% cut 12%, 2.0 presses/s, per min 6.11 jumps 15.67 guards 9.39+0.76 hits, RG 0.049/0.062 RC 0.044, after RG move/hit 0.393/0.141, combo avg/p90/max 622/1153/1886 IC 0.0 | vs0: win 22% loss 78% cut 0%, 1.92 presses/s, per min 6.5 jumps 28.0 guards 7.3+0.03 hits, RG 0.067/0.0 RC 0.143, after RG move/hit 0.228/0.101, combo avg/p90/max 736/1212/1558 IC 0.0
+--vs matches: 48
+[171.4M steps, 112s, L3, KL 0.059, setup 35.37/min] cpu: win 44% loss 47% cut 9%, 1.89 presses/s, per min 5.28 jumps 17.63 guards 9.53+0.74 hits, RG 0.035/0.068 RC 0.043, after RG move/hit 0.515/0.188, combo avg/p90/max 650/1185/1637 IC 0.0 | vs0: win 19% loss 81% cut 0%, 1.91 presses/s, per min 6.59 jumps 25.47 guards 7.93+0.1 hits, RG 0.053/0.143 RC 0.045, after RG move/hit 0.182/0.036, combo avg/p90/max 769/1220/1539 IC 0.0
+--vs matches: 48
+[172.4M steps, 116s, L3, KL 0.066, setup 34.87/min] cpu: win 41% loss 53% cut 6%, 2.31 presses/s, per min 5.77 jumps 14.05 guards 10.46+0.95 hits, RG 0.048/0.062 RC 0.048, after RG move/hit 0.56/0.233, combo avg/p90/max 619/1195/2897 IC 0.002 | vs0: win 16% loss 84% cut 0%, 2.2 presses/s, per min 6.65 jumps 22.56 guards 7.8+0.03 hits, RG 0.058/0.0 RC 0.25, after RG move/hit 0.15/0.053, combo avg/p90/max 776/1226/1402 IC 0.002
+--vs matches: 48
+best so far (0.391): best.zip
+[173.4M steps, 111s, L3, KL 0.070, setup 35.09/min] cpu: win 44% loss 47% cut 9%, 1.82 presses/s, per min 6.4 jumps 16.05 guards 9.34+1.02 hits, RG 0.044/0.018 RC 0.073, after RG move/hit 0.31/0.121, combo avg/p90/max 634/1179/1527 IC 0.006 | vs0: win 34% loss 66% cut 0%, 1.72 presses/s, per min 5.3 jumps 27.49 guards 6.08+0.04 hits, RG 0.046/0.0 RC 0.111, after RG move/hit 0.156/0.057, combo avg/p90/max 756/1213/1425 IC 0.0
+--vs matches: 48
+best so far (0.422): best.zip
+[174.5M steps, 103s, L3, KL 0.072, setup 36.07/min] cpu: win 47% loss 34% cut 19%, 2.01 presses/s, per min 5.89 jumps 17.03 guards 9.16+0.78 hits, RG 0.033/0.03 RC 0.038, after RG move/hit 0.447/0.181, combo avg/p90/max 658/1184/1612 IC 0.0 | vs0: win 38% loss 62% cut 0%, 1.93 presses/s, per min 5.31 jumps 24.8 guards 6.15+0.03 hits, RG 0.035/0.0 RC 0.043, after RG move/hit 0.155/0.071, combo avg/p90/max 778/1208/1399 IC 0.006
+--vs matches: 48
+best so far (0.453): best.zip
+[175.5M steps, 104s, L3, KL 0.070, setup 35.03/min] cpu: win 56% loss 34% cut 9%, 2.01 presses/s, per min 5.54 jumps 15.63 guards 9.59+0.86 hits, RG 0.044/0.044 RC 0.026, after RG move/hit 0.468/0.135, combo avg/p90/max 677/1175/1943 IC 0.002 | vs0: win 34% loss 66% cut 0%, 2.12 presses/s, per min 5.67 jumps 21.41 guards 6.92+0.03 hits, RG 0.056/0.0 RC 0.087, after RG move/hit 0.177/0.08, combo avg/p90/max 792/1229/1588 IC 0.0
+--vs matches: 48
+[176.5M steps, 114s, L3, KL 0.073, setup 35.90/min] cpu: win 50% loss 38% cut 12%, 1.98 presses/s, per min 4.69 jumps 18.02 guards 9.53+0.58 hits, RG 0.027/0.045 RC 0.031, after RG move/hit 0.325/0.13, combo avg/p90/max 661/1192/1740 IC 0.0 | vs0: win 22% loss 78% cut 0%, 1.84 presses/s, per min 4.89 jumps 26.98 guards 6.17+0.01 hits, RG 0.032/0.0 RC 0.105, after RG move/hit 0.237/0.15, combo avg/p90/max 724/1202/1377 IC 0.002
+--vs matches: 48
+[177.5M steps, 111s, L3, KL 0.068, setup 35.37/min] cpu: win 53% loss 44% cut 3%, 2.16 presses/s, per min 6.11 jumps 14.81 guards 9.43+0.74 hits, RG 0.036/0.068 RC 0.039, after RG move/hit 0.436/0.17, combo avg/p90/max 655/1175/1561 IC 0.002 | vs0: win 16% loss 84% cut 0%, 2.17 presses/s, per min 6.49 jumps 23.82 guards 7.64+0.06 hits, RG 0.032/0.2 RC 0.105, after RG move/hit 0.25/0.069, combo avg/p90/max 762/1220/1508 IC 0.0
+--vs matches: 48
+[178.5M steps, 113s, L3, KL 0.069, setup 37.28/min] cpu: win 47% loss 44% cut 9%, 1.9 presses/s, per min 6.43 jumps 16.59 guards 9.11+0.98 hits, RG 0.048/0.061 RC 0.015, after RG move/hit 0.435/0.181, combo avg/p90/max 628/1177/1541 IC 0.002 | vs0: win 28% loss 72% cut 0%, 1.89 presses/s, per min 5.45 jumps 26.3 guards 6.11+0.05 hits, RG 0.033/0.0 RC 0.16, after RG move/hit 0.185/0.111, combo avg/p90/max 770/1209/1469 IC 0.0
+--vs matches: 48
+[179.5M steps, 111s, L3, KL 0.070, setup 36.07/min] cpu: win 47% loss 47% cut 6%, 1.91 presses/s, per min 6.98 jumps 12.86 guards 10.82+1.16 hits, RG 0.051/0.059 RC 0.03, after RG move/hit 0.439/0.163, combo avg/p90/max 637/1138/1619 IC 0.002 | vs0: win 25% loss 75% cut 0%, 1.96 presses/s, per min 6.41 jumps 22.79 guards 8.0+0.08 hits, RG 0.064/0.0 RC 0.1, after RG move/hit 0.227/0.091, combo avg/p90/max 777/1212/1585 IC 0.002
+--vs matches: 48
+[180.6M steps, 104s, L3, KL 0.068, setup 36.29/min] cpu: win 41% loss 53% cut 6%, 2.05 presses/s, per min 6.72 jumps 15.3 guards 10.53+0.93 hits, RG 0.042/0.08 RC 0.016, after RG move/hit 0.517/0.198, combo avg/p90/max 650/1183/1560 IC 0.004 | vs0: win 28% loss 72% cut 0%, 2.1 presses/s, per min 6.23 jumps 22.49 guards 7.46+0.08 hits, RG 0.052/0.0 RC 0.158, after RG move/hit 0.245/0.1, combo avg/p90/max 763/1222/1457 IC 0.006
+--vs matches: 48
+[181.6M steps, 101s, L3, KL 0.070, setup 36.35/min] cpu: win 59% loss 34% cut 6%, 1.96 presses/s, per min 6.51 jumps 15.09 guards 9.57+0.95 hits, RG 0.054/0.069 RC 0.016, after RG move/hit 0.518/0.226, combo avg/p90/max 652/1170/1586 IC 0.004 | vs0: win 16% loss 84% cut 0%, 1.88 presses/s, per min 6.08 jumps 24.14 guards 7.0+0.03 hits, RG 0.071/0.0 RC 0.176, after RG move/hit 0.195/0.082, combo avg/p90/max 784/1219/1441 IC 0.0
+done

@@ -1,0 +1,104 @@
+{
+ "args": {
+  "data": "D:/tasogare/EFZ",
+  "starts": "D:/tasogare/efz-replays/combo-starts",
+  "replays": null,
+  "out": "runs/human-ayu/combo",
+  "start": "runs/human-ayu/combo\\combo.zip",
+  "prior": "C:\\Users\\sakuy\\.local\\share\\asm\\worktrees\\28c0039a-e9f0-4d37-971f-5c6186c8c9d1\\runs\\human-ayu\\bc-d14.zip",
+  "prior_coef": 0.02,
+  "delay": 14,
+  "history": 16,
+  "limit": 1200,
+  "focus": 0.5,
+  "resume": true,
+  "pool": 624,
+  "envs": 64,
+  "chunk": 1000000.0,
+  "budget": 8000000.0,
+  "lr": 0.0001,
+  "ent_coef": 0.005,
+  "torch_threads": 12
+ },
+ "history": [
+  {
+   "steps": 0,
+   "eval": {
+    "starts": 64,
+    "damage": 259.5,
+    "human_damage": 510.2656230250723,
+    "hits": 2.109375,
+    "human_hits": 3.265625,
+    "better": 0.140625,
+    "ic": 0.015625,
+    "special": 0.234375
+   }
+  },
+  {
+   "steps": 1001472,
+   "seconds": 506.87830114364624,
+   "prior_kl": 0.17555372416973114,
+   "eval": {
+    "starts": 64,
+    "damage": 494.375,
+    "human_damage": 510.2656230250723,
+    "hits": 2.671875,
+    "human_hits": 3.265625,
+    "better": 0.25,
+    "ic": 0.0625,
+    "special": 0.515625
+   }
+  },
+  {
+   "steps": 2002944,
+   "seconds": 400.00408577919006,
+   "prior_kl": 0.23226052522659302,
+   "eval": {
+    "starts": 64,
+    "damage": 607.59375,
+    "human_damage": 510.2656230250723,
+    "hits": 3.078125,
+    "human_hits": 3.265625,
+    "better": 0.328125,
+    "ic": 0.0625,
+    "special": 0.609375
+   }
+  },
+  {
+   "steps": 3004416,
+   "seconds": 360.3062469959259,
+   "prior_kl": 0.195895254611969,
+   "eval": {
+    "starts": 64,
+    "damage": 611.125,
+    "human_damage": 510.2656230250723,
+    "hits": 3.03125,
+    "human_hits": 3.265625,
+    "better": 0.359375,
+    "ic": 0.015625,
+    "special": 0.578125
+   }
+  },
+  {
+   "steps": 4012032,
+   "seconds": 311.0637936592102,
+   "prior_kl": 0.2176496535539627,
+   "eval": {
+    "starts": 82,
+    "damage": 602.0731707317074,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 1581.4,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 2662.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 3.1341463414634148,
+    "human_hits": 3.268292682926829,
+    "hits_max": 10.0,
+    "human_hits_max": 20.0,
+    "better": 0.35365853658536583,
+    "ic": 0.012195121951219513,
+    "special": 0.5365853658536586
+   }
+  }
+ ]
+}

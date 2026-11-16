@@ -1,0 +1,116 @@
+{
+ "starts": "own",
+ "n": 200,
+ "kinds": {
+  "ground-mid": 51,
+  "air-mid": 25,
+  "ground-corner": 114,
+  "air-corner": 10
+ },
+ "models": {
+  "runs/human-ayu/agent-league2-kl/chunk005.zip": {
+   "as-is": {
+    "starts": 200,
+    "damage": 864.885,
+    "damage_p90": 1700.1,
+    "damage_max": 2048.0,
+    "hits": 3.56,
+    "hits_max": 9.0,
+    "ic": 0.01,
+    "special": 0.72
+   },
+   "blue0": {
+    "starts": 200,
+    "damage": 822.35,
+    "damage_p90": 1673.8,
+    "damage_max": 2082.0,
+    "hits": 3.475,
+    "hits_max": 7.0,
+    "ic": 0.0,
+    "special": 0.67
+   },
+   "red0": {
+    "starts": 200,
+    "damage": 830.945,
+    "damage_p90": 1730.3,
+    "damage_max": 2094.0,
+    "hits": 3.48,
+    "hits_max": 9.0,
+    "ic": 0.01,
+    "special": 0.675
+   },
+   "cyan0": {
+    "starts": 200,
+    "damage": 837.77,
+    "damage_p90": 1762.1,
+    "damage_max": 2673.0,
+    "hits": 3.445,
+    "hits_max": 9.0,
+    "ic": 0.01,
+    "special": 0.66
+   },
+   "cyan3": {
+    "starts": 200,
+    "damage": 966.41,
+    "damage_p90": 1851.3,
+    "damage_max": 2684.0,
+    "hits": 3.75,
+    "hits_max": 9.0,
+    "ic": 0.015,
+    "special": 0.715
+   }
+  },
+  "runs/human-ayu/agent-league2-own10/model.zip": {
+   "as-is": {
+    "starts": 200,
+    "damage": 944.755,
+    "damage_p90": 1740.3,
+    "damage_max": 2000.0,
+    "hits": 3.73,
+    "hits_max": 7.0,
+    "ic": 0.005,
+    "special": 0.715
+   },
+   "blue0": {
+    "starts": 200,
+    "damage": 894.145,
+    "damage_p90": 1724.1,
+    "damage_max": 2478.0,
+    "hits": 3.71,
+    "hits_max": 10.0,
+    "ic": 0.0,
+    "special": 0.705
+   },
+   "red0": {
+    "starts": 200,
+    "damage": 928.695,
+    "damage_p90": 1753.6,
+    "damage_max": 2072.0,
+    "hits": 3.64,
+    "hits_max": 7.0,
+    "ic": 0.01,
+    "special": 0.705
+   },
+   "cyan0": {
+    "starts": 200,
+    "damage": 953.72,
+    "damage_p90": 1815.5,
+    "damage_max": 2495.0,
+    "hits": 3.655,
+    "hits_max": 8.0,
+    "ic": 0.005,
+    "special": 0.725
+   },
+   "cyan3": {
+    "starts": 200,
+    "damage": 960.515,
+    "damage_p90": 1809.1,
+    "damage_max": 2579.0,
+    "hits": 3.695,
+    "hits_max": 10.0,
+    "ic": 0.025,
+    "special": 0.705
+   }
+  }
+ }
+}

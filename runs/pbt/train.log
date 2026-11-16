@@ -1,0 +1,54 @@
+generation 1: training
+  m00: 100,000 steps in 38s against CPU x64, []; mean return +nan
+  m01: 100,000 steps in 41s against CPU x16, ['m00']; mean return +nan
+  m02: 100,000 steps in 42s against CPU x16, ['m01', 'm00']; mean return +nan
+  m03: 100,000 steps in 48s against CPU x16, ['m02', 'm00', 'm01']; mean return +nan
+generation 1: rating
+generation 1: ratings (223s; the CPU at level 2 is 1000)
+  member   Elo   vs CPU   lr        entropy  round  match  parent  steps
+  m01     767    19%   6.51e-04  0.0223   0.30   1.59   -       100,000
+  m03     758    22%   7.20e-04  0.0011   0.36   0.76   -       100,000
+  m02     734    22%   3.50e-04  0.0241   0.41   0.50   -       100,000
+  m00     729     9%   4.33e-04  0.0025   0.02   0.52   -       100,000
+  m00 <- m01 (weights and settings, perturbed)
+generation 2: training
+  m00: 100,000 steps in 21s against CPU x16, ['m01', 'g001-m00', 'm00']; mean return +nan
+  m01: 100,000 steps in 26s against CPU x16, ['m03', 'm01', 'm00']; mean return +nan
+  m02: 100,000 steps in 22s against CPU x16, ['m01', 'm03', 'm02']; mean return +nan
+  m03: 100,000 steps in 21s against CPU x16, ['m00', 'm02', 'm03']; mean return +nan
+generation 2: rating
+generation 2: ratings (137s; the CPU at level 2 is 1000)
+  member   Elo   vs CPU   lr        entropy  round  match  parent  steps
+  m00     941    50%   8.13e-04  0.0279   0.24   0.54   m01     200,000
+  m03     868    25%   7.20e-04  0.0011   0.36   0.76   -       200,000
+  m02     826    25%   3.50e-04  0.0241   0.41   0.50   -       200,000
+  m01     769    19%   6.51e-04  0.0223   0.30   1.59   -       200,000
+  m01 <- m00 (weights and settings, perturbed)
+generation 3: training
+  m00: 100,000 steps in 23s against CPU x16, ['m00', 'm01', 'g002-m00']; mean return +nan
+  m01: 100,000 steps in 24s against CPU x16, ['m03', 'm00', 'm02']; mean return +nan
+  m02: 100,000 steps in 23s against CPU x16, ['m03', 'm00', 'g001-m02']; mean return +nan
+  m03: 100,000 steps in 20s against CPU x16, ['m00', 'm02', 'm03']; mean return +nan
+generation 3: rating
+generation 3: ratings (128s; the CPU at level 2 is 1000)
+  member   Elo   vs CPU   lr        entropy  round  match  parent  steps
+  m03    1105    53%   7.20e-04  0.0011   0.36   0.76   -       300,000
+  m00    1036    62%   8.13e-04  0.0279   0.24   0.54   m01     300,000
+  m01     946    50%   6.51e-04  0.0300   0.30   0.68   m00     300,000
+  m02     937    38%   3.50e-04  0.0241   0.41   0.50   -       300,000
+  m02 <- m03 (weights and settings, perturbed)
+generation 4: training
+  m00: 100,000 steps in 21s against CPU x16, ['g003-m02', 'g001-m00', 'g003-m03']; mean return +nan
+  m01: 100,000 steps in 20s against CPU x16, ['m00', 'g001-m00', 'm02']; mean return +nan
+  m02: 100,000 steps in 20s against CPU x16, ['g002-m02', 'm01', 'g003-m00']; mean return +nan
+  m03: 100,000 steps in 21s against CPU x16, ['g001-m03', 'g003-m02', 'g001-m02']; mean return +nan
+generation 4: rating
+generation 4: ratings (121s; the CPU at level 2 is 1000)
+  member   Elo   vs CPU   lr        entropy  round  match  parent  steps
+  m03    1345    81%   7.20e-04  0.0011   0.36   0.76   -       400,000
+  m02    1213    84%   9.00e-04  0.0010   0.37   0.61   m03     400,000
+  m00    1069    59%   8.13e-04  0.0279   0.24   0.54   m01     400,000
+  m01     941    44%   6.51e-04  0.0300   0.30   0.68   m00     400,000
+  m01 <- m03 (weights and settings, perturbed)
+best: runs/pbt/best.zip
+exit 0

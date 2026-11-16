@@ -1,0 +1,79 @@
+{
+ "args": {
+  "data": "D:/tasogare/EFZ",
+  "dataset": "D:/tasogare/efz-replays/datasets/ayu",
+  "out": "runs/human-ayu/team",
+  "history": 16,
+  "delay": 14,
+  "name": "player479",
+  "keep": 0.25,
+  "epochs": 2,
+  "batch": 4096,
+  "lr": 0.0003,
+  "gamma": 0.999,
+  "width": 512,
+  "vf_coef": 0.5,
+  "limit": 0,
+  "players": "479",
+  "who": null,
+  "init": "runs/human-ayu/bc-d14.zip",
+  "torch_threads": 14
+ },
+ "matches": 41,
+ "people": {
+  "presses": {
+   "A": 0.0079,
+   "B": 0.008,
+   "C": 0.0074,
+   "D": 0.0005
+  },
+  "presses_per_second": 1.52,
+  "jumps_per_min": 14.27,
+  "guard_ground_per_min": 14.41,
+  "guard_air_per_min": 0.14,
+  "rg_ground_per_min": 2.49,
+  "rg_air_per_min": 0.14,
+  "hit_ground_per_min": 7.48,
+  "hit_air_per_min": 3.6,
+  "rg_ground": 0.102,
+  "rg_air": 0.036,
+  "rc": 0.167,
+  "rc_chances_per_min": 0.83,
+  "rg_move": 0.368,
+  "rg_punish": 0.263,
+  "rg_long": 0.0,
+  "rg_long_hit": null,
+  "guess_623A_per_min": 1.11,
+  "guess_623A_counter": 0.5,
+  "guess_623B_per_min": 0.28,
+  "guess_623B_counter": 0.5
+ },
+ "train_steps": 79702,
+ "val_steps": 27723,
+ "epochs": [
+  {
+   "nll": 0.318583604289534,
+   "action": 0.9252245427983985,
+   "direction": 0.9477690004689248,
+   "press_recall": 0.019938650306748466,
+   "press_precision": 0.7222222222222222,
+   "presses": 0.023518378241893012,
+   "epoch": 0,
+   "train_nll": 0.312730572864027,
+   "train_value": 0.022616568759154045,
+   "seconds": 3.0471138954162598
+  },
+  {
+   "nll": 0.31778808435234285,
+   "action": 0.9252606139306713,
+   "direction": 0.9477690004689248,
+   "press_recall": 0.019938650306748466,
+   "press_precision": 0.7647058823529411,
+   "presses": 0.023518378241893012,
+   "epoch": 1,
+   "train_nll": 0.31070433265561426,
+   "train_value": 0.021584090330535842,
+   "seconds": 3.1205122470855713
+  }
+ ]
+}

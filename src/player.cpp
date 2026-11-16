@@ -607,7 +607,8 @@ double CPlayer::AttackFactor()
 
 double CPlayer::DefenseFactor()
 {
-    return (m_hp * 0.5 / 10000.0 + 0.5) * m_defense;
+    // DamageTaken: 1, but for a scale the headless env set (an advantage for a red team)
+    return (m_hp * 0.5 / 10000.0 + 0.5) * m_defense * ::efz::DamageTaken(m_side);
 }
 
 double CPlayer::ProrationFactor()

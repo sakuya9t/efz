@@ -35,11 +35,17 @@ frame, at about 64 drawn frames a second; .pat durations are multiplied by 3 at 
 - **Recoil Guard**: pressing back *from neutral* sets the window to 60; a guard during
   its first 30 ticks is a recoil guard. A new press only counts once the window has run
   out, so mashing back does nothing. Air recoil guard works even against attacks that
-  can't be air-guarded (player.cpp:534 waives flagsAA 4 inside the window). The CPU never
-  recoil-guards: every CpuInput zeroes the window (akane.cpp:832).
-- **RF gauge** (`m_rfGauge`, `m_rfBlue`): see comments.txt. Blue = full, then draining.
+  can't be air-guarded (player.cpp:534 waives flagsAA 4 inside the window). The CPU
+  recoil-guards at random: every CpuInput zeroes the window each tick (akane.cpp:832) and
+  then opens it again by chance, more often at higher levels and in guard stun
+  (kanna.cpp:703-711; ayu.cpp:790 and akiko.cpp:955 multiply the guard-stun chance by
+  2000 where 2 was meant, so they recoil-guard every hit there).
+- **RF gauge** (`m_rfGauge`, `m_rfBlue`): see comments.txt. The HUD draws it blue under
+  500 (grows 0.3 a tick), red at 500-999 (0.1 a tick), and cyan, blinking, while
+  `m_rfBlue` is set: from full until spent (no growth, drained by hits). The member's
+  name predates that reading: its state is the cyan one.
 - **Instant Charge** (22C, 0xa7/0xab): level 500, so it cancels anything that connected
-  (m_attackResult 2, 3, 5, 7; with blue RF even after a parry, 6).
+  (m_attackResult 2, 3, 5, 7; with cyan RF, m_rfBlue, even after a parry, 6).
 - **Cancels**: a move starts when the current frame has flagsB0 8 and
   `m_patterns[pattern].cancelLevel <= m_patterns[move].level`; the extra
   `(pattern >= 0xc8 && m_attackResult >= 2 && != 6 || pattern < 0xc8)` in every

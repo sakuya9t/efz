@@ -10,7 +10,12 @@ import glob
 import os
 import sys
 
-VERSION = 1
+VERSION = 10
+
+# EfzEnvConfig.autoreset
+AUTORESET_SAME_STEP = 0
+AUTORESET_NEXT_STEP = 1
+AUTORESET_DISABLED = 2
 
 if sys.platform == 'win32':
     _NAMES = ['efz_env.dll', 'libefz_env.dll']
@@ -37,6 +42,8 @@ class Config(ctypes.Structure):
         ('reward_round', ctypes.c_float),
         ('reward_match', ctypes.c_float),
         ('seed', ctypes.c_uint64),
+        ('autoreset', ctypes.c_int32),
+        ('first_intro', ctypes.c_int32),
     ]
 
 
@@ -64,6 +71,9 @@ class Info(ctypes.Structure):
         ('chars', ctypes.c_int8 * 2),
         ('stage', ctypes.c_int8),
         ('ended', ctypes.c_int8),
+        ('input', ctypes.c_uint8 * 2),
+        ('replay', ctypes.c_int8),
+        ('reserved', ctypes.c_int8),
         ('episode_return', ctypes.c_float * 2),
     ]
 
@@ -76,6 +86,48 @@ class Buffers(ctypes.Structure):
         ('terminated', ctypes.POINTER(ctypes.c_uint8)),
         ('truncated', ctypes.POINTER(ctypes.c_uint8)),
         ('info', ctypes.POINTER(Info)),
+    ]
+
+
+class SoundEvent(ctypes.Structure):
+    _fields_ = [
+        ('kind', ctypes.c_int32),
+        ('slot', ctypes.c_int32),
+        ('value', ctypes.c_int32),
+        ('file', ctypes.c_char * 48),
+    ]
+
+
+class AgentInfo(ctypes.Structure):
+    _fields_ = [
+        ('width', ctypes.c_int32),
+        ('actions', ctypes.c_int32),
+        ('frame_skip', ctypes.c_int32),
+        ('history', ctypes.c_int32),
+        ('delay', ctypes.c_int32),
+        ('character', ctypes.c_int32),
+        ('routes', ctypes.c_int32),
+        ('pool', ctypes.c_int32),
+        ('replan', ctypes.c_int32),
+        ('chooser', ctypes.c_int32),
+        ('format', ctypes.c_int32),
+        ('name', ctypes.c_char * 64),
+        ('version', ctypes.c_char * 64),
+        ('modules', ctypes.c_char * 64),
+    ]
+
+
+class Plan(ctypes.Structure):
+    _fields_ = [
+        ('outcome', ctypes.c_int32),
+        ('chosen', ctypes.c_int32),
+        ('options', ctypes.c_int32),
+        ('frames', ctypes.c_int32),
+        ('route', ctypes.c_int32 * 64),
+        ('at', ctypes.c_int32 * 64),
+        ('dealt', ctypes.c_float * 64),
+        ('expected', ctypes.c_float * 168),
+        ('ms', ctypes.c_double),
     ]
 
 
@@ -109,6 +161,12 @@ def _bind(lib):
         'efz_env_set_obs_buffers': (None, [P, P, P]),
         'efz_env_set_matches': (ctypes.c_int, [P, ctypes.POINTER(Match), ctypes.c_int32]),
         'efz_env_reset': (ctypes.c_int, [P, P]),
+        'efz_env_seed': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_uint64]),
+        'efz_env_record': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32, ctypes.c_int32]),
+        'efz_env_play': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_char_p]),
+        'efz_env_set_gauges': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32, ctypes.c_int32,
+                                              ctypes.c_double, ctypes.c_int32]),
+        'efz_env_set_save_dir': (ctypes.c_int, [P, ctypes.c_char_p]),
         'efz_env_step': (ctypes.c_int, [P, P]),
         'efz_env_step_async': (ctypes.c_int, [P, P]),
         'efz_env_step_wait': (ctypes.c_int, [P]),
@@ -117,12 +175,39 @@ def _bind(lib):
         'efz_env_load_state': (ctypes.c_int, [P, ctypes.c_int32, P, ctypes.c_size_t]),
         'efz_env_render': (ctypes.c_int, [P, ctypes.c_int32, P]),
         'efz_env_ticks': (ctypes.c_uint64, [P]),
+        'efz_env_sound_log': (None, [ctypes.c_int32]),
+        'efz_env_sound_events': (ctypes.c_int32, [P, ctypes.c_int32, P, ctypes.c_int32]),
         'efz_env_error': (ctypes.c_char_p, [P]),
+        'efz_env_agent_load': (P, [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_size_t]),
+        'efz_env_agent_free': (None, [P]),
+        'efz_env_agent_info': (None, [P, ctypes.POINTER(AgentInfo)]),
+        'efz_env_agent_log_probs': (None, [P, P, ctypes.c_int32, P]),
+        'efz_env_agent_reset': (None, [P, ctypes.c_uint64]),
+        'efz_env_agent_step': (ctypes.c_uint8, [P, P, ctypes.c_int32, ctypes.c_int32]),
+        'efz_env_agent_last_action': (ctypes.c_int32, [P]),
+        'efz_env_agent_plan': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32,
+                                                ctypes.c_int32, P, ctypes.c_int32, P,
+                                                ctypes.c_uint8, ctypes.c_int32, ctypes.c_uint64,
+                                                ctypes.c_int32, P, ctypes.c_int32,
+                                                ctypes.POINTER(Plan)]),
+        'efz_env_agent_choose': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32, P]),
     }
     for name, (restype, argtypes) in sig.items():
         f = getattr(lib, name)
         f.restype = restype
         f.argtypes = argtypes
+    # Additions to the version that a library built before them lacks.
+    optional = {
+        'efz_env_set_damage_scale': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32,
+                                                    ctypes.c_float]),
+        'efz_env_set_recoil_guard': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32,
+                                                    ctypes.c_float]),
+    }
+    for name, (restype, argtypes) in optional.items():
+        f = getattr(lib, name, None)
+        if f is not None:
+            f.restype = restype
+            f.argtypes = argtypes
     return lib
 
 

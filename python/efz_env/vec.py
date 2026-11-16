@@ -5,9 +5,10 @@
     obs, reward, terminated, truncated, info = env.step(actions)   # actions (256, 2) uint8
 
 Everything returned is a numpy view of the library's buffers, written in place by the
-next step or reset: copy what you keep. Matches that end restart within the same step
-(the returned obs is the new match's first view; final_obs holds the last view of the
-match that ended, and info describes it).
+next step or reset: copy what you keep. By default matches that end restart within the
+same step (the returned obs is the new match's first view; final_obs holds the last view
+of the match that ended, and info describes it); autoreset='next_step' restarts them at
+the next step instead, and 'disabled' leaves them ended until reset(mask).
 """
 
 import ctypes
@@ -18,6 +19,12 @@ import numpy as np
 from . import _native
 
 STAGES = 23
+
+AUTORESET = {
+    'same_step': _native.AUTORESET_SAME_STEP,
+    'next_step': _native.AUTORESET_NEXT_STEP,
+    'disabled': _native.AUTORESET_DISABLED,
+}
 
 
 def character_names():
@@ -76,13 +83,25 @@ class EfzVecEnv:
         bar dealt minus taken, plus reward_round per round won minus lost, plus
         reward_match for winning the match minus for losing it.
     seed: draws random characters and stages and seeds the game's CPU.
+    autoreset: what a step does when a match ends: 'same_step' (the next match starts
+        in the step; final_obs is the last view), 'next_step' (obs is the last view;
+        the next step starts the next match, ignoring its actions, with no reward) or
+        'disabled' (the environment stays ended until reset(mask) starts it again).
+    save_dir: where the game writes files (replays: record()); default the data folder,
+        where EFZ's replay menu reads them. For the whole process, as data_dir is.
+    first_intro: a match starts at the fight scene's start, before its first round's
+        intro, as the game shows it (to be watched: with skip_noninteractive=False; with
+        it the first step runs through the intro), not just after it. The intro's frames
+        don't count in the match's (info['frame'], max_frames).
     """
 
     def __init__(self, data_dir=None, num_envs=64, *, num_threads=0, frame_skip=1,
                  max_frames=0, rounds_to_win=2, cpu_level=2, damage_level=2,
                  skip_noninteractive=True, relative_actions=True, drawing=False,
                  cache_size=64, reward_damage=1.0, reward_round=0.0, reward_match=1.0,
-                 seed=0):
+                 seed=0, autoreset='same_step', save_dir=None, first_intro=False):
+        if autoreset not in AUTORESET:
+            raise ValueError(f'autoreset must be one of {sorted(AUTORESET)}')
         data_dir = data_dir or os.environ.get('EFZ_DATA') or os.environ.get('EFZ_DIR')
         if not data_dir:
             raise ValueError('pass data_dir, the folder of an EFZ 4.02 install (or set EFZ_DATA)')
@@ -97,7 +116,8 @@ class EfzVecEnv:
                                 relative_actions=int(relative_actions), drawing=int(drawing),
                                 cache_size=cache_size, reward_damage=reward_damage,
                                 reward_round=reward_round, reward_match=reward_match,
-                                seed=seed).items():
+                                seed=seed, autoreset=AUTORESET[autoreset],
+                                first_intro=int(first_intro)).items():
             setattr(cfg, name, value)
         self.config = cfg
         error = ctypes.create_string_buffer(512)
@@ -108,6 +128,10 @@ class EfzVecEnv:
         self.obs_dim = lib.efz_env_obs_dim()
         self.observation_names = [lib.efz_env_obs_name(i).decode() for i in range(self.obs_dim)]
         self.drawing = bool(drawing)
+        self.autoreset = autoreset
+        self.data_dir = data_dir
+        self.save_dir = save_dir or data_dir
+        lib.efz_env_set_save_dir(self._h, os.fsencode(save_dir) if save_dir else None)
         self._actions = np.zeros((num_envs, 2), dtype=np.uint8)
         self._pending = False
         self._keep = None
@@ -207,10 +231,98 @@ class EfzVecEnv:
             self._lib.efz_env_step_wait(self._h)
             self._pending = False
 
-    def reset(self, mask=None):
-        """Starts new matches (in every environment, or where mask is true). Returns obs;
-        info is in self.info."""
+    def replay_path(self, page, slot):
+        """The file of replay slot page-slot (1-9 each), as EFZ's replay menu numbers them."""
+        return os.path.join(self.save_dir, 'replay', f'data{int(page)}-{int(slot)}.rep')
+
+    def record(self, index, page, slot, overwrite=False):
+        """Records environment `index`'s next match (from its next reset or autoreset) into
+        replay slot page-slot, as the replay menu's record item does: the game writes
+        replay_path(page, slot), which EFZ plays back. Both players must be the program's
+        (set_matches cpu=(False, False)): replays don't hold the CPU's decisions. Refuses
+        a slot that holds a replay already unless overwrite."""
         self._finish()
+        path = self.replay_path(page, slot)
+        if os.path.exists(path) and not overwrite:
+            raise FileExistsError(f'{path} holds a replay already (overwrite=True to replace it)')
+        if self._lib.efz_env_record(self._h, int(index), int(page), int(slot)) != 0:
+            raise RuntimeError(f'efz_env: {self._lib.efz_env_error(self._h).decode(errors="replace")}')
+        return path
+
+    def play(self, index, path):
+        """Plays the replay at `path` back in environment `index`, as the replay menu's
+        play item does, for its next match (from its next reset or autoreset): a .rep,
+        the game's own or EfzRevival's. Its characters, stage and palettes are the
+        replay's; each step its inputs play instead of the actions given, and
+        info['input'] holds them (each player's control byte on the step's first frame,
+        forward/back with relative_actions), info['replay'] set. The match ends when it
+        is won (terminated) or when the replay runs out (truncated: cut short, or a
+        showcase that just stops). rounds_to_win and damage_level must be the replay's
+        (EfzRevival's netplay: 2 and 2, the defaults)."""
+        self._finish()
+        if self._lib.efz_env_play(self._h, int(index), os.fsencode(os.fspath(path))) != 0:
+            raise ValueError(f'efz_env: {self._lib.efz_env_error(self._h).decode(errors="replace")}')
+
+    def set_gauges(self, index, player, power=None, rf=None, blue=None):
+        """Sets a player's gauges in environment `index`'s match now, as training mode's
+        refill does: power (0-3000, a level per 1000), rf (the RF gauge, 0-1000) and blue
+        (the game's m_rfBlue: the gauge was full and is being spent, drawn cyan on the HUD;
+        an Instant Charge, 22C, then gives back five times the gauge in proration);
+        None leaves one as it is. obs and info show them at once."""
+        self._finish()
+        r = self._lib.efz_env_set_gauges(self._h, int(index), int(player),
+                                         -1 if power is None else int(power),
+                                         -1.0 if rf is None else float(rf),
+                                         -1 if blue is None else int(bool(blue)))
+        if r != 0:
+            raise RuntimeError(f'efz_env: environment {index} has no match to set')
+
+    def set_damage_scale(self, index, player, scale):
+        """Scales the damage `player` takes from hits in environment `index`, from its
+        next step on and in every match after until set again (guarded hits' chip damage
+        stays the game's; replays played back or recorded are EFZ's): an advantage for
+        the other side, e.g. a red team's hits worth what a person's combos are. 1 is the
+        game's."""
+        self._finish()
+        f = getattr(self._lib, 'efz_env_set_damage_scale', None)
+        if f is None:
+            raise RuntimeError('efz_env: this library has no damage scale: rebuild it')
+        if f(self._h, int(index), int(player), float(scale)) != 0:
+            raise ValueError(f'efz_env: no damage scale {scale} for environment {index}, '
+                             f'player {player}')
+
+    def set_recoil_guard(self, index, player, chance):
+        """Makes `chance` (0-1) of `player`'s guards in environment `index` recoil guards,
+        as the game's CPU makes its own (of the guards held the right way against a hit
+        that can be guarded): an advantage for a red team. From its next step on, in every
+        match after, until set again; replays are EFZ's. 0 is the game's."""
+        self._finish()
+        f = getattr(self._lib, 'efz_env_set_recoil_guard', None)
+        if f is None:
+            raise RuntimeError('efz_env: this library has no recoil-guard chance: rebuild it')
+        if f(self._h, int(index), int(player), float(chance)) != 0:
+            raise ValueError(f'efz_env: no recoil-guard chance {chance} for environment '
+                             f'{index}, player {player}')
+
+    def seed(self, index, seed):
+        """Seeds environment `index`: its following matches (characters and stages drawn
+        from pools, the game's rand) follow from `seed` alone, from its next match on."""
+        self._finish()
+        if self._lib.efz_env_seed(self._h, int(index), int(seed) & (2**64 - 1)) != 0:
+            raise IndexError(f'no environment {index}')
+
+    def reset(self, mask=None, seed=None):
+        """Starts new matches (in every environment, or where mask is true). Returns obs;
+        info is in self.info. seed: an int seeds environment i with seed + i (as
+        Gymnasium's vector environments do), or a sequence gives each its own (None
+        leaves one as it is); only the environments reset are seeded."""
+        self._finish()
+        if seed is not None:
+            which = range(self.num_envs) if mask is None else np.flatnonzero(mask)
+            for i in which:
+                s = seed + int(i) if isinstance(seed, (int, np.integer)) else seed[i]
+                if s is not None:
+                    self.seed(i, s)
         if mask is None:
             self._lib.efz_env_reset(self._h, None)
         else:
@@ -259,9 +371,11 @@ class EfzVecEnv:
         return buf.raw
 
     def load_state(self, index, state):
+        """Loads a save_state() of this process (another process's only where the
+        library is at the same address: ValueError otherwise)."""
         self._finish()
         if self._lib.efz_env_load_state(self._h, index, state, len(state)) != 0:
-            raise ValueError('not a save state of this library')
+            raise ValueError(f'efz_env: {self._lib.efz_env_error(self._h).decode(errors="replace")}')
 
     def render(self, index=0):
         """The last frame environment `index` drew, (240, 320, 3) uint8 RGB. Needs
@@ -273,6 +387,27 @@ class EfzVecEnv:
         if not self._lib.efz_env_render(self._h, index, frame.ctypes.data):
             raise RuntimeError('no frame drawn yet')
         return frame
+
+    def sound_log(self, on=True):
+        """Keeps the sounds the games ask for (every batch of the process), for
+        sound_events; the library plays none. Off by default."""
+        self._lib.efz_env_sound_log(1 if on else 0)
+
+    def sound_events(self, index=0):
+        """The sounds environment `index` asked for since the last call, oldest first:
+        (kind, slot, value, file) with kind 'play' (value 1: it loops), 'stop' or
+        'volume' (value in hundredths of a decibel), file the .wav relative to the data
+        folder with '/' separators ('' if not known). Needs sound_log()."""
+        self._finish()
+        events = (_native.SoundEvent * 64)()
+        out = []
+        while True:
+            n = self._lib.efz_env_sound_events(self._h, index, events, 64)
+            for e in events[:n]:
+                out.append((('play', 'stop', 'volume')[e.kind], e.slot, e.value,
+                            e.file.decode('ascii', 'replace').replace('\\', '/')))
+            if n < 64:
+                return out
 
     @property
     def ticks(self):

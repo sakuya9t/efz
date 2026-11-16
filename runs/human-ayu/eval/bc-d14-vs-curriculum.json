@@ -1,0 +1,73 @@
+{
+ "vs": {
+  "win": 0.0,
+  "loss": 1.0,
+  "cut": 0.0,
+  "matches": 48,
+  "sides": [
+   {
+    "presses": {
+     "A": 0.0055,
+     "B": 0.0063,
+     "C": 0.0062,
+     "D": 0.0006
+    },
+    "presses_per_second": 1.19,
+    "jumps_per_min": 19.97,
+    "guard_ground_per_min": 7.89,
+    "guard_air_per_min": 0.13,
+    "rg_ground_per_min": 1.81,
+    "rg_air_per_min": 0.36,
+    "hit_ground_per_min": 7.31,
+    "hit_air_per_min": 3.78,
+    "rg_ground": 0.106,
+    "rg_air": 0.084,
+    "rc": 0.0,
+    "rc_chances_per_min": 0.11,
+    "rg_move": 0.473,
+    "rg_punish": 0.304,
+    "rg_long": 0.017,
+    "rg_long_hit": 0.5,
+    "guess_623A_per_min": 0.23,
+    "guess_623A_counter": 0.32,
+    "guess_623B_per_min": 0.29,
+    "guess_623B_counter": 0.375
+   },
+   {
+    "presses": {
+     "A": 0.0349,
+     "B": 0.0279,
+     "C": 0.0365,
+     "D": 0.0411
+    },
+    "presses_per_second": 8.99,
+    "jumps_per_min": 16.97,
+    "guard_ground_per_min": 0.68,
+    "guard_air_per_min": 0.0,
+    "rg_ground_per_min": 0.17,
+    "rg_air_per_min": 0.01,
+    "hit_ground_per_min": 6.64,
+    "hit_air_per_min": 0.96,
+    "rg_ground": 0.023,
+    "rg_air": 0.009,
+    "rc": 0.091,
+    "rc_chances_per_min": 0.9,
+    "rg_move": 0.7,
+    "rg_punish": 0.55,
+    "rg_long": 0.05,
+    "rg_long_hit": 1.0,
+    "guess_623A_per_min": 0.37,
+    "guess_623A_counter": 0.1,
+    "guess_623B_per_min": 0.67,
+    "guess_623B_counter": 0.096
+   }
+  ],
+  "by_opponent": {
+   "ayu": [
+    0,
+    48,
+    0
+   ]
+  }
+ }
+}

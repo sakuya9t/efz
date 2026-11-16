@@ -110,7 +110,7 @@ void Game::loadRandomState(int state)
 int Game::playSound(WORD id, int loop)
 {
     int result = id;
-    IDirectSoundBuffer **buffers = sound_->buffers;
+    IDirectSoundBuffer **buffers = sound_->m_buffers;
     if (isMusic(id) && muteBGM_)
         return buffers[id]->Stop();
     if (id < 0x96 && buffers[id]) {
@@ -125,7 +125,7 @@ int Game::playSound(WORD id, int loop)
 int Game::stopSound(WORD id)
 {
     int result = id;
-    IDirectSoundBuffer **buffers = sound_->buffers;
+    IDirectSoundBuffer **buffers = sound_->m_buffers;
     if (id < 0x96 && buffers[id])
         result = buffers[id]->Stop();
     return result;
@@ -134,7 +134,7 @@ int Game::stopSound(WORD id)
 // FUNCTION: 0x1006d110
 void Game::setSoundVolume(WORD id, int volume)
 {
-    IDirectSoundBuffer **buffers = sound_->buffers;
+    IDirectSoundBuffer **buffers = sound_->m_buffers;
     if (id < 0x96 && buffers[id])
         buffers[id]->SetVolume(volume);
 }
@@ -185,8 +185,8 @@ void Game::setRendering(bool enable)
     }
 }
 
-// Called by CScene3::Draw in place of CScene3::Unk7631f0 (hookCall at 0x76479c): the
-// boxes asked for, the kept ones, then the call it replaced.
+// Called by CScene3::Draw in place of CScene3::DrawBordersAndFlip (hookCall at
+// 0x76479c): the boxes asked for, the kept ones, then the call it replaced.
 // FUNCTION: 0x1006ce40
 void Game::drawBoxes()
 {
@@ -313,32 +313,34 @@ int Game::character(int player)
 {
     int id = sceneId();
     if (id == 2 || id == 3)
-        return (*currentScene()->players[player])->character;
+        return (*currentScene()->m_playerRefs[player])->m_charId;
     if (id == 1)
-        return ((CScene1 *)currentScene())->character[player];
+        return ((CScene1 *)currentScene())->m_charId[player];
     return -1;
 }
 
+// Netplay runs the fight in REPLAY mode while recording it, at CPU level 1; otherwise
+// VS HUMAN at CPU level 4.
 // FUNCTION: 0x1006c980
 void Game::setNetplay(bool netplay)
 {
     if (scene(2)) {
         if (netplay) {
-            game_->unk1364 = 5;
-            game_->unk1365 = 1;
-            game_->replayMode = 2;
+            game_->m_gameMode = 5;
+            game_->m_cpuLevel = 1;
+            game_->m_replayMode = 2;
             return;
         }
-        game_->unk1364 = 4;
-        game_->unk1365 = 4;
-        game_->replayMode = 0;
+        game_->m_gameMode = 4;
+        game_->m_cpuLevel = 4;
+        game_->m_replayMode = 0;
     }
 }
 
 // FUNCTION: 0x1006c960
 void Game::setReplayMode(char mode)
 {
-    game_->replayMode = mode;
+    game_->m_replayMode = mode;
 }
 
 // FUNCTION: 0x1006c940
@@ -365,15 +367,17 @@ void Game::clearText()
     render_->clearTextRender();
 }
 
+// The settings a spectator plays the match with: normal effects, every frame drawn,
+// 100% damage, two rounds to win.
 // FUNCTION: 0x1006c890
 void Game::setSpectating()
 {
     CGame *game = game_;
-    game->unk1366 = 1;
-    game->unk1368 = 0;
-    game->unk136c = 1;
-    game->unk1370 = 2;
-    game->unk134f = 2;
+    game->m_fullEffects = 1;
+    game->m_oddFrame = 0;
+    game->m_drawEveryFrame = 1;
+    game->m_damageLevel = 2;
+    game->m_roundsSetting = 2;
 }
 
 // FUNCTION: 0x1006c880
@@ -404,14 +408,15 @@ char Game::menuChoice()
 {
     CScene0 *title = (CScene0 *)scene(0);
     if (title)
-        return title->menuChoice;
+        return title->m_cursor;
     return 0;
 }
 
+// The side a human plays in single player: the CPU's flag of side 0.
 // FUNCTION: 0x1006c850
 int Game::humanPlayer()
 {
-    return game_->unk1343;
+    return game_->m_isCpu[0];
 }
 
 // FUNCTION: 0x1006c800
@@ -420,9 +425,9 @@ int Game::paletteNumber(int player)
     switch (sceneId()) {
     case 1:
     case 2:
-        return ((CScene1 *)scene(1))->palette[player];
+        return ((CScene1 *)scene(1))->m_paletteIndex[player];
     case 3:
-        return (*currentScene()->players[player])->palette;
+        return (*currentScene()->m_playerRefs[player])->m_paletteIndex;
     }
     return 0;
 }
@@ -432,7 +437,7 @@ bool Game::hasPalette(int player)
 {
     int id = sceneId();
     if (id >= 1 && id <= 3)
-        return *(bool *)&scene(1)->game->hasPalette[player];
+        return *(bool *)&scene(1)->m_game->m_editColor[player];
     return false;
 }
 
@@ -442,7 +447,7 @@ bool Game::canChoosePalette(int player)
     CScene1 *select = (CScene1 *)currentScene();
     switch (sceneId()) {
     case 1:
-        return select->unk49e[player] == 6;
+        return select->m_state[player] == 6;
     case 2:
     case 3:
         return true;
@@ -454,21 +459,23 @@ bool Game::canChoosePalette(int player)
 void Game::setPalette(int player, const ColorPalette &palette)
 {
     if (sceneId() == 3) {
-        CGame *game = (*currentScene()->players[player])->game;
-        memcpy(&game->palette[95 + player * 40], palette.data + 4, 0xa0);
-        EFZ_BUILD_BLEND_TABLES(EFZ_GRAPHICS, game->palette);
+        CGame *game = (*currentScene()->m_playerRefs[player])->m_game;
+        memcpy(&game->m_palette[95 + player * 40], palette.data + 4, 0xa0);
+        EFZ_BUILD_BLEND_TABLES(EFZ_GRAPHICS, game->m_palette);
     }
 }
 
+// The fight's drawing offset. The shake added to it is always 0 (m_hitstop * 2 is even),
+// as in the original.
 // FUNCTION: 0x1006c6d0
 POINT Game::getCamera()
 {
     CPlayer *p1 = player(0);
     CScene3 *fight = (CScene3 *)currentScene();
-    short shake = isHit(p1) * (p1->unk14a * 2 % 2);
+    short shake = isHit(p1) * (p1->m_hitstop * 2 % 2);
     POINT camera;
-    camera.x = shake + fight->camera.x;
-    camera.y = fight->camera.y;
+    camera.x = shake + fight->m_draw.x;
+    camera.y = fight->m_draw.y;
     return camera;
 }
 
@@ -479,11 +486,13 @@ void Game::showBoxes(int player, int kind)
 }
 
 // One player's boxes of one kind, then those of its objects. Each box goes through the
-// fight's own transform (CScene3::Unk7677a0), doubled for the 640x480 overlay; the
-// height is recomputed from the player's position. Hitboxes are stippled once the
-// attack has hit (CPlayer+0x16c clear) unless the frame may hit again (flag 0x40); a
-// collision box also gets a vertical line through the player's x, twice its height,
-// centred on its top edge: the crossup midline.
+// fight's own transform (CScene3::InfoBoxOnStage, BoxOnStage for objects), doubled for
+// the 640x480 overlay; the height is recomputed from the player's position. A player's
+// hitboxes are stippled once the attack can't hit any more (m_hitsLeft 0), unless the
+// frame is a throw's (kAttackThrow, bit 6 of flagsAA); an object's once it has hit, or
+// can't hit any more, or is invulnerable. A collision box also gets a vertical line
+// through the player's x, twice its height, centred on its top edge: the crossup
+// midline.
 // FUNCTION: 0x1006c1d0
 // TODO: differs in one store: the original keeps r->left = (int)p->x before the line
 // that overwrites it, as if r could point at camera (&camera escaping); c2 drops it here
@@ -503,8 +512,8 @@ void Game::drawBoxRequest(BoxRequest *request)
     int count = 0;
     DWORD color = 0;
     getCollisionInfo(request->player, &info);
-    bool vulnerable = (info.frame.flagsB0 & 0x20) == 0 && p->unk13c == 0;
-    bool solid = (p->unk16c != 0) | (info.frame.flagsAA >> 6 & 1);
+    bool vulnerable = (info.frame.flagsB0 & kStateInvulnerable) == 0 && p->m_invulTime == 0;
+    bool solid = (p->m_hitsLeft != 0) | (info.frame.flagsAA >> 6 & 1);
     unsigned int flags = 0xffffffff;
     switch (request->kind) {
     case BOX_HIT:
@@ -555,23 +564,23 @@ void Game::drawBoxRequest(BoxRequest *request)
             }
         }
     }
-    short end = p->objectEnd;
-    for (int i = p->objectStart; i != end; i = (i + 1) % 64) {
-        PlayerObject *object = &p->objects[i];
-        if (p->objectActive[i] == 0)
+    short end = p->m_objectHead;
+    for (int i = p->m_objectTail; i != end; i = (i + 1) % 64) {
+        PlayerObject *object = &p->m_objects[i];
+        if (p->m_objectActive[i] == 0)
             continue;
         getPatternFrame(request->player, object->pattern, object->frame, &info.frame);
-        bool vulnerable = (info.frame.flagsB0 & 0x20) == 0;
+        bool vulnerable = (info.frame.flagsB0 & kStateInvulnerable) == 0;
         // short, not bool: the original holds it in edi (tested as di), which has no
         // byte register
-        short active = object->unk84 != 0 && vulnerable;
+        short active = object->hitsLeft != 0 && vulnerable;
         unsigned int objectFlags = 0xffffffff;
         switch (request->kind) {
         case BOX_HIT:
             boxes = info.frame.hitBoxes;
             color = 0xffff0000;
             count = 4;
-            if (!active || object->unk80 != 0)
+            if (!active || object->attackResult != 0)
                 objectFlags = 0xf0f0f0f0;
             break;
         case BOX_HURT:
@@ -610,7 +619,8 @@ void Game::drawBoxRequest(BoxRequest *request)
     }
 }
 
-// Mishio's 0x199 objects: their boxes are kept in rects, one per object and box.
+// Mishio's (character 15) field hits, kMishioFieldHit: their boxes are kept in
+// rects, one per object and box, so that they stay on screen.
 // FUNCTION: 0x1006bf20
 void Game::collectRects(BoxRequest *request, std::vector<HitRect> &rects)
 {
@@ -625,18 +635,18 @@ void Game::collectRects(BoxRequest *request, std::vector<HitRect> &rects)
     int count = 0;
     DWORD color = 0;
     getCollisionInfo(request->player, &info);
-    short end = p->objectEnd;
-    for (int i = p->objectStart; i != end; i = (i + 1) % 64) {
-        PlayerObject *object = &p->objects[i];
-        if (p->objectActive[i] == 0)
+    short end = p->m_objectHead;
+    for (int i = p->m_objectTail; i != end; i = (i + 1) % 64) {
+        PlayerObject *object = &p->m_objects[i];
+        if (p->m_objectActive[i] == 0)
             continue;
         short pattern = object->pattern;
-        if (character(request->player) != 15 || pattern != 0x199)
+        if (character(request->player) != 15 || pattern != kMishioFieldHit)
             continue;
-        // pattern, not 0x199: it keeps pattern a register across character(), as the
-        // original does (the call still gets the constant, from the test above)
+        // pattern, not kMishioFieldHit: it keeps pattern a register across character(),
+        // as the original does (the call still gets the constant, from the test above)
         getPatternFrame(request->player, pattern, object->frame, &info.frame);
-        bool vulnerable = !((info.frame.flagsB0 & 0x20) > 0);
+        bool vulnerable = !((info.frame.flagsB0 & kStateInvulnerable) > 0);
         switch (request->kind) {
         case BOX_HIT:
             boxes = info.frame.hitBoxes;
@@ -720,9 +730,9 @@ void Game::toScreen(RECT *rect)
         CScene3 *fight = (CScene3 *)currentScene();
         int width = rect->right - rect->left;
         int height = rect->bottom - rect->top;
-        rect->left = rect->left + fight->camera.x * 2;
+        rect->left = rect->left + fight->m_draw.x * 2;
         rect->right = rect->left + width;
-        rect->top = rect->top + (fight->camera.y + 210) * 2;
+        rect->top = rect->top + (fight->m_draw.y + 210) * 2;
         rect->bottom = rect->top + height;
     }
 }
@@ -732,7 +742,7 @@ CPlayer *Game::player(int index)
 {
     if (sceneId() != 3)
         return 0;
-    return *currentScene()->players[index];
+    return *currentScene()->m_playerRefs[index];
 }
 
 // FUNCTION: 0x1006bdd0
@@ -742,22 +752,27 @@ void Game::clearBoxes()
     boxes_.clear();
 }
 
+// In a hit reaction, unless the opponent is down. The original reads the opponent's
+// action through m_opponent[2], the slot two after the opponent's, which holds
+// g_scenes[0] for player 1 and g_game for player 2: the second test compares the first
+// word of the title scene (its vtable pointer) or of CGame instead.
 // FUNCTION: 0x1006bd70
 bool Game::isHit(CPlayer *p)
 {
     if (sceneId() != 3)
         return false;
     short action = p->pattern;
-    short opponent = *p->unk78[2];
-    return action >= 50 && action < 150 && opponent != 0x60 && opponent != 0x61
-        && opponent != 0x62 && opponent != 0x63;
+    short opponent = *p->m_opponent[2];
+    return action >= kFirstHitReaction && action < kFirstGuard && opponent != kWakeUp
+        && opponent != kKnockdownHittable && opponent != kKnockdown
+        && opponent != kLyingDown;
 }
 
 // FUNCTION: 0x1006bd20
 void Game::getPatternFrame(int index, short pattern, short frame, PatternFrame *out)
 {
     if (sceneId() == 3 && out != 0) {
-        PatternFrame *frames = player(index)->patterns[pattern].frames;
+        PatternFrame *frames = player(index)->m_patterns[pattern].frames;
         *out = frames[frame];
     }
 }
@@ -775,7 +790,7 @@ void Game::getCollisionInfo(int index, CollisionInfo *info)
         CPlayer *p = player(index);
         short frame = p->frame;
         short pattern = p->pattern;
-        PatternFrame *frames = p->patterns[pattern].frames;
+        PatternFrame *frames = p->m_patterns[pattern].frames;
         SpriteFrame *sprites = p->anims[pattern].frames;
         info->frame = frames[frame];
         info->sprite.rect = sprites[frame].rect;
@@ -815,7 +830,7 @@ void Game::setGameSpeed(char speed)
     }
     CScene3 *fight = (CScene3 *)scene(3);
     if (fight)
-        fight->speed = speed;
+        fight->m_speed = speed;
 }
 
 // FUNCTION: 0x1006baf0
@@ -904,8 +919,8 @@ void Game::refreshPalette(int player)
 {
     if (sceneId() == 3) {
         int start = player * 40 + 95;
-        EFZ_DDPALETTE->SetEntries(0, start, 40,
-                                  &(*currentScene()->players[player])->game->palette[start]);
+        EFZ_DDPALETTE->SetEntries(
+            0, start, 40, &(*currentScene()->m_playerRefs[player])->m_game->m_palette[start]);
     }
 }
 
@@ -922,14 +937,14 @@ short Game::actionFrame(int index)
 {
     if (sceneId() != 3)
         return 0;
-    return player(index)->unkc;
+    return player(index)->timer;
 }
 
 // FUNCTION: 0x1006b7a0
 CReplayFile *Game::replayFile()
 {
     if (sceneId() == 3)
-        return &game_->replay;
+        return &game_->m_replay;
     return 0;
 }
 
@@ -1020,7 +1035,7 @@ void Game::setRandomSeed(int seed)
 void Game::readExtendedReplay(std::vector<FrameInput> &inputs)
 {
     inputs.clear();
-    std::iostream *file = (std::iostream *)replayFile()->handle;
+    std::iostream *file = (std::iostream *)replayFile()->m_handle;
     std::streampos start = file->tellg();
     if (!isExtendedReplay(file)) {
         g_log << "Not Modded\n";
@@ -1085,7 +1100,7 @@ char Game::replayMode()
 {
     if (sceneId() != 2 && sceneId() != 3)
         return -1;
-    return game_->replayMode;
+    return game_->m_replayMode;
 }
 
 // FUNCTION: 0x1006b180
@@ -1099,9 +1114,11 @@ bool Game::isMatchOver()
 {
     if (sceneId() != 3)
         return false;
-    return currentScene()->unk2d == 2;
+    return currentScene()->m_leave == 2;
 }
 
+// In a hit reaction in the air, free to recover: the guard gauge empty, no untech time
+// left and no hit that forbids it.
 // FUNCTION: 0x1006b0d0
 bool Game::isTeching(int index)
 {
@@ -1110,35 +1127,35 @@ bool Game::isTeching(int index)
     CPlayer *p = player(index);
     double y = p->y;
     int action = playerAction(index);
-    float unk134 = p->unk134;
-    return action >= 50 && action < 150 && unk134 <= 0.0 && p->unk124 == 0 && y < 0.0
-        && p->unk128 == 0;
+    float guardGauge = p->m_guardGauge;
+    return action >= kFirstHitReaction && action < kFirstGuard && guardGauge <= 0.0
+        && p->m_untechTime == 0 && y < 0.0 && p->m_noAirRecovery == 0;
 }
 
 // FUNCTION: 0x1006b0c0
 KeyBindings *Game::bindings()
 {
-    return input_->bindings;
+    return input_->m_bindings;
 }
 
 // FUNCTION: 0x1006b0a0
 IDirectInputDevice7 *Game::device(char index)
 {
-    return input_->devices[index];
+    return input_->m_devices[index];
 }
 
 // FUNCTION: 0x1006b080
 int Game::roundWinner()
 {
-    return g_game.getGame()->unk134c;
+    return g_game.getGame()->m_winner;
 }
 
 // Left and right together count as left.
 // FUNCTION: 0x1006b060
 char Game::cleanInput(char input)
 {
-    if ((input & 2) && (input & 1))
-        return input & ~1;
+    if ((input & kInputLeft) && (input & kInputRight))
+        return input & ~kInputRight;
     return input;
 }
 
@@ -1151,34 +1168,34 @@ void Game::setSaveReplays(bool save)
 // FUNCTION: 0x1006b040
 void Game::setGameFlag1366(bool value)
 {
-    game_->unk1366 = value;
+    game_->m_fullEffects = value;
 }
 
 // FUNCTION: 0x1006b020
 int Game::playerFlagAc(int index)
 {
-    return player(index)->unkac;
+    return player(index)->m_roundsWon;
 }
 
 // FUNCTION: 0x1006aff0
 bool Game::isRoundOver()
 {
     if (sceneId() == 3)
-        return currentScene()->unk2d == 1 || currentScene()->unk2d == 2;
+        return currentScene()->m_leave == 1 || currentScene()->m_leave == 2;
     return false;
 }
 
 // FUNCTION: 0x1006afe0
 WORD Game::musicId()
 {
-    return game_->music;
+    return game_->m_music;
 }
 
 // Reads the devices a player's bindings use, logging each result; false if one fails.
 // FUNCTION: 0x1006adf0
 bool Game::pollDevices(int player)
 {
-    char *keys = (char *)&input_->bindings[player];
+    char *keys = (char *)&input_->m_bindings[player];
     int last = 0;
     for (int i = 1; i < 16; i += 2) {
         int device = keys[i];
@@ -1190,7 +1207,7 @@ bool Game::pollDevices(int player)
     g_log << "Player " << player + 1 << "\n";
     bool ok = true;
     for (int i = 0; i <= last; i++) {
-        IDirectInputDevice7 *device = input_->devices[i];
+        IDirectInputDevice7 *device = input_->m_devices[i];
         HRESULT result;
         if (i == 0) {
             char keys[0x100];
@@ -1214,7 +1231,7 @@ bool Game::pollDevices(int player)
 // FUNCTION: 0x1006ada0
 bool Game::joystickAdded()
 {
-    IDirectInput7 *di = input_->di;
+    IDirectInput7 *di = input_->m_di;
     if (di) {
         int count = 0;
         di->EnumDevices(DIDEVTYPE_JOYSTICK, (LPDIENUMDEVICESCALLBACK)countDevice, &count,
@@ -1232,7 +1249,7 @@ void Game::reacquireJoysticks()
 {
     char &count = EFZ_JOYSTICK_COUNT;
     for (int i = 0; i < count; i++) {
-        IDirectInputDevice7 *&slot = input_->devices[i + 1];
+        IDirectInputDevice7 *&slot = input_->m_devices[i + 1];
         if (IDirectInputDevice7 *joystick = slot) {
             joystick->Unacquire();
             joystick->Release();
@@ -1240,7 +1257,7 @@ void Game::reacquireJoysticks()
         slot = 0;
     }
     count = 0;
-    IDirectInput7 *di = input_->di;
+    IDirectInput7 *di = input_->m_di;
     if (di)
         di->EnumDevices(DIDEVTYPE_JOYSTICK, EFZ_ENUM_JOYSTICKS, di, DIEDFL_ATTACHEDONLY);
 }
@@ -1251,19 +1268,22 @@ void Game::reloadKeys()
     EFZ_LOAD_BINDINGS(input_);
 }
 
+// Lying down (kLyingDown), at least 3 ticks into its current frame.
 // FUNCTION: 0x1006ace0
 bool Game::isWakingUp(int player)
 {
-    if (playerAction(player) == 99 && actionFrame(player) >= 3)
+    if (playerAction(player) == kLyingDown && actionFrame(player) >= 3)
         return true;
     return false;
 }
 
+// Three of the seven guards: standing against a medium attack, crouching against a
+// light one, in the air.
 // FUNCTION: 0x1006acb0
 bool Game::isGuarding(int player)
 {
     int action = playerAction(player);
-    if (action != 0x97 && action != 0x99 && action != 0x9c)
+    if (action != kGuardStandMedium && action != kGuardCrouchLight && action != kGuardAir)
         return false;
     return true;
 }
@@ -1272,7 +1292,8 @@ bool Game::isGuarding(int player)
 bool Game::isRecoilGuarding(int player)
 {
     int action = playerAction(player);
-    if (action != 0xa8 && action != 0xa9 && action != 0xaa)
+    if (action != kRecoilGuardStand && action != kRecoilGuardCrouch
+        && action != kRecoilGuardAir)
         return false;
     return true;
 }
@@ -1300,5 +1321,5 @@ bool Game::keyIniChanged()
 // FUNCTION: 0x1006abd0
 HWND Game::window()
 {
-    return input_->hwnd;
+    return input_->m_hwnd;
 }

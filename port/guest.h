@@ -22,7 +22,16 @@
 #include <type_traits>
 
 #ifdef EFZ_MULTI_INSTANCE
+#if defined(__linux__) && defined(__GNUC__)
+// The arena's base is read on every pointer the game follows: the static TLS model, not
+// a __tls_get_addr call each time. Two pointers fit in what glibc keeps for libraries
+// loaded later. Only these: with -ftls-model=initial-exec on everything, libstdc++'s own
+// thread-locals (std::call_once's) were bound that way too, and loading the library
+// after torch failed ("cannot allocate memory in static TLS block").
+#define EFZ_THREAD_LOCAL thread_local __attribute__((tls_model("initial-exec")))
+#else
 #define EFZ_THREAD_LOCAL thread_local
+#endif
 #else
 #define EFZ_THREAD_LOCAL
 #endif
@@ -83,11 +92,39 @@ struct Globals {
     uint8_t drawing;     // whether pictures are drawn (sprites decoded, blitters run)
     uint8_t quit;        // the game asked to close: WM_CLOSE, or a MessageBox
     uint32_t root[16];   // the platform's own handles: what WinMain kept in globals
+    float damageTaken[2]; // a scale on the damage each player takes, set by the headless
+                          // env (efz_env_set_damage_scale) for each step; 0 (an arena as
+                          // NewArena makes it) is 1, the game's
+    float recoilGuard[2]; // the share of each player's guards made recoil guards, set the
+                          // same way (efz_env_set_recoil_guard); 0, the game's: none
+    uint32_t assistRng;   // RecoilAssistRoll's generator: the game's rand() runs as it would
 };
 
 inline Globals* G()
 {
     return (Globals*)(g_arena + kGlobals);
+}
+
+// The scale on the damage player `side` takes (CPlayer::DefenseFactor): the game's 1
+// unless the headless env set one.
+inline double DamageTaken(int side)
+{
+    float s = G()->damageTaken[side & 1];
+    return s > 0 ? (double)s : 1.0;
+}
+
+// Whether the headless env makes some of player `side`'s guards recoil guards (as the
+// game's CPU makes its own: CpuInput sets the window at random), and the draw for one
+// guard: a red team's advantage (CScene3::ResolvePlayerAttack, ResolveObjectAttack).
+inline bool RecoilAssistOn(int side)
+{
+    return G()->recoilGuard[side & 1] > 0;
+}
+inline bool RecoilAssistRoll(int side)
+{
+    uint32_t& s = G()->assistRng;
+    s = s * 1664525u + 1013904223u;
+    return (float)(s >> 8) * (1.0f / 16777216.0f) < G()->recoilGuard[side & 1];
 }
 
 // An arena of its own for another game: reserved, its first 64 KB and heap set up
@@ -104,6 +141,10 @@ inline void BindArena(char* arena)
 // another arena with LoadArena makes that one the same game.
 uintptr_t ArenaUsed();
 void LoadArena(const void* bytes, uintptr_t size);
+#else
+inline double DamageTaken(int) { return 1.0; }
+inline bool RecoilAssistOn(int) { return false; }
+inline bool RecoilAssistRoll(int) { return false; }
 #endif
 
 // A pointer field of the game's structures: 4 bytes, used like a T*.

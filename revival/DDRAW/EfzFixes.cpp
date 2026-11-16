@@ -267,6 +267,13 @@ void fixSounds()
     patchGame((void *)0x40dd53, &flags, 4);
 }
 
+// The keyboard and joysticks. CInput::Init (0x40c6f0) gets DirectInput from
+// directInputCreate, and two of its bytes change (a 6, then a jmp). Each scene's
+// HandleKeys (CScene0 0x776760, CScene1 0x759770, CScene6 0x75d350, CScene3 0x765660,
+// CScene8 0x770d80, CScene5 0x775750) reads the keyboard into a local it doesn't clear,
+// so clearLocals zeroes it first. Then four bytes zeroed and a 0x74 (je) after them
+// rewrite a comparison and its jump: in five of those scenes (not CScene5) and three
+// times in CInput::GetInput (0x40cd00), which also loses two 9-byte runs (nops).
 // FUNCTION: 0x1001ca50
 void fixGame()
 {
@@ -367,6 +374,8 @@ static void inputHook()
 // FUNCTION: 0x1001cdf0
 static void readHat(BYTE *result, BYTE *player)
 {
+    // efz.exe's g_scenes[3] (0x79011c, the fight)->m_game (0x1c)->m_input (4): the
+    // CInput, whose m_bindings are at 0x1c0 and its two joysticks at 0x1ec and 0x1f0
     BYTE *input = *(BYTE **)(*(BYTE **)(*(BYTE **)0x79011c + 0x1c) + 4);
     IDirectInputDevice2A *device = NULL;
     DIJOYSTATE state;
@@ -405,8 +414,8 @@ static void readHat(BYTE *result, BYTE *player)
 
 // --- Input
 
-// The joystick's hat as a direction (0-3 right, left, down, up): the first hat that
-// isn't centred.
+// The joystick's hat as a direction, in the input's bits 0-3 (1 right, 2 left, 4 down,
+// 8 up: src/efz.h kInputRight...kInputUp): the first hat that isn't centred.
 // FUNCTION: 0x1001cec0
 static BYTE hatDirection(DIJOYSTATE *state)
 {
@@ -439,6 +448,7 @@ BYTE efzInput(bool player2)
     typedef BYTE (__thiscall *GetInput)(void *input, BYTE player);
     if (!g_inputCode)
         return 0;
+    // g_scenes[3]->m_game->m_input, as readHat reads it
     BYTE *scene = *(BYTE **)0x79011c;
     BYTE *game = *(BYTE **)(scene + 0x1c);
     void *input = *(void **)(game + 4);

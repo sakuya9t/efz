@@ -34,6 +34,9 @@ void RecorderFrameStart(long frame, int scene);
 bool RecorderFrameEnd(int scene);
 // Ends a fight in progress, and says how a replay went.
 void StopRecorder();
+// No records and no per-tick checks while set: a network match runs frames again on
+// rollback (port/netplay/), which a record can't follow; it writes a replay of its own.
+void SuspendRecorder(bool suspend);
 // A replay's exit code: 0 every tick as recorded, 3 a difference, 4 not replayed.
 int ReplayResult();
 

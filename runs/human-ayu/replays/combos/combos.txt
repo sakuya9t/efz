@@ -1,0 +1,12 @@
+combo master (combo/) (P1) vs runs/human-ayu/bc-d14.zip (P2), ayu vs ayu: 32 matches; each match's most damaging combo: median 2057, most 2783
+  page 1 slot 1: 2783 damage, 7 hits, round 2, 51 s into its fight, from cyan1
+  page 1 slot 2: 2614 damage, 8 hits, round 2, 54 s into its fight, from cyan1
+  page 1 slot 3: 2597 damage, 8 hits, round 2, 74 s into its fight, from red1
+red team 3 (combo-red3/) (P1) vs runs/human-ayu/bc-d14.zip (P2), ayu vs ayu: 32 matches; each match's most damaging combo: median 3324, most 4340
+  page 1 slot 4: 4340 damage, 10 hits, round 2, 111 s into its fight, from cyan1
+  page 1 slot 5: 4010 damage, 9 hits, round 2, 92 s into its fight, from red1
+  page 1 slot 6: 3984 damage, 8 hits, round 3, 204 s into its fight, from red3
+red team 3 with the lookahead (redteam.py) (P1) vs runs/human-ayu/bc-d14.zip (P2), ayu vs ayu: 32 matches; each match's most damaging combo: median 3434, most 4114
+  page 1 slot 7: 4114 damage, 9 hits, round 2, 68 s into its fight, from red0
+  page 1 slot 8: 4066 damage, 7 hits, round 2, 95 s into its fight, from red1
+  page 1 slot 9: 3999 damage, 10 hits, round 2, 118 s into its fight, from red1

@@ -95,7 +95,7 @@ if (-not $configured) {
 }
 # The game and its test; the headless library and tools have a build of their own
 # (docs/headless.md).
-& $cmake --build $build --config RelWithDebInfo --target efz efz-x87-test --parallel
+& $cmake --build $build --config RelWithDebInfo --target efz efz-x87-test efz-netplay-test --parallel
 if ($LASTEXITCODE -ne 0) {
     Die 'the build failed (above)'
 }

@@ -348,10 +348,10 @@ void ReplaySession::loadState(ReplayState &state)
 {
     control_ = false;
     CScene3 *fight = (CScene3 *)g_game.scene(3);
-    char speed = fight->speed;
+    char speed = fight->m_speed;
     state.state.load();
     ((ReplayFile *)g_game.replayFile())->file->seekg(state.position);
-    fight->speed = speed;
+    fight->m_speed = speed;
 }
 
 // FUNCTION: 0x100778c0

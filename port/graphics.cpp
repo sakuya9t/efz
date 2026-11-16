@@ -39,6 +39,19 @@ struct IDirectDrawPalette : IUnknown {
     }
 };
 
+namespace efz {
+
+bool g_skipDrawing;
+
+PALETTEENTRY* ScreenPalette(CGraphics* graphics)
+{
+    if (!graphics || !graphics->m_ddpal)
+        return nullptr;
+    return ((IDirectDrawPalette*)graphics->m_ddpal)->entries;
+}
+
+} // namespace efz
+
 IDirectDrawSurface::IDirectDrawSurface(int w, int h, bool allPixels)
 {
     width = w;
@@ -375,6 +388,8 @@ static BOOL BlitCopy(IDirectDrawSurface* target, RECT dst, IDirectDrawSurface* s
 
 BOOL CGraphics::Blit(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE key, BOOL flip)
 {
+    if (efz::g_skipDrawing)
+        return TRUE;
     return BlitCopy(m_back, dst, surface, src, key, flip, 320, 240);
 }
 
@@ -388,6 +403,8 @@ BOOL CGraphics::BlitEx(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE key
                        char mode)
 {
     Lock s, d;
+    if (efz::g_skipDrawing)
+        return TRUE;
     if (mode != 0 && mode != 1)
         return FALSE;
     if (!Clip(dst, src, flip, 0, 320, 240))
@@ -409,6 +426,8 @@ BOOL CGraphics::BlitTint(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE k
                          BYTE color)
 {
     Lock s, d;
+    if (efz::g_skipDrawing)
+        return TRUE;
     if (!Clip(dst, src, flip, 0, 320, 240))
         return TRUE;
     if (!s.Take(surface, &src) || !d.Take(m_back, &dst))
@@ -428,6 +447,8 @@ BOOL CGraphics::BlitShadow(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE
                            BYTE shade)
 {
     Lock s, d;
+    if (efz::g_skipDrawing)
+        return TRUE;
     int r = src.right;
     if (dst.top >= dst.bottom || dst.left >= dst.right)
         return TRUE;
@@ -477,6 +498,8 @@ BOOL CGraphics::BlitShadow(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE
 BOOL CGraphics::BlitSmear(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE key, BOOL flip)
 {
     Lock s, d;
+    if (efz::g_skipDrawing)
+        return TRUE;
     if (!Clip(dst, src, flip, 3, 320, 240))
         return TRUE;
     if (!s.Take(surface, &src) || !d.Take(m_back, &dst))
@@ -568,6 +591,8 @@ BOOL CGraphics::DrawFrame(RECT rc, BYTE color)
 BOOL CGraphics::FillRect(RECT rc, BYTE color)
 {
     Lock d;
+    if (efz::g_skipDrawing)
+        return TRUE;
     if (rc.top >= rc.bottom || rc.left >= rc.right)
         return TRUE;
     if (rc.top < 0)
@@ -590,6 +615,8 @@ BOOL CGraphics::FillRect(RECT rc, BYTE color)
 BOOL CGraphics::Upscale()
 {
     Lock d;
+    if (efz::g_skipDrawing)
+        return TRUE;
     RECT r = MakeRect(0, 0, 640, 480);
     if (!d.Take(m_back, &r))
         return TRUE;
@@ -606,6 +633,10 @@ BOOL CGraphics::Upscale()
 
 BOOL CGraphics::Flip()
 {
+    if (efz::g_skipDrawing) {
+        efz::PumpEvents();
+        return TRUE;
+    }
     if (m_mode)
         Upscale();
     efz::Present(m_back, m_ddpal ? m_ddpal->entries : NULL);

@@ -35,6 +35,17 @@ original's.
 byte of the game state on every tick ([docs/compat.md](docs/compat.md)).
 See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
 
+**With EfzRevival's netplay built in:** NET PLAY on the title hosts or joins a match over
+the network, rollback and all, with EfzRevival 1.02h's protocol and rules, recovered
+from its binaries and made native (no launcher, no injected DLL). See
+[docs/netplay.md](docs/netplay.md).
+
+**And trained agents to play:** an agent trained here, written as one agent file (its
+network, its combo library's routes, their join points and its chooser), plays a side of
+VS HUMAN (chosen on character select) or this computer's side of a network match, run by
+the game itself, no Python needed, its combos from people's routes planned on copies of
+the fight. See [docs/agents.md](docs/agents.md).
+
 **And headless, for training agents:** `efz_env`, a library (C API, and a Python
 package) that runs batches of matches without a window or sound on every core, 3,000
 to 4,700 times real time on an 8-core laptop, with the game's CPU as an opponent, save
@@ -62,6 +73,8 @@ states and rewards. See [The headless game](#the-headless-game) and
 | `src/efz.rc` | The icon resource (the icon itself is taken from the original at build time) |
 | `src/trace.cpp` | The compatibility test's harness (`make trace` and the native game), not part of efz.exe |
 | `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point; the log, crash reports and fight records |
+| `port/netplay/` | Netplay: EfzRevival 1.02h's launcher protocol and online session (rollback) in the game's process, its UDP messages, the NET PLAY screens ([docs/netplay.md](docs/netplay.md)) |
+| `port/agent/` | Trained agents: their view of a fight (shared with `efz_env`), their network read from an agent file and run, their combos' routes planned on copies of the fight, and their play in the game: character select, the fight, netplay ([docs/agents.md](docs/agents.md)) |
 | `port/headless/` | The headless platform and the training library `efz_env` (C API: `efz_env.h`), `efz-headless`, `efz-bench` |
 | `python/efz_env/` | The Python package over `efz_env`: `EfzVecEnv`, action tables, a Gymnasium adapter |
 
@@ -189,6 +202,22 @@ tools/efzlog.py show logs/<session>  # what happened: warnings, errors, crash, f
 tools/efzlog.py export logs/<session>/fight-003.jsonl fight.npz       # a row a tick
 ```
 
+NET PLAY, on the title menu after VS HUMAN, plays a match over the network: one side hosts,
+the other joins its address, and both play from character select on, with rollback.
+It is EfzRevival 1.02h's netplay, built in ([docs/netplay.md](docs/netplay.md)):
+
+```sh
+efz --data DIR --host                       # or from the command line: host on UDP 10800
+efz --data DIR --join 192.168.1.5          # join it
+```
+
+A trained agent plays in the game too: export it (`python python/examples/export_agent.py
+PACK.zip`, the whole pack in one file: its model, its combo library's routes and their
+join points, its chooser, played as the pack's `play.py --assist` plays them; or
+`MODEL.zip`), put the `.efzagent` file in the game's `agents`
+folder, and on VS HUMAN's character select F5 or F6 has it play P1 or P2; NET PLAY's
+PLAYED BY has it play your side of a network match ([docs/agents.md](docs/agents.md)).
+
 ## The headless game
 
 For reinforcement learning and other programs that play: the game without a window,
@@ -209,11 +238,29 @@ obs = env.reset()                                   # (256, 2, 168)
 obs, reward, terminated, truncated, info = env.step(ActionTable().to_bytes(actions))
 ```
 
+Adapters for Gymnasium (`efz/VsCpu-v0`), Stable-Baselines3 and PettingZoo, a PPO
+training script, and a window to play a trained agent yourself, which records every
+match and can let the agent learn from them:
+
+```sh
+pip install -e "python[all]"
+python python/examples/train.py --data "$EFZ_DIR" --opponent self --steps 2e6 --out runs/self
+python python/examples/play.py --data "$EFZ_DIR" --agent runs/self/model.zip
+python python/examples/train.py --data "$EFZ_DIR" --opponent human --load runs/self/model.zip
+```
+
+[runs/](runs/README.md) has the first trained agents (Ayu against Ayu): the best wins 77%
+of full matches against the level-4 CPU. Play it with
+`python python/examples/play.py --data "$EFZ_DIR" --agent runs/curriculum/model.zip --chars ayu ayu`.
+
 It is the same game: `tools/compat.py check` plays every case of the compatibility
 suite both in the SDL3 game and headless, and the logs must agree with the reference
 and with each other; CI runs the headless library's tests that need no game data
 (`ctest -L headless`). [docs/headless.md](docs/headless.md) has the observations,
-actions, rewards, save states, the GPU and the measurements.
+actions, rewards, save states, the GPU and the measurements;
+[docs/training.md](docs/training.md) the training frameworks it can be used from (and
+the gaps to close first), how Touhou 12.3's AIs and EFZ's own CPU are built, and what
+follows for training.
 
 ## Matching workflow
 
@@ -303,11 +350,15 @@ copy of the 1.02h files (default `~/.local/share/efz-decomp/revival/1.02h`).
 
 ```sh
 toolchain/setup-vs2012.sh          # ~3.5 GB download, once; after toolchain/setup.sh
+toolchain/setup-vs2012-windows.sh  # the same on Windows, in Git Bash: no container, no admin
 ```
 
 lays out Visual C++ 2012 with Update 5's compiler, the Windows SDK 7.1A, the DirectX SDK
 (June 2010), boost 1.56, protobuf 2.6.1 and zlib 1.2.8, which is what the binaries'
-Rich headers and code show; `tools/msvc11` runs it.
+Rich headers and code show; `tools/msvc11` runs it. On Windows it runs the tools as they
+are, with a `subst` drive `Z:` and junctions (`C:\Git`, `C:\Programming`) for the
+container's paths, and the setup also puts GNU make and a `python3` with pefile in the
+toolchain's `bin`; add it to `PATH` and the targets below run the same way.
 
 ```sh
 make revival-diff                  # compare the launcher's functions with $REVIVAL_DIR's
@@ -377,7 +428,9 @@ See [docs/recon.md](docs/recon.md). In short:
      headless platform runs it without a window, many games to a process
      ([docs/headless.md](docs/headless.md))
    - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools.
-     Netplay is tested against the original game running EfzRevival 1.02h, over the network
+     *Begun:* rollback netplay is built in, with EfzRevival 1.02h's protocol and rules
+     ([docs/netplay.md](docs/netplay.md)); native against native is checked frame by frame.
+     Netplay is to be tested against the original game running EfzRevival 1.02h, over the network
      ([docs/compat.md](docs/compat.md), "The network layer")
    - add widescreen and HD output, in-game input binding and controller hot-plug
    - add mod support for characters, stages and palettes

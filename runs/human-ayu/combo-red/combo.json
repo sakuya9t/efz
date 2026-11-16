@@ -1,0 +1,212 @@
+{
+ "args": {
+  "data": "D:/tasogare/EFZ",
+  "starts": "D:/tasogare/efz-replays/combo-starts",
+  "replays": null,
+  "out": "runs/human-ayu/combo-red",
+  "start": "runs/human-ayu/combo/combo.zip",
+  "prior": "C:\\Users\\sakuy\\.local\\share\\asm\\worktrees\\28c0039a-e9f0-4d37-971f-5c6186c8c9d1\\runs\\human-ayu\\bc-d14.zip",
+  "prior_coef": 0.0,
+  "delay": 0,
+  "history": 16,
+  "limit": 1200,
+  "focus": 0.5,
+  "resume": false,
+  "pool": 624,
+  "envs": 64,
+  "chunk": 1000000.0,
+  "budget": 12000000.0,
+  "lr": 0.0001,
+  "ent_coef": 0.005,
+  "torch_threads": 12
+ },
+ "history": [
+  {
+   "steps": 0,
+   "eval": {
+    "starts": 82,
+    "damage": 598.609756097561,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 1855.3000000000002,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 2571.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 3.2560975609756095,
+    "human_hits": 3.268292682926829,
+    "hits_max": 10.0,
+    "human_hits_max": 20.0,
+    "better": 0.3170731707317073,
+    "ic": 0.0,
+    "special": 0.43902439024390244
+   }
+  },
+  {
+   "steps": 5019648,
+   "seconds": 310.8040702342987,
+   "prior_kl": NaN,
+   "eval": {
+    "starts": 82,
+    "damage": 759.4024390243902,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 2079.0,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 2571.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 3.8292682926829267,
+    "human_hits": 3.268292682926829,
+    "hits_max": 13.0,
+    "human_hits_max": 20.0,
+    "better": 0.3902439024390244,
+    "ic": 0.0975609756097561,
+    "special": 0.6463414634146342
+   }
+  },
+  {
+   "steps": 6027264,
+   "seconds": 330.7852382659912,
+   "prior_kl": NaN,
+   "eval": {
+    "starts": 82,
+    "damage": 828.6463414634146,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 2218.4,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 2679.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 3.6097560975609757,
+    "human_hits": 3.268292682926829,
+    "hits_max": 14.0,
+    "human_hits_max": 20.0,
+    "better": 0.45121951219512196,
+    "ic": 0.12195121951219512,
+    "special": 0.7073170731707317
+   }
+  },
+  {
+   "steps": 7034880,
+   "seconds": 327.89523124694824,
+   "prior_kl": NaN,
+   "eval": {
+    "starts": 82,
+    "damage": 859.1219512195122,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 2192.6000000000004,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 2635.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 3.182926829268293,
+    "human_hits": 3.268292682926829,
+    "hits_max": 12.0,
+    "human_hits_max": 20.0,
+    "better": 0.47560975609756095,
+    "ic": 0.13414634146341464,
+    "special": 0.7195121951219512
+   }
+  },
+  {
+   "steps": 8042496,
+   "seconds": 335.2795407772064,
+   "prior_kl": NaN,
+   "eval": {
+    "starts": 82,
+    "damage": 912.9878048780488,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 2309.4000000000005,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 3298.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 3.451219512195122,
+    "human_hits": 3.268292682926829,
+    "hits_max": 14.0,
+    "human_hits_max": 20.0,
+    "better": 0.4878048780487805,
+    "ic": 0.2073170731707317,
+    "special": 0.7073170731707317
+   }
+  },
+  {
+   "steps": 9050112,
+   "seconds": 327.7712104320526,
+   "prior_kl": NaN,
+   "eval": {
+    "starts": 82,
+    "damage": 985.5243902439024,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 2876.7,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 4102.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 3.6707317073170733,
+    "human_hits": 3.268292682926829,
+    "hits_max": 14.0,
+    "human_hits_max": 20.0,
+    "better": 0.45121951219512196,
+    "ic": 0.32926829268292684,
+    "special": 0.7073170731707317
+   }
+  },
+  {
+   "steps": 10057728,
+   "seconds": 329.14415764808655,
+   "prior_kl": NaN,
+   "eval": {
+    "starts": 82,
+    "damage": 1160.7926829268292,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 3087.6000000000004,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 4102.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 4.402439024390244,
+    "human_hits": 3.268292682926829,
+    "hits_max": 14.0,
+    "human_hits_max": 20.0,
+    "better": 0.524390243902439,
+    "ic": 0.3780487804878049,
+    "special": 0.7317073170731707
+   }
+  },
+  {
+   "steps": 11065344,
+   "seconds": 327.5318992137909,
+   "prior_kl": NaN,
+   "eval": {
+    "starts": 82,
+    "damage": 1067.060975609756,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 3064.2,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 4102.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 4.109756097560975,
+    "human_hits": 3.268292682926829,
+    "hits_max": 14.0,
+    "human_hits_max": 20.0,
+    "better": 0.4634146341463415,
+    "ic": 0.3048780487804878,
+    "special": 0.6829268292682927
+   }
+  },
+  {
+   "steps": 12072960,
+   "seconds": 328.1792483329773,
+   "prior_kl": NaN,
+   "eval": {
+    "starts": 82,
+    "damage": 1068.1951219512196,
+    "human_damage": 502.3780496720134,
+    "damage_p90": 2876.7,
+    "human_damage_p90": 1533.7000673074276,
+    "damage_max": 4143.0,
+    "human_damage_max": 2926.000088185072,
+    "hits": 4.2073170731707314,
+    "human_hits": 3.268292682926829,
+    "hits_max": 14.0,
+    "human_hits_max": 20.0,
+    "better": 0.4634146341463415,
+    "ic": 0.3048780487804878,
+    "special": 0.7195121951219512
+   }
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+284 library combos, 624 training starts, 82 held out (51s)
+C:\Users\sakuy\AppData\Local\Temp\claude\17035b73bc2e8750\69f916fc-8098-4b53-ba81-0bfa9cfc366e\scratchpad\venv\Lib\site-packages\stable_baselines3\common\vec_env\base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+10682 combo trials and 1248 of its own play in 143s
+selector trained (304s), loss 0.055
+red0 {"own": {"damage": 651, "p90": 1524, "most": 2533}, "selector": {"damage": 587, "p90": 1859, "most": 2533}, "hindsight": {"damage": 994, "p90": 2283, "most": 3053}, "macro_used": 0.4268292682926829}
+cyan0 {"own": {"damage": 960, "p90": 2464, "most": 3479}, "selector": {"damage": 821, "p90": 2415, "most": 3113}, "hindsight": {"damage": 1329, "p90": 2999, "most": 4589}, "macro_used": 0.34146341463414637}
+blue0 {"own": {"damage": 1083, "p90": 2821, "most": 4268}, "selector": {"damage": 970, "p90": 2667, "most": 3317}, "hindsight": {"damage": 1825, "p90": 4434, "most": 5480}, "macro_used": 0.25609756097560976}
+blue3 {"own": {"damage": 1378, "p90": 3599, "most": 4386}, "selector": {"damage": 1521, "p90": 3798, "most": 4593}, "hindsight": {"damage": 2336, "p90": 5228, "most": 6165}, "macro_used": 0.34146341463414637}
+done in 350s

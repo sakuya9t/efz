@@ -1,0 +1,168 @@
+{
+ "starts": "own",
+ "n": 200,
+ "kinds": {
+  "ground-mid": 61,
+  "air-mid": 21,
+  "ground-corner": 111,
+  "air-corner": 7
+ },
+ "models": {
+  "runs/human-ayu/agent-league/model.zip": {
+   "as-is": {
+    "starts": 200,
+    "damage": 824.76,
+    "damage_p90": 1694.3,
+    "damage_max": 1945.0,
+    "hits": 3.61,
+    "hits_max": 9.0,
+    "ic": 0.01,
+    "special": 0.64
+   },
+   "blue0": {
+    "starts": 200,
+    "damage": 829.565,
+    "damage_p90": 1666.0,
+    "damage_max": 2417.0,
+    "hits": 3.735,
+    "hits_max": 9.0,
+    "ic": 0.005,
+    "special": 0.68
+   },
+   "red0": {
+    "starts": 200,
+    "damage": 849.14,
+    "damage_p90": 1773.6,
+    "damage_max": 2053.0,
+    "hits": 3.605,
+    "hits_max": 8.0,
+    "ic": 0.01,
+    "special": 0.665
+   },
+   "cyan0": {
+    "starts": 200,
+    "damage": 819.555,
+    "damage_p90": 1735.5,
+    "damage_max": 2063.0,
+    "hits": 3.49,
+    "hits_max": 8.0,
+    "ic": 0.01,
+    "special": 0.635
+   },
+   "cyan3": {
+    "starts": 200,
+    "damage": 868.935,
+    "damage_p90": 1766.0,
+    "damage_max": 2512.0,
+    "hits": 3.63,
+    "hits_max": 9.0,
+    "ic": 0.02,
+    "special": 0.69
+   }
+  },
+  "runs/human-ayu/agent-league2-base/model.zip": {
+   "as-is": {
+    "starts": 200,
+    "damage": 803.1,
+    "damage_p90": 1694.3,
+    "damage_max": 1973.0,
+    "hits": 3.525,
+    "hits_max": 9.0,
+    "ic": 0.005,
+    "special": 0.625
+   },
+   "blue0": {
+    "starts": 200,
+    "damage": 839.81,
+    "damage_p90": 1685.2,
+    "damage_max": 1942.0,
+    "hits": 3.7,
+    "hits_max": 9.0,
+    "ic": 0.0,
+    "special": 0.64
+   },
+   "red0": {
+    "starts": 200,
+    "damage": 809.45,
+    "damage_p90": 1713.1,
+    "damage_max": 2154.0,
+    "hits": 3.57,
+    "hits_max": 9.0,
+    "ic": 0.01,
+    "special": 0.615
+   },
+   "cyan0": {
+    "starts": 200,
+    "damage": 802.375,
+    "damage_p90": 1731.8999999999999,
+    "damage_max": 2496.0,
+    "hits": 3.505,
+    "hits_max": 9.0,
+    "ic": 0.015,
+    "special": 0.615
+   },
+   "cyan3": {
+    "starts": 200,
+    "damage": 811.76,
+    "damage_p90": 1815.2,
+    "damage_max": 2496.0,
+    "hits": 3.515,
+    "hits_max": 10.0,
+    "ic": 0.0,
+    "special": 0.62
+   }
+  },
+  "runs/human-ayu/agent-league2-own/model.zip": {
+   "as-is": {
+    "starts": 200,
+    "damage": 861.14,
+    "damage_p90": 1725.3,
+    "damage_max": 2285.0,
+    "hits": 3.735,
+    "hits_max": 10.0,
+    "ic": 0.005,
+    "special": 0.64
+   },
+   "blue0": {
+    "starts": 200,
+    "damage": 768.295,
+    "damage_p90": 1680.1999999999998,
+    "damage_max": 1962.0,
+    "hits": 3.565,
+    "hits_max": 9.0,
+    "ic": 0.0,
+    "special": 0.59
+   },
+   "red0": {
+    "starts": 200,
+    "damage": 807.505,
+    "damage_p90": 1741.6999999999998,
+    "damage_max": 2425.0,
+    "hits": 3.61,
+    "hits_max": 8.0,
+    "ic": 0.01,
+    "special": 0.625
+   },
+   "cyan0": {
+    "starts": 200,
+    "damage": 801.39,
+    "damage_p90": 1726.2,
+    "damage_max": 2594.0,
+    "hits": 3.485,
+    "hits_max": 9.0,
+    "ic": 0.035,
+    "special": 0.595
+   },
+   "cyan3": {
+    "starts": 200,
+    "damage": 827.435,
+    "damage_p90": 1798.8,
+    "damage_max": 2631.0,
+    "hits": 3.56,
+    "hits_max": 9.0,
+    "ic": 0.04,
+    "special": 0.61
+   }
+  }
+ }
+}

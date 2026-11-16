@@ -1,0 +1,22 @@
+people (held out): {"presses": {"A": 0.0069, "B": 0.0081, "C": 0.0062, "D": 0.001}, "presses_per_second": 1.43, "jumps_per_min": 18.79, "guard_ground_per_min": 12.77, "guard_air_per_min": 0.39, "rg_ground_per_min": 2.79, "rg_air_per_min": 0.42, "hit_ground_per_min": 5.17, "hit_air_per_min": 2.65, "rg_ground": 0.135, "rg_air": 0.122, "rc": 0.27, "rc_chances_per_min": 1.36, "rg_move": 0.424, "rg_punish": 0.16, "rg_long": 0.024, "rg_long_hit": 0.294, "guess_623A_per_min": 0.22, "guess_623A_counter": 0.165, "guess_623B_per_min": 0.33, "guess_623B_counter": 0.222}
+1908 matches: 4,935,940 training steps, 1,671,998 held out (58s)
+  epoch 0 batch 0/1206: nll 3.766 value 0.1272
+  epoch 0 batch 500/1206: nll 0.394 value 0.0635
+  epoch 0 batch 1000/1206: nll 0.387 value 0.0545
+{"nll": 0.3757252720651477, "action": 0.9125549193240662, "direction": 0.9326691778339448, "press_recall": 0.005245471682648963, "press_precision": 0.5013054830287206, "presses": 0.02189177259781411, "epoch": 0, "train_nll": 0.6010194486758388, "train_value": 0.0652624723705246, "seconds": 282.3810398578644}
+  epoch 1 batch 0/1206: nll 0.367 value 0.0500
+  epoch 1 batch 500/1206: nll 0.368 value 0.0449
+  epoch 1 batch 1000/1206: nll 0.351 value 0.0375
+{"nll": 0.36203824194836454, "action": 0.9128013311020707, "direction": 0.9333773126522878, "press_recall": 0.040488484550446686, "press_precision": 0.3931034482758621, "presses": 0.02189177259781411, "epoch": 1, "train_nll": 0.3608501464470597, "train_value": 0.042260582439422614, "seconds": 287.46855998039246}
+  epoch 2 batch 0/1206: nll 0.355 value 0.0328
+  epoch 2 batch 500/1206: nll 0.347 value 0.0290
+  epoch 2 batch 1000/1206: nll 0.354 value 0.0261
+{"nll": 0.35072716323734576, "action": 0.91365240867513, "direction": 0.9337499207534937, "press_recall": 0.02603611725814824, "press_precision": 0.5129171151776103, "presses": 0.02189177259781411, "epoch": 2, "train_nll": 0.34820186680209814, "train_value": 0.028117406280213617, "seconds": 295.1994526386261}
+  epoch 3 batch 0/1206: nll 0.354 value 0.0233
+  epoch 3 batch 500/1206: nll 0.353 value 0.0231
+  epoch 3 batch 1000/1206: nll 0.332 value 0.0215
+{"nll": 0.34876102913674545, "action": 0.9138641314164251, "direction": 0.9339365238475166, "press_recall": 0.03193727290112832, "press_precision": 0.5258659469185785, "presses": 0.02189177259781411, "epoch": 3, "train_nll": 0.34147363922995216, "train_value": 0.02273205921120514, "seconds": 286.66154861450195}
+kept the epoch with held-out nll 0.3488
+C:\Users\sakuy\AppData\Local\Temp\claude\17035b73bc2e8750\69f916fc-8098-4b53-ba81-0bfa9cfc366e\scratchpad\venv\Lib\site-packages\stable_baselines3\common\vec_env\base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+done in 1219s

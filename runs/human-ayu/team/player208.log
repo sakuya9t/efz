@@ -1,0 +1,11 @@
+people (held out): {"presses": {"A": 0.0067, "B": 0.0094, "C": 0.0062, "D": 0.001}, "presses_per_second": 1.49, "jumps_per_min": 19.52, "guard_ground_per_min": 9.6, "guard_air_per_min": 0.31, "rg_ground_per_min": 2.13, "rg_air_per_min": 0.37, "hit_ground_per_min": 5.4, "hit_air_per_min": 1.88, "rg_ground": 0.124, "rg_air": 0.145, "rc": 0.274, "rc_chances_per_min": 1.91, "rg_move": 0.481, "rg_punish": 0.136, "rg_long": 0.0, "rg_long_hit": null, "guess_623A_per_min": 0.31, "guess_623A_counter": 0.2, "guess_623B_per_min": 0.43, "guess_623B_counter": 0.286}
+120 matches: 342,328 training steps, 124,345 held out (4s)
+starting from runs/human-ayu/bc-d14.zip
+  epoch 0 batch 0/84: nll 0.330 value 0.0281
+{"nll": 0.3239113010770186, "action": 0.9175760987574892, "direction": 0.9386786762636213, "press_recall": 0.07430555555555556, "press_precision": 0.6388059701492538, "presses": 0.023161365555510877, "epoch": 0, "train_nll": 0.3271572739181876, "train_value": 0.02383841154960861, "seconds": 13.101802587509155}
+  epoch 1 batch 0/84: nll 0.338 value 0.0213
+{"nll": 0.3225302185011963, "action": 0.9176323937432145, "direction": 0.9386625919819857, "press_recall": 0.08090277777777778, "press_precision": 0.6297297297297297, "presses": 0.023161365555510877, "epoch": 1, "train_nll": 0.32237807717307926, "train_value": 0.02030457941121537, "seconds": 13.459877014160156}
+kept the epoch with held-out nll 0.3225
+C:\Users\sakuy\AppData\Local\Temp\claude\17035b73bc2e8750\69f916fc-8098-4b53-ba81-0bfa9cfc366e\scratchpad\venv\Lib\site-packages\stable_baselines3\common\vec_env\base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+done in 35s

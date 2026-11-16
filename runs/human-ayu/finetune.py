@@ -1,0 +1,933 @@
+"""Reinforcement learning from the clone of people's Ayu (bc.py), kept close to how they
+play: PPO, every frame, with a KL penalty toward the clone (efz_env.policy).
+
+    python runs/human-ayu/finetune.py --data "$EFZ_DIR" --out runs/human-ayu/agent   # continues it
+    python runs/human-ayu/finetune.py --data "$EFZ_DIR" --out runs/mine --prior-coef 0
+
+Ayu plays player 1. In --cpu-share of the matches player 2 is the game's CPU, from
+--level up (a level higher once it wins --promote of its matches there), playing a
+character drawn from all of them (people's Ayu met them all); in the rest it
+is Ayu played by one of: a frozen copy of the policy (taken at each chunk's start), the
+clone, the agent of runs/curriculum (every 4 frames, as it was trained), and the --team:
+clones of single players (bc.py --players), each with its own habits, so that no one
+way of winning works against all of them (a league, as against self-play's narrowing),
+and the --combo master (combo.py): a red-team opponent, seeing the game as it is
+(without the reaction time the others have), that lands the most damaging combo it can,
+so that a hit taken costs what it can. With --combo-teacher it is also the target of the
+pull while the agent's own combo runs (people's play elsewhere). The reward
+is the damage dealt minus taken (full bars) and 1 for the match, as the clone's critic
+learnt it from people's matches. Each chunk (--chunk steps) is followed by matches
+played to the end against the CPU (at the level of the chunk) and the curriculum
+agent, with how it played (evaluate.py's Events: people's are people.py's). --out gets
+model.zip, chunkNNN.zip, finetune.json (the evaluations) and config.json.
+
+Any character (--char, from its clone: bc.py --char), Ayu by default; the mirror
+opponents above (a frozen copy, the clone, --old, --team, --combo) play the learner's
+character. --vs MODEL:CHAR adds frozen opponents of their own characters (an agent of
+another run), which play --vs-share of the matches against agents (1: only they). With
+--focus the learner also gets focus.py's shaping reward for what it is meant to be good
+at ('setup': objects put out in free time, Mizuka's and Misuzu's traps; 'charge': Kano's
+charge moves in free time; 'reversal': an invincible attack at wake-up or after a recoil
+guard that hits): an exploiter with a style, trained against a frozen agent
+(--vs) and kept close to its people's clone. --stop-win ends it once it beats every --vs
+opponent that often. best.zip is the chunk whose evaluation won most (the mean over the
+--vs opponents and the CPU; with --cpu-chars a character, the share of its HP taken
+instead of its wins), to be checked on more matches: a league forgets what it
+stops meeting. --pfsp-window shares the matches by the last few evaluations, not the
+last one alone. --vs-assist plays the --vs opponents with built-in combos
+(combo_support.FairAssistOpponent), in training and evaluations: an agent trained with
+--assist, met as it plays. --assist-distill makes --assist's routes targets rather than
+steps left out: after each update the policy learns the routes' actions on the steps they
+played, so that its own combos become theirs (it is evaluated without them); with
+--assist-where cpu only in the CPU's matches, whose guarding the planner models, its own
+combos learning by reward against the agents.
+
+    python runs/human-ayu/finetune.py --char kano --start runs/human-ayu/kano/bc-d14.zip \\
+        --prior runs/human-ayu/kano/bc-d14.zip --delay 14 --out runs/human-ayu/kano/exploiter \\
+        --vs runs/human-ayu/agent-red/model.zip:ayu --vs-share 1 --cpu-share 0.25 --focus charge
+"""
+
+import argparse
+import json
+import os
+import sys
+import time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(os.path.dirname(HERE))
+sys.path.insert(0, os.path.join(REPO, 'python'))
+sys.path.insert(0, HERE)
+
+import numpy as np
+import torch
+from stable_baselines3 import PPO
+from stable_baselines3.common.callbacks import BaseCallback
+
+from efz_env import ActionTable
+from efz_env.sb3 import EfzSB3VecEnv, frozen, held, mixture
+
+import evaluate as ev
+
+TABLE = ActionTable()
+
+
+OLD = os.path.join(REPO, 'runs', 'curriculum', 'model.zip')
+
+
+def parse():
+    p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    p.add_argument('--data', default=os.environ.get('EFZ_DATA') or os.environ.get('EFZ_DIR'))
+    p.add_argument('--out', default=os.path.join(HERE, 'agent'))
+    p.add_argument('--char', default='ayu', help="the learner's character")
+    p.add_argument('--vs', nargs='*', default=[],
+                   help='frozen opponents of other runs, MODEL.zip:CHAR (CHAR: ayu if left out)')
+    p.add_argument('--vs-share', type=float, default=0.5,
+                   help='share of the matches against agents that the --vs opponents play')
+    p.add_argument('--vs-char-share', nargs='*', default=[],
+                   help="CHAR:SHARE: a character's --vs opponents together play this share of the "
+                        "--vs matches, --pfsp sharing them among themselves and the rest among the "
+                        "others (a league that grows doesn't dilute what it must keep meeting)")
+    p.add_argument('--vs-damage', type=float, nargs='*', default=[],
+                   help="a red team's advantage: the damage the learner takes from hits in the "
+                        "--vs opponents' matches, times this (one value for all, or one per --vs "
+                        "opponent); training only, the evaluations are the game's")
+    p.add_argument('--vs-rg', type=float, nargs='*', default=[],
+                   help="a red team's advantage (advantages.py): the share of the --vs opponents' "
+                        "guards made recoil guards, as the game's CPU makes its own (one value, or "
+                        "one per --vs opponent); training only")
+    p.add_argument('--vs-reversal', type=float, nargs='*', default=[],
+                   help="and the share of their recoil guards followed by their fastest invincible "
+                        "move (motions.json), as a person's reversal")
+    p.add_argument('--vs-throw', type=float, nargs='*', default=[],
+                   help="and the share of their chances to throw (close, the learner free and not "
+                        "protected) in which they throw")
+    p.add_argument('--vs-adv-share', type=float, default=1.0,
+                   help="the share of the --vs matches that play with the advantages (--vs-rg ... "
+                        "--vs-damage), drawn anew each chunk; the rest the plain game")
+    p.add_argument('--vs-bait', type=float, nargs='*', default=[],
+                   help="and the share of the learner's knockdowns on which they guard its wake-up "
+                        "instead of attacking it: its wake-up reversal guarded, then punished")
+    p.add_argument('--vs-patient', type=float, nargs='*', default=[],
+                   help="and the share of their guards' ends and their risings after which they hold "
+                        "a guard (crouching or standing, drawn) for 20 steps, pressing nothing "
+                        "(advantages.py patient: a person's defence, docs/training-v2.md)")
+    p.add_argument('--vs-wake', type=float, nargs='*', default=[],
+                   help="and the share of their risings on which they put out an invincible move "
+                        "as soon as the game takes it (advantages.py wake)")
+    p.add_argument('--vs-jumpin', type=float, nargs='*', default=[],
+                   help="and the share of the learner's knockdowns they jump in on, timed to its "
+                        "rise (advantages.py jumpin)")
+    p.add_argument('--focus', choices=('setup', 'charge', 'reversal'),
+                   help="a shaping reward (focus.py)")
+    p.add_argument('--focus-coef', type=float, default=0.02)
+    p.add_argument('--pfsp', type=float, default=0,
+                   help='share out the --vs matches by (1 - the last evaluation\'s win) ** PFSP: '
+                        'more against what it loses to (prioritized fictitious self-play; 0: evenly)')
+    p.add_argument('--pfsp-window', type=int, default=1,
+                   help='--pfsp by the average win of the last this many evaluations (a 16-match '
+                        'evaluation swings by about 12%%)')
+    p.add_argument('--stop-win', type=float, default=0,
+                   help='stop once winning this share against every --vs opponent (0: never)')
+    p.add_argument('--start', default=os.path.join(HERE, 'bc.zip'))
+    p.add_argument('--prior', default=os.path.join(HERE, 'bc.zip'),
+                   help='the policy to stay close to')
+    p.add_argument('--prior-coef', type=float, default=0.1)
+    p.add_argument('--old', default=OLD,
+                   help='an agent of frame_skip 4 among the opponents')
+    p.add_argument('--team', nargs='*', default=[], help="players' clones among the opponents")
+    p.add_argument('--combo', help="combo.py's combo master: a red-team opponent")
+    p.add_argument('--combo-teacher', action='store_true',
+                   help="the combo master as the pull's target in the agent's own combos")
+    p.add_argument('--combo-delay', type=int, default=0, help="the combo master's reaction time")
+    p.add_argument('--lookahead', help="combo_library.py's library: the combo master tries its "
+                   "options at each hit on copies of the game and plays the best (redteam.py)")
+    p.add_argument('--combo-share', type=float, default=0.25,
+                   help='share of the matches against agents that the combo master plays')
+    p.add_argument('--level', type=int, default=2, help="the CPU's level to start at")
+    p.add_argument('--promote', type=float, default=0.6,
+                   help='share of wins against the CPU to move up a level')
+    p.add_argument('--envs', type=int, default=64)
+    p.add_argument('--practice', type=int, default=0,
+                   help='of --envs, the environments of combo practice (practice.py): trials '
+                        'from a hit, resources preset, against a dummy')
+    p.add_argument('--practice-starts', default='own',
+                   help="'own' (the learner's first hits against agents) or combo_starts.py's "
+                        "folder (people's)")
+    p.add_argument('--practice-replays',
+                   help="the folder with index.csv for people's starts (default: the starts' parent)")
+    p.add_argument('--practice-rich', type=float, default=0.5,
+                   help='share of trials with resources drawn from the 12 groups')
+    p.add_argument('--practice-pool', type=int, default=400, help='starts held at once')
+    p.add_argument('--practice-limit', type=int, default=600, help='steps a trial lasts at most')
+    p.add_argument('--assist', help="built-in combos (combo_support.ComboAssist): once the learner "
+                                    "sees its hit, routes from this library (combo_library.py's) and "
+                                    "its own play are tried on copies and the best played; those "
+                                    "steps are kept out of the policy's loss")
+    p.add_argument('--assist-distill', type=float, default=0,
+                   help="--assist's routes as targets: after each update, this times the "
+                        "cross-entropy of the policy toward the routes' actions on the steps they "
+                        "played, so that its own combos learn them (evaluated without routes)")
+    p.add_argument('--assist-where', default='all', choices=('all', 'cpu'),
+                   help="--assist's routes in every match, or only the CPU's (the planner's "
+                        "defender guards as the CPU does; agents escape otherwise)")
+    p.add_argument('--assist-score', default='damage', choices=('damage', 'value'),
+                   help="--assist's and --vs-assist's choice of route: the most damaging, or the "
+                        "most worth to the player (damage plus its critic's value of the game it "
+                        "left: redteam.Planner)")
+    p.add_argument('--vs-assist', help="the --vs opponents play with built-in combos, routes from "
+                                       "this library (combo_support.FairAssistOpponent): agents "
+                                       "trained with --assist, met as they play")
+    p.add_argument('--practice-scale', type=float, default=1.0,
+                   help="practice's reward per HP dealt, as a multiple of the match's (1/9999): "
+                        "combo.py's is about 10")
+    p.add_argument('--cpu-share', type=float, default=0.5)
+    p.add_argument('--cpu-focus', nargs='*', default=[], metavar='CHAR:SHARE',
+                   help="of the CPU's matches, SHARE with CHAR (the rest drawn from all 23): "
+                        "kanna:0.25 for more of level-4 Kanna, whom it meets once in 23 "
+                        "otherwise")
+    p.add_argument('--history', type=int, default=16)
+    p.add_argument('--delay', type=int, default=0,
+                   help='steps late every player sees the game (the prior must be trained '
+                        'with the same: bc.py --delay)')
+    p.add_argument('--delay-most', type=int, default=None,
+                   help="a reaction time that varies, as people's does: each match's drawn "
+                        "from --delay to this (default: --delay always); the agent is "
+                        "evaluated at --delay")
+    p.add_argument('--chunk', type=float, default=3e6)
+    p.add_argument('--budget', type=float, default=6e7)
+    p.add_argument('--minutes', type=float, default=5)
+    p.add_argument('--eval', type=int, default=48)
+    p.add_argument('--eval-every', type=int, default=1,
+                   help='evaluate after every this many chunks (and the last): --assist plans in '
+                        'every match evaluated, which is slow')
+    p.add_argument('--cpu-chars', default='tiers',
+                   help="the CPU's characters in evaluations: 'tiers' (level 4: a third per "
+                        "tier, evaluate.TIERS), 'random' (drawn), or one character, as the "
+                        "only CPU trained against (--cpu-focus CHAR:1): kanna; best.zip then "
+                        "counts the share of its HP taken, which moves where its wins don't"),
+    p.add_argument('--lr', type=float, default=1e-4)
+    p.add_argument('--lr-end', type=float, default=None,
+                   help='the learning rate falls linearly from --lr to this over the run, from '
+                        "its start's steps to --budget (docs/training-v2.md: the spread of the "
+                        "chunks' wandering shrinks with the step)")
+    p.add_argument('--average', action='store_true',
+                   help="keep a running mean of the chunks' weights (avg.zip): it is what is "
+                        "evaluated after each chunk, best.zip and PFSP's shares come from it, it "
+                        "is the run's result; the learner trains on as before")
+    p.add_argument('--seed', type=int, default=0,
+                   help="torch's generator and the environments' seeds (a replicate run: the "
+                        "same command with another --seed); 0: as before")
+    p.add_argument('--n-steps', type=int, default=256, help="PPO's rollout, steps per environment")
+    p.add_argument('--eval-workers', type=int, default=1,
+                   help="the evaluation's pairings in this many processes (seeded: the same "
+                        "results as one after another); the red team's stays in this one")
+    p.add_argument('--eval-old', type=int, default=1,
+                   help='0: leave the curriculum agent (--old) out of the evaluations')
+    p.add_argument('--ent-coef', type=float, default=0.005)
+    p.add_argument('--torch-threads', type=int, default=8)
+    args = p.parse_args()
+    if args.delay_most is not None and args.delay_most != args.delay:
+        if args.delay_most < args.delay:
+            p.error('--delay-most: at least --delay')
+        if args.assist or args.vs_assist or args.practice:  # (they plan with one delay)
+            p.error('--delay-most: not with --assist, --vs-assist or --practice')
+    if args.cpu_chars not in ('tiers', 'random'):
+        from efz_env.vec import character_names
+        if args.cpu_chars not in character_names():
+            p.error(f'--cpu-chars: tiers, random or a character, not {args.cpu_chars}')
+    if args.char != 'ayu' and args.old == OLD:  # the curriculum agent plays Ayu only
+        args.old = ''
+    args.vs = [tuple(v.rsplit(':', 1)) if ':' in os.path.basename(v) else (v, 'ayu')
+               for v in args.vs]
+    if len(args.vs_damage) not in (0, 1, len(args.vs)) or any(d <= 0 for d in args.vs_damage):
+        p.error(f'--vs-damage: one value above 0, or one per --vs opponent ({len(args.vs)})')
+    if len(args.vs_damage) == 1:
+        args.vs_damage = args.vs_damage * len(args.vs)
+    for name in ('vs_rg', 'vs_reversal', 'vs_throw', 'vs_bait', 'vs_patient', 'vs_wake',
+                 'vs_jumpin'):
+        v = getattr(args, name)
+        if len(v) not in (0, 1, len(args.vs)) or any(not 0 <= x <= 1 for x in v):
+            p.error(f"--{name.replace('_', '-')}: one share (0-1), or one per --vs opponent")
+        setattr(args, name, v * len(args.vs) if len(v) == 1 else v)
+    shares = {}
+    for x in args.vs_char_share:
+        c, _, v = x.rpartition(':')
+        try:
+            shares[c] = float(v)
+        except ValueError:
+            p.error(f'--vs-char-share: CHAR:SHARE, not {x}')
+        if not any(ch == c for _, ch in args.vs) or not 0 < shares[c] < 1:
+            p.error(f'--vs-char-share: {c} has no --vs opponent, or {v} is not a share in (0, 1)')
+    if sum(shares.values()) >= 1:
+        p.error('--vs-char-share: the shares add up to 1 or more')
+    args.vs_char_share = shares
+    return args
+
+
+def vs_advantage(args, j):
+    """The --vs opponent j's advantages (advantages.parse's keys)."""
+    get = lambda v, default: v[j] if v else default
+    return dict(rg=get(args.vs_rg, 0.0), reversal=get(args.vs_reversal, 0.0),
+                throw=get(args.vs_throw, 0.0), damage=get(args.vs_damage, 1.0),
+                bait=get(args.vs_bait, 0.0), patient=get(args.vs_patient, 0.0),
+                wake=get(args.vs_wake, 0.0), jumpin=get(args.vs_jumpin, 0.0))
+
+
+def unpacked(start, out):
+    """`start`, or if it is an agent file (.efzagent: a released agent, docs/agents.md) the
+    model it carries, unpacked into the run's folder (start-unpacked/)."""
+    if not start.lower().endswith('.efzagent'):
+        return start
+    from efz_env.export import unpack_agent
+    got = unpack_agent(start, os.path.join(out, 'start-unpacked'))
+    print(f"--start: {start} unpacked: {got['model']}" +
+          (' (the critic too)' if got['critic'] == 'file' else
+           ' (the actor only: the file has no training part, its critic is new and has '
+           'the value to learn again)') +
+          (f"; its routes: {got['library']}" if got['library'] else ''), flush=True)
+    return got['model']
+
+
+def ppo_settings(args):
+    return dict(learning_rate=args.lr, n_steps=args.n_steps, batch_size=8192, n_epochs=3,
+                gamma=0.999, gae_lambda=0.98, ent_coef=args.ent_coef, clip_range=0.1,
+                vf_coef=0.5, max_grad_norm=0.5)
+
+
+def recent_wins(history, k, window=1):
+    """The learner's win against each of the k --vs opponents, averaged over the last
+    `window` evaluations that played it (None where none did)."""
+    evals = [h['eval'] for h in history if h.get('eval')]
+    out = []
+    for j in range(k):
+        w = [e[f'vs{j}']['win'] for e in evals if f'vs{j}' in e][-window:]
+        out.append(float(np.mean(w)) if w else None)
+    return out
+
+
+def score(results, k, cpu_hp=False):
+    """An evaluation's worth, for best.zip: the mean win against the --vs opponents and the
+    CPU, each counted once; cpu_hp: for the CPU the share of its HP taken instead (one
+    character it is never beaten as, level-4 Kanna: the user's measure)."""
+    cpu = results['cpu']
+    wins = [results[f'vs{j}']['win'] for j in range(k)] + [
+        (cpu.get('opp_hp_taken') or 0.0) if cpu_hp else cpu['win']]
+    return float(np.mean(wins))
+
+
+def vs_counts(n, wins, power):
+    """n matches shared out among the --vs opponents: by (1 - win) ** power (PFSP), at
+    least one each, by largest remainder; evenly without wins or power. PFSP has only the
+    matches beyond one each to share (n == k: one each, whatever the wins)."""
+    k = len(wins)
+    if n < k:
+        raise ValueError(f'{n} --vs matches for {k} --vs opponents: raise --vs-share or --envs')
+    if not power or any(w is None for w in wins):
+        return [n // k + (j < n % k) for j in range(k)]
+    w = np.array([(1 - x) ** power + 0.02 for x in wins])
+    share = (n - k) * w / w.sum()
+    counts = 1 + np.floor(share).astype(int)
+    for j in np.argsort(-(share - np.floor(share)))[:n - counts.sum()]:
+        counts[j] += 1
+    return [int(c) for c in counts]
+
+
+def vs_counts_shared(n, wins, power, chars, fixed):
+    """vs_counts, with the opponents of each character of fixed ({char: share}) playing that
+    share of the n matches together (rounded, at least one each) and the rest of them shared
+    among the others; within each, by vs_counts."""
+    if not fixed:
+        return vs_counts(n, wins, power)
+    counts = [0] * len(chars)
+    left = n
+    for c, share in fixed.items():
+        idx = [j for j, ch in enumerate(chars) if ch == c]
+        m = max(len(idx), int(round(n * share)))
+        left -= m
+        for j, k in zip(idx, vs_counts(m, [wins[j] for j in idx], power)):
+            counts[j] = k
+    rest = [j for j, ch in enumerate(chars) if ch not in fixed]
+    if rest:
+        for j, k in zip(rest, vs_counts(left, [wins[j] for j in rest], power)):
+            counts[j] = k
+    return counts
+
+
+def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
+    """opponents: the mirror ones (the learner's character); vs: [(opponent, char)];
+    wins: the learner's last wins against each of vs (for --pfsp); pool: --practice's
+    starts (practice.StartPool), whose trials take the last --practice environments."""
+    n = args.envs - args.practice
+    n_mirror = len(opponents)
+    n_cpu = int(round(n * args.cpu_share))
+    cpu_envs = np.arange(n) >= n - n_cpu
+    agents = np.flatnonzero(~cpu_envs)
+    k_vs = int(round(len(agents) * args.vs_share)) if vs else 0
+    vs_envs, mirror = agents[:k_vs], agents[k_vs:]
+    # The mirror matches, shared out among the mirror opponents; the combo master (the
+    # last of them) plays --combo-share of them. Then the --vs opponents' (after them).
+    assignment = np.full(n, -1)
+    assignment[mirror] = np.arange(len(mirror)) % max(1, len(opponents))
+    red = len(opponents) - 1 if args.combo else -2
+    if args.combo:
+        k = int(round(len(mirror) * args.combo_share))
+        others = len(opponents) - 1
+        assignment[mirror] = [red if j < k else j % others for j in range(len(mirror))]
+    if len(vs_envs):
+        counts = vs_counts_shared(len(vs_envs), wins or [None] * len(vs), args.pfsp,
+                                  [c for _, c in vs], args.vs_char_share)
+        which = np.repeat(np.arange(len(vs)), counts)
+        assignment[vs_envs] = len(opponents) + which
+        print('--vs matches:', ', '.join(f'{c}' for c in counts), flush=True)
+    chars = [(args.char, None)] * n
+    for i in mirror:
+        chars[i] = (args.char, args.char)
+    for i in vs_envs:
+        chars[i] = (args.char, vs[assignment[i] - len(opponents)][1])
+    cpu_idx = list(np.flatnonzero(cpu_envs))
+    for focus in args.cpu_focus:  # these CPU matches with one character
+        name, share = focus.rsplit(':', 1)
+        k = min(len(cpu_idx), int(round(np.sum(cpu_envs) * float(share))))
+        for _ in range(k):
+            chars[cpu_idx.pop()] = (args.char, name)
+        print(f'--cpu-focus: {k} of the {int(np.sum(cpu_envs))} CPU matches with {name}', flush=True)
+    opponents = list(opponents) + [o for o, _ in vs]
+    # The combo master has a reaction time of its own.
+    opponent_delay = np.where(assignment == red, min(args.combo_delay, args.delay), args.delay)
+    env = EfzSB3VecEnv(args.data, n, opponent=mixture(opponents, assignment),
+                        cpu_envs=cpu_envs, chars=chars, frame_skip=1, history=args.history,
+                        delay=args.delay, opponent_delay=opponent_delay if args.delay else None,
+                        delay_most=args.delay_most,
+                        max_frames=int(args.minutes * 3840), cpu_level=level,
+                        reward_round=0.0, reward_match=1.0, seed=seed)
+    for o in opponents:  # the lookahead red team saves this environment's games
+        if hasattr(o, 'attach'):
+            o.attach(env)
+    # The --vs matches with the advantages (--vs-adv-share of them, drawn each chunk).
+    advantaged = np.zeros(n, bool)
+    advantaged[vs_envs] = np.random.default_rng(seed).random(len(vs_envs)) < args.vs_adv_share
+    if args.vs_damage and len(vs_envs):  # the learner (player 1) takes more from these
+        for i in vs_envs[advantaged[vs_envs]]:
+            env.env.set_damage_scale(int(i), 0, args.vs_damage[assignment[i] - n_mirror])
+        print('--vs-damage:', ', '.join(f'{d:g}' for d in args.vs_damage), flush=True)
+    if args.vs_rg and len(vs_envs):  # and these recoil-guard more (player 2)
+        for i in vs_envs[advantaged[vs_envs]]:
+            env.env.set_recoil_guard(int(i), 1, args.vs_rg[assignment[i] - n_mirror])
+        print('--vs-rg:', ', '.join(f'{d:g}' for d in args.vs_rg), flush=True)
+    for o in opponents:  # and their inputs' advantages, there only
+        if hasattr(o, 'only'):
+            o.only = advantaged
+    if args.vs_adv_share < 1 and len(vs_envs):
+        print(f'--vs-adv-share: {int(advantaged.sum())} of the {len(vs_envs)} --vs matches '
+              'with the advantages', flush=True)
+    if args.assist:
+        import combo_support
+        env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'],
+                                        ASSIST.get('value'),
+                                        only=cpu_envs if args.assist_where == 'cpu' else None)
+    if args.focus:
+        import focus
+        env = focus.Focus(env, args.focus, args.focus_coef, args.char)
+    if args.practice:
+        import practice
+        from combo import ComboTrials
+        trials = ComboTrials(args.data, [], args.practice, args.delay, args.history,
+                             args.practice_limit, seed=seed, rich=args.practice_rich,
+                             sample=pool.sample, reward_scale=args.practice_scale / 9999,
+                             bootstrap=True)
+        env = practice.Practice(env, trials, pool, harvest=~cpu_envs)
+    return env
+
+
+class AssistMask(BaseCallback):
+    """--assist: the steps a route played (infos[i]['assisted']) out of the policy's loss:
+    their advantages 0, the rest normalised (PPO's own normalisation is off). The critic
+    learns from every step, so it learns what a hit is worth with the routes.
+
+    distill > 0 (--assist-distill): the routes' actions are also targets. Each rollout's
+    route steps (the views the learner had then, the route's action) are kept, and after
+    PPO's update (at the next rollout's start: one callback for the whole run) the policy
+    takes `epochs` steps of distill * cross-entropy toward them: its own combos learn the
+    routes, chosen once it saw its hit, from people's inputs (a teacher, as DAgger's: on
+    the states its own play reaches)."""
+
+    def __init__(self, distill=0.0, epochs=4, batch=4096):
+        super().__init__()
+        self.distill, self.epochs, self.batch = distill, epochs, batch
+        self.pairs = None
+
+    def _on_rollout_start(self):
+        buf = self.model.rollout_buffer
+        self.mask = np.zeros((buf.buffer_size, buf.n_envs), bool)
+        self.route = np.zeros((buf.buffer_size, buf.n_envs), np.int64)
+        if self.pairs is not None:
+            self._learn_routes()
+
+    def _on_step(self):
+        pos = self.model.rollout_buffer.pos
+        for e, info in enumerate(self.locals['infos']):
+            if info.get('assisted'):
+                self.mask[pos, e] = True
+                self.route[pos, e] = info.get('route_action', 0)
+        return True
+
+    def _on_rollout_end(self):
+        buf = self.model.rollout_buffer
+        adv, m = buf.advantages, self.mask
+        keep = adv[~m]
+        adv[~m] = (keep - keep.mean()) / (keep.std() + 1e-8)
+        adv[m] = 0.0
+        ASSIST['steps'] = ASSIST.get('steps', 0) + m.size
+        ASSIST['assisted'] = ASSIST.get('assisted', 0) + int(m.sum())
+        if self.distill > 0 and m.any():
+            self.pairs = (np.array(buf.observations[m], np.float32), self.route[m].copy())
+
+    def _learn_routes(self):
+        obs, act = self.pairs
+        self.pairs = None
+        policy = self.model.policy
+        policy.set_training_mode(True)
+        o = torch.as_tensor(obs, device=policy.device)
+        a = torch.as_tensor(act, device=policy.device)
+        with torch.no_grad():
+            d = policy.get_distribution(o)
+            ce0 = float(-d.log_prob(a).mean())
+            acc0 = float((d.distribution.probs.argmax(-1) == a).float().mean())
+        rng = np.random.default_rng()
+        for _ in range(self.epochs):
+            order = rng.permutation(len(a))
+            for k in range(0, len(a), self.batch):
+                idx = torch.as_tensor(order[k:k + self.batch], device=policy.device)
+                loss = -self.distill * policy.get_distribution(o[idx]).log_prob(a[idx]).mean()
+                policy.optimizer.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(policy.parameters(), self.model.max_grad_norm)
+                policy.optimizer.step()
+        policy.set_training_mode(False)
+        dist = ASSIST.setdefault('distill', dict(n=0, ce=0.0, acc=0.0, k=0))
+        dist['n'] += len(a)
+        dist['ce'] += ce0
+        dist['acc'] += acc0
+        dist['k'] += 1
+
+
+class KLLog(BaseCallback):
+    def _on_rollout_end(self):
+        self.logger.record('train/prior_kl', self.model.policy.prior_kl)
+
+    def _on_step(self):
+        return True
+
+
+class TrainLog(BaseCallback):
+    """A chunk's PPO numbers (SB3 records them in train() and finetune.py never printed
+    them): the means over its updates of approx_kl, clip_fraction, entropy_loss,
+    value_loss, explained_variance, learning_rate; and its drift, how far the weights went
+    over the length of a random walk of its updates: |sum of steps| / sqrt(sum of |step|^2)
+    (1: as a random walk; more: a direction), with the mean cosine of consecutive steps."""
+    KEYS = ('approx_kl', 'clip_fraction', 'entropy_loss', 'value_loss', 'explained_variance',
+            'learning_rate', 'policy_gradient_loss')
+
+    def __init__(self):
+        super().__init__()
+        self.sums, self.n = {}, 0
+        self.first = self.last = self.prev_step = None
+        self.sq, self.cos, self.steps = 0.0, [], 0
+
+    def _flat(self):
+        return torch.cat([p.detach().reshape(-1) for p in self.model.policy.parameters()]).clone()
+
+    def _read(self):
+        values = self.model.logger.name_to_value
+        if 'train/approx_kl' not in values:
+            return
+        for k in self.KEYS:
+            if f'train/{k}' in values:
+                self.sums[k] = self.sums.get(k, 0.0) + float(values[f'train/{k}'])
+        self.n += 1
+        now = self._flat()
+        if self.last is not None:
+            step = now - self.last
+            self.sq += float(step.pow(2).sum())
+            if self.prev_step is not None:
+                self.cos.append(float(torch.nn.functional.cosine_similarity(step, self.prev_step, dim=0)))
+            self.prev_step = step
+            self.steps += 1
+        self.last = now
+
+    def _on_training_start(self):
+        self.first = self.last = self._flat()
+
+    def _on_rollout_start(self):
+        self._read()
+
+    def _on_training_end(self):
+        self._read()
+
+    def _on_step(self):
+        return True
+
+    def take(self):
+        out = {k: v / self.n for k, v in self.sums.items()} if self.n else {}
+        if self.steps and self.sq > 0:
+            out['updates'] = self.steps
+            out['moved'] = float((self.last - self.first).norm())
+            out['drift'] = out['moved'] / float(np.sqrt(self.sq))
+            out['step_cos'] = float(np.mean(self.cos)) if self.cos else None
+        return out
+
+
+class _Eval:
+    pass
+
+
+def _eval_one(job):
+    """One pairing of evaluate()'s in a worker process: (key, result)."""
+    key, data, minutes, chars, model_path, opponent, matches, level = job[:8]
+    torch.set_num_threads(1)
+    a = _Eval()
+    a.data, a.minutes, a.chars = data, minutes, chars
+    them = 'cpu' if opponent == 'cpu' else ev.Agent(opponent)
+    me = ev.Agent(model_path)
+    if len(job) > 8:  # --assist: with its built-in combos (the worker's own planner)
+        import combo_support
+        library, how = job[8:]
+        if 'planner' not in ASSIST:
+            import macros
+            import redteam
+            ASSIST['planner'] = redteam.Planner(data, macros.load_library(library), me.model,
+                                                score=how)
+        me = combo_support.FairComboAgent(me, ASSIST['planner'])
+    return key, ev.play(a, me, them, matches, level)
+
+
+def evaluate(args, model_path, level):
+    a = _Eval()
+    a.data, a.minutes = args.data, args.minutes
+    me = ev.Agent(model_path)
+    if args.assist and not args.assist_distill:  # it plays with its built-in combos
+        import combo_support
+        me = combo_support.FairComboAgent(me, ASSIST['planner'])
+    out = {}
+    cpu_chars = (args.char, args.cpu_chars if level == 4 or args.cpu_chars not in
+                 ('tiers', 'random') else 'random')  # tiers: level 4's; one character: any
+    jobs = [('cpu', cpu_chars, 'cpu', level)]
+    if args.old and os.path.exists(args.old) and args.eval_old:
+        jobs.append(('old', (args.char, 'ayu'), args.old, 4))
+    jobs += [(f'vs{j}', (args.char, char), path, 4) for j, (path, char) in enumerate(args.vs)]
+    pool = None
+    if args.eval_workers > 1 and not args.vs_assist and not (args.assist and
+                                                             args.assist_score == 'value'):
+        import multiprocessing as mp
+        pool = mp.get_context('spawn').Pool(min(args.eval_workers, len(jobs)))
+        routes = (args.assist, args.assist_score) if args.assist and not args.assist_distill \
+            else ()
+        pending = pool.map_async(_eval_one, [(k, args.data, args.minutes, c, model_path, o,
+                                              args.eval, lv) + routes for k, c, o, lv in jobs])
+    else:
+        for key, chars, opponent, lv in jobs:
+            a.chars = chars
+            them = 'cpu' if opponent == 'cpu' else ev.Agent(opponent)
+            if args.vs_assist and key.startswith('vs'):  # as it plays: its built-in combos
+                import combo_support
+                them = combo_support.FairComboAgent(them, VS_ASSIST[int(key[2:])])
+            out[key] = ev.play(a, me, them, args.eval, lv)
+    if args.combo:
+        a.chars = (args.char, args.char)
+        red = RED['agent'] if RED else ev.Agent(args.combo)
+        n = len(red.plans) if RED else 0
+        out['red'] = ev.play(a, me, red, args.eval)
+        if RED:  # what the hits the agent took were worth to the red team
+            plans = red.plans[n:]
+            out['red']['plans'] = dict(
+                n=len(plans), potential=float(np.mean([p[0] for p in plans])) if plans else None,
+                own=float(np.mean([p[1] for p in plans])) if plans else None,
+                library=float(np.mean([p[2] for p in plans])) if plans else None,
+                big=float(np.mean([p[0] >= 3000 for p in plans])) if plans else None)
+    if pool is not None:  # the workers' pairings, in their order (the red team's played meanwhile)
+        red = out.pop('red', None)
+        out.update(dict(pending.get()))
+        pool.close()
+        pool.join()
+        if red is not None:
+            out['red'] = red
+    out['cpu']['level'] = level
+    return out
+
+
+RED = {}  # the lookahead red team: its planner, opponent and agent
+ASSIST = {}  # --assist: its planner, the learner's own play on the copies, counts
+VS_ASSIST = []  # --vs-assist: each --vs opponent's planner
+
+
+def show(results):
+    parts = []
+    for k, r in results.items():
+        s = r['sides'][0]
+        lost = (f" (own HP lost {r['self_hp_taken']:.0%})"  # hard wins from easy ones
+                if r.get('self_hp_taken') is not None else '')
+        parts.append(f"{k}: win {r['win']:.0%}{lost} loss {r['loss']:.0%} cut {r['cut']:.0%}, "
+                     f"{s['presses_per_second']} presses/s, per min {s['jumps_per_min']} jumps "
+                     f"{s['guard_ground_per_min']} guards {s['hit_ground_per_min']}+"
+                     f"{s['hit_air_per_min']} hits, RG {s['rg_ground']}/{s['rg_air']} "
+                     f"RC {s['rc']}, after RG move/hit {s['rg_move']}/{s['rg_punish']}, "
+                     f"combo avg/p90/max {s.get('combo_damage')}/{s.get('combo_damage_p90')}/"
+                     f"{s.get('combo_damage_max')} IC {s.get('combo_ic')}"
+                     + (f", taken {r['sides'][1].get('combo_damage_per_min')}/min" if k == 'red' else '')
+                     + (' [' + ', '.join(f"{t} {v['win']:.0%}" + (
+                         f" (HP {v['opp_hp_taken']:.0%})" if t == 'hardest' and
+                         v.get('opp_hp_taken') is not None else '')
+                         for t, v in r['by_tier'].items()) + ']'
+                        if k == 'cpu' and r.get('by_tier') else ''))
+    return ' | '.join(parts)
+
+
+def main():
+    args = parse()
+    if not args.data:
+        sys.exit('pass --data, the folder of an EFZ 4.02 install (or set EFZ_DATA)')
+    torch.set_num_threads(args.torch_threads)
+    if args.seed:
+        torch.manual_seed(args.seed)
+    os.makedirs(args.out, exist_ok=True)
+    state_path = os.path.join(args.out, 'finetune.json')
+    # The other models may be agent files too (released agents as opponents, a prior):
+    # each one's model, unpacked for this run.
+    from efz_env.agent import model_file
+    given = dict(vs=list(args.vs), team=list(args.team))  # (as named, for the run's record)
+    args.prior, args.old, args.combo = (model_file(p) if p else p
+                                        for p in (args.prior, args.old, args.combo))
+    args.team = [model_file(p) for p in args.team]
+    args.vs = [(model_file(p), c) for p, c in args.vs]
+    history, start, level = [], unpacked(args.start, args.out), args.level
+    saved = {}
+    cpu_hp = args.cpu_chars not in ('tiers', 'random')  # best.zip: its HP taken, not wins
+    if os.path.exists(state_path):
+        with open(state_path) as f:
+            saved = json.load(f)
+        history, level = saved['history'], saved['level']
+        start = os.path.join(args.out, 'model.zip')
+        print(f'continuing {args.out} after chunk {len(history)}', flush=True)
+    settings = ppo_settings(args)
+    seeds = lambda k: k + 1000 * args.seed  # chunk k's environments' seed
+    with open(os.path.join(args.out, 'config.json'), 'w') as f:
+        json.dump(dict(frame_skip=1, history=args.history, delay=args.delay,
+                       delay_most=args.delay_most, chars=[args.char, None],
+                       vs=[[os.path.relpath(p, REPO), c] for p, c in given['vs']], vs_share=args.vs_share,
+                       vs_char_share=args.vs_char_share,
+                       vs_damage=args.vs_damage, vs_rg=args.vs_rg, vs_reversal=args.vs_reversal,
+                       vs_throw=args.vs_throw, vs_bait=args.vs_bait, vs_patient=args.vs_patient,
+                       vs_wake=args.vs_wake, vs_jumpin=args.vs_jumpin,
+                       vs_adv_share=args.vs_adv_share,
+                       pfsp=args.pfsp, pfsp_window=args.pfsp_window, cpu_focus=args.cpu_focus,
+                       focus=args.focus, focus_coef=args.focus_coef,
+                       prior=os.path.relpath(args.prior, REPO), prior_coef=args.prior_coef,
+                       team=[os.path.relpath(t, REPO) for t in given['team']],
+                       combo=args.combo and os.path.relpath(args.combo, REPO),
+                       combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
+                       lookahead=args.lookahead, assist=args.assist, vs_assist=args.vs_assist,
+                       assist_score=args.assist_score, assist_distill=args.assist_distill,
+                       assist_where=args.assist_where,
+                       practice=args.practice, practice_starts=args.practice_starts,
+                       practice_rich=args.practice_rich, practice_pool=args.practice_pool,
+                       practice_limit=args.practice_limit, practice_scale=args.practice_scale,
+                       level=args.level, ppo=settings, lr_end=args.lr_end, average=args.average,
+                       seed=args.seed, cpu_share=args.cpu_share,
+                       actions=[TABLE.describe(i) for i in range(len(TABLE))]), f, indent=1)
+    prior = PPO.load(args.prior, device='cpu')
+    clone = frozen(prior)
+    old = held(frozen(PPO.load(args.old, device='cpu')), 4) if args.old else None
+    team = [frozen(PPO.load(t, device='cpu')) for t in args.team]
+    master = PPO.load(args.combo, device='cpu') if args.combo else None
+    if master is not None and args.lookahead:
+        import macros
+        import redteam
+        planner = redteam.Planner(args.data, macros.load_library(args.lookahead), master)
+        RED.update(opponent=redteam.RedTeamOpponent(planner, master),
+                   agent=redteam.RedTeamAgent(planner, args.combo))
+        team.append(RED['opponent'])
+    elif master is not None:
+        team.append(frozen(master))
+    opponents = lambda snapshot: [o for o in (snapshot, clone, old) if o is not None] + team
+    if args.vs_assist:
+        import combo_support
+        import macros
+        import redteam
+        library = macros.load_library(args.vs_assist)
+        vs = []
+        for p, c in args.vs:
+            m = PPO.load(p, device='cpu')
+            VS_ASSIST.append(redteam.Planner(args.data, library, m, score=args.assist_score))
+            vs.append((combo_support.FairAssistOpponent(VS_ASSIST[-1], m), c))
+    else:
+        vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
+    if (args.vs_reversal or args.vs_throw or args.vs_bait or args.vs_patient or args.vs_wake
+            or args.vs_jumpin):  # their inputs' (advantages.py)
+        import advantages
+        inputs = lambda a: (a['reversal'] or a['throw'] or a['bait'] or a['patient'] or a['wake']
+                            or a['jumpin'])
+        vs = [(advantages.AdvantagedOpponent(o, c, vs_advantage(args, j), seed=seeds(j),
+                                             learner=args.char)
+               if inputs(vs_advantage(args, j)) else o, c)
+              for j, (o, c) in enumerate(vs)]
+    if args.assist:
+        import macros
+        import redteam
+        ASSIST['planner'] = redteam.Planner(args.data, macros.load_library(args.assist),
+                                            PPO.load(start, device='cpu'), score=args.assist_score)
+        ASSIST['policy'] = None  # (set to each chunk's learner before its environment)
+    pool = None
+    if args.practice:
+        import practice
+        if args.practice_starts == 'own':
+            pool = practice.StartPool(args.practice_pool, seed=len(history))
+        else:
+            replays = args.practice_replays or os.path.dirname(os.path.abspath(args.practice_starts))
+            pool = practice.StartPool.people(args.data, args.practice_starts, replays,
+                                             limit=args.practice_pool)
+            print(f"practice: {len(pool.starts)} of people's starts {pool.kinds()}", flush=True)
+    env = make_env(args, opponents(clone), vs, seeds(len(history)), level, pool=pool)
+    model = PPO.load(start, env=env, device='cpu', **settings)
+    if args.assist:
+        model.normalize_advantage = False  # AssistMask normalises, the routes' steps left out
+    if args.prior_coef > 0:
+        teacher = master.policy if master is not None and args.combo_teacher else None
+        model.policy.set_prior(prior.policy, args.prior_coef, args.ent_coef, combo=teacher)
+    # --lr-end: the step falls linearly over the run, from its start's steps to --budget.
+    t0 = saved.get('start_steps')
+    if t0 is None:
+        t0 = model.num_timesteps if len(history) < 2 else history[1]['steps'] - int(args.chunk)
+    span = max(1.0, args.budget - t0)
+
+    def set_lr():  # each chunk's, at its middle (SB3's schedule is saved with the model)
+        if args.lr_end is not None:
+            frac = min(1.0, max(0.0, (model.num_timesteps + args.chunk / 2 - t0) / span))
+            model.learning_rate = args.lr + (args.lr_end - args.lr) * frac
+            model._setup_lr_schedule()
+    # --average: the running mean of the chunks' weights (avg.zip), what is evaluated.
+    avg_path = os.path.join(args.out, 'avg.zip')
+    avg_state, avg_n = None, saved.get('average_n', 0)
+    if args.average and avg_n and os.path.exists(avg_path):
+        avg_state = {k: v.clone() for k, v in
+                     PPO.load(avg_path, device='cpu').policy.state_dict().items()}
+    assist_cb = AssistMask(args.assist_distill) if args.assist else None  # (the whole run's)
+    print('starting from', start, flush=True)
+    if not history:
+        before = evaluate(args, start, level)
+        print('before:', show(before), flush=True)
+        worth = score(before, len(args.vs), cpu_hp) if args.vs else None
+        if worth is not None:  # the start is the best so far
+            import shutil
+            shutil.copyfile(start, os.path.join(args.out, 'best.zip'))
+        history.append(dict(steps=0, level=level, score=worth, eval=before))
+    while model.num_timesteps < args.budget:
+        env.close()
+        wins = recent_wins(history, len(vs), args.pfsp_window)
+        if args.assist:
+            ASSIST['policy'] = frozen(model)
+            if args.assist_score == 'value':
+                import redteam
+                ASSIST['value'] = redteam.critic(model)
+        env = make_env(args, opponents(frozen(model)), vs, seeds(len(history) + 1), level, wins,
+                       pool)
+        model.set_env(env)
+        if pool is not None and pool.growing and len(pool.starts) < 48:
+            n = practice.fill(pool, env.matches, model, mask=env.mask)
+            print(f'practice: {n} starts of its own to begin with {pool.kinds()}', flush=True)
+        t = time.time()
+        train_log = TrainLog()
+        set_lr()
+        callbacks = [KLLog(), train_log] + ([assist_cb] if args.assist else [])
+        model.learn(int(args.chunk), reset_num_timesteps=False, callback=callbacks)
+        seconds = time.time() - t
+        path = os.path.join(args.out, 'model.zip')
+        model.save(path)
+        model.save(os.path.join(args.out, f'chunk{len(history):03d}.zip'))
+        eval_path = path
+        if args.average:  # the running mean, with the learner's own weights put back after
+            cur = {k: v.detach().clone() for k, v in model.policy.state_dict().items()}
+            avg_n += 1
+            avg_state = cur if avg_state is None else {
+                k: avg_state[k] + (cur[k] - avg_state[k]) / avg_n if cur[k].is_floating_point()
+                else cur[k] for k in cur}
+            model.policy.load_state_dict(avg_state)
+            model.save(avg_path)
+            model.policy.load_state_dict(cur)
+            eval_path = avg_path
+        due = len(history) % args.eval_every == 0 or model.num_timesteps >= args.budget
+        t_eval = time.time()
+        results = evaluate(args, eval_path, level) if due else None
+        eval_seconds = time.time() - t_eval
+        ppo = train_log.take()
+        returns = [e['r'] for e in model.ep_info_buffer]
+        focus = env.take() if args.focus else None  # the focus' events, a minute of play
+        focus_rate = focus['events'] / max(1, focus['steps']) * 3840 if focus else None
+        assist = None
+        if args.assist:  # the chunk's built-in combos: plans made, steps they played
+            assist = dict(env.assist.take_plans() if hasattr(env, 'assist') else {},
+                          assisted=round(ASSIST.pop('assisted', 0) / max(1, ASSIST.pop('steps', 1)), 4))
+            dist = ASSIST.pop('distill', None)
+            if dist and dist['k']:  # the routes' steps learnt from: before each update's steps
+                assist['distill'] = dict(pairs=dist['n'], ce=round(dist['ce'] / dist['k'], 3),
+                                         acc=round(dist['acc'] / dist['k'], 3))
+        vs_plans = None
+        if args.vs_assist:  # the --vs opponents' built-in combos in the chunk's matches
+            vs_plans = [o.assist.take_plans() for o, _ in vs]
+        trials = None
+        if pool is not None:  # the practice of the chunk, and the pool it drew from
+            trials = dict(env.take_trials(), pool=len(pool.starts), kinds=pool.kinds())
+        if results and args.vs:  # the best evaluated so far (best.zip; the 64-match check is after)
+            worth = score(results, len(args.vs), cpu_hp)
+            best = max((h.get('score', -1) for h in history), default=-1)
+            if worth > best:
+                import shutil
+                shutil.copyfile(eval_path, os.path.join(args.out, 'best.zip'))
+                print(f'best so far ({worth:.3f}): best.zip' +
+                      (f' (the mean of {avg_n} chunks)' if args.average else ''), flush=True)
+        else:
+            worth = None
+        history.append(dict(steps=model.num_timesteps, level=level, train_seconds=seconds,
+                            eval_seconds=round(eval_seconds, 1), score=worth,
+                            prior_kl=model.policy.prior_kl, ppo=ppo,
+                            average_n=avg_n if args.average else None,
+                            ep_return=float(np.mean(returns)) if returns else None,
+                            focus_per_min=focus_rate, practice=trials, assist=assist,
+                            vs_assist=vs_plans, eval=results))
+        print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s + eval {eval_seconds:.0f}s, '
+              f'L{level}, KL {model.policy.prior_kl:.3f}'
+              + (f', lr {ppo.get("learning_rate", 0):.2e}, approx_kl {ppo.get("approx_kl", 0):.5f}, '
+                 f'clipped {ppo.get("clip_fraction", 0):.3f}, value EV {ppo.get("explained_variance", 0):.3f}, '
+                 f'drift {ppo.get("drift", 0):.2f} over {ppo.get("updates", 0)} updates' if ppo else '')
+              + (f', score of the mean of {avg_n}: {worth:.3f}' if args.average and worth is not None else '')
+              + (f', {args.focus} {focus_rate:.2f}/min' if focus else '') + '] '
+              + (show(results) if results else 'not evaluated (--eval-every)'), flush=True)
+        if assist and assist.get('plans'):
+            print(f"  assist: {assist['plans']} plans, a route in {assist['route']:.0%}, best "
+                  f"{assist['best']} (own play {assist['own']}); {assist['assisted']:.1%} of steps"
+                  + (f"; routes learnt: {assist['distill']['pairs']} steps, cross-entropy "
+                     f"{assist['distill']['ce']}, agreement {assist['distill']['acc']:.0%}"
+                     if assist.get('distill') else ''), flush=True)
+        for j, v in enumerate(vs_plans or []):
+            if v.get('plans'):
+                print(f"  vs{j} assist: {v['plans']} plans, a route in {v['route']:.0%}, best "
+                      f"{v['best']} (own play {v['own']})", flush=True)
+        if trials and trials.get('trials'):
+            print(f"  practice: {trials['trials']} trials, combo {trials['damage']}/"
+                  f"{trials['damage_p90']}/{trials['damage_max']}, {trials['hits']} hits, IC "
+                  f"{trials['ic']:.0%}, special {trials['special']:.0%}; pool {trials['pool']}",
+                  flush=True)
+        if results and results['cpu']['win'] >= args.promote and level < 4:
+            level += 1
+            print(f'promoted to level {level}', flush=True)
+        with open(state_path, 'w') as f:
+            json.dump(dict(level=level, history=history, start_steps=t0, average_n=avg_n), f, indent=1)
+        if results and args.stop_win and args.vs and all(results[f'vs{j}']['win'] >= args.stop_win
+                                             for j in range(len(args.vs))):
+            print(f'beats every --vs opponent {args.stop_win:.0%} of the time: stopping', flush=True)
+            break
+    env.close()
+    print('done', flush=True)
+
+
+if __name__ == '__main__':
+    main()

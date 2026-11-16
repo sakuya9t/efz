@@ -1,0 +1,139 @@
+{
+ "cpu2": {
+  "win": 0.375,
+  "loss": 0.5,
+  "cut": 0.125,
+  "matches": 24,
+  "sides": [
+   {
+    "presses": {
+     "A": 0.0065,
+     "B": 0.0075,
+     "C": 0.008,
+     "D": 0.0004
+    },
+    "presses_per_second": 1.43,
+    "jumps_per_min": 20.63,
+    "guard_ground_per_min": 10.1,
+    "guard_air_per_min": 0.18,
+    "rg_ground_per_min": 1.51,
+    "rg_air_per_min": 0.12,
+    "hit_ground_per_min": 7.51,
+    "hit_air_per_min": 2.8,
+    "rg_ground": 0.079,
+    "rg_air": 0.039,
+    "rc": 0.027,
+    "rc_chances_per_min": 0.45,
+    "rg_move": 0.478,
+    "rg_punish": 0.284,
+    "rg_long": 0.015,
+    "rg_long_hit": 1.0,
+    "guess_623A_per_min": 0.22,
+    "guess_623A_counter": 0.167,
+    "guess_623B_per_min": 0.42,
+    "guess_623B_counter": 0.114
+   },
+   {
+    "presses": {
+     "A": 0.0063,
+     "B": 0.0093,
+     "C": 0.003,
+     "D": 0.0094
+    },
+    "presses_per_second": 1.79,
+    "jumps_per_min": 22.21,
+    "guard_ground_per_min": 5.45,
+    "guard_air_per_min": 0.41,
+    "rg_ground_per_min": 0.75,
+    "rg_air_per_min": 0.15,
+    "hit_ground_per_min": 7.11,
+    "hit_air_per_min": 2.69,
+    "rg_ground": 0.057,
+    "rg_air": 0.045,
+    "rc": 0.151,
+    "rc_chances_per_min": 0.64,
+    "rg_move": 0.77,
+    "rg_punish": 0.297,
+    "rg_long": 0.0,
+    "rg_long_hit": null
+   }
+  ],
+  "by_opponent": {
+   "nanase": [
+    0,
+    1,
+    0
+   ],
+   "makoto": [
+    1,
+    0,
+    0
+   ],
+   "mayu": [
+    1,
+    1,
+    0
+   ],
+   "nagamori": [
+    0,
+    1,
+    0
+   ],
+   "misaki": [
+    1,
+    0,
+    0
+   ],
+   "shiori": [
+    0,
+    3,
+    0
+   ],
+   "sayuri": [
+    2,
+    1,
+    0
+   ],
+   "nayuki": [
+    0,
+    1,
+    0
+   ],
+   "mio": [
+    0,
+    0,
+    1
+   ],
+   "kaori": [
+    1,
+    1,
+    0
+   ],
+   "mishio": [
+    0,
+    1,
+    0
+   ],
+   "akiko": [
+    1,
+    0,
+    1
+   ],
+   "nayukib": [
+    0,
+    1,
+    0
+   ],
+   "kanna": [
+    1,
+    0,
+    0
+   ],
+   "kano": [
+    1,
+    1,
+    1
+   ]
+  }
+ }
+}

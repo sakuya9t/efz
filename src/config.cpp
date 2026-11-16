@@ -136,6 +136,17 @@ DWORD CReplayFile::OpenRead(const char* name)
 
 void CReplayFile::OpenWrite(const char* name)
 {
+#ifdef EFZ_NATIVE
+    // A network match's replay: kept by the session, which writes only the frames both
+    // players' inputs are known for and saves it under its own name, as EfzRevival's
+    // replacement of these methods does; the player's replay slots are left alone.
+    if (efz::g_netplay.active) {
+        efz::g_netplay.replayOpen();
+        m_handle = efz::kNetplayReplay;
+        m_eof = FALSE;
+        return;
+    }
+#endif
     m_handle = CreateFile(name, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL,
                           NULL);
     if (m_handle == INVALID_HANDLE_VALUE)
@@ -145,6 +156,14 @@ void CReplayFile::OpenWrite(const char* name)
 
 void CReplayFile::Close()
 {
+#ifdef EFZ_NATIVE
+    if (m_handle == efz::kNetplayReplay) {
+        if (efz::g_netplay.replayClose)
+            efz::g_netplay.replayClose();
+        m_handle = NULL;
+        return;
+    }
+#endif
     if (m_handle) {
         CloseHandle(m_handle);
         m_handle = NULL;
@@ -153,6 +172,10 @@ void CReplayFile::Close()
 
 CReplayFile::~CReplayFile()
 {
+#ifdef EFZ_NATIVE
+    if (m_handle == efz::kNetplayReplay)
+        return;
+#endif
     if (m_handle)
         CloseHandle(m_handle);
 }
@@ -178,6 +201,13 @@ void CReplayFile::Write(short value)
     short data = value;
     DWORD written;
 
+#ifdef EFZ_NATIVE
+    if (m_handle == efz::kNetplayReplay) {
+        if (efz::g_netplay.replayWrite)
+            efz::g_netplay.replayWrite(value);
+        return;
+    }
+#endif
     if (!WriteFile(m_handle, &data, 2, &written, NULL))
         MessageBox(NULL, "リプレイファイルの書き込みに失敗しました。", "ReplaySave ERROR", MB_OK);
 }

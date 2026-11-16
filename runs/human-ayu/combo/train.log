@@ -1,0 +1,19 @@
+624 training starts, 64 held out
+C:\Users\sakuy\AppData\Local\Temp\claude\17035b73bc2e8750\69f916fc-8098-4b53-ba81-0bfa9cfc366e\scratchpad\venv\Lib\site-packages\stable_baselines3\common\vec_env\base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+C:\Users\sakuy\AppData\Local\Temp\claude\17035b73bc2e8750\69f916fc-8098-4b53-ba81-0bfa9cfc366e\scratchpad\venv\Lib\site-packages\stable_baselines3\common\vec_env\base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+before: {"starts": 64, "damage": 259.5, "human_damage": 510.2656230250723, "hits": 2.109375, "human_hits": 3.265625, "better": 0.140625, "ic": 0.015625, "special": 0.234375}
+[1.0M steps, 507s, KL 0.176] {"starts": 64, "damage": 494.375, "human_damage": 510.2656230250723, "hits": 2.671875, "human_hits": 3.265625, "better": 0.25, "ic": 0.0625, "special": 0.515625}
+[2.0M steps, 400s, KL 0.232] {"starts": 64, "damage": 607.59375, "human_damage": 510.2656230250723, "hits": 3.078125, "human_hits": 3.265625, "better": 0.328125, "ic": 0.0625, "special": 0.609375}
+[3.0M steps, 360s, KL 0.196] {"starts": 64, "damage": 611.125, "human_damage": 510.2656230250723, "hits": 3.03125, "human_hits": 3.265625, "better": 0.359375, "ic": 0.015625, "special": 0.578125}
+624 training starts, 82 held out
+C:\Users\sakuy\AppData\Local\Temp\claude\17035b73bc2e8750\69f916fc-8098-4b53-ba81-0bfa9cfc366e\scratchpad\venv\Lib\site-packages\stable_baselines3\common\vec_env\base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+states made again from the replays in 36s: 706 of 706 at the view kept
+624 training starts, 82 held out
+C:\Users\sakuy\AppData\Local\Temp\claude\17035b73bc2e8750\69f916fc-8098-4b53-ba81-0bfa9cfc366e\scratchpad\venv\Lib\site-packages\stable_baselines3\common\vec_env\base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+C:\Users\sakuy\AppData\Local\Temp\claude\17035b73bc2e8750\69f916fc-8098-4b53-ba81-0bfa9cfc366e\scratchpad\venv\Lib\site-packages\stable_baselines3\common\vec_env\base_vec_env.py:78: UserWarning: The `render_mode` attribute is not defined in your environment. It will be set to None.
+  warnings.warn("The `render_mode` attribute is not defined in your environment. It will be set to None.")
+[4.0M steps, 311s, KL 0.218] {"starts": 82, "damage": 602.0731707317074, "human_damage": 502.3780496720134, "damage_p90": 1581.4, "human_damage_p90": 1533.7000673074276, "damage_max": 2662.0, "human_damage_max": 2926.000088185072, "hits": 3.1341463414634148, "human_hits": 3.268292682926829, "hits_max": 10.0, "human_hits_max": 20.0, "better": 0.35365853658536583, "ic": 0.012195121951219513, "special": 0.5365853658536586}

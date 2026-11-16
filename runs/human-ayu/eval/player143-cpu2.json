@@ -1,0 +1,139 @@
+{
+ "cpu2": {
+  "win": 0.125,
+  "loss": 0.7083333333333334,
+  "cut": 0.16666666666666666,
+  "matches": 24,
+  "sides": [
+   {
+    "presses": {
+     "A": 0.0064,
+     "B": 0.0071,
+     "C": 0.0052,
+     "D": 0.001
+    },
+    "presses_per_second": 1.26,
+    "jumps_per_min": 19.99,
+    "guard_ground_per_min": 12.19,
+    "guard_air_per_min": 0.3,
+    "rg_ground_per_min": 1.68,
+    "rg_air_per_min": 0.27,
+    "hit_ground_per_min": 8.52,
+    "hit_air_per_min": 2.54,
+    "rg_ground": 0.075,
+    "rg_air": 0.088,
+    "rc": 0.171,
+    "rc_chances_per_min": 0.4,
+    "rg_move": 0.351,
+    "rg_punish": 0.193,
+    "rg_long": 0.023,
+    "rg_long_hit": 0.5,
+    "guess_623A_per_min": 0.23,
+    "guess_623A_counter": 0.2,
+    "guess_623B_per_min": 0.26,
+    "guess_623B_counter": 0.174
+   },
+   {
+    "presses": {
+     "A": 0.0068,
+     "B": 0.0102,
+     "C": 0.003,
+     "D": 0.0063
+    },
+    "presses_per_second": 1.69,
+    "jumps_per_min": 22.99,
+    "guard_ground_per_min": 5.1,
+    "guard_air_per_min": 0.38,
+    "rg_ground_per_min": 0.71,
+    "rg_air_per_min": 0.18,
+    "hit_ground_per_min": 6.16,
+    "hit_air_per_min": 2.42,
+    "rg_ground": 0.059,
+    "rg_air": 0.061,
+    "rc": 0.143,
+    "rc_chances_per_min": 0.56,
+    "rg_move": 0.731,
+    "rg_punish": 0.231,
+    "rg_long": 0.0,
+    "rg_long_hit": null
+   }
+  ],
+  "by_opponent": {
+   "nanase": [
+    0,
+    1,
+    0
+   ],
+   "makoto": [
+    0,
+    1,
+    0
+   ],
+   "mayu": [
+    0,
+    1,
+    1
+   ],
+   "nagamori": [
+    0,
+    0,
+    1
+   ],
+   "misaki": [
+    0,
+    0,
+    1
+   ],
+   "shiori": [
+    0,
+    3,
+    0
+   ],
+   "sayuri": [
+    0,
+    3,
+    0
+   ],
+   "nayuki": [
+    0,
+    1,
+    0
+   ],
+   "mio": [
+    0,
+    1,
+    0
+   ],
+   "kaori": [
+    0,
+    2,
+    0
+   ],
+   "mishio": [
+    1,
+    0,
+    0
+   ],
+   "akiko": [
+    0,
+    1,
+    1
+   ],
+   "nayukib": [
+    0,
+    1,
+    0
+   ],
+   "kanna": [
+    1,
+    0,
+    0
+   ],
+   "kano": [
+    1,
+    2,
+    0
+   ]
+  }
+ }
+}

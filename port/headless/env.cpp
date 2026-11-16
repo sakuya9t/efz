@@ -8,7 +8,8 @@
 // asked for, a game is set up for it as the menus would and played through scene 2
 // (the loading) and the intro, and its arena saved (Snapshot); after that, starting
 // that match is copying the bytes back (LoadArena). A batch keeps the last cache_size
-// of these.
+// of these. With first_intro the copy is saved at the fight scene's start instead, and
+// the match plays its intro from there.
 //
 // Nothing here allocates while an arena is bound, except through Unbound: operator new
 // takes from the bound arena (arena.cpp), which must hold the game alone.
@@ -17,11 +18,17 @@
 #include <string.h>
 #include <algorithm>
 #include <atomic>
+#include <chrono>
 #include <condition_variable>
+#include <deque>
 #include <functional>
 #include <list>
+#include <map>
 #include <memory>
 #include <mutex>
+// Before efz.h, whose x87.h makes sin, cos and atan2 macros: agent/policy.h and
+// agent/routes.h need these, and the <cmath> they bring does not compile after them.
+#include <random>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -41,6 +48,9 @@
 #include "efz.h"
 #include "efz_env.h"
 #include "headless.h"
+#include "agent/observe.h"
+#include "agent/policy.h"
+#include "agent/routes.h"
 #include "platform.h"
 
 using namespace efz;
@@ -48,96 +58,15 @@ using namespace efz::headless;
 
 namespace {
 
-// --- Observations: per environment, each player's view, self first.
+// --- Observations: per environment, each player's view, self first (agent/observe.h,
+// which the game's agents see too).
 
-const int kGlobalFeatures = 8;
-const int kPlayerFeatures = 32;
-const int kObjects = 8; // per player: the active ones nearest the viewer
-const int kObjectFeatures = 6;
-const int kObsDim = kGlobalFeatures + 2 * kPlayerFeatures + 2 * kObjects * kObjectFeatures;
-
-const char* const kGlobalNames[kGlobalFeatures] = {
-    "frame",       // frames into the match / max_frames (or / 10000)
-    "round",       // the round being played, from 1
-    "intro",       // a round's intro is running: the controls do nothing
-    "round_over",  // a KO happened and the next round hasn't started
-    "dx",          // the opponent's x minus the viewer's, / 640
-    "dy",          // the opponent's y minus the viewer's, / 240
-    "side",        // the viewer is player 1 (0) or 2 (1)
-    "rounds_to_win",
-};
-
-const char* const kPlayerNames[kPlayerFeatures] = {
-    "hp",            // / 9999
-    "gauge",         // / 3000: a level per 1000
-    "rf_gauge",      // / 1000
-    "rf_blue",       // the RF gauge filled and turned blue
-    "guard_gauge",   // / 360
-    "x",             // (x - 320) / 320: the stage is 0-640
-    "y",             // / 240: 0 on the ground, negative in the air
-    "vx",            // / 20
-    "vy",            // / 20
-    "facing",        // 1 right, -1 left
-    "action",        // the action (pattern) number: categorical, 0-~600
-    "action_frame",  // the frame of the action's animation
-    "hitstun",       // in a hit reaction
-    "guarding",
-    "dashing",
-    "hitstop",       // / 30
-    "freeze",        // a super's flash stops the opponent
-    "invulnerable",
-    "no_guard",
-    "armor",
-    "throw_protected",
-    "untech",        // ticks before an air recovery, / 100
-    "combo_hits",    // / 30
-    "proration",     // / 10000
-    "rounds_won",
-    "air_actions",   // double jumps and air dashes used
-    "character",     // 0-24: categorical
-    "own_action",    // the action is the character's own (a move), not common
-    "cpu",           // the game's CPU plays this side
-    "sealed",        // Akiko's seal level
-    "combo_damage",  // / 9999, while a combo goes on
-    "airborne",
-};
-
-const char* const kObjectNames[kObjectFeatures] = {
-    "active", "x", "y", "vx", "vy", "can_hit",
-};
-
-const char* const kCharacterNames[EFZ_CHARACTERS] = {
-    "nanase", "ayu", "mai", "makoto", "akane", "mayu", "nagamori", "misaki", "shiori",
-    "sayuri", "nayuki", "mio", "exnanase", "kaori", "ikumi", "mishio", "akiko", "nayukib",
-    "mizukab", "kanna", "kano", "minagi", "nayuki2", "misuzu", "mizuka",
-};
+using agent::kObsDim;
 
 // Characters drawn when a match's pool is 0: all but 22 (a second Nayuki) and 24 (the
 // boss Mizuka, not on the select screen).
 const uint32_t kDefaultCharPool = ((1u << EFZ_CHARACTERS) - 1) & ~(1u << 22) & ~(1u << 24);
 const uint32_t kDefaultStagePool = (1u << EFZ_STAGES) - 1;
-
-std::once_flag g_namesOnce;
-char g_names[kObsDim][40];
-
-void MakeNames()
-{
-    int n = 0;
-    for (int i = 0; i < kGlobalFeatures; i++)
-        snprintf(g_names[n++], sizeof(g_names[0]), "%s", kGlobalNames[i]);
-    for (int p = 0; p < 2; p++) {
-        for (int i = 0; i < kPlayerFeatures; i++)
-            snprintf(g_names[n++], sizeof(g_names[0]), "%s_%s", p ? "opp" : "self",
-                     kPlayerNames[i]);
-    }
-    for (int p = 0; p < 2; p++) {
-        for (int k = 0; k < kObjects; k++) {
-            for (int i = 0; i < kObjectFeatures; i++)
-                snprintf(g_names[n++], sizeof(g_names[0]), "%s_obj%d_%s", p ? "opp" : "self", k,
-                         kObjectNames[i]);
-        }
-    }
-}
 
 // --- Saved games.
 
@@ -387,6 +316,7 @@ struct Episode {
     int32_t episode;
     int32_t prevHp[2];
     int8_t prevRounds[2];
+    int8_t opening; // first_intro: the first round's intro is playing; frame stays 0
     float ret[2];
     uint64_t rng;
 };
@@ -396,7 +326,20 @@ struct Slot {
     EfzMatch spec;
     Episode ep;
     bool started = false;
-    bool broken = false; // its game asked to close (a file it needs is missing)
+    bool broken = false;   // its game asked to close (a file it needs is missing)
+    bool pending = false;  // its match ended: the next step starts the next (NEXT_STEP)
+    bool finished = false; // its match ended: it waits for efz_env_reset (DISABLED)
+    int recordPage = 0;    // efz_env_record: its next match is recorded to this slot
+    int recordSlot = 0;
+    bool recording = false; // the game is writing its match's replay
+    std::string playNext;  // efz_env_play: its next match plays this replay back
+    Match playMatch;       // the replay's characters, stage and palettes
+    long playTrailer = 0;  // bytes at the replay's end that aren't the game's
+    bool playing = false;  // the game is reading its match's replay
+    bool inputTaken = false; // input[] holds the step's first frame's
+    uint8_t input[2] = {0, 0}; // EfzInfo.input
+    float damageScale[2] = {1, 1}; // efz_env_set_damage_scale: kept over its matches
+    float recoilGuard[2] = {0, 0}; // efz_env_set_recoil_guard: the same
 };
 
 const uint32_t kStateMagic = 0x5a464545; // "EEFZ"
@@ -405,13 +348,24 @@ struct StateHeader {
     uint32_t magic;
     uint32_t version;
     uint64_t arenaSize;
+    uint64_t base; // where the library is loaded (LibraryBase): what the state's pointers assume
     Episode ep;
 };
+
+// The game's objects in an arena hold the addresses of their C++ classes' tables, which
+// are the library's: a state is only good where the library is loaded at the same address
+// (in the process that saved it; in another only by chance, as address randomisation
+// places it).
+uint64_t LibraryBase()
+{
+    return (uint64_t)(uintptr_t)&efz_env_version;
+}
 
 } // namespace
 
 struct EfzEnv {
     EfzEnvConfig cfg;
+    std::string dataDir;
     int n = 0;
     std::vector<Slot> slots;
     // The buffers of efz_env_buffers.
@@ -442,6 +396,17 @@ CScene3* Fight()
     return (CScene3*)Scene(3);
 }
 
+// The slot's advantages (damage scales, recoil guards) into its game, bound: the game's
+// own (none) while a replay plays or is recorded, so that it stays the one EFZ plays.
+void ApplyAdvantages(const Slot& s)
+{
+    bool faithful = s.playing || s.recording;
+    for (int k = 0; k < 2; k++) {
+        G()->damageTaken[k] = faithful ? 1.0f : s.damageScale[k];
+        G()->recoilGuard[k] = faithful ? 0.0f : s.recoilGuard[k];
+    }
+}
+
 // The controls do something: no intro, no KO waiting for the next round.
 bool Actionable()
 {
@@ -450,16 +415,38 @@ bool Actionable()
            Fight()->m_enter == 0;
 }
 
+// How BuildMatch starts a match besides: recorded, or a replay played back.
+struct Build {
+    int recordPage = 0;          // 1-9, with recordSlot: as the replay menu's record item
+    int recordSlot = 0;
+    const char* play = nullptr;  // a replay file: as the replay menu's play item
+    long trailer = 0;            // bytes at its end that aren't the game's
+};
+
 // Sets up the bound arena's game for `m` (a copy of env->init) and plays it through the
-// loading and the intro, as the menus would have started it: VS on the replay menu's
-// footing (mode 5, no replay), which keeps records and replays unwritten.
-bool BuildMatch(EfzEnv* env, const Match& m)
+// loading and the intro (with first_intro: the loading and the fight scene's first frame,
+// its fade-in, the intro just begun), as the menus would have started it: VS on the
+// replay menu's footing (mode 5, no replay), which keeps records and replays unwritten.
+// With a page and slot (1-9), as the replay menu's record item: the game writes the
+// match's replay there from the loading on. With a replay file, as its play item: the
+// loader reads the characters, stage and palettes from it (the same as m's), and the game
+// its inputs.
+bool BuildMatch(EfzEnv* env, const Match& m, const Build& how = Build(), unsigned seed = 1)
 {
     env->init.Load();
     const EfzEnvConfig& cfg = env->cfg;
     CGame* game = Game();
     game->m_gameMode = 5;
     game->m_replayMode = 0;
+    if (how.recordPage > 0) {
+        game->m_replayMode = 2;
+        game->m_replayPage = (char)(how.recordPage - 1);
+        game->m_replaySlot = (char)(how.recordSlot - 1);
+    } else if (how.play) {
+        game->m_replayMode = 1;
+        game->m_replayPage = 0;
+        game->m_replaySlot = 0;
+    }
     game->m_roundsToWin = (char)cfg.rounds_to_win;
     game->m_roundsSetting = (char)cfg.rounds_to_win;
     game->m_isCpu[0] = m.cpu[0];
@@ -474,22 +461,44 @@ bool BuildMatch(EfzEnv* env, const Match& m)
     game->m_damageLevel = (char)cfg.damage_level;
     game->m_drawEveryFrame = 1;
     game->m_fullEffects = 1;
-    CScene2* loader = (CScene2*)Scene(2);
-    loader->CreateCharacter(loader->m_player1Ref, loader->m_player2Ref, 0, m.chars[0]);
-    loader->CreateCharacter(loader->m_player2Ref, loader->m_player1Ref, 1, m.chars[1]);
-    (*loader->m_player1Ref)->m_paletteIndex = m.palettes[0];
-    (*loader->m_player2Ref)->m_paletteIndex = m.palettes[1];
+    if (!how.play) {
+        CScene2* loader = (CScene2*)Scene(2);
+        loader->CreateCharacter(loader->m_player1Ref, loader->m_player2Ref, 0, m.chars[0]);
+        loader->CreateCharacter(loader->m_player2Ref, loader->m_player1Ref, 1, m.chars[1]);
+        (*loader->m_player1Ref)->m_paletteIndex = m.palettes[0];
+        (*loader->m_player2Ref)->m_paletteIndex = m.palettes[1];
+    }
     G()->input[0] = G()->input[1] = 0;
-    srand(1);
+    srand(seed);
     SceneIndex() = 2;
+    SetReplayFile(how.play); // the loader opens it as replay slot 1-1's file
+    bool opened = !how.play, ok = false;
     for (int frame = 0; frame < 2000; frame++) {
         RunFrame();
+        if (!opened && game->m_replay.m_handle) {
+            // What follows the game's part (EfzRevival's block) reads as the file's end.
+            opened = true;
+            SetReplayFile(nullptr);
+            DWORD& left = game->m_replay.m_remaining;
+            left = left > (DWORD)how.trailer ? left - (DWORD)how.trailer : 0;
+        }
         if (QuitRequested() || (SceneIndex() != 2 && SceneIndex() != 3))
-            return false;
-        if (Actionable())
-            return true;
+            break;
+        // first_intro: the fight scene's first frame (CScene3::Update's m_enter, which
+        // takes the players and fades in) is run, its intro just begun.
+        bool fightStarted = SceneIndex() == 3 && Fight()->m_enter == 0;
+        if (cfg.first_intro ? fightStarted : Actionable()) {
+            ok = true;
+            break;
+        }
     }
-    return false;
+    SetReplayFile(nullptr);
+    if (ok && how.play) { // the replay the loader read is the one efz_env_play read
+        CScene3* fight = (CScene3*)Scene(3);
+        ok = game->m_replayMode == 1 && fight->m_players[0]->m_charId == m.chars[0] &&
+             fight->m_players[1]->m_charId == m.chars[1];
+    }
+    return ok;
 }
 
 Match DrawMatch(const EfzMatch& spec, uint64_t& rng)
@@ -513,10 +522,116 @@ Match DrawMatch(const EfzMatch& spec, uint64_t& rng)
     return m;
 }
 
+bool LoadMatch(EfzEnv* env, Slot& s, const Match& m);
+
+// Starts the replay efz_env_play gave the slot, in its (bound) arena: built from its
+// start, the loader reading the replay.
+bool StartPlayback(EfzEnv* env, Slot& s)
+{
+    std::string path;
+    {
+        Unbound unbound; // the slot's strings are the C library's
+        path.swap(s.playNext);
+    }
+    Build how;
+    how.play = path.c_str();
+    how.trailer = s.playTrailer;
+    bool ok = BuildMatch(env, s.playMatch, how);
+    {
+        Unbound unbound;
+        std::string().swap(path);
+    }
+    if (!ok) {
+        if (Game()->m_replayMode == 1) {
+            Game()->m_replay.Close();
+            Game()->m_replayMode = 0;
+        }
+        env->SetError("the replay could not be played back");
+        s.broken = true;
+        return false;
+    }
+    s.playing = true;
+    return true;
+}
+
 // Starts the slot's next match in its (bound) arena.
 bool StartMatch(EfzEnv* env, Slot& s)
 {
-    Match m = DrawMatch(s.spec, s.ep.rng);
+    Match m;
+    if (!s.playNext.empty()) {
+        m = s.playMatch;
+        if (!StartPlayback(env, s))
+            return false;
+    } else {
+        m = DrawMatch(s.spec, s.ep.rng);
+        int page = s.recordPage, slot = s.recordSlot;
+        s.recordPage = s.recordSlot = 0;
+        if (page > 0 && (m.cpu[0] || m.cpu[1])) {
+            env->SetError("not recorded: a replay doesn't hold the CPU's decisions, so "
+                          "both players must be the program's");
+            page = 0;
+        }
+        if (page > 0) {
+            // Recorded: built from its start with the game writing the replay, not copied.
+            Build how;
+            how.recordPage = page;
+            how.recordSlot = slot;
+            if (!BuildMatch(env, m, how, (unsigned)SplitMix(s.ep.rng))) {
+                Game()->m_replay.Close();
+                Game()->m_replayMode = 0;
+                env->SetError("the recorded match could not be started");
+                s.broken = true;
+                return false;
+            }
+            s.recording = true;
+        } else if (!LoadMatch(env, s, m)) {
+            return false;
+        }
+    }
+    s.ep.match = m;
+    s.ep.frame = 0;
+    s.ep.episode++;
+    s.ep.prevHp[0] = s.ep.prevHp[1] = 9999;
+    s.ep.prevRounds[0] = s.ep.prevRounds[1] = 0;
+    s.ep.opening = !Actionable(); // first_intro
+    s.ep.ret[0] = s.ep.ret[1] = 0;
+    s.input[0] = s.input[1] = 0;
+    s.started = true;
+    s.broken = false;
+    return true;
+}
+
+// Ends the slot's replay (its arena bound). One played back is closed. One recorded,
+// after a match won, plays on as the game does after a match (the end fade) until it
+// closes the replay; else it is closed now.
+void EndReplay(Slot& s, bool playOut)
+{
+    if (s.playing) {
+        s.playing = false;
+        if (Game()->m_replayMode == 1) {
+            Game()->m_replay.Close();
+            Game()->m_replayMode = 0;
+        }
+    }
+    if (!s.recording)
+        return;
+    s.recording = false;
+    if (playOut) {
+        G()->input[0] = G()->input[1] = 0;
+        for (int frame = 0; frame < 2000 && SceneIndex() == 3 && Game()->m_replayMode == 2;
+             frame++)
+            RunFrame();
+    }
+    if (Game()->m_replayMode == 2) {
+        Game()->m_replay.Close();
+        Game()->m_replayMode = 0;
+    }
+}
+
+// Starts match `m` in the slot's (bound) arena from its saved copy, made the first time
+// it is asked for.
+bool LoadMatch(EfzEnv* env, Slot& s, const Match& m)
+{
     std::shared_ptr<CacheEntry> entry = env->cache.Get(m.Key());
     {
         std::lock_guard<std::mutex> lock(entry->lock);
@@ -530,7 +645,7 @@ bool StartMatch(EfzEnv* env, Slot& s)
     if (!entry->ready) {
         char text[96];
         snprintf(text, sizeof(text), "the match %s vs %s on stage %d could not be started",
-                 kCharacterNames[m.chars[0]], kCharacterNames[m.chars[1]], m.stage);
+                 agent::CharacterName(m.chars[0]), agent::CharacterName(m.chars[1]), m.stage);
         env->SetError(text);
         s.broken = true;
         return false;
@@ -542,35 +657,53 @@ bool StartMatch(EfzEnv* env, Slot& s)
     }
     // The CPU and the effects draw from rand: a seed of its own for each match.
     srand((unsigned)SplitMix(s.ep.rng));
-    s.ep.match = m;
-    s.ep.frame = 0;
-    s.ep.episode++;
-    s.ep.prevHp[0] = s.ep.prevHp[1] = 9999;
-    s.ep.prevRounds[0] = s.ep.prevRounds[1] = 0;
-    s.ep.ret[0] = s.ep.ret[1] = 0;
-    s.started = true;
-    s.broken = false;
     return true;
 }
 
+// Swaps forward and back for a player facing left (from controls relative to facing, or
+// to them).
+uint8_t Mirror(uint8_t bits, bool relative, int facing)
+{
+    if (relative && facing < 0)
+        bits = (uint8_t)((bits & ~3) | (bits & 1) << 1 | (bits & 2) >> 1);
+    return bits;
+}
+
+// The controls `p` played on the frame just run (the agent's view's, observe.h).
+uint8_t ControlsRead(CPlayer* p)
+{
+    return agent::ControlsRead(p);
+}
+
 // One frame with the players' controls (relative to their facing, if so configured);
-// adds to the rewards. Returns the match's winner once it is decided, else -1.
+// adds to the rewards. Returns the match's winner once it is decided, else -1; -2 if
+// the fight scene ended otherwise, -3 if the replay played back ran out.
 int Frame(EfzEnv* env, Slot& s, const uint8_t* act, float* reward)
 {
     const EfzEnvConfig& cfg = env->cfg;
     CScene3* fight = Fight();
     Globals* g = G();
+    int facing[2];
     for (int p = 0; p < 2; p++) {
-        uint8_t bits = act ? act[p] : 0;
-        if (cfg.relative_actions && fight->m_players[p]->facing < 0)
-            bits = (uint8_t)((bits & ~3) | (bits & 1) << 1 | (bits & 2) >> 1);
-        g->input[p] = bits;
+        facing[p] = fight->m_players[p]->facing;
+        g->input[p] = Mirror(act ? act[p] : 0, cfg.relative_actions != 0, facing[p]);
     }
     RunFrame();
     env->ticks.fetch_add(fight->m_speed, std::memory_order_relaxed);
-    s.ep.frame++;
+    if (!s.ep.opening)
+        s.ep.frame++;
     if (SceneIndex() != 3)
         return -2;
+    // The intro first_intro showed is over: the match's frame 0, where it would have
+    // started without it.
+    if (s.ep.opening && Actionable())
+        s.ep.opening = 0;
+    if (!s.inputTaken) {
+        s.inputTaken = true;
+        for (int p = 0; p < 2; p++)
+            s.input[p] = Mirror(ControlsRead(fight->m_players[p]), cfg.relative_actions != 0,
+                                facing[p]);
+    }
 
     int taken[2];
     int8_t rounds[2];
@@ -593,110 +726,16 @@ int Frame(EfzEnv* env, Slot& s, const uint8_t* act, float* reward)
         reward[p] += r;
         s.ep.ret[p] += r;
     }
+    // The replay's end: the scene leaves the next frame (CScene3::HandleKeys).
+    if (winner == -1 && s.playing && (Game()->m_replay.m_eof || fight->m_leave == 1))
+        return -3;
     return winner;
-}
-
-float Clamp(double v, double lo, double hi)
-{
-    return (float)(v < lo ? lo : v > hi ? hi : v);
-}
-
-void WritePlayer(float* o, CPlayer* p)
-{
-    o[0] = p->m_hp / 9999.0f;
-    o[1] = p->m_gauge / 3000.0f;
-    o[2] = (float)(p->m_rfGauge / 1000.0);
-    o[3] = p->m_rfBlue != 0;
-    o[4] = (float)p->m_guardGauge / 360.0f;
-    o[5] = (float)((p->x - 320.0) / 320.0);
-    o[6] = (float)(p->y / 240.0);
-    o[7] = Clamp(p->vx / 20.0, -10, 10);
-    o[8] = Clamp(p->vy / 20.0, -10, 10);
-    o[9] = p->facing;
-    o[10] = p->pattern;
-    o[11] = p->frame;
-    o[12] = p->IsInHitstun() != 0;
-    o[13] = p->IsGuarding() != 0;
-    o[14] = p->IsDashing() != 0;
-    o[15] = p->m_hitstop / 30.0f;
-    o[16] = p->m_freezeTime > 0;
-    o[17] = p->m_invulTime > 0;
-    o[18] = p->m_noGuardTime > 0;
-    o[19] = p->m_armorTime > 0;
-    o[20] = p->m_throwProtect > 0;
-    o[21] = p->m_untechTime / 100.0f;
-    o[22] = p->m_comboHits / 30.0f;
-    o[23] = (float)(p->m_proration / 10000.0);
-    o[24] = p->m_roundsWon;
-    o[25] = p->m_airActions;
-    o[26] = p->m_charId;
-    o[27] = p->pattern >= kFirstCharacterAction;
-    o[28] = p->m_cpu != 0;
-    o[29] = (float)p->m_sealLevel;
-    o[30] = p->m_comboHits > 0 ? p->m_comboDamage / 9999.0f : 0.0f;
-    o[31] = p->y < 0.0;
-}
-
-// The `owner`'s active objects nearest the viewer, nearest first.
-void WriteObjects(float* o, CPlayer* owner, CPlayer* viewer)
-{
-    int slots[0x40];
-    double dist[0x40];
-    int n = 0;
-    for (int k = 0; k < 0x40; k++) {
-        if (!owner->m_objectActive[k])
-            continue;
-        const PlayerObject& obj = owner->m_objects[k];
-        slots[n] = k;
-        dist[n] = fabs(obj.x - viewer->x) + fabs(obj.y - viewer->y);
-        n++;
-    }
-    for (int k = 0; k < kObjects; k++, o += kObjectFeatures) {
-        if (k >= n) {
-            memset(o, 0, kObjectFeatures * sizeof(float));
-            continue;
-        }
-        int best = k;
-        for (int j = k + 1; j < n; j++) {
-            if (dist[j] < dist[best])
-                best = j;
-        }
-        std::swap(slots[k], slots[best]);
-        std::swap(dist[k], dist[best]);
-        const PlayerObject& obj = owner->m_objects[slots[k]];
-        o[0] = 1.0f;
-        o[1] = (float)((obj.x - viewer->x) / 320.0);
-        o[2] = (float)(obj.y / 240.0);
-        o[3] = Clamp(obj.vx / 20.0, -10, 10);
-        o[4] = Clamp(obj.vy / 20.0, -10, 10);
-        o[5] = obj.hitsLeft > 0;
-    }
 }
 
 void WriteObs(EfzEnv* env, const Slot& s, float* out)
 {
-    CScene3* fight = Fight();
-    CGame* game = Game();
-    for (int v = 0; v < 2; v++) {
-        float* o = out + v * kObsDim;
-        CPlayer* self = fight->m_players[v];
-        CPlayer* opp = fight->m_players[1 - v];
-        int max = env->cfg.max_frames > 0 ? env->cfg.max_frames : 10000;
-        o[0] = (float)s.ep.frame / max;
-        o[1] = game->m_round;
-        o[2] = game->m_intro != 0;
-        o[3] = game->m_roundOver != 0;
-        o[4] = (float)((opp->x - self->x) / 640.0);
-        o[5] = (float)((opp->y - self->y) / 240.0);
-        o[6] = (float)v;
-        o[7] = game->m_roundsToWin;
-        o += kGlobalFeatures;
-        WritePlayer(o, self);
-        WritePlayer(o + kPlayerFeatures, opp);
-        o += 2 * kPlayerFeatures;
-        WriteObjects(o, self, self);
-        WriteObjects(o + kObjects * kObjectFeatures, opp, self);
-    }
+    for (int v = 0; v < 2; v++)
+        agent::WriteView(out + v * kObsDim, Fight(), Game(), v, s.ep.frame, env->cfg.max_frames);
 }
 
 void WriteInfo(const Slot& s, EfzInfo& info, int winner, bool ended)
@@ -716,6 +755,10 @@ void WriteInfo(const Slot& s, EfzInfo& info, int winner, bool ended)
     info.winner = (int8_t)winner;
     info.stage = s.ep.match.stage;
     info.ended = ended;
+    info.input[0] = s.input[0];
+    info.input[1] = s.input[1];
+    info.replay = s.playing;
+    info.reserved = 0;
 }
 
 float* ObsOf(EfzEnv* env, float* base, int i)
@@ -727,10 +770,13 @@ float* ObsOf(EfzEnv* env, float* base, int i)
 void ResetOne(EfzEnv* env, int i)
 {
     Slot& s = env->slots[i];
+    s.pending = s.finished = false;
     BindArena(s.arena);
+    EndReplay(s, false); // a reset cuts a replay short
     env->reward[2 * i] = env->reward[2 * i + 1] = 0;
     env->terminated[i] = env->truncated[i] = 0;
     if (StartMatch(env, s)) {
+        ApplyAdvantages(s);
         WriteObs(env, s, ObsOf(env, env->obsOut, i));
         WriteInfo(s, env->info[i], -1, false);
     } else {
@@ -748,21 +794,29 @@ void StepOne(EfzEnv* env, int i)
     float* reward = &env->reward[2 * i];
     const uint8_t* act = &env->actions[2 * i];
     reward[0] = reward[1] = 0;
+    if (s.finished) // DISABLED: as it ended, until efz_env_reset
+        return;
     env->terminated[i] = env->truncated[i] = 0;
-    if (!s.started || s.broken) {
+    if (!s.started || s.broken || s.pending) {
         ResetOne(env, i);
         return;
     }
     BindArena(s.arena);
+    ApplyAdvantages(s);
     int winner = -1;
+    s.inputTaken = false;
     for (int k = 0; k < cfg.frame_skip && winner == -1; k++)
         winner = Frame(env, s, act, reward);
     if (cfg.skip_noninteractive) {
         for (int guard = 0; winner == -1 && !Actionable() && guard < 4000; guard++)
             winner = Frame(env, s, nullptr, reward);
     }
+    bool ranOut = winner == -3; // the replay played back ends here, the match unfinished
+    if (ranOut)
+        winner = -1;
     bool terminated = winner != -1;
-    bool truncated = !terminated && cfg.max_frames > 0 && s.ep.frame >= cfg.max_frames;
+    bool truncated = !terminated &&
+                     (ranOut || (cfg.max_frames > 0 && s.ep.frame >= cfg.max_frames));
     if (winner == -2) { // the fight scene ended some other way: start over
         winner = -1;
         s.broken = true;
@@ -780,6 +834,18 @@ void StepOne(EfzEnv* env, int i)
         WriteInfo(s, env->info[i], winner, true);
     } else {
         memset(ObsOf(env, env->finalObsOut, i), 0, 2 * kObsDim * sizeof(float));
+    }
+    EndReplay(s, terminated && !s.broken);
+    if (cfg.autoreset != EFZ_AUTORESET_SAME_STEP) {
+        // The step's observation is the match's last; the next match waits.
+        memcpy(ObsOf(env, env->obsOut, i), ObsOf(env, env->finalObsOut, i),
+               2 * kObsDim * sizeof(float));
+        if (cfg.autoreset == EFZ_AUTORESET_NEXT_STEP)
+            s.pending = true;
+        else
+            s.finished = true;
+        BindArena(nullptr);
+        return;
     }
     if (StartMatch(env, s)) {
         WriteObs(env, s, ObsOf(env, env->obsOut, i));
@@ -819,6 +885,7 @@ void efz_env_default_config(EfzEnvConfig* c)
     c->reward_round = 0.0f;
     c->reward_match = 1.0f;
     c->seed = 0;
+    c->autoreset = EFZ_AUTORESET_SAME_STEP;
 }
 
 int32_t efz_env_version(void)
@@ -833,13 +900,12 @@ int32_t efz_env_obs_dim(void)
 
 const char* efz_env_obs_name(int32_t i)
 {
-    std::call_once(g_namesOnce, MakeNames);
-    return i >= 0 && i < kObsDim ? g_names[i] : nullptr;
+    return agent::ObservationName(i);
 }
 
 const char* efz_env_character_name(int32_t c)
 {
-    return c >= 0 && c < EFZ_CHARACTERS ? kCharacterNames[c] : nullptr;
+    return c >= 0 && c < EFZ_CHARACTERS ? agent::CharacterName(c) : nullptr;
 }
 
 EfzEnv* efz_env_create(const char* dataDir, const EfzEnvConfig* config, char* error,
@@ -866,6 +932,8 @@ EfzEnv* efz_env_create(const char* dataDir, const EfzEnvConfig* config, char* er
     cfg.damage_level = std::min(3, std::max(1, cfg.damage_level));
     if (cfg.cache_size <= 0)
         cfg.cache_size = 64;
+    if (cfg.autoreset < EFZ_AUTORESET_SAME_STEP || cfg.autoreset > EFZ_AUTORESET_DISABLED)
+        return fail("autoreset must be EFZ_AUTORESET_SAME_STEP, _NEXT_STEP or _DISABLED");
     if (!dataDir || !*dataDir)
         return fail("no data_dir: the folder of an EFZ 4.02 install");
     std::string probe = std::string(dataDir) + "/system/effect/effect.dat";
@@ -878,6 +946,7 @@ EfzEnv* efz_env_create(const char* dataDir, const EfzEnvConfig* config, char* er
 
     std::unique_ptr<EfzEnv> env(new EfzEnv);
     env->cfg = cfg;
+    env->dataDir = dataDir;
     env->n = cfg.num_envs;
     env->cache.SetCapacity((size_t)cfg.cache_size);
     size_t obsSize = (size_t)env->n * 2 * kObsDim;
@@ -930,8 +999,14 @@ void efz_env_destroy(EfzEnv* env)
         return;
     BindArena(nullptr);
     Finish(env);
-    for (Slot& s : env->slots)
+    for (Slot& s : env->slots) {
+        if (s.recording || s.playing) { // its replay ends where the match is
+            BindArena(s.arena);
+            EndReplay(s, false);
+            BindArena(nullptr);
+        }
         FreeArena(s.arena);
+    }
     delete env;
 }
 
@@ -980,6 +1055,151 @@ int efz_env_reset(EfzEnv* env, const uint8_t* mask)
     }
     Pool::Get().Launch(env->job, (int)which.size(), [env, &which](int k) { ResetOne(env, which[k]); });
     Pool::Get().Wait(env->job);
+    return 0;
+}
+
+int efz_env_record(EfzEnv* env, int32_t index, int32_t page, int32_t slot)
+{
+    if (!env || index < 0 || index >= env->n)
+        return -1;
+    Finish(env);
+    if (page < 1 || page > 9 || slot < 1 || slot > 9) {
+        env->SetError("replay slots are page 1-9, slot 1-9");
+        return -1;
+    }
+    Slot& s = env->slots[index];
+    if (s.spec.cpu[0] || s.spec.cpu[1]) {
+        env->SetError("a replay doesn't hold the CPU's decisions: both players must be the "
+                      "program's (set_matches cpu=(False, False))");
+        return -1;
+    }
+    s.recordPage = page;
+    s.recordSlot = slot;
+    return 0;
+}
+
+int efz_env_play(EfzEnv* env, int32_t index, const char* path)
+{
+    if (!env || index < 0 || index >= env->n || !path || !*path)
+        return -1;
+    Finish(env);
+    Unbound unbound;
+    std::vector<uint8_t> b;
+    if (FILE* f = OpenPath(path, "rb")) {
+        uint8_t buf[65536];
+        size_t n;
+        while ((n = fread(buf, 1, sizeof(buf), f)) > 0)
+            b.insert(b.end(), buf, buf + n);
+        fclose(f);
+    } else {
+        env->SetError(std::string("cannot read ") + path);
+        return -1;
+    }
+    auto word = [&](size_t at) { return (int)(int16_t)(b[at] | b[at + 1] << 8); };
+    auto dword = [&](size_t at) {
+        return (int32_t)(b[at] | b[at + 1] << 8 | b[at + 2] << 16 | (uint32_t)b[at + 3] << 24);
+    };
+    // The header CScene2 reads: P1, P2, [a version over 100,] stage, P1's palette, P2's.
+    Match m;
+    memset(&m, 0, sizeof(m));
+    size_t at = 6;
+    if (b.size() >= 12) {
+        m.chars[0] = (int8_t)word(0);
+        m.chars[1] = (int8_t)word(2);
+        int stage = word(4);
+        if (stage > 100) {
+            stage = word(6);
+            at = 8;
+        }
+        m.stage = (int8_t)stage;
+        m.palettes[0] = (int8_t)word(at);
+        m.palettes[1] = (int8_t)word(at + 2);
+    }
+    bool ok = b.size() >= 12 && word(0) >= 0 && word(0) < EFZ_CHARACTERS && word(2) >= 0 &&
+              word(2) < EFZ_CHARACTERS && m.stage >= 0 && m.stage < EFZ_STAGES;
+    if (!ok) {
+        env->SetError(std::string("not a replay: ") + path);
+        return -1;
+    }
+    // EfzRevival's block after the game's part ends with its offset and -1
+    // (Game::readExtendedReplay): the game would read it as inputs.
+    long game = (long)b.size();
+    if (b.size() >= 28 && dword(b.size() - 4) == -1) {
+        int32_t offset = dword(b.size() - 8);
+        if (offset >= 12 && (size_t)offset + 16 <= b.size())
+            game = offset;
+    }
+    game &= ~1L; // whole words
+    Slot& s = env->slots[index];
+    s.playNext = path;
+    s.playMatch = m;
+    s.playTrailer = (long)b.size() - game;
+    return 0;
+}
+
+int efz_env_set_save_dir(EfzEnv* env, const char* dir)
+{
+    if (!env)
+        return -1;
+    Finish(env);
+    SetDataDir(env->dataDir.c_str(), dir && *dir ? dir : env->dataDir.c_str());
+    return 0;
+}
+
+int efz_env_set_gauges(EfzEnv* env, int32_t index, int32_t player, int32_t power, double rf,
+                       int32_t blue)
+{
+    if (!env || index < 0 || index >= env->n || player < 0 || player > 1)
+        return -1;
+    Finish(env);
+    Slot& s = env->slots[index];
+    if (!s.started || s.broken)
+        return -1;
+    BindArena(s.arena);
+    int ok = -1;
+    if (SceneIndex() == 3) {
+        CPlayer* p = Fight()->m_players[player];
+        if (power >= 0)
+            p->m_gauge = (short)std::min(power, 3000);
+        if (rf >= 0)
+            p->m_rfGauge = std::min(rf, 1000.0);
+        if (blue >= 0)
+            p->m_rfBlue = blue ? 1 : 0;
+        WriteObs(env, s, ObsOf(env, env->obsOut, index));
+        WriteInfo(s, env->info[index], -1, false);
+        ok = 0;
+    }
+    BindArena(nullptr);
+    return ok;
+}
+
+int efz_env_set_damage_scale(EfzEnv* env, int32_t index, int32_t player, float scale)
+{
+    if (!env || index < 0 || index >= env->n || player < 0 || player > 1 ||
+        !(scale > 0 && scale <= 100))
+        return -1;
+    Finish(env);
+    env->slots[index].damageScale[player] = scale; // written into the game each step
+    return 0;
+}
+
+int efz_env_set_recoil_guard(EfzEnv* env, int32_t index, int32_t player, float chance)
+{
+    if (!env || index < 0 || index >= env->n || player < 0 || player > 1 ||
+        !(chance >= 0 && chance <= 1))
+        return -1;
+    Finish(env);
+    env->slots[index].recoilGuard[player] = chance;
+    return 0;
+}
+
+int efz_env_seed(EfzEnv* env, int32_t index, uint64_t seed)
+{
+    if (!env || index < 0 || index >= env->n)
+        return -1;
+    Finish(env);
+    uint64_t state = seed;
+    env->slots[index].ep.rng = SplitMix(state);
     return 0;
 }
 
@@ -1035,6 +1255,7 @@ size_t efz_env_save_state(EfzEnv* env, int32_t index, void* out, size_t size)
     h.magic = kStateMagic;
     h.version = EFZ_ENV_VERSION;
     h.arenaSize = need - sizeof(StateHeader);
+    h.base = LibraryBase();
     h.ep = s.ep;
     memcpy(out, &h, sizeof(h));
     memcpy((char*)out + sizeof(h), s.arena, (size_t)h.arenaSize);
@@ -1048,17 +1269,32 @@ int efz_env_load_state(EfzEnv* env, int32_t index, const void* state, size_t siz
     StateHeader h;
     memcpy(&h, state, sizeof(h));
     if (h.magic != kStateMagic || h.version != EFZ_ENV_VERSION ||
-        h.arenaSize + sizeof(StateHeader) != size)
+        h.arenaSize + sizeof(StateHeader) != size) {
+        env->SetError("not a save state of this library");
         return -1;
+    }
+    if (h.base != LibraryBase()) {
+        env->SetError("the state was saved where the library was loaded at another address "
+                      "(another process): its objects' pointers would be wrong here");
+        return -1;
+    }
     Finish(env);
     int stackMark;
     SetStack(&stackMark);
     Slot& s = env->slots[index];
     BindArena(s.arena);
+    EndReplay(s, false);
     LoadArena((const char*)state + sizeof(h), (uintptr_t)h.arenaSize);
+    // Saved while recording or playing a replay back: a loaded game neither writes one
+    // nor reads one (the file is the saving environment's), its players play on.
+    if (Game()->m_replayMode == 1 || Game()->m_replayMode == 2) {
+        Game()->m_replay.m_handle = NULL;
+        Game()->m_replayMode = 0;
+    }
     s.ep = h.ep;
     s.started = true;
     s.broken = false;
+    s.pending = s.finished = false;
     env->reward[2 * index] = env->reward[2 * index + 1] = 0;
     env->terminated[index] = env->truncated[index] = 0;
     WriteObs(env, s, ObsOf(env, env->obsOut, index));
@@ -1084,6 +1320,24 @@ int efz_env_render(EfzEnv* env, int32_t index, uint8_t* rgb)
     return 1;
 }
 
+void efz_env_sound_log(int32_t on)
+{
+    SetSoundLog(on != 0);
+}
+
+int32_t efz_env_sound_events(EfzEnv* env, int32_t index, EfzSoundEvent* out, int32_t max)
+{
+    static_assert(sizeof(EfzSoundEvent) == sizeof(SoundEvent), "EfzSoundEvent");
+    if (!env || index < 0 || index >= env->n || !out || max <= 0)
+        return 0;
+    BindArena(nullptr);
+    Finish(env);
+    BindArena(env->slots[index].arena);
+    int n = TakeSoundEvents((SoundEvent*)out, max);
+    BindArena(nullptr);
+    return n;
+}
+
 uint64_t efz_env_ticks(const EfzEnv* env)
 {
     return env ? env->ticks.load() : 0;
@@ -1092,6 +1346,239 @@ uint64_t efz_env_ticks(const EfzEnv* env)
 const char* efz_env_error(const EfzEnv* env)
 {
     return env ? env->error.c_str() : "";
+}
+
+// --- Agents (port/agent/policy.h), outside any game: no arena is bound.
+
+struct EfzAgent {
+    agent::Policy policy;
+    std::unique_ptr<agent::Player> player;
+};
+
+namespace {
+
+// A slot's game as the routes' planner sees it (agent/routes.h): its arena bound only
+// inside each call, so that what the planner allocates is the C library's, not the
+// game's (a game loaded back over its arena would take it).
+class EnvWorld : public agent::World {
+public:
+    explicit EnvWorld(Slot& s) : s_(s) {}
+    void Save(agent::Snapshot* out) override
+    {
+        BindArena(s_.arena);
+        size_t n = ArenaUsed();
+        BindArena(nullptr);
+        out->bytes.resize(n);
+        memcpy(out->bytes.data(), s_.arena, n);
+        out->valid = true;
+    }
+    bool Load(const agent::Snapshot& in) override
+    {
+        if (!in.valid)
+            return false;
+        BindArena(s_.arena);
+        LoadArena(in.bytes.data(), in.bytes.size());
+        BindArena(nullptr);
+        return true;
+    }
+    bool Step(const uint8_t input[2]) override
+    {
+        BindArena(s_.arena);
+        G()->input[0] = input[0];
+        G()->input[1] = input[1];
+        RunFrame();
+        bool ok = SceneIndex() == 3 && !QuitRequested();
+        BindArena(nullptr);
+        return ok;
+    }
+    void View(int side, float* out) override
+    {
+        BindArena(s_.arena);
+        agent::WriteView(out, Fight(), Game(), side, 0, 0);
+        BindArena(nullptr);
+    }
+    int Facing(int p) override
+    {
+        BindArena(s_.arena);
+        int f = Fight()->m_players[p]->facing;
+        BindArena(nullptr);
+        return f;
+    }
+    int Hp(int p) override
+    {
+        BindArena(s_.arena);
+        int hp = Fight()->m_players[p]->m_hp;
+        BindArena(nullptr);
+        return hp > 0 ? hp : 0;
+    }
+    int ComboHits(int p) override
+    {
+        BindArena(s_.arena);
+        int n = Fight()->m_players[p]->m_comboHits;
+        BindArena(nullptr);
+        return n;
+    }
+    uint8_t Read(int p) override
+    {
+        BindArena(s_.arena);
+        uint8_t c = agent::ControlsRead(Fight()->m_players[p]);
+        BindArena(nullptr);
+        return c;
+    }
+    bool Over() override
+    {
+        BindArena(s_.arena);
+        bool over = Game()->m_roundOver != 0 || Fight()->m_leave == 2;
+        BindArena(nullptr);
+        return over;
+    }
+
+private:
+    Slot& s_;
+};
+
+} // namespace
+
+EfzAgent* efz_env_agent_load(const char* path, char* error, size_t errorSize)
+{
+    BindArena(nullptr);
+    std::unique_ptr<EfzAgent> a(new EfzAgent);
+    std::string why;
+    if (!path || !a->policy.Load(path, &why)) {
+        if (error && errorSize)
+            snprintf(error, errorSize, "%s", path ? why.c_str() : "no path");
+        return nullptr;
+    }
+    a->player.reset(new agent::Player(&a->policy, 1));
+    return a.release();
+}
+
+void efz_env_agent_free(EfzAgent* a)
+{
+    BindArena(nullptr);
+    delete a;
+}
+
+void efz_env_agent_info(const EfzAgent* a, EfzAgentInfo* info)
+{
+    if (!a || !info)
+        return;
+    memset(info, 0, sizeof(*info));
+    info->width = a->policy.Width();
+    info->actions = a->policy.Actions();
+    info->frame_skip = a->policy.frameSkip;
+    info->history = a->policy.history;
+    info->delay = a->policy.delay;
+    info->character = a->policy.character;
+    info->routes = (int32_t)a->policy.routes.list.size();
+    info->pool = (int32_t)a->policy.routes.pool.size();
+    info->replan = a->policy.routes.replan;
+    info->chooser = !a->policy.chooser.Empty();
+    info->format = a->policy.format;
+    snprintf(info->name, sizeof(info->name), "%s", a->policy.name.c_str());
+    snprintf(info->version, sizeof(info->version), "%s", a->policy.version.c_str());
+    snprintf(info->modules, sizeof(info->modules), "%s", a->policy.modules.c_str());
+}
+
+void efz_env_agent_log_probs(const EfzAgent* a, const float* views, int32_t n, float* out)
+{
+    if (!a || !views || !out)
+        return;
+    BindArena(nullptr);
+    int w = a->policy.Width(), k = a->policy.Actions();
+    for (int32_t i = 0; i < n; i++)
+        a->policy.LogProbs(views + (size_t)i * w, out + (size_t)i * k);
+}
+
+void efz_env_agent_reset(EfzAgent* a, uint64_t seed)
+{
+    if (!a)
+        return;
+    BindArena(nullptr);
+    a->player.reset(new agent::Player(&a->policy, seed));
+}
+
+uint8_t efz_env_agent_step(EfzAgent* a, const float* view, int32_t actionable, int32_t deterministic)
+{
+    if (!a || !view)
+        return 0;
+    BindArena(nullptr);
+    return a->player->Step(view, actionable != 0, deterministic != 0);
+}
+
+int32_t efz_env_agent_last_action(const EfzAgent* a)
+{
+    return a ? a->player->LastAction() : -1;
+}
+
+int32_t efz_env_agent_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side,
+                           int32_t starter, const int32_t* actions, int32_t count,
+                           const float* history, uint8_t prev, int32_t deterministic,
+                           uint64_t seed, int32_t late, const int32_t* extra, int32_t extraCount,
+                           EfzPlan* out)
+{
+    if (!a || !env || !out || index < 0 || index >= env->n || side < 0 || side > 1 ||
+        count < 0 || (count && !actions) || (a->policy.history && !history) || late < 0 ||
+        extraCount < 0 || (extraCount && !extra))
+        return -1;
+    BindArena(nullptr);
+    memset(out, 0, sizeof(*out));
+    if (a->policy.routes.Empty()) {
+        env->SetError("the agent has no routes");
+        return -1;
+    }
+    for (int32_t k = 0; k < count + extraCount; k++) {
+        int32_t v = k < count ? actions[k] : extra[k - count];
+        if (v < 0 || v >= a->policy.Actions()) {
+            env->SetError("an action out of range");
+            return -1;
+        }
+    }
+    Finish(env);
+    int stackMark;
+    SetStack(&stackMark);
+    Slot& s = env->slots[index];
+    BindArena(s.arena);
+    bool fighting = SceneIndex() == 3 && Fight()->m_enter == 0;
+    BindArena(nullptr);
+    if (!fighting) {
+        env->SetError("the environment isn't in a fight");
+        return -1;
+    }
+    EnvWorld world(s);
+    agent::Planner planner(&a->policy, &world, seed);
+    float view[kObsDim];
+    world.View(side, view);
+    planner.Begin(side, starter, std::vector<int>(actions, actions + count), history, prev,
+                  deterministic != 0, view, late, std::vector<int>(extra, extra + extraCount));
+    planner.Work(agent::Planner::Clock::time_point::max());
+    out->outcome = (int32_t)planner.outcome;
+    out->chosen = planner.chosen < 64 ? planner.chosen : -1;
+    out->frames = (int32_t)planner.frames;
+    out->options = (int32_t)std::min<size_t>(planner.tried.size(), 64);
+    const agent::Routes& routes = a->policy.routes;
+    for (int32_t j = 0; j < out->options; j++) {
+        int e = planner.tried[j];
+        out->route[j] = e >= 0 ? routes.pool[e].route : e;
+        out->at[j] = e >= 0 ? routes.pool[e].at : 0;
+        out->dealt[j] = planner.dealt[j];
+    }
+    memcpy(out->expected, planner.expected, sizeof(out->expected));
+    out->ms = planner.ms;
+    return 0;
+}
+
+int32_t efz_env_agent_choose(const EfzAgent* a, const float* input, int32_t starter,
+                             int32_t offset, float* values)
+{
+    if (!a || !input || a->policy.chooser.Empty())
+        return -2;
+    BindArena(nullptr);
+    std::vector<float> v;
+    int r = a->policy.Choose(input, starter, offset, &v);
+    if (values)
+        memcpy(values, v.data(), v.size() * sizeof(float));
+    return r;
 }
 
 } // extern "C"

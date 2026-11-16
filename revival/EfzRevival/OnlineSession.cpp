@@ -512,11 +512,11 @@ void OnlineSession::fightUpdate(void *frame)
     char pressed = remote | local;
     for (int key = 0; key < 5; key++) {
         if (pressed & (1 << key))
-            keys[0x3e + key] = 0x80;
+            keys[DIK_F4 + key] = 0x80;
         else
-            keys[0x3e + key] = 0;
+            keys[DIK_F4 + key] = 0;
     }
-    keys[1] = (pressed & 0xe0) << 2;
+    keys[DIK_ESCAPE] = (pressed & 0xe0) << 2;
 }
 
 // FUNCTION: 0x10072000

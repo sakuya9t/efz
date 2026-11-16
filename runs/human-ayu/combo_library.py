@@ -1,0 +1,158 @@
+"""People's Ayu combos as a library: every combo of the dataset's matches with its damage,
+hits, length, the move it started from, the gauges it had (power, RF, blue), whether it
+used an Instant Charge (with the RF gauge red or cyan) or a super, and whether in the corner; and the
+inputs that made it, from the step after its first hit to its end (relative to facing,
+as an agent's), with the one before (prev: what the first of them presses follows from). Writes --out (npz: the --keep most damaging) and prints the best.
+
+Combos hold on some characters and not others, or take another rhythm on them (on Ayu,
+Mayu, Sayuri, Unknown and Kano they drop more easily: the user's), and the most damaging
+overall are seldom on those: --per-victim K also keeps each victim's K most damaging
+(each entry's kept_for: 'overall' or 'victim'), for a planner to try the combos landed
+on the character it faces first (redteam.Planner).
+
+    python runs/human-ayu/combo_library.py --dataset D:/tasogare/efz-replays/datasets/ayu
+
+--marks LIBRARY: for a library written already, where each of its combos can be joined
+(LIBRARY.marks.json beside it: the first hit of each new move inside the combo, with the
+damage and the hits before it), for a planner that plans again at each new move's hit
+(redteam.Planner(replan=True)).
+"""
+
+import argparse
+import csv
+import json
+import os
+import sys
+
+import numpy as np
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+ACTION, GAUGE, RF, BLUE, OPP_X = 18, 9, 10, 11, 45
+HITS, DAMAGE = 30, 38
+IC = (0xa7, 0xab)
+PER_VICTIM_MIN = 1500  # --per-victim's least damage (people's Kanna: a few short ones)
+SUPERS = range(0x12c, 0x13e)
+
+
+def combos_of(obs, inputs):
+    hits = np.round(obs[:, HITS].astype(np.float32) * 30).astype(int)
+    on = hits > 0
+    starts = np.flatnonzero(on & ~np.concatenate([[False], on[:-1]]))
+    ends = np.flatnonzero(~on & np.concatenate([[False], on[:-1]]))
+    act = np.round(obs[:, ACTION].astype(np.float32)).astype(int)
+    for b in starts:
+        later = ends[ends > b]
+        e = later[0] if len(later) else len(obs)
+        seg = act[b:e]
+        ic_at = [k for k in range(b, e) if act[k] in IC and (k == b or act[k - 1] not in IC)]
+        yield dict(start=int(b), end=int(e), frames=int(e - b), hits=int(hits[b:e].max()),
+                   damage=float(obs[b:e, DAMAGE].astype(np.float32).max() * 9999),
+                   starter=int(act[b]), power=int(round(float(obs[b, GAUGE]) * 3000)),
+                   rf=int(round(float(obs[b, RF]) * 1000)), blue=bool(obs[b, BLUE] > 0),
+                   ic=len(ic_at), ic_blue=any(obs[max(0, k - 1), BLUE] > 0 for k in ic_at),
+                   super=bool(np.isin(seg, list(SUPERS)).any()),
+                   corner=bool(abs(float(obs[b, OPP_X])) > 0.8),
+                   prev=int(inputs[b - 1]) if b > 0 else 0, inputs=inputs[b:e].copy())
+
+
+def marks_of(obs, start, end):
+    """Where a combo's moves first hit: [step from its start, the move, the combo's damage
+    and hits before it] for each hit that a move other than the one before made. A combo
+    can be joined there (redteam.Planner's suffixes): its inputs from that step are what
+    its player did after that move connected."""
+    hits = np.round(obs[start:end, HITS].astype(np.float32) * 30).astype(int)
+    act = np.round(obs[start:end, ACTION].astype(np.float32)).astype(int)
+    dmg = obs[start:end, DAMAGE].astype(np.float32) * 9999
+    out, last = [], None
+    for t in range(len(hits)):
+        if hits[t] > (hits[t - 1] if t else 0) and act[t] != last:
+            last = int(act[t])
+            out.append([t, last, round(float(dmg[t - 1]), 1) if t else 0.0,
+                        int(hits[t - 1]) if t else 0])
+    return out
+
+
+def write_marks(library, dataset):
+    """LIBRARY.marks.json: each of the library's combos' marks_of, by its place in the
+    library's list (macros.load_library reads the file if it is there)."""
+    meta = json.loads(str(np.load(library)['meta']))
+    out, cache = {}, {}
+    for k, m in enumerate(meta):
+        name = f"{m['id']}-{m['side']}.npz"
+        if name not in cache:
+            with np.load(os.path.join(dataset, name)) as z:
+                cache[name] = z['obs']
+        out[k] = marks_of(cache[name], m['start'], m['end'])
+    path = os.path.splitext(library)[0] + '.marks.json'
+    json.dump(out, open(path, 'w'))
+    n = np.array([len(v) for v in out.values()])
+    print(f'{path}: {len(out)} combos, {int(n.sum())} marks (a combo: median {np.median(n):.0f}, '
+          f'most {n.max()})')
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    p.add_argument('--dataset', required=True)
+    p.add_argument('--marks', metavar='LIBRARY',
+                   help='write LIBRARY.marks.json (where each combo can be joined) and stop')
+    p.add_argument('--out', default=os.path.join('D:/tasogare/efz-replays', 'combo-library.npz'))
+    p.add_argument('--keep', type=int, default=300)
+    p.add_argument('--show', type=int, default=25)
+    p.add_argument('--per-victim', type=int, default=0,
+                   help="also keep each victim's this many most damaging")
+    args = p.parse_args()
+    if args.marks:
+        return write_marks(args.marks, args.dataset)
+    rows = [r for r in csv.DictReader(open(os.path.join(args.dataset, 'matches.csv'),
+                                           encoding='utf-8')) if r['in_sync'] == '1']
+    found = []
+    for r in rows:
+        with np.load(os.path.join(args.dataset, f"{r['id']}-{r['side']}.npz")) as z:
+            obs, inputs = z['obs'], z['input']
+        for c in combos_of(obs, inputs):
+            if c['hits'] >= 2:
+                c.update(id=r['id'], side=int(r['side']), opponent=r['opponent'])
+                found.append(c)
+    found.sort(key=lambda c: -c['damage'])
+    dmg = np.array([c['damage'] for c in found])
+    print(f'{len(found)} combos of 2 hits or more in {len(rows)} matches; damage: median '
+          f'{np.median(dmg):.0f}, 90th percentile {np.percentile(dmg, 90):.0f}, '
+          f'99th {np.percentile(dmg, 99):.0f}, most {dmg.max():.0f}')
+    for t in (3000, 4000, 5000, 6000, 7000):
+        top = [c for c in found if c['damage'] >= t]
+        if top:
+            share = lambda k: np.mean([bool(c[k]) for c in top])
+            print(f'  {len(top):5d} of {t}+: cyan IC {share("ic_blue"):.0%}, any IC {share("ic"):.0%}, '
+                  f'super {share("super"):.0%}, corner {share("corner"):.0%}, started with '
+                  f'cyan RF {share("blue"):.0%}, power {np.mean([c["power"] for c in top]):.0f}')
+    sys.path.insert(0, HERE)
+    from evaluate import GROUPS, resources
+    print('by resources at the start (RF gauge blue < 500, red 500-999, cyan full; bars of power):')
+    for g in GROUPS:
+        d = np.array([c['damage'] for c in found
+                      if resources(c['power'], c['rf'], c['blue']) == g])
+        if len(d):
+            print(f'  {g:6s} {len(d):5d} combos: average {d.mean():5.0f}, 90th percentile '
+                  f'{np.percentile(d, 90):5.0f}, most {d.max():5.0f}')
+    print('the best:')
+    for c in found[:args.show]:
+        print(f"  {c['damage']:5.0f} HP {c['hits']:2d} hits {c['frames']:4d} frames, starter 0x{c['starter']:x}, "
+              f"power {c['power']} RF {c['rf']}{' blue' if c['blue'] else ''}, IC {c['ic']}"
+              f"{' (blue)' if c['ic_blue'] else ''}{', super' if c['super'] else ''}"
+              f"{', corner' if c['corner'] else ''}, vs {c['opponent']} (replay {c['id']})")
+    keep = [dict(c, kept_for='overall') for c in found[:args.keep]]
+    if args.per_victim:
+        for victim in sorted({c['opponent'] for c in found}):
+            mine = [c for c in found[args.keep:] if c['opponent'] == victim and
+                    c['damage'] >= PER_VICTIM_MIN]
+            have = sum(c['opponent'] == victim for c in keep)
+            keep += [dict(c, kept_for='victim') for c in mine[:max(0, args.per_victim - have)]]
+    meta = [{k: v for k, v in c.items() if k != 'inputs'} for c in keep]
+    np.savez(args.out, meta=json.dumps(meta),
+             **{f'inputs{k}': c['inputs'] for k, c in enumerate(keep)})
+    print('kept', len(keep), 'in', args.out)
+
+
+if __name__ == '__main__':
+    main()
