@@ -84,6 +84,48 @@ class EfzFeatures(BaseFeaturesExtractor):
         return th.cat(parts, dim=1)
 
 
+def widen(source, width, gain=1.0):
+    """A copy of the policy `source` for observations `width` wide (more features after
+    its own, all continuous): its weights, and zeros for the new features' in the first
+    layers, so it plays as the source does until training gives them a use. gain: what
+    the new features are scaled by on the way in (EfzFeatures' scale): their weights
+    start at zero and Adam moves each weight about as far a step whatever its input's
+    size, so features of 0-1 beside inputs scaled to a unit spread are learned slowly
+    (the "told habits" runs: 0.1 against 1.06 after 6M steps); a gain of g is g times
+    the learning rate for them."""
+    old = source.observation_space.shape[0]
+    if width < old:
+        raise ValueError(f'widen: from {old} features to {width}')
+    kwargs = source._get_constructor_parameters()
+    if hasattr(source, 'share_features_extractor'):
+        kwargs['share_features_extractor'] = source.share_features_extractor
+    kwargs['observation_space'] = spaces.Box(-np.inf, np.inf, (width,), np.float32)
+    policy = type(source)(**kwargs).to(source.device)
+    # The features: the continuous columns first, then the embeddings (EfzFeatures).
+    was, now = len(continuous_columns(old)), len(continuous_columns(width))
+    state = policy.state_dict()
+    for name, v in source.state_dict().items():
+        new = state[name]
+        if new.shape == v.shape:
+            state[name] = v.clone()
+        elif v.dim() == 1 and new.shape[0] - v.shape[0] == now - was:  # mean, scale
+            new = new.clone()
+            new[:was] = v
+            if name.endswith('scale'):
+                new[was:] = gain
+            state[name] = new
+        elif v.dim() == 2 and new.shape[1] - v.shape[1] == now - was:  # a first layer
+            new = th.zeros_like(new)
+            new[:, :was] = v[:, :was]
+            new[:, now:] = v[:, was:]
+            state[name] = new
+        else:
+            raise RuntimeError(f"widen: {name} is {tuple(v.shape)}, the wider policy's "
+                               f'{tuple(new.shape)}')
+    policy.load_state_dict(state)
+    return policy
+
+
 def policy_kwargs(width=512, depth=2):
     return dict(features_extractor_class=EfzFeatures, share_features_extractor=False,
                 net_arch=dict(pi=[width] * depth, vf=[width] * depth),
