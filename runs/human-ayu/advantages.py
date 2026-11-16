@@ -49,6 +49,39 @@ which no exploiter played):
   guard, a standing one holds it), jumps as the agent's knockdown has the probe's
   contact steps left plus JUMP_LATE, and presses the attack on the probe's step. The
   user's jump-ins hit the rising agent 76% of the times, the exploiters' 52%.
+
+Habits (docs/training-v2.md, "Adapting during a match": an opponent a read pays against):
+
+- blind: of its wake-up reversals (wake), the share that come out whether or not the
+  agent is committed: a habit, which an agent that waits guards and punishes (without
+  it the reversal reads the agent's commitment from the game as it is: no bait works);
+- crouch: the share of its patient guards held crouching (0.85 unless given): a lean
+  an okizeme of the other height opens;
+- habits: the share of matches in which each of wake, blind, patient, crouch, throw,
+  reversal and jumpin is drawn afresh for the match from HABITS (ranges about as wide
+  as people's players'), in place of the profile's: opponents that differ from one match
+  to the next, and are the same within one. told(i): the match's values, for an agent
+  that is told them (finetune.py --tell: can PPO use a read at all?). In an environment
+  with sets (EfzSB3VecEnv's sets) they are drawn a set, not a match. wide: the share of
+  those drawn from HABITS (1 unless given); the rest from PEOPLE, ranges about as wide
+  as the community's players are apart (docs/training-v2.md, "What people's habits look
+  like": by player, a wake-up reversal on 0.00-0.27 of wake-ups, a move out of pressure
+  on 0.27-0.48), where HABITS reaches further than people do, for a read that pays;
+- adapt: its habits change within a set by how its own choices went (an opponent that
+  learns the agent: "if it keeps one strategy it will be exploited", the user's, 15
+  November): each time one of wake, reversal, throw, jumpin pays (the agent is hit, or
+  thrown) that habit moves this share of the way to the most HABITS has for it, and each
+  time it costs (itself hit first) to the least; crouch moves toward the guard that would
+  have held (hit holding a standing guard: crouching more; a crouching one: less);
+  patient up when its own play after a guard is hit, down when that play hits, or when
+  it is thrown holding a guard; wake up when a guard on rising is opened. Each set starts
+  from the profile's (or the set's drawn habits) again.
+- tech: the share of the combos it takes in the air that it recovers from as soon as the
+  game lets it (a button with back held, pressed again every other step: src/player.cpp's
+  TryAirRecovery, once the untech time is out). The policies of the league seldom do
+  (the agent's bigger combos end in their air recovery 10% of the time, in the user's
+  41%, 15 November), so a combo that leaves its victim free in the air costs the agent
+  nothing against them.
 """
 
 import json
@@ -98,13 +131,29 @@ WAKE_BUTTON = 2   # a wake-up reversal's button this many steps before its first
 WAKE_HOLD = 3     # steps the button is held
 THROW_UP = 12     # steps after its own rising in which a person profile's throw isn't tried
                   # (it fails there: its forward + C comes out as an attack, punished)
-KEYS = ('rg', 'reversal', 'throw', 'damage', 'bait', 'patient', 'wake', 'jumpin')
+KEYS = ('rg', 'reversal', 'throw', 'damage', 'bait', 'patient', 'wake', 'jumpin', 'blind',
+        'crouch', 'habits', 'adapt', 'wide', 'tech')
+AIR_HIT = range(0x32, 0x60)  # the hit reactions (src/efz.h); in the air: what a recovery ends
+THROWN = tuple(range(0x64, 0x79))  # evaluate.THROWN: the poses a throw puts its victim in
+THROW_WATCH = 30  # steps after its throw's press in which how it went is looked for
+FREE_WATCH = 40   # ... after a guard it didn't hold on from, its own play's
+# The inputs' advantages kept per environment (drawn a match with habits), and what a
+# habit is drawn from.
+KNOBS = ('wake', 'blind', 'patient', 'crouch', 'throw', 'reversal', 'jumpin', 'bait')
+TOLD = 1 + len(KNOBS)  # told()'s features
+HABITS = dict(wake=(0.0, 0.15, 0.4, 0.8), blind=(0.0, 1.0), patient=(0.0, 0.3, 0.9),
+              crouch=(0.3, 0.6, 0.85, 1.0), throw=(0.0, 0.3, 0.9), reversal=(0.0, 0.3, 0.8),
+              jumpin=(0.0, 0.2, 0.6))
+PEOPLE = dict(wake=(0.0, 0.05, 0.1, 0.2, 0.3), blind=(0.0, 0.5, 1.0),
+              patient=(0.2, 0.3, 0.5, 0.9), crouch=(0.6, 0.85, 1.0), throw=(0.4, 0.7, 0.9),
+              reversal=(0.0, 0.04, 0.1, 0.3), jumpin=(0.0, 0.2, 0.4))
+SPAN = {name: (min(v), max(v)) for name, v in HABITS.items()}  # adapt's least and most
 
 
 def parse(spec):
     """'rg=0.5,reversal=0.8,throw=0.3,damage=2' -> dict (left out: none)."""
     out = dict(rg=0.0, reversal=0.0, throw=0.0, damage=1.0, bait=0.0, patient=0.0, wake=0.0,
-               jumpin=0.0)
+               jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0, adapt=0.0, wide=1.0, tech=0.0)
     for part in filter(None, (spec or '').split(',')):
         k, v = part.split('=')
         if k not in out:
@@ -198,7 +247,16 @@ class Advantages:
     opponent's own on this step, as (numpad direction, buttons), or None."""
 
     def __init__(self, char, n, reversal=0.0, throw=0.0, seed=0, bait=0.0, learner='ayu',
-                 patient=0.0, wake=0.0, jumpin=0.0):
+                 patient=0.0, wake=0.0, jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0,
+                 adapt=0.0, wide=1.0, tech=0.0):
+        self.wide, self.tech = wide, tech
+        self.base = dict(wake=wake, blind=blind, patient=patient, crouch=crouch, throw=throw,
+                         reversal=reversal, jumpin=jumpin, bait=bait)
+        self.habits, self.adapt = habits, adapt
+        if habits > 0 or adapt > 0:  # what a match may come to: the most of each, for what is loaded
+            reversal, throw = max(reversal, max(HABITS['reversal'])), max(throw, max(HABITS['throw']))
+            patient, wake = max(patient, max(HABITS['patient'])), max(wake, max(HABITS['wake']))
+            jumpin = max(jumpin, max(HABITS['jumpin']))
         self.moves = invincible_moves(char) if reversal > 0 else []
         self.patterns = {m[4] for m in self.moves}
         self.reversal, self.throw, self.bait = reversal, throw, bait
@@ -220,25 +278,34 @@ class Advantages:
         if jumpin > 0 and not self.left:
             raise ValueError(f'jumpin: no knockdown for {learner} in motions.json (motions.py '
                              '--add wake)')
+        self.off = set()  # the knobs the character has nothing for
         if jumpin > 0 and not self.plan:  # (Kanna: no jump of hers is one)
             self.jumpin = 0.0
+            self.off.add('jumpin')
         if wake > 0 and not self.wake_moves:  # (Minagi: no invincible move)
             self.wake = 0.0
+            self.off.add('wake')
         if (wake > 0 or patient > 0) and not self.rise:
             raise ValueError(f'wake, patient: no rising length for {char} in motions.json '
                              '(motions.py --add wake)')
         self.rng = np.random.default_rng(seed)
+        self.habit_rng = np.random.default_rng([seed, 0x4ab17])  # (its own: the play's draws as without)
         self.resize(n)
-        self.counts = dict(rg=0, armed=0, reversals=0, reversals_started=0, reversal_hit=0,
+        self.counts = dict(recoveries=0, rg=0, armed=0, reversals=0, reversals_started=0, reversal_hit=0,
                            reversal_hit_back=0, throw_chances=0, throws=0,
                            wake_reversals=0, baited=0, baited_hit_us=0, bait_punishes=0,
                            bait_punished=0, guards_ended=0, patient_holds=0, rises=0,
-                           rise_reversals=0, rise_reversals_held=0, rise_reversals_started=0, rise_reversal_hit=0,
+                           rise_reversals=0, rise_reversals_blind=0, rise_reversals_held=0, rise_reversals_started=0, rise_reversal_hit=0,
                            rise_reversal_hit_back=0, rise_patient=0, knockdowns=0,
                            jumpins_armed=0, jumpins=0, jumpin_hit=0, jumpin_guarded=0,
-                           jumpin_hit_back=0, jumpin_late=0)
+                           jumpin_hit_back=0, jumpin_late=0, adapted=0)
 
     def resize(self, n):
+        self.tech_on, self.tech_step = np.zeros(n, bool), np.zeros(n, int)
+        self.k = {name: np.full(n, 0.0 if name in self.off else float(v))
+                  for name, v in self.base.items()}  # each environment's, this match
+        for i in range(n if self.habits > 0 else 0):  # (an evaluation's matches: one each)
+            self.draw(i)
         self.queue = [[] for _ in range(n)]
         self.prev = np.full(n, -1)
         self.prev_opp = np.full(n, -1)
@@ -267,6 +334,33 @@ class Advantages:
         self.jumping = np.zeros(n, bool)  # a jump-in planned on this knockdown
         self.decided = np.zeros(n, bool)  # this knockdown's jump-in drawn
         self.jump_watch = np.zeros(n, int)  # steps left to see a jump-in's outcome
+        self.throw_watch = np.zeros(n, int)  # ... a throw's
+        self.free_watch = np.zeros(n, int)  # ... its own play's after a guard it didn't hold on from
+        self.rise_guard = np.zeros(n, int)  # ... a guard's on rising
+
+    def learn(self, i, name, paid):
+        """adapt: environment i's habit `name` after a choice of its kind paid, or cost."""
+        if self.adapt <= 0 or name in self.off:
+            return
+        lo, hi = SPAN[name]
+        k = self.k[name][i]
+        self.k[name][i] = k + self.adapt * ((hi if paid else lo) - k)
+        self.counts['adapted'] += 1
+
+    def draw(self, i):
+        """The match's habits for environment i: HABITS' in a share `habits` of the
+        matches, else the profile's."""
+        drawn = self.habit_rng.random() < self.habits
+        table = HABITS if self.wide >= 1 or self.habit_rng.random() < self.wide else PEOPLE
+        for name, v in self.base.items():
+            if drawn and name in table:
+                v = table[name][int(self.habit_rng.integers(len(table[name])))]
+            self.k[name][i] = 0.0 if name in self.off else v
+
+    def told(self, i):
+        """What a player told of environment i's habits this match sees (TOLD features):
+        1, then the habits in KNOBS' order."""
+        return np.array([1.0] + [self.k[name][i] for name in KNOBS], np.float32)
 
     def clear(self, i):
         self.queue[i] = []
@@ -281,6 +375,7 @@ class Advantages:
         self.own_up[i] = 999
         self.down_k[i] = self.jump_watch[i] = 0
         self.jumping[i] = self.decided[i] = False
+        self.throw_watch[i] = self.free_watch[i] = self.rise_guard[i] = 0
 
     def pick(self, v):
         """The fastest invincible move its gauges allow, as its input: the motion, then the
@@ -296,6 +391,22 @@ class Advantages:
         return None
 
     def step(self, i, v):
+        out = self.act(i, v)
+        if self.tech > 0:  # recovering in the air from the agent's combo: over anything else
+            a = int(round(v[SELF_ACT]))
+            if a in AIR_HIT:
+                if self.tech_step[i] == 0:  # a new combo on it: does it recover from this one
+                    self.tech_on[i] = self.rng.random() < self.tech
+                self.tech_step[i] += 1
+                if self.tech_on[i] and v[SELF_AIRBORNE] > 0.5:
+                    return (4, 'A' if self.tech_step[i] % 2 else '')
+            else:
+                if self.tech_step[i] and self.tech_on[i] and a in (0x9d, 0x9e):
+                    self.counts['recoveries'] += 1
+                self.tech_step[i] = 0
+        return out
+
+    def act(self, i, v):
         a, o = int(round(v[SELF_ACT])), int(round(v[OPP_ACT]))
         hit = np.array([v[OPP_HITSTUN] > 0.5, v[SELF_HITSTUN] > 0.5])
         rose = hit & ~self.hit_prev[i]
@@ -304,7 +415,13 @@ class Advantages:
             self.watch[i] -= 1
             if rose[0] or rose[1]:
                 self.counts['reversal_hit' if rose[0] else 'reversal_hit_back'] += 1
+                self.learn(i, 'reversal', bool(rose[0]))
                 self.watch[i] = 0
+        if self.throw_watch[i] > 0:  # its throw: the agent thrown, or itself hit first
+            self.throw_watch[i] -= 1
+            if o in THROWN or rose[1]:
+                self.learn(i, 'throw', o in THROWN)
+                self.throw_watch[i] = 0
         if self.trying[i] and a in self.patterns:  # it came out: let it play
             self.counts['reversals_started'] += 1
             self.trying[i] = 0
@@ -329,7 +446,7 @@ class Advantages:
         self.step_person(i, v, a, o, rose)
         if a in RG and self.prev[i] not in RG:
             self.counts['rg'] += 1
-            if self.moves and self.rng.random() < self.reversal:
+            if self.moves and self.rng.random() < self.k['reversal'][i]:
                 self.counts['armed'] += 1
                 self.armed[i] = ARM
         if self.queue[i]:
@@ -341,8 +458,9 @@ class Advantages:
                      and (self.own_up[i] > THROW_UP or not self.person))  # (not as it rises)
             if close and not self.was_close[i]:
                 self.counts['throw_chances'] += 1
-                if self.rng.random() < self.throw:
+                if self.rng.random() < self.k['throw'][i]:
                     self.counts['throws'] += 1
+                    self.throw_watch[i] = THROW_WATCH
                     self.queue[i] = [(6, 'C')]  # a fresh press: forward + C
                     out = (6, '')
             self.was_close[i] = close
@@ -374,27 +492,46 @@ class Advantages:
             self.rise_watch[i] -= 1
             if rose[0] or rose[1]:
                 self.counts['rise_reversal_hit' if rose[0] else 'rise_reversal_hit_back'] += 1
+                self.learn(i, 'wake', bool(rose[0]))
                 self.rise_watch[i] = 0
+        if self.adapt > 0:
+            if rose[1] and self.patience[i] > 0:  # hit holding a guard: the other height held
+                self.learn(i, 'crouch', self.guard_dir[i] == 4)
+            if a in THROWN and self.prev[i] not in THROWN and self.patience[i] > 0:
+                self.learn(i, 'patient', False)  # thrown holding one
+            if self.rise_guard[i] > 0:  # a guard on rising, opened
+                self.rise_guard[i] -= 1
+                if rose[1] or a in THROWN:
+                    self.learn(i, 'wake', True)
+                    self.rise_guard[i] = 0
+            if self.free_watch[i] > 0:  # its own play after a guard: who is hit first
+                self.free_watch[i] -= 1
+                if rose[0] or rose[1]:
+                    self.learn(i, 'patient', bool(rose[1]))
+                    self.free_watch[i] = 0
         if self.jump_watch[i] > 0:  # the jump-in: hit, guarded, or hit back
             self.jump_watch[i] -= 1
             if rose[0] or rose[1] or v[OPP_GUARDING] > 0.5:
                 self.counts['jumpin_hit' if rose[0] else 'jumpin_hit_back' if rose[1]
                             else 'jumpin_guarded'] += 1
+                if rose[0] or rose[1]:
+                    self.learn(i, 'jumpin', bool(rose[0]))
                 self.jump_watch[i] = 0
         self.agent_k[i] = 0 if o != self.prev_opp[i] else self.agent_k[i] + 1
         self.own_up[i] = 0 if a in DOWN else min(999, self.own_up[i] + 1)
         if (self.wake > 0 or self.patient > 0) and a == RISING and self.prev[i] != RISING:
             self.counts['rises'] += 1
             u = self.rng.random()
-            plan = self.pick_wake(v) if u < self.wake else None
+            wake, patient = self.k['wake'][i], self.k['patient'][i]
+            plan = self.pick_wake(v) if u < wake else None
             if plan:  # its directions during the rising, the button decided on WAKE_BUTTON before
                 dirs, button = plan
                 self.rise_wait[i] = max(0, self.rise - WAKE_BUTTON - (len(dirs) - 1))
                 self.rise_plan[i], self.rise_delay[i], self.patience[i] = plan, len(dirs) - 1, 0
-            elif self.wake <= u < self.wake + (1 - self.wake) * self.patient:  # of the rest
+            elif wake <= u < wake + (1 - wake) * patient:  # of the rest
                 self.counts['rise_patient'] += 1
-                self.patience[i] = self.rise + RISE_PATIENCE
-                self.guard_dir[i] = 1 if self.rng.random() < CROUCH else 4
+                self.patience[i] = self.rise_guard[i] = self.rise + RISE_PATIENCE
+                self.guard_dir[i] = 1 if self.rng.random() < self.k['crouch'][i] else 4
         if self.rise_plan[i] is not None:
             if self.rise_wait[i] > 0:  # until its motion's first step
                 self.rise_wait[i] -= 1
@@ -409,6 +546,10 @@ class Advantages:
                              # or as it stands in to meaty (a read: it does, 70% of times)
                              or (v[OPP_AIRBORNE] < 0.5 and o in FREE and o not in HOLDING
                                  and near < MEATY_NEAR))
+                blind = self.k['blind'][i]
+                if not committed and blind > 0 and self.rng.random() < blind:
+                    committed = True  # a habit: it comes out anyway
+                    self.counts['rise_reversals_blind'] += 1
                 if committed:
                     self.counts['rise_reversals'] += 1
                     self.queue[i] = [(dirs[-1], button)] * WAKE_HOLD
@@ -417,16 +558,18 @@ class Advantages:
                     self.counts['rise_reversals_held'] += 1
                     self.queue[i] = []
                     self.patience[i] = WAKE_BUTTON + RISE_PATIENCE
-                    self.guard_dir[i] = 1 if self.rng.random() < CROUCH else 4
+                    self.guard_dir[i] = 1 if self.rng.random() < self.k['crouch'][i] else 4
         guarding = a in GUARDS
         if self.patient > 0 and self.guarding[i] and not guarding:  # a guard of its ended
             self.counts['guards_ended'] += 1
             if self.patience[i] > 0:  # guarding patiently still: as long again
                 self.patience[i] = PATIENCE
-            elif self.rng.random() < self.patient:
+            elif self.rng.random() < self.k['patient'][i]:
                 self.counts['patient_holds'] += 1
                 self.patience[i] = PATIENCE
-                self.guard_dir[i] = 1 if self.rng.random() < CROUCH else 4
+                self.guard_dir[i] = 1 if self.rng.random() < self.k['crouch'][i] else 4
+            else:
+                self.free_watch[i] = FREE_WATCH
         self.guarding[i] = guarding
         if self.jumpin > 0:  # the agent's knockdown: a jump-in on it, drawn once
             if o in self.left:
@@ -434,7 +577,7 @@ class Advantages:
                 if not self.decided[i]:
                     self.decided[i] = True
                     self.counts['knockdowns'] += 1
-                    if self.rng.random() < self.jumpin:
+                    if self.rng.random() < self.k['jumpin'][i]:
                         self.jumping[i] = True
                         self.counts['jumpins_armed'] += 1
             else:
@@ -508,7 +651,7 @@ class Advantages:
         if (self.baiting[i] == 0 and o in self.theirs and o != self.prev_opp[i]
                 and self.since_up[i] <= WAKE):  # a wake-up reversal
             self.counts['wake_reversals'] += 1
-            if a in FREE and self.rng.random() < self.bait:  # not committed: guard it through
+            if a in FREE and self.rng.random() < self.k['bait'][i]:  # not committed: guard it through
                 self.counts['baited'] += 1
                 self.baiting[i], self.blocked[i], self.free_steps[i] = 2, False, 0
                 self.queue[i], self.armed[i], self.trying[i] = [], 0, 0
@@ -553,23 +696,62 @@ def set_env(env, indices, side, adv):
 
 class AdvantagedOpponent:
     """finetune.py's: an EfzSB3VecEnv opponent (player 2) with the advantages' inputs.
-    attach(venv) first. The game's part (rg, damage) is finetune.make_env's."""
+    attach(venv) first. The game's part (rg, damage) is finetune.make_env's. alt: a second
+    profile's advantages, played in the environments of `second` (finetune.py
+    --vs-profile2)."""
     takes_index = True
 
-    def __init__(self, inner, char, adv, seed=0, learner='ayu'):
+    def __init__(self, inner, char, adv, seed=0, learner='ayu', alt=None):
         from efz_env.actions import ActionTable
         self.inner, self.adv = inner, adv
         self.table = ActionTable()
         self.index = {a: k for k, a in enumerate(self.table.actions)}
-        self.logic = Advantages(char, 0, adv['reversal'], adv['throw'], seed,
-                                adv.get('bait', 0.0), learner, adv.get('patient', 0.0),
-                                adv.get('wake', 0.0), adv.get('jumpin', 0.0))
+        logic = lambda a, seed: Advantages(char, 0, a['reversal'], a['throw'], seed,
+                                           a.get('bait', 0.0), learner, a.get('patient', 0.0),
+                                           a.get('wake', 0.0), a.get('jumpin', 0.0),
+                                           a.get('blind', 0.0), a.get('crouch', CROUCH),
+                                           a.get('habits', 0.0), a.get('adapt', 0.0),
+                                           a.get('wide', 1.0), a.get('tech', 0.0))
+        self.logic = logic(adv, seed)
+        self.alt = logic(alt, seed + 7919) if alt is not None else None
         self.venv = None
-        self.only = None  # the environments that play with the advantages (None: all)
+        self.only = None    # the environments that play with the advantages (None: all)
+        self.second = None  # and those of them that play with alt's
+        self.mine = None    # the environments it plays in at all (None: all)
 
     def attach(self, venv):
         self.venv = venv
         self.logic.resize(venv.env.num_envs)
+        if self.alt is not None:
+            self.alt.resize(venv.env.num_envs)
+        if hasattr(venv, 'on_end'):
+            venv.on_end.append(self.new_match)
+
+    def of(self, i):
+        """The advantages environment i plays with (None: without)."""
+        if (self.mine is not None and not self.mine[i]) or \
+                (self.only is not None and not self.only[i]):
+            return None
+        if self.alt is not None and self.second is not None and self.second[i]:
+            return self.alt
+        return self.logic
+
+    def new_match(self, ended):
+        """The matches that ended (EfzSB3VecEnv's on_end): the next ones' habits drawn
+        where a set starts (the environment's sets: every match, without them), and told
+        to the learner where the environment tells (its extra features)."""
+        v = self.venv
+        fresh = getattr(v, 'new_set', None)
+        for i in np.flatnonzero(ended):
+            i = int(i)
+            if self.mine is not None and not self.mine[i]:
+                continue
+            logic = self.of(i)
+            if logic is not None and (logic.habits > 0 or logic.adapt > 0) and \
+                    (fresh is None or fresh[i]):
+                logic.draw(i)
+            if v.extra is not None:
+                v.extra[i, 0] = logic.told(i) if logic is not None else 0.0
 
     def __call__(self, obs, idx):
         return self.post(np.asarray(self.inner(obs)).copy(), idx)
@@ -580,11 +762,12 @@ class AdvantagedOpponent:
         v = self.venv
         for k, i in enumerate(idx):
             i = int(i)
-            if self.only is not None and not self.only[i]:
+            logic = self.of(i)
+            if logic is None:
                 continue
             if v._length[i] == 0:  # a new match
-                self.logic.clear(i)
-            o = self.logic.step(i, v.env.obs[i, 1])
+                logic.clear(i)
+            o = logic.step(i, v.env.obs[i, 1])
             if o is not None:
                 actions[k] = self.index[o]
         return actions
@@ -599,7 +782,10 @@ class AdvantagedAgent:
         self.agent, self.adv, self.encode = agent, adv, encode
         self.logic = Advantages(char, 0, adv['reversal'], adv['throw'], seed,
                                 adv.get('bait', 0.0), learner, adv.get('patient', 0.0),
-                                adv.get('wake', 0.0), adv.get('jumpin', 0.0))
+                                adv.get('wake', 0.0), adv.get('jumpin', 0.0),
+                                adv.get('blind', 0.0), adv.get('crouch', CROUCH),
+                                adv.get('habits', 0.0), adv.get('adapt', 0.0),
+                                adv.get('wide', 1.0), adv.get('tech', 0.0))
         self.env = self.side = None
 
     def __getattr__(self, name):  # the rest is the agent's

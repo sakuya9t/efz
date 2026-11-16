@@ -25,7 +25,10 @@ entropy - (coef / ent_coef) * KL, whose ent_coef-weighted loss is the entropy bo
 plus coef * KL. ent_coef must not be 0. The prior isn't saved with the policy. With a
 `combo` policy too, the pull is toward it instead while the policy's own combo runs (its
 combo counter, self_combo_hits, above 0 in what it sees): a teacher of combos (a combo
-master trained on combo trials), people's play elsewhere.
+master trained on combo trials), people's play elsewhere. With `where` (an observation
+column, values, a factor), the pull is that many times as strong where the column has
+one of the values in what the policy sees: a part of the game kept closer to people's
+(the opponent knocked down: their okizeme).
 """
 
 import numpy as np
@@ -137,10 +140,11 @@ class EfzPolicy(ActorCriticPolicy):
         for extractor in (self.pi_features_extractor, self.vf_features_extractor):
             extractor.set_scale(mean, std)
 
-    def set_prior(self, prior, coef, ent_coef, combo=None):
+    def set_prior(self, prior, coef, ent_coef, combo=None, where=None):
         """Pulls training toward `prior` (a policy over the same observations, frozen
         here) by coef * KL(self || prior); ent_coef is PPO's. `combo`: the policy to pull
-        toward instead during the policy's own combos."""
+        toward instead during the policy's own combos. where: (column, values, factor):
+        the pull times factor where the observation's column is one of the values."""
         if ent_coef <= 0:
             raise ValueError('the KL goes in through the entropy term: ent_coef > 0')
         for policy in (prior, combo):
@@ -152,12 +156,19 @@ class EfzPolicy(ActorCriticPolicy):
         self.__dict__['prior'] = prior
         self.__dict__['combo_prior'] = combo
         self.__dict__['prior_scale'] = coef / ent_coef
+        self.__dict__['prior_where'] = where
         self.__dict__['prior_kl'] = float('nan')
 
     @property
     def prior_kl(self):
         """The mean KL to the prior over the last batch trained on."""
         return self.__dict__.get('prior_kl', float('nan'))
+
+    @property
+    def prior_where_seen(self):
+        """set_prior's `where` over the last batch trained on: the share of it there, the
+        mean KL there (None without a `where`)."""
+        return self.__dict__.get('prior_where_seen')
 
     def logits(self, obs):
         """The actor's log-probabilities of every action, (batch, actions)."""
@@ -191,4 +202,13 @@ class EfzPolicy(ActorCriticPolicy):
                     prior_logp = th.where(in_combo[:, None], combo.logits(obs), prior_logp)
         kl = (logp.exp() * (logp - prior_logp)).sum(-1)
         self.__dict__['prior_kl'] = float(kl.mean().detach())
+        where = self.__dict__.get('prior_where')
+        if where is not None:
+            column, those, factor = where
+            there = th.isin(obs[:, column].round().long(), th.as_tensor(those, device=obs.device))
+            # (the share of the batch it holds for, the KL there: prior_where_seen)
+            self.__dict__['prior_where_seen'] = (
+                float(there.float().mean()),
+                float(kl[there].mean().detach()) if there.any() else float('nan'))
+            kl = kl * th.where(there, float(factor), 1.0)
         return values, log_prob, entropy - self.__dict__['prior_scale'] * kl

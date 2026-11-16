@@ -13,7 +13,10 @@ meant to be good at, by tactics.py's definitions, for finetune.py --focus.
     end) or after a recoil guard (within RG_WINDOW steps), that hits the opponent within
     REVERSAL_WINDOW steps, before the learner is hit itself: the user's answer to an agent
     that presses the same thing at every wake-up and in every string ("a wake-up
-    invincible, or an RG and an invincible during it").
+    invincible, or an RG and an invincible during it");
+'air': a hit of its own, made in the air, that begins the hit reaction of an opponent on
+    the ground: a jump-in that lands (docs/training-v2.md, "Round 17": people's opponents
+    jump in on Ayu 2.9 times a minute, the league's 1.1, and the agent walks into them).
 
 Each such event adds `coef` to the step's reward (the game's: damage dealt minus taken
 in full bars, so 0.02 is 200 HP's worth). The learner is player 1; the events are read
@@ -33,7 +36,8 @@ SETUP_WINDOW = 30
 WAKE_WINDOW = 8       # steps after a knockdown's end in which a reversal is a wake-up one
 RG_WINDOW = 20        # ... after a recoil guard
 REVERSAL_WINDOW = 40  # steps in which a reversal must hit
-FOCUSES = ('setup', 'charge', 'reversal')
+FOCUSES = ('setup', 'charge', 'reversal', 'air')
+AIR_SELF, AIR_OPP = 39, 71  # self_airborne, opp_airborne
 
 
 def reversal_moves(char):
@@ -107,6 +111,9 @@ class Focus(VecEnvWrapper):
             self.pending[self.pending == 0] = -1
         elif self.focus == 'charge':
             bonus[started & np.isin(a, list(self.charge))] = self.coef
+        elif self.focus == 'air':
+            hit_opp = (now[:, HITSTUN_OPP] > 0) & ~(prev[:, HITSTUN_OPP] > 0)
+            bonus[hit_opp & (now[:, AIR_SELF] > 0) & ~(prev[:, AIR_OPP] > 0)] = self.coef
         else:
             rose = np.isin(a0, tactics.DOWN) & ~np.isin(a, tactics.DOWN)
             self.since_down = np.where(rose, 0, np.minimum(self.since_down + 1, 999))
@@ -129,3 +136,36 @@ class Focus(VecEnvWrapper):
         self.counts['events'] += int((bonus > 0).sum())
         self.counts['steps'] += len(a)
         return obs, reward + bonus.astype(reward.dtype), done, infos
+
+
+class Calm(VecEnvWrapper):
+    """A cost on the learner's presses while it is hit or guarding (finetune.py
+    --press-cost): each button pressed on a step that began with it in a hit reaction or
+    a guard takes `cost` off the step's reward (0.002: 20 HP's worth). A human limit kept
+    by the reward: people's Ayu players press 1.0 times a second there (0.6-2.2 by
+    player; evaluate.py's presses_where), round 15's agent 2.8-3.8, and a press there
+    does nothing but the one that is buffered for the first step it can act, which is
+    worth far more than its cost."""
+
+    def __init__(self, venv, cost):
+        super().__init__(venv)
+        self.cost, self.prev = cost, None
+
+    def _raw(self):
+        return self.venv.env.obs[:, 0]
+
+    def reset(self):
+        obs = self.venv.reset()
+        self.prev = self._raw().copy()
+        return obs
+
+    def step_wait(self):
+        obs, reward, done, infos = self.venv.step_wait()
+        prev = self.prev
+        defending = (prev[:, HITSTUN_SELF] > 0) | np.isin(np.round(prev[:, ACT_SELF]).astype(int),
+                                                          tactics.GUARDS)
+        # (the step's input, newest in the history; a match that ended: cleared, none)
+        pressed = self.venv.history.buf[:, 0, 0, 2:].sum(-1)
+        self.prev = self._raw().copy()
+        return obs, reward - (self.cost * pressed * defending).astype(reward.dtype), done, infos
+
