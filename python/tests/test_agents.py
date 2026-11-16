@@ -462,6 +462,22 @@ class PlansAsRedteam(unittest.TestCase):
         return out
 
     def test_same_plans(self):
+        self.same_plans()
+
+    def test_same_plans_by_ending(self):
+        """The same with a knockdown at a combo's end worth HP (redteam.Planner's ending,
+        the file's route_ending): the copies' victim recovering in the air when it can."""
+        import inspect
+        sys.path.insert(0, RUNS)
+        try:
+            import redteam
+        except ImportError as e:
+            self.skipTest(f'runs/human-ayu: {e}')
+        if 'ending' not in inspect.signature(redteam.Planner).parameters:
+            self.skipTest("runs/human-ayu's redteam.py plans by damage alone")
+        self.same_plans(ending=3000)
+
+    def same_plans(self, ending=0):
         sys.path.insert(0, RUNS)
         try:
             import redteam
@@ -492,11 +508,12 @@ class PlansAsRedteam(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
             out = os.path.join(folder, 'agent.efzagent')
-            export_agent(path, out, check=False, library=library)
+            export_agent(path, out, check=False, library=library, ending=ending)
             native = NativeAgent(out, deterministic=True)
             self.assertEqual(native.routes, len(library))
             model = PPO.load(path, device='cpu')
-            planner = redteam.Planner(DATA, library, model, per_start=12, history=self.HISTORY)
+            planner = redteam.Planner(DATA, library, model, per_start=12, history=self.HISTORY,
+                                      **(dict(ending=ending) if ending else {}))
             policy = sampler(model, deterministic=True)
             sim = planner.sim
             pre = np.zeros((sim.num_envs, 2), np.uint8)
@@ -534,6 +551,9 @@ class PlansAsRedteam(unittest.TestCase):
                 compared += 1
                 routes_chosen += want is not None
             self.assertGreater(compared, 2)
+            if ending:  # the endings told apart, and a choice of them made by it somewhere
+                self.assertEqual(planner.endings['plans'], compared)
+                self.assertGreater(planner.endings['changed'], 0, planner.endings)
             native.close()
         env.close()
 
@@ -621,6 +641,389 @@ class PlansAsRedteam(unittest.TestCase):
             self.assertGreater(compared, 4)
             native.close()
         env.close()
+
+
+@unittest.skipIf(not DATA or not os.path.isdir(DATA or ''), 'no game data: set EFZ_DATA')
+class OkizemeAsOkiplan(unittest.TestCase):
+    """The game's planned okizeme (port/agent/mix.h: the module okiplan:1) against
+    runs/human-ayu/okiplan.py: the same counts of the opponent from the same views, and at
+    a knockdown the same options, worth against each answer, and mix."""
+
+    HISTORY, DELAY = 4, 5
+
+    def setUp(self):
+        sys.path.insert(0, RUNS)
+        if not os.path.exists(os.path.join(RUNS, 'motions.json')):  # (made on each machine)
+            self.skipTest('no runs/human-ayu/motions.json: python runs/human-ayu/motions.py '
+                          'makes it')
+        try:
+            import okiplan
+            import oki_library
+            self.okiplan, self.answers = okiplan, oki_library.answers()
+        except ImportError as e:
+            self.skipTest(f'runs/human-ayu: {e}')
+        if not hasattr(okiplan.OkiPlanner, 'wake_schedule'):
+            self.skipTest("runs/human-ayu's okiplan.py has no scheduled reversal")
+
+    def match(self, steps, seed=0, envs=8):
+        """Random play, ayu against mai: yields (the environment, its views) a step."""
+        from efz_env import ActionTable, EfzVecEnv
+        table = ActionTable()
+        env = EfzVecEnv(DATA, envs, frame_skip=1, rounds_to_win=2, max_frames=0, seed=3,
+                        autoreset='disabled', skip_noninteractive=False)
+        env.set_matches(chars=('ayu', 'mai'))
+        obs = env.reset()
+        rng = np.random.default_rng(seed)
+        a = np.zeros((envs, 2), np.uint8)
+        try:
+            for _ in range(steps):
+                a[:, 0] = table.table[rng.integers(len(table), size=envs)]
+                a[:, 1] = table.table[rng.integers(len(table), size=envs)]
+                obs, _, term, trunc, _ = env.step(a)
+                yield env, obs, term | trunc
+        finally:
+            env.close()
+
+    def library(self, air, rng):
+        """Entries of every kind that can be played from a knockdown wherever it is."""
+        lib = []
+        for k, cls in enumerate(['ground low', 'jump high', 'fly high', 'throw', 'ground mid',
+                                 'dash high', 'ground low', 'jump high']):
+            n = 110 + 3 * k
+            lib.append(dict(actions=rng.integers(0, 45, n).astype(np.int64),
+                            dist=np.full(n, 20 * k, np.int16), air=np.full(n, air), rise=85 + k,
+                            move_at=84, cls=cls, opponent='mai' if k % 2 else 'akane',
+                            corner=bool(k % 3 == 0)))
+        lib.append(dict(lib[0], opponent='mai'))  # (the same inputs: tried once)
+        return lib
+
+    def test_the_same_counts(self):
+        from efz_env.memory import K, Memory
+        names = ['w_n', 'w_move', 'w_inv', 'w_jump', 'w_back', 'p_n', 'p_move', 'p_inv',
+                 'p_jump', 'p_back', 'g_n', 'g_crouch']
+        from efz_env.vec import character_names
+        chars = character_names()
+        inv = {str(chars.index(c)): acts for c, acts in self.answers['invincible'].items()}
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            lib = self.library(False, np.random.default_rng(1))
+            export_agent(path, out, check=False, okiplan=dict(library=lib, answers=self.answers))
+            native = NativeAgent(out)
+            self.assertEqual(native.oki, len(lib))
+            self.assertIn('okiplan:1', native.modules)
+            memory = Memory(1, invincible=inv)
+            native.counts(mode=1)
+            seen = 0
+            for step, (env, obs, over) in enumerate(self.match(9000, envs=1)):
+                view = obs[0, 0]
+                memory.update(view[None])
+                mine, shares = native.counts(view)
+                if step % 250 == 0 or over[0]:
+                    theirs = np.array([memory.c[0, K[n]] for n in names])
+                    np.testing.assert_array_equal(mine, theirs, err_msg=f'step {step}')
+                    np.testing.assert_allclose(shares, self.okiplan.belief(memory.c[0], 6.0, 6.0),
+                                               rtol=1e-12)
+                    seen = max(seen, int((theirs > 0).sum()))
+                if over[0]:
+                    break
+            self.assertGreaterEqual(seen, 6, 'too little happened in the match to tell')
+            memory.end(np.array([True]), new_set=np.array([False]))  # the same opponent again
+            mine, _ = native.counts(mode=2)
+            np.testing.assert_allclose(mine, [memory.c[0, K[n]] for n in names], rtol=1e-6)
+            native.close()
+
+    def test_played_in_a_match(self):
+        """The game's player with its planner, in a match (NativeAgent.attach): at its
+        opponent's knockdowns plans are asked for and made from where the game then is
+        (none elsewhere), and what is drawn is played."""
+        from efz_env import ActionTable, EfzVecEnv
+        table = ActionTable()
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            lib = self.library(False, np.random.default_rng(2)) + \
+                self.library(True, np.random.default_rng(3))
+            export_agent(path, out, check=False,
+                         okiplan=dict(library=lib, answers=self.answers, per_plan=3, window=20,
+                                      tolerance=400, think=4, skip=0.05))
+            native = NativeAgent(out, seed=5)
+            env = EfzVecEnv(DATA, 1, frame_skip=1, rounds_to_win=2, max_frames=0, seed=3,
+                            autoreset='disabled')
+            rng = np.random.default_rng(0)
+            a = np.zeros((1, 2), np.uint8)
+            total = {}
+            for match in range(6):
+                env.set_matches(chars=('ayu', 'mai'))
+                obs = env.reset()
+                native.attach(env, 0, 0, seed=match) if match == 0 else native.reset(match)
+                for _ in range(20000):
+                    live = obs[0, 0, 2] == 0 and obs[0, 0, 3] == 0
+                    a[0, 0] = native.step(obs[0, 0], live)
+                    a[0, 1] = table.table[rng.integers(9)]  # (it only moves)
+                    obs, _, term, trunc, _ = env.step(a)
+                    if term[0] or trunc[0]:
+                        break
+                for k, v in native.stats().items():
+                    total[k] = total.get(k, 0) + v
+                if total['oki_plans'] >= 3:
+                    break
+            self.assertGreaterEqual(total['oki_plans'], 1, total)
+            self.assertEqual(total['oki_elsewhere'], 0, total)
+            self.assertEqual(total['oki_late'], 0, total)
+            self.assertEqual(total['oki_asked'], total['oki_plans'] + total['oki_nothing'] +
+                             total['oki_apart'], total)
+            self.assertGreater(total['oki_frames'], 0)
+            native.attach(None)
+            native.close()
+            env.close()
+
+    def test_the_same_plans(self):
+        from efz_env.modules import sampler
+        okiplan = self.okiplan
+        found = []
+        was = np.zeros(8, bool)
+        for env, obs, over in self.match(30000):
+            down = np.isin(np.round(obs[:, 0, okiplan.OPP_ACT]), [0x62]) & ~over
+            for e in np.flatnonzero(down & ~was):
+                found.append((env.save_state(int(e)), obs[e, 0].copy()))
+            was = down
+            if len(found) >= 6 or over.all():
+                break
+        self.assertGreaterEqual(len(found), 3, 'too few knockdowns in the random play')
+        rng = np.random.default_rng(5)
+        compared = 0
+        skipped = 0
+        for doubt, skip in ((0.0, 0.0), (0.3, 0.0), (0.3, 0.12), (0.0, 0.12)):
+            with tempfile.TemporaryDirectory() as folder:
+                path, model = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+                out = os.path.join(folder, 'agent.efzagent')
+                policy = sampler(model, deterministic=True)
+                for state, view in found:
+                    air = bool(view[okiplan.SELF_AIR] > 0)
+                    lib = self.library(air, np.random.default_rng(compared))
+                    options = dict(per_plan=5, per_class=2, window=40, wait=30, tolerance=400,
+                                   doubt=doubt, skip=skip)
+                    export_agent(path, out, check=False,
+                                 okiplan=dict(library=lib, answers=self.answers, **options))
+                    native = NativeAgent(out, deterministic=True)
+                    planner = okiplan.OkiPlanner(DATA, lib, OBS_DIM + 6 * self.HISTORY, self.DELAY,
+                                                 history=self.HISTORY, after='guard', **options)
+                    seen = np.repeat(view[None], self.DELAY + 1, 0) + \
+                        rng.normal(0, 0.01, (self.DELAY + 1, len(view))).astype(np.float32)
+                    hist = rng.integers(0, 2, (self.HISTORY, 6)).astype(np.float32)
+                    shares = rng.dirichlet(np.ones(5))
+                    env = planner.one
+                    env.load_state(0, state)
+                    mine = native.oki_plan(env, 0, 0, hist, 0x10, shares, seen=seen)
+                    self.assertEqual(env.save_state(0), state)  # the game as it was
+                    planner.plan(state, 0, hist, 0x10, seen, policy, shares)
+                    theirs = planner.last
+                    if theirs is None:
+                        self.assertEqual(mine['outcome'], 'nothing')
+                    else:
+                        self.assertEqual(mine['outcome'], 'planned')
+                        self.assertEqual(mine['lead'], theirs['lead'])
+                        self.assertEqual(mine['entries'], theirs['entries'])
+                        kinds = [lib[k]['cls'] for k in theirs['entries']] + ['wait', 'own']
+                        self.assertEqual(theirs['kinds'], kinds)
+                        self.assertEqual(len(mine['kinds']), len(kinds))
+                        self.assertEqual(mine['kinds'][-2:], ['wait', 'own'])
+                        # (an answer with a share under skip: not played here, not counted there)
+                        counted = shares >= skip
+                        skipped += int((~counted).sum())
+                        np.testing.assert_array_equal(mine['worth'][:, counted],
+                                                      theirs['worth'][:, counted])
+                        np.testing.assert_array_equal(mine['first'][:, counted],
+                                                      theirs['first'][:, counted])
+                        self.assertFalse(mine['worth'][:, ~counted].any())
+                        np.testing.assert_allclose(mine['expected'], theirs['expected'], rtol=1e-9,
+                                                   atol=1e-6)
+                        np.testing.assert_allclose(mine['mix'], theirs['mix'], atol=1e-4)  # (2,000 rounds' sums)
+                        self.assertEqual(len(theirs['entries']), 5)
+                        # (something happened on the copies: not every worth is 0)
+                        self.assertGreater(float(np.abs(theirs['worth']).max()), 0)
+                        compared += 1
+                    native.close()
+                    for e in (planner.one, planner.sim):
+                        e.close()
+        self.assertGreaterEqual(compared, 4)
+        self.assertGreater(skipped, 0)
+
+
+@unittest.skipIf(not DATA or not os.path.isdir(DATA or ''), 'no game data: set EFZ_DATA')
+class PressureAsPressplan(unittest.TestCase):
+    """The game's planned pressure (mix.h's BeginPress: the module pressplan:1) against
+    runs/human-ayu/pressplan.py's live plan: from the step a move touches a guard, the
+    same wait, the same view expected, the same options, worth and mix."""
+
+    HISTORY, DELAY = 4, 5
+
+    def setUp(self):
+        sys.path.insert(0, RUNS)
+        if not os.path.exists(os.path.join(RUNS, 'motions.json')):  # (made on each machine)
+            self.skipTest('no runs/human-ayu/motions.json: python runs/human-ayu/motions.py '
+                          'makes it')
+        try:
+            import okiplan
+            import pressplan
+            import pressure_library
+            self.okiplan, self.pressplan = okiplan, pressplan
+            self.answers = pressure_library.answers()
+        except ImportError as e:
+            self.skipTest(f'runs/human-ayu: {e}')
+        if not hasattr(pressplan, 'live_plan'):
+            self.skipTest("runs/human-ayu's pressplan.py has no live plan")
+
+    def contacts(self, want=6):
+        """States on the step a move of player 1's touches player 2's guard: ayu walks in
+        and presses, mai holds a crouching guard."""
+        from efz_env import EfzVecEnv
+        from efz_env.actions import encode
+        okiplan = self.okiplan
+        env = EfzVecEnv(DATA, 1, frame_skip=1, rounds_to_win=2, max_frames=0, seed=3,
+                        autoreset='disabled', skip_noninteractive=False)
+        env.set_matches(chars=('ayu', 'mai'))
+        obs = env.reset()
+        a = np.zeros((1, 2), np.uint8)
+        guards = set(self.pressplan.GUARDS.tolist())
+        found, was = [], (-1, 0)
+        for t in range(6000):
+            close = abs(float(obs[0, 0, okiplan.DX])) * 640 < 36
+            button = 'AB'[(t // 60) % 2]
+            a[0, 0] = encode(2, button) if close and t % 14 == 0 else encode(5) if close else encode(6)
+            a[0, 1] = encode(1)
+            obs, _, term, trunc, _ = env.step(a)
+            if term[0] or trunc[0]:
+                break
+            act, frame = int(round(float(obs[0, 0, 50]))), int(round(float(obs[0, 0, 51])))
+            if act in guards and (was[0] not in guards or act != was[0] or frame < was[1]):
+                found.append((env.save_state(0), obs[0, 0].copy()))
+                if len(found) >= want:
+                    break
+            was = (act, frame)
+        env.close()
+        return found
+
+    def library(self, rng):
+        lib = []
+        for k, cls in enumerate(['ground low', 'throw', 'dash high', 'none: hold', 'ground mid',
+                                 'jump high', 'ground low', 'throw']):
+            lib.append(dict(actions=rng.integers(0, 45, 30 + k).astype(np.int64), cls=cls,
+                            adv=int(rng.integers(-6, 8)), distance=20 + 6 * k,
+                            opponent='mai' if k % 2 else 'akane', corner=bool(k % 3 == 0)))
+        lib.append(dict(lib[0], opponent='mai'))
+        return lib
+
+    def test_played_in_a_match(self):
+        """The game's player with its planner, in a match against a guarding opponent
+        (NativeAgent.attach): plans asked for at its guarded moves, made from where the
+        game then is or dropped for a reason, and counted."""
+        from efz_env import EfzVecEnv
+        from efz_env.actions import encode
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            export_agent(path, out, check=False,
+                         pressplan=dict(library=self.library(np.random.default_rng(2)),
+                                        answers=self.answers, per_plan=3, window=20,
+                                        tolerance=400, slack=40))
+            native = NativeAgent(out, seed=5)
+            env = EfzVecEnv(DATA, 1, frame_skip=1, rounds_to_win=2, max_frames=0, seed=3,
+                            autoreset='disabled')
+            a = np.zeros((1, 2), np.uint8)
+            total = {}
+            for match in range(4):
+                env.set_matches(chars=('ayu', 'mai'))
+                obs = env.reset()
+                native.attach(env, 0, 0, seed=match) if match == 0 else native.reset(match)
+                for t in range(20000):
+                    live = obs[0, 0, 2] == 0 and obs[0, 0, 3] == 0
+                    a[0, 0] = native.step(obs[0, 0], live)
+                    # (it walks in and holds a crouching guard)
+                    a[0, 1] = encode(6) if abs(float(obs[0, 0, 4])) * 640 > 60 else encode(1)
+                    obs, _, term, trunc, _ = env.step(a)
+                    if term[0] or trunc[0]:
+                        break
+                for k, v in native.stats().items():
+                    total[k] = total.get(k, 0) + v
+                if total['press_plans'] >= 3:
+                    break
+            self.assertGreaterEqual(total['press_asked'], 3, total)
+            self.assertGreaterEqual(total['press_plans'], 1, total)
+            self.assertEqual(total['press_late'], 0, total)
+            self.assertEqual(total['press_asked'], total['press_plans'] + total['press_nothing'] +
+                             total['press_apart'] + total['press_elsewhere'], total)
+            native.attach(None)
+            native.close()
+            env.close()
+
+    def test_the_same_plans(self):
+        from efz_env.modules import sampler
+        okiplan, pressplan = self.okiplan, self.pressplan
+        found = self.contacts()
+        self.assertGreaterEqual(len(found), 3, 'too few guarded moves in the script')
+        rng = np.random.default_rng(7)
+        compared = nothing = 0
+        for doubt, skip in ((0.3, 0.05), (0.0, 0.0), (0.3, 0.12)):
+            with tempfile.TemporaryDirectory() as folder:
+                path, model = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+                out = os.path.join(folder, 'agent.efzagent')
+                policy = sampler(model, deterministic=True)
+                for n, (state, view) in enumerate(found):
+                    lib = self.library(np.random.default_rng(n))
+                    options = dict(per_plan=4, per_class=2, window=30, wait=10, tolerance=400,
+                                   slack=40, doubt=doubt, skip=skip)
+                    export_agent(path, out, check=False,
+                                 pressplan=dict(library=lib, answers=self.answers, **options))
+                    native = NativeAgent(out, deterministic=True)
+                    self.assertEqual(native.press, len(lib))
+                    self.assertIn('pressplan:1', native.modules)
+                    planner = pressplan.PressPlanner(DATA, lib, OBS_DIM + 6 * self.HISTORY,
+                                                     self.DELAY, history=self.HISTORY,
+                                                     after='guard', **options)
+                    actions = rng.integers(0, 45, self.DELAY) if n % 2 else \
+                        np.full(self.DELAY, okiplan.NEUTRAL)
+                    hist = rng.integers(0, 2, (self.HISTORY, 6)).astype(np.float32)
+                    shares = rng.dirichlet(np.ones(5))
+                    hold = 0x06  # (it holds a crouching guard: encode(1))
+                    env = planner.one
+                    env.load_state(0, state)
+                    seen = np.repeat(env.obs[0, 0][None], self.DELAY + 1, 0)
+                    mine = native.press_plan(env, 0, 0, actions, hist, 0x10, shares, hold)
+                    self.assertEqual(env.save_state(0), state)  # the game as it was
+                    got = pressplan.live_plan(planner, state, 0, hist, 0x10, seen, policy, shares,
+                                              rest=actions)
+                    if got is None:
+                        self.assertEqual(mine['outcome'], 'nothing')
+                        nothing += 1
+                    else:
+                        theirs = planner.last
+                        self.assertEqual(mine['outcome'], 'planned')
+                        waited = len(got[0]) - self.DELAY
+                        counted = shares >= skip
+                        self.assertEqual(mine['adv'], theirs['adv'])
+                        self.assertEqual(mine['lead'], theirs['lead'])
+                        np.testing.assert_array_equal(mine['view'][1:], got[2][1:])
+                        self.assertEqual(mine['entries'], theirs['entries'])
+                        np.testing.assert_array_equal(mine['worth'][:, counted],
+                                                      theirs['worth'][:, counted])
+                        np.testing.assert_allclose(mine['mix'], theirs['mix'], atol=1e-4)  # (2,000 rounds' sums)
+                        # What it drew: the wait until it is free, then that option's inputs.
+                        c, k = mine['chosen'], len(theirs['entries'])
+                        want = (lib[theirs['entries'][c]]['actions'] if c < k else
+                                np.full(theirs['lead'] + options['wait'], okiplan.CROUCH_GUARD)
+                                if c == k else np.zeros(0, int))
+                        self.assertEqual(mine['waited'], mine['option'].size - len(want))
+                        np.testing.assert_array_equal(mine['option'][mine['waited']:], want)
+                        self.assertTrue((mine['option'][:mine['waited']] == okiplan.CROUCH_GUARD).all())
+                        # (the Python plan's own draw: the same wait before whatever it drew)
+                        self.assertGreaterEqual(waited, mine['waited'])
+                        compared += 1
+                    native.close()
+                    for e in (planner.one, planner.sim):
+                        e.close()
+        self.assertGreaterEqual(compared, 4, (compared, nothing))
 
 
 if __name__ == '__main__':

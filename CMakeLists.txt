@@ -71,7 +71,7 @@ endforeach()
 # Trained agents: their view of a fight, their network and their routes (port/agent/,
 # docs/agents.md), in the game and the training library alike.
 set(EFZ_AGENT_SOURCES)
-foreach(f observe policy routes)
+foreach(f observe policy routes mix)
   list(APPEND EFZ_AGENT_SOURCES ${CMAKE_SOURCE_DIR}/port/agent/${f}.cpp)
 endforeach()
 set(EFZ_SDL_SOURCES)

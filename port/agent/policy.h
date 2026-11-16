@@ -37,6 +37,10 @@
 //   "chooser.": chooser.features.*, chooser.layer.K.*, chooser.out.* (routes + 1 outputs,
 //   in thousands of HP).
 //
+// okiplan:1, its okizeme planned from a library of people's (mix.h, which has its keys and
+//   tensors).
+// pressplan:1, its pressure after a guarded move planned from another (mix.h's Press).
+//
 // Keys of no module say where the file came from (version, source.*, exporter, exported,
 // dropped): the menus show the version, the log the rest. A file may also carry what a game
 // doesn't play and reads past: its training part (key train, keys and tensors train.*:
@@ -52,6 +56,8 @@
 #include <random>
 #include <string>
 #include <vector>
+
+#include "agent/mix.h"
 
 namespace efz {
 namespace agent {
@@ -107,6 +113,9 @@ struct Routes {
     int limit = 900;       // frames a copy is played for at most
     bool byVictim = false; // a library kept per victim: those landed on the opponent first
     bool replan = false;   // a plan again at each new move's hit
+    int ending = 0;        // the HP a knockdown at a combo's end is worth over any other
+                           // end (0: damage alone); with it the copies' victim recovers
+                           // in the air as soon as it can (redteam.Planner's ending)
     std::vector<int> victims; // the characters planned against (empty: all)
     std::string source;
     bool Empty() const { return list.empty(); }
@@ -151,6 +160,8 @@ public:
     std::vector<uint8_t> table; // per action, the control byte (forward/back relative)
     Routes routes;      // its combos' routes; empty: it plays its own
     Chooser chooser;    // its routes' chooser; empty: none
+    Mix mix;            // its planned okizeme's library (mix.h); empty: none
+    Press press;        // its planned pressure's (mix.h); empty: none
     int format = 0;
     std::string modules; // as "policy:1,routes:1"
     std::string version; // the version it was exported as (empty: none given)
@@ -171,6 +182,19 @@ struct RouteStats {
     int chooser = 0;
     double planMs = 0, planMsMost = 0, waitedMs = 0, waitedMsMost = 0;
     int dropped() const { return late + elsewhere + over + own + apart; }
+};
+
+// What an agent's planned okizeme did: plans asked for (a knockdown each), made, and of
+// those the ones that drew an option of the library or the wait (played) and not its own
+// play; plans dropped and why (late; the game elsewhere than planned from; nothing to
+// plan: the opponent up too soon; the fight over); what was drawn, by kind (the library's
+// kinds, then the wait and its own play); the time planning took and the game waited.
+struct OkiStats {
+    int asked = 0, plans = 0, played = 0;
+    int late = 0, elsewhere = 0, nothing = 0, apart = 0;
+    std::vector<int> drawn;
+    double planMs = 0, planMsMost = 0, waitedMs = 0, waitedMsMost = 0;
+    long frames = 0;
 };
 
 // An agent playing one side of a match: each frame, the view of its player and whether
@@ -209,11 +233,39 @@ public:
     const RouteStats& Stats() const { return stats_; }
     bool Planning() const { return planner_ != nullptr; }
 
+    // Its okizeme planned by `mix` for player `side` (nullptr: its own), as
+    // runs/human-ayu/okiplan.py's module plays it: at its opponent's knockdown it chooses
+    // its inputs for the `delay` frames until it sees the knockdown, the planner tries the
+    // library's okizeme from where those leave the fight, and once it sees the knockdown
+    // it plays the one drawn, until its inputs end, it sees itself hit, or a route takes
+    // over (a hit of the okizeme's: the routes plan from it, the rest of the okizeme one
+    // of their options). The answers' shares are its counts of this opponent (Counts),
+    // kept from match to match, older ones counting for less.
+    void SetMix(MixPlanner* mix, int side, double patienceMs);
+    const OkiStats& Oki() const { return oki_; }
+    // Its planned pressure's (the same counts: a guarded move each; played: a plan that
+    // drew something other than its own play). With a pressure library the same planner
+    // also plans from each move of the agent's that touches the opponent's guard
+    // (pressplan.py's live plan): its inputs for the `delay` frames until it sees the
+    // guard chosen at once, then a crouching guard until it is free, then the follow-up
+    // drawn.
+    const OkiStats& Pressure() const { return press_; }
+    bool Mixing() const { return mix_ != nullptr; }
+    // Another opponent: what it counted of the last one forgotten.
+    void Forget() { counts_.Clear(); counted_ = false; }
+    const Counts& Seen() const { return counts_; }
+
 private:
     void PushInput(uint8_t controls);
     int Sample(const float* in, bool deterministic);
     void Begin(const float* view, bool deterministic);
     void Result(const float* view);
+    void OkiBegin(const float* view, bool deterministic);
+    void OkiResult(const float* view);
+    void MixResults(const float* view);
+    void MixBegins(const float* view, bool deterministic);
+    void PressBegin(const float* view, bool deterministic);
+    void PressResult(const float* view);
 
     const Policy* policy_;
     std::mt19937_64 rng_;
@@ -245,6 +297,22 @@ private:
     int prevHits_ = 0;
     std::vector<float> values_;
     RouteStats stats_;
+
+    // The planned okizeme.
+    MixPlanner* mix_ = nullptr;
+    Counts counts_;
+    bool counted_ = false;   // a view counted since the last match's end
+    bool wasDown_ = false;   // the opponent was down on the frame before (as the game is)
+    bool okiWanted_ = false; // a knockdown not planned for yet
+    bool okiPending_ = false; // a plan asked for
+    std::vector<int> okiRoute_; // what it planned and is playing (an okizeme, or a
+    size_t okiAt_ = 0;          // guarded move's follow-up), from okiAt_
+    bool okiOn_ = false;
+    OkiStats oki_;
+    bool pressPending_ = false;  // a pressure plan asked for
+    std::vector<int> pressRest_; // what was left of the planned move it was playing then
+    int nowAct_ = -1, nowFrame_ = 0; // the opponent's action and its frame, as the game was
+    OkiStats press_;
 };
 
 } // namespace agent

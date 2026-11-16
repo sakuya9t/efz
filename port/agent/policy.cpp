@@ -29,11 +29,29 @@ const int kOppCharacter = 66; // opp_character
 const struct {
     const char* name;
     int version;
-} kModules[] = {{"policy", 1}, {"routes", 1}, {"chooser", 1}};
+} kModules[] = {{"policy", 1}, {"routes", 1}, {"chooser", 1}, {"okiplan", 1},
+               {"pressplan", 1}};
 
 int Hits(const float* view)
 {
     return (int)nearbyintf(view[kComboHits] * 30);
+}
+
+const int kOppAction = 50;    // opp_action
+const int kOppFrame = 51;     // opp_action_frame
+const int kSelfHitstun = 20;  // self_hitstun
+
+// A guard (src/efz.h: the guards, the air guard, the recoil guards).
+bool IsGuard(int a)
+{
+    return (a >= 0x96 && a <= 0x9c) || (a >= 0xa8 && a <= 0xaa);
+}
+
+// The opponent is knocked down (src/efz.h: rising, the knockdowns, lying).
+bool IsDown(const float* view)
+{
+    int a = (int)nearbyintf(view[kOppAction]);
+    return a >= 0x60 && a <= 0x63;
 }
 
 struct Tensor {
@@ -524,6 +542,7 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         routes.limit = std::max(1, ToInt(keys, "route_limit", 900));
         routes.byVictim = ToInt(keys, "route_by_victim", 0) != 0;
         routes.replan = ToInt(keys, "route_replan", 0) != 0;
+        routes.ending = std::max(0, ToInt(keys, "route_ending", 0));
         const std::string& victims = keys["route_victims"];
         for (size_t at = 0; at < victims.size();) {
             size_t end = victims.find(',', at);
@@ -550,6 +569,186 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         }
         chooser.perStart = std::max(1, ToInt(keys, "chooser_per_start", 12));
         chooser.margin = ToFloat(keys, "chooser_margin", 200);
+    }
+
+    // okiplan:1 (mix.h)
+    mix = Mix();
+    if (Has(names, "okiplan")) {
+        if (frameSkip != 1 || delay <= 0 || history <= 0) {
+            *error = "the agent's planned okizeme needs it to decide every frame, with a delay "
+                     "and its input history";
+            return false;
+        }
+        int count = ToInt(keys, "oki_entries", 0);
+        Tensor offset, actions, dist, air, rise, moveAt, kind, victim, corner;
+        Tensor wchar, wneeds, wpress, woffset, wbytes, ichar, iaction;
+        if (!take("oki.offset", 1, 1, &offset) || !take("oki.actions", 2, 1, &actions) ||
+            !take("oki.dist", 1, 1, &dist) || !take("oki.air", 2, 1, &air) ||
+            !take("oki.rise", 1, 1, &rise) || !take("oki.move_at", 1, 1, &moveAt) ||
+            !take("oki.kind", 1, 1, &kind) || !take("oki.victim", 1, 1, &victim) ||
+            !take("oki.corner", 1, 1, &corner) || !take("oki.wake.character", 1, 1, &wchar) ||
+            !take("oki.wake.needs", 1, 1, &wneeds) || !take("oki.wake.press", 1, 1, &wpress) ||
+            !take("oki.wake.offset", 1, 1, &woffset) || !take("oki.wake.bytes", 2, 1, &wbytes) ||
+            !take("oki.invincible.character", 1, 1, &ichar) ||
+            !take("oki.invincible.action", 1, 1, &iaction))
+            return false;
+        size_t n = (size_t)std::max(0, count), steps = actions.u.size(), moves = wchar.i.size();
+        bool fits = n > 0 && offset.i.size() == n + 1 && offset.i[0] == 0 &&
+                    (size_t)offset.i[n] == steps && dist.i.size() == steps && air.u.size() == steps &&
+                    rise.i.size() == n && moveAt.i.size() == n && kind.i.size() == n &&
+                    victim.i.size() == n && corner.i.size() == n && wneeds.i.size() == moves &&
+                    wpress.i.size() == moves && woffset.i.size() == moves + 1 &&
+                    woffset.i[0] == 0 && (size_t)woffset.i[moves] == wbytes.u.size() &&
+                    ichar.i.size() == iaction.i.size();
+        for (size_t k = 0; fits && k < n; k++)
+            fits = offset.i[k] <= offset.i[k + 1];
+        for (size_t k = 0; fits && k < moves; k++)
+            fits = woffset.i[k] <= woffset.i[k + 1] && wpress.i[k] >= 0;
+        for (size_t k = 0; fits && k < steps; k++)
+            fits = actions.u[k] < table.size();
+        if (!fits) {
+            *error = "the agent's okizeme library doesn't fit together";
+            return false;
+        }
+        mix.entries.resize(n);
+        for (size_t k = 0; k < n; k++) {
+            Mix::Entry& e = mix.entries[k];
+            e.begin = (uint32_t)offset.i[k];
+            e.size = (uint32_t)(offset.i[k + 1] - offset.i[k]);
+            e.rise = rise.i[k];
+            e.moveAt = moveAt.i[k];
+            e.kind = kind.i[k];
+            e.victim = victim.i[k];
+            e.corner = corner.i[k] != 0;
+        }
+        mix.actions = std::move(actions.u);
+        mix.dist = std::move(dist.i);
+        mix.air = std::move(air.u);
+        mix.wake.resize(moves);
+        for (size_t k = 0; k < moves; k++) {
+            Mix::Reversal& m = mix.wake[k];
+            m.character = wchar.i[k];
+            m.needs = wneeds.i[k];
+            m.press = wpress.i[k];
+            m.bytes.assign(wbytes.u.begin() + woffset.i[k], wbytes.u.begin() + woffset.i[k + 1]);
+        }
+        mix.invincible.assign((size_t)Mix::kCharacters * Mix::kActs, 0);
+        for (size_t k = 0; k < ichar.i.size(); k++) {
+            int c = ichar.i[k], a = iaction.i[k];
+            if (c >= 0 && c < Mix::kCharacters && a >= 0 && a < Mix::kActs)
+                mix.invincible[(size_t)c * Mix::kActs + a] = 1;
+        }
+        const std::string& kindNames = keys["oki_kinds"];
+        for (size_t at = 0; at <= kindNames.size();) {
+            size_t end = kindNames.find('|', at);
+            if (end == std::string::npos)
+                end = kindNames.size();
+            mix.kinds.push_back(kindNames.substr(at, end - at));
+            at = end + 1;
+        }
+        mix.perPlan = std::max(1, ToInt(keys, "oki_per_plan", 6));
+        mix.perClass = std::max(1, ToInt(keys, "oki_per_class", 2));
+        mix.window = std::max(1, ToInt(keys, "oki_window", 45));
+        mix.wait = std::max(0, ToInt(keys, "oki_wait", 40));
+        mix.tolerance = std::max(0, ToInt(keys, "oki_tolerance", 24));
+        mix.temperature = std::max(1e-6f, ToFloat(keys, "oki_temperature", 200));
+        mix.doubt = std::min(1.0f, std::max(0.0f, ToFloat(keys, "oki_doubt", 0)));
+        mix.hitWorth = ToFloat(keys, "oki_hit_worth", 1300);
+        mix.hurtWorth = ToFloat(keys, "oki_hurt_worth", 1200);
+        mix.prior = std::max(0.0f, ToFloat(keys, "oki_prior", 6));
+        mix.decay = std::min(1.0f, std::max(0.0f, ToFloat(keys, "oki_decay", 0.7f)));
+        mix.skip = std::min(1.0f, std::max(0.0f, ToFloat(keys, "oki_skip", 0)));
+        mix.think = std::min(60, std::max(0, ToInt(keys, "oki_think", 0)));
+        mix.source = keys["oki_source"];
+    }
+
+    // pressplan:1 (mix.h's Press)
+    press = Press();
+    if (Has(names, "pressplan")) {
+        if (frameSkip != 1 || delay <= 0 || history <= 0) {
+            *error = "the agent's planned pressure needs it to decide every frame, with a delay "
+                     "and its input history";
+            return false;
+        }
+        int count = ToInt(keys, "press_entries", 0);
+        Tensor offset, actions, adv, distance, kind, victim, corner;
+        Tensor rchar, rneeds, rpress, roffset, rbytes, ichar, iaction;
+        if (!take("press.offset", 1, 1, &offset) || !take("press.actions", 2, 1, &actions) ||
+            !take("press.adv", 1, 1, &adv) || !take("press.distance", 1, 1, &distance) ||
+            !take("press.kind", 1, 1, &kind) || !take("press.victim", 1, 1, &victim) ||
+            !take("press.corner", 1, 1, &corner) || !take("press.rev.character", 1, 1, &rchar) ||
+            !take("press.rev.needs", 1, 1, &rneeds) || !take("press.rev.press", 1, 1, &rpress) ||
+            !take("press.rev.offset", 1, 1, &roffset) || !take("press.rev.bytes", 2, 1, &rbytes) ||
+            !take("press.invincible.character", 1, 1, &ichar) ||
+            !take("press.invincible.action", 1, 1, &iaction))
+            return false;
+        size_t n = (size_t)std::max(0, count), steps = actions.u.size(), moves = rchar.i.size();
+        bool fits = n > 0 && offset.i.size() == n + 1 && offset.i[0] == 0 &&
+                    (size_t)offset.i[n] == steps && adv.i.size() == n && distance.i.size() == n &&
+                    kind.i.size() == n && victim.i.size() == n && corner.i.size() == n &&
+                    rneeds.i.size() == moves && rpress.i.size() == moves &&
+                    roffset.i.size() == moves + 1 && roffset.i[0] == 0 &&
+                    (size_t)roffset.i[moves] == rbytes.u.size() &&
+                    ichar.i.size() == iaction.i.size();
+        for (size_t k = 0; fits && k < n; k++)
+            fits = offset.i[k] <= offset.i[k + 1];
+        for (size_t k = 0; fits && k < moves; k++)
+            fits = roffset.i[k] <= roffset.i[k + 1] && rpress.i[k] >= 0;
+        for (size_t k = 0; fits && k < steps; k++)
+            fits = actions.u[k] < table.size();
+        if (!fits) {
+            *error = "the agent's pressure library doesn't fit together";
+            return false;
+        }
+        press.entries.resize(n);
+        for (size_t k = 0; k < n; k++) {
+            Press::Entry& e = press.entries[k];
+            e.begin = (uint32_t)offset.i[k];
+            e.size = (uint32_t)(offset.i[k + 1] - offset.i[k]);
+            e.adv = adv.i[k];
+            e.distance = distance.i[k];
+            e.kind = kind.i[k];
+            e.victim = victim.i[k];
+            e.corner = corner.i[k] != 0;
+        }
+        press.actions = std::move(actions.u);
+        press.reversals.resize(moves);
+        for (size_t k = 0; k < moves; k++) {
+            Mix::Reversal& m = press.reversals[k];
+            m.character = rchar.i[k];
+            m.needs = rneeds.i[k];
+            m.press = rpress.i[k];
+            m.bytes.assign(rbytes.u.begin() + roffset.i[k], rbytes.u.begin() + roffset.i[k + 1]);
+        }
+        press.invincible.assign((size_t)Mix::kCharacters * Mix::kActs, 0);
+        for (size_t k = 0; k < ichar.i.size(); k++) {
+            int c = ichar.i[k], a = iaction.i[k];
+            if (c >= 0 && c < Mix::kCharacters && a >= 0 && a < Mix::kActs)
+                press.invincible[(size_t)c * Mix::kActs + a] = 1;
+        }
+        const std::string& kindNames = keys["press_kinds"];
+        for (size_t at = 0; at <= kindNames.size();) {
+            size_t end = kindNames.find('|', at);
+            if (end == std::string::npos)
+                end = kindNames.size();
+            press.kinds.push_back(kindNames.substr(at, end - at));
+            at = end + 1;
+        }
+        press.perPlan = std::max(1, ToInt(keys, "press_per_plan", 4));
+        press.perClass = std::max(1, ToInt(keys, "press_per_class", 2));
+        press.window = std::max(1, ToInt(keys, "press_window", 40));
+        press.wait = std::max(0, ToInt(keys, "press_wait", 24));
+        press.tolerance = std::max(0, ToInt(keys, "press_tolerance", 16));
+        press.slack = std::max(0, ToInt(keys, "press_slack", 2));
+        press.near = std::max(1, ToInt(keys, "press_near", 160));
+        press.maxWait = std::max(0, ToInt(keys, "press_max_wait", 20));
+        press.temperature = std::max(1e-6f, ToFloat(keys, "press_temperature", 200));
+        press.doubt = std::min(1.0f, std::max(0.0f, ToFloat(keys, "press_doubt", 0.3f)));
+        press.hitWorth = ToFloat(keys, "press_hit_worth", 1300);
+        press.hurtWorth = ToFloat(keys, "press_hurt_worth", 1200);
+        press.prior = std::max(0.0f, ToFloat(keys, "press_prior", 8));
+        press.skip = std::min(1.0f, std::max(0.0f, ToFloat(keys, "press_skip", 0.05f)));
+        press.source = keys["press_source"];
     }
     return true;
 }
@@ -679,6 +878,255 @@ void Player::Reset()
     stats_ = RouteStats();
     if (planner_)
         planner_->Cancel();
+    wasDown_ = okiWanted_ = okiPending_ = okiOn_ = pressPending_ = false;
+    okiRoute_.clear();
+    pressRest_.clear();
+    okiAt_ = 0;
+    nowAct_ = -1;
+    nowFrame_ = 0;
+    oki_ = OkiStats();
+    press_ = OkiStats();
+    if (mix_)
+        mix_->Cancel();
+    if (counted_) { // the match's end: the same opponent next, what it showed older
+        counts_.End(policy_->mix.decay);
+        counted_ = false;
+    }
+}
+
+void Player::SetMix(MixPlanner* mix, int side, double patienceMs)
+{
+    const Policy& p = *policy_;
+    if (mix && ((p.mix.Empty() && p.press.Empty()) || p.frameSkip != 1 || p.delay <= 0 ||
+                p.history <= 0))
+        mix = nullptr;
+    mix_ = mix;
+    side_ = side;
+    if (!planner_)
+        patienceMs_ = patienceMs;
+    counts_.Clear();
+    counted_ = false;
+    Reset();
+}
+
+// At its opponent's knockdown (as the game is): its inputs for the `delay` frames until it
+// sees it, its own play's from what it will see then, and the plan asked for from where
+// they leave the fight.
+void Player::OkiBegin(const float* view, bool deterministic)
+{
+    (void)view;
+    const int delay = policy_->delay;
+    std::vector<float> hist = inputs_, in(in_.size());
+    uint8_t prev = prev_;
+    std::vector<int> actions;
+    for (int k = 0; k < delay; k++) {
+        std::copy(seen_.begin() + (size_t)(delay - k) * kObsDim,
+                  seen_.begin() + (size_t)(delay - k + 1) * kObsDim, in.begin());
+        std::copy(hist.begin(), hist.end(), in.begin() + kObsDim);
+        int a = Sample(in.data(), deterministic);
+        actions.push_back(a);
+        Push(hist, prev, policy_->table[a]);
+    }
+    // (then a crouching guard while the planner works on: the plan is for after it)
+    int guard = 0;
+    for (int a = 0; a < policy_->Actions(); a++) {
+        if (policy_->table[a] == 0x06)
+            guard = a;
+    }
+    for (int k = 0; k < policy_->mix.think; k++) {
+        actions.push_back(guard);
+        Push(hist, prev, policy_->table[guard]);
+    }
+    double shares[kAnswers];
+    counts_.Belief(policy_->mix.prior, shares);
+    mix_->Begin(side_, actions, hist.data(), prev, deterministic, shares);
+    queue_.assign(actions.begin(), actions.end());
+    okiPending_ = true;
+    okiWanted_ = false;
+    okiOn_ = false;
+    oki_.asked++;
+}
+
+// The plans due on this frame (the inputs chosen when they were asked for are played).
+void Player::MixResults(const float* view)
+{
+    if (okiPending_ && queue_.empty())
+        OkiResult(view);
+    if (pressPending_ && queue_.empty())
+        PressResult(view);
+}
+
+// The plans to ask for on this frame, as the game is: its opponent's knockdown, planned
+// for once no other plan or route is on, while it is still down; a move of its own
+// touching the opponent's guard (a contact: the guard starts, or starts again), planned
+// from unless a plan or a combo's route is on.
+void Player::MixBegins(const float* view, bool deterministic)
+{
+    const Policy& p = *policy_;
+    int act = (int)nearbyintf(view[kOppAction]), frame = (int)nearbyintf(view[kOppFrame]);
+    bool contact = IsGuard(act) && (!IsGuard(nowAct_) || act != nowAct_ || frame < nowFrame_);
+    nowAct_ = act;
+    nowFrame_ = frame;
+    bool down = IsDown(view);
+    okiWanted_ = !p.mix.Empty() && down && (okiWanted_ || !wasDown_);
+    wasDown_ = down;
+    bool busy = pending_ || okiPending_ || pressPending_ || routeOn_ || !queue_.empty();
+    if (okiWanted_ && !busy) {
+        OkiBegin(view, deterministic);
+        return;
+    }
+    if (contact && !busy && !p.press.Empty() && !(in_[kSelfHitstun] > 0))
+        PressBegin(view, deterministic);
+}
+
+// On the frame a move of its own touches the opponent's guard (pressplan.py's live plan):
+// its inputs for the `delay` frames until it sees the guard (what is left of a planned
+// move's own first, then its own play's from what it will see), and the plan asked for.
+void Player::PressBegin(const float* view, bool deterministic)
+{
+    const int delay = policy_->delay;
+    std::vector<int> rest;
+    if (okiOn_) {
+        rest.assign(okiRoute_.begin() + okiAt_, okiRoute_.end());
+        okiOn_ = false;
+    }
+    std::vector<float> hist = inputs_, in(in_.size());
+    uint8_t prev = prev_;
+    std::vector<int> actions;
+    for (int k = 0; k < delay; k++) {
+        int a;
+        if (k < (int)rest.size()) {
+            a = rest[k];
+        } else {
+            std::copy(seen_.begin() + (size_t)(delay - k) * kObsDim,
+                      seen_.begin() + (size_t)(delay - k + 1) * kObsDim, in.begin());
+            std::copy(hist.begin(), hist.end(), in.begin() + kObsDim);
+            a = Sample(in.data(), deterministic);
+        }
+        actions.push_back(a);
+        Push(hist, prev, policy_->table[a]);
+    }
+    pressRest_.clear();
+    if ((int)rest.size() > delay)
+        pressRest_.assign(rest.begin() + delay, rest.end());
+    double shares[kAnswers];
+    counts_.PressBelief(policy_->press.prior, shares);
+    int theirs = (int)nearbyintf(view[kOppAction]);
+    bool crouching = (theirs >= 0x99 && theirs <= 0x9b) || theirs == 0xa9;
+    // (its history as it is now: the planner pushes each input as it plays it)
+    mix_->BeginPress(side_, actions, inputs_.data(), prev_, deterministic, shares,
+                     crouching ? 0x06 : 0x02);
+    queue_.assign(actions.begin(), actions.end());
+    pressPending_ = true;
+    press_.asked++;
+}
+
+// `delay` frames after the contact, the plan, if the game is where it was planned from;
+// nothing planned: on with what was left of the planned move it was playing.
+void Player::PressResult(const float* view)
+{
+    typedef MixPlanner::Clock Clock;
+    pressPending_ = false;
+    std::vector<int> rest;
+    rest.swap(pressRest_);
+    auto on = [&](const std::vector<int>& actions) {
+        okiRoute_ = actions;
+        okiAt_ = 0;
+        okiOn_ = !actions.empty();
+    };
+    Clock::time_point t0 = Clock::now();
+    bool done = mix_->Done();
+    if (!done) {
+        Clock::time_point until = patienceMs_ < 0 ? Clock::time_point::max()
+            : t0 + std::chrono::duration_cast<Clock::duration>(
+                       std::chrono::duration<double, std::milli>(patienceMs_));
+        done = mix_->Work(until);
+    }
+    double waited = std::chrono::duration<double, std::milli>(Clock::now() - t0).count();
+    press_.waitedMs += waited;
+    press_.waitedMsMost = std::max(press_.waitedMsMost, waited);
+    if (!done) {
+        mix_->Cancel();
+        press_.late++;
+        on(rest);
+        return;
+    }
+    press_.planMs += mix_->ms;
+    press_.planMsMost = std::max(press_.planMsMost, mix_->ms);
+    press_.frames += mix_->frames;
+    MixPlanner::Outcome outcome = mix_->outcome;
+    mix_->outcome = MixPlanner::kNone;
+    if (outcome != MixPlanner::kPlanned) {
+        (outcome == MixPlanner::kNothing ? press_.nothing : press_.apart)++;
+        on(rest);
+        return;
+    }
+    for (int i = 0; i < kObsDim; i++) {
+        if (!(mix_->view[i] == view[i])) {
+            press_.elsewhere++;
+            return;
+        }
+    }
+    press_.plans++;
+    int kinds = (int)policy_->press.kinds.size(), k = mix_->kinds[mix_->chosen];
+    press_.drawn.resize((size_t)kinds + 2, 0);
+    size_t slot = k == MixPlanner::kWait ? (size_t)kinds : k == MixPlanner::kOwnPlay
+        ? (size_t)kinds + 1 : (size_t)std::min(std::max(k, 0), kinds - 1);
+    press_.drawn[slot]++;
+    if (k != MixPlanner::kOwnPlay)
+        press_.played++;
+    on(mix_->option);
+}
+
+// `delay` frames after the knockdown, the plan, if the game is where it was planned from.
+void Player::OkiResult(const float* view)
+{
+    typedef MixPlanner::Clock Clock;
+    okiPending_ = false;
+    Clock::time_point t0 = Clock::now();
+    bool done = mix_->Done();
+    if (!done) {
+        Clock::time_point until = patienceMs_ < 0 ? Clock::time_point::max()
+            : t0 + std::chrono::duration_cast<Clock::duration>(
+                       std::chrono::duration<double, std::milli>(patienceMs_));
+        done = mix_->Work(until);
+    }
+    double waited = std::chrono::duration<double, std::milli>(Clock::now() - t0).count();
+    oki_.waitedMs += waited;
+    oki_.waitedMsMost = std::max(oki_.waitedMsMost, waited);
+    if (!done) {
+        mix_->Cancel();
+        oki_.late++;
+        return;
+    }
+    oki_.planMs += mix_->ms;
+    oki_.planMsMost = std::max(oki_.planMsMost, mix_->ms);
+    oki_.frames += mix_->frames;
+    MixPlanner::Outcome outcome = mix_->outcome;
+    mix_->outcome = MixPlanner::kNone;
+    if (outcome != MixPlanner::kPlanned) {
+        (outcome == MixPlanner::kNothing ? oki_.nothing : oki_.apart)++;
+        return;
+    }
+    for (int i = 0; i < kObsDim; i++) {
+        if (!(mix_->view[i] == view[i])) {
+            oki_.elsewhere++;
+            return;
+        }
+    }
+    oki_.plans++;
+    // (by kind: the library's, then the wait and its own play)
+    int kinds = (int)policy_->mix.kinds.size(), k = mix_->kinds[mix_->chosen];
+    oki_.drawn.resize((size_t)kinds + 2, 0);
+    size_t slot = k == MixPlanner::kWait ? (size_t)kinds : k == MixPlanner::kOwnPlay
+        ? (size_t)kinds + 1 : (size_t)std::min(std::max(k, 0), kinds - 1);
+    oki_.drawn[slot]++;
+    if (!mix_->option.empty()) {
+        oki_.played++;
+        okiRoute_ = mix_->option;
+        okiAt_ = 0;
+        okiOn_ = true;
+    }
 }
 
 void Player::SetPlanner(Planner* planner, int side, double patienceMs, double againMs)
@@ -721,8 +1169,12 @@ void Player::Begin(const float* view, bool deterministic)
 {
     const int delay = policy_->delay;
     std::vector<int> rest;
-    if (routeOn_)
+    if (routeOn_) {
         rest.assign(route_.begin() + routeAt_, route_.end());
+    } else if (okiOn_) { // its okizeme hit: what is left of it, as a route it is on
+        rest.assign(okiRoute_.begin() + okiAt_, okiRoute_.end());
+        okiOn_ = false;
+    }
     std::vector<float> hist = inputs_, in(in_.size());
     uint8_t prev = prev_;
     std::vector<int> actions;
@@ -857,9 +1309,28 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
     std::copy(seen_.begin() + (size_t)delay * kObsDim, seen_.begin() + (size_t)(delay + 1) * kObsDim,
               in_.begin());
     std::copy(inputs_.begin(), inputs_.end(), in_.begin() + kObsDim);
+    if (mix_) { // what it sees of its opponent, counted
+        counts_.Update(in_.data(), policy_->mix.Empty() ? policy_->press.invincible
+                                                         : policy_->mix.invincible);
+        counted_ = true;
+    }
     int action;
-    if (!planner_) {
+    if (!planner_ && !mix_) {
         action = Sample(in_.data(), deterministic);
+    } else if (!planner_) {
+        // Its okizeme and pressure planned, its combos its own.
+        MixResults(view);
+        MixBegins(view, deterministic);
+        if (okiOn_ && (okiAt_ >= okiRoute_.size() || in_[kSelfHitstun] > 0))
+            okiOn_ = false;
+        if (!queue_.empty()) {
+            action = queue_.front();
+            queue_.pop_front();
+        } else if (okiOn_) {
+            action = okiRoute_[okiAt_++];
+        } else {
+            action = Sample(in_.data(), deterministic);
+        }
     } else {
         // LiveRoutes.__call__: the inputs chosen at its hit, then the route chosen (until
         // its actions run out or the combo is over), else its own play; a hit of its own
@@ -876,17 +1347,28 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
             planned_ = false;
         if (pending_ && queue_.empty())
             Result(view);
+        if (mix_)
+            MixResults(view);
         if (routeOn_ && ((hits == 0 && routeAt_ > 0) || routeAt_ >= route_.size()))
             routeOn_ = false; // it ended, or dropped
         bool again = policy_->routes.replan ? !(planned_ && hitMove_ == plannedMove_)
                                             : prevHits_ == 0 && !routeOn_;
-        if (!pending_ && hits > 0 && again)
+        // (a plan of the one kind while the other's inputs are being played waits)
+        if (!pending_ && !okiPending_ && !pressPending_ && hits > 0 && again)
             Begin(view, deterministic);
+        if (mix_) {
+            MixBegins(view, deterministic);
+            // What it planned: until its inputs end, it sees itself hit, or a route is on.
+            if (okiOn_ && (okiAt_ >= okiRoute_.size() || in_[kSelfHitstun] > 0 || routeOn_))
+                okiOn_ = false;
+        }
         if (!queue_.empty()) {
             action = queue_.front();
             queue_.pop_front();
         } else if (routeOn_) {
             action = route_[routeAt_++];
+        } else if (okiOn_) {
+            action = okiRoute_[okiAt_++];
         } else {
             action = Sample(in_.data(), deterministic);
         }

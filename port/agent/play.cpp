@@ -44,6 +44,7 @@
 #include "agent/observe.h"
 #include "agent/policy.h"
 #include "agent/routes.h"
+#include "agent/mix.h"
 
 extern int g_fkeyHeld; // src/scene3.cpp
 
@@ -246,6 +247,7 @@ struct Side {
     std::shared_ptr<agent::Policy> policy;
     std::unique_ptr<agent::Player> player;
     std::unique_ptr<agent::Planner> planner; // its routes', if it has some
+    std::unique_ptr<agent::MixPlanner> mix;  // its okizeme's, if it has a library of them
     unsigned char input = 0; // this frame's
     bool playing = false;    // this frame's input is the agent's
     int wait = 0;            // character select: frames before the next press
@@ -357,9 +359,72 @@ int IndexOf(const std::string& path)
     return -1;
 }
 
+// What was drawn, by kind, for the log.
+std::string Drawn(const agent::OkiStats& o, const std::vector<std::string>& kinds)
+{
+    std::string drawn;
+    for (size_t k = 0; k < o.drawn.size(); k++) {
+        if (!o.drawn[k])
+            continue;
+        std::string name = k < kinds.size() ? kinds[k]
+                                            : k == kinds.size() ? "wait" : "its own play";
+        drawn += (drawn.empty() ? "" : ", ") + name + " " + std::to_string(o.drawn[k]);
+    }
+    return drawn.empty() ? "none" : drawn;
+}
+
+// What an agent's planned pressure did, for the log.
+void LogPressure(const char* who, const Side& s)
+{
+    const agent::OkiStats& o = s.player->Pressure();
+    if (!o.asked)
+        return;
+    const agent::Press& lib = s.policy->press;
+    double shares[agent::kAnswers];
+    s.player->Seen().PressBelief(lib.prior, shares);
+    LogInfo("agent", "%s's pressure: %d guarded moves planned from: %d plans made, %d played "
+                     "(%s); %d dropped (late %d, the game elsewhere %d, nothing to plan %d, the "
+                     "fight over %d); planning %.1f ms a plan (at most %.1f), the game waited "
+                     "%.2f ms a plan (at most %.1f); it expects of this opponent after a guard: "
+                     "a crouching guard %.0f%%, a standing one %.0f%%, a reversal %.0f%%, a "
+                     "jump %.0f%%, a button %.0f%%",
+            who, o.asked, o.plans, o.played, Drawn(o, lib.kinds).c_str(),
+            o.late + o.elsewhere + o.nothing + o.apart, o.late, o.elsewhere, o.nothing, o.apart,
+            o.planMs / std::max(1, o.asked - o.late), o.planMsMost, o.waitedMs / o.asked,
+            o.waitedMsMost, shares[0] * 100, shares[1] * 100, shares[2] * 100, shares[3] * 100,
+            shares[4] * 100);
+}
+
+// What an agent's planned okizeme did, for the log.
+void LogOkizeme(const char* who, const Side& s)
+{
+    if (!s.player || !s.player->Mixing())
+        return;
+    LogPressure(who, s);
+    const agent::OkiStats& o = s.player->Oki();
+    if (!o.asked)
+        return;
+    const agent::Mix& lib = s.policy->mix;
+    std::string drawn = Drawn(o, lib.kinds);
+    double shares[agent::kAnswers];
+    s.player->Seen().Belief(lib.prior, shares);
+    LogInfo("agent", "%s's okizeme: %d knockdowns planned for: %d plans made, %d played (%s); "
+                     "%d dropped (late %d, the game elsewhere %d, the opponent up too soon %d, "
+                     "the fight over %d); planning %.1f ms a plan (at most %.1f), %ld frames on "
+                     "copies a plan, the game waited %.2f ms a plan (at most %.1f); it expects "
+                     "of this opponent's wake-ups: a crouching guard %.0f%%, a standing one "
+                     "%.0f%%, a reversal %.0f%%, a jump %.0f%%, a button %.0f%%",
+            who, o.asked, o.plans, o.played, drawn.c_str(),
+            o.late + o.elsewhere + o.nothing + o.apart, o.late, o.elsewhere, o.nothing, o.apart,
+            o.planMs / std::max(1, o.asked - o.late), o.planMsMost,
+            o.frames / std::max(1, o.asked - o.late), o.waitedMs / o.asked, o.waitedMsMost,
+            shares[0] * 100, shares[1] * 100, shares[2] * 100, shares[3] * 100, shares[4] * 100);
+}
+
 // What an agent's routes did, for the log.
 void LogRoutes(const char* who, const Side& s)
 {
+    LogOkizeme(who, s);
     if (!s.player || !s.player->Planning())
         return;
     const agent::RouteStats& r = s.player->Stats();
@@ -405,6 +470,16 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
                      ", " + std::to_string(p->routes.perStart) + " tried" +
                      (p->chooser.Empty() ? "" : "; the chooser's when a plan is late");
         }
+        if (!p->mix.Empty()) {
+            combos += "; its okizeme planned from " + std::to_string(p->mix.entries.size()) +
+                      " of people's (" + p->mix.source + "), " + std::to_string(p->mix.perPlan) +
+                      " tried a knockdown";
+        }
+        if (!p->press.Empty()) {
+            combos += "; its pressure after a guarded move planned from " +
+                      std::to_string(p->press.entries.size()) + " of people's (" +
+                      p->press.source + "), " + std::to_string(p->press.perPlan) + " tried";
+        }
         LogInfo("agent", "%s: \"%s\"%s, %s, format %d (%s), deciding every %d frame(s), %d "
                          "frames late, %d inputs of history; %s",
                 e.path.c_str(), p->name.c_str(),
@@ -424,6 +499,13 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
         s->player->SetPlanner(s->planner.get(), player, patience, kPatienceAgain);
         if (!s->player->Planning())
             s->planner.reset();
+    }
+    if (player >= 0 && (!s->policy->mix.Empty() || !s->policy->press.Empty())) {
+        s->mix.reset(new agent::MixPlanner(s->policy.get(), &g_world, Seed()));
+        s->player->SetMix(s->mix.get(), player,
+                          g_fast ? -1 : net ? kPatienceNet : kPatienceLocal);
+        if (!s->player->Mixing())
+            s->mix.reset();
     }
     return true;
 }
@@ -685,6 +767,8 @@ void AgentsIdle(uint64_t deadlineNs)
     for (Side* s : sides) {
         if (s->planner && s->planner->Busy())
             s->planner->Work(until);
+        if (s->mix && s->mix->Busy())
+            s->mix->Work(until);
     }
 }
 

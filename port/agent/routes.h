@@ -8,6 +8,10 @@
 // its own play (seeing the copy as late as it sees the game) are played on copies, the
 // opponent guarding once it can, until each combo ends. The one that dealt the most is
 // chosen if it beats its own play. The Player (policy.h) plays it once it sees its hit.
+// With routes.ending (redteam.Planner's ending) the victim on the copies also presses a
+// button every other frame, which recovers it in the air as soon as the game lets it, as a
+// person does; each option is played a few frames past its combo's end, and one that
+// leaves the victim lying (not recovered in the air) is worth that many HP more.
 // Planned again at a later move's hit of the combo (routes.replan, round 15b's), the
 // routes are also joined where that move hit in them (the pool's entries), and the rest
 // of the route being played is one more option.
@@ -115,6 +119,8 @@ public:
     std::vector<int> tried;   // the options: pool entries (Policy::routes.pool), kExtra,
                               // then kOwnPlay
     std::vector<float> dealt; // the most each dealt (HP), in that order
+    std::vector<int> ends;    // how each left the victim: 1 lying, 2 recovered in the air, 0
+                              // neither (routes.ending; else all 0)
     float best = 0, own = 0;  // the most any option dealt, its own play's
     float expected[kObsDim];  // the agent's view when it sees its hit, on the copy
     double ms = 0;            // time worked on it
@@ -127,6 +133,8 @@ private:
         bool started = false;
         int t = 0;
         float dealt = 0;
+        int over = -1;                  // the frame its combo ended on (routes.ending)
+        bool down = false, recovered = false; // how it left the victim: lying; recovered in the air
         Snapshot state;             // where it was left, when the work stopped in it
         std::vector<float> delayed; // its own play: the views it has seen, newest first
         std::vector<float> history; // its own play: its input history

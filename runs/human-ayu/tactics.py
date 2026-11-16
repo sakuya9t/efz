@@ -388,6 +388,96 @@ def strings(me, opp, live, controls):
     return out
 
 
+THROWN = list(range(0x64, 0x7a))  # the poses a throw puts its victim in
+AIR_RECOVERY = (0x9d, 0x9e)       # recovering in the air from a hit, forward and back
+LYING = (0x61, 0x62, 0x63)
+THROW = 0xdc                      # every character's throw; + 1: it caught
+AIR_THROW_F0 = ('ayu', 'mai', 'akane', 'akiko')  # their air throw is 0xf0, the others' 0xf8
+ENDINGS = ('knockdown', 'recovery', 'standing', 'ko')
+BIG = 1000                        # HP: a combo worth ending well
+AFTER_END = 150                   # steps after an air recovery in which who hits first is looked for
+
+
+def endings(att, dfn, live):
+    """How att's combos on dfn end, a record each: the HP it took and where it left dfn:
+    'knockdown' (lying, to rise into att's okizeme), 'recovery' (dfn recovered in the
+    air: untech time ran out before the ground, and dfn is free to act), 'standing' (a
+    ground hit's stun ran out), 'ko'. For a recovery also whether att was still in a move
+    of its own (busy) and who was hit first after it (next: 'caught', 'hit back',
+    'guarded', 'nothing')."""
+    T = len(dfn.act)
+    react = ((dfn.act >= 0x32) & (dfn.act < 0x60)) | np.isin(dfn.act, THROWN)
+    lying = np.isin(dfn.act, LYING)
+    starts = np.flatnonzero(react & ~_prev(react, False))
+    out, k = [], 0
+    while k < len(starts):
+        s = e = int(starts[k])
+        while True:
+            while e < T and react[e]:
+                e += 1
+            f = e
+            while f < T and lying[f]:
+                f += 1
+            if f > e and f < T and react[f]:  # hit again lying: the combo goes on
+                e = f
+                continue
+            break
+        while k < len(starts) and starts[k] < e:
+            k += 1
+        if e >= T or s == 0:
+            continue
+        a = int(dfn.act[e])
+        kind = ('ko' if not live[e] or dfn.hp[e] <= 0 else 'recovery' if a in AIR_RECOVERY else
+                'knockdown' if a in LYING or a == 0x60 or dfn.air[e] else 'standing')
+        rec = dict(damage=float(dfn.hp[s - 1] - dfn.hp[e]), kind=kind)
+        if kind == 'recovery':
+            ev = [(x, name) for x, name in ((_first(dfn.hit, e + 1, e + AFTER_END), 'caught'),
+                                            (_first(att.hit, e + 1, e + AFTER_END), 'hit back'),
+                                            (_first(dfn.contact, e + 1, e + AFTER_END), 'guarded'))
+                  if x is not None]
+            rec.update(busy=bool(att.act[e] >= FIRST_OWN), next=min(ev)[1] if ev else 'nothing')
+        out.append(rec)
+    return out
+
+
+def endings_report(recs):
+    big = [r for r in recs if r['damage'] >= BIG]
+    out = dict(n=len(recs), n_big=len(big))
+    for name, rs in (('all', recs), ('big', big)):
+        out[name] = {k: round(float(np.mean([r['kind'] == k for r in rs])), 3) for k in ENDINGS} if rs else None
+    rec = [r for r in recs if r['kind'] == 'recovery']
+    if rec:
+        out['after_recovery'] = dict(
+            n=len(rec), busy=round(float(np.mean([r['busy'] for r in rec])), 3),
+            **{k: round(float(np.mean([r['next'] == k for r in rec])), 3)
+               for k in ('caught', 'hit back', 'guarded', 'nothing')})
+    return out
+
+
+def grabs(me, opp, dx, live):
+    """One record a match: me's throws and air throws (tried: the move came out; landed),
+    the times it could have tried one (free within reach of an opponent on the ground
+    that is free or guarding; of one in the air that isn't being hit), and the air
+    exchanges (both in the air when one is hit: won, lost)."""
+    px = np.abs(dx) * 640
+    at = 0xf0 if names()[me.char] in AIR_THROW_F0 else 0xf8
+    ground = ~me.air & ~opp.air & (px < 45) & me.free & (opp.free | opp.guard) & live
+    air = me.air & opp.air & (px < 100) & me.free & ~opp.hitstun & live
+    return [dict(throw_tries=int((me.new & (me.act == THROW)).sum()),
+                 throws=int((me.new & (me.act == THROW + 1)).sum()),
+                 air_tries=int((me.new & (me.act == at)).sum()),
+                 air_throws=int((me.new & (me.act == at + 1)).sum()),
+                 throw_chances=len(_runs(ground)[0]), air_chances=len(_runs(air)[0]),
+                 air_won=int((opp.hit & me.air & opp.air).sum()),
+                 air_lost=int((me.hit & me.air & opp.air).sum()))]
+
+
+def grabs_report(recs, per_min):
+    tot = {k: sum(r[k] for r in recs) for k in recs[0]} if recs else {}
+    return {k + '_per_min': round(v * per_min, 2) for k, v in tot.items()}
+
+
+
 def measure(c, controls=None):
     """Both ways, for one player's match: c, its views' OBS columns (T, len(OBS));
     controls (T,), its inputs: with them also its strings (strings())."""
@@ -396,7 +486,9 @@ def measure(c, controls=None):
     live = (c[:, 16] == 0) & (c[:, 17] == 0)
     dx = c[:, 18]
     extra = dict(strings=strings(me, opp, live, controls)) if controls is not None else {}
-    return dict(**extra, press_off=pressure(me, opp, dx, live), press_def=pressure(opp, me, dx, live),
+    return dict(**extra, ends_off=endings(me, opp, live), ends_def=endings(opp, me, live),
+                grabs=grabs(me, opp, dx, live),
+                press_off=pressure(me, opp, dx, live), press_def=pressure(opp, me, dx, live),
                 oki_off=wakeup(opp, me, dx, live), oki_def=wakeup(me, opp, dx, live),
                 free_self=free_time(me, opp, dx, live), free_opp=free_time(opp, me, dx, live))
 
@@ -600,7 +692,11 @@ def strings_report(recs, per_min, top=12):
 
 def report(n, per_min):
     """Events' lists (measure()'s, concatenated) -> its report's entries."""
-    return dict(strings=strings_report(n.get('strings', []), per_min), pressure=pressure_report(n['press_off'], per_min, moves=True),
+    return dict(strings=strings_report(n.get('strings', []), per_min),
+                combo_ends=endings_report(n.get('ends_off', [])),
+                taken_combo_ends=endings_report(n.get('ends_def', [])),
+                grabs=grabs_report(n.get('grabs', []), per_min),
+                pressure=pressure_report(n['press_off'], per_min, moves=True),
                 under_pressure=pressure_report(n['press_def'], per_min),
                 okizeme=wakeup_report(n['oki_off'], per_min),
                 wakeup=wakeup_report(n['oki_def'], per_min),

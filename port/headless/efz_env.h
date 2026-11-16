@@ -343,6 +343,81 @@ EFZ_ENV_API int32_t efz_env_agent_plan(EfzAgent* agent, EfzEnv* env, int32_t ind
 EFZ_ENV_API int32_t efz_env_agent_choose(const EfzAgent* agent, const float* input,
                                          int32_t starter, int32_t offset, float* values);
 
+/* An agent with a planned okizeme (the module okiplan:1, port/agent/mix.h): the entries of
+ * its library (0: it has none). */
+EFZ_ENV_API int32_t efz_env_agent_oki_entries(const EfzAgent* agent);
+/* A plan at the opponent's knockdown in environment `index`, as the game makes one, for a
+ * test that it is runs/human-ayu/okiplan.py's. actions (count): the agent's inputs for the
+ * frames until the plan is played (none: from the game as it is); history, prev: its input
+ * history after them; shares: of the five answers; seen: its views then, (delay + 1)
+ * newest first, or NULL (those of the frames `actions` are played on). The environment is
+ * left as it was. 0, or -1 with efz_env_error. */
+typedef struct EfzOkiPlan {
+    int32_t outcome;       /* 1 planned, 2 nothing to plan (not down, or up too soon), 3 the
+                              copies couldn't be played */
+    int32_t lead;          /* frames to the rising */
+    int32_t options;       /* the options tried: the entries, a wait, its own play */
+    int32_t chosen;        /* the one drawn */
+    int32_t frames;        /* frames played on copies */
+    int32_t option_size;   /* the drawn option's actions (0: its own play) */
+    int32_t entry[32];     /* the library's entries tried (options - 2) */
+    int32_t kind[32];      /* each option's kind: the library's, -1 the wait, -2 its own play */
+    int32_t first[32 * 5]; /* [option][answer]: who hit first (1 the agent, -1 the opponent) */
+    int32_t option[512];
+    double worth[32 * 5];  /* [option][answer] */
+    double expected[32];
+    double mix[32];
+    double ms;
+    int32_t adv;           /* the pressure's: the frame advantage planned at */
+    int32_t waited;        /* the pressure's: frames of guard before the follow-up */
+    float view[168];       /* the agent's view after `actions`, on the copy */
+} EfzOkiPlan;
+EFZ_ENV_API int32_t efz_env_agent_oki_plan(EfzAgent* agent, EfzEnv* env, int32_t index,
+                                           int32_t side, const int32_t* actions, int32_t count,
+                                           const float* history, uint8_t prev,
+                                           int32_t deterministic, uint64_t seed,
+                                           const double* shares, const float* seen,
+                                           EfzOkiPlan* out);
+/* An agent with a planned pressure (the module pressplan:1, mix.h's Press): its library's
+ * entries (0: none); a plan on the frame a move of the agent's touches the opponent's
+ * guard in environment `index` (MixPlanner::BeginPress: actions, its inputs for the
+ * frames until it sees the guard; history, prev: its input history before them; hold: the
+ * control byte the opponent holds until the plan's start), the drawn option the frames of
+ * guard until the agent is free and then the follow-up; and the answers' shares from the
+ * agent's counts (efz_env_agent_counts) for `prior`. */
+EFZ_ENV_API int32_t efz_env_agent_press_entries(const EfzAgent* agent);
+EFZ_ENV_API int32_t efz_env_agent_press_plan(EfzAgent* agent, EfzEnv* env, int32_t index,
+                                             int32_t side, const int32_t* actions,
+                                             int32_t count, const float* history, uint8_t prev,
+                                             int32_t deterministic, uint64_t seed,
+                                             const double* shares, uint8_t hold,
+                                             EfzOkiPlan* out);
+EFZ_ENV_API void efz_env_agent_press_shares(const EfzAgent* agent, double prior, double* shares);
+/* The agent plays player `side` of environment `index` as it plays in the game: its
+ * combos' routes and its okizeme planned on copies of that environment (what the file
+ * has of them), every plan worked to its end on the step that needs it (the game's
+ * fast-forward). From then on efz_env_agent_step is given that player's view of the
+ * environment as it is, before the step its control byte is for; efz_env_agent_reset
+ * starts a match. The environment must outlive the agent, or the agent be detached
+ * (env NULL). stats (24, or NULL, read at any time through efz_env_agent_stats): the
+ * routes' plans made and those that chose a route, then the okizeme's: plans asked, made,
+ * played (an option not its own play), late, elsewhere, nothing, apart, frames on copies;
+ * the milliseconds the routes' plans took in all and the okizeme's; the routes' plans
+ * dropped; then the pressure's: asked, made, played, late, elsewhere, nothing, apart,
+ * frames, milliseconds.
+ * 0, or -1 with efz_env_error. */
+EFZ_ENV_API int32_t efz_env_agent_attach(EfzAgent* agent, EfzEnv* env, int32_t index,
+                                         int32_t side, uint64_t seed);
+EFZ_ENV_API void efz_env_agent_stats(const EfzAgent* agent, int32_t* stats);
+/* The agent's counts of its opponent (port/agent/mix.h's Counts, efz_env.memory's): mode 0
+ * takes a view (the agent's), 1 forgets everything (another opponent), 2 ends a match
+ * against the same one (view NULL for 1 and 2). counts (12, or NULL): wake-ups, of them a
+ * move, an invincible one, a jump, a backdash; guards ended, the same four after them; its
+ * guards on the ground, of them crouching. shares (5, or NULL): the answers' shares for
+ * `prior`. */
+EFZ_ENV_API void efz_env_agent_counts(EfzAgent* agent, const float* view, int32_t mode,
+                                      double prior, float* counts, double* shares);
+
 #ifdef __cplusplus
 }
 #endif

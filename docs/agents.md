@@ -208,6 +208,110 @@ counted at what it dealt, the opponent's whole HP. The Python planner's copies r
 through a KO within a step (`skip_noninteractive`), so they miss the KO's last blow and
 count such a route short.
 
+## Its okizeme: planned from people's
+
+An agent file with the module `okiplan:1` plans what it does at its opponent's knockdowns
+as `runs/human-ayu/okiplan.py` does in evaluations (`port/agent/mix.h`; the reasons and
+the measures: docs/training-v2.md, "The planned okizeme"). Without it an agent's okizeme
+is its network's, which is one low attack whoever it plays.
+
+    python runs/human-ayu/oki_library.py --answers ~/data/efz-replays/oki-library.npz
+    python python/examples/export_agent.py runs/human-ayu/agent-league17-s1/avg.zip \
+        --library ~/data/efz-replays/combo-library-victims.npz --replan \
+        --okizeme ~/data/efz-replays/oki-library.npz \
+        --okizeme-option per_plan=5 --okizeme-option window=40 \
+        --okizeme-option skip=0.05 --okizeme-option think=14
+
+The library (`oki_library.py`) is what a character's players did in the community's
+replays from each knockdown they made to their first contact on the riser, with its
+timing: 8,499 for Ayu. `--answers` writes beside it what the game needs and has no other
+way to know: each character's reversals on rising and the moves that are invincible from
+their start. The file is about 5 MB larger for them.
+
+- **When.** On the frame its opponent is knocked down (as the game is), it chooses its
+  inputs for the 14 frames until it sees the knockdown, as the routes do at a hit, and
+  then `think` frames of crouching guard; the planner works in the game's spare time
+  over those frames, from where they leave the fight. A knockdown at a combo's end
+  waits until the routes' plan and route are done.
+- **What it tries.** The library's okizeme whose player stood where the agent stands, as
+  many frames before the rising as are left (an entry is played with its recorded rising
+  on the frame this opponent rises), at most `per_class` of a kind (how it comes in, how
+  it is guarded, the side; a throw) and `per_plan` in all; a wait (a crouching guard
+  through the rising: the bait); and its own play. Each against a riser that guards
+  crouching, guards standing, reverses, jumps away, or presses a button; an answer this
+  opponent is expected to give less than `skip` of the time isn't played.
+- **What it draws.** Each answer's share comes from what it has seen this opponent do on
+  its wake-ups and how it guards (counted from its own late view; kept from one match to
+  the next of the same seat, older matches counting 0.7 each), over a prior of the
+  community's players. An option's worth is the HP it took less the HP it lost by
+  `window` frames after the rising, a first hit either way counted as a combo; the draw
+  is by exp(expected worth / `temperature`), or with `doubt` the mix that still does
+  well if the shares are wrong.
+- **Playing it.** Once it sees the knockdown and the game is where the plan expected, it
+  plays what was drawn, until the inputs end or it sees itself hit. If the okizeme hits,
+  the routes plan from that hit with the rest of the okizeme as one of their options.
+
+The game's planner differs from an evaluation's `okiplan` module in what a frame's spare
+time affords: fewer options (5 or 6, not 10), a shorter look after the rising, a
+crouching guard after an option's inputs on the copies instead of the network on every
+copy (`okiplan.py`'s `after=guard`), and the `think` frames. An evaluation with those
+settings is what the game plays; `evaluate.py --p1 FILE.efzagent --p1-native` runs the
+game's own code (`runs/human-ayu/native_agent.py`: each match's player attached to its
+environment, `NativeAgent.attach`), which is how a file is measured before a person
+meets it. `tests.test_agents.OkizemeAsOkiplan`: the same counts from the same views as
+`efz_env.memory`, at a knockdown the same options, the same worth against each answer
+and the same mix as `okiplan.py`, and plans made and played in a match.
+
+The log has a line a fight: knockdowns planned for, plans made and played and what was
+drawn by kind, plans dropped and why, the time a plan took and the game waited, and what
+it now expects of this opponent's wake-ups.
+
+A file's okizeme is carried into a file of a model trained further by `--parts-from`
+(`--keep routes chooser okiplan pressplan`, the default); `unpack_agent.py` doesn't write the
+library back as a file. A game older than the module refuses the file and says which
+module it doesn't play.
+
+## Its pressure: planned from people's
+
+An agent file with the module `pressplan:1` plans what follows each of its guarded moves
+as `runs/human-ayu/pressplan.py`'s live plan does (`mix.h`'s `Press`, the okizeme's
+planner from a guard instead of a knockdown; docs/training-v2.md, "The planned
+pressure"). Without it an agent's pressure is a low or nothing after each guard, with no
+throw.
+
+    python runs/human-ayu/pressure_library.py --answers ~/data/efz-replays/pressure-library.npz
+    python python/examples/export_agent.py MODEL.zip --library ... --okizeme ... \
+        --pressure ~/data/efz-replays/pressure-library.npz
+
+The library is what a character's players did next when a move of theirs was guarded and
+they could act again beside the guarding player (17,963 for Ayu: the next move, a throw,
+an overhead, holding, backing off), each with the frame advantage it was done at.
+
+- **When.** A plan has no time between seeing a guard and acting on it. So on the frame a
+  move of the agent's touches the opponent's guard (as the game is), its inputs for the
+  14 frames until it sees the guard are chosen at once (its own play's, from what it has
+  seen: what it would have pressed anyway), and the planner works over those frames, from
+  where they leave the fight with the opponent holding its guard: then a crouching guard
+  until the agent is free (at most `max_wait` frames, else nothing is planned), then the
+  follow-up.
+- **What it tries.** The library's follow-ups done at the same frame advantage (within
+  `slack` frames) and distance (within `tolerance` pixels), a wait (the bait) and its own
+  play, each against a guarding player that goes on guarding crouching or standing,
+  reverses on its first free frame, jumps away, or presses a button. The shares come from
+  what this opponent did after its guards so far; the draw is the mix that holds up if
+  those shares are wrong (`doubt` 0.3).
+- **Playing it.** When it sees the guard and the game is where the plan expected (the
+  opponent did hold its guard), it plays the wait and the follow-up; if the follow-up is
+  guarded it plans again from that contact, and if it hits the routes take it from the
+  hit. Nothing planned (a hit either way first, the agent not free in time, the opponent
+  gone): its own play.
+
+A plan is about 0.6 of a route plan (4 options, the answers expected 5% of the time or
+more, 40 frames past the guard). `tests.test_agents.PressureAsPressplan`: from the frame
+of a contact the same wait, the same view expected, the same options and worth as
+`pressplan.live_plan`, and plans made in a match. The log has a line a fight, as the
+okizeme's.
+
 ## Over the network
 
 NET PLAY's screen has a row **PLAYED BY**: YOU, or an agent (left and right switch; it is
@@ -323,9 +427,10 @@ the opponent's inputs, or a rollback, change the frames it was made for.
 
 ## Not yet
 
-- **Other modules**: an `agent.json`'s modules besides `routes` (`oki`, people's okizeme
-  played by a second network) can't go into a file yet; nor routes chosen by the chooser
-  alone (`by: chooser`).
+- **Other modules**: of an `agent.json`'s modules the file takes `routes` and, through
+  `--okizeme` and `--pressure`, the planned okizeme and pressure; not `oki` (people's
+  okizeme played by a second network) or routes chosen by the chooser alone
+  (`by: chooser`).
 - **A real EfzRevival 1.02h peer**: the network matches above are this game against
   itself.
 - **A controller's button** for F5 and F6: the keyboard only.

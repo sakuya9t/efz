@@ -131,6 +131,28 @@ class Plan(ctypes.Structure):
     ]
 
 
+class OkiPlan(ctypes.Structure):
+    _fields_ = [
+        ('outcome', ctypes.c_int32),
+        ('lead', ctypes.c_int32),
+        ('options', ctypes.c_int32),
+        ('chosen', ctypes.c_int32),
+        ('frames', ctypes.c_int32),
+        ('option_size', ctypes.c_int32),
+        ('entry', ctypes.c_int32 * 32),
+        ('kind', ctypes.c_int32 * 32),
+        ('first', ctypes.c_int32 * (32 * 5)),
+        ('option', ctypes.c_int32 * 512),
+        ('worth', ctypes.c_double * (32 * 5)),
+        ('expected', ctypes.c_double * 32),
+        ('mix', ctypes.c_double * 32),
+        ('ms', ctypes.c_double),
+        ('adv', ctypes.c_int32),
+        ('waited', ctypes.c_int32),
+        ('view', ctypes.c_float * 168),
+    ]
+
+
 def _candidates():
     env = os.environ.get('EFZ_ENV_LIBRARY')
     if env:
@@ -192,6 +214,25 @@ def _bind(lib):
                                                 ctypes.POINTER(Plan)]),
         'efz_env_agent_choose': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32, P]),
     }
+    # (a library built before the planned okizeme has none of these)
+    newer = {
+        'efz_env_agent_oki_entries': (ctypes.c_int32, [P]),
+        'efz_env_agent_oki_plan': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32, P,
+                                                    ctypes.c_int32, P, ctypes.c_uint8,
+                                                    ctypes.c_int32, ctypes.c_uint64, P, P,
+                                                    ctypes.POINTER(OkiPlan)]),
+        'efz_env_agent_counts': (None, [P, P, ctypes.c_int32, ctypes.c_double, P, P]),
+        'efz_env_agent_press_entries': (ctypes.c_int32, [P]),
+        'efz_env_agent_press_plan': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32, P,
+                                                      ctypes.c_int32, P, ctypes.c_uint8,
+                                                      ctypes.c_int32, ctypes.c_uint64, P,
+                                                      ctypes.c_uint8, ctypes.POINTER(OkiPlan)]),
+        'efz_env_agent_press_shares': (None, [P, ctypes.c_double, P]),
+        'efz_env_agent_attach': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32,
+                                                  ctypes.c_uint64]),
+        'efz_env_agent_stats': (None, [P, P]),
+    }
+    sig.update({name: s for name, s in newer.items() if hasattr(lib, name)})
     for name, (restype, argtypes) in sig.items():
         f = getattr(lib, name)
         f.restype = restype

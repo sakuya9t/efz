@@ -17,6 +17,14 @@ namespace agent {
 namespace {
 
 const uint8_t kBack = 0x02;     // efz_env.actions.BACK: back, relative to facing
+const uint8_t kBackPress = 0x12; // redteam.BACK_PRESS: with A, the victim's air recovery
+const int kEndingTail = 12;      // redteam.ENDING_TAIL
+const int kOppAction = 50;       // the view's opp_action
+
+// redteam.LYING and AIR_RECOVERY (src/efz.h: wake-up, the knockdowns, lying; the air
+// recoveries forward and back).
+bool Lying(int action) { return action >= 0x60 && action <= 0x63; }
+bool Recovering(int action) { return action == 0x9d || action == 0x9e; }
 const int kOppCharacter = 66;   // opp_character
 const int kInputFeatures = 6;
 const int kShortest = 240;      // its own play's combo is played this long at least
@@ -235,17 +243,28 @@ bool Planner::Play(Option& o, Clock::time_point deadline)
         }
         int facing[2] = {world_->Facing(0), world_->Facing(1)};
         uint8_t input[2];
+        const int ending = routes.ending;
         input[side_] = ToScreen(bits, facing[side_]);
-        input[1 - side_] = ToScreen(kBack, facing[1 - side_]);
+        input[1 - side_] = ToScreen(ending > 0 && o.t % 2 ? kBackPress : kBack, facing[1 - side_]);
         if (!world_->Step(input))
             return true;
         frames++;
         if (o.entry == kOwnPlay) // its history: the controls the game read (info['input'])
             Push(o.history, o.prev, ToScreen(world_->Read(side_), facing[side_]));
-        o.dealt = std::max(o.dealt, (float)(hp0_ - world_->Hp(1 - side_)));
+        if (o.over < 0) {
+            o.dealt = std::max(o.dealt, (float)(hp0_ - world_->Hp(1 - side_)));
+            // Its combo over, or the round (a KO: what it dealt can't grow).
+            if (world_->ComboHits(side_) == 0 || world_->Over())
+                o.over = o.t;
+        }
+        if (ending > 0) { // how it leaves the victim, to a little after its combo's end
+            View(side_, now);
+            int action = (int)lround(now[kOppAction]);
+            o.recovered = o.recovered || Recovering(action);
+            o.down = o.down || Lying(action);
+        }
         o.t++;
-        // Its combo over, or the round (a KO: what it dealt can't grow).
-        if (world_->ComboHits(side_) == 0 || world_->Over())
+        if (o.over >= 0 && (ending <= 0 || o.t - 1 - o.over >= kEndingTail))
             return true;
     }
     return true;
@@ -257,15 +276,22 @@ void Planner::Choose()
     dealt.clear();
     size_t n = options_.size();
     size_t top = 0;
+    const float ending = (float)policy_->routes.ending;
+    ends.clear();
+    std::vector<float> worth(n);
+    best = 0;
     for (size_t j = 0; j < n; j++) {
-        tried.push_back(options_[j].entry);
-        dealt.push_back(options_[j].dealt);
-        if (options_[j].dealt > options_[top].dealt)
+        const Option& o = options_[j];
+        tried.push_back(o.entry);
+        dealt.push_back(o.dealt);
+        ends.push_back(o.recovered ? 2 : o.down ? 1 : 0);
+        worth[j] = o.dealt + (o.down && !o.recovered ? ending : 0.0f);
+        best = std::max(best, o.dealt);
+        if (worth[j] > worth[top])
             top = j;
     }
-    best = options_[top].dealt;
     own = options_[n - 1].dealt;
-    chosen = top + 1 < n && options_[top].dealt > own ? (int)top : -1;
+    chosen = top + 1 < n && worth[top] > worth[n - 1] ? (int)top : -1;
     route.clear();
     if (chosen >= 0 && options_[top].entry == kExtra) {
         route = extra_;

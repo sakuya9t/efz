@@ -73,7 +73,7 @@ from .agent import load_config
 MAGIC = b'EFZAGENT'
 FORMAT = 2
 # The modules this exporter writes, each's version (port/agent/policy.h's kModules).
-MODULES = {'policy': 1, 'routes': 1, 'chooser': 1}
+MODULES = {'policy': 1, 'routes': 1, 'chooser': 1, 'okiplan': 1, 'pressplan': 1}
 TRAIN = 1  # the training part's version (key train)
 # PPO's settings a file keeps (train.sb3) and unpack_agent makes the model with.
 HYPER = ('n_steps', 'batch_size', 'n_epochs', 'gamma', 'gae_lambda', 'ent_coef', 'vf_coef',
@@ -114,6 +114,204 @@ def load_routes(path):
                         kept_for=m.get('kept_for'), damage=m.get('damage'),
                         marks=marks.get(str(k), []), actions=acts))
     return out
+
+
+# The planned okizeme as the game plays it (port/agent/mix.h; runs/human-ayu/okiplan.py with
+# after='guard'): fewer options and a shorter look than an evaluation's, what a frame's
+# spare time affords.
+OKI_OPTIONS = dict(per_plan=6, per_class=2, window=45, wait=40, tolerance=24,
+                   temperature=200.0, doubt=0.0, hit_worth=1300.0, hurt_worth=1200.0,
+                   prior=6.0, decay=0.7, skip=0.0, think=0)
+WAKE_HOLD = 3  # runs/human-ayu/advantages.py's: the steps a riser's reversal button is held
+
+
+def answers_path(library):
+    """Where an okizeme library's answers are (oki_library.py --answers writes them): the
+    risers' reversals by character and the moves that are invincible from their start."""
+    return os.path.splitext(os.fspath(library))[0] + '.answers.json'
+
+
+def load_oki(path):
+    """runs/human-ayu/oki_library.py's entries, their inputs as an agent's actions: dicts
+    with actions, dist, air (per step), rise, move_at, cls, opponent, corner."""
+    from .history import action_labels
+    table = ActionTable()
+    lib = np.load(os.path.expanduser(os.fspath(path)))
+    out = []
+    for k, m in enumerate(json.loads(str(lib['meta']))):
+        inputs = lib[f'inputs{k}']
+        acts = action_labels(np.concatenate([[m.get('prev', 0)], inputs]).astype(np.uint8),
+                             table)[1:]
+        cls = 'throw' if m['height'] == 'throw' else \
+            f"{m['way']} {m['height']}" + (' cross' if m['cross'] else '')
+        out.append(dict(m, actions=acts.astype(np.int64), dist=lib[f'dist{k}'],
+                        air=lib[f'air{k}'], cls=cls))
+    return out
+
+
+def _oki_parts(entries, answers, options, history, delay, frame_skip):
+    """The planned okizeme's keys and tensors for the agent file. entries: load_oki's (or
+    dicts like them); answers: {'wake': {character: [[directions, button, needs], ...]},
+    'invincible': {character: [actions]}} (answers_path's file); options: OKI_OPTIONS'
+    keys."""
+    from .actions import encode
+    from .vec import character_names
+    if frame_skip != 1 or delay <= 0 or history <= 0:
+        raise ValueError('okiplan: an agent deciding every frame (frame_skip 1), with a delay '
+                         'and its input history')
+    unknown = sorted(set(options) - set(OKI_OPTIONS))
+    if unknown:
+        raise ValueError(f"okiplan: no option {', '.join(unknown)} in the game's planner "
+                         f"({', '.join(OKI_OPTIONS)})")
+    o = dict(OKI_OPTIONS, **options)
+    names = character_names()
+    kinds = []
+    for m in entries:
+        if m['cls'] not in kinds:
+            kinds.append(m['cls'])
+    if any('|' in k or '\n' in k for k in kinds):
+        raise ValueError('okiplan: a kind with | or a line break in its name')
+    lengths = [len(m['actions']) for m in entries]
+    for m in entries:
+        if not (len(m['dist']) == len(m['air']) == len(m['actions'])):
+            raise ValueError("okiplan: an entry's dist and air aren't its actions' length")
+    wake_char, wake_needs, wake_press, wake_bytes = [], [], [], []
+    for char, moves in (answers.get('wake') or {}).items():
+        if char not in names:
+            continue
+        for dirs, button, needs in moves:
+            wake_char.append(names.index(char))
+            wake_needs.append({None: 0, 'bar': 1, 'rf': 2}[needs])
+            wake_press.append(len(dirs) - 1)
+            wake_bytes.append([encode(int(d)) for d in dirs[:-1]] +
+                              [encode(int(dirs[-1]), button)] * WAKE_HOLD)
+    inv = [(names.index(c), int(a)) for c, acts in (answers.get('invincible') or {}).items()
+           if c in names for a in acts]
+    keys = {
+        'oki_entries': len(entries),
+        'oki_kinds': '|'.join(kinds),
+        **{f'oki_{k}': (int(v) if isinstance(OKI_OPTIONS[k], int) else repr(float(v)))
+           for k, v in o.items()},
+    }
+    cat = lambda xs, dtype: (np.concatenate([np.asarray(x, dtype) for x in xs])
+                             if len(xs) else np.zeros(0, dtype))
+    tensors = [
+        ('oki.offset', np.concatenate([[0], np.cumsum(lengths)]), True),
+        ('oki.actions', cat([m['actions'] for m in entries], np.uint8), 'u8'),
+        ('oki.dist', cat([m['dist'] for m in entries], np.int32), True),
+        ('oki.air', cat([m['air'] for m in entries], np.uint8), 'u8'),
+        ('oki.rise', [int(m['rise']) for m in entries], True),
+        ('oki.move_at', [int(m['move_at']) for m in entries], True),
+        ('oki.kind', [kinds.index(m['cls']) for m in entries], True),
+        ('oki.victim', [names.index(m['opponent']) if m['opponent'] in names else -1
+                        for m in entries], True),
+        ('oki.corner', [int(bool(m['corner'])) for m in entries], True),
+        ('oki.wake.character', np.asarray(wake_char, np.int32), True),
+        ('oki.wake.needs', np.asarray(wake_needs, np.int32), True),
+        ('oki.wake.press', np.asarray(wake_press, np.int32), True),
+        ('oki.wake.offset', np.concatenate([[0], np.cumsum([len(b) for b in wake_bytes])]), True),
+        ('oki.wake.bytes', cat(wake_bytes, np.uint8), 'u8'),
+        ('oki.invincible.character', np.asarray([c for c, _ in inv], np.int32), True),
+        ('oki.invincible.action', np.asarray([a for _, a in inv], np.int32), True),
+    ]
+    return keys, tensors
+
+
+# The planned pressure as the game plays it (port/agent/mix.h's Press; runs/human-ayu/
+# pressplan.py with live=true, after='guard'): a plan has the frames of the delay and no
+# more.
+PRESS_OPTIONS = dict(per_plan=4, per_class=2, window=40, wait=24, tolerance=16, slack=2,
+                     near=160, max_wait=20, temperature=200.0, doubt=0.3, hit_worth=1300.0,
+                     hurt_worth=1200.0, prior=8.0, skip=0.05)
+MASH = 12  # runs/human-ayu/advantages.py's: the times a reversal's button is pressed again
+
+
+def load_press(path):
+    """runs/human-ayu/pressure_library.py's entries, their inputs as an agent's actions:
+    dicts with actions, cls, adv, distance, corner, opponent."""
+    from .history import action_labels
+    table = ActionTable()
+    lib = np.load(os.path.expanduser(os.fspath(path)))
+    inputs, ends = lib['inputs'], np.cumsum(lib['lengths'])
+    out = []
+    for k, m in enumerate(json.loads(str(lib['meta']))):
+        x = inputs[ends[k] - lib['lengths'][k]:ends[k]]
+        acts = action_labels(np.concatenate([[m.get('prev', 0)], x]).astype(np.uint8), table)[1:]
+        out.append(dict(m, actions=acts.astype(np.int64)))
+    return out
+
+
+def _reversal_tensors(prefix, moves, names, hold):
+    """A character's reversals as tensors (mix.h's Mix::Reversal): moves {character:
+    [[directions, button, needs], ...]}; hold: the button's bytes after the motion
+    (the last direction with it, `hold` times; or with MASH: then without and with it,
+    MASH times)."""
+    from .actions import encode
+    chars, needs_, press, seqs = [], [], [], []
+    for char, ms in (moves or {}).items():
+        if char not in names:
+            continue
+        for dirs, button, needs in ms:
+            last = int(dirs[-1])
+            tail = ([encode(last, button)] * hold if hold else
+                    [encode(last, button)] + [encode(last), encode(last, button)] * MASH)
+            chars.append(names.index(char))
+            needs_.append({None: 0, 'bar': 1, 'rf': 2}[needs])
+            press.append(len(dirs) - 1)
+            seqs.append([encode(int(d)) for d in dirs[:-1]] + tail)
+    flat = np.concatenate([np.asarray(b, np.uint8) for b in seqs]) if seqs else np.zeros(0, np.uint8)
+    return [(prefix + 'character', np.asarray(chars, np.int32), True),
+            (prefix + 'needs', np.asarray(needs_, np.int32), True),
+            (prefix + 'press', np.asarray(press, np.int32), True),
+            (prefix + 'offset', np.concatenate([[0], np.cumsum([len(b) for b in seqs])]), True),
+            (prefix + 'bytes', flat, 'u8')]
+
+
+def _press_parts(entries, answers, options, history, delay, frame_skip):
+    """The planned pressure's keys and tensors for the agent file. entries: load_press's
+    (or dicts like them); answers: {'reversal': {character: [[directions, button, needs],
+    ...]}, 'invincible': {character: [actions]}} (answers_path's file,
+    pressure_library.py --answers); options: PRESS_OPTIONS' keys."""
+    from .vec import character_names
+    if frame_skip != 1 or delay <= 0 or history <= 0:
+        raise ValueError('pressplan: an agent deciding every frame (frame_skip 1), with a '
+                         'delay and its input history')
+    unknown = sorted(set(options) - set(PRESS_OPTIONS))
+    if unknown:
+        raise ValueError(f"pressplan: no option {', '.join(unknown)} in the game's planner "
+                         f"({', '.join(PRESS_OPTIONS)})")
+    o = dict(PRESS_OPTIONS, **options)
+    names = character_names()
+    kinds = []
+    for m in entries:
+        if m['cls'] not in kinds:
+            kinds.append(m['cls'])
+    if any('|' in k or '\n' in k for k in kinds):
+        raise ValueError('pressplan: a kind with | or a line break in its name')
+    lengths = [len(m['actions']) for m in entries]
+    inv = [(names.index(c), int(a)) for c, acts in (answers.get('invincible') or {}).items()
+           if c in names for a in acts]
+    keys = {
+        'press_entries': len(entries),
+        'press_kinds': '|'.join(kinds),
+        **{f'press_{k}': (int(v) if isinstance(PRESS_OPTIONS[k], int) else repr(float(v)))
+           for k, v in o.items()},
+    }
+    tensors = [
+        ('press.offset', np.concatenate([[0], np.cumsum(lengths)]), True),
+        ('press.actions', np.concatenate([np.asarray(m['actions'], np.uint8) for m in entries])
+         if entries else np.zeros(0, np.uint8), 'u8'),
+        ('press.adv', [int(m['adv']) for m in entries], True),
+        ('press.distance', [int(round(float(m['distance']))) for m in entries], True),
+        ('press.kind', [kinds.index(m['cls']) for m in entries], True),
+        ('press.victim', [names.index(m['opponent']) if m['opponent'] in names else -1
+                          for m in entries], True),
+        ('press.corner', [int(bool(m['corner'])) for m in entries], True),
+        *_reversal_tensors('press.rev.', answers.get('reversal'), names, 0),
+        ('press.invincible.character', np.asarray([c for c, _ in inv], np.int32), True),
+        ('press.invincible.action', np.asarray([a for _, a in inv], np.int32), True),
+    ]
+    return keys, tensors
 
 
 def marks_path(library):
@@ -162,7 +360,8 @@ def _tensor(name, array, integer=False):
             struct.pack(f'<{a.ndim}I', *a.shape) + a.tobytes())
 
 
-def _route_parts(routes, victims, history, delay, frame_skip, replan=False, per_start=None):
+def _route_parts(routes, victims, history, delay, frame_skip, replan=False, per_start=None,
+                 ending=0):
     """The routes' keys and tensors for the agent file."""
     from .vec import character_names
     if frame_skip != 1 or delay <= 0 or history <= 0:
@@ -192,6 +391,7 @@ def _route_parts(routes, victims, history, delay, frame_skip, replan=False, per_
         'route_by_victim': int(any(m.get('kept_for') == 'victim' for m in routes)),
         'route_victims': ','.join(str(names.index(v)) for v in victims or []),
         'route_replan': int(bool(replan)),
+        'route_ending': int(ending or 0),
         'route_pool': len(pool),
     }
     tensors = [
@@ -419,13 +619,17 @@ def _modules(keys, fmt):
 
 def _carried(path, keep):
     """The parts of the agent file `path` another file takes as they are (keep: of
-    'routes', 'chooser'): (modules, keys, tensors as _tensor takes them)."""
+    'routes', 'chooser', 'okiplan'): (modules, keys, tensors as _tensor takes them)."""
     fmt, keys, tensors = read_agent(path)
     has = _modules(keys, fmt)
     modules, out_keys, out_tensors = [], {}, []
     prefixes = {'routes': ('routes', 'route_', 'source.library', 'source.marks'),
-                'chooser': ('chooser_', 'source.chooser')}
-    for part in ('routes', 'chooser'):
+                'chooser': ('chooser_', 'source.chooser'),
+                'okiplan': ('oki_', 'source.okizeme'),
+                'pressplan': ('press_', 'source.pressure')}
+    named = {'okiplan': 'oki.', 'pressplan': 'press.'}  # (its tensors' prefix, where it
+    #                                                      isn't the part's name)
+    for part in ('routes', 'chooser', 'okiplan', 'pressplan'):
         if part not in keep or part not in has:
             continue
         if part == 'chooser' and 'routes' not in modules:
@@ -435,7 +639,7 @@ def _carried(path, keep):
             if k == part or any(k.startswith(x) for x in prefixes[part]):
                 out_keys[k] = v
         for name, a in tensors.items():
-            if name.startswith(part + '.'):
+            if name.startswith(named.get(part, part + '.')):
                 out_tensors.append((name, a, 'u8' if a.dtype == np.uint8 else
                                     a.dtype.kind == 'i'))
     return modules, out_keys, out_tensors
@@ -494,7 +698,9 @@ def _one_line(v):
 def export_agent(model_path, out_path, name=None, character=None, check=True, library=None,
                  victims=None, replan=False, per_start=None, chooser=None,
                  margin=CHOOSER_MARGIN, version=None, sources=None, dropped=(), train=True,
-                 optimizer=False, parts_from=None, keep=('routes', 'chooser')):
+                 optimizer=False, parts_from=None,
+                 keep=('routes', 'chooser', 'okiplan', 'pressplan'),
+                 ending=0, okiplan=None, pressplan=None):
     """Writes model_path (a model.zip, with its config.json) as an agent file at out_path.
     name: what the game shows (default: the model's folder for avg.zip / model.zip, else
     its file name). character: the one it plays (a name or 0-24; default the first of
@@ -502,7 +708,14 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
     beside it if they are there; or load_routes's list) whose routes the game plays the
     agent's combos from, as play.py --assist does; victims: the characters it plans
     against (play.py --assist-victims; None all); replan: planned again at each new move's
-    hit (round 15b's); per_start: the routes tried a plan (default 12, replanning 24).
+    hit (round 15b's); per_start: the routes tried a plan (default 12, replanning 24);
+    ending: the HP a knockdown at a combo's end is worth over any other end (0: damage
+    alone; redteam.Planner's ending, port/agent/routes.h).
+    okiplan: its planned okizeme (the module okiplan:1, port/agent/mix.h): {'library': an
+    okizeme library (oki_library.py's .npz, its .answers.json beside it) or its entries,
+    'answers': those answers if not from the file, and OKI_OPTIONS' keys}. pressplan: its
+    planned pressure (pressplan:1), the same with a pressure library
+    (pressure_library.py's) and PRESS_OPTIONS' keys.
     chooser: combo_net.py's chooser.pt for that agent and library, played when a combo's
     first plan is late; margin: what a route it picks must promise beyond the agent's own
     play (HP). version: what the game shows beside the name. sources: {part: (label,
@@ -511,8 +724,8 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
     train: the file carries its training part too (the critic, config.json, PPO's
     settings), so that it can be unpacked and trained further (unpack_agent); optimizer:
     Adam's moments as well (three times the size: a fine-tune starts well without).
-    parts_from: an agent file whose routes and chooser (keep: which) go into this one as
-    they are, for a model without its library at hand: a packed agent trained further.
+    parts_from: an agent file whose routes, chooser and planned okizeme (keep: which) go
+    into this one as they are, for a model without its library at hand: a packed agent trained further.
     check: run the file in the library and compare it with the model: {'policy': the
     largest difference of the log-probabilities, 'chooser': of the chooser's values (HP),
     None without one; 'routes', 'pool': the file's as the library reads them} (None if not
@@ -543,8 +756,13 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         carried = _carried(parts_from, keep)
     features, feature_tensors, activation, layers, out = _actor(policy)
     from .policy import OPP_ACTION, OPP_CHAR, SELF_ACTION, SELF_CHAR, ACTIONS, CHARACTERS
+    for part, given in (('okiplan', okiplan), ('pressplan', pressplan)):
+        if given is not None and part in carried[0]:
+            raise ValueError(f"parts_from: that file's {part}, or a library given for it, not "
+                             "both (keep says which of its parts)")
     modules = (['policy'] + ['routes'] * (library is not None) +
-               ['chooser'] * (chooser is not None) + carried[0])
+               ['chooser'] * (chooser is not None) + carried[0] +
+               ['okiplan'] * (okiplan is not None) + ['pressplan'] * (pressplan is not None))
     keys = {
         'modules': ','.join(f'{m}:{MODULES[m]}' for m in modules),
         'name': _one_line(name),
@@ -570,7 +788,8 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         routes = load_routes(library) if isinstance(library, (str, os.PathLike)) else library
         route_keys, route_tensors = _route_parts(routes, victims, keys['history'],
                                                  keys['delay'], keys['frame_skip'],
-                                                 replan=replan, per_start=per_start)
+                                                 replan=replan, per_start=per_start,
+                                                 ending=ending)
         keys.update(route_keys)
         if isinstance(library, (str, os.PathLike)):
             keys['route_source'] = os.path.basename(os.fspath(library))
@@ -578,6 +797,38 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         chooser_keys, chooser_tensors, chooser_values = _chooser_parts(model, chooser, routes,
                                                                        margin)
         keys.update(chooser_keys)
+    oki_tensors = []
+    if okiplan is not None:
+        spec = dict(okiplan)
+        oki_library, answers = spec.pop('library'), spec.pop('answers', None)
+        from_file = isinstance(oki_library, (str, os.PathLike))
+        if answers is None:
+            if not from_file or not os.path.exists(answers_path(oki_library)):
+                raise ValueError("okiplan: the library's answers (oki_library.py --answers "
+                                 'writes its .answers.json)')
+            answers = json.load(open(answers_path(oki_library)))
+        oki_keys, oki_tensors = _oki_parts(load_oki(oki_library) if from_file else oki_library,
+                                           answers, spec, keys['history'], keys['delay'],
+                                           keys['frame_skip'])
+        keys.update(oki_keys)
+        if from_file:
+            keys['oki_source'] = os.path.basename(os.fspath(oki_library))
+    if pressplan is not None:
+        spec = dict(pressplan)
+        press_library, answers = spec.pop('library'), spec.pop('answers', None)
+        from_file = isinstance(press_library, (str, os.PathLike))
+        if answers is None:
+            if not from_file or not os.path.exists(answers_path(press_library)):
+                raise ValueError("pressplan: the library's answers (pressure_library.py "
+                                 '--answers writes its .answers.json)')
+            answers = json.load(open(answers_path(press_library)))
+        press_keys, press_tensors = _press_parts(
+            load_press(press_library) if from_file else press_library, answers, spec,
+            keys['history'], keys['delay'], keys['frame_skip'])
+        keys.update(press_keys)
+        oki_tensors = oki_tensors + press_tensors
+        if from_file:
+            keys['press_source'] = os.path.basename(os.fspath(press_library))
     if carried[0]:
         if 'routes' in carried[0] and (keys['frame_skip'] != 1 or keys['delay'] <= 0 or
                                        keys['history'] <= 0):
@@ -600,6 +851,12 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
                                     sha256(marks_path(library)))
         if chooser is not None:
             sources['chooser'] = (os.path.basename(os.fspath(chooser)), sha256(chooser))
+        if okiplan is not None and isinstance(okiplan.get('library'), (str, os.PathLike)):
+            sources['okizeme'] = (os.path.basename(os.fspath(okiplan['library'])),
+                                  sha256(okiplan['library']))
+        if pressplan is not None and isinstance(pressplan.get('library'), (str, os.PathLike)):
+            sources['pressure'] = (os.path.basename(os.fspath(pressplan['library'])),
+                                   sha256(pressplan['library']))
     for part, (label, digest) in sources.items():
         keys.setdefault(f'source.{part}', _one_line(f'{label} sha256:{digest}'))
     keys['exporter'] = _one_line(exporter())
@@ -611,7 +868,8 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
     for k, (w, b) in enumerate(layers):
         tensors += [(f'pi.{k}.weight', w, False), (f'pi.{k}.bias', b, False)]
     tensors += [('action.weight', out[0], False), ('action.bias', out[1], False)]
-    tensors += route_tensors + chooser_tensors + train_tensors
+    tensors += route_tensors + chooser_tensors + [(n, a, i) for n, a, i in oki_tensors] + \
+        train_tensors
     blob = [MAGIC, struct.pack('<I', FORMAT), struct.pack('<I', len(text)), text,
             struct.pack('<I', len(tensors))] + [_tensor(*t) for t in tensors]
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
@@ -711,7 +969,7 @@ def pack_name(path):
 
 def export_pack(path, out_path=None, name=None, version=None, character=None, drop=(),
                 replan=None, per_start=None, check=True, log=print, train=True,
-                optimizer=False):
+                optimizer=False, ending=None):
     """Writes a pack (read_pack) as one agent file: its model, its library's routes with
     their join points, its chooser, as its play.py plays them (an agent.json says how;
     without one, round 15b's packs' way when the library has join points: planned again at
@@ -800,6 +1058,8 @@ def export_pack(path, out_path=None, name=None, version=None, character=None, dr
             replan = bool(options.get('replan', marks is not None)) if library else False
         if per_start is None:
             per_start = options.get('per_start')
+        if ending is None:
+            ending = options.get('ending', 0)
         if model not in kinds:
             raise ValueError(f'{os.path.basename(path)}: its agent.json names the model {model}, '
                              f'which it hasn\'t got')
@@ -857,7 +1117,7 @@ def export_pack(path, out_path=None, name=None, version=None, character=None, dr
                               per_start=per_start, chooser=chooser_file,
                               margin=float(options.get('margin', CHOOSER_MARGIN)),
                               version=version, sources=sources, dropped=dropped,
-                              train=train, optimizer=optimizer)
+                              train=train, optimizer=optimizer, ending=ending)
     for n, f in fate.items():
         log(f'  {n}: {f}')
     return out_path, result, fate
@@ -1045,6 +1305,7 @@ def unpack_agent(path, out_dir, check=True):
                        optimizer=bool(adam),
                        routes=dict(per_start=int(keys.get('route_per_start', 0) or 0),
                                    replan=bool(int(keys.get('route_replan', 0) or 0)),
+                                   ending=int(keys.get('route_ending', 0) or 0),
                                    victims=keys.get('route_victims', ''))
                        if 'routes.starter' in tensors else None), f, indent=1)
     result = dict(model=model_path, config=config_path, library=library_path,
@@ -1133,8 +1394,117 @@ class NativeAgent:
         self.format = info.format
         self.version = info.version.decode(errors='replace')
         self.modules = info.modules.decode(errors='replace')
+        # (its planned okizeme's entries; a library built before it: none)
+        self.oki = int(lib.efz_env_agent_oki_entries(self._h)) \
+            if hasattr(lib, 'efz_env_agent_oki_entries') else 0
+        self.press = int(lib.efz_env_agent_press_entries(self._h)) \
+            if hasattr(lib, 'efz_env_agent_press_entries') else 0
         self.deterministic = deterministic
         self.reset(seed)
+
+    def oki_plan(self, env, index, side, history, prev, shares, seen=None, actions=(),
+                 deterministic=True, seed=0):
+        """The game's okizeme planner (port/agent/mix.h) at the opponent's knockdown in
+        `env`'s environment `index`, which is left as it was. actions: the agent's inputs
+        for the steps until the plan is played (none: from the game as it is); history
+        (H, 6), prev: its input history after them; shares: of okiplan.ANSWERS; seen: its
+        views then ((delay + 1, dim), newest first), or None: those of the steps `actions`
+        are played on. A dict: outcome ('planned', 'nothing', 'apart'), lead, entries (the
+        library's tried), kinds (each option's: the library's kinds' numbers, 'wait',
+        'own'), worth and first ((options, 5)), expected, mix, chosen, option (the drawn
+        option's actions; empty: its own play), frames, ms."""
+        env._finish()
+        acts = np.ascontiguousarray(actions, np.int32)
+        hist = np.ascontiguousarray(history, np.float32).reshape(-1)
+        sh = np.ascontiguousarray(shares, np.float64)
+        views = None if seen is None else np.ascontiguousarray(seen, np.float32)
+        out = _native.OkiPlan()
+        r = self._lib.efz_env_agent_oki_plan(self._h, env._h, int(index), int(side),
+                                             acts.ctypes.data, len(acts), hist.ctypes.data,
+                                             int(prev), int(bool(deterministic)), int(seed),
+                                             sh.ctypes.data,
+                                             None if views is None else views.ctypes.data,
+                                             ctypes.byref(out))
+        if r != 0:
+            raise ValueError(f'efz_env_agent_oki_plan: {self._lib.efz_env_error(env._h).decode()}')
+        return self._mix_plan(out)
+
+    @staticmethod
+    def _mix_plan(out):
+        n = out.options
+        names = {-1: 'wait', -2: 'own'}
+        return dict(outcome={1: 'planned', 2: 'nothing', 3: 'apart'}.get(out.outcome, 'none'),
+                    lead=out.lead, adv=out.adv, waited=out.waited,
+                    entries=[int(e) for e in out.entry[:max(0, n - 2)]],
+                    kinds=[names.get(k, int(k)) for k in out.kind[:n]],
+                    worth=np.array(out.worth[:n * 5]).reshape(n, 5),
+                    first=np.array(out.first[:n * 5]).reshape(n, 5),
+                    expected=np.array(out.expected[:n]), mix=np.array(out.mix[:n]),
+                    chosen=int(out.chosen), option=np.array(out.option[:out.option_size], np.int64),
+                    view=np.array(out.view, np.float32), frames=out.frames, ms=out.ms)
+
+    def press_plan(self, env, index, side, actions, history, prev, shares, hold,
+                   deterministic=True, seed=0):
+        """The game's pressure planner (port/agent/mix.h's BeginPress) on the step a move of
+        the agent's touches the opponent's guard in `env`'s environment `index`, which is
+        left as it was. actions: the agent's inputs for the steps until it sees the guard;
+        history (H, 6), prev: its input history before them; shares: of the answers; hold:
+        the control byte the opponent holds meanwhile. As oki_plan's dict, with adv (the
+        frame advantage planned at), waited (the steps of guard before the follow-up:
+        the first of `option`) and view (the agent's view after `actions`)."""
+        env._finish()
+        acts = np.ascontiguousarray(actions, np.int32)
+        hist = np.ascontiguousarray(history, np.float32).reshape(-1)
+        sh = np.ascontiguousarray(shares, np.float64)
+        out = _native.OkiPlan()
+        r = self._lib.efz_env_agent_press_plan(self._h, env._h, int(index), int(side),
+                                               acts.ctypes.data, len(acts), hist.ctypes.data,
+                                               int(prev), int(bool(deterministic)), int(seed),
+                                               sh.ctypes.data, int(hold), ctypes.byref(out))
+        if r != 0:
+            raise ValueError(f'efz_env_agent_press_plan: {self._lib.efz_env_error(env._h).decode()}')
+        return self._mix_plan(out)
+
+    def press_shares(self, prior=8.0):
+        """The answers' shares after a guard, from its counts (counts()) over the prior."""
+        s = np.zeros(5, np.float64)
+        self._lib.efz_env_agent_press_shares(self._h, float(prior), s.ctypes.data)
+        return s
+
+    def attach(self, env, index=0, side=0, seed=0):
+        """Plays player `side` of `env`'s environment `index` as the game's agent does: its
+        routes and its okizeme planned on copies of that environment, each plan worked to
+        its end on the step that needs it. From then on step() takes that player's view of
+        the environment as it is, before the env.step its control byte goes into; reset()
+        starts a match. env None: detached. Keep the environment open while attached."""
+        env_h = None
+        if env is not None:
+            env._finish()
+            env_h = env._h
+        if self._lib.efz_env_agent_attach(self._h, env_h, int(index), int(side), int(seed)) != 0:
+            raise ValueError(f'efz_env_agent_attach: {self._lib.efz_env_error(env._h).decode()}')
+        self._attached = env  # (kept alive)
+
+    def stats(self):
+        """An attached agent's plans this match: the routes' (plans, routes chosen) and the
+        okizeme's (asked, plans, played, late, elsewhere, nothing, apart, frames)."""
+        v = (ctypes.c_int32 * 24)()
+        self._lib.efz_env_agent_stats(self._h, v)
+        names = ('route_plans', 'routes', 'oki_asked', 'oki_plans', 'oki_played', 'oki_late',
+                 'oki_elsewhere', 'oki_nothing', 'oki_apart', 'oki_frames', 'route_ms', 'oki_ms',
+                 'route_dropped', 'press_asked', 'press_plans', 'press_played', 'press_late',
+                 'press_elsewhere', 'press_nothing', 'press_apart', 'press_frames', 'press_ms')
+        return dict(zip(names, [int(x) for x in v]))
+
+    def counts(self, view=None, mode=0, prior=6.0):
+        """Its counts of the opponent (port/agent/mix.h's Counts): mode 0 takes `view` (the
+        agent's), 1 forgets everything, 2 ends a match against the same opponent. Returns
+        (the 12 counts, the answers' shares for `prior`)."""
+        c, s = np.zeros(12, np.float32), np.zeros(5, np.float64)
+        v = None if view is None else np.ascontiguousarray(view, np.float32)
+        self._lib.efz_env_agent_counts(self._h, None if v is None else v.ctypes.data,
+                                       int(mode), float(prior), c.ctypes.data, s.ctypes.data)
+        return c, s
 
     def log_probs(self, views):
         """(n, width) views -> (n, actions) log-probabilities."""
