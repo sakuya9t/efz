@@ -221,7 +221,7 @@ bool g_fast = false;
 const double kPatienceLocal = 40, kPatienceNet = 8, kPatienceAgain = 8;
 
 const unsigned char kRight = 0x01, kLeft = 0x02, kDown = 0x04, kUp = 0x08, kA = 0x10, kC = 0x40;
-const int kDikF5 = 0x3f, kDikF6 = 0x40;
+const int kDikF5 = 0x3f, kDikF6 = 0x40, kDikLShift = 0x2a, kDikRShift = 0x36;
 const int kVsHuman = 4;   // CGame::m_gameMode
 const int kSelectWait = 3; // frames between character select presses, at the least
 
@@ -515,14 +515,19 @@ unsigned char FightInput(Side& s, int side)
     return ToScreen(s.player->Step(view, seen && actionable), facing);
 }
 
-void Cycle(int side)
+// F5/F6: the side's next player, `step` 1 (on through the agents) or -1 (Shift: back),
+// the person between the last agent and the first.
+void Cycle(int side, int step)
 {
     Scan();
     Side& s = g_sides[side];
+    int count = (int)g_agents.size();
     int at = s.path.empty() ? -1 : IndexOf(s.path);
     std::string error;
-    for (int next = at + 1;; next++) {
-        if (next >= (int)g_agents.size()) {
+    for (int next = at + step;; next += step) {
+        if (next < -1)
+            next = count - 1;
+        if (next < 0 || next >= count) {
             Choose(&s, "", &error, side);
             Note(std::string(side ? "P2" : "P1") + ": a person");
             return;
@@ -589,10 +594,11 @@ void AgentsFrame()
     int scene = *o.scene;
     bool vs = o.game && o.game->m_gameMode == kVsHuman;
     const unsigned char* keys = KeyboardState();
+    bool shift = ((keys[kDikLShift] | keys[kDikRShift]) & 0x80) != 0;
     for (int k = 0; k < 2; k++) {
         bool down = (keys[k ? kDikF6 : kDikF5] & 0x80) != 0;
         if (down && !g_keyDown[k] && scene == 1 && vs)
-            Cycle(k);
+            Cycle(k, shift ? -1 : 1);
         g_keyDown[k] = down;
     }
     if (scene == 3 && g_lastScene != 3)
@@ -705,7 +711,7 @@ void DrawAgents(SDL_Renderer* r)
         if (scene == 1) {
             std::string hint = g_agents.empty()
                                    ? "Agents: put .efzagent files in the game's agents folder"
-                                   : "F5 / F6: P1 / P2 played by an agent";
+                                   : "F5 / F6: P1 / P2 played by an agent (Shift: back)";
             Text(r, 320 - Width(hint, 1) / 2, 468, hint, 1, kGrey);
         }
     }

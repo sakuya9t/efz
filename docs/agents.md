@@ -139,8 +139,10 @@ python python/examples/export_agent.py runs/mine/avg.zip --parts-from agents/ayu
 
 On the title, VS HUMAN, then on character select:
 
-- **F5** switches who plays P1: you, then each agent in the folders in turn, then you
-  again. **F6** does the same for P2. The bottom of the screen says who plays each side.
+- **F5** switches who plays P1: you, then each agent in the folders in turn (by the name
+  in the file), then you again. **F6** does the same for P2. **Shift+F5** and
+  **Shift+F6** go the other way, so the last agent is one press from you. The bottom of
+  the screen says who plays each side.
 - An agent's side picks its own character (the one it was trained to play) by moving the
   cursor and pressing A, and keeps the colour it lands on. The stage is yours to pick.
 - With P1 an agent, you play P2 with P1's controls (your usual keys) as well as P2's.

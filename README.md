@@ -215,7 +215,8 @@ A trained agent plays in the game too: export it (`python python/examples/export
 PACK.zip`, the whole pack in one file: its model, its combo library's routes and their
 join points, its chooser, played as the pack's `play.py --assist` plays them; or
 `MODEL.zip`), put the `.efzagent` file in the game's `agents`
-folder, and on VS HUMAN's character select F5 or F6 has it play P1 or P2; NET PLAY's
+folder, and on VS HUMAN's character select F5 or F6 has it play P1 or P2 (Shift+F5 and
+Shift+F6 go back through the agents); NET PLAY's
 PLAYED BY has it play your side of a network match ([docs/agents.md](docs/agents.md)).
 
 ## The headless game

@@ -1,12 +1,12 @@
 // Trained agents in the native game (port/agent/play.cpp, docs/agents.md): an agent file
 // (.efzagent, python/examples/export_agent.py) in the `agents` folder of the game's
 // folder or of its save folder plays a side of VS HUMAN, chosen on character select
-// (F5 for P1, F6 for P2), or this computer's side of a network match (NET PLAY's PLAYED
-// BY). It plays through the controls only, a control byte a frame as a person's, so the
-// game, its replays and the other side of a network match see nothing else. An agent
-// file with routes (a combo library) plans its combos on copies of the fight in the
-// time between frames (agent/routes.h), as play.py --assist does; the copies' frames
-// are heard, drawn, recorded and sent nowhere.
+// (F5 for P1, F6 for P2; with Shift, back), or this computer's side of a network match
+// (NET PLAY's PLAYED BY). It plays through the controls only, a control byte a frame as
+// a person's, so the game, its replays and the other side of a network match see
+// nothing else. An agent file with routes (a combo library) plans its combos on copies
+// of the fight in the time between frames (agent/routes.h), as play.py --assist does;
+// the copies' frames are heard, drawn, recorded and sent nowhere.
 #ifndef EFZ_AGENTS_H
 #define EFZ_AGENTS_H
 
@@ -27,7 +27,7 @@ struct AgentOptions {
 };
 void InitAgents(const AgentOptions& options);
 // main.cpp, each frame before the scene's update, out of netplay: the agents' inputs of
-// the frame, and F5/F6 on character select.
+// the frame, and F5/F6 (Shift+F5/F6) on character select.
 void AgentsFrame();
 // input.cpp's CInput::GetInput out of netplay: an agent's side gets its input instead of
 // the controls'; with one side an agent, the other side's player may use P1's controls.

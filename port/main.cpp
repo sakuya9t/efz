@@ -39,7 +39,8 @@
 //
 // Agents (docs/agents.md): an agent file (.efzagent) in the agents folder of the game's
 // folder or of the save folder plays a side of VS HUMAN, chosen on character select (F5
-// for P1, F6 for P2), or this computer's side of a network match.
+// for P1, F6 for P2; with Shift, back through the agents), or this computer's side of a
+// network match.
 //   --agent-p1 FILE, --agent-p2 FILE
 //                     VS HUMAN's P1 or P2 played by the agent file FILE from the start
 //
