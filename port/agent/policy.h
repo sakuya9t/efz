@@ -40,6 +40,8 @@
 // okiplan:1, its okizeme planned from a library of people's (mix.h, which has its keys and
 //   tensors).
 // pressplan:1, its pressure after a guarded move planned from another (mix.h's Press).
+// airthrow:1, an air throw of an opponent that recovers in the air out of its combo, when
+//   one catches inside the recovery (mix.h's Catch; key air_near).
 //
 // Keys of no module say where the file came from (version, source.*, exporter, exported,
 // dropped): the menus show the version, the log the rest. A file may also carry what a game
@@ -162,6 +164,7 @@ public:
     Chooser chooser;    // its routes' chooser; empty: none
     Mix mix;            // its planned okizeme's library (mix.h); empty: none
     Press press;        // its planned pressure's (mix.h); empty: none
+    Catch air;          // its catch of an air recovery (mix.h); off: none
     int format = 0;
     std::string modules; // as "policy:1,routes:1"
     std::string version; // the version it was exported as (empty: none given)
@@ -250,6 +253,12 @@ public:
     // guard chosen at once, then a crouching guard until it is free, then the follow-up
     // drawn.
     const OkiStats& Pressure() const { return press_; }
+    // Its catches' (the module airthrow:1): asked, the opponent's air recoveries out of
+    // its combos planned from, on the frame they begin (its inputs for the `delay` frames
+    // until it sees one chosen at once); plans and played, those with an air throw that
+    // catches inside the recovery, played when it sees the recovery; nothing: no such
+    // throw (or the opponent out of reach); the rest as the okizeme's.
+    const OkiStats& Air() const { return air_; }
     bool Mixing() const { return mix_ != nullptr; }
     // Another opponent: what it counted of the last one forgotten.
     void Forget() { counts_.Clear(); counted_ = false; }
@@ -266,6 +275,8 @@ private:
     void MixBegins(const float* view, bool deterministic);
     void PressBegin(const float* view, bool deterministic);
     void PressResult(const float* view);
+    void ThrowBegin(const float* view, bool deterministic);
+    void ThrowResult(const float* view);
 
     const Policy* policy_;
     std::mt19937_64 rng_;
@@ -313,6 +324,9 @@ private:
     std::vector<int> pressRest_; // what was left of the planned move it was playing then
     int nowAct_ = -1, nowFrame_ = 0; // the opponent's action and its frame, as the game was
     OkiStats press_;
+    bool throwWanted_ = false;  // the opponent recovering in the air, not planned from yet
+    bool throwPending_ = false; // a catch asked for
+    OkiStats air_;
 };
 
 } // namespace agent

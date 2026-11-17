@@ -30,7 +30,7 @@ const struct {
     const char* name;
     int version;
 } kModules[] = {{"policy", 1}, {"routes", 1}, {"chooser", 1}, {"okiplan", 1},
-               {"pressplan", 1}};
+               {"pressplan", 1}, {"airthrow", 1}};
 
 int Hits(const float* view)
 {
@@ -750,6 +750,18 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         press.skip = std::min(1.0f, std::max(0.0f, ToFloat(keys, "press_skip", 0.05f)));
         press.source = keys["press_source"];
     }
+
+    // airthrow:1 (mix.h's Catch)
+    air = Catch();
+    if (Has(names, "airthrow")) {
+        if (frameSkip != 1 || delay <= 0 || history <= 0) {
+            *error = "the agent's air throw of a recovery needs it to decide every frame, with "
+                     "a delay and its input history";
+            return false;
+        }
+        air.on = true;
+        air.near = std::max(1, ToInt(keys, "air_near", 320));
+    }
     return true;
 }
 
@@ -879,6 +891,8 @@ void Player::Reset()
     if (planner_)
         planner_->Cancel();
     wasDown_ = okiWanted_ = okiPending_ = okiOn_ = pressPending_ = false;
+    throwWanted_ = throwPending_ = false;
+    air_ = OkiStats();
     okiRoute_.clear();
     pressRest_.clear();
     okiAt_ = 0;
@@ -897,7 +911,7 @@ void Player::Reset()
 void Player::SetMix(MixPlanner* mix, int side, double patienceMs)
 {
     const Policy& p = *policy_;
-    if (mix && ((p.mix.Empty() && p.press.Empty()) || p.frameSkip != 1 || p.delay <= 0 ||
+    if (mix && ((p.mix.Empty() && p.press.Empty() && !p.air.on) || p.frameSkip != 1 || p.delay <= 0 ||
                 p.history <= 0))
         mix = nullptr;
     mix_ = mix;
@@ -954,6 +968,8 @@ void Player::MixResults(const float* view)
         OkiResult(view);
     if (pressPending_ && queue_.empty())
         PressResult(view);
+    if (throwPending_ && queue_.empty())
+        ThrowResult(view);
 }
 
 // The plans to ask for on this frame, as the game is: its opponent's knockdown, planned
@@ -965,18 +981,98 @@ void Player::MixBegins(const float* view, bool deterministic)
     const Policy& p = *policy_;
     int act = (int)nearbyintf(view[kOppAction]), frame = (int)nearbyintf(view[kOppFrame]);
     bool contact = IsGuard(act) && (!IsGuard(nowAct_) || act != nowAct_ || frame < nowFrame_);
+    // Its opponent recovering in the air out of a hit reaction (src/efz.h: 0x9d, 0x9e
+    // from 0x32-0x5f): wanted from the frame it begins, while it lasts.
+    bool recovering = act == 0x9d || act == 0x9e;
+    throwWanted_ = p.air.on && recovering &&
+        (throwWanted_ || (nowAct_ >= 0x32 && nowAct_ < 0x60));
     nowAct_ = act;
     nowFrame_ = frame;
     bool down = IsDown(view);
     okiWanted_ = !p.mix.Empty() && down && (okiWanted_ || !wasDown_);
     wasDown_ = down;
-    bool busy = pending_ || okiPending_ || pressPending_ || routeOn_ || !queue_.empty();
+    bool busy = pending_ || okiPending_ || pressPending_ || throwPending_ || routeOn_ ||
+        !queue_.empty();
     if (okiWanted_ && !busy) {
         OkiBegin(view, deterministic);
         return;
     }
+    if (throwWanted_ && !busy && !(in_[kSelfHitstun] > 0)) {
+        ThrowBegin(view, deterministic);
+        return;
+    }
     if (contact && !busy && !p.press.Empty() && !(in_[kSelfHitstun] > 0))
         PressBegin(view, deterministic);
+}
+
+// On the frame its opponent's air recovery begins (airplan.py's live_throw): its inputs for
+// the `delay` frames until it sees the recovery, its own play's from what it will see, and
+// the catch asked for from where they leave the fight.
+void Player::ThrowBegin(const float* view, bool deterministic)
+{
+    (void)view;
+    const int delay = policy_->delay;
+    okiOn_ = false;
+    std::vector<float> hist = inputs_, in(in_.size());
+    uint8_t prev = prev_;
+    std::vector<int> actions;
+    for (int k = 0; k < delay; k++) {
+        std::copy(seen_.begin() + (size_t)(delay - k) * kObsDim,
+                  seen_.begin() + (size_t)(delay - k + 1) * kObsDim, in.begin());
+        std::copy(hist.begin(), hist.end(), in.begin() + kObsDim);
+        int a = Sample(in.data(), deterministic);
+        actions.push_back(a);
+        Push(hist, prev, policy_->table[a]);
+    }
+    mix_->BeginThrow(side_, actions, inputs_.data(), prev_, deterministic, policy_->air.near);
+    queue_.assign(actions.begin(), actions.end());
+    throwPending_ = true;
+    throwWanted_ = false;
+    air_.asked++;
+}
+
+// `delay` frames after the recovery began, the throw, if there is one that catches and
+// the game is where it was planned from.
+void Player::ThrowResult(const float* view)
+{
+    typedef MixPlanner::Clock Clock;
+    throwPending_ = false;
+    Clock::time_point t0 = Clock::now();
+    bool done = mix_->Done();
+    if (!done) {
+        Clock::time_point until = patienceMs_ < 0 ? Clock::time_point::max()
+            : t0 + std::chrono::duration_cast<Clock::duration>(
+                       std::chrono::duration<double, std::milli>(patienceMs_));
+        done = mix_->Work(until);
+    }
+    double waited = std::chrono::duration<double, std::milli>(Clock::now() - t0).count();
+    air_.waitedMs += waited;
+    air_.waitedMsMost = std::max(air_.waitedMsMost, waited);
+    if (!done) {
+        mix_->Cancel();
+        air_.late++;
+        return;
+    }
+    air_.planMs += mix_->ms;
+    air_.planMsMost = std::max(air_.planMsMost, mix_->ms);
+    air_.frames += mix_->frames;
+    MixPlanner::Outcome outcome = mix_->outcome;
+    mix_->outcome = MixPlanner::kNone;
+    if (outcome != MixPlanner::kPlanned) {
+        (outcome == MixPlanner::kNothing ? air_.nothing : air_.apart)++;
+        return;
+    }
+    for (int i = 0; i < kObsDim; i++) {
+        if (!(mix_->view[i] == view[i])) {
+            air_.elsewhere++;
+            return;
+        }
+    }
+    air_.plans++;
+    air_.played++;
+    okiRoute_ = mix_->option;
+    okiAt_ = 0;
+    okiOn_ = !okiRoute_.empty();
 }
 
 // On the frame a move of its own touches the opponent's guard (pressplan.py's live plan):
@@ -1354,7 +1450,7 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
         bool again = policy_->routes.replan ? !(planned_ && hitMove_ == plannedMove_)
                                             : prevHits_ == 0 && !routeOn_;
         // (a plan of the one kind while the other's inputs are being played waits)
-        if (!pending_ && !okiPending_ && !pressPending_ && hits > 0 && again)
+        if (!pending_ && !okiPending_ && !pressPending_ && !throwPending_ && hits > 0 && again)
             Begin(view, deterministic);
         if (mix_) {
             MixBegins(view, deterministic);

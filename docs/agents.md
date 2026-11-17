@@ -267,7 +267,7 @@ drawn by kind, plans dropped and why, the time a plan took and the game waited, 
 it now expects of this opponent's wake-ups.
 
 A file's okizeme is carried into a file of a model trained further by `--parts-from`
-(`--keep routes chooser okiplan pressplan`, the default); `unpack_agent.py` doesn't write the
+(`--keep routes chooser okiplan pressplan airthrow`, the default); `unpack_agent.py` doesn't write the
 library back as a file. A game older than the module refuses the file and says which
 module it doesn't play.
 
@@ -311,6 +311,40 @@ more, 40 frames past the guard). `tests.test_agents.PressureAsPressplan`: from t
 of a contact the same wait, the same view expected, the same options and worth as
 `pressplan.live_plan`, and plans made in a match. The log has a line a fight, as the
 okizeme's.
+
+## Its catch: an air throw inside the recovery
+
+An agent file with the module `airthrow:1` air-throws an opponent that recovers in the air
+out of its combo, when a throw catches before the recovery is over (`mix.h`'s `Catch`,
+`runs/human-ayu/airplan.py`'s sure throw; docs/training-v2.md, "The air"). An opponent
+that presses out of a combo in the air is free again beside the agent, and nothing
+touches it until its recovery ends, except an air throw (`src/ayu.cpp`: C with forward
+held, in the air within 100 pixels of an opponent in the air that is in no hit reaction
+and no guard). In the community's replays that is the catch that works: half of the air
+throws tried on a recovery catch, a fifth of anything else.
+
+    python python/examples/export_agent.py MODEL.zip --library ... --air-throw
+
+No library and no guess about the opponent: until its recovery ends it can do nothing,
+so what a copy of the fight shows is what will happen.
+
+- **When.** On the frame the opponent goes from a hit reaction into its air recovery (as
+  the game is), the agent's inputs for the 14 frames until it sees the recovery are
+  chosen at once (its own play's), and the planner works over those frames from where
+  they leave the fight.
+- **What it tries.** C with forward held after every second frame, up to 24 and the
+  recovery's end: of holding forward in the air, of a second jump at the opponent, of a
+  dash at it; from the ground, that far into a jump at it or straight up. Each on a copy
+  until the recovery's end; the one that catches soonest.
+- **Playing it.** When it sees the recovery and the game is where the plan expected, it
+  plays that throw. None that catches (the opponent too far, the agent still in a move,
+  under 3 frames of the recovery left, further apart than `air_near` pixels): its own
+  play, as before.
+
+A plan is at most 32 throws of at most 60 frames on copies. `tests.test_agents.
+CatchAsAirplan`: from the frame of a recovery the same view expected, the same frames of
+the recovery left and the same throw as `airplan.live_throw`, and plans made in a match.
+The log has a line a fight ("...'s catches").
 
 ## Over the network
 
@@ -428,9 +462,10 @@ the opponent's inputs, or a rollback, change the frames it was made for.
 ## Not yet
 
 - **Other modules**: of an `agent.json`'s modules the file takes `routes` and, through
-  `--okizeme` and `--pressure`, the planned okizeme and pressure; not `oki` (people's
-  okizeme played by a second network) or routes chosen by the chooser alone
-  (`by: chooser`).
+  `--okizeme`, `--pressure` and `--air-throw`, the planned okizeme and pressure and the
+  catch; not `oki` (people's okizeme played by a second network), routes chosen by the
+  chooser alone (`by: chooser`), or `airplan`'s and `jumpplan`'s options tried against
+  answers (measured in evaluations only: docs/training-v2.md, "The air").
 - **A real EfzRevival 1.02h peer**: the network matches above are this game against
   itself.
 - **A controller's button** for F5 and F6: the keyboard only.

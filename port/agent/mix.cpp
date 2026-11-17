@@ -4,6 +4,7 @@
 #include <string.h>
 #include <algorithm>
 #include <chrono>
+#include <initializer_list>
 #include <random>
 #include <set>
 #include <string>
@@ -39,6 +40,7 @@ const int kChoice = 16, kInv = 8, kWakeLife = 96, kPressLife = 64;
 const double kPriorReversal = 0.10, kPriorMash = 0.19, kPriorJump = 0.04, kPriorCrouch = 0.8;
 
 bool Down(int a) { return a >= 0x60 && a <= 0x63; }
+bool Recovery(int a) { return a == 0x9d || a == 0x9e; } // recovering in the air from a hit
 bool Thrown(int a) { return a >= 0x64 && a < 0x79; }
 bool Guard(int a) { return (a >= 0x96 && a <= 0x9c) || (a >= 0xa8 && a <= 0xaa); }
 bool GuardGround(int a) { return (a >= 0x96 && a <= 0x9b) || a == 0xa8 || a == 0xa9; }
@@ -230,6 +232,17 @@ MixPlanner::MixPlanner(const Policy* policy, World* world, uint64_t seed)
     for (int a = 0; a < policy->Actions(); a++) {
         if (policy->table[a] == kCrouchGuard)
             guard_ = a;
+        // (efz_env.actions.encode: 5, 6, 9, 8, 6 + C)
+        if (policy->table[a] == 0x00)
+            neutral_ = a;
+        if (policy->table[a] == 0x01)
+            forward_ = a;
+        if (policy->table[a] == 0x09)
+            upForward_ = a;
+        if (policy->table[a] == 0x08)
+            up_ = a;
+        if (policy->table[a] == 0x41)
+            grab_ = a;
     }
     memset(view, 0, sizeof(view));
     for (double& s : shares_)
@@ -242,6 +255,7 @@ void MixPlanner::Cancel()
     outcome = kNone;
     plays_.clear();
     options_.clear();
+    throws_.clear();
     start_.valid = from_.valid = false;
 }
 
@@ -258,7 +272,9 @@ void MixPlanner::Begin(int side, const std::vector<int>& actions, const float* h
 {
     Cancel();
     const Mix& lib = policy_->mix;
-    press_ = false;
+    press_ = throw_ = false;
+    caught = -1;
+    tried = 0;
     window_ = lib.window;
     skip_ = lib.skip;
     doubt_ = lib.doubt;
@@ -528,6 +544,138 @@ void MixPlanner::PressCandidates(const float* now)
     options_.push_back(std::vector<int>((size_t)(lead + lib.wait), guard_));
     kinds.push_back(kOwnPlay);
     options_.push_back(std::vector<int>());
+}
+
+void MixPlanner::BeginThrow(int side, const std::vector<int>& actions, const float* history,
+                            uint8_t prev, bool deterministic, int near)
+{
+    const double none[kAnswers] = {0, 0, 0, 0, 0};
+    Begin(side, actions, history, prev, deterministic, none, nullptr);
+    throw_ = true;
+    near_ = near;
+}
+
+// airplan.live_throw up to its throws: the agent's inputs until it sees the recovery, the
+// frames of the recovery left, and the throws to try (airplan.AirPlanner.throws).
+bool MixPlanner::ThrowPrelude()
+{
+    if (!world_->Load(start_))
+        return false;
+    float now[kObsDim];
+    uint8_t input[2];
+    for (size_t k = 0; k < actions_.size(); k++) {
+        input[side_] = ToScreen(policy_->table[actions_[k]], world_->Facing(side_));
+        input[1 - side_] = 0;
+        if (!world_->Step(input)) {
+            Finish(kNothing);
+            return true;
+        }
+        frames++;
+        world_->View(side_, now);
+        if (world_->Over() || now[kRoundOver] != 0 || now[kSelfStun] > 0) {
+            Finish(kNothing);
+            return true;
+        }
+    }
+    world_->View(side_, now);
+    memcpy(view, now, sizeof(view));
+    if (neutral_ < 0 || forward_ < 0 || upForward_ < 0 || up_ < 0 || grab_ < 0 ||
+        fabs((double)now[kDx]) * 640 > near_ || !(now[kOppAir] > 0) || now[kOppStun] > 0 ||
+        Thrown(Rint(now[kOppAct]))) {
+        Finish(kNothing);
+        return true;
+    }
+    bool air = now[kSelfAir] > 0;
+    world_->Save(&from_);
+    // The frames until the opponent is out of its recovery, nobody pressing anything.
+    lead = -1;
+    for (int t = 0; t < kThrowLook; t++) {
+        world_->View(side_, now);
+        if (!Recovery(Rint(now[kOppAct]))) {
+            lead = t;
+            break;
+        }
+        input[0] = input[1] = 0;
+        if (!world_->Step(input) || world_->Over())
+            break;
+        frames++;
+    }
+    if (lead < kThrowMinLead) {
+        Finish(kNothing);
+        return true;
+    }
+    throws_.clear();
+    auto add = [&](std::initializer_list<int> head, int action, int count) {
+        std::vector<int> q(head);
+        q.insert(q.end(), (size_t)std::max(0, count), action);
+        q.push_back(grab_);
+        q.push_back(grab_);
+        throws_.push_back(q);
+    };
+    for (int d = 0; d < std::min(lead, (int)kThrowSpan); d += 2) {
+        if (air) {
+            add({}, forward_, d);
+            if (d >= 4) {
+                add({neutral_, upForward_}, forward_, d - 2);
+                add({forward_, neutral_, forward_}, forward_, d - 3);
+            }
+        } else if (d >= 4) {
+            add({}, upForward_, d);
+            add({}, up_, d);
+        }
+    }
+    tried = (int)throws_.size();
+    if (throws_.empty()) {
+        Finish(kNothing);
+        return true;
+    }
+    throwAt_ = 0;
+    best_ = -1;
+    caught = -1;
+    phase_ = kThrows;
+    return true;
+}
+
+// One of the throws on a copy, to the frame it catches or the recovery's end
+// (airplan.sure_throw); after the last, the one that catches soonest (then the shortest,
+// then the first) is the plan. False: the copy couldn't be played.
+bool MixPlanner::ThrowRun()
+{
+    if (!world_->Load(from_))
+        return false;
+    const std::vector<int>& q = throws_[throwAt_];
+    float now[kObsDim];
+    for (int t = 0; t <= lead; t++) {
+        if (best_ >= 0 && t > caught)
+            break; // (it could not catch sooner than the one found)
+        uint8_t input[2];
+        int action = t < (int)q.size() ? q[t] : neutral_;
+        input[side_] = ToScreen(policy_->table[action], world_->Facing(side_));
+        input[1 - side_] = 0;
+        if (!world_->Step(input))
+            break;
+        frames++;
+        world_->View(side_, now);
+        if (Thrown(Rint(now[kOppAct]))) {
+            bool better = best_ < 0 || t < caught ||
+                (t == caught && q.size() < throws_[(size_t)best_].size());
+            if (better) {
+                best_ = (int)throwAt_;
+                caught = t;
+            }
+            break;
+        }
+    }
+    if (++throwAt_ == throws_.size()) {
+        if (best_ < 0) {
+            Finish(kNothing);
+        } else {
+            option = throws_[(size_t)best_];
+            chosen = best_;
+            Finish(kPlanned);
+        }
+    }
+    return true;
 }
 
 // pressplan.live_plan: the frames until the agent sees the guard, its inputs chosen
@@ -841,8 +989,12 @@ bool MixPlanner::Work(Clock::time_point deadline)
     world_->Enter();
     world_->Save(&real_);
     bool apart = false;
-    if (phase_ == kPrelude && !(press_ ? PressPrelude() : Prelude()))
+    if (phase_ == kPrelude && !(throw_ ? ThrowPrelude() : press_ ? PressPrelude() : Prelude()))
         apart = true;
+    while (!apart && phase_ == kThrows && Clock::now() < deadline) {
+        if (!ThrowRun())
+            apart = true;
+    }
     while (!apart && phase_ == kPlays && Clock::now() < deadline) {
         Play& p = plays_[current_];
         bool loaded = p.started && p.state.valid ? world_->Load(p.state) : world_->Load(from_);

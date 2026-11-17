@@ -106,8 +106,13 @@ def main():
                         ".answers.json beside it: pressure_library.py --answers)")
     p.add_argument('--pressure-option', action='append', default=[], metavar='KEY=VALUE',
                    help="the game's pressure planner's settings (efz_env.export.PRESS_OPTIONS)")
-    p.add_argument('--keep', nargs='+', choices=('routes', 'chooser', 'okiplan', 'pressplan'),
-                   default=['routes', 'chooser', 'okiplan', 'pressplan'],
+    p.add_argument('--air-throw', action='store_true',
+                   help="in the game it air-throws an opponent that recovers in the air out "
+                        "of its combo, when a throw catches inside the recovery (the module "
+                        "airthrow:1; runs/human-ayu/airplan.py's sure throw: no library)")
+    p.add_argument('--keep', nargs='+',
+                   choices=('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow'),
+                   default=['routes', 'chooser', 'okiplan', 'pressplan', 'airthrow'],
                    help='--parts-from: which of them')
     args = p.parse_args()
     if args.show:
@@ -178,7 +183,8 @@ def main():
                                  version=args.version, train=args.train,
                                  optimizer=args.optimizer, parts_from=args.parts_from,
                                  keep=tuple(args.keep), ending=args.ending or 0,
-                                 okiplan=okiplan, pressplan=pressplan)
+                                 okiplan=okiplan, pressplan=pressplan,
+                                 airthrow={} if args.air_throw else None)
         except ValueError as e:
             sys.exit(str(e))
     bad = []
@@ -202,6 +208,8 @@ def main():
         combos += f"; its okizeme planned from {agent.oki} of people's"
     if agent.press:
         combos += f"; its pressure planned from {agent.press} of people's"
+    if getattr(agent, 'airthrow', False):
+        combos += "; an air throw of an air recovery when one catches inside it"
 
     label = agent.name + (f' {agent.version}' if agent.version else '')
     sure = f"log-probabilities within {check['policy']:.1g}"

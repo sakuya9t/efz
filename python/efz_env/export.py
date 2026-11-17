@@ -73,7 +73,8 @@ from .agent import load_config
 MAGIC = b'EFZAGENT'
 FORMAT = 2
 # The modules this exporter writes, each's version (port/agent/policy.h's kModules).
-MODULES = {'policy': 1, 'routes': 1, 'chooser': 1, 'okiplan': 1, 'pressplan': 1}
+MODULES = {'policy': 1, 'routes': 1, 'chooser': 1, 'okiplan': 1, 'pressplan': 1,
+           'airthrow': 1}
 TRAIN = 1  # the training part's version (key train)
 # PPO's settings a file keeps (train.sb3) and unpack_agent makes the model with.
 HYPER = ('n_steps', 'batch_size', 'n_epochs', 'gamma', 'gae_lambda', 'ent_coef', 'vf_coef',
@@ -224,6 +225,12 @@ PRESS_OPTIONS = dict(per_plan=4, per_class=2, window=40, wait=24, tolerance=16, 
                      near=160, max_wait=20, temperature=200.0, doubt=0.3, hit_worth=1300.0,
                      hurt_worth=1200.0, prior=8.0, skip=0.05)
 MASH = 12  # runs/human-ayu/advantages.py's: the times a reversal's button is pressed again
+
+
+# The catch as the game plays it (port/agent/mix.h's Catch; runs/human-ayu/airplan.py's
+# live_throw): an air throw of an opponent that recovers in the air out of the agent's
+# combo, when one catches inside the recovery. near: the most pixels apart it is looked for.
+AIR_OPTIONS = dict(near=320)
 
 
 def load_press(path):
@@ -626,10 +633,11 @@ def _carried(path, keep):
     prefixes = {'routes': ('routes', 'route_', 'source.library', 'source.marks'),
                 'chooser': ('chooser_', 'source.chooser'),
                 'okiplan': ('oki_', 'source.okizeme'),
-                'pressplan': ('press_', 'source.pressure')}
+                'pressplan': ('press_', 'source.pressure'),
+                'airthrow': ('air_',)}
     named = {'okiplan': 'oki.', 'pressplan': 'press.'}  # (its tensors' prefix, where it
     #                                                      isn't the part's name)
-    for part in ('routes', 'chooser', 'okiplan', 'pressplan'):
+    for part in ('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow'):
         if part not in keep or part not in has:
             continue
         if part == 'chooser' and 'routes' not in modules:
@@ -699,8 +707,8 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
                  victims=None, replan=False, per_start=None, chooser=None,
                  margin=CHOOSER_MARGIN, version=None, sources=None, dropped=(), train=True,
                  optimizer=False, parts_from=None,
-                 keep=('routes', 'chooser', 'okiplan', 'pressplan'),
-                 ending=0, okiplan=None, pressplan=None):
+                 keep=('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow'),
+                 ending=0, okiplan=None, pressplan=None, airthrow=None):
     """Writes model_path (a model.zip, with its config.json) as an agent file at out_path.
     name: what the game shows (default: the model's folder for avg.zip / model.zip, else
     its file name). character: the one it plays (a name or 0-24; default the first of
@@ -715,7 +723,8 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
     okizeme library (oki_library.py's .npz, its .answers.json beside it) or its entries,
     'answers': those answers if not from the file, and OKI_OPTIONS' keys}. pressplan: its
     planned pressure (pressplan:1), the same with a pressure library
-    (pressure_library.py's) and PRESS_OPTIONS' keys.
+    (pressure_library.py's) and PRESS_OPTIONS' keys. airthrow: its air throw of an opponent's
+    air recovery (airthrow:1: no library), AIR_OPTIONS' keys ({} for the defaults).
     chooser: combo_net.py's chooser.pt for that agent and library, played when a combo's
     first plan is late; margin: what a route it picks must promise beyond the agent's own
     play (HP). version: what the game shows beside the name. sources: {part: (label,
@@ -756,13 +765,14 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         carried = _carried(parts_from, keep)
     features, feature_tensors, activation, layers, out = _actor(policy)
     from .policy import OPP_ACTION, OPP_CHAR, SELF_ACTION, SELF_CHAR, ACTIONS, CHARACTERS
-    for part, given in (('okiplan', okiplan), ('pressplan', pressplan)):
+    for part, given in (('okiplan', okiplan), ('pressplan', pressplan), ('airthrow', airthrow)):
         if given is not None and part in carried[0]:
             raise ValueError(f"parts_from: that file's {part}, or a library given for it, not "
                              "both (keep says which of its parts)")
     modules = (['policy'] + ['routes'] * (library is not None) +
                ['chooser'] * (chooser is not None) + carried[0] +
-               ['okiplan'] * (okiplan is not None) + ['pressplan'] * (pressplan is not None))
+               ['okiplan'] * (okiplan is not None) + ['pressplan'] * (pressplan is not None) +
+               ['airthrow'] * (airthrow is not None))
     keys = {
         'modules': ','.join(f'{m}:{MODULES[m]}' for m in modules),
         'name': _one_line(name),
@@ -829,6 +839,15 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         oki_tensors = oki_tensors + press_tensors
         if from_file:
             keys['press_source'] = os.path.basename(os.fspath(press_library))
+    if airthrow is not None:
+        if keys['frame_skip'] != 1 or keys['delay'] <= 0 or keys['history'] <= 0:
+            raise ValueError('airthrow: an agent deciding every frame (frame_skip 1), with a '
+                             'delay and its input history')
+        unknown = sorted(set(airthrow) - set(AIR_OPTIONS))
+        if unknown:
+            raise ValueError(f"airthrow: no option {', '.join(unknown)} "
+                             f"({', '.join(AIR_OPTIONS)})")
+        keys.update({f'air_{k}': int(v) for k, v in dict(AIR_OPTIONS, **airthrow).items()})
     if carried[0]:
         if 'routes' in carried[0] and (keys['frame_skip'] != 1 or keys['delay'] <= 0 or
                                        keys['history'] <= 0):
@@ -1399,6 +1418,7 @@ class NativeAgent:
             if hasattr(lib, 'efz_env_agent_oki_entries') else 0
         self.press = int(lib.efz_env_agent_press_entries(self._h)) \
             if hasattr(lib, 'efz_env_agent_press_entries') else 0
+        self.airthrow = 'airthrow:' in self.modules
         self.deterministic = deterministic
         self.reset(seed)
 
@@ -1465,6 +1485,28 @@ class NativeAgent:
             raise ValueError(f'efz_env_agent_press_plan: {self._lib.efz_env_error(env._h).decode()}')
         return self._mix_plan(out)
 
+    def throw_plan(self, env, index, side, actions, history, prev, near=320):
+        """The game's catch (port/agent/mix.h's BeginThrow) on the step the opponent's air
+        recovery begins in `env`'s environment `index`, which is left as it was. actions:
+        the agent's inputs for the steps until it sees the recovery; history (H, 6), prev:
+        its input history before them. A dict: outcome (1: an air throw that catches inside
+        the recovery, 2: none), lead (the steps of the recovery left after `actions`),
+        option (the throw's actions), caught (the step of them it catches on), tried (the
+        throws looked at), view (the agent's view after `actions`), frames, ms."""
+        env._finish()
+        acts = np.ascontiguousarray(actions, np.int32)
+        hist = np.ascontiguousarray(history, np.float32).reshape(-1)
+        out = _native.OkiPlan()
+        r = self._lib.efz_env_agent_throw_plan(self._h, env._h, int(index), int(side),
+                                               acts.ctypes.data, len(acts), hist.ctypes.data,
+                                               int(prev), int(near), ctypes.byref(out))
+        if r != 0:
+            raise ValueError(f'efz_env_agent_throw_plan: {self._lib.efz_env_error(env._h).decode()}')
+        return dict(outcome=int(out.outcome), lead=int(out.lead),
+                    option=np.array(out.option[:out.option_size], np.int64),
+                    caught=int(out.adv), tried=int(out.waited),
+                    view=np.array(out.view, np.float32), frames=int(out.frames), ms=out.ms)
+
     def press_shares(self, prior=8.0):
         """The answers' shares after a guard, from its counts (counts()) over the prior."""
         s = np.zeros(5, np.float64)
@@ -1494,7 +1536,14 @@ class NativeAgent:
                  'oki_elsewhere', 'oki_nothing', 'oki_apart', 'oki_frames', 'route_ms', 'oki_ms',
                  'route_dropped', 'press_asked', 'press_plans', 'press_played', 'press_late',
                  'press_elsewhere', 'press_nothing', 'press_apart', 'press_frames', 'press_ms')
-        return dict(zip(names, [int(x) for x in v]))
+        out = dict(zip(names, [int(x) for x in v]))
+        if hasattr(self._lib, 'efz_env_agent_air_stats'):  # its catches (airthrow:1)
+            v = (ctypes.c_int32 * 16)()
+            self._lib.efz_env_agent_air_stats(self._h, v)
+            names = ('air_asked', 'air_plans', 'air_played', 'air_late', 'air_elsewhere',
+                     'air_nothing', 'air_apart', 'air_frames', 'air_ms')
+            out.update(zip(names, [int(x) for x in v]))
+        return out
 
     def counts(self, view=None, mode=0, prior=6.0):
         """Its counts of the opponent (port/agent/mix.h's Counts): mode 0 takes `view` (the

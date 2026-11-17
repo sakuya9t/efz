@@ -1026,5 +1026,171 @@ class PressureAsPressplan(unittest.TestCase):
         self.assertGreaterEqual(compared, 4, (compared, nothing))
 
 
+@unittest.skipIf(not DATA or not os.path.isdir(DATA or ''), 'no game data: set EFZ_DATA')
+class CatchAsAirplan(unittest.TestCase):
+    """The game's catch (mix.h's BeginThrow: the module airthrow:1) against
+    runs/human-ayu/airplan.py's live_throw: from the step an opponent's air recovery
+    begins, the same view expected, the same steps of the recovery left, and the same air
+    throw that catches inside it (or none)."""
+
+    HISTORY, DELAY = 4, 5
+
+    def setUp(self):
+        sys.path.insert(0, RUNS)
+        try:
+            import airplan
+            import okiplan
+            self.airplan, self.okiplan = airplan, okiplan
+        except ImportError as e:
+            self.skipTest(f'runs/human-ayu: {e}')
+        if not hasattr(airplan, 'live_throw'):
+            self.skipTest("runs/human-ayu's airplan.py has no live throw")
+
+    def recoveries(self, want=12, steps=6000):
+        """States on the step player 2 recovers in the air out of a hit of player 1's:
+        ayu presses and jumps at random, mai jumps about pressing a button every other
+        step (which is also how a recovery is pressed)."""
+        from efz_env import EfzVecEnv
+        from efz_env.actions import encode
+        okiplan = self.okiplan
+        n = 8
+        env = EfzVecEnv(DATA, n, frame_skip=1, rounds_to_win=2, max_frames=0, seed=3,
+                        autoreset='disabled', skip_noninteractive=False)
+        env.set_matches(chars=('ayu', 'mai'))
+        obs = env.reset()
+        rng = np.random.default_rng(5)
+        table = okiplan.TABLE.table
+        mine = [okiplan.INDEX[x] for x in ((5, 'A'), (5, 'B'), (9, ''), (9, 'A'), (9, 'B'),
+                                           (8, 'B'), (6, ''), (5, 'C'), (2, 'B'), (6, ''))]
+        a = np.zeros((n, 2), np.uint8)
+        was, hold, cur = np.zeros(n, int), np.zeros(n, int), np.zeros(n, int)
+        found = []
+        for t in range(steps):
+            for i in range(n):
+                if hold[i] <= 0:
+                    cur[i], hold[i] = mine[rng.integers(0, len(mine))], rng.integers(2, 10)
+                hold[i] -= 1
+            a[:, 0] = table[cur]
+            d = (7, 8, 9, 9)[(t // 40) % 4]
+            a[:, 1] = encode(d, 'A') if t % 2 == 0 else encode(d)
+            obs, _, term, trunc, _ = env.step(a)
+            act = np.round(obs[:, 0, 50]).astype(int)
+            for i in range(n):
+                if act[i] in (0x9d, 0x9e) and 0x32 <= was[i] < 0x60 and not (term[i] or trunc[i]):
+                    found.append((env.save_state(i), obs[i, 0].copy()))
+            was = act
+            if len(found) >= want or (term | trunc).all():
+                break
+        env.close()
+        return found
+
+    def test_the_same_throws(self):
+        from efz_env.modules import sampler
+        airplan, okiplan = self.airplan, self.okiplan
+        found = self.recoveries()
+        self.assertGreaterEqual(len(found), 6, 'too few air recoveries in the script')
+        rng = np.random.default_rng(7)
+        caught = none = 0
+        with tempfile.TemporaryDirectory() as folder:
+            path, model = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            export_agent(path, out, check=False, airthrow={})
+            native = NativeAgent(out, deterministic=True)
+            self.assertIn('airthrow:1', native.modules)
+            self.assertTrue(native.airthrow)
+            policy = sampler(model, deterministic=True)
+            planner = airplan.AirPlanner(DATA, [], OBS_DIM + 6 * self.HISTORY, self.DELAY,
+                                         history=self.HISTORY)
+            env = planner.one
+            for n, (state, view) in enumerate(found):
+                actions = rng.integers(0, 45, self.DELAY) if n % 3 == 2 else \
+                    np.full(self.DELAY, okiplan.NEUTRAL if n % 3 else airplan.FORWARD)
+                hist = rng.integers(0, 2, (self.HISTORY, 6)).astype(np.float32)
+                env.load_state(0, state)
+                seen = np.repeat(env.obs[0, 0][None], self.DELAY + 1, 0)
+                mine = native.throw_plan(env, 0, 0, actions, hist, 0x10)
+                self.assertEqual(env.save_state(0), state)  # the game as it was
+                got = airplan.live_throw(planner, state, 0, hist, 0x10, seen, policy, rest=actions)
+                if got is None:
+                    self.assertEqual(mine['outcome'], 2, mine)
+                    self.assertEqual(mine['option'].size, 0)
+                    none += 1
+                else:
+                    self.assertEqual(mine['outcome'], 1, mine)
+                    self.assertEqual(got[1], self.DELAY)
+                    np.testing.assert_array_equal(mine['view'][1:], got[2][1:])
+                    np.testing.assert_array_equal(mine['option'], got[0][self.DELAY:])
+                    self.assertEqual(mine['lead'], planner.last['lead'])
+                    self.assertEqual(mine['caught'], planner.last['caught'])
+                    self.assertEqual(mine['tried'], planner.last['tried'])
+                    caught += 1
+            native.close()
+            for e in (planner.one, planner.sim):
+                e.close()
+        self.assertGreaterEqual(caught, 2, (caught, none))
+        self.assertGreaterEqual(none, 1, (caught, none))
+
+    def test_out_of_reach_nothing_is_planned(self):
+        airplan = self.airplan
+        found = self.recoveries(want=2)
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            export_agent(path, out, check=False, airthrow=dict(near=1))
+            native = NativeAgent(out, deterministic=True)
+            planner = airplan.AirPlanner(DATA, [], OBS_DIM + 6 * self.HISTORY, self.DELAY,
+                                         history=self.HISTORY)
+            env = planner.one
+            state, view = found[0]
+            env.load_state(0, state)
+            hist = np.zeros((self.HISTORY, 6), np.float32)
+            actions = np.full(self.DELAY, self.okiplan.NEUTRAL)
+            if abs(float(view[4])) * 640 > 1:
+                self.assertEqual(native.throw_plan(env, 0, 0, actions, hist, 0, near=1)['outcome'], 2)
+            native.close()
+            for e in (planner.one, planner.sim):
+                e.close()
+
+    def test_played_in_a_match(self):
+        """The game's player with the catch, in matches against an opponent that jumps
+        about and recovers (NativeAgent.attach): each recovery out of its hits is planned
+        from or dropped for a reason, and counted."""
+        from efz_env import EfzVecEnv
+        from efz_env.actions import encode
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            export_agent(path, out, check=False, airthrow={})
+            native = NativeAgent(out, seed=5)
+            env = EfzVecEnv(DATA, 1, frame_skip=1, rounds_to_win=2, max_frames=0, seed=3,
+                            autoreset='disabled')
+            a = np.zeros((1, 2), np.uint8)
+            total = {}
+            for match in range(6):
+                env.set_matches(chars=('ayu', 'mai'))
+                obs = env.reset()
+                native.attach(env, 0, 0, seed=match) if match == 0 else native.reset(match)
+                for t in range(20000):
+                    live = obs[0, 0, 2] == 0 and obs[0, 0, 3] == 0
+                    a[0, 0] = native.step(obs[0, 0], live)
+                    d = (7, 8, 9, 9)[(t // 40) % 4]
+                    a[0, 1] = encode(d, 'A') if t % 2 == 0 else encode(d)
+                    obs, _, term, trunc, _ = env.step(a)
+                    if term[0] or trunc[0]:
+                        break
+                for k, v in native.stats().items():
+                    total[k] = total.get(k, 0) + v
+                if total['air_asked'] >= 3:
+                    break
+            self.assertGreaterEqual(total['air_asked'], 1, total)
+            self.assertEqual(total['air_late'], 0, total)
+            self.assertEqual(total['air_asked'], total['air_plans'] + total['air_nothing'] +
+                             total['air_apart'] + total['air_elsewhere'], total)
+            self.assertEqual(total['air_plans'], total['air_played'], total)
+            native.attach(None)
+            native.close()
+            env.close()
+
+
 if __name__ == '__main__':
     unittest.main()

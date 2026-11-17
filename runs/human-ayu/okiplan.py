@@ -185,6 +185,8 @@ class Entries:
 class OkiPlanner:
     """Tries a knockdown's okizeme on copies of the game and draws one."""
 
+    ANSWERS = ANSWERS  # (a planner of another situation has its own: airplan.py)
+
     def __init__(self, data_dir, library, width, delay, history=16, per_plan=10, per_class=2,
                  window=70, wait=40, tolerance=24, temperature=200.0, hit_worth=1300.0,
                  hurt_worth=1200.0, doubt=0.0, learner='ayu', seed=0, entries=True,
@@ -212,7 +214,7 @@ class OkiPlanner:
         self.hit_worth, self.hurt_worth, self.learner = hit_worth, hurt_worth, learner
         from efz_env.vec import character_names
         self.names = character_names()
-        self.R = len(ANSWERS)
+        self.R = len(self.ANSWERS)
         # (a frame a step, a KO's too: a copy is played to the round's end and no further)
         make = lambda envs: EfzVecEnv(data_dir, envs, frame_skip=1, rounds_to_win=2,
                                       max_frames=0, autoreset='disabled',
@@ -319,6 +321,31 @@ class OkiPlanner:
             return out
         return ahead if out is None else np.concatenate([ahead, out])
 
+    def count_from(self, lead):
+        """The step of the copies from which a first hit counts (before: the knockdown's
+        own reactions)."""
+        return lead - 2
+
+    def their_controls(self, t, lead, answer, side, schedule, logic):
+        """The opponent's control bytes on step t of the copies, by each copy's answer
+        (answer: its index in ANSWERS, a copy each)."""
+        guard, stand, jump = encode(1), encode(4), encode(7)
+        theirs = np.full(len(answer), guard, np.uint8)
+        theirs[answer == 1] = stand
+        if t >= lead - 2:
+            theirs[answer == 3] = jump
+        if t >= lead - 1:
+            theirs[answer == 4] = encode(2, 'A') if t % 2 == 0 else encode(2)
+        if schedule is not None:
+            if t < len(schedule):
+                theirs[answer == 2] = schedule[t]
+        elif logic is not None:
+            for e in np.flatnonzero(answer == 2):
+                out = logic.step(int(e), self.sim.obs[e, 1 - side])
+                if out is not None:
+                    theirs[e] = encode(out[0], out[1])
+        return theirs
+
     def tryout(self, state, side, lead, options, kinds, entries, hist, prev, seen, policy,
                shares, logic=None, schedule=None):
         """The options (actions each; the last two a wait and its own play) against the
@@ -351,7 +378,6 @@ class OkiPlanner:
         thrown[:, 0] = np.isin(np.round(sim.obs[:E, side, SELF_ACT]), THROWN)
         thrown[:, 1] = np.isin(np.round(sim.obs[:E, side, OPP_ACT]), THROWN)
         controls = np.zeros((sim.num_envs, 2), np.uint8)
-        guard, stand, jump = encode(1), encode(4), encode(7)
         for t in range(lead + self.window):
             mine = np.full(E, CROUCH_GUARD)
             own = t >= length
@@ -364,21 +390,7 @@ class OkiPlanner:
                     int(own.sum()), -1)], 1)[:, :self.width]
                 mine[own] = np.asarray(policy(view)).reshape(-1)
             controls[:E, side] = TABLE.table[mine]
-            theirs = np.full(E, guard, np.uint8)
-            theirs[answer == 1] = stand
-            if t >= lead - 2:
-                theirs[answer == 3] = jump
-            if t >= lead - 1:
-                theirs[answer == 4] = encode(2, 'A') if t % 2 == 0 else encode(2)
-            if schedule is not None:
-                if t < len(schedule):
-                    theirs[answer == 2] = schedule[t]
-            elif logic is not None:
-                for e in np.flatnonzero(answer == 2):
-                    out = logic.step(int(e), sim.obs[e, 1 - side])
-                    if out is not None:
-                        theirs[e] = encode(out[0], out[1])
-            controls[:E, 1 - side] = theirs
+            controls[:E, 1 - side] = self.their_controls(t, lead, answer, side, schedule, logic)
             obs, _, term, trunc, info = sim.step(controls)
             hists.push(info['input'][:E, side])
             views[:, 1:] = views[:, :-1]
@@ -388,7 +400,7 @@ class OkiPlanner:
                            np.isin(np.round(obs[:E, side, OPP_ACT]), THROWN)], 1)
             began = (s & ~stun) | (th & ~thrown)
             stun, thrown = s, th
-            if t >= lead - 2:  # (before: the knockdown's own reactions)
+            if t >= self.count_from(lead):
                 undecided = (first == 0) & ~over
                 first[undecided & began[:, 1]] = 1
                 first[undecided & began[:, 0] & ~began[:, 1]] = -1

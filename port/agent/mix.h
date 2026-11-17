@@ -124,6 +124,17 @@ struct Press {
     bool Empty() const { return entries.empty(); }
 };
 
+// The catch (the module airthrow:1; runs/human-ayu/airplan.py's sure throw): when its
+// opponent recovers in the air out of a combo (src/player.cpp's TryAirRecovery: free
+// again, beside the agent), the air throws that would catch it before the recovery is
+// over are looked for on copies of the fight, and the soonest is played. Until its
+// recovery ends the opponent can do nothing, so what a copy shows is what happens: no
+// answers to weigh, no library. Keys air_near (the most pixels apart it is looked for at).
+struct Catch {
+    bool on = false;
+    int near = 320;
+};
+
 // What the agent has seen its opponent do (efz_env.memory.Memory's counts that the
 // planner's belief reads, made the same way from the same views: the agent's, `delay`
 // frames late): on its wake-ups, after its guards, and how it guards.
@@ -182,6 +193,8 @@ public:
     enum { kWait = -1, kOwnPlay = -2 }; // kinds besides the library's
     enum { kMinLead = 24, kMotion = 8, kLook = 110 }; // okiplan.MIN_LEAD, MOTION, LOOK
     enum { kPressLook = 80, kFreeLong = 30 };         // pressplan.LOOK; its free_for limit
+    // airplan.LOOK, SURE_SPAN, SURE_MIN_LEAD
+    enum { kThrowLook = 60, kThrowSpan = 24, kThrowMinLead = 3 };
 
     MixPlanner(const Policy* policy, World* world, uint64_t seed);
 
@@ -206,6 +219,18 @@ public:
     void BeginPress(int side, const std::vector<int>& actions, const float* history,
                     uint8_t prev, bool deterministic, const double shares[kAnswers],
                     uint8_t hold);
+    // The catch (airplan.live_throw), on the frame the opponent's air recovery begins:
+    // actions, the agent's inputs for the `delay` frames until it sees the recovery, the
+    // opponent pressing nothing; then, from there, the air throws of airplan.throws (C
+    // with forward held after every second frame of holding forward, of a second jump or
+    // a dash at the opponent, or that far into a jump from the ground), each on a copy
+    // until the recovery's end. The plan (`option`) is the one that catches soonest:
+    // `caught`, the frame of it the throw catches on; `tried`, how many were looked at;
+    // `view`, the agent's view after `actions`. kNothing: the round over or the agent
+    // hit on the way, the opponent not in the air or beyond `near` pixels, under
+    // kThrowMinLead frames of its recovery left, or no throw that catches inside it.
+    void BeginThrow(int side, const std::vector<int>& actions, const float* history,
+                    uint8_t prev, bool deterministic, int near);
     // Works on the plan until `deadline`, or until it is done; true once done.
     bool Work(Clock::time_point deadline);
     bool Busy() const { return phase_ != kIdle && phase_ != kDone; }
@@ -218,6 +243,8 @@ public:
                                 // (the pressure's: to its guard's end, 0 if it is over)
     int adv = 0;                // the pressure's: the frame advantage planned at
     int waited = 0;             // the pressure's: frames of guard before the follow-up
+    int caught = -1;            // the catch's: the frame of `option` its throw catches on
+    int tried = 0;              // the catch's: the throws looked at
     std::vector<int> entries;   // the library's entries tried
     std::vector<int> kinds;     // each option's kind: the entries', then kWait, kOwnPlay
     std::vector<double> worth;  // [option * kAnswers + answer]
@@ -234,7 +261,7 @@ public:
                                        int rounds = 2000);
 
 private:
-    enum Phase { kIdle, kPrelude, kPlays, kDone };
+    enum Phase { kIdle, kPrelude, kPlays, kThrows, kDone };
     struct Play {
         int option = 0, answer = 0;
         bool started = false;
@@ -248,6 +275,8 @@ private:
 
     bool Prelude();
     bool PressPrelude();
+    bool ThrowPrelude();
+    bool ThrowRun();
     void Candidates(const float* now);
     void PressCandidates(const float* now);
     void Plays();
@@ -276,6 +305,13 @@ private:
     bool stun0_[2] = {false, false}, thrown0_[2] = {false, false};
     int guard_ = 0; // the action that is a crouching guard
     bool press_ = false; // the plan asked for is the pressure's
+    bool throw_ = false; // ... is the catch's
+    int near_ = 320;     // the catch's: the most pixels apart
+    std::vector<std::vector<int>> throws_; // the catch's: the throws to try
+    size_t throwAt_ = 0;                   // ... the next of them
+    int best_ = -1;                        // ... the one that catches soonest so far
+    // (the actions that are nothing, forward, up-forward, up, forward + C: -1 without)
+    int neutral_ = -1, forward_ = -1, upForward_ = -1, up_ = -1, grab_ = -1;
     uint8_t hold_ = 0;   // the pressure's: what the opponent holds until the plan's start
     int window_ = 0;     // frames past the lead each play runs
     // (the library's of the plan asked for: the okizeme's or the pressure's)

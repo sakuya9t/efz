@@ -393,6 +393,20 @@ EFZ_ENV_API int32_t efz_env_agent_press_plan(EfzAgent* agent, EfzEnv* env, int32
                                              const double* shares, uint8_t hold,
                                              EfzOkiPlan* out);
 EFZ_ENV_API void efz_env_agent_press_shares(const EfzAgent* agent, double prior, double* shares);
+/* An agent with the catch (the module airthrow:1, mix.h's Catch): a plan on the frame the
+ * opponent's air recovery begins in environment `index` (MixPlanner::BeginThrow: actions,
+ * its inputs for the frames until it sees the recovery; near: the most pixels apart). In
+ * `out`: outcome (1: a throw that catches inside the recovery, 2: none), lead (the frames
+ * of the recovery left after `actions`), option (the throw's actions), adv (the frame of
+ * them it catches on, -1), waited (the throws looked at), view, frames, ms. The
+ * environment is left as it was. 0, or -1 with efz_env_error. */
+EFZ_ENV_API int32_t efz_env_agent_throw_plan(EfzAgent* agent, EfzEnv* env, int32_t index,
+                                             int32_t side, const int32_t* actions,
+                                             int32_t count, const float* history, uint8_t prev,
+                                             int32_t near, EfzOkiPlan* out);
+/* An attached agent's catches (16): asked, with a throw found, played, late, elsewhere,
+ * none found, apart, frames on copies, milliseconds. */
+EFZ_ENV_API void efz_env_agent_air_stats(const EfzAgent* agent, int32_t* stats);
 /* The agent plays player `side` of environment `index` as it plays in the game: its
  * combos' routes and its okizeme planned on copies of that environment (what the file
  * has of them), every plan worked to its end on the step that needs it (the game's

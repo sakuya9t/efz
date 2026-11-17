@@ -395,12 +395,29 @@ void LogPressure(const char* who, const Side& s)
             shares[4] * 100);
 }
 
+// What an agent's air throws of its opponent's recoveries did, for the log.
+void LogCatches(const char* who, const Side& s)
+{
+    const agent::OkiStats& o = s.player->Air();
+    if (!o.asked)
+        return;
+    LogInfo("agent", "%s's catches: %d air recoveries of its opponent planned from: an air "
+                     "throw that catches inside the recovery found and played in %d; none in "
+                     "%d; %d dropped (late %d, the game elsewhere %d, the fight over %d); "
+                     "planning %.1f ms a plan (at most %.1f), %ld frames on copies a plan, the "
+                     "game waited %.2f ms a plan (at most %.1f)",
+            who, o.asked, o.played, o.nothing, o.late + o.elsewhere + o.apart, o.late,
+            o.elsewhere, o.apart, o.planMs / std::max(1, o.asked - o.late), o.planMsMost,
+            o.frames / std::max(1, o.asked - o.late), o.waitedMs / o.asked, o.waitedMsMost);
+}
+
 // What an agent's planned okizeme did, for the log.
 void LogOkizeme(const char* who, const Side& s)
 {
     if (!s.player || !s.player->Mixing())
         return;
     LogPressure(who, s);
+    LogCatches(who, s);
     const agent::OkiStats& o = s.player->Oki();
     if (!o.asked)
         return;
@@ -480,6 +497,8 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
                       std::to_string(p->press.entries.size()) + " of people's (" +
                       p->press.source + "), " + std::to_string(p->press.perPlan) + " tried";
         }
+        if (p->air.on)
+            combos += "; an air throw of an opponent's air recovery when one catches inside it";
         LogInfo("agent", "%s: \"%s\"%s, %s, format %d (%s), deciding every %d frame(s), %d "
                          "frames late, %d inputs of history; %s",
                 e.path.c_str(), p->name.c_str(),
@@ -500,7 +519,8 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
         if (!s->player->Planning())
             s->planner.reset();
     }
-    if (player >= 0 && (!s->policy->mix.Empty() || !s->policy->press.Empty())) {
+    if (player >= 0 && (!s->policy->mix.Empty() || !s->policy->press.Empty() ||
+                        s->policy->air.on)) {
         s->mix.reset(new agent::MixPlanner(s->policy.get(), &g_world, Seed()));
         s->player->SetMix(s->mix.get(), player,
                           g_fast ? -1 : net ? kPatienceNet : kPatienceLocal);

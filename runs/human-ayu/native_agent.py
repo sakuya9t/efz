@@ -66,6 +66,9 @@ class NativePlayers:
         t['oki_frames_a_plan'] = round(t.get('oki_frames', 0) / asked)
         pressed = max(1, t.get('press_asked', 0) - t.get('press_late', 0))
         t['press_ms_a_plan'] = round(t.get('press_ms', 0) / pressed, 1)
+        caught = max(1, t.get('air_asked', 0) - t.get('air_late', 0))
+        t['air_ms_a_plan'] = round(t.get('air_ms', 0) / caught, 1)
+        t['air_frames_a_plan'] = round(t.get('air_frames', 0) / caught)
         made = max(1, t.get('route_plans', 0) + t.get('route_dropped', 0))
         t['route_ms_a_plan'] = round(t.get('route_ms', 0) / made, 1)
         return t
