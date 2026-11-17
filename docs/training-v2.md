@@ -1526,3 +1526,190 @@ Still open of the user's five: the air (4: the air throw, and the recovery caugh
 what a combo's ending is worth against a person (2). The okizeme leans high where it
 leaned low: 62% overheads against an opponent it has seen little of, moving with the
 counts of its standing guards.
+
+## Round 18 (16 November): opponents that recover in the air, and that learn the agent
+
+**1. The exploiters of round 17's agent.** The eleven `exploiter17`s (from each
+`exploiter16/league.zip`, the firmer recipe of round 17) all ended: ten held 70% of 64
+matches against the bare agent and stopped (Sayuri's, Nayuki's and Makoto's after one
+chunk of a million steps, Mayu's after two, Mishio's after five, the others after eight
+to thirteen); Nanase's never did in 24 chunks (55-61% at the end). `CHAR/exploiter17/
+model.zip` is what the league meets. They beat the agent as it trains, without its
+routes; what it does against them with the routes is the round's first measure (below).
+
+**2. The league and the arms.** From round 17's agent (`agent-league17-s1/avg.zip`, 261M
+steps), round 14's loop, 20M steps; the league: round 17's (the 46, the `exploiter14`s,
+`15`s and `16`s) and the `exploiter17`s; `person` and `crowd` each in a quarter of the
+`--vs` matches; `--press-cost 0.004` in every arm (round 17's decision: the input rate is
+a human limit, not a thing to trade). The match memory is not in the policy (the told
+experiment: training does not use a read); what adapts is on the opponents' side. Three
+arms of two seeds, each one change on the one before, on a frozen copy of the code at
+52cec3c (`--vs-tech` added):
+
+| Arm | Change | Question |
+|---|---|---|
+| `agent-league18` | round 17's opponents | the control: what do 20M steps more and the `exploiter17`s give? |
+| `agent-league18-tech` | both profiles recover in the air from 0.7 of the combos they take there (`--vs-tech 0.7`, `tech=0.7`) | does it learn combos that end in a knockdown once the other end costs? (a person recovered from 41% of its big combos, the league from 10%) |
+| `agent-league18-adapt` | `-tech`, and in half of the sets the profiles' habits are drawn from people's ranges and move within the set by how they went (`--vs-habits 0.5 --vs-habits-wide 0 --vs-adapt 0.3`, sets of 1 to 5 matches) | does an opponent that repeats what worked teach it to close the hole it showed? |
+
+0.7 is my estimate (the league's policies recover from about one combo in ten, the user
+from most of those the game allowed; no count of people's own recoveries by player was
+made).
+
+Judged by `avg.zip` on 64 seeded matches an opponent with the routes planned again (24
+tried), no other module: the `exploiter17`s in the plain game; the `crowd` set and the
+`crowdt` set (`crowd` with `tech=0.9`); the 46 with its own combos; and in sets of four
+(`evaluate.py --sets 4`) the `learner` set (`crowd` with `tech=0.7`, every set's habits
+drawn from people's ranges, `adapt=0.3`) over the same eight opponents. **The rules,
+fixed before the runs:**
+
+- An arm's seed can replace round 17's agent if it beats it over the `exploiter17`s and
+  is not more than two points under it on the `crowd` set or over the 46. An arm is
+  taken only if both its seeds can.
+- `-tech` is taken over `agent-league18` if both its seeds end more of their big combos
+  (1000 HP or more) in a knockdown on the `crowdt` set than both of `agent-league18`'s,
+  and neither is more than two points under `agent-league18`'s mean on the `crowd` set
+  or over the `exploiter17`s.
+- `-adapt` is taken over `-tech` if both its seeds win more of the third and fourth
+  matches of the `learner` sets than both of `-tech`'s, and neither is more than two
+  points under `-tech`'s mean on the `crowd` set or over the `exploiter17`s.
+- Within the arm taken, the seed that does better on the `crowd` set (as rounds 16 and
+  17 chose). Reported, not gates: presses while hit or guarding (the target 2.2 a
+  second), the frontal jump-ins' share that hit, wins by the match's number in a set.
+- The pick is then measured with the planned okizeme and pressure through the game's
+  own code (`--p1-native`) before it is packed.
+
+## The air (16 November): the recovery caught, and the jump at the agent
+
+The user's fourth point of 15 November ("Air still weak. In-air throwing is a very
+important skill the agent should have"), in numbers of that session: the agent caught
+the user again after 28% of the user's air recoveries and was hit back after 28%, the
+user caught it after 67% of its own; air throws 0 a minute against the user's 0.29; air
+exchanges won 0.80 a minute and lost 1.43. Two situations of it have an event a planner can start from, as the
+knockdown and the guarded move have.
+
+**1. The opponent recovers in the air out of the agent's combo.** `air_library.py`
+(`~/data/efz-replays/air-library.npz`: 3,808 recoveries out of Ayu players' combos in the
+1,908 matches, the player's inputs from the recovery to the next contact, where both
+were at each step; the match's id, the side and the opponent's character, no player's
+name). What people do there, and how it goes:
+
+| The player's next | Share | Caught (hit or thrown) | The player hit first |
+|---|---|---|---|
+| a move in the air | 47% | 21% | 15% |
+| a move from the ground | 17% | 18% | 12% |
+| a jump, no move | 14% | 26% | 15% |
+| nothing | 10% | 18% | 17% |
+| **an air throw** | **7%** | **51%** | **7%** |
+| backing off | 5% | 18% | 9% |
+
+The recovery holds its player 27 steps at the median (15 to 36), and the game lets it be
+thrown in them (`src/ayu.cpp`: an air throw starts on C with forward held, within 100
+pixels of an opponent in the air that is in no hit reaction and no guard; the recovery's
+actions 0x9d and 0x9e are neither), while nothing else touches it. That is the user's
+point from the game's side: the air throw is the one catch that does not wait for the
+recovery to end. Out of their recoveries the opponents pressed a move 38% of the time
+(the player then hit first in 29% and caught them in 15%), fell without anything 35%
+(caught 45%), dashed 12%, jumped again 10%, held a guard 5%.
+
+**2. The opponent jumps at the agent.** `air_library.py --kind jump`
+(`~/data/efz-replays/jump-library.npz`: 6,207 forward jumps begun within 320 pixels of an
+Ayu player on the ground). The jumper attacked in the air in 72% (half of those within
+24 steps of the jump's start), landed without attacking in 14%, jumped again or dashed in
+12%; it crossed sides in 21%; it was down 54 steps after the jump began at the median.
+
+| The player's answer | Share | Hit the jumper | Guarded it | Was hit |
+|---|---|---|---|---|
+| a move from the ground | 46% | 25% | 7% | 23% |
+| a guard held | 20% | 0% | 82% | 12% |
+| a move in the air | 15% | 27% | 3% | 21% |
+| a jump, no move | 11% | 4% | 31% | 29% |
+| nothing | 8% | 38% | 13% | 26% |
+
+People gamble on the jump as often as they guard it, and win the gamble as often as they
+lose it. The guard-on-sight module of 14 November lost wins because it guarded every
+jump through; a planner can take the gamble only where the copies say it wins.
+
+**The planners** (`airplan.py`: the modules `airplan` and `jumpplan`, built on
+`okiplan.py`'s planner). As the okizeme's: the library's entries whose player was where
+the agent is, as many steps after the event as have passed, tried on copies of the game
+against the opponent's answers, one drawn by its expected worth.
+
+- *After a recovery*: the entries; an air throw of its own timing (C with forward held
+  after 0, 4 or 8 steps in the air, or 7, 11 or 15 steps into a jump at the opponent);
+  back held; its own play. Against an opponent that falls, guards, presses a button,
+  jumps again or dashes back; the shares from what this opponent did out of its
+  recoveries so far, over the community's.
+- *At a jump* (the agent on the ground, the jumper within 260 pixels): the entries; the
+  jump with an air throw at three timings; a standing guard held until the jumper is
+  down; its own play. Against a jumper that attacks at once, attacks 10 steps before it
+  lands, lands and guards, lands and presses a low, or jumps again; the shares from this
+  opponent's jumps over the community's (an early attack 0.40, a late one 0.32, none
+  0.12 and 0.04, another jump 0.12).
+- `think`: the plan made for the game as it will be that many steps on, back held until
+  then, and dropped if the game is not there: what a planner beside the game can do
+  (the first measure plans at once, which the game cannot).
+
+**The catch, measured.** Round 17's agent with its routes planned again, the `crowdt` set
+(the opponents recover from 0.9 of the combos they take in the air: 4.5 recoveries a
+match), 64 matches an opponent:
+
+| | Wins (own HP lost) | After the opponent's recoveries: caught / hit back | Air throws a minute, landed (tried) |
+|---|---|---|---|
+| no module (512 matches) | 90.6% (58%) | 37% / 22% | 0.00 (0.02) |
+| the options against the answers, first four opponents (256) | 85.2% (60%); none: 88.7% (61%) | 37% / 21%; none: 38% / 26% | 0.15 (0.38) |
+| **a sure throw or its own play** (512) | **91.2% (56%)** | **44% / 18%** | **0.34 (0.36)** |
+
+- *Weighing options against answers does not pay here.* The copies gave the option drawn
+  688 HP of expected worth against 367 for the agent's own play, and the matches gave
+  nothing: what a recovered opponent does next is not one of five scripts, and the best
+  of eleven options by five samples each is mostly the luckiest. The agent's own play
+  after a recovery was already people's (it catches 37%; the community's Ayu players
+  33%).
+- *Why the air throw works for people, from the library*: of its 139 catches every one
+  lands on the last step of the recovery as recorded, which is the throw ending it. The
+  throw is pressed inside the recovery (a step before, at the median), from 38 pixels at
+  the median (19 to 103). It is not a read: the opponent cannot answer.
+- *So the planner looks for that and nothing else* (`sure`, the default; `matrix=0`
+  leaves the rest to the agent's own play): C with forward held after every second step
+  of holding forward, of a second jump or a dash at the opponent, or of a jump from the
+  ground, each on a copy until the recovery's end; the one that catches soonest is
+  played, and without one nothing is changed. A throw exists after 16% of the recoveries
+  (the agent in reach: 34 pixels at the median where one is found, 96 where none is,
+  with 13 to 20 steps of the recovery left when it sees it), and 94% of those tried land:
+  0.34 a minute, the user's rate (0.29). Seven points more recoveries caught, four fewer
+  answered with a hit, two points less HP lost; the wins level within the noise.
+- The limit is reach, not timing: the recoveries of this set come where the opponent's
+  untech time runs out, mid-combo, often with the agent a move's length away.
+
+**In the game** (`port/agent/mix.h`'s `Catch`, `BeginThrow`; the module `airthrow:1`,
+`export_agent.py --air-throw`): the sure throw alone, since it needs no library, no
+answers and no counts. Planned on the frame the recovery begins, over the 14 frames
+until the agent sees it (its inputs for them chosen at once, as the pressure's), played
+when it sees the recovery if the game is where the plan expected; at most 32 throws of
+at most 60 frames a plan. `tests.test_agents.CatchAsAirplan`: the game's plan is
+`airplan.live_throw`'s (the view expected, the recovery's frames left, the throw).
+
+**The catch through the game's own code** (`--p1-native`: round 17's file with its routes,
+okizeme and pressure, and the same with `airthrow:1`; the `crowdt` set, 512 matches each):
+
+| | Wins (own HP lost) | After the opponent's recoveries: caught / hit back | Air throws a minute, landed (tried) |
+|---|---|---|---|
+| routes, okizeme, pressure (`round17b`) | 93.8% (52%) | 36% / 23% | 0.01 (0.02) |
+| + the catch (`round17c`) | 93.8% (50%) | 43% / 19% | 0.30 (0.32) |
+
+The game's code does what the Python planner did: seven points more recoveries caught,
+four fewer answered with a hit, the wins level. (The frontal jump-ins that hit it: 50% of
+576 for 42% of 617; the Python measure had 36% for 38%. Not followed up: one of them is
+noise, or the throws leave it in the air more often.) Handed over:
+`agent-league17-s1-round17c.efzagent` (16.0 MB, with the training part; no path under a
+home folder, no player's name), which needs a game built with `airthrow:1`.
+
+**The jump at the agent, first measure** (`jumpplan`, the plan made at once; round 17's
+agent with its routes against the first four `exploiter17`s in the plain game, 256
+matches each): 89.1% (own HP lost 62%) for 85.5% (63%) without; the frontal jump-ins hit
+it 29% of the time for 37%; air exchanges won 1.07 a minute for 0.78; 2.6 plans a match,
+of which a jump with an air throw in two of five, a move from the ground in one of five,
+a guard in one of ten. A gain of the size of the noise on four opponents, with the plan
+made at once; the other seven and the plan a game could make (`think=6`: back held six
+steps while it is made, dropped if the jumper did something in them) are running.

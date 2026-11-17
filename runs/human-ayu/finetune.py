@@ -136,6 +136,10 @@ def parse():
                    help="the --vs opponents with the advantages change their habits within "
                         "a set by how their choices went (advantages.py's adapt: the share "
                         "of the way a habit moves each time)")
+    p.add_argument('--vs-tech', type=float, default=0.0,
+                   help="the --vs opponents with the advantages recover in the air as soon as "
+                        "the game lets them, from this share of the combos they take there "
+                        "(advantages.py's tech: a combo that leaves its victim free costs)")
     p.add_argument('--tell', action='store_true',
                    help="the learner is told the --vs opponents' habits of the match "
                         "(advantages.py's told(): more features after its input history; a "
@@ -317,7 +321,8 @@ def vs_advantage(args, j):
                 throw=get(args.vs_throw, 0.0), damage=get(args.vs_damage, 1.0),
                 bait=get(args.vs_bait, 0.0), patient=get(args.vs_patient, 0.0),
                 wake=get(args.vs_wake, 0.0), jumpin=get(args.vs_jumpin, 0.0),
-                habits=args.vs_habits, adapt=args.vs_adapt, wide=args.vs_habits_wide)
+                habits=args.vs_habits, adapt=args.vs_adapt, wide=args.vs_habits_wide,
+                tech=args.vs_tech)
 
 
 def told_width(args):
@@ -818,7 +823,7 @@ def main():
                        vs_damage=args.vs_damage, vs_rg=args.vs_rg, vs_reversal=args.vs_reversal,
                        vs_throw=args.vs_throw, vs_bait=args.vs_bait, vs_patient=args.vs_patient,
                        vs_wake=args.vs_wake, vs_jumpin=args.vs_jumpin, tell=args.tell, vs_habits=args.vs_habits, vs_adapt=args.vs_adapt,
-                       vs_habits_wide=args.vs_habits_wide,
+                       vs_habits_wide=args.vs_habits_wide, vs_tech=args.vs_tech,
                        **({'memory': memory_config(args)} if args.memory else {}), sets=args.sets,
                        vs_adv_share=args.vs_adv_share,
                        vs_profile2=args.vs_profile2, vs_profile2_share=args.vs_profile2_share,
