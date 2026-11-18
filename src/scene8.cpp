@@ -5,6 +5,15 @@
 #include <math.h>
 #include "efz.h"
 
+#ifdef EFZ_NATIVE
+// The native game's last page: RECORDS after EXIT when it has fight records
+// (efz::RecordsHooks), else EXIT.
+static int LastPage()
+{
+    return efz::g_records.play ? efz::kRecordsPage : 9;
+}
+#endif
+
 CScene8::CScene8(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound)
     : CScene(hwnd, player1Ref, player2Ref, game, graphics, input, sound)
 {
@@ -121,6 +130,32 @@ BYTE CScene8::Update()
     for (; side < 2; side++) {
         switch (m_state) {
         case 0:
+#ifdef EFZ_NATIVE
+            if (m_page == efz::kRecordsPage) {
+                // The records: up and down choose one, A plays it; left, right and B as
+                // on the other pages.
+                if (efz::g_records.move(side, m_game->m_inputY[side])) {
+                    m_game->PlaySE(8);
+                }
+                if (m_held[side] == 0 && m_game->m_inputX[side] != 0) {
+                    m_game->PlaySE(8);
+                    m_page += m_game->m_inputX[side];
+                    if (m_page > LastPage()) {
+                        m_page = 0;
+                    }
+                }
+                if (m_game->m_pressA[side] != 0 && efz::g_records.play()) {
+                    m_game->PlaySE(6);
+                    m_enter = 2; // (before the fade: the page's list isn't drawn over it)
+                    CScene::FadeOut(m_palette, 0, 0, 50);
+                    return 2;
+                }
+                if (m_game->m_pressB[0] != 0 || m_game->m_pressB[1] != 0) {
+                    m_leave = 1;
+                }
+                break;
+            }
+#endif
             if (m_held[side] == 0 && m_game->m_inputY[side] != 0) {
                 m_game->PlaySE(8);
                 m_slot += m_game->m_inputY[side];
@@ -133,11 +168,19 @@ BYTE CScene8::Update()
             if (m_held[side] == 0 && m_game->m_inputX[side] != 0) {
                 m_game->PlaySE(8);
                 m_page += m_game->m_inputX[side];
+#ifdef EFZ_NATIVE
+                if (m_page > LastPage()) {
+                    m_page = 0;
+                } else if (m_page < 0) {
+                    m_page = LastPage();
+                }
+#else
                 if (m_page > 9) {
                     m_page = 0;
                 } else if (m_page < 0) {
                     m_page = 9;
                 }
+#endif
             }
             if (m_game->m_pressA[side] != 0) {
                 if (m_page == 9) {
@@ -250,6 +293,14 @@ void CScene8::Draw()
     src = MakeRect(0, 25, 320, 16);
     dst = MakeRect(0, 4, 320, 16);
     m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
+#ifdef EFZ_NATIVE
+    // RECORDS isn't in the menu's picture: the page draws its label and its list over
+    // the frame (port/records.cpp), where the slots would be.
+    if (m_page == efz::kRecordsPage) {
+        m_graphics->Flip();
+        return;
+    }
+#endif
     if (m_page == 9) {
         src = MakeRect((m_page << 4) + 80, 6, 40, 15);
         dst = MakeRect((m_page << 4) + 80, 4, 40, 15);
@@ -386,6 +437,11 @@ void CScene8::Enter()
             m_game->m_replay.Close();
         }
     }
+#ifdef EFZ_NATIVE
+    if (efz::g_records.enter) {
+        efz::g_records.enter();
+    }
+#endif
     if (m_enter == 2) {
         Draw();
         CScene::FadeIn(m_palette, 1);

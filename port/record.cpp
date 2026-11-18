@@ -17,6 +17,7 @@
 #include "crash.h"
 #include "log.h"
 #include "record.h"
+#include "agents.h"
 
 // src/scene3.cpp: one of F5-F8 is held, so that each press acts once.
 extern int g_fkeyHeld;
@@ -189,6 +190,7 @@ struct Recorder {
     Still still[2];
     Line line;
     Line event;
+    bool swallowEsc = false; // the Esc that left a record is still down
 };
 Recorder g;
 
@@ -249,6 +251,49 @@ struct Change {
     unsigned value;
 };
 
+// The sounds a fight's game loaded for it: slots of its CSound, which the state holds by
+// number (CGame::m_sounds and m_music, each player's m_voices). They follow what the
+// game loaded before (the menus, the demo, earlier fights).
+struct SoundSlots {
+    WORD sounds[0x41];
+    WORD music;
+    short voices[2][0x32];
+
+    void Read(CScene3* scene)
+    {
+        memcpy(sounds, scene->m_game->m_sounds, sizeof(sounds));
+        music = scene->m_game->m_music;
+        for (int i = 0; i < 2; i++)
+            memcpy(voices[i], scene->m_players[i]->m_voices, sizeof(voices[i]));
+    }
+    void Write(CScene3* scene) const
+    {
+        memcpy(scene->m_game->m_sounds, sounds, sizeof(sounds));
+        scene->m_game->m_music = music;
+        for (int i = 0; i < 2; i++)
+            memcpy(scene->m_players[i]->m_voices, voices[i], sizeof(voices[i]));
+    }
+    // How many differ from `other`'s; the first, and other's there.
+    int Differ(const SoundSlots& other, int* first, int* otherFirst) const
+    {
+        int n = 0;
+        auto note = [&](int x, int y) {
+            if (x != y && n++ == 0) {
+                *first = x;
+                *otherFirst = y;
+            }
+        };
+        note(music, other.music);
+        for (int i = 0; i < 0x41; i++)
+            note(sounds[i], other.sounds[i]);
+        for (int p = 0; p < 2; p++) {
+            for (int i = 0; i < 0x32; i++)
+                note(voices[p][i], other.voices[p][i]);
+        }
+        return n;
+    }
+};
+
 struct Replay {
     bool active = false;
     std::string path, dir;
@@ -265,8 +310,32 @@ struct Replay {
     unsigned sizes[TRACE_BLOCKS];
     bool loaded = false, done = false;
     long firstDiff = -1, diffs = 0, compared = 0;
+    // Played from the REPLAY menu (PlayRecord), not --replay-fight: the game goes on
+    // afterwards. `game` is CGame as the menu had it, `save` the save folder.
+    bool viewing = false;
+    bool soundsKept = false; // this game's sound slots in place of the record's, `slots`
+    SoundSlots slots;
+    bool left = false;       // Esc
+    bool paused = false;     // F8, outside the game (RecordPaused)
+    bool pauseKey = false;
+    std::vector<unsigned char> game;
+    std::string save;
 };
 Replay r;
+
+// Why a record can't be replayed: in the log, and in short for the REPLAY menu's page.
+std::string g_refusal;
+
+void Refuse(const char* reason, const char* format, ...) EFZ_PRINTF(2, 3);
+void Refuse(const char* reason, const char* format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    LogV(kLogError, "replay", format, args);
+    va_end(args);
+    if (g_refusal.empty())
+        g_refusal = reason;
+}
 
 // JSON, as much as the records need: a small reader into a tree.
 struct Json {
@@ -289,6 +358,11 @@ struct Json {
     {
         const Json* j = Get(key);
         return j && j->kind == kNumber ? j->number : fallback;
+    }
+    bool Bool(const char* key) const
+    {
+        const Json* j = Get(key);
+        return j && j->kind == kBool && j->number != 0;
     }
     std::string String(const char* key) const
     {
@@ -462,7 +536,8 @@ bool LoadState(const std::string& path)
     size_t size = 0;
     unsigned char* data = (unsigned char*)SDL_LoadFile(path.c_str(), &size);
     if (!data) {
-        LogError("replay", "cannot read the state %s: %s", path.c_str(), SDL_GetError());
+        Refuse("its state file can't be read", "cannot read the state %s: %s", path.c_str(),
+               SDL_GetError());
         return false;
     }
     r.state.assign(data, data + size);
@@ -482,7 +557,8 @@ bool LoadState(const std::string& path)
     }
     for (int i = 0; i < TRACE_BLOCKS; i++) {
         if (!seen[i]) {
-            LogError("replay", "the state %s has no block %s", path.c_str(), TraceBlockName(i));
+            Refuse("its state file is incomplete", "the state %s has no block %s", path.c_str(),
+                   TraceBlockName(i));
             return false;
         }
     }
@@ -494,7 +570,7 @@ bool LoadRecord(const char* path)
     size_t size = 0;
     char* data = (char*)SDL_LoadFile(path, &size);
     if (!data) {
-        LogError("replay", "cannot read %s: %s", path, SDL_GetError());
+        Refuse("the record can't be read", "cannot read %s: %s", path, SDL_GetError());
         return false;
     }
     r.path = path;
@@ -516,14 +592,15 @@ bool LoadRecord(const char* path)
             if (type == "fight" && !header) {
                 header = true;
                 if (j.String("format") != "efz-fight" || j.Number("version") != 1) {
-                    LogError("replay", "%s isn't an efz-fight record of version 1", path);
+                    Refuse("it isn't a fight record this game reads",
+                           "%s isn't an efz-fight record of version 1", path);
                     SDL_free(data);
                     return false;
                 }
                 const Json* players = j.Get("players");
                 for (int i = 0; i < 2; i++) {
                     if (!players || players->items.size() != 2) {
-                        LogError("replay", "%s has no players", path);
+                        Refuse("the record has no players", "%s has no players", path);
                         SDL_free(data);
                         return false;
                     }
@@ -541,15 +618,15 @@ bool LoadRecord(const char* path)
                 r.repCopy = j.String("replay_copy");
                 r.repOffset = (long)j.Number("replay_offset");
                 if (!ParseHashes(j.String("state_hashes"), r.stateHashes)) {
-                    LogError("replay", "%s has no state_hashes", path);
+                    Refuse("the record has no state hashes", "%s has no state_hashes", path);
                     SDL_free(data);
                     return false;
                 }
             } else if (type == "tick") {
                 ReplayTick t;
                 if ((long)j.Number("t", -1) != (long)r.ticks.size()) {
-                    LogError("replay", "%s:%ld: tick %ld where %ld was due", path, lineNumber,
-                             (long)j.Number("t", -1), (long)r.ticks.size());
+                    Refuse("the record misses ticks", "%s:%ld: tick %ld where %ld was due", path,
+                           lineNumber, (long)j.Number("t", -1), (long)r.ticks.size());
                     SDL_free(data);
                     return false;
                 }
@@ -579,7 +656,8 @@ bool LoadRecord(const char* path)
     }
     SDL_free(data);
     if (!header || r.ticks.empty()) {
-        LogError("replay", "%s has %s", path, header ? "no ticks" : "no header");
+        Refuse(header ? "the record has no ticks" : "the record has no header", "%s has %s",
+               path, header ? "no ticks" : "no header");
         return false;
     }
     return LoadState(r.dir + "/" + r.stateFile);
@@ -604,15 +682,18 @@ bool ReplayLoad(CScene3* scene)
     CGame* game = scene->m_game;
     for (int i = 0; i < 2; i++) {
         if (scene->m_players[i]->m_charId != r.chars[i]) {
-            LogError("replay", "P%d is character %d, the record's %d", i + 1,
-                     scene->m_players[i]->m_charId, r.chars[i]);
+            Refuse("the characters aren't the record's", "P%d is character %d, the record's %d",
+                   i + 1, scene->m_players[i]->m_charId, r.chars[i]);
             return false;
         }
     }
+    SoundSlots live;
+    live.Read(scene);
     int bad = TraceLoadState(scene, r.blocks, r.sizes);
     if (bad >= 0) {
-        LogError("replay", "the state's block %s has %u bytes where this build has others",
-                 TraceBlockName(bad), r.sizes[bad]);
+        Refuse("it was recorded by a game of another layout",
+               "the state's block %s has %u bytes where this build has others",
+               TraceBlockName(bad), r.sizes[bad]);
         return false;
     }
     srand(r.rng);
@@ -622,8 +703,8 @@ bool ReplayLoad(CScene3* scene)
         std::string copy = r.dir + "/" + r.repCopy;
         FILE* f = r.repCopy.empty() ? nullptr : OpenUtf8(copy.c_str(), "rb");
         if (!f) {
-            LogError("replay", "the fight played a replay, and its copy %s is missing",
-                     copy.c_str());
+            Refuse("the replay file it played is missing",
+                   "the fight played a replay, and its copy %s is missing", copy.c_str());
             return false;
         }
         fseek(f, r.repOffset, SEEK_SET);
@@ -639,10 +720,23 @@ bool ReplayLoad(CScene3* scene)
     SaveState(scene, nullptr, 0, h);
     for (int i = 0; i < TRACE_BLOCKS; i++) {
         if (h[i] != r.stateHashes[i]) {
-            LogError("replay", "the loaded state's block %s doesn't hash as recorded",
-                     TraceBlockName(i));
+            Refuse("its state doesn't load as recorded",
+                   "the loaded state's block %s doesn't hash as recorded", TraceBlockName(i));
             return false;
         }
+    }
+    // The game must play and free the sounds it loaded, not the record's (and played
+    // from the menu, it goes on after the fight). The record's are put back only to hash
+    // the state as the record's game had it (OnTick).
+    r.slots.Read(scene);
+    int first = 0, here = 0;
+    int moved = r.slots.Differ(live, &first, &here);
+    if (moved) {
+        LogInfo("replay", "%d of the record's sounds were in other slots than this game's "
+                          "(the first in %d, here %d): this game's are kept",
+                moved, first, here);
+        live.Write(scene);
+        r.soundsKept = true;
     }
     LogInfo("replay", "loaded the recorded state at the first tick");
     return true;
@@ -651,7 +745,8 @@ bool ReplayLoad(CScene3* scene)
 void Compare(const uint32_t* hashes)
 {
     long t = g.tick;
-    if (!r.loaded || t >= (long)r.ticks.size())
+    // (Esc, played from the menu, is the player's: the fight is left from then on.)
+    if (!r.loaded || r.left || t >= (long)r.ticks.size())
         return;
     const ReplayTick& rec = r.ticks[t];
     char what[256] = "";
@@ -681,8 +776,9 @@ void Compare(const uint32_t* hashes)
             char state[48];
             snprintf(state, sizeof(state), "desync-t%06ld.state", t);
             bool saved = SaveState(g.fight, state, t, nullptr);
-            LogError("replay", "tick %ld differs from the record: %s%s%s", t, what,
-                     saved ? "; this state is in " : "", saved ? state : "");
+            Log(r.viewing ? kLogWarn : kLogError, "replay",
+                "tick %ld differs from the record: %s%s%s", t, what,
+                saved ? "; this state is in " : "", saved ? state : "");
         }
     }
     if (t + 1 == (long)r.ticks.size())
@@ -797,8 +893,6 @@ void BeginFight(CScene3* scene)
     PlayerName(p[1], names[1]);
     g.started = true;
     g.tick = 0;
-    g.fights++;
-    snprintf(g.name, sizeof(g.name), "fight-%03d", g.fights);
     g.prevIntro = (char)game->m_intro;
     g.prevOver = game->m_roundOver != 0;
     g.prevWon[0] = p[0]->m_roundsWon;
@@ -809,6 +903,15 @@ void BeginFight(CScene3* scene)
     g.snapshots = 0;
     for (int i = 0; i < 2; i++)
         g.still[i] = Still{-1, -1, -1, 0};
+    // A record played from the REPLAY menu isn't a fight of this session's: no record of
+    // it, nor checks (its own were made as it was recorded).
+    if (r.viewing) {
+        LogInfo("replay", "playing %s: %s (P1) vs %s (P2), %ld ticks", r.path.c_str(),
+                names[0], names[1], (long)r.ticks.size());
+        return;
+    }
+    g.fights++;
+    snprintf(g.name, sizeof(g.name), "fight-%03d", g.fights);
     CountSession("fights");
     LogInfo("fight", "fight %d: %s (P1, %s) vs %s (P2, %s), stage %d, %s%s", g.fights, names[0],
             p[0]->m_cpu ? "cpu" : "human", names[1], p[1]->m_cpu ? "cpu" : "human",
@@ -861,7 +964,20 @@ void BeginFight(CScene3* scene)
         l.Printf(",\"palette\":%d,\"cpu\":%d,\"cpu_skill\":", p[i]->m_paletteIndex,
                  p[i]->m_cpu != 0);
         l.Double(p[i]->m_cpuSkill);
-        l.Printf(",\"edit_color\":%d}", game->m_editColor[i] != 0);
+        l.Printf(",\"edit_color\":%d", game->m_editColor[i] != 0);
+        // VS HUMAN: the agent that plays the side (agents.h), null for a person.
+        if (game->m_gameMode == 4) {
+            const char* agent = AgentName(i);
+            l.Add(",\"agent\":");
+            if (agent) {
+                l.String(agent);
+                l.Add(",\"agent_file\":");
+                l.String(AgentFileName(i));
+            } else {
+                l.Add("null");
+            }
+        }
+        l.Add("}");
     }
     l.Printf("],\"rng\":%u,\"fkey_held\":%d,\"state\":\"%s.state\",\"state_hashes\":\"",
              (unsigned)RandState(), g_fkeyHeld, g.name);
@@ -888,6 +1004,11 @@ void EndFight(const char* reason)
     if (!g.started)
         return;
     g.started = false;
+    if (r.viewing) {
+        LogInfo("replay", "%s: left after %ld of its %ld ticks (%s)", r.path.c_str(), g.tick,
+                (long)r.ticks.size(), r.left ? "Esc" : reason);
+        return;
+    }
     for (int i = 0; i < g.anomalyCount; i++) {
         const Anomaly& a = g.anomalies[i];
         if (a.count > 1)
@@ -1180,8 +1301,9 @@ void OnTickStart(CScene3* scene)
         if (r.active && !r.loaded && !r.done) {
             r.loaded = ReplayLoad(scene);
             if (!r.loaded) {
-                r.done = true;
-                RequestQuit();
+                r.done = true; // (played from the menu: back to it, RecorderFrameEnd)
+                if (!r.viewing)
+                    RequestQuit();
             }
         }
         BeginFight(scene);
@@ -1208,7 +1330,16 @@ void OnTick(CScene3* scene, const unsigned* traceHashes)
         g.inTick = false;
         return;
     }
-    Check(scene);
+    if (r.soundsKept && traceHashes) {
+        // The state's hashes as the record's game had it, its sound slots in.
+        SoundSlots live;
+        live.Read(scene);
+        r.slots.Write(scene);
+        SaveState(scene, nullptr, g.tick, hashes);
+        live.Write(scene);
+    }
+    if (!r.viewing)
+        Check(scene);
     Events(scene);
     WriteTick(scene, traceHashes ? hashes : nullptr);
     if (r.active)
@@ -1247,12 +1378,11 @@ void StartRecorder(const RecordOptions& options, CGame* game, CScene** scenes)
     LogInfo("record", "fight records %s", options.record ? "on" : "off");
 }
 
-bool StartReplay(unsigned char* scene)
+namespace {
+
+// The loaded record's match, set up for match setup (scene 2).
+void SetUpMatch()
 {
-    if (!g.options.replay)
-        return false;
-    if (!LoadRecord(g.options.replay))
-        return false;
     CGame* game = g.game;
     CScene2* loader = (CScene2*)g.scenes[2];
     // The match as the harness's recording sets one up (src/trace.cpp), without a replay
@@ -1270,11 +1400,206 @@ bool StartReplay(unsigned char* scene)
     loader->CreateCharacter(loader->m_player2Ref, loader->m_player1Ref, 1, (char)r.chars[1]);
     (*loader->m_player1Ref)->m_paletteIndex = (char)r.palettes[0];
     (*loader->m_player2Ref)->m_paletteIndex = (char)r.palettes[1];
-    *scene = 2;
     r.active = true;
     LogInfo("replay", "replaying %s: characters %d and %d, stage %d, %ld ticks",
             r.path.c_str(), r.chars[0], r.chars[1], r.stage, (long)r.ticks.size());
+}
+
+// What a record's state, loaded at its first tick, sets in CGame (the whole of it is in
+// the state) that outlasts the fight: the controls as the menu last read them, the
+// modes, the settings of key.ini and the matches. They are put back as the REPLAY menu
+// had them, after a record played from it.
+void RestoreGame(CGame* game, const CGame* was)
+{
+#define EFZ_KEEP(m) memcpy(&game->m, &was->m, sizeof(game->m));
+    EFZ_KEEP(m_inputX) EFZ_KEEP(m_inputY) EFZ_KEEP(m_pressA) EFZ_KEEP(m_pressB)
+    EFZ_KEEP(m_pressC) EFZ_KEEP(m_pressD) EFZ_KEEP(m_holdA) EFZ_KEEP(m_holdB)
+    EFZ_KEEP(m_holdC) EFZ_KEEP(m_holdD)
+    EFZ_KEEP(m_gameMode) EFZ_KEEP(m_isCpu) EFZ_KEEP(m_humanSide) EFZ_KEEP(m_replayMode)
+    EFZ_KEEP(m_replaySlot) EFZ_KEEP(m_replayPage) EFZ_KEEP(m_replayVersion)
+    EFZ_KEEP(m_cpuLevel) EFZ_KEEP(m_fullEffects) EFZ_KEEP(m_drawEveryFrame)
+    EFZ_KEEP(m_damageLevel) EFZ_KEEP(m_roundsSetting) EFZ_KEEP(m_hasConfig)
+    EFZ_KEEP(m_extraChars)
+    EFZ_KEEP(m_stage) EFZ_KEEP(m_round) EFZ_KEEP(m_roundsToWin) EFZ_KEEP(m_winner)
+    EFZ_KEEP(m_editColor) EFZ_KEEP(m_dummyStance) EFZ_KEEP(m_dummyGuard)
+    EFZ_KEEP(m_arcadeMatch) EFZ_KEEP(m_beatenChars) EFZ_KEEP(m_playedStages)
+    EFZ_KEEP(m_continued) EFZ_KEEP(m_continuedAt)
+#undef EFZ_KEEP
+}
+
+// A record played from the menu is over, its fight left: back to the REPLAY menu (scene
+// 8), the game as it was there.
+void EndViewing(unsigned char* scene)
+{
+    RestoreGame(g.game, (const CGame*)r.game.data());
+    // The REPLAY menu leaves on Esc too: not on the one that left the record.
+    g.swallowEsc = r.left;
+    SetDataDir(DataDir(), r.save.c_str());
+    g_traceHooks.hashes = g.options.record || g.options.replay;
+    LogInfo("replay", "back to the REPLAY menu from %s%s", r.path.c_str(),
+            r.firstDiff >= 0 ? "; it played otherwise than recorded" : "");
+    r = Replay();
+    *scene = 8;
+}
+
+} // namespace
+
+bool ReadRecordSummary(const char* path, RecordSummary* out)
+{
+    FILE* f = OpenUtf8(path, "rb");
+    if (!f)
+        return false;
+    // The header: the first line (a few hundred bytes).
+    std::string head;
+    char buffer[4096];
+    size_t k;
+    while (head.find('\n') == std::string::npos && head.size() < (1u << 16) &&
+           (k = fread(buffer, 1, sizeof(buffer), f)) > 0)
+        head.append(buffer, k);
+    // The end: the last line, or the last tick's when the record stops short.
+    fseek(f, 0, SEEK_END);
+    long size = ftell(f);
+    long from = size > (long)sizeof(buffer) ? size - (long)sizeof(buffer) : 0;
+    fseek(f, from, SEEK_SET);
+    std::string tail(buffer, fread(buffer, 1, sizeof(buffer), f));
+    fclose(f);
+    size_t nl = head.find('\n');
+    Json h;
+    if (nl == std::string::npos || !ParseJson(head.data(), head.data() + nl, h) ||
+        h.String("type") != "fight" || h.String("format") != "efz-fight")
+        return false;
+    *out = RecordSummary();
+    out->path = path;
+    out->session = h.String("session");
+    out->started = h.String("started");
+    out->fight = (int)h.Number("fight");
+    out->mode = (int)h.Number("mode", -1);
+    out->replayMode = (int)h.Number("replay_mode");
+    out->replayed = h.Get("replay_of") != nullptr;
+    if (const Json* b = h.Get("build")) {
+        out->revision = b->String("revision");
+        out->os = b->String("os");
+        out->dirty = b->Bool("dirty");
+    }
+    const Json* players = h.Get("players");
+    for (int i = 0; players && i < 2 && i < (int)players->items.size(); i++) {
+        const Json& p = players->items[i];
+        out->chars[i] = (int)p.Number("char", -1);
+        out->cpu[i] = p.Number("cpu") != 0;
+        out->agent[i] = p.String("agent");
+        // Records before agents were noted say nothing of who played VS HUMAN's sides.
+        out->unknown[i] = !out->cpu[i] && out->mode == 4 && !p.Get("agent");
+    }
+    // Lines of the tail, last first; the first may be cut.
+    size_t end = tail.size();
+    while (end > 0) {
+        size_t start = tail.rfind('\n', end - 1);
+        start = start == std::string::npos ? 0 : start + 1;
+        Json j;
+        if (end > start && (start > 0 || from == 0) &&
+            ParseJson(tail.data() + start, tail.data() + end, j)) {
+            std::string type = j.String("type");
+            if (type == "end" && out->reason.empty()) {
+                out->reason = j.String("reason");
+                out->winner = (int)j.Number("winner", -1);
+                if (const Json* won = j.Get("rounds_won")) {
+                    out->roundsWon[0] = (int)won->At(0);
+                    out->roundsWon[1] = (int)won->At(1);
+                }
+                out->ticks = (long)j.Number("t");
+                out->frames = (long)j.Number("f");
+                break;
+            }
+            if (type == "tick") {
+                out->ticks = (long)j.Number("t") + 1;
+                out->frames = (long)j.Number("f") + 1;
+                break;
+            }
+        }
+        if (start == 0)
+            break;
+        end = start - 1;
+    }
     return true;
+}
+
+bool StartReplay(unsigned char* scene)
+{
+    if (!g.options.replay)
+        return false;
+    if (!LoadRecord(g.options.replay))
+        return false;
+    SetUpMatch();
+    *scene = 2;
+    return true;
+}
+
+bool PlayRecord(const char* path, std::string* error)
+{
+    if (r.active) {
+        *error = "a record is playing";
+        return false;
+    }
+    r = Replay();
+    g_refusal.clear();
+    if (!LoadRecord(path)) {
+        *error = g_refusal.empty() ? "it can't be read" : g_refusal;
+        r = Replay();
+        return false;
+    }
+    r.viewing = true;
+    r.game.assign((const unsigned char*)g.game, (const unsigned char*)g.game + sizeof(CGame));
+    // The game's files meanwhile go to a scratch folder, as --replay-fight's do: a
+    // recorded F6 restarting a recorded replay would write the player's replay file.
+    r.save = SaveDir();
+    char scratch[1100];
+    if (SessionPath("scratch", scratch, sizeof(scratch))) {
+        SDL_CreateDirectory(scratch);
+        SetDataDir(DataDir(), scratch);
+    }
+    // Each tick is compared with the record's, which needs the hashes (--no-record).
+    g_traceHooks.hashes = 1;
+    SetUpMatch();
+    return true;
+}
+
+const RecordView* ViewingRecord()
+{
+    static RecordView view;
+    if (!r.viewing)
+        return nullptr;
+    view.path = r.path.c_str();
+    view.tick = r.loaded ? g.tick : 0;
+    view.ticks = (long)r.ticks.size();
+    view.firstDiff = r.firstDiff;
+    view.paused = r.paused;
+    view.done = r.done;
+    return &view;
+}
+
+std::string TakeRecordError()
+{
+    std::string e;
+    std::swap(e, g_refusal);
+    return e;
+}
+
+bool RecordPaused(int scene)
+{
+    if (!r.viewing)
+        return false;
+    const unsigned char* keys = KeyboardState();
+    bool f8 = (keys[0x42] & 0x80) != 0;
+    CScene3* fight = (CScene3*)g.scenes[3];
+    bool playing = scene == 3 && g.inScene3 && g.started && !r.done && fight->m_enter == 0 &&
+                   fight->m_leave == 0;
+    if (f8 && !r.pauseKey && playing)
+        r.paused = !r.paused;
+    r.pauseKey = f8;
+    // Esc goes on, to leave (FilterKeyboard).
+    if (!playing || (keys[0x01] & 0x80))
+        r.paused = false;
+    return r.paused;
 }
 
 void RecorderFrameStart(long frame, int scene)
@@ -1289,8 +1614,10 @@ void RecorderFrameStart(long frame, int scene)
         g.fightFrame++;
 }
 
-bool RecorderFrameEnd(int scene)
+bool RecorderFrameEnd(unsigned char* sceneRef)
 {
+    int scene = *sceneRef;
+    bool left = g.inScene3 && scene != 3;
     if (g.inScene3) {
         CScene3* fight = (CScene3*)g.scenes[3];
         if (g.started && fight->m_paused != g.paused) {
@@ -1305,14 +1632,27 @@ bool RecorderFrameEnd(int scene)
                      : g.replayMode == 1  ? "replay_end"
                                           : "left");
             g.inScene3 = false;
-            if (r.active && fought && !r.done) {
+            if (r.active && fought && !r.done && !r.left) {
                 r.done = true;
-                LogError("replay", "the fight ended after %ld ticks; the record has %ld",
-                         g.tick, (long)r.ticks.size());
+                Log(r.viewing ? kLogWarn : kLogError, "replay",
+                    "the fight ended after %ld ticks; the record has %ld", g.tick,
+                    (long)r.ticks.size());
             }
         }
     }
-    return r.active && r.done;
+    if (!r.viewing)
+        return r.active && r.done;
+    // Played from the menu: once its last tick has played (or it couldn't be), the fight
+    // is left as Esc leaves it, even from the fade at a match's end; whatever the scene
+    // goes to then, it is the REPLAY menu.
+    CScene3* fight = (CScene3*)g.scenes[3];
+    if (scene == 3 && r.done && fight->m_enter == 0 && fight->m_leave != 1) {
+        fight->m_leave = 1;
+        fight->m_paused = 0;
+    }
+    if (left)
+        EndViewing(sceneRef);
+    return false;
 }
 
 void SuspendRecorder(bool suspend)
@@ -1338,7 +1678,7 @@ void SuspendRecorder(bool suspend)
 void StopRecorder()
 {
     EndFight("exit");
-    if (!r.active)
+    if (!r.active || r.viewing) // (played from the menu: EndFight said where it was left)
         return;
     long total = (long)r.ticks.size();
     if (!r.loaded)
@@ -1366,13 +1706,25 @@ void FilterKeyboard(unsigned char* keys, size_t size)
     if (first)
         g.keyFrame = g.fightFrame;
     if (r.active) {
+        // Played from the menu, Esc is the player's own: it leaves the record.
+        bool esc = r.viewing && g.inScene3 && size > 1 && (keys[0x01] & 0x80);
         memset(keys, 0, size);
         unsigned held = g.inScene3 ? ValueAt(r.keys, g.fightFrame, -1) : 0;
         for (int i = 0; i < kSysKeyCount; i++) {
             if ((held & (1u << i)) && kSysKeys[i] < size)
                 keys[kSysKeys[i]] = 0x80;
         }
+        if (esc) {
+            keys[0x01] = 0x80;
+            r.left = r.done = true;
+        }
         return;
+    }
+    if (g.swallowEsc && size > 1) {
+        if (keys[0x01] & 0x80)
+            keys[0x01] = 0;
+        else
+            g.swallowEsc = false;
     }
     // Recording: what the fight's first read of each frame (CScene3::HandleKeys) saw.
     if (!first)

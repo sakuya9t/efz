@@ -75,7 +75,7 @@ foreach(f observe policy routes mix)
   list(APPEND EFZ_AGENT_SOURCES ${CMAKE_SOURCE_DIR}/port/agent/${f}.cpp)
 endforeach()
 set(EFZ_SDL_SOURCES)
-foreach(f main sdlmain input sound video log crash record)
+foreach(f main sdlmain input sound video log crash record records)
   list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
 endforeach()
 # Netplay: EfzRevival 1.02h's, built in (port/netplay/, docs/netplay.md).

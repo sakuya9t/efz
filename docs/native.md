@@ -66,8 +66,9 @@ macOS (arm64, x64).
   points exactly, where the original checked once per frame.
 
 - **Logs.** Each run keeps a folder in `logs/` under the save folder: `efz.log`, a
-  report when the game crashes or hangs, and a record of each fight, which
-  `--replay-fight` replays tick for tick ([logging.md](logging.md)).
+  report when the game crashes or hangs, and a record of each fight, which the REPLAY
+  menu's RECORDS page (after EXIT) and `--replay-fight` replay tick for tick
+  ([logging.md](logging.md)).
 
 For tests the game runs without a display (`SDL_VIDEO_DRIVER=offscreen
 SDL_AUDIO_DRIVER=dummy`) and takes `--frames N`, `--fast`, `--keys SCRIPT` and
@@ -193,6 +194,7 @@ lists what a platform provides).
 | `sound.cpp` | `CSound`: the 150 sound slots, a mixer on SDL's audio thread, `.wav` parsing, the music's loop points |
 | `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second; `MessageBox`, `PostMessage`, `timeGetTime` |
 | `log.cpp`, `crash.cpp`, `record.cpp` | The log and its session folder, crash and hang reports, and the fight records, checks and replays ([logging.md](logging.md)) |
+| `records.cpp` | The REPLAY menu's RECORDS page: the logs folder's fight records, each played as a replay ([logging.md](logging.md)) |
 
 ## The compatibility test
 

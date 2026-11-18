@@ -12,9 +12,11 @@
 #define EFZ_RECORD_H
 
 #include <stddef.h>
+#include <string>
 
 class CGame;
 class CScene;
+struct SDL_Renderer;
 
 namespace efz {
 
@@ -29,9 +31,61 @@ void StartRecorder(const RecordOptions& options, CGame* game, CScene** scenes);
 // the scene to start from. False if the record can't be read.
 bool StartReplay(unsigned char* scene);
 // The main loop's frames, before and after the scene's Update. RecorderFrameEnd returns
-// true once a replay is over.
+// true once a replay is over; a record played from the REPLAY menu sets *scene to the
+// menu's when the fight is left.
 void RecorderFrameStart(long frame, int scene);
-bool RecorderFrameEnd(int scene);
+bool RecorderFrameEnd(unsigned char* scene);
+
+// --- Records played in the game, from the REPLAY menu's RECORDS page (port/records.cpp).
+
+// A record's facts, from its first and last lines.
+struct RecordSummary {
+    std::string path;    // its fight-NNN.jsonl
+    std::string session; // its session's id
+    std::string started; // when the fight began, as the header has it
+    std::string revision, os; // the game that recorded it: git's revision, its system
+    bool dirty = false;       // and whether it was built with changes
+    int fight = 0;
+    int mode = -1;       // CGame::m_gameMode
+    int replayMode = 0;
+    int chars[2] = {-1, -1};
+    bool cpu[2] = {false, false};
+    std::string agent[2]; // the agent that played the side ("": a person or the CPU)
+    bool unknown[2] = {false, false}; // a person or an agent: the record doesn't say
+    bool replayed = false; // the record of a replayed fight (replay_of)
+    // The end: why ("" none: the record stops short, as after a crash), the winner (-1
+    // none), the rounds won; how long the fight was.
+    std::string reason;
+    int winner = -1;
+    int roundsWon[2] = {0, 0};
+    long ticks = 0, frames = 0;
+};
+bool ReadRecordSummary(const char* path, RecordSummary* out);
+// Plays a record in the game: the match set up as --replay-fight sets it up (scene 2
+// next), the recorded state and inputs at the first tick, the record's F-keys. The
+// game's files go to a scratch folder meanwhile. Esc or the record's end leaves the
+// fight for the REPLAY menu, with the game's settings as they were. False (and *error)
+// if it can't be read.
+bool PlayRecord(const char* path, std::string* error);
+// The record being played, for what the page shows over it; null when none.
+struct RecordView {
+    const char* path;
+    long tick, ticks; // played, and in all
+    long firstDiff;   // the first tick that played otherwise than recorded; -1 none
+    bool paused;
+    bool done;        // its last tick played, or left
+};
+const RecordView* ViewingRecord();
+// Why the last record that was to be played wasn't ("" none), once.
+std::string TakeRecordError();
+// main.cpp, each frame: F8 pauses a record being played and goes on with it (the game's
+// own F8 is the record's); true while paused: the frame is then shown again, not run.
+bool RecordPaused(int scene);
+// port/records.cpp: the RECORDS page (efz::RecordsHooks, main.cpp once the game exists,
+// out of the compatibility harness); video.cpp, over each frame shown: the page's list,
+// and a record's information as it plays.
+void InitRecords();
+void DrawRecords(SDL_Renderer* renderer);
 // Ends a fight in progress, and says how a replay went.
 void StopRecorder();
 // No records and no per-tick checks while set: a network match runs frames again on

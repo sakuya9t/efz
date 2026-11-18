@@ -184,7 +184,9 @@ again, which a record can't follow, and the match keeps a replay of its own.
 game mode (`mode`: 0 arcade, 1 practice, 3 vs cpu, 4 vs human, 5 replay, 6 demo) and
 `replay_mode` (1 playing a replay, with `replay_copy` and `replay_offset`; 2 recording
 one), the stage, the round and rounds to win, the CPU level, each player's character
-number and name, palette, whether the CPU plays it and its skill; `rng`, `rand()`'s
+number and name, palette, whether the CPU plays it and its skill, and in VS HUMAN the
+agent that plays it (`agent`, its name and version, and `agent_file`; null for a person:
+[agents.md](agents.md)); `rng`, `rand()`'s
 state, and `fkey_held`, at the first tick; `state`, the state file, and `state_hashes`,
 its blocks' hashes; and the names of the tick lines' fields.
 
@@ -215,6 +217,24 @@ input is read: the blocks the hashes are of, pointers zeroed, each as the harnes
 bytes), so `tools/compat.py`'s tools read it.
 
 ## Replaying a fight
+
+In the game: the REPLAY menu's last page, **RECORDS** (after EXIT), lists the fight
+records of the logs folder, newest first: when, the mode, each side's character (with
+"AI" for an agent and "CPU" for the CPU), the rounds won (the winner's name in colour),
+how long the fight was; and for the one chosen, who played each side, its session and
+the build that recorded it. Up and down choose (held, they go on), A plays it, left and
+right go to the other pages and B leaves, as on the menu's other pages. The fight plays
+as the replay below plays it, at the game's speed: Esc goes back to the menu, F8 pauses
+and goes on (the game's own F8 is the record's), and the menu comes back by itself after
+the record's last tick, on the same record. A record that this build plays otherwise
+than it was recorded says so over the fight ("This game plays the record otherwise from
+here on") and on the menu afterwards; one that can't be played says why on the menu.
+Records made before agents were noted (before this page) say "a person or an agent" of
+VS HUMAN's sides. A played record writes no record of its own, makes no checks, and its
+game's files go to `scratch` in the session folder, as below; once it is over the
+game's settings (the modes, `key.ini`'s, the controls) are as the menu had them.
+
+From the command line, to watch or to check:
 
 ```sh
 efz --data "$EFZ_DIR" --replay-fight logs/20261103-182001-4f2a/fight-003.jsonl          # watch it
@@ -249,6 +269,13 @@ fight differently fails it at the first tick that differs, as `tools/compat.py` 
 What a record doesn't replay: the menus (only the fight is recorded); a fight whose
 replay copy is missing; and a build whose state blocks have another layout (the layout
 is the original's, `port/layout.cpp`, so records move between Windows, Linux and macOS).
+
+The state holds the sounds the game loaded for the fight by slot number (`CGame`'s
+`m_sounds` and `m_music`, each player's `m_voices`), and a slot follows what the game
+loaded before: the menus' path to a fight gives the same slots every time, the demo's
+others. When a record's differ from the replaying game's, the game keeps its own (to play
+and free the sounds it loaded), and each tick's hashes are taken with the record's put
+back, so the comparison is the same.
 
 ## Data for training
 

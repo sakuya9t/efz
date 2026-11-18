@@ -41,6 +41,7 @@
 #include "log.h"
 #include "netplay.h"
 #include "platform.h"
+#include "record.h"
 #include "agent/observe.h"
 #include "agent/policy.h"
 #include "agent/routes.h"
@@ -690,7 +691,7 @@ void InitAgents(const AgentOptions& options)
 
 void AgentsFrame()
 {
-    if (!g_on)
+    if (!g_on || ViewingRecord())
         return;
     GameObjects o = Objects();
     int scene = *o.scene;
@@ -754,6 +755,24 @@ bool AgentPlanning()
     return g_planning;
 }
 
+const char* AgentName(int side)
+{
+    GameObjects o = Objects();
+    if (!g_on || side < 0 || side > 1 || !g_sides[side].player || !o.game ||
+        o.game->m_gameMode != kVsHuman)
+        return nullptr;
+    return g_sides[side].name.c_str();
+}
+
+const char* AgentFileName(int side)
+{
+    if (!AgentName(side))
+        return nullptr;
+    const std::string& path = g_sides[side].path;
+    size_t slash = path.find_last_of("/\\");
+    return path.c_str() + (slash == std::string::npos ? 0 : slash + 1);
+}
+
 void StopAgents()
 {
     if (!g_on)
@@ -770,7 +789,7 @@ void StopAgents()
 
 void AgentsIdle(uint64_t deadlineNs)
 {
-    if (!g_on)
+    if (!g_on || ViewingRecord())
         return;
     GameObjects o = Objects();
     CScene3* fight = (CScene3*)o.scenes[3];
@@ -794,7 +813,7 @@ void AgentsIdle(uint64_t deadlineNs)
 
 void DrawAgents(SDL_Renderer* r)
 {
-    if (!g_on)
+    if (!g_on || ViewingRecord())
         return;
     GameObjects o = Objects();
     int scene = *o.scene;

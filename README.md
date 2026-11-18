@@ -194,7 +194,8 @@ tools/compat.py coverage            # which lines of src/ the suite runs
 Each run of the native game keeps a log folder (`logs/` in the save folder):
 `efz.log`, a report with a stack trace when it crashes or hangs, checks of the game's
 state on every tick of a fight, and a record of every fight, which replays it tick for
-tick and is data to learn from ([docs/logging.md](docs/logging.md)):
+tick (in the game, from the REPLAY menu's RECORDS page) and is data to learn from
+([docs/logging.md](docs/logging.md)):
 
 ```sh
 efz --data DIR --replay-fight logs/<session>/fight-003.jsonl --fast   # replay a fight, check every tick

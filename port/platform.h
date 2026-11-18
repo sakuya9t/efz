@@ -38,6 +38,9 @@ void PumpEvents();
 // CloseScreen undoes OpenScreen.
 bool OpenScreen(int width, int height);
 void Present(IDirectDrawSurface* back, const tagPALETTEENTRY* palette);
+// The frame last presented, shown again with what is drawn over it now (SDL3's; a
+// record paused, record.h).
+void PresentAgain();
 void CloseScreen();
 // Whether the game's pictures are drawn at all. A headless game can run without: its
 // sprites are then not decoded and the blitters do nothing, which leaves the game

@@ -194,6 +194,23 @@ extern NetplayHooks g_netplay;
 // CReplayFile's handle while the session keeps the replay.
 const HANDLE kNetplayReplay = 0xef2e0001u;
 
+// --- The REPLAY menu's RECORDS page (port/records.cpp, docs/logging.md): after EXIT,
+// the fight records of the logs folder, each played as the game plays a replay. Empty in
+// a build without records (the headless library): the menu then has its ten pages.
+struct RecordsHooks {
+    // CScene8::Enter: the records are read again.
+    void (*enter)();
+    // Each frame on the page, per side: the controls' up or down (-1, 0, 1); true when
+    // the choice moved.
+    bool (*move)(int side, int dy);
+    // A pressed on the page: the chosen record is set up to play, true; the menu then
+    // goes to match setup as it does for a replay. False: it can't be played (the page
+    // says why).
+    bool (*play)();
+};
+extern RecordsHooks g_records;
+const int kRecordsPage = 10; // CScene8::m_page
+
 } // namespace efz
 
 #endif

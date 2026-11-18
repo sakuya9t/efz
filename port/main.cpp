@@ -37,6 +37,9 @@
 //   --agent FILE      this computer's side is played by the agent file FILE (NET PLAY's
 //                     PLAYED BY)
 //
+// The REPLAY menu has a page after EXIT, RECORDS: the fight records in the logs folder,
+// each played as the game plays a replay (Esc: back to the menu, F8: pause).
+//
 // Agents (docs/agents.md): an agent file (.efzagent) in the agents folder of the game's
 // folder or of the save folder plays a side of VS HUMAN, chosen on character select (F5
 // for P1, F6 for P2; with Shift, back through the agents), or this computer's side of a
@@ -550,6 +553,7 @@ int EfzMain(int argc, char** argv)
         agentOptions.fast = fast;
         efz::InitAgents(agentOptions);
         efz::InitNetplay(netOptions);
+        efz::InitRecords(); // the REPLAY menu's RECORDS page
     }
     efz::StartWatchdog(15);
 
@@ -591,18 +595,26 @@ int EfzMain(int argc, char** argv)
             continue;
         }
         efz::SetLogFrame(n, g_scene);
-        efz::RecorderFrameStart(n, g_scene);
-        efz::AgentsFrame();
-        g_game->m_oddFrame = !g_game->m_oddFrame;
+        // A record played from the REPLAY menu and paused (F8): its frame shown again, the
+        // game not run.
+        bool paused = efz::RecordPaused(g_scene);
+        if (!paused) {
+            efz::RecorderFrameStart(n, g_scene);
+            efz::AgentsFrame();
+            g_game->m_oddFrame = !g_game->m_oddFrame;
+        }
         BYTE scene = g_scene;
         Uint64 start = SDL_GetTicksNS();
         long pumps = g_pumps;
         if (g_scenes[g_scene] != NULL) {
             g_sound->UpdateLoop(g_game->m_music);
-            g_scene = g_scenes[g_scene]->Update();
+            if (paused)
+                efz::PresentAgain();
+            else
+                g_scene = g_scenes[g_scene]->Update();
         }
         Uint64 spent = SDL_GetTicksNS() - start;
-        bool replayed = efz::RecorderFrameEnd(g_scene);
+        bool replayed = !paused && efz::RecorderFrameEnd(&g_scene);
         visitFrames++;
         visitTime += spent;
         worstFrame = spent > worstFrame ? spent : worstFrame;
