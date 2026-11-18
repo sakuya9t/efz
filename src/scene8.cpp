@@ -10,7 +10,7 @@
 // (efz::RecordsHooks), else EXIT.
 static int LastPage()
 {
-    return efz::g_records.play ? efz::kRecordsPage : 9;
+    return efz::g_records.update ? efz::kRecordsPage : 9;
 }
 #endif
 
@@ -132,26 +132,34 @@ BYTE CScene8::Update()
         case 0:
 #ifdef EFZ_NATIVE
             if (m_page == efz::kRecordsPage) {
-                // The records: up and down choose one, A plays it; left, right and B as
-                // on the other pages.
-                if (efz::g_records.move(side, m_game->m_inputY[side])) {
+                // The records: the page takes the controls (up and down choose a record,
+                // A plays it, C saves it as a replay); left, right and B as on the other
+                // pages, unless the page has a use for them.
+                switch (efz::g_records.update(side, m_game->m_inputX[side], m_game->m_inputY[side],
+                                             m_game->m_pressA[side] != 0,
+                                             m_game->m_pressB[side] != 0,
+                                             m_game->m_pressC[side] != 0, m_held[side] != 0)) {
+                case efz::kRecordsMoved:
                     m_game->PlaySE(8);
-                }
-                if (m_held[side] == 0 && m_game->m_inputX[side] != 0) {
+                    break;
+                case efz::kRecordsChosen:
+                    m_game->PlaySE(6);
+                    break;
+                case efz::kRecordsTurn:
                     m_game->PlaySE(8);
                     m_page += m_game->m_inputX[side];
                     if (m_page > LastPage()) {
                         m_page = 0;
                     }
-                }
-                if (m_game->m_pressA[side] != 0 && efz::g_records.play()) {
+                    break;
+                case efz::kRecordsStart:
                     m_game->PlaySE(6);
                     m_enter = 2; // (before the fade: the page's list isn't drawn over it)
                     CScene::FadeOut(m_palette, 0, 0, 50);
                     return 2;
-                }
-                if (m_game->m_pressB[0] != 0 || m_game->m_pressB[1] != 0) {
+                case efz::kRecordsBack:
                     m_leave = 1;
+                    break;
                 }
                 break;
             }

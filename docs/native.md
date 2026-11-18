@@ -43,7 +43,9 @@ cmake --build build/native --config RelWithDebInfo
 ctest --test-dir build/native -C RelWithDebInfo
 ```
 
-CMake downloads SDL3 3.4.18, pinned by SHA-256, and links it statically.
+CMake downloads SDL3 3.4.18, libopus 1.5.2 and minih264's encoder header, pinned by
+SHA-256, and links them statically ([third-party.md](third-party.md)). It builds two
+programs: the game, `efz`, and the replay tool, `efz-convert` ([logging.md](logging.md)).
 `-DEFZ_SYSTEM_SDL3=ON` uses an installed SDL3 instead. On Linux, SDL3's build needs the
 development files of the desktop's libraries (X11, Wayland, ALSA, PulseAudio; see
 `.github/workflows/native.yml`); it loads the libraries themselves at run time, so the
@@ -194,7 +196,9 @@ lists what a platform provides).
 | `sound.cpp` | `CSound`: the 150 sound slots, a mixer on SDL's audio thread, `.wav` parsing, the music's loop points |
 | `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second; `MessageBox`, `PostMessage`, `timeGetTime` |
 | `log.cpp`, `crash.cpp`, `record.cpp` | The log and its session folder, crash and hang reports, and the fight records, checks and replays ([logging.md](logging.md)) |
-| `records.cpp` | The REPLAY menu's RECORDS page: the logs folder's fight records, each played as a replay ([logging.md](logging.md)) |
+| `records.cpp` | The REPLAY menu's RECORDS page: the logs folder's fight records, each played as a replay or saved as one in a replay slot ([logging.md](logging.md)) |
+| `tool.cpp`, `toolmain.cpp` | The replay tool, `efz-convert`: the game in a window of its own that converts records and replays and makes videos ([logging.md](logging.md)) |
+| `mp4.cpp`, `minih264.c` | Videos of fights: H.264 (minih264's encoder) and Opus (libopus) in an MP4 ([third-party.md](third-party.md)) |
 
 ## The compatibility test
 

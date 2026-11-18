@@ -9,7 +9,8 @@
 #
 # With CMake and SDL3's build dependencies on the machine, plain CMake works as well:
 #   cmake -B build/native && cmake --build build/native
-# SDL3's release tarball is downloaded once into ~/.cache/efz-native.
+# SDL3's release tarball, libopus's and minih264's encoder header (the videos, port/mp4.cpp)
+# are downloaded once into ~/.cache/efz-native.
 set -euo pipefail
 
 repo=$(cd "$(dirname "$0")/.." && pwd)
@@ -27,13 +28,21 @@ sdl=SDL3-3.4.18.tar.gz
 mkdir -p "$cache"
 [ -f "$cache/$sdl" ] ||
     curl -sSL -o "$cache/$sdl" "https://github.com/libsdl-org/SDL/releases/download/release-3.4.18/$sdl"
+opus=opus-1.5.2.tar.gz
+[ -f "$cache/$opus" ] || curl -sSL -o "$cache/$opus" "https://downloads.xiph.org/releases/opus/$opus"
+minih264=minih264e-b0baea7a.h
+[ -f "$cache/$minih264" ] ||
+    curl -sSL -o "$cache/$minih264" \
+        "https://raw.githubusercontent.com/lieff/minih264/b0baea7a80ef9d12da97301dd1099b8791b5ba43/minih264e.h"
 
 docker image inspect efz-native >/dev/null 2>&1 ||
     docker build -q -t efz-native --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" \
         -f "$repo/toolchain/native.Dockerfile" "$repo/toolchain" >/dev/null
 
 docker run --rm -u "$(id -u):$(id -g)" -v "$repo:/work" -v "$cache:/cache" -w /work efz-native \
-    bash -c "cmake -S . -B $dir -G Ninja -Wno-dev -DEFZ_SDL3_ARCHIVE=/cache/$sdl $toolchain $* >/dev/null &&
+    bash -c "cmake -S . -B $dir -G Ninja -Wno-dev -DEFZ_SDL3_ARCHIVE=/cache/$sdl \
+                   -DEFZ_OPUS_ARCHIVE=/cache/$opus -DEFZ_MINIH264_HEADER=/cache/$minih264 \
+                   $toolchain $* >/dev/null &&
              cmake --build $dir &&
              if [ $target = linux ]; then ctest --test-dir $dir --output-on-failure; fi"
 echo "built $dir"

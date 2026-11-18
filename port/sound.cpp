@@ -66,6 +66,40 @@ struct IDirectSound : IUnknown {
 namespace {
 
 CSound* g_sound;
+bool g_muted; // efz::MuteSounds
+
+// The playing buffers added together: `frames` stereo samples at `rate` into out.
+void MixInto(float* out, int frames, int rate)
+{
+    memset(out, 0, sizeof(float) * 2 * frames);
+    for (int id = 0; g_sound && id < 0x96; id++) {
+        IDirectSoundBuffer* b = g_sound->m_buffers[id];
+        if (!b || !b->playing || !b->data)
+            continue;
+        int total = b->size / b->Frame();
+        double step = (double)b->rate / rate;
+        for (int i = 0; i < frames && b->playing; i++) {
+            int f = (int)b->pos;
+            if (f >= total) {
+                if (!b->looping) {
+                    b->playing = false;
+                    break;
+                }
+                b->pos -= total;
+                f = (int)b->pos;
+            }
+            float l = b->Sample(f, 0);
+            float r = b->channels > 1 ? b->Sample(f, 1) : l;
+            out[i * 2] += l * b->gain;
+            out[i * 2 + 1] += r * b->gain;
+            b->pos += step;
+            if (b->loopEnd && b->pos * b->Frame() >= b->loopEnd)
+                b->pos -= (double)b->loopLength / b->Frame();
+        }
+    }
+    for (int i = 0; i < frames * 2; i++)
+        out[i] = out[i] > 1.0f ? 1.0f : out[i] < -1.0f ? -1.0f : out[i];
+}
 
 void SDLCALL Mix(void*, SDL_AudioStream* stream, int additional, int)
 {
@@ -76,34 +110,7 @@ void SDLCALL Mix(void*, SDL_AudioStream* stream, int additional, int)
             frames = 1024;
         if (frames == 0)
             frames = 1;
-        memset(out, 0, sizeof(out));
-        for (int id = 0; g_sound && id < 0x96; id++) {
-            IDirectSoundBuffer* b = g_sound->m_buffers[id];
-            if (!b || !b->playing || !b->data)
-                continue;
-            int total = b->size / b->Frame();
-            double step = (double)b->rate / kRate;
-            for (int i = 0; i < frames && b->playing; i++) {
-                int f = (int)b->pos;
-                if (f >= total) {
-                    if (!b->looping) {
-                        b->playing = false;
-                        break;
-                    }
-                    b->pos -= total;
-                    f = (int)b->pos;
-                }
-                float l = b->Sample(f, 0);
-                float r = b->channels > 1 ? b->Sample(f, 1) : l;
-                out[i * 2] += l * b->gain;
-                out[i * 2 + 1] += r * b->gain;
-                b->pos += step;
-                if (b->loopEnd && b->pos * b->Frame() >= b->loopEnd)
-                    b->pos -= (double)b->loopLength / b->Frame();
-            }
-        }
-        for (int i = 0; i < frames * 2; i++)
-            out[i] = out[i] > 1.0f ? 1.0f : out[i] < -1.0f ? -1.0f : out[i];
+        MixInto(out, frames, kRate);
         SDL_PutAudioStreamData(stream, out, frames * 8);
         additional -= frames * 8;
     }
@@ -233,8 +240,35 @@ void CSound::Stop(WORD id)
     }
 }
 
+namespace efz {
+
+void MuteSounds(bool muted)
+{
+    g_muted = muted;
+}
+
+void PauseSoundDevice(bool paused)
+{
+    if (!g_stream)
+        return;
+    if (paused)
+        SDL_PauseAudioStreamDevice(g_stream);
+    else
+        SDL_ResumeAudioStreamDevice(g_stream);
+}
+
+void MixSounds(float* out, int frames, int rate)
+{
+    AudioLock lock;
+    MixInto(out, frames, rate);
+}
+
+} // namespace efz
+
 void CSound::Play(WORD id, BOOL loop)
 {
+    if (g_muted) // a replay written or checked from the REPLAY menu
+        return;
     // A frame of an agent's plan, on a copy of the fight: nothing is heard, and netplay
     // doesn't count it.
     if (efz::AgentPlanning())

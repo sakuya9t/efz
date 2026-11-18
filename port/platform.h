@@ -72,6 +72,13 @@ void KeyEvent(int scancode, bool down);
 void ResetInput();
 // Opens newly connected controllers and closes unplugged ones.
 void UpdateJoysticks();
+// sound.cpp: while muted, the game's sounds and music aren't started (a replay written
+// or checked from the REPLAY menu, record.h).
+void MuteSounds(bool muted);
+// A video being made (record.h): the sound device stops taking the game's sound, which
+// MixSounds mixes instead, `frames` stereo samples at `rate` a frame shown.
+void PauseSoundDevice(bool paused);
+void MixSounds(float* out, int frames, int rate);
 // The keyboard as it is, by DIK_ code (0x80: down), whatever the game is shown of it.
 const unsigned char* KeyboardState();
 // What P1's controls give (CInput::GetInput's bits, left and right together as left),

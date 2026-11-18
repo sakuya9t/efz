@@ -9,6 +9,7 @@
 #include "netplay.h"
 #include "agents.h"
 #include "record.h"
+#include "tool.h"
 
 namespace {
 
@@ -85,6 +86,7 @@ void Present(IDirectDrawSurface* back, const PALETTEENTRY* pal)
     }
     g_rgbWidth = back->width;
     g_rgbHeight = back->height;
+    FrameShown(g_rgb, back->width, back->height); // a video's frame, if one is made
     SDL_UpdateTexture(g_texture, nullptr, g_rgb, back->width * 4);
     PresentAgain();
 }
@@ -100,6 +102,7 @@ void PresentAgain()
     DrawNetplay(g_renderer); // its screens and a match's information, over the frame
     DrawAgents(g_renderer);  // who plays each side of VS HUMAN
     DrawRecords(g_renderer); // the REPLAY menu's records, and the one playing
+    DrawTool(g_renderer);    // the replay tool's window
     // For tests: EFZ_DUMP_WINDOW=DIR writes the window as shown, overlays included, every
     // EFZ_DUMP_WINDOW_EVERY (default 30) frames shown, to DIR/wNNNNNN.bmp.
     static const char* windowDump = getenv("EFZ_DUMP_WINDOW");

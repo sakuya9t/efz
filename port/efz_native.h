@@ -195,18 +195,24 @@ extern NetplayHooks g_netplay;
 const HANDLE kNetplayReplay = 0xef2e0001u;
 
 // --- The REPLAY menu's RECORDS page (port/records.cpp, docs/logging.md): after EXIT,
-// the fight records of the logs folder, each played as the game plays a replay. Empty in
-// a build without records (the headless library): the menu then has its ten pages.
+// the fight records of the logs folder, each played as the game plays a replay, or saved
+// as one in a replay slot. Empty in a build without records (the headless library): the
+// menu then has its ten pages.
 struct RecordsHooks {
     // CScene8::Enter: the records are read again.
     void (*enter)();
-    // Each frame on the page, per side: the controls' up or down (-1, 0, 1); true when
-    // the choice moved.
-    bool (*move)(int side, int dy);
-    // A pressed on the page: the chosen record is set up to play, true; the menu then
-    // goes to match setup as it does for a replay. False: it can't be played (the page
-    // says why).
-    bool (*play)();
+    // Each frame on the page, per side: the controls' directions (-1, 0, 1), A, B and C
+    // pressed this frame, and whether a direction or B was held already. What the menu
+    // does then: a RecordsAction.
+    int (*update)(int side, int dx, int dy, bool a, bool b, bool c, bool held);
+};
+enum RecordsAction {
+    kRecordsNothing,
+    kRecordsMoved,  // the page's choice moved (the menu's move sound)
+    kRecordsChosen, // something chosen on the page (the menu's choice sound)
+    kRecordsTurn,   // left or right: to the menu's next page
+    kRecordsStart,  // a record set up to play or to be saved: match setup next
+    kRecordsBack,   // B: leave the menu
 };
 extern RecordsHooks g_records;
 const int kRecordsPage = 10; // CScene8::m_page

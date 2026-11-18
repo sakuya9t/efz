@@ -232,7 +232,8 @@ here on") and on the menu afterwards; one that can't be played says why on the m
 Records made before agents were noted (before this page) say "a person or an agent" of
 VS HUMAN's sides. A played record writes no record of its own, makes no checks, and its
 game's files go to `scratch` in the session folder, as below; once it is over the
-game's settings (the modes, `key.ini`'s, the controls) are as the menu had them.
+game's settings (the modes, `key.ini`'s, the controls) are as the menu had them. C saves
+the chosen record as a replay in one of the menu's slots ([below](#records-and-replays)).
 
 From the command line, to watch or to check:
 
@@ -276,6 +277,93 @@ loaded before: the menus' path to a fight gives the same slots every time, the d
 others. When a record's differ from the replaying game's, the game keeps its own (to play
 and free the sounds it loaded), and each tick's hashes are taken with the record's put
 back, so the comparison is the same.
+
+## Records and replays
+
+A record and the game's own replay file (`.rep`, [compat.md](compat.md)) convert into
+each other, and either becomes a video. In the game (a record to a replay slot, below),
+in the replay tool, and from the command line:
+
+```sh
+efz --data "$EFZ_DIR" --record-to-rep logs/<session>/fight-*.jsonl --out reps   # records to .rep
+efz --data "$EFZ_DIR" --rep-to-record replay/data1-*.rep replay/netplay/*.rep   # .rep to records
+efz --data "$EFZ_DIR" --export-mp4 logs/<session>/fight-003.jsonl a.rep --out videos  # videos
+```
+
+These run without a window or sound and quit when done, a line on stdout for each file:
+what it was converted to, or why it wasn't. Exit code 0: all converted; 3: a replay
+played otherwise than its record; 4: one wasn't converted.
+
+**The replay tool**, `efz-convert` (`efz-convert.exe`, `efz-convert.app`), built beside
+the game and found where it is, as the game is, does the same in a window of its own.
+Records and replays are dropped on the window (a session's folder brings all its records)
+or picked with Add files; the buttons, or 1, 2 and 3, make the records into replays, the
+replays into records, or videos of them all. What is made goes to `converted` in the logs
+folder, which the game's RECORDS page lists (Change picks another folder, Open shows it);
+each file says how it went, and the one under the mouse why. Stop leaves the one going
+and the rest. A video's fight plays in the window as it is made.
+
+**Videos** (`--export-mp4`, `--video-size 640` or `1280`, the tool's 3): the fight plays
+as the record or replay has it, drawn, every frame the game shows into the file with the
+sound it plays then: H.264 pictures (`640x480` or `1280x960`, the default, each of the
+game's pixels a block), Opus sound at 48 kHz, in an MP4 at the game's 64 frames a second,
+from the fight's first frame to its fade at the end. A frame the game doesn't draw (its 30
+FPS setting, a pause) shows the last one again, so the video keeps the fight's time; the
+frames-per-second count at the top of the screen says 64. They are made by the game, with
+nothing to install: minih264's encoder and libopus are built in
+([third-party.md](third-party.md)). ffmpeg reads them through without an error; Opus in
+MP4 plays in browsers and VLC, but not in every player (QuickTime may play it silent). A
+record whose fight had the CPU in it makes a video too: the CPU decides again, as it does
+when the record is watched.
+
+**A record to a .rep** (`--record-to-rep`, `<session>-fight-NNN.rep` in `--out`, the
+current folder by default; in the game, C on the RECORDS page, then a REPLAY page and
+DATA slot, A to save, A again to replace a slot's replay, Esc to stop). The game itself
+writes the replay: the record is replayed, as above, with the game recording a replay as
+the REPLAY menu's RECORD item records one, so the file is what a recording of that fight
+would have written, the header from match setup and every word as the fight wrote it.
+Then the replay is played back as the menu's PLAY item plays one, and compared with the
+record tick by tick: the replay is kept (written out, or put in the slot) only if all
+its ticks are the record's. In the game the two run fast, neither drawn nor heard, with
+how far they are on the screen. A record whose fight played a replay gets that replay,
+copied. What can't be a replay:
+
+- A fight the CPU plays in (arcade, VS CPU, practice, the demo): a replay holds each
+  player's inputs, and the CPU writes none (`CpuInput` decides, and guards, by itself).
+- A match to other than 2 rounds won: the REPLAY menu plays every replay to 2.
+- And a replay doesn't hold `key.ini`'s damage: one made of a fight at 50% or 200% plays
+  as it was in a game set the same (it says so).
+
+The comparison of a replay played back with its record leaves out what any game playing
+a replay has of its own: CGame's mode and replay file; the fight scene and the effects'
+ring, which keep what earlier fights left in them that a fight doesn't reset
+(`CScene3::m_endFade`, the ring's idle slots); and the players' blocks, which hold the
+sounds that game loaded, the HP a replay's F-key words set (`m_refillHp`) and no
+character records (`CharRecord`, read for VS HUMAN). What plays must be the record's:
+each player's fields as the tick lines have them, their objects and their characters'
+blocks, `rand()` (seeded as the record's was) and both inputs. A replay doesn't hold
+`rand()`'s state, so in another game its effects and visual objects come out otherwise;
+the fight doesn't.
+
+**A .rep to a record** (`--rep-to-record`): the replay is played as the REPLAY menu plays
+it, and its fight recorded in the run's session folder (`--log-dir`), or with `--out`
+(and in the tool) in that folder, named for the replay, with a copy of the replay beside
+it, as any fight playing a replay is; its record replays from the RECORDS page and with
+`--replay-fight`. EfzRevival's replays (its netplay's, and this game's
+`replay/netplay/`: the game's words, then Revival's trailer) play to Revival's rules: two
+rounds, 100% damage, normal effects, every frame drawn. In the game, a replay played from
+the REPLAY menu is recorded as any fight is, and is on the RECORDS page after.
+
+Checked: the 23 matches of a session against an agent (records of the native game on
+Windows, 15 to 44 thousand ticks) each became a `.rep` whose every tick played back as
+recorded (11 minutes for the 23, each played twice); each of those, recorded again with
+`--rep-to-record`, has the original record's inputs and players on every tick, its
+length, winner and HP (3 minutes), and that record replays exactly (`--replay-fight`).
+Records with the CPU were refused, and a record with one input changed was refused at
+that tick. Three of the community's EfzRevival netplay replays became records of their
+whole matches, which replay exactly. In the game, a record saved in a slot and then
+played from the REPLAY menu plays as its record; Esc while saving leaves the slot as it
+was.
 
 ## Data for training
 

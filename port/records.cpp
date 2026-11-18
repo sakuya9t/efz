@@ -1,7 +1,8 @@
 // The REPLAY menu's RECORDS page (efz::RecordsHooks, docs/logging.md): the page after
 // EXIT lists the fight records of the logs folder, newest first, and plays the one
 // chosen as the game plays a replay (record.h's PlayRecord): from the record's state at
-// its first tick, with its inputs and F-keys, the CPU deciding again as it did.
+// its first tick, with its inputs and F-keys, the CPU deciding again as it did. C saves
+// it as a replay in a slot of the menu's, picked on the page (SaveRecordAsReplay).
 //
 // The menu's picture (system\replay.dat) has no letters for the page, so the page draws
 // its label, its list and a record's information as it plays over the frame, with SDL's
@@ -127,9 +128,9 @@ SDL_EnumerationResult Collect(void* context, const char* dirname, const char* fn
     if (!SDL_GetPathInfo(path.c_str(), &info))
         return SDL_ENUM_CONTINUE;
     std::string name = fname;
+    // (Any .jsonl: records made of replays are named for them, ReadRecordSummary tells.)
     if (f->dirs ? info.type == SDL_PATHTYPE_DIRECTORY
-                : info.type == SDL_PATHTYPE_FILE && name.size() > 12 &&
-                      name.compare(0, 6, "fight-") == 0 &&
+                : info.type == SDL_PATHTYPE_FILE && name.size() > 6 &&
                       name.compare(name.size() - 6, 6, ".jsonl") == 0)
         f->names->push_back(name);
     return SDL_ENUM_CONTINUE;
@@ -171,25 +172,69 @@ void Scan()
     g_top = std::max(0, std::min(g_cursor - kRows / 2, (int)g_list.size() - kRows));
 }
 
+// --- Saving a record as a replay: the slot it goes to.
+
+struct Picker {
+    bool open = false;
+    bool confirm = false; // the slot has a replay: A again replaces it
+    int page = 0, slot = 0;
+    std::string used[9][9]; // each slot's replay ("Ayu vs Shiori"), "" none
+};
+Picker g_picker;
+int g_savedPage = -1, g_savedSlot = -1; // the slot of the save in progress
+
+// The REPLAY menu's slots, as it reads them (src/scene8.cpp): a replay's first two words
+// are its characters.
+void ReadSlots()
+{
+    for (int page = 0; page < 9; page++) {
+        for (int slot = 0; slot < 9; slot++) {
+            char name[40];
+            snprintf(name, sizeof(name), "replay\\data%d-%d.rep", page + 1, slot + 1);
+            std::string& used = g_picker.used[page][slot];
+            used.clear();
+            FILE* f = OpenGameFile(name, "rb");
+            if (!f)
+                continue;
+            int16_t chars[2];
+            if (fread(chars, 2, 2, f) == 2)
+                used = std::string(CharName(chars[0])) + " vs " + CharName(chars[1]);
+            else
+                used = "?";
+            fclose(f);
+        }
+    }
+}
+
 // --- The hooks.
 
 void Enter()
 {
     Scan();
-    std::string why = TakeRecordError();
-    if (!why.empty()) {
-        Note("The record couldn't be played: " + why + ".");
+    bool ok = false;
+    std::string note = TakeRecordNote(&ok);
+    if (g_savedPage >= 0) {
+        char where[40];
+        snprintf(where, sizeof(where), "REPLAY page %d, DATA %d", g_savedPage + 1,
+                 g_savedSlot + 1);
+        Note(ok ? std::string("Saved in ") + where + ": it plays back as recorded."
+                : "Not saved in " + std::string(where) + ": " + note + ".");
+    } else if (!note.empty()) {
+        Note(note);
     } else if (g_watched && g_last.firstDiff >= 0) {
         // (the tick's frame, about: 3 ticks a frame)
         Note("This game played it otherwise than it was recorded, from " +
              Clock(g_last.firstDiff / 3) + ".");
     }
     g_watched = false;
+    g_savedPage = g_savedSlot = -1;
+    g_picker.open = false;
     LogInfo("replay", "the REPLAY menu: %d fight records in %s", (int)g_list.size(),
             g_logs.empty() ? "no logs folder" : g_logs.c_str());
 }
 
-bool Move(int side, int dy)
+// Up or down this frame: a step on pressing, then on and on while held.
+bool Step(int side, int dy)
 {
     if (side < 0 || side > 1)
         return false;
@@ -205,7 +250,12 @@ bool Move(int side, int dy)
         step = g_heldFor[side] >= 20 && (g_heldFor[side] - 20) % 4 == 0;
     }
     g_heldDy[side] = dy;
-    if (!step || g_list.empty())
+    return step;
+}
+
+bool Move(int dy)
+{
+    if (g_list.empty())
         return false;
     int n = (int)g_list.size();
     g_cursor = (g_cursor + dy + n) % n;
@@ -232,6 +282,104 @@ bool Play()
     g_last = RecordView();
     g_last.firstDiff = -1;
     return true;
+}
+
+// C on a record: the slots to save it in, if it can be a replay.
+bool OpenPicker()
+{
+    if (g_list.empty())
+        return false;
+    const RecordSummary& s = g_list[g_cursor];
+    if (s.cpu[0] || s.cpu[1]) {
+        Note("This record can't be a replay: the CPU plays in it, and a replay can't hold the "
+             "CPU's decisions.");
+        return false;
+    }
+    if (s.roundsToWin != 2) {
+        Note("It was played to " + std::to_string(s.roundsToWin) +
+             " rounds won, and a replay is always played to 2.");
+        return false;
+    }
+    ReadSlots();
+    g_note.clear();
+    g_picker.open = true;
+    g_picker.confirm = false;
+    // The first slot free, from where the picker was last.
+    for (int i = 0; i < 81; i++) {
+        int at = (g_picker.page * 9 + g_picker.slot + i) % 81;
+        if (g_picker.used[at / 9][at % 9].empty()) {
+            g_picker.page = at / 9;
+            g_picker.slot = at % 9;
+            break;
+        }
+    }
+    return true;
+}
+
+int Save()
+{
+    const RecordSummary& s = g_list[g_cursor];
+    g_picker.open = g_picker.confirm = false;
+    g_savedPage = g_picker.page;
+    g_savedSlot = g_picker.slot;
+    std::string error;
+    if (SaveRecordAsReplay(s.path.c_str(), g_picker.page, g_picker.slot, &error))
+        return kRecordsStart;
+    // Done already (the replay its fight played, copied), or refused.
+    bool ok = false;
+    std::string note = TakeRecordNote(&ok);
+    char where[40];
+    snprintf(where, sizeof(where), "REPLAY page %d, DATA %d", g_savedPage + 1, g_savedSlot + 1);
+    Note(ok ? "Saved in " + std::string(where) + ": the replay its fight played."
+            : "Not saved: " + (note.empty() ? error : note) + ".");
+    g_savedPage = g_savedSlot = -1;
+    return kRecordsChosen;
+}
+
+int Update(int side, int dx, int dy, bool a, bool b, bool c, bool held)
+{
+    if (g_picker.open) {
+        if (g_picker.confirm) {
+            if (a)
+                return Save();
+            if (b) {
+                g_picker.confirm = false;
+                return kRecordsMoved;
+            }
+            return kRecordsNothing;
+        }
+        bool moved = false;
+        if (Step(side, dy)) {
+            g_picker.slot = (g_picker.slot + dy + 9) % 9;
+            moved = true;
+        }
+        if (!held && dx != 0) {
+            g_picker.page = (g_picker.page + dx + 9) % 9;
+            moved = true;
+        }
+        if (a) {
+            if (g_picker.used[g_picker.page][g_picker.slot].empty())
+                return Save();
+            g_picker.confirm = true;
+            return kRecordsChosen;
+        }
+        if (b) {
+            g_picker.open = false;
+            return kRecordsMoved;
+        }
+        return moved ? kRecordsMoved : kRecordsNothing;
+    }
+    if (Step(side, dy) && Move(dy))
+        return kRecordsMoved;
+    if (!held && dx != 0)
+        return kRecordsTurn;
+    if (a)
+        return Play() ? kRecordsStart : kRecordsNothing;
+    if (c)
+        return OpenPicker() ? kRecordsChosen : kRecordsNothing;
+    if (b)
+        return kRecordsBack;
+    return kRecordsNothing;
 }
 
 // --- Drawing, over the 640x480 screen.
@@ -335,6 +483,42 @@ void DrawList(SDL_Renderer* r)
     Text(r, kListX, y + 24, facts, 1, kGrey);
 }
 
+// The slots to save the chosen record in, over the list.
+void DrawPicker(SDL_Renderer* r)
+{
+    const RecordSummary& s = g_list[g_cursor];
+    Box(r, 40, 120, 560, 236, Color{10, 26, 40, 245});
+    Box(r, 40, 120, 560, 2, kTeal);
+    Box(r, 40, 354, 560, 2, kTeal);
+    std::string title = "SAVE AS A REPLAY";
+    Text(r, 320 - Width(title, 2) / 2, 134, title, 2, kWhite);
+    std::string what = When(s) + "  " + Side(s, 0) + " " +
+                       (s.reason.empty() ? std::string("--")
+                                         : std::to_string(s.roundsWon[0]) + "-" +
+                                               std::to_string(s.roundsWon[1])) +
+                       " " + Side(s, 1);
+    Text(r, 320 - Width(what, 1) / 2, 160, what, 1, kGrey);
+    char page[32], slot[32];
+    snprintf(page, sizeof(page), "REPLAY page  < %d >", g_picker.page + 1);
+    snprintf(slot, sizeof(slot), "DATA  < %d >", g_picker.slot + 1);
+    Text(r, 72, 196, page, 2, kWhite);
+    Text(r, 392, 196, slot, 2, kWhite);
+    const std::string& used = g_picker.used[g_picker.page][g_picker.slot];
+    std::string in = used.empty() ? "empty" : "has a replay: " + used;
+    Text(r, 320 - Width(in, 1) / 2, 232, in, 1, used.empty() ? kTeal : kYellow);
+    if (g_picker.confirm) {
+        std::string ask = "Replace it?   A: yes   B: no";
+        Text(r, 320 - Width(ask, 2) / 2, 268, ask, 2, kYellow);
+    } else {
+        std::string how = "The fight plays again, fast, the game recording its replay, which";
+        std::string how2 = "then plays back against the record: the slot gets it only if equal.";
+        Text(r, 320 - Width(how, 1) / 2, 268, how, 1, kGrey);
+        Text(r, 320 - Width(how2, 1) / 2, 280, how2, 1, kGrey);
+    }
+    std::string keys = "Left/Right: page   Up/Down: DATA   A: save   B: back";
+    Text(r, 320 - Width(keys, 1) / 2, 330, keys, 1, kGrey);
+}
+
 void DrawMenu(SDL_Renderer* r, CScene8* menu)
 {
     bool on = menu->m_page == kRecordsPage;
@@ -342,11 +526,30 @@ void DrawMenu(SDL_Renderer* r, CScene8* menu)
     Text(r, 524, 16, "RECORDS", 2, on ? kWhite : Color{100, 100, 100, 255});
     if (on && menu->m_state == 0) {
         DrawList(r);
-        std::string keys = "Up/Down: choose   A: play   Left/Right: pages   B: back";
+        if (g_picker.open && !g_list.empty())
+            DrawPicker(r);
+        std::string keys = "Up/Down: choose   A: play   C: save as a replay   "
+                           "Left/Right: pages   B: back";
         Text(r, 320 - Width(keys, 1) / 2, 458, keys, 1, kGrey);
     }
-    if (on && !g_note.empty() && SDL_GetTicks() < g_noteUntil)
-        Text(r, 320 - Width(g_note, 1) / 2, 40, g_note, 1, kYellow);
+    if (on && !g_picker.open && !g_note.empty() && SDL_GetTicks() < g_noteUntil) {
+        // Over the list, in lines that fit.
+        std::vector<std::string> lines;
+        std::string rest = g_note;
+        while (rest.size() > 68) {
+            size_t cut = rest.rfind(' ', 68);
+            cut = cut == std::string::npos || cut == 0 ? 68 : cut;
+            lines.push_back(rest.substr(0, cut));
+            rest = rest.substr(cut + (rest[cut] == ' ' ? 1 : 0));
+        }
+        lines.push_back(rest);
+        float h = 16.0f + 12 * lines.size();
+        Box(r, 40, 220 - h / 2, 560, h, Color{0, 0, 0, 225});
+        Box(r, 40, 220 - h / 2, 560, 2, kYellow);
+        for (size_t i = 0; i < lines.size(); i++)
+            Text(r, 320 - Width(lines[i], 1) / 2, 220 - h / 2 + 9 + 12 * i, lines[i], 1,
+                 kYellow);
+    }
 }
 
 void DrawPlaying(SDL_Renderer* r, const RecordView& v)
@@ -376,23 +579,48 @@ void DrawPlaying(SDL_Renderer* r, const RecordView& v)
         Text(r, 320 - Width("PAUSED", 3) / 2, 220, "PAUSED", 3, kWhite);
 }
 
+// A record being saved as a replay: how far, over what was last shown (its frames
+// aren't drawn).
+void DrawSaving(SDL_Renderer* r, const RecordView& v)
+{
+    Box(r, 0, 0, 640, 480, Color{0, 0, 0, 200});
+    std::string title = "SAVING AS A REPLAY";
+    Text(r, 320 - Width(title, 2) / 2, 180, title, 2, kWhite);
+    char where[48] = "";
+    if (g_savedPage >= 0)
+        snprintf(where, sizeof(where), "REPLAY page %d, DATA %d", g_savedPage + 1,
+                 g_savedSlot + 1);
+    Text(r, 320 - Width(where, 1) / 2, 206, where, 1, kGrey);
+    std::string step = v.checking ? "2/2  playing it back against the record"
+                                  : "1/2  recording it as the fight plays again";
+    Text(r, 320 - Width(step, 1) / 2, 236, step, 1, kWhite);
+    float done = v.ticks > 0 ? std::min(1.0f, (float)v.tick / v.ticks) : 0;
+    Box(r, 160, 256, 320, 10, Color{60, 60, 60, 255});
+    Box(r, 160, 256, 320 * done, 10, kTeal);
+    if (v.firstDiff >= 0)
+        Text(r, 320 - Width("it plays otherwise than the record", 1) / 2, 276,
+             "it plays otherwise than the record", 1, kYellow);
+    Text(r, 320 - Width("Esc: stop", 1) / 2, 300, "Esc: stop", 1, kGrey);
+}
+
 } // namespace
 
 void InitRecords()
 {
     g_records.enter = Enter;
-    g_records.move = Move;
-    g_records.play = Play;
+    g_records.update = Update;
 }
 
 void DrawRecords(SDL_Renderer* r)
 {
-    if (!g_records.play)
+    if (!g_records.update)
         return;
     GameObjects o = Objects();
     if (const RecordView* v = ViewingRecord()) {
         g_last = *v;
-        if (*o.scene == 3)
+        if (v->saving)
+            DrawSaving(r, *v);
+        else if (*o.scene == 3)
             DrawPlaying(r, *v);
         return;
     }

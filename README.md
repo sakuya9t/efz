@@ -199,6 +199,10 @@ tick (in the game, from the REPLAY menu's RECORDS page) and is data to learn fro
 
 ```sh
 efz --data DIR --replay-fight logs/<session>/fight-003.jsonl --fast   # replay a fight, check every tick
+efz --data DIR --record-to-rep logs/<session>/fight-*.jsonl --out reps  # records to the game's .rep
+efz --data DIR --rep-to-record replay/data1-1.rep                     # a .rep to a record
+efz --data DIR --export-mp4 logs/<session>/fight-003.jsonl            # a video of a fight
+efz-convert                                                           # the same, in a window
 tools/efzlog.py show logs/<session>  # what happened: warnings, errors, crash, fights
 tools/efzlog.py export logs/<session>/fight-003.jsonl fight.npz       # a row a tick
 ```

@@ -48,6 +48,39 @@ if(EFZ_GAME)
   endif()
 endif()
 
+# Video files of fights (port/mp4.cpp, docs/logging.md): H.264 pictures from minih264's
+# encoder (one header, public domain: CC0) and Opus sound from libopus (BSD), in an MP4
+# written by the game. Pinned like SDL3; EFZ_OPUS_ARCHIVE and EFZ_MINIH264_HEADER can
+# point at local copies.
+set(EFZ_OPUS_VERSION 1.5.2)
+set(EFZ_OPUS_SHA256 65c1d2f78b9f2fb20082c38cbe47c951ad5839345876e46941612ee87f9a7ce1)
+set(EFZ_OPUS_ARCHIVE
+    "https://downloads.xiph.org/releases/opus/opus-${EFZ_OPUS_VERSION}.tar.gz"
+    CACHE STRING "libopus release tarball (URL or path)")
+set(EFZ_MINIH264_COMMIT b0baea7a80ef9d12da97301dd1099b8791b5ba43)
+set(EFZ_MINIH264_SHA256 661afe7802b4e1174e8389632f3ee437b903e036a9c91a7f035830947c6a7aae)
+set(EFZ_MINIH264_HEADER
+    "https://raw.githubusercontent.com/lieff/minih264/${EFZ_MINIH264_COMMIT}/minih264e.h"
+    CACHE STRING "minih264's encoder header, minih264e.h (URL or path)")
+if(EFZ_GAME)
+  include(FetchContent)
+  set(OPUS_BUILD_SHARED_LIBRARY OFF CACHE BOOL "" FORCE)
+  set(OPUS_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+  set(OPUS_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+  set(OPUS_INSTALL_PKG_CONFIG_MODULE OFF CACHE BOOL "" FORCE)
+  set(OPUS_INSTALL_CMAKE_CONFIG_MODULE OFF CACHE BOOL "" FORCE)
+  FetchContent_Declare(opus URL "${EFZ_OPUS_ARCHIVE}" URL_HASH SHA256=${EFZ_OPUS_SHA256})
+  FetchContent_MakeAvailable(opus)
+  FetchContent_Declare(minih264 URL "${EFZ_MINIH264_HEADER}"
+                       URL_HASH SHA256=${EFZ_MINIH264_SHA256} DOWNLOAD_NO_EXTRACT TRUE)
+  FetchContent_MakeAvailable(minih264)
+  # (The header is downloaded under the name it had: given back its own.)
+  file(GLOB EFZ_MINIH264_FILE ${minih264_SOURCE_DIR}/*.h)
+  configure_file(${EFZ_MINIH264_FILE} ${CMAKE_BINARY_DIR}/minih264/minih264e.h COPYONLY)
+  add_library(efz_minih264 STATIC ${CMAKE_SOURCE_DIR}/port/minih264.c)
+  target_include_directories(efz_minih264 PUBLIC ${CMAKE_BINARY_DIR}/minih264)
+endif()
+
 # sin, cos and atan2 from this CPU's x87 instead of their emulation (port/x87.cpp): the
 # original's results on this machine exactly, but no longer the same on every machine.
 # For the replay test on x86; GCC or Clang.
@@ -75,7 +108,7 @@ foreach(f observe policy routes mix)
   list(APPEND EFZ_AGENT_SOURCES ${CMAKE_SOURCE_DIR}/port/agent/${f}.cpp)
 endforeach()
 set(EFZ_SDL_SOURCES)
-foreach(f main sdlmain input sound video log crash record records)
+foreach(f main input sound video log crash record records mp4 tool)
   list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
 endforeach()
 # Netplay: EfzRevival 1.02h's, built in (port/netplay/, docs/netplay.md).
@@ -112,32 +145,44 @@ function(efz_game_target target)
 endfunction()
 
 if(EFZ_GAME)
-  add_executable(efz WIN32 MACOSX_BUNDLE ${EFZ_GAME_SOURCES} ${EFZ_PORT_SOURCES} ${EFZ_AGENT_SOURCES}
-                 ${EFZ_SDL_SOURCES})
-  efz_game_target(efz)
-  target_link_libraries(efz PRIVATE SDL3::SDL3)
-  if(EFZ_COVERAGE)
-    target_link_options(efz PRIVATE --coverage)
-  endif()
-  if(MINGW)
-    target_link_options(efz PRIVATE -static)
-  endif()
-  # The crash report's stack traces and minidumps (port/crash.cpp); netplay's sockets and
-  # the host's network adapters.
-  if(WIN32)
-    target_link_libraries(efz PRIVATE dbghelp ws2_32 iphlpapi)
-  else()
-    target_link_libraries(efz PRIVATE ${CMAKE_DL_LIBS})
-  endif()
+  # The game's code once, for two programs: the game (efz), and the replay tool
+  # (efz-convert: records and replays converted, and fights made into videos, in a small
+  # window of its own; port/tool.cpp).
+  add_library(efz_game OBJECT ${EFZ_GAME_SOURCES} ${EFZ_PORT_SOURCES} ${EFZ_AGENT_SOURCES}
+              ${EFZ_SDL_SOURCES})
+  efz_game_target(efz_game)
+  target_link_libraries(efz_game PRIVATE SDL3::SDL3 opus efz_minih264)
   # The revision and configuration the log names (port/log.cpp), from git at each build.
   add_custom_target(efz-buildinfo
     COMMAND ${CMAKE_COMMAND} -DSOURCE=${CMAKE_SOURCE_DIR} -DOUT=${CMAKE_BINARY_DIR}/efz_build.h
             -P ${CMAKE_SOURCE_DIR}/tools/buildinfo.cmake
     BYPRODUCTS ${CMAKE_BINARY_DIR}/efz_build.h
     VERBATIM)
-  add_dependencies(efz efz-buildinfo)
-  target_include_directories(efz PRIVATE ${CMAKE_BINARY_DIR})
-  target_compile_definitions(efz PRIVATE EFZ_BUILD_CONFIG="$<CONFIG>")
+  add_dependencies(efz_game efz-buildinfo)
+  target_include_directories(efz_game PRIVATE ${CMAKE_BINARY_DIR})
+  target_compile_definitions(efz_game PRIVATE EFZ_BUILD_CONFIG="$<CONFIG>")
+  foreach(program efz efz-convert)
+    if(program STREQUAL "efz")
+      set(entry ${CMAKE_SOURCE_DIR}/port/sdlmain.cpp)
+    else()
+      set(entry ${CMAKE_SOURCE_DIR}/port/toolmain.cpp)
+    endif()
+    add_executable(${program} WIN32 MACOSX_BUNDLE ${entry} $<TARGET_OBJECTS:efz_game>)
+    target_link_libraries(${program} PRIVATE SDL3::SDL3 opus efz_minih264)
+    if(EFZ_COVERAGE)
+      target_link_options(${program} PRIVATE --coverage)
+    endif()
+    if(MINGW)
+      target_link_options(${program} PRIVATE -static)
+    endif()
+    # The crash report's stack traces and minidumps (port/crash.cpp); netplay's sockets
+    # and the host's network adapters.
+    if(WIN32)
+      target_link_libraries(${program} PRIVATE dbghelp ws2_32 iphlpapi)
+    else()
+      target_link_libraries(${program} PRIVATE ${CMAKE_DL_LIBS})
+    endif()
+  endforeach()
 endif()
 
 # The headless library: the game compiled once more, each game in an arena of its own

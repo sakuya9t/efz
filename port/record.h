@@ -12,7 +12,9 @@
 #define EFZ_RECORD_H
 
 #include <stddef.h>
+#include <stdint.h>
 #include <string>
+#include <vector>
 
 class CGame;
 class CScene;
@@ -48,6 +50,7 @@ struct RecordSummary {
     int fight = 0;
     int mode = -1;       // CGame::m_gameMode
     int replayMode = 0;
+    int roundsToWin = 2;
     int chars[2] = {-1, -1};
     bool cpu[2] = {false, false};
     std::string agent[2]; // the agent that played the side ("": a person or the CPU)
@@ -67,17 +70,79 @@ bool ReadRecordSummary(const char* path, RecordSummary* out);
 // fight for the REPLAY menu, with the game's settings as they were. False (and *error)
 // if it can't be read.
 bool PlayRecord(const char* path, std::string* error);
-// The record being played, for what the page shows over it; null when none.
+// Saves a record as a replay in the REPLAY menu's slot (page, slot from 0): the record is
+// replayed with the game recording a replay of it, as the menu's RECORD item records one
+// (fast, not drawn, not heard), then that replay is played back as the menu's PLAY item
+// plays one and compared with the record tick by tick; the slot gets it only if every
+// tick is the record's. A record whose fight played a replay gets that one. Not a record
+// with the CPU in it (a replay can't hold the CPU's decisions), nor one played to other
+// than 2 rounds won (a replay is played to 2). True when the game goes to match setup
+// for it; false when it is done already or can't be (*error says why, "" when done).
+// How it went: TakeRecordNote, back on the menu.
+bool SaveRecordAsReplay(const char* path, int page, int slot, std::string* error);
+// Conversions, for the command line (--record-to-rep, --rep-to-record, --export-mp4) and
+// the replay tool (port/tool.cpp):
+// - kToRep: a record to a .rep in outDir (<session>-fight-NNN.rep), as
+//   SaveRecordAsReplay makes one;
+// - kToRecord: a .rep (the game's, or EfzRevival's extended, played to Revival's rules)
+//   played as the menu plays one, its fight recorded: in outDir as <replay's name>.jsonl
+//   (.state, .rep), or without outDir in this run's session folder;
+// - kToVideo: either played (a record as watched) into a video, outDir/<name>.mp4, its
+//   pictures 640x480 times videoScale (1 or 2).
+// Each says how it went on stdout (not `stay`) and in the log. True when the game runs
+// the first (scene 2 next); the command line's run is over when RecorderFrameEnd says
+// so; with `stay` (the tool) the game waits for more (scene 0, not run). Conversions:
+// how each went; Progress: the one going. ConversionResult: 0 all converted, 3 a replay
+// played otherwise than its record, 4 one not converted.
+struct Conversion {
+    enum Kind { kToRep, kToRecord, kToVideo };
+    Kind kind = kToRep;
+    std::string in;
+    std::string outDir;
+    int videoScale = 2;
+};
+bool StartConversions(const std::vector<Conversion>& list, unsigned char* scene,
+                      bool stay = false);
+int ConversionResult();
+struct ConversionState {
+    std::string in, out; // out: what it made
+    std::string said;    // how it went ("" not yet)
+    int status;          // -1 not yet, 0 done, 3 played otherwise, 4 not converted
+};
+std::vector<ConversionState> Conversions();
+struct ConversionProgress {
+    bool running = false;
+    size_t job = 0, jobs = 0;
+    bool checking = false; // a replay made of a record, played back against it
+    bool video = false;
+    float done = 0;        // of the fight
+};
+ConversionProgress Progress();
+// The tool's Stop: the conversion going is left, the rest not started.
+void CancelConversions();
+// video.cpp, each frame shown (0x00RRGGBB, before what is drawn over it): a video's.
+void FrameShown(const uint32_t* pixels, int width, int height);
+// The record being played from the menu, or saved as a replay, for what the page shows
+// over it; null when none.
 struct RecordView {
     const char* path;
     long tick, ticks; // played, and in all
     long firstDiff;   // the first tick that played otherwise than recorded; -1 none
     bool paused;
     bool done;        // its last tick played, or left
+    bool saving;      // being saved as a replay: written, then
+    bool checking;    // played back to be compared
 };
 const RecordView* ViewingRecord();
-// Why the last record that was to be played wasn't ("" none), once.
-std::string TakeRecordError();
+// How the last record played or saved from the menu went ("" nothing to say), once;
+// *done: it was saved.
+std::string TakeRecordNote(bool* done = nullptr);
+// main.cpp: while a replay is written, checked or recorded, or a video made, frames
+// aren't waited for (RecordHurry); nor drawn but for a video (RecordUndrawn: the page
+// shows how far it is now and then). RecordTasksRunning: any of it, or a record watched.
+bool RecordHurry();
+bool RecordUndrawn();
+bool RecordTasksRunning();
 // main.cpp, each frame: F8 pauses a record being played and goes on with it (the game's
 // own F8 is the record's); true while paused: the frame is then shown again, not run.
 bool RecordPaused(int scene);
