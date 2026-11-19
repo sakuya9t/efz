@@ -38,10 +38,19 @@
 //   in thousands of HP).
 //
 // okiplan:1, its okizeme planned from a library of people's (mix.h, which has its keys and
-//   tensors).
+//   tensors). okiplan:2: with oki_sight (the riser guards by sight) or oki_bait (a
+//   reversal waited out is worth its punish), which a game of the first version would
+//   read past: a file that uses either says 2.
 // pressplan:1, its pressure after a guarded move planned from another (mix.h's Press).
+//   pressplan:2: with press_sight.
 // airthrow:1, an air throw of an opponent that recovers in the air out of its combo, when
 //   one catches inside the recovery (mix.h's Catch; key air_near).
+// rise:1, its own rising guarded by sight when it sees the attacker on it (Rise, below;
+//   keys rise_prior, rise_meaty, rise_low, rise_high, rise_near, rise_fly, rise_decay).
+// risk:1, a raw special of its own play let out or stopped at its input by how that move
+//   has paid in the match (Risk, below; keys risk_prior, risk_temperature, risk_window,
+//   risk_look, risk_look_down, risk_decay, risk_ahead, and risk_moves: "0x105:-131,0xfc:-326,...",
+//   each move's action and its prior, HP a use).
 //
 // Keys of no module say where the file came from (version, source.*, exporter, exported,
 // dropped): the menus show the version, the log the rest. A file may also carry what a game
@@ -131,6 +140,59 @@ struct Chooser {
     bool Empty() const { return net.Empty(); }
 };
 
+// Its own rising (format's rise:1; runs/human-ayu/rise.py's guard by sight). A rising on
+// which the agent sees the attacker on it (while it sees itself down: the attacker in a
+// move of its own, or in the air within `fly` pixels, or nearer than `near`: 0, off) is
+// guarded through with a probability read from the match: the share of the risings it
+// has seen at which the attacker was in a move of its own as the agent saw itself up,
+// over a prior (`meaty`, counting as `prior` risings); none at the rate `low`, all at
+// `high`, in a line between. A rising guarded through: while it sees itself down, a
+// standing guard while it sees the attacker in the air, else its own play's guard, else
+// a crouching one. The counts are kept from match to match, scaled by `decay` (the same
+// opponent next).
+struct Rise {
+    bool on = false;
+    float prior = 2, meaty = 0.56f, low = 0.3f, high = 0.6f;
+    float near = 0, fly = 200, decay = 0.7f;
+    int stand = -1, crouch = -1; // the actions of a standing and a crouching guard
+};
+
+// Its raw specials (format's risk:1; runs/human-ayu/risk.py). A step that is its own
+// play's and presses a button, the agent not seeing its opponent in a hit reaction: the
+// press is tried on the game as it is (Player::SetRisk's World), the opponent pressing
+// nothing: the press, then nothing, for `look` frames (lookDown while the agent is down:
+// a reversal's button is read while it rises). If that starts (an action it was not in)
+// one of `moves`, the move's account decides: its worth the mean HP swing (the
+// opponent's HP lost less its own over `window` steps after the press, as the agent sees
+// it) of the times it was let out in this match, over its prior (`worth`, counting as
+// `prior` uses); with the probability 1 / (1 + exp(worth / temperature)) the action's
+// button is left out. The accounts are kept from match to match, scaled by `decay`.
+// ahead: the inputs of its own play that a planner chooses ahead (for the frames between a
+// contact and its seeing it) are drawn for as they are played, as any step of its own
+// play is: whatever the contact was, which it has not seen (a plan made from an input
+// that is then left out finds the game elsewhere and is dropped).
+struct Risk {
+    bool on = false;
+    float prior = 4, temperature = 75, decay = 0.7f;
+    int window = 180, look = 10, lookDown = 50;
+    bool ahead = false; // its own play's inputs chosen ahead (a planner's lead-in) drawn for too
+    std::vector<int> moves;   // the moves with an account (their actions)
+    std::vector<float> worth; // ... and each's prior, HP a use
+    std::vector<int> plain;   // per action, the action of the same direction with no button
+};
+
+// What its raw specials did: presses that would start a move with an account (drawn
+// for), those stopped and let out, and of the ones let out the moves it then saw.
+struct RiskStats {
+    int seen = 0, stopped = 0, let = 0, came = 0;
+};
+
+// What its risings did: the knockdowns it saw, those the attacker was on, of them the
+// ones guarded through, the steps it held a guard for and of them the standing ones.
+struct RiseStats {
+    int knockdowns = 0, met = 0, guarded = 0, steps = 0, stood = 0;
+};
+
 class Policy {
 public:
     // Reads an agent file; false with *error saying why.
@@ -165,6 +227,8 @@ public:
     Mix mix;            // its planned okizeme's library (mix.h); empty: none
     Press press;        // its planned pressure's (mix.h); empty: none
     Catch air;          // its catch of an air recovery (mix.h); off: none
+    Rise rise;          // its own rising guarded by sight; off: none
+    Risk risk;          // its raw specials by their accounts; off: none
     int format = 0;
     std::string modules; // as "policy:1,routes:1"
     std::string version; // the version it was exported as (empty: none given)
@@ -259,9 +323,34 @@ public:
     // catches inside the recovery, played when it sees the recovery; nothing: no such
     // throw (or the opponent out of reach); the rest as the okizeme's.
     const OkiStats& Air() const { return air_; }
+    // Its risings' (the module rise:1), the probability the next one the attacker is on
+    // is guarded through, and its accounts (account 0 its own play, 1 the guard: the
+    // risings counted and their swings' sum).
+    const RiseStats& Rising() const { return rise_; }
+    double RiseChance() const;
+    double RiseSeen() const { return riseSeen_; } // the risings it saw; of them, the
+    double RiseOn() const { return riseOn_; }     // attacker in a move as it rose
+    // Its raw specials by their accounts (the module risk:1), tried on `world`'s game for
+    // player `side` (nullptr: off: nothing is stopped). RiskStarts: the move (an index
+    // into policy()->risk.moves, -1 none) that `action` starts on the game as it is, the
+    // game left as it was; `view`: that game's view. RiskChance: the probability that a
+    // press starting that move is stopped now.
+    void SetRisk(World* world, int side);
+    const RiskStats& Risks() const { return risks_; }
+    int RiskStarts(const float* view, int action);
+    double RiskChance(int move) const;
     bool Mixing() const { return mix_ != nullptr; }
     // Another opponent: what it counted of the last one forgotten.
-    void Forget() { counts_.Clear(); counted_ = false; }
+    void Forget()
+    {
+        counts_.Clear();
+        counted_ = false;
+        riseSeen_ = riseOn_ = 0;
+        risen_ = false;
+        std::fill(riskCount_.begin(), riskCount_.end(), 0.0);
+        std::fill(riskTotal_.begin(), riskTotal_.end(), 0.0);
+        risked_ = false;
+    }
     const Counts& Seen() const { return counts_; }
 
 private:
@@ -277,6 +366,11 @@ private:
     void PressResult(const float* view);
     void ThrowBegin(const float* view, bool deterministic);
     void ThrowResult(const float* view);
+    void RiseWatch();
+    int RiseAct(int action);
+    void RiskWatch();
+    int RiskAct(const float* view, int action);
+    void RiskSettle();
 
     const Policy* policy_;
     std::mt19937_64 rng_;
@@ -294,6 +388,10 @@ private:
     int side_ = 0;
     double patienceMs_ = 50, againMs_ = 8, waitMs_ = 50;
     std::deque<int> queue_; // its inputs chosen at the hit, for the frames until it sees it
+    std::deque<bool> queueOwn_; // ... each its own play's (drawn from the network), or a plan's
+    // The inputs chosen ahead, queued: `planned` of them (the first) a plan's, the rest
+    // its own play's.
+    void Queue(const std::vector<int>& actions, size_t planned, size_t own);
     bool pending_ = false;  // a plan asked for
     bool pendingFirst_ = false; // (a combo's first)
     int pendingMove_ = 0, pendingOffset_ = 0;
@@ -327,6 +425,30 @@ private:
     bool throwWanted_ = false;  // the opponent recovering in the air, not planned from yet
     bool throwPending_ = false; // a catch asked for
     OkiStats air_;
+
+    // Its own rising (rise.py's Rise, the guard by sight), from what it sees.
+    double riseSeen_ = 0, riseOn_ = 0; // the risings it saw; the attacker in a move at them
+    bool risen_ = false;      // a view seen since the last match's end
+    bool riseDown_ = false;   // it saw itself down on the step before
+    bool riseMet_ = false;    // this rising: the attacker seen on it
+    bool riseDrawn_ = false;  // ... and its guard drawn for
+    bool riseVeto_ = false;   // ... guarded through
+    RiseStats rise_;
+
+    // Its raw specials (risk.py's Risk).
+    World* riskWorld_ = nullptr;
+    int riskSide_ = 0;
+    Snapshot riskSnap_;
+    std::vector<double> riskCount_, riskTotal_; // the accounts, a move each
+    bool risked_ = false;      // a view seen since the last match's end
+    int riskT_ = 0;            // steps
+    int riskDrawn_ = -1, riskDrawnAt_ = 0; // the press being tried: its move, the step,
+    bool riskStop_ = false;                // and whether it is stopped
+    int riskOpen_ = -1;        // the use being followed: its move (-1 none), its age,
+    int riskAge_ = 0;          // both HP at the press, whether the move was seen
+    float riskHp_ = 0, riskOppHp_ = 0;
+    bool riskCame_ = false;
+    RiskStats risks_;
 };
 
 } // namespace agent

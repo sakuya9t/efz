@@ -794,7 +794,13 @@ class OkizemeAsOkiplan(unittest.TestCase):
         rng = np.random.default_rng(5)
         compared = 0
         skipped = 0
-        for doubt, skip in ((0.0, 0.0), (0.3, 0.0), (0.3, 0.12), (0.0, 0.12)):
+        from efz_env.memory import K
+        # (doubt, skip, and okiplan:2's: sight, the riser's guard by what it saw that many
+        # steps ago; bait, a reversal that came out and missed counted as its punish)
+        for doubt, skip, sight, bait in ((0.0, 0.0, 0, 0.0), (0.3, 0.0, 0, 0.0),
+                                         (0.3, 0.12, 0, 0.0), (0.0, 0.12, 0, 0.0),
+                                         (0.0, 0.0, 6, 0.0), (0.0, 0.0, 0, 500.0),
+                                         (0.3, 0.12, 3, 700.0)):
             with tempfile.TemporaryDirectory() as folder:
                 path, model = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
                 out = os.path.join(folder, 'agent.efzagent')
@@ -803,10 +809,15 @@ class OkizemeAsOkiplan(unittest.TestCase):
                     air = bool(view[okiplan.SELF_AIR] > 0)
                     lib = self.library(air, np.random.default_rng(compared))
                     options = dict(per_plan=5, per_class=2, window=40, wait=30, tolerance=400,
-                                   doubt=doubt, skip=skip)
+                                   doubt=doubt, skip=skip, sight=sight, bait=bait)
                     export_agent(path, out, check=False,
                                  okiplan=dict(library=lib, answers=self.answers, **options))
                     native = NativeAgent(out, deterministic=True)
+                    # (a file that uses neither is one the first version's game loads)
+                    self.assertIn('okiplan:2' if sight or bait else 'okiplan:1', native.modules)
+                    np.testing.assert_allclose(
+                        native.counts(mode=1)[1],
+                        okiplan.belief(np.zeros(len(K)), 6.0, 6.0, sight=bool(sight)), rtol=1e-12)
                     planner = okiplan.OkiPlanner(DATA, lib, OBS_DIM + 6 * self.HISTORY, self.DELAY,
                                                  history=self.HISTORY, after='guard', **options)
                     seen = np.repeat(view[None], self.DELAY + 1, 0) + \
@@ -965,7 +976,9 @@ class PressureAsPressplan(unittest.TestCase):
         self.assertGreaterEqual(len(found), 3, 'too few guarded moves in the script')
         rng = np.random.default_rng(7)
         compared = nothing = 0
-        for doubt, skip in ((0.3, 0.05), (0.0, 0.0), (0.3, 0.12)):
+        # (doubt, skip, and pressplan:2's sight: the guard by sight, okiplan's)
+        for doubt, skip, sight in ((0.3, 0.05, 0), (0.0, 0.0, 0), (0.3, 0.12, 0), (0.0, 0.0, 5),
+                                   (0.3, 0.05, 2)):
             with tempfile.TemporaryDirectory() as folder:
                 path, model = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
                 out = os.path.join(folder, 'agent.efzagent')
@@ -973,12 +986,12 @@ class PressureAsPressplan(unittest.TestCase):
                 for n, (state, view) in enumerate(found):
                     lib = self.library(np.random.default_rng(n))
                     options = dict(per_plan=4, per_class=2, window=30, wait=10, tolerance=400,
-                                   slack=40, doubt=doubt, skip=skip)
+                                   slack=40, doubt=doubt, skip=skip, sight=sight)
                     export_agent(path, out, check=False,
                                  pressplan=dict(library=lib, answers=self.answers, **options))
                     native = NativeAgent(out, deterministic=True)
                     self.assertEqual(native.press, len(lib))
-                    self.assertIn('pressplan:1', native.modules)
+                    self.assertIn('pressplan:2' if sight else 'pressplan:1', native.modules)
                     planner = pressplan.PressPlanner(DATA, lib, OBS_DIM + 6 * self.HISTORY,
                                                      self.DELAY, history=self.HISTORY,
                                                      after='guard', **options)
@@ -1189,6 +1202,309 @@ class CatchAsAirplan(unittest.TestCase):
             self.assertEqual(total['air_plans'], total['air_played'], total)
             native.attach(None)
             native.close()
+            env.close()
+
+
+@unittest.skipUnless(DATA, 'the game data (EFZ_DATA)')
+class NativeAsOpponent(unittest.TestCase):
+    """An agent file played by the game's code as a training environment's opponent
+    (runs/human-ayu/native_agent.py's NativeOpponent, finetune.py --vs-native): player 2
+    of its matches is the file's player, attached to each of them."""
+
+    HISTORY, DELAY = 4, 5
+
+    def setUp(self):
+        sys.path.insert(0, RUNS)
+        try:
+            import native_agent
+            self.native_agent = native_agent
+        except ImportError as e:
+            self.skipTest(f'runs/human-ayu: {e}')
+        if not hasattr(native_agent, 'NativeOpponent'):
+            self.skipTest("runs/human-ayu's native_agent.py has no opponent")
+
+    def played(self, path, threads, steps=400, n=3):
+        """Player 2's control bytes over `steps` steps of n matches, of which the file
+        plays the first two; and the file's own steps for them, asked again."""
+        from efz_env.sb3 import EfzSB3VecEnv, mixture
+        opp = self.native_agent.NativeOpponent(path, deterministic=True, seed=4, threads=threads)
+        idle = lambda obs: np.zeros(len(obs), np.int64)
+        assignment = np.array([0, 0, 1])
+        env = EfzSB3VecEnv(DATA, n, opponent=mixture([opp, idle], assignment),
+                           chars=[('ayu', 'mai')] * n, frame_skip=1, history=self.HISTORY,
+                           delay=self.DELAY, max_frames=0, seed=3)
+        opp.mine = assignment == 0
+        opp.attach(env)
+        self.assertEqual(sorted(opp.agents), [0, 1])
+        rng = np.random.default_rng(1)
+        env.reset()
+        out = []
+        for _ in range(steps):
+            env.step_async(rng.integers(0, env.action_space.n, n))
+            out.append(env._controls[:, 1].copy())
+            env.step_wait()
+        env.close()
+        opp.close()
+        return np.array(out)
+
+    def test_the_file_plays_its_matches(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            export_agent(path, out, check=False)
+            a = self.played(out, 1)
+            # Its own matches: bytes of its own, more than one kind; the other match is
+            # the mixture's other member's (action 0: nothing pressed).
+            self.assertGreater(len(np.unique(a[:, :2])), 3)
+            self.assertTrue((a[:, 2] == a[0, 2]).all())
+            # The same play again, and on threads.
+            np.testing.assert_array_equal(a, self.played(out, 1))
+            np.testing.assert_array_equal(a, self.played(out, 3))
+
+    def test_as_a_free_player(self):
+        """Without planners in the file, the attached player's bytes are the ones the
+        file's player gives for the same views (the game as it is, delayed by itself)."""
+        from efz_env import EfzVecEnv
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            export_agent(path, out, check=False)
+            from efz_env.sb3 import EfzSB3VecEnv, mixture
+            opp = self.native_agent.NativeOpponent(out, deterministic=True, seed=4)
+            env = EfzSB3VecEnv(DATA, 1, opponent=mixture([opp], np.zeros(1, int)),
+                               chars=[('ayu', 'mai')], frame_skip=1, history=self.HISTORY,
+                               delay=self.DELAY, max_frames=0, seed=3)
+            opp.attach(env)
+            twin = NativeAgent(out, deterministic=True, seed=4)
+            rng = np.random.default_rng(1)
+            env.reset()
+            for t in range(300):
+                o = env.env.obs[0, 1].copy()
+                want = twin.step(o[:OBS_DIM], o[2] == 0 and o[3] == 0)
+                env.step_async(rng.integers(0, env.action_space.n, 1))
+                self.assertEqual(int(env._controls[0, 1]), want, t)
+                env.step_wait()
+            env.close()
+            opp.close()
+            twin.close()
+
+
+class RiseAsRisePy(unittest.TestCase):
+    """The game's guard on rising (policy.h's Rise: the module rise:1) against
+    runs/human-ayu/rise.py's with guard=true, carry=true: from the same views, the guard
+    held by sight on the same steps, and the same read of the match's attacker."""
+
+    HISTORY, DELAY = 4, 5
+    LYING, HIT = 0x62, 0x3b
+
+    def setUp(self):
+        sys.path.insert(0, RUNS)
+        try:
+            import rise
+            from efz_env import modules
+            self.rise, self.modules = rise, modules
+        except ImportError as e:
+            self.skipTest(f'runs/human-ayu: {e}')
+
+    def views(self, script):
+        """script: (steps, its own action, the attacker's distance in pixels, the attacker
+        in the air, the attacker's action, its own HP lost on the first of them)."""
+        rise, out, hp = self.rise, [], 1.0
+        for steps, act, dx, air, opp, lost in script:
+            for k in range(steps):
+                hp -= (lost if k == 0 else 0) / rise.HP
+                v = np.zeros(OBS_DIM, np.float32)
+                v[rise.SELF_ACT], v[rise.DX], v[rise.OPP_AIR] = act, dx / rise.PIXELS, float(air)
+                v[rise.OPP_ACT], v[rise.SELF_HP], v[rise.OPP_HP] = opp, hp, 1.0
+                out.append(v)
+        return out
+
+    def played(self, native, views):
+        return [native.step(v) for v in views]
+
+    def twin(self, views, **options):
+        """rise.py's module over the views as the agent sees them (DELAY late)."""
+        m = self.modules.REGISTRY['rise'](None, 'batch', {}, dict(guard=True, carry=True, **options),
+                                          None)
+        m.batch(1)
+        self.feed(m, views)
+        return m
+
+    def feed(self, m, views):
+        for t in range(len(views)):
+            v = views[max(0, t - self.DELAY)]
+            ctx = self.modules.Context(v, v, hist=np.zeros((self.HISTORY, 6), np.float32), policy=None)
+            m.watch(0, ctx)
+            m.act(0, ctx)
+
+    def test_the_guard_held_by_sight(self):
+        rise = self.rise
+        # Up; down with the attacker far; then near on the ground, then in the air; up.
+        script = [(8, 0, 400, False, 0, 0), (6, self.LYING, 400, False, 0, 0),
+                  (6, self.LYING, 100, False, 0, 0), (7, self.LYING, 100, True, 0, 0),
+                  (5, self.LYING, 100, False, 0, 0), (30, 0, 100, False, 0, 0)]
+        views = self.views(script)
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            plain, out = os.path.join(folder, 'plain.efzagent'), os.path.join(folder, 'rise.efzagent')
+            export_agent(path, plain, check=False)
+            export_agent(path, out, check=False, rise=dict(low=-1.0, high=0.0, near=130))  # (always guarded)
+            self.assertNotIn('rise', read_header(plain)[1]['modules'])
+            with self.assertRaises(ValueError):
+                export_agent(path, out + '.bad', check=False, rise=dict(nothing=1))
+            native, base = NativeAgent(out, deterministic=True), NativeAgent(plain, deterministic=True)
+            self.assertIn('rise:1', native.modules)
+            self.assertTrue(native.rise)
+            got, own = self.played(native, views), self.played(base, views)
+            stats = native.stats()
+            native.close()
+            base.close()
+        # What it sees is DELAY steps late: down from step 8 + DELAY, the attacker on it
+        # from 14 + DELAY, in the air from 20 + DELAY to 27 + DELAY, up at 32 + DELAY.
+        d = self.DELAY
+        self.assertEqual(got[:14 + d], own[:14 + d])  # its own play until the attacker is on it
+        for t in range(14 + d, 32 + d):
+            air = 20 + d <= t < 27 + d
+            self.assertIn(got[t], (0x02,) if air else (0x02, 0x06), t)
+        self.assertTrue(any(got[t] == 0x06 for t in range(14 + d, 20 + d)))
+        self.assertEqual((stats['rise_knockdowns'], stats['rise_met'], stats['rise_guarded'],
+                          stats['rise_steps'], stats['rise_stood']), (1, 1, 1, 18, 7))
+        # The attacker far and not in a move: its own play throughout.
+        far = self.views([(8, 0, 400, False, 0, 0), (20, self.LYING, 400, False, 0, 0),
+                          (20, 0, 400, False, 0, 0)])
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            plain, out = os.path.join(folder, 'plain.efzagent'), os.path.join(folder, 'rise.efzagent')
+            export_agent(path, plain, check=False)
+            export_agent(path, out, check=False, rise=dict(low=-1.0, high=0.0, near=130))
+            native, base = NativeAgent(out, deterministic=True), NativeAgent(plain, deterministic=True)
+            self.assertEqual(self.played(native, far), self.played(base, far))
+            self.assertEqual(native.stats()['rise_met'], 0)
+            native.close()
+            base.close()
+
+    def test_the_same_read_of_the_attacker(self):
+        # A rising the attacker leaves alone (no move of its own as the agent sees itself
+        # up), and one it is in a move at.
+        alone = [(6, 0, 300, False, 0, 0), (12, self.LYING, 300, False, 0, 0), (40, 0, 300, False, 0, 0)]
+        there = [(12, self.LYING, 90, False, 0xd0, 0), (3, 0, 90, False, 0xd0, 0),
+                 (4, self.HIT, 90, False, 0, 1300), (40, 0, 300, False, 0, 0)]
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'rise.efzagent')
+            export_agent(path, out, check=False, rise={})
+            native = NativeAgent(out, deterministic=True)
+            m = self.twin([])
+            # At the prior: the same probability.
+            self.assertAlmostEqual(m.guard_chance(0), 0.867, delta=0.001)
+            self.assertEqual(native.stats()['rise_chance'], 867)
+            # The same risings counted, and the same probability after each.
+            for script, seen, on, chance in ((alone, 1, 0, 244), (alone, 2, 0, 0), (there, 3, 1, 413)):
+                views = self.views(script)
+                self.played(native, views)
+                self.feed(m, views)
+                got = native.stats()
+                self.assertEqual((got['rise_seen'], got['rise_on']), (100 * seen, 100 * on))
+                self.assertEqual((m.seen[0], m.on[0]), (seen, on))
+                self.assertAlmostEqual(got['rise_chance'], chance, delta=1)
+                self.assertAlmostEqual(got['rise_chance'] / 1000, m.guard_chance(0), delta=0.001)
+            native.next_match()                            # the same opponent next: older,
+            native.next_match()                            # (once a match, as the game
+            m.reset()                                      # resets at both its ends)
+            got = native.stats()
+            self.assertEqual((got['rise_seen'], got['rise_on']), (210, 70))
+            self.assertAlmostEqual(m.seen[0], 2.1)
+            self.assertAlmostEqual(m.on[0], 0.7)
+            native.reset(1)                                # afresh: nothing kept
+            self.assertEqual(native.stats()['rise_seen'], 0)
+            native.close()
+
+
+@unittest.skipIf(not DATA or not os.path.isdir(DATA or ''), 'no game data: set EFZ_DATA')
+class RiskAsRiskPy(unittest.TestCase):
+    """The game's look at a press (policy.h's Risk, Player::RiskStarts: the module risk:1)
+    against runs/human-ayu/risk.py's: from the same game, the same move started (or none)
+    by the same press, at once or kept by the game and played later; and the same
+    probability of stopping it at the priors."""
+
+    HISTORY, DELAY = 4, 5
+
+    def setUp(self):
+        sys.path.insert(0, RUNS)
+        try:
+            import risk
+            from efz_env import modules
+            self.risk, self.modules = risk, modules
+        except ImportError as e:
+            self.skipTest(f'runs/human-ayu: {e}')
+
+    def test_the_same_moves_started(self):
+        from efz_env import EfzVecEnv
+        from efz_env.actions import encode
+        risk = self.risk
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'risk.efzagent')
+            moves = {risk.MOVES[k]: w for k, w in risk.PRIORS.items()}
+            with self.assertRaises(ValueError):
+                export_agent(path, out + '.bad', check=False, risk={})
+            export_agent(path, out, check=False, risk=dict(moves=moves, ahead=1))
+            self.assertEqual(read_header(out)[1]['risk_ahead'], '1')  # (the inputs chosen ahead too)
+            export_agent(path, out, check=False, risk=dict(moves=moves))
+            self.assertEqual(read_header(out)[1]['risk_ahead'], '0')
+            native = NativeAgent(out, deterministic=True)
+            self.assertIn('risk:1', native.modules)
+            env = EfzVecEnv(DATA, 1, frame_skip=1, rounds_to_win=2, max_frames=0, seed=3,
+                            autoreset='disabled')
+            env.set_matches(chars=('ayu', 'ayu'))
+            obs = env.reset()
+            twin = risk.Risk(DATA, None, self.DELAY)
+            twin.batch(1)
+
+            def step(byte):
+                a = np.zeros((1, 2), np.uint8)
+                a[0, 0] = byte
+                return env.step(a)[0]
+
+            def both(action):
+                state = env.save_state(0)
+                ctx = self.modules.Context(obs[0, 0], obs[0, 0], save=lambda: state, side=0)
+                mine = twin.starts(ctx, action)
+                got, chance = native.risk_starts(env, 0, 0, action)
+                self.assertEqual(env.save_state(0), state)  # the game as it was
+                self.assertEqual(got, None if mine is None else risk.MOVES[mine], (action, mine))
+                if mine is not None:
+                    self.assertAlmostEqual(chance, twin.chance(0, mine), delta=1e-6)
+                return mine
+
+            for _ in range(150):
+                obs = step(0)
+            seen = set()
+            presses = [risk.INDEX[a] for a in ((6, 'A'), (6, 'B'), (6, 'C'), (3, 'B'), (5, 'A'),
+                                               (2, 'C'), (5, ''))]
+            for motion in ('236', '623', '236236', '641236', '5'):
+                for _ in range(90):
+                    obs = step(0)
+                for d in motion[:-1]:
+                    obs = step(encode(int(d)))
+                    for a in presses:
+                        seen.add(both(a))
+                for a in presses:
+                    seen.add(both(a))
+            self.assertTrue({'236A', '236B', '236C', '623A', '623B', '623C'} <= seen, seen)
+            # A press made during a normal, which the game keeps: 5A, then 2 3 6 inside it.
+            for _ in range(90):
+                obs = step(0)
+            obs = step(encode(5, 'A'))
+            kept = set()
+            for d in '236':
+                obs = step(encode(int(d)))
+            for _ in range(6):
+                kept.add(both(risk.INDEX[(6, 'B')]))
+                obs = step(encode(6))
+            self.assertIn('236B', kept, kept)
+            native.close()
+            twin.close()
             env.close()
 
 

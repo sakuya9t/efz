@@ -74,7 +74,21 @@ MAGIC = b'EFZAGENT'
 FORMAT = 2
 # The modules this exporter writes, each's version (port/agent/policy.h's kModules).
 MODULES = {'policy': 1, 'routes': 1, 'chooser': 1, 'okiplan': 1, 'pressplan': 1,
-           'airthrow': 1}
+           'airthrow': 1, 'rise': 1, 'risk': 1}
+# A module's later version, written only for a file that uses what it added (so a file
+# without is one every game that plays the first version still loads): the keys that
+# make it so. okiplan:2: the riser's guard by sight, the bait's worth; pressplan:2: the
+# guard by sight.
+LATER = {'okiplan': (2, ('oki_sight', 'oki_bait')), 'pressplan': (2, ('press_sight',))}
+
+
+def _versions(modules, keys):
+    """The header's modules with each's version: LATER's where the file has its keys."""
+    out = []
+    for m in modules:
+        version, added = LATER.get(m, (MODULES[m], ()))
+        out.append(f'{m}:{version if any(k in keys for k in added) else MODULES[m]}')
+    return ','.join(out)
 TRAIN = 1  # the training part's version (key train)
 # PPO's settings a file keeps (train.sb3) and unpack_agent makes the model with.
 HYPER = ('n_steps', 'batch_size', 'n_epochs', 'gamma', 'gae_lambda', 'ent_coef', 'vf_coef',
@@ -122,7 +136,8 @@ def load_routes(path):
 # spare time affords.
 OKI_OPTIONS = dict(per_plan=6, per_class=2, window=45, wait=40, tolerance=24,
                    temperature=200.0, doubt=0.0, hit_worth=1300.0, hurt_worth=1200.0,
-                   prior=6.0, decay=0.7, skip=0.0, think=0)
+                   prior=6.0, decay=0.7, skip=0.0, think=0, sight=0, bait=0.0)
+OKI_LATER = ('sight', 'bait')  # (okiplan:2's: written only where they are not 0)
 WAKE_HOLD = 3  # runs/human-ayu/advantages.py's: the steps a riser's reversal button is held
 
 
@@ -192,7 +207,7 @@ def _oki_parts(entries, answers, options, history, delay, frame_skip):
         'oki_entries': len(entries),
         'oki_kinds': '|'.join(kinds),
         **{f'oki_{k}': (int(v) if isinstance(OKI_OPTIONS[k], int) else repr(float(v)))
-           for k, v in o.items()},
+           for k, v in o.items() if k not in OKI_LATER or float(v) != 0},
     }
     cat = lambda xs, dtype: (np.concatenate([np.asarray(x, dtype) for x in xs])
                              if len(xs) else np.zeros(0, dtype))
@@ -223,7 +238,8 @@ def _oki_parts(entries, answers, options, history, delay, frame_skip):
 # more.
 PRESS_OPTIONS = dict(per_plan=4, per_class=2, window=40, wait=24, tolerance=16, slack=2,
                      near=160, max_wait=20, temperature=200.0, doubt=0.3, hit_worth=1300.0,
-                     hurt_worth=1200.0, prior=8.0, skip=0.05)
+                     hurt_worth=1200.0, prior=8.0, skip=0.05, sight=0)
+PRESS_LATER = ('sight',)  # (pressplan:2's)
 MASH = 12  # runs/human-ayu/advantages.py's: the times a reversal's button is pressed again
 
 
@@ -231,6 +247,26 @@ MASH = 12  # runs/human-ayu/advantages.py's: the times a reversal's button is pr
 # live_throw): an air throw of an opponent that recovers in the air out of the agent's
 # combo, when one catches inside the recovery. near: the most pixels apart it is looked for.
 AIR_OPTIONS = dict(near=320)
+
+# Its own rising guarded by sight, as the game plays it (port/agent/policy.h's Rise;
+# runs/human-ayu/rise.py with guard=true, carry=true): a rising on which it sees the
+# attacker on it (in a move of its own, in the air within `fly` pixels, or nearer than
+# `near`: 0, off)
+# is guarded through by how often this match's attacker has been in a move as the agent
+# rose (meaty: the prior, weighing `prior` risings; none guarded at the rate `low`, all
+# at `high`; decay: what the counts keep into the next match).
+RISE_OPTIONS = dict(prior=2.0, meaty=0.56, low=0.3, high=0.6, near=0.0, fly=200.0, decay=0.7)
+
+
+# Its raw specials by their accounts, as the game plays them (port/agent/policy.h's Risk;
+# runs/human-ayu/risk.py with carry=true): prior (the uses a move's prior counts as),
+# temperature, window (the steps a use is followed for), look and look_down (the frames a
+# press is tried for on the game as it is, standing and down), decay (what the accounts
+# keep into the next match), ahead (1: its own play's inputs that a planner chooses ahead,
+# for the frames until it sees a contact, are drawn for as any other step of its own play
+# is; 0: they are played as chosen); and `moves`: {a move's action: its prior, HP a use}.
+RISK_OPTIONS = dict(prior=4.0, temperature=75.0, window=180, look=10, look_down=50, decay=0.7,
+                    ahead=0)
 
 
 def load_press(path):
@@ -302,7 +338,7 @@ def _press_parts(entries, answers, options, history, delay, frame_skip):
         'press_entries': len(entries),
         'press_kinds': '|'.join(kinds),
         **{f'press_{k}': (int(v) if isinstance(PRESS_OPTIONS[k], int) else repr(float(v)))
-           for k, v in o.items()},
+           for k, v in o.items() if k not in PRESS_LATER or float(v) != 0},
     }
     tensors = [
         ('press.offset', np.concatenate([[0], np.cumsum(lengths)]), True),
@@ -634,10 +670,10 @@ def _carried(path, keep):
                 'chooser': ('chooser_', 'source.chooser'),
                 'okiplan': ('oki_', 'source.okizeme'),
                 'pressplan': ('press_', 'source.pressure'),
-                'airthrow': ('air_',)}
+                'airthrow': ('air_',), 'rise': ('rise_',), 'risk': ('risk_',)}
     named = {'okiplan': 'oki.', 'pressplan': 'press.'}  # (its tensors' prefix, where it
     #                                                      isn't the part's name)
-    for part in ('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow'):
+    for part in ('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow', 'rise', 'risk'):
         if part not in keep or part not in has:
             continue
         if part == 'chooser' and 'routes' not in modules:
@@ -707,8 +743,9 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
                  victims=None, replan=False, per_start=None, chooser=None,
                  margin=CHOOSER_MARGIN, version=None, sources=None, dropped=(), train=True,
                  optimizer=False, parts_from=None,
-                 keep=('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow'),
-                 ending=0, okiplan=None, pressplan=None, airthrow=None):
+                 keep=('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow', 'rise', 'risk'),
+                 ending=None, okiplan=None, pressplan=None, airthrow=None, rise=None,
+                 risk=None):
     """Writes model_path (a model.zip, with its config.json) as an agent file at out_path.
     name: what the game shows (default: the model's folder for avg.zip / model.zip, else
     its file name). character: the one it plays (a name or 0-24; default the first of
@@ -718,13 +755,17 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
     against (play.py --assist-victims; None all); replan: planned again at each new move's
     hit (round 15b's); per_start: the routes tried a plan (default 12, replanning 24);
     ending: the HP a knockdown at a combo's end is worth over any other end (0: damage
-    alone; redteam.Planner's ending, port/agent/routes.h).
+    alone; redteam.Planner's ending, port/agent/routes.h); None: 0, or with parts_from
+    that file's.
     okiplan: its planned okizeme (the module okiplan:1, port/agent/mix.h): {'library': an
     okizeme library (oki_library.py's .npz, its .answers.json beside it) or its entries,
     'answers': those answers if not from the file, and OKI_OPTIONS' keys}. pressplan: its
     planned pressure (pressplan:1), the same with a pressure library
     (pressure_library.py's) and PRESS_OPTIONS' keys. airthrow: its air throw of an opponent's
-    air recovery (airthrow:1: no library), AIR_OPTIONS' keys ({} for the defaults).
+    air recovery (airthrow:1: no library), AIR_OPTIONS' keys ({} for the defaults). rise:
+    its own rising guarded by sight (rise:1), RISE_OPTIONS' keys ({} for the defaults).
+    risk: its raw specials by their accounts (risk:1): {'moves': {action: prior HP}, and
+    RISK_OPTIONS' keys}.
     chooser: combo_net.py's chooser.pt for that agent and library, played when a combo's
     first plan is late; margin: what a route it picks must promise beyond the agent's own
     play (HP). version: what the game shows beside the name. sources: {part: (label,
@@ -765,14 +806,16 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         carried = _carried(parts_from, keep)
     features, feature_tensors, activation, layers, out = _actor(policy)
     from .policy import OPP_ACTION, OPP_CHAR, SELF_ACTION, SELF_CHAR, ACTIONS, CHARACTERS
-    for part, given in (('okiplan', okiplan), ('pressplan', pressplan), ('airthrow', airthrow)):
+    for part, given in (('okiplan', okiplan), ('pressplan', pressplan), ('airthrow', airthrow),
+                        ('rise', rise), ('risk', risk)):
         if given is not None and part in carried[0]:
             raise ValueError(f"parts_from: that file's {part}, or a library given for it, not "
                              "both (keep says which of its parts)")
     modules = (['policy'] + ['routes'] * (library is not None) +
                ['chooser'] * (chooser is not None) + carried[0] +
                ['okiplan'] * (okiplan is not None) + ['pressplan'] * (pressplan is not None) +
-               ['airthrow'] * (airthrow is not None))
+               ['airthrow'] * (airthrow is not None) + ['rise'] * (rise is not None) +
+               ['risk'] * (risk is not None))
     keys = {
         'modules': ','.join(f'{m}:{MODULES[m]}' for m in modules),
         'name': _one_line(name),
@@ -799,7 +842,7 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         route_keys, route_tensors = _route_parts(routes, victims, keys['history'],
                                                  keys['delay'], keys['frame_skip'],
                                                  replan=replan, per_start=per_start,
-                                                 ending=ending)
+                                                 ending=ending or 0)
         keys.update(route_keys)
         if isinstance(library, (str, os.PathLike)):
             keys['route_source'] = os.path.basename(os.fspath(library))
@@ -848,12 +891,35 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
             raise ValueError(f"airthrow: no option {', '.join(unknown)} "
                              f"({', '.join(AIR_OPTIONS)})")
         keys.update({f'air_{k}': int(v) for k, v in dict(AIR_OPTIONS, **airthrow).items()})
+    if rise is not None:
+        if keys['frame_skip'] != 1 or keys['delay'] <= 0:
+            raise ValueError('rise: an agent deciding every frame (frame_skip 1), with a delay')
+        unknown = sorted(set(rise) - set(RISE_OPTIONS))
+        if unknown:
+            raise ValueError(f"rise: no option {', '.join(unknown)} ({', '.join(RISE_OPTIONS)})")
+        keys.update({f'rise_{k}': type(RISE_OPTIONS[k])(v)
+                     for k, v in dict(RISE_OPTIONS, **rise).items()})
+    if risk is not None:
+        if keys['frame_skip'] != 1 or keys['delay'] <= 0:
+            raise ValueError('risk: an agent deciding every frame (frame_skip 1), with a delay')
+        risk = dict(risk)
+        moves = risk.pop('moves', None)
+        unknown = sorted(set(risk) - set(RISK_OPTIONS))
+        if unknown:
+            raise ValueError(f"risk: no option {', '.join(unknown)} ({', '.join(RISK_OPTIONS)})")
+        if not moves:
+            raise ValueError("risk: 'moves', {a move's action: its prior, HP a use}")
+        keys.update({f'risk_{k}': type(RISK_OPTIONS[k])(v)
+                     for k, v in dict(RISK_OPTIONS, **risk).items()})
+        keys['risk_moves'] = ','.join(f'{int(a):#x}:{float(w):g}' for a, w in sorted(moves.items()))
     if carried[0]:
         if 'routes' in carried[0] and (keys['frame_skip'] != 1 or keys['delay'] <= 0 or
                                        keys['history'] <= 0):
             raise ValueError('parts_from: routes are for an agent deciding every frame, with '
                              'a delay and its input history')
         keys.update(carried[1])
+        if ending is not None and 'routes' in carried[0]:
+            keys['route_ending'] = int(ending)  # (a planner's setting, not a part)
         route_tensors = carried[2]
         keys['parts_from'] = _one_line(os.path.basename(os.fspath(parts_from)))
     train_tensors = []
@@ -878,6 +944,7 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
                                    sha256(pressplan['library']))
     for part, (label, digest) in sources.items():
         keys.setdefault(f'source.{part}', _one_line(f'{label} sha256:{digest}'))
+    keys['modules'] = _versions(modules, keys)  # (now that every part's keys are in)
     keys['exporter'] = _one_line(exporter())
     keys['exported'] = datetime.datetime.now().isoformat(timespec='seconds')
     if dropped:
@@ -1413,12 +1480,18 @@ class NativeAgent:
         self.format = info.format
         self.version = info.version.decode(errors='replace')
         self.modules = info.modules.decode(errors='replace')
+        if hasattr(lib, 'efz_env_agent_modules'):  # (the whole of it: info's is 63 characters)
+            whole = ctypes.create_string_buffer(512)
+            lib.efz_env_agent_modules(self._h, whole, len(whole))
+            self.modules = whole.value.decode(errors='replace')
         # (its planned okizeme's entries; a library built before it: none)
         self.oki = int(lib.efz_env_agent_oki_entries(self._h)) \
             if hasattr(lib, 'efz_env_agent_oki_entries') else 0
         self.press = int(lib.efz_env_agent_press_entries(self._h)) \
             if hasattr(lib, 'efz_env_agent_press_entries') else 0
         self.airthrow = 'airthrow:' in self.modules
+        self.rise = 'rise:' in self.modules
+        self.risk = 'risk:' in self.modules
         self.deterministic = deterministic
         self.reset(seed)
 
@@ -1543,7 +1616,28 @@ class NativeAgent:
             names = ('air_asked', 'air_plans', 'air_played', 'air_late', 'air_elsewhere',
                      'air_nothing', 'air_apart', 'air_frames', 'air_ms')
             out.update(zip(names, [int(x) for x in v]))
+        if hasattr(self._lib, 'efz_env_agent_rise_stats') and getattr(self, 'rise', False):
+            v = (ctypes.c_int32 * 16)()  # its risings (rise:1)
+            self._lib.efz_env_agent_rise_stats(self._h, v)
+            names = ('rise_knockdowns', 'rise_met', 'rise_guarded', 'rise_steps', 'rise_stood',
+                     'rise_chance', 'rise_seen', 'rise_on')
+            out.update(zip(names, [int(x) for x in v]))
+        if hasattr(self._lib, 'efz_env_agent_risk_stats') and getattr(self, 'risk', False):
+            v = (ctypes.c_int32 * 8)()  # its raw specials (risk:1)
+            self._lib.efz_env_agent_risk_stats(self._h, v)
+            out.update(zip(('risk_seen', 'risk_stopped', 'risk_let', 'risk_came'),
+                           [int(x) for x in v]))
         return out
+
+    def risk_starts(self, env, index, side, action):
+        """(the move with an account that `action` would start for player `side` of
+        environment `index` as it is, or None; the probability the agent would stop that
+        press now): the module risk:1's look at the game. The environment is left as it
+        was."""
+        chance = ctypes.c_double(0.0)
+        move = int(self._lib.efz_env_agent_risk_starts(self._h, env._h, int(index), int(side),
+                                                       int(action), ctypes.byref(chance)))
+        return (None if move < 0 else move), float(chance.value)
 
     def counts(self, view=None, mode=0, prior=6.0):
         """Its counts of the opponent (port/agent/mix.h's Counts): mode 0 takes `view` (the
@@ -1567,6 +1661,11 @@ class NativeAgent:
         if seed is None:
             seed = int.from_bytes(os.urandom(8), 'little')
         self._lib.efz_env_agent_reset(self._h, seed)
+
+    def next_match(self):
+        """A new match against the same opponent: what the agent keeps from match to match
+        kept, older (reset() on a detached agent starts it afresh)."""
+        self._lib.efz_env_agent_next_match(self._h)
 
     def step(self, view, actionable=True):
         """The frame's control byte for the player's view (obs_dim numbers)."""

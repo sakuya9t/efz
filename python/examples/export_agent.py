@@ -85,7 +85,8 @@ def main():
                                                  'replanning 24)')
     p.add_argument('--ending', type=int, metavar='HP',
                    help="what a knockdown at a combo's end is worth to the planner over any "
-                        "other end (default: damage alone, or the pack's)")
+                        "other end (default: damage alone, or the pack's, or the "
+                        "--parts-from file's)")
     p.add_argument('--no-train', dest='train', action='store_false',
                    help="without the training part (the critic, config.json, PPO's settings): "
                         "a file to play, not to train further")
@@ -110,9 +111,22 @@ def main():
                    help="in the game it air-throws an opponent that recovers in the air out "
                         "of its combo, when a throw catches inside the recovery (the module "
                         "airthrow:1; runs/human-ayu/airplan.py's sure throw: no library)")
+    p.add_argument('--rise', action='store_true',
+                   help="in the game it guards its own rising by sight when it sees the "
+                        "attacker on it, as often as guarding has paid in the match (the "
+                        "module rise:1; runs/human-ayu/rise.py's guard)")
+    p.add_argument('--rise-option', action='append', default=[], metavar='KEY=VALUE',
+                   help="its settings (efz_env.export.RISE_OPTIONS)")
+    p.add_argument('--risk', action='store_true',
+                   help="in the game a raw special of its own play is let out or stopped at "
+                        "its input by how that move has paid in the match (the module risk:1; "
+                        "runs/human-ayu/risk.py, whose moves and priors it takes)")
+    p.add_argument('--risk-option', action='append', default=[], metavar='KEY=VALUE',
+                   help="its settings (efz_env.export.RISK_OPTIONS), or a move's name for its "
+                        "prior (623B=-326)")
     p.add_argument('--keep', nargs='+',
-                   choices=('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow'),
-                   default=['routes', 'chooser', 'okiplan', 'pressplan', 'airthrow'],
+                   choices=('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow', 'rise', 'risk'),
+                   default=['routes', 'chooser', 'okiplan', 'pressplan', 'airthrow', 'rise', 'risk'],
                    help='--parts-from: which of them')
     args = p.parse_args()
     if args.show:
@@ -154,6 +168,33 @@ def main():
             name = folder if stem in ('avg', 'model', 'best') and folder else stem
         file = f'{name}-{args.version}' if args.version else name
         out = args.out or os.path.join(os.path.dirname(os.path.abspath(model)), file + '.efzagent')
+        rise = None
+        if args.rise or args.rise_option:
+            from efz_env.export import RISE_OPTIONS
+            rise = {}
+            for kv in args.rise_option:
+                k, _, v = kv.partition('=')
+                if k not in RISE_OPTIONS:
+                    sys.exit(f"--rise-option {k}: one of {', '.join(RISE_OPTIONS)}")
+                rise[k] = type(RISE_OPTIONS[k])(v)
+        risk = None
+        if args.risk or args.risk_option:
+            from efz_env.export import RISK_OPTIONS
+            sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+                os.path.abspath(__file__)))), 'runs', 'human-ayu'))
+            import risk as risk_module  # (the moves and their priors)
+            priors = dict(risk_module.PRIORS)
+            risk = {}
+            for kv in args.risk_option:
+                k, _, v = kv.partition('=')
+                if k in risk_module.MOVES:
+                    priors[k] = float(v)
+                elif k in RISK_OPTIONS:
+                    risk[k] = type(RISK_OPTIONS[k])(v)
+                else:
+                    sys.exit(f"--risk-option {k}: one of {', '.join(RISK_OPTIONS)}, or a move "
+                             f"({', '.join(risk_module.MOVES)})")
+            risk['moves'] = {risk_module.MOVES[k]: w for k, w in priors.items()}
         okiplan = None
         if args.okizeme:
             from efz_env.export import OKI_OPTIONS
@@ -182,9 +223,10 @@ def main():
                                  per_start=args.per_start, chooser=args.chooser,
                                  version=args.version, train=args.train,
                                  optimizer=args.optimizer, parts_from=args.parts_from,
-                                 keep=tuple(args.keep), ending=args.ending or 0,
+                                 keep=tuple(args.keep), ending=args.ending,
                                  okiplan=okiplan, pressplan=pressplan,
-                                 airthrow={} if args.air_throw else None)
+                                 airthrow={} if args.air_throw else None, rise=rise,
+                                 risk=risk)
         except ValueError as e:
             sys.exit(str(e))
     bad = []
@@ -210,6 +252,10 @@ def main():
         combos += f"; its pressure planned from {agent.press} of people's"
     if getattr(agent, 'airthrow', False):
         combos += "; an air throw of an air recovery when one catches inside it"
+    if getattr(agent, 'rise', False):
+        combos += "; its rising guarded by sight when the attacker is on it"
+    if getattr(agent, 'risk', False):
+        combos += "; its raw specials let out or stopped by how each has paid in the match"
 
     label = agent.name + (f' {agent.version}' if agent.version else '')
     sure = f"log-probabilities within {check['policy']:.1g}"

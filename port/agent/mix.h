@@ -50,7 +50,7 @@ enum { kAnswers = 5 }; // okiplan.ANSWERS: crouch, stand, reversal, jump, mash
 // The library and the planner's settings (the module okiplan:1). Keys oki_entries (their
 // count), oki_per_plan, oki_per_class, oki_window, oki_wait, oki_tolerance,
 // oki_temperature, oki_doubt, oki_hit_worth, oki_hurt_worth, oki_prior, oki_decay,
-// oki_skip, oki_think,
+// oki_skip, oki_think, oki_sight, oki_bait (okiplan:2; without them 0),
 // oki_kinds (the kinds' names, '|' between them), oki_source; tensors oki.offset (int32,
 // count + 1: where each entry's steps begin), oki.actions (uint8: the agent's actions),
 // oki.dist (int32: the player's distance from the riser in pixels at each step), oki.air
@@ -84,6 +84,13 @@ struct Mix {
     double skip = 0; // an answer with a share under this isn't played or counted
     int think = 0;   // frames of crouching guard after the agent sees the knockdown, before
                      // the plan's first input: the planner's working time beyond the delay
+    int sight = 0;   // okiplan's sight: the riser's 'crouch' answer guards by what it saw of
+                     // the agent this many frames ago, standing against one in the air (0:
+                     // it crouches whatever comes); its 'stand' answer is then kSightStand
+                     // of its guards
+    double bait = 0; // okiplan's bait: the HP a riser's reversal that came out is worth to
+                     // the agent on the plays where neither hit first (the punish, which
+                     // the copies do not play)
     std::string source;
     enum { kActs = 0x400, kCharacters = 64 };
     bool Empty() const { return entries.empty(); }
@@ -100,7 +107,8 @@ struct Mix {
 // player, each with the frame advantage it was done at. Keys press_entries, press_per_plan,
 // press_per_class, press_window, press_wait, press_tolerance, press_slack, press_near,
 // press_max_wait, press_temperature, press_doubt, press_hit_worth, press_hurt_worth,
-// press_prior, press_skip, press_kinds, press_source; tensors press.offset (int32, count +
+// press_prior, press_skip, press_sight (pressplan:2; as oki_sight), press_kinds,
+// press_source; tensors press.offset (int32, count +
 // 1), press.actions (uint8), press.adv, press.distance, press.kind, press.victim,
 // press.corner (int32, an entry each); the guarding player's reversals press.rev.* (as
 // oki.wake.*: the motion, the button, then the button again every other frame) and the
@@ -120,6 +128,7 @@ struct Press {
     int near = 160, maxWait = 20;
     double temperature = 200, doubt = 0.3, hitWorth = 1300, hurtWorth = 1200;
     double prior = 8, skip = 0.05;
+    int sight = 0; // as Mix::sight, of the guarding player
     std::string source;
     bool Empty() const { return entries.empty(); }
 };
@@ -153,10 +162,12 @@ public:
     // A frame's view (the agent's). invincible: the moves invincible from their start,
     // [character * Mix::kActs + action] (a Mix's or a Press's; empty: the timer alone).
     void Update(const float* view, const std::vector<uint8_t>& invincible);
-    // okiplan.belief: the shares of the answers a riser is expected to give.
-    void Belief(double prior, double shares[kAnswers]) const;
+    // okiplan.belief: the shares of the answers a riser is expected to give. sight: the
+    // planner's (Mix::sight > 0): the 'crouch' answer is the guard by sight and the
+    // 'stand' one kSightStand of the guards, whatever its guards showed.
+    void Belief(double prior, double shares[kAnswers], bool sight = false) const;
     // pressplan.belief: of the answers a player gives after guarding.
-    void PressBelief(double prior, double shares[kAnswers]) const;
+    void PressBelief(double prior, double shares[kAnswers], bool sight = false) const;
     float c[kCount];
 
 private:
@@ -266,6 +277,8 @@ private:
         int option = 0, answer = 0;
         bool started = false;
         int t = 0, first = 0;
+        bool moved = false;       // the opponent started a move of its own (its reversal)
+        std::vector<uint8_t> air; // the agent in the air or not, a frame each (sight)
         bool stun[2] = {false, false}, thrown[2] = {false, false};
         int hp[2] = {0, 0};
         Snapshot state;
@@ -316,6 +329,8 @@ private:
     int window_ = 0;     // frames past the lead each play runs
     // (the library's of the plan asked for: the okizeme's or the pressure's)
     double skip_ = 0, doubt_ = 0, temperature_ = 200, hitWorth_ = 1300, hurtWorth_ = 1200;
+    int sight_ = 0;   // Mix::sight or Press::sight
+    double bait_ = 0; // Mix::bait (the okizeme's alone)
     std::vector<int> waits_; // the pressure's: the guard frames before the follow-up
     std::vector<float> in_, probs_;
 };

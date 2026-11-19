@@ -288,12 +288,16 @@ typedef struct EfzAgentInfo {
     int32_t format;     /* the file's */
     char name[64];
     char version[64];   /* as exported (export_agent.py --version), "" none */
-    char modules[64];   /* what it is made of, as "policy:1,routes:1,chooser:1" */
+    char modules[64];   /* what it is made of, as "policy:1,routes:1,chooser:1" (cut to
+                           fit: efz_env_agent_modules has all of it) */
 } EfzAgentInfo;
 /* NULL on failure, with the reason in error. */
 EFZ_ENV_API EfzAgent* efz_env_agent_load(const char* path, char* error, size_t error_size);
 EFZ_ENV_API void efz_env_agent_free(EfzAgent* agent);
 EFZ_ENV_API void efz_env_agent_info(const EfzAgent* agent, EfzAgentInfo* info);
+/* What it is made of, whole (EfzAgentInfo's modules holds 63 characters): into out[size],
+ * cut to fit; returns its length. */
+EFZ_ENV_API int32_t efz_env_agent_modules(const EfzAgent* agent, char* out, size_t size);
 /* The log-probability of each action for n views of `width` numbers: out[n][actions]. */
 EFZ_ENV_API void efz_env_agent_log_probs(const EfzAgent* agent, const float* views, int32_t n,
                                      float* out);
@@ -407,6 +411,25 @@ EFZ_ENV_API int32_t efz_env_agent_throw_plan(EfzAgent* agent, EfzEnv* env, int32
 /* An attached agent's catches (16): asked, with a throw found, played, late, elsewhere,
  * none found, apart, frames on copies, milliseconds. */
 EFZ_ENV_API void efz_env_agent_air_stats(const EfzAgent* agent, int32_t* stats);
+/* An attached agent's raw specials (8; the module risk:1): presses that would start a
+ * move with an account, those stopped, let out, and of the ones let out the moves seen. */
+EFZ_ENV_API void efz_env_agent_risk_stats(const EfzAgent* agent, int32_t* stats);
+/* The move with an account (its action; -1 none) that `action` of the agent's would start
+ * for player `side` of environment `index` as it is (the press, then nothing, the other
+ * player pressing nothing), and the probability the agent would stop that press now. The
+ * environment is left as it was. */
+EFZ_ENV_API int32_t efz_env_agent_risk_starts(EfzAgent* agent, EfzEnv* env, int32_t index,
+                                              int32_t side, int32_t action, double* chance);
+/* A new match against the same opponent, for an agent attached or not: what it keeps
+ * from match to match kept (its counts of the opponent, its risings' counts, older),
+ * where efz_env_agent_reset on a detached agent starts it afresh. */
+EFZ_ENV_API void efz_env_agent_next_match(EfzAgent* agent);
+/* An agent's risings (8; the module rise:1): the knockdowns it saw, those the attacker
+ * was on, of them the ones guarded through, the steps it held a guard for, of them
+ * standing, the probability the next such rising is guarded through, in thousandths; and
+ * what that is read from, in hundredths: the risings it saw, and of them those at which
+ * the attacker was in a move of its own. */
+EFZ_ENV_API void efz_env_agent_rise_stats(const EfzAgent* agent, int32_t* stats);
 /* The agent plays player `side` of environment `index` as it plays in the game: its
  * combos' routes and its okizeme planned on copies of that environment (what the file
  * has of them), every plan worked to its end on the step that needs it (the game's

@@ -315,6 +315,11 @@ class EfzSB3VecEnv(VecEnv):
         # match's first view is put together: where what is told changes.
         self.extra = np.zeros((num_envs, 2, extra), np.float32) if extra else None
         self.on_end = []
+        # opponent_controls: hooks(bytes) called each step with player 2's control bytes
+        # after the opponent's actions became them: a player that makes its own bytes
+        # (an agent file run by the game's code, native_agent.NativeOpponent) writes
+        # its matches' there.
+        self.opponent_controls = []
         # sets: the matches of an environment come in sets against the same opponent, of
         # these lengths (one drawn a set; None: every match its own). new_set: where the
         # match that begins starts one (read by on_end's hooks: an opponent's habits are
@@ -414,6 +419,8 @@ class EfzSB3VecEnv(VecEnv):
                     seen = self.delay.buf[np.arange(self.n), 1, self.opponent_delay]
                     view = np.concatenate([seen, view[:, seen.shape[1]:]], axis=1)
                 self._controls[:, 1] = self.table.to_bytes(self.opponent(view))
+                for hook in self.opponent_controls:
+                    hook(self._controls[:, 1])
         self.env.step_async(self._controls)
 
     def step_wait(self):
@@ -483,22 +490,43 @@ class ModularLearner(VecEnv):
     (infos[i]['module']) and its action (infos[i]['route_action']), for the policy's loss
     to leave out or learn from. only (a mask of the environments, default all): where the
     modules play. policy: its own play on a module's copies of the game (frozen(model),
-    this chunk's); value: its critic's."""
+    this chunk's); value: its critic's. A module finds the learner's views where an
+    Agent's are (host.agent.seen.buf, host.agent.delay)."""
+
+    class _Views:
+        """What a module reads of an efz_env Agent, for the learner: its delayed views."""
+
+        def __init__(self, venv):
+            self._venv, self.delay = venv, venv.delay.steps
+            self.seen = self
+
+        @property
+        def buf(self):
+            return self._venv.delay.buf[:, 0]
 
     def __init__(self, venv, modules, policy, value=None, only=None):
         from .modules import Stack
         self.venv, self.policy, self.value = venv, policy, value
-        self.env, self.side, self.agent = venv.env, 0, None
+        self.env, self.side, self.agent = venv.env, 0, self._Views(venv)
         self.only = np.ones(venv.num_envs, bool) if only is None else np.asarray(only, bool)
         self.delay = venv.delay.steps
         self.stack = modules if isinstance(modules, Stack) else Stack(modules)
+        self.stack.owner.clear()
         for m in self.stack:
             m.attach(self)
+            m.batch(venv.num_envs)
         self.contexts = [None] * venv.num_envs  # each environment's step, as last watched
         self.assisted = np.zeros(venv.num_envs, bool)
         self.route = np.zeros(venv.num_envs, int)
         self.by = [None] * venv.num_envs
         super().__init__(venv.num_envs, venv.observation_space, venv.action_space)
+
+    def __getattr__(self, name):
+        # What it doesn't have itself is the environment's (its input history, its
+        # matches: for the wrappers around it). Its own `delay` is the steps.
+        if name.startswith('__') or name == 'venv':
+            raise AttributeError(name)
+        return getattr(self.venv, name)
 
     def reset(self):
         self.stack.reset()

@@ -44,8 +44,19 @@ options: per_plan (10), per_class (2), window (70), wait (40), tolerance (pixels
 after ('own'; 'guard': a crouching guard after an option's inputs on the copies, not its
 own play: the game's planner), skip (0: an answer with a share under it isn't counted),
 think (0: steps of crouching guard before the plan's first input, the game's planner's
-working time), temperature (200), doubt (0), hit_worth (1300), hurt_worth (1200), prior (6: the wake-ups the prior
-counts as), carry (false: a new match is another opponent; true: the same, evaluate.py
+working time), temperature (200), doubt (0), hit_worth (1300), hurt_worth (1200), bait
+(0: the HP a riser's reversal that came out and did not hit is worth to the agent, on
+the copies where neither hit first: the punish, which the copies do not play; without it
+waiting a reversal out is worth nothing and is never drawn. The league's measure,
+evaluate.py's faced_risks: a miss of the opponent's costs it 600), prior (6: the wake-ups
+the prior counts as), sight (0: the riser's two guards are a crouching one and a standing
+one, held whatever the agent does, in the shares its guards have shown; N: the riser
+guards by sight, standing while it sees the agent in the air and crouching otherwise,
+N steps late, and the standing guard held throughout is SIGHT_STAND of its guards.
+People guard so: of their guards of an attack from the air 95% stand, of one from the
+ground 92% crouch (the community's replays). Without it an overhead off a jump is worth
+a hit four times in five on the copies and is what the planner draws most; in the
+league it hits 23% of the time and is its worst okizeme), carry (false: a new match is another opponent; true: the same, evaluate.py
 --sets), fixed (none: an answer to plan for whatever was seen, for a test), seed.
 """
 
@@ -79,6 +90,8 @@ ANSWERS = ('crouch', 'stand', 'reversal', 'jump', 'mash')
 # like"): a wake-up's invincible move, another move, a jump or backdash; the crouching
 # share of a guard is the profiles' (my estimate).
 PRIOR = dict(reversal=0.10, mash=0.19, jump=0.04, crouch=0.8)
+SIGHT_STAND = 0.08  # with `sight`: the share of a riser's guards that stand whatever comes
+FIRST_OWN = 0xc8  # kFirstCharacterAction: a character's own moves from here
 MIN_LEAD = 24   # steps to the rising below which nothing is planned (the rising itself is 20)
 MOTION = 8      # an entry's move is pressed at most this many steps before it starts
 LOOK = 110      # the most steps the rising is looked for
@@ -92,9 +105,10 @@ def load_library(path):
     return load_oki(path)
 
 
-def belief(counts, prior=6.0, crouch_prior=6.0):
+def belief(counts, prior=6.0, crouch_prior=6.0, sight=False):
     """The shares of ANSWERS a riser is expected to give: efz_env.memory's counts (one
-    environment's) over the community's prior."""
+    environment's) over the community's prior. sight: the 'crouch' answer is the guard
+    by sight (the planner's `sight`), the 'stand' one SIGHT_STAND of the guards."""
     n = float(counts[K['w_n']])
     inv = float(counts[K['w_inv']])
     move = max(0.0, float(counts[K['w_move']]) - inv)
@@ -105,6 +119,8 @@ def belief(counts, prior=6.0, crouch_prior=6.0):
     guard = max(0.0, 1.0 - rev - mash - jump)
     g = float(counts[K['g_n']])
     crouch = (crouch_prior * PRIOR['crouch'] + float(counts[K['g_crouch']])) / (crouch_prior + g)
+    if sight:
+        crouch = 1 - SIGHT_STAND
     return np.array([guard * crouch, guard * (1 - crouch), rev, jump, mash])
 
 
@@ -190,12 +206,17 @@ class OkiPlanner:
     def __init__(self, data_dir, library, width, delay, history=16, per_plan=10, per_class=2,
                  window=70, wait=40, tolerance=24, temperature=200.0, hit_worth=1300.0,
                  hurt_worth=1200.0, doubt=0.0, learner='ayu', seed=0, entries=True,
-                 scheduled=True, after='own', skip=0.0, think=0):
+                 scheduled=True, after='own', skip=0.0, think=0, bait=0.0, sight=0):
         # skip: an answer whose share is under this isn't counted (the game's planner
         # doesn't play it at all: a fifth of a plan's frames for an answer seen one time in
         # thirty). think: the plan is for `think` steps from now, a crouching guard held
         # until then (the frames the game's planner works in beyond the agent's delay).
         self.skip, self.think = float(skip), int(think)
+        # bait: a reversal that came out and missed is the agent's punish (the file's head)
+        self.bait = float(bait)
+        # sight: the riser's 'crouch' answer guards by what it saw of the agent `sight`
+        # steps ago (standing against one in the air); 0: it crouches whatever comes
+        self.sight, self.seen_air = int(sight), None
         # after: what follows an option's inputs on the copies: 'own', the agent's own play
         # (the network on every copy, every step); 'guard', a crouching guard (what a
         # planner with a frame's spare time can afford: the game's). Its own play as an
@@ -332,6 +353,8 @@ class OkiPlanner:
         guard, stand, jump = encode(1), encode(4), encode(7)
         theirs = np.full(len(answer), guard, np.uint8)
         theirs[answer == 1] = stand
+        if self.sight and self.seen_air is not None:  # the guard by sight, late
+            theirs[(answer == 0) & self.seen_air[max(0, len(self.seen_air) - 1 - self.sight)]] = stand
         if t >= lead - 2:
             theirs[answer == 3] = jump
         if t >= lead - 1:
@@ -377,6 +400,9 @@ class OkiPlanner:
         thrown = np.zeros((E, 2), bool)
         thrown[:, 0] = np.isin(np.round(sim.obs[:E, side, SELF_ACT]), THROWN)
         thrown[:, 1] = np.isin(np.round(sim.obs[:E, side, OPP_ACT]), THROWN)
+        moved = np.zeros(E, bool)  # the riser started a move of its own (its reversal)
+        # (what the riser has seen of the agent, a step each: in the air or not)
+        self.seen_air = [sim.obs[:E, side, SELF_AIR] > 0] if self.sight else None
         controls = np.zeros((sim.num_envs, 2), np.uint8)
         for t in range(lead + self.window):
             mine = np.full(E, CROUCH_GUARD)
@@ -395,17 +421,24 @@ class OkiPlanner:
             hists.push(info['input'][:E, side])
             views[:, 1:] = views[:, :-1]
             views[:, 0] = obs[:E, side]
+            if self.sight:
+                self.seen_air.append(obs[:E, side, SELF_AIR] > 0)
             s = np.stack([obs[:E, side, SELF_HITSTUN] > 0, obs[:E, side, OPP_HITSTUN] > 0], 1)
             th = np.stack([np.isin(np.round(obs[:E, side, SELF_ACT]), THROWN),
                            np.isin(np.round(obs[:E, side, OPP_ACT]), THROWN)], 1)
             began = (s & ~stun) | (th & ~thrown)
             stun, thrown = s, th
             if t >= self.count_from(lead):
+                moved |= (np.round(obs[:E, side, OPP_ACT]) >= FIRST_OWN) & ~over
                 undecided = (first == 0) & ~over
                 first[undecided & began[:, 1]] = 1
                 first[undecided & began[:, 0] & ~began[:, 1]] = -1
             live = ~over
             hp[live] = info['hp'][:E][live]
+            if t + 1 == lead and getattr(self, 'from_lead', False):
+                # (endplan: against a victim that recovers, only what follows its
+                # recovery counts: the combo's own last hits are every option's)
+                hp0[answer > 0] = hp[answer > 0]
             over |= term[:E] | trunc[:E] | (obs[:E, side, ROUND_OVER] != 0)
             if over.all():
                 break
@@ -413,6 +446,11 @@ class OkiPlanner:
         taken = np.maximum(hp0[:, side] - hp[:, side], 0)
         worth = (np.where(first > 0, np.maximum(dealt, self.hit_worth), dealt) -
                  np.where(first < 0, np.maximum(taken, self.hurt_worth), taken)).reshape(O, R)
+        baited = np.zeros((O, R), bool)
+        if self.bait > 0 and 'reversal' in self.ANSWERS:
+            r = self.ANSWERS.index('reversal')
+            baited[:, r] = (moved & (first == 0)).reshape(O, R)[:, r]
+            worth = worth + self.bait * baited
         shares = np.asarray(shares, float)
         counted = shares >= self.skip
         if not counted.any():
@@ -426,7 +464,7 @@ class OkiPlanner:
         chosen = int(self.rng.choice(O, p=mix / mix.sum()))
         self.last = dict(lead=int(lead), kinds=kinds, worth=worth, expected=expected,
                          chosen=chosen, mix=mix, first=first.reshape(O, R),
-                         entries=list(entries))
+                         entries=list(entries), baited=baited)
         return None if kinds[chosen] == 'own' else np.asarray(options[chosen])
 
 
@@ -494,7 +532,7 @@ class OkiPlan(modules.Module):
         if int(round(float(ctx.now[OPP_ACT]))) not in DOWN or ctx.view[SELF_HITSTUN] > 0:
             return None
         shares = self.fixed if self.fixed is not None else \
-            belief(self.memory.c[i], self.prior, self.prior)
+            belief(self.memory.c[i], self.prior, self.prior, sight=bool(getattr(self.planner, 'sight', 0)))
         chosen = self.planner.plan(ctx.save(), ctx.side, ctx.hist, ctx.prev, ctx.seen,
                                    ctx.policy, shares)
         last = self.planner.last
@@ -506,7 +544,8 @@ class OkiPlan(modules.Module):
                                spread=float(-(last['mix'] * np.log(last['mix'] + 1e-12)).sum()),
                                expected=float(last['expected'][c]),
                                own=float(last['expected'][own]), shares=shares,
-                               lead=last['lead']))
+                               lead=last['lead'],
+                               baited='baited' in last and bool(last['baited'][c].any())))
         if chosen is None or not len(chosen):
             return None
         self.playing[i] = [chosen, 1]
@@ -528,6 +567,8 @@ class OkiPlan(modules.Module):
                     between=round(float(np.exp(np.mean([x['spread'] for x in p]))), 2),
                     chosen={k: round(v / len(p), 3) for k, v in
                             sorted(kinds.items(), key=lambda kv: -kv[1])},
+                    # (the chosen option one that waits the riser's reversal out)
+                    baits=round(float(np.mean([x.get('baited', False) for x in p])), 3),
                     shares={a: round(float(np.mean([x['shares'][j] for x in p])), 3)
                             for j, a in enumerate(ANSWERS)})
 
@@ -544,7 +585,7 @@ def okiplan(agent, where, files, options, data):
                          'plans made beside the game, as the live routes are)')
     o = dict(options)
     keys = ('per_plan', 'per_class', 'window', 'wait', 'tolerance', 'temperature', 'hit_worth',
-            'hurt_worth', 'doubt', 'seed', 'after', 'skip', 'think')
+            'hurt_worth', 'doubt', 'seed', 'after', 'skip', 'think', 'bait', 'sight')
     unknown = sorted(set(o) - set(keys) - {'carry', 'prior', 'fixed'})
     if unknown:
         raise ValueError(f"okiplan: no option {', '.join(unknown)}")

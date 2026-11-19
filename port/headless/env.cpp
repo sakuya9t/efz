@@ -1487,6 +1487,15 @@ void efz_env_agent_info(const EfzAgent* a, EfzAgentInfo* info)
     snprintf(info->modules, sizeof(info->modules), "%s", a->policy.modules.c_str());
 }
 
+int32_t efz_env_agent_modules(const EfzAgent* a, char* out, size_t size)
+{
+    if (!a)
+        return 0;
+    if (out && size)
+        snprintf(out, size, "%s", a->policy.modules.c_str());
+    return (int32_t)a->policy.modules.size();
+}
+
 void efz_env_agent_log_probs(const EfzAgent* a, const float* views, int32_t n, float* out)
 {
     if (!a || !views || !out)
@@ -1507,6 +1516,14 @@ void efz_env_agent_reset(EfzAgent* a, uint64_t seed)
         return;
     }
     a->player.reset(new agent::Player(&a->policy, seed));
+}
+
+void efz_env_agent_next_match(EfzAgent* a)
+{
+    if (!a)
+        return;
+    BindArena(nullptr);
+    a->player->Reset();
 }
 
 uint8_t efz_env_agent_step(EfzAgent* a, const float* view, int32_t actionable, int32_t deterministic)
@@ -1553,6 +1570,8 @@ int32_t efz_env_agent_attach(EfzAgent* a, EfzEnv* env, int32_t index, int32_t si
         a->mix.reset(new agent::MixPlanner(&a->policy, a->world.get(), seed + 2));
         a->player->SetMix(a->mix.get(), side, -1);
     }
+    if (a->policy.risk.on)
+        a->player->SetRisk(a->world.get(), side);
     return 0;
 }
 
@@ -1579,6 +1598,54 @@ void efz_env_agent_air_stats(const EfzAgent* a, int32_t* stats)
     int32_t v[16] = {o.asked, o.plans, o.played, o.late, o.elsewhere, o.nothing, o.apart,
                      (int32_t)o.frames, (int32_t)o.planMs};
     memcpy(stats, v, sizeof(v));
+}
+
+void efz_env_agent_rise_stats(const EfzAgent* a, int32_t* stats)
+{
+    if (!a || !stats)
+        return;
+    const agent::RiseStats& r = a->player->Rising();
+    int32_t v[8] = {r.knockdowns, r.met, r.guarded, r.steps, r.stood,
+                     (int32_t)(a->player->RiseChance() * 1000 + 0.5),
+                     (int32_t)lround(a->player->RiseSeen() * 100),
+                     (int32_t)lround(a->player->RiseOn() * 100)};
+    memcpy(stats, v, sizeof(v));
+}
+
+void efz_env_agent_risk_stats(const EfzAgent* a, int32_t* stats)
+{
+    if (!a || !stats)
+        return;
+    const agent::RiskStats& r = a->player->Risks();
+    int32_t v[8] = {r.seen, r.stopped, r.let, r.came};
+    memcpy(stats, v, sizeof(v));
+}
+
+int32_t efz_env_agent_risk_starts(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side,
+                                  int32_t action, double* chance)
+{
+    if (!a || !env || index < 0 || index >= env->n || side < 0 || side > 1 || !a->policy.risk.on ||
+        action < 0 || action >= a->policy.Actions())
+        return -1;
+    BindArena(nullptr);
+    Finish(env);
+    int stackMark;
+    SetStack(&stackMark);
+    BindArena(env->slots[index].arena);
+    bool fighting = SceneIndex() == 3 && Fight()->m_enter == 0;
+    BindArena(nullptr);
+    if (!fighting)
+        return -1;
+    EnvWorld world(env->slots[index]);
+    agent::Player player(&a->policy, 0);
+    player.SetRisk(&world, side);
+    float view[kObsDim];
+    world.View(side, view);
+    int move = player.RiskStarts(view, action);
+    if (chance)
+        *chance = a->player->RiskChance(move);
+    BindArena(nullptr);
+    return move < 0 ? -1 : a->policy.risk.moves[move];
 }
 
 int32_t efz_env_agent_last_action(const EfzAgent* a)
@@ -1764,7 +1831,7 @@ int32_t efz_env_agent_throw_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_
 void efz_env_agent_press_shares(const EfzAgent* a, double prior, double* shares)
 {
     if (a && shares)
-        a->counts.PressBelief(prior, shares);
+        a->counts.PressBelief(prior, shares, a->policy.press.sight > 0);
 }
 
 void efz_env_agent_counts(EfzAgent* a, const float* view, int32_t mode, double prior,
@@ -1783,7 +1850,7 @@ void efz_env_agent_counts(EfzAgent* a, const float* view, int32_t mode, double p
     if (counts)
         memcpy(counts, a->counts.c, sizeof(a->counts.c));
     if (shares)
-        a->counts.Belief(prior, shares);
+        a->counts.Belief(prior, shares, a->policy.mix.sight > 0);
 }
 
 int32_t efz_env_agent_choose(const EfzAgent* a, const float* input, int32_t starter,

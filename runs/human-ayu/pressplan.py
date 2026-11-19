@@ -50,7 +50,7 @@ next `delay`.
 
 options: live (false), max_wait (20), per_plan (10), per_class (2), window (60), wait (24), tolerance (pixels, 16),
 slack (steps, 2), near (160), fresh (40), temperature (200), doubt (0.3), hit_worth (1300),
-hurt_worth (1200), prior (8: the guards the prior counts as), carry, fixed, seed.
+hurt_worth (1200), sight (0; N: the guard by sight, okiplan.py's), prior (8: the guards the prior counts as), carry, fixed, seed.
 """
 
 import json
@@ -93,10 +93,10 @@ def load_library(path):
     return load_press(path)
 
 
-def belief(counts, prior=8.0):
+def belief(counts, prior=8.0, sight=False):
     """The shares of ANSWERS a player is expected to give after guarding: efz_env.memory's
     counts (one environment's: its answers after its guards ended, its guards' height)
-    over the community's prior."""
+    over the community's prior. sight: as okiplan.belief's (the guard by sight)."""
     n = float(counts[K['p_n']])
     inv = float(counts[K['p_inv']])
     move = max(0.0, float(counts[K['p_move']]) - inv)
@@ -107,6 +107,8 @@ def belief(counts, prior=8.0):
     guard = max(0.0, 1.0 - rev - mash - jump)
     g = float(counts[K['g_n']])
     crouch = (prior * PRIOR['crouch'] + float(counts[K['g_crouch']])) / (prior + g)
+    if sight:
+        crouch = 1 - okiplan.SIGHT_STAND
     return np.array([guard * crouch, guard * (1 - crouch), rev, jump, mash])
 
 
@@ -156,11 +158,12 @@ class PressPlanner(okiplan.OkiPlanner):
     def __init__(self, data_dir, library, width, delay, history=16, per_plan=10, per_class=2,
                  window=60, wait=24, tolerance=16, slack=2, temperature=200.0,
                  hit_worth=1300.0, hurt_worth=1200.0, doubt=0.3, learner='ayu', seed=0,
-                 after='own', skip=0.0):
+                 after='own', skip=0.0, sight=0):
         super().__init__(data_dir, [], width, delay, history=history, per_plan=per_plan,
                          per_class=per_class, window=window, wait=wait, temperature=temperature,
                          hit_worth=hit_worth, hurt_worth=hurt_worth, doubt=doubt,
-                         learner=learner, seed=seed, entries=False, after=after, skip=skip)
+                         learner=learner, seed=seed, entries=False, after=after, skip=skip,
+                         sight=sight)
         self.entries = Followups(library, per_plan, per_class, tolerance, slack)
 
     def reversal(self, victim):
@@ -372,7 +375,8 @@ class PressPlan(modules.Module):
                 return int(p[0][p[1] - 1])
         if not self.contact[i] or i in self.playing or ctx.view[SELF_HITSTUN] > 0:
             return None
-        shares = self.fixed if self.fixed is not None else belief(self.memory.c[i], self.prior)
+        shares = self.fixed if self.fixed is not None else belief(
+            self.memory.c[i], self.prior, sight=bool(getattr(self.planner, 'sight', 0)))
         got = live_plan(self.planner, ctx.save(), ctx.side, ctx.hist, ctx.prev, ctx.seen,
                         ctx.policy, shares, rest=rest, near=self.near, max_wait=self.max_wait)
         if got is None:
@@ -416,7 +420,8 @@ class PressPlan(modules.Module):
             self.armed[i] = False
             return None
         self.armed[i] = False  # once a guarded string
-        shares = self.fixed if self.fixed is not None else belief(self.memory.c[i], self.prior)
+        shares = self.fixed if self.fixed is not None else belief(
+            self.memory.c[i], self.prior, sight=bool(getattr(self.planner, 'sight', 0)))
         chosen = self.planner.plan(ctx.save(), ctx.side, ctx.hist, ctx.prev, ctx.seen,
                                    ctx.policy, shares, free_for=self.free_for[i])
         last = self.planner.last
@@ -448,7 +453,7 @@ def pressplan(agent, where, files, options, data):
                          'plans made beside the game, as the live routes are)')
     o = dict(options)
     keys = ('per_plan', 'per_class', 'window', 'wait', 'tolerance', 'slack', 'temperature',
-            'hit_worth', 'hurt_worth', 'doubt', 'seed', 'after', 'skip')
+            'hit_worth', 'hurt_worth', 'doubt', 'seed', 'after', 'skip', 'sight')
     unknown = sorted(set(o) - set(keys) - {'carry', 'prior', 'fixed', 'near', 'fresh', 'live',
                                            'max_wait'})
     if unknown:

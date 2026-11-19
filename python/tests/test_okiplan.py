@@ -83,6 +83,9 @@ class Belief(unittest.TestCase):
         c[K['g_n']], c[K['g_crouch']] = 20, 0  # and never guards crouching
         b = okiplan.belief(c, prior=6, crouch_prior=6)
         self.assertAlmostEqual(b[0] / (b[0] + b[1]), 6 * prior['crouch'] / 26)
+        b = okiplan.belief(c, prior=6, sight=True)  # by sight: what its guards showed isn't asked
+        self.assertAlmostEqual(b[1] / (b[0] + b[1]), okiplan.SIGHT_STAND)
+        self.assertAlmostEqual(float(b.sum()), 1.0)
 
 
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
@@ -249,6 +252,41 @@ class OnTheGame(unittest.TestCase):
                 self.assertIsNone(chosen)
             else:
                 self.assertGreater(len(chosen), 0)
+            # bait: on the copies where the riser's reversal came out and neither was hit
+            # first, the punish's worth is added; nothing else changes.
+            again = okiplan.OkiPlanner(DATA, library, 264, 14, per_plan=3, tolerance=1000, bait=600)
+            again.plan(state, 0, hist, 0, seen, policy, okiplan.belief(np.zeros(len(K))))
+            credit = again.last['baited']
+            r = okiplan.ANSWERS.index('reversal')
+            self.assertFalse(np.delete(credit, r, 1).any())
+            self.assertFalse(last['baited'].any())
+            np.testing.assert_allclose(again.last['worth'], last['worth'] + 600 * credit)
+            came = bool(planner.wake_schedule('mai', planner.theirs, lead))
+            wait = again.last['kinds'].index('wait')
+            if came:  # (a wait guards it: the reversal came out and did not hit)
+                self.assertTrue(credit[wait, r])
+                self.assertEqual(again.last['first'][wait, r], 0)
+            else:
+                self.assertFalse(credit.any())
+            again.one.close()
+            again.sim.close()
+            # sight: the riser's 'crouch' answer stands against an agent it saw in the air
+            # `sight` steps ago; the others are as they were.
+            from efz_env.actions import encode
+            sighted = okiplan.OkiPlanner(DATA, library, 264, 14, per_plan=3, tolerance=1000, sight=3)
+            answer = np.array([0, 0, 1, 2, 4])
+            air = np.array([True, False, False, True, True])
+            sighted.seen_air = [air, ~air, ~air, ~air]            # (three steps ago: `air`)
+            np.testing.assert_array_equal(
+                sighted.their_controls(0, 30, answer, 0, None, None),
+                [encode(4), encode(1), encode(4), encode(1), encode(1)])
+            sighted.seen_air = [~air, air]                        # (not that long yet: the first)
+            self.assertEqual(sighted.their_controls(0, 30, answer, 0, None, None)[1], encode(4))
+            sighted.plan(state, 0, hist, 0, seen, policy, okiplan.belief(np.zeros(len(K)), sight=True))
+            self.assertTrue(np.isfinite(sighted.last['worth']).all())
+            self.assertEqual(len(sighted.seen_air), sighted.last['lead'] + sighted.window + 1)
+            sighted.one.close()
+            sighted.sim.close()
         env.close()
         planner.one.close()
         planner.sim.close()

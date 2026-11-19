@@ -38,6 +38,8 @@ const uint8_t kDownA = 0x14;       // 2 + A
 const int kChoice = 16, kInv = 8, kWakeLife = 96, kPressLife = 64;
 // okiplan.PRIOR: the community's players.
 const double kPriorReversal = 0.10, kPriorMash = 0.19, kPriorJump = 0.04, kPriorCrouch = 0.8;
+const double kSightStand = 0.08; // okiplan.SIGHT_STAND
+const int kFirstOwn = 0xc8;      // a character's own moves from here
 
 bool Down(int a) { return a >= 0x60 && a <= 0x63; }
 bool Recovery(int a) { return a == 0x9d || a == 0x9e; } // recovering in the air from a hit
@@ -184,7 +186,7 @@ void Counts::Update(const float* view, const std::vector<uint8_t>& invincible)
     press_.Tick();
 }
 
-void Counts::Belief(double prior, double shares[kAnswers]) const
+void Counts::Belief(double prior, double shares[kAnswers], bool sight) const
 {
     double n = c[kWakes], inv = c[kWakeInvincible];
     double move = std::max(0.0, (double)c[kWakeMove] - inv);
@@ -195,6 +197,8 @@ void Counts::Belief(double prior, double shares[kAnswers]) const
     double guard = std::max(0.0, 1.0 - rev - mash - jump);
     double g = c[kGuards];
     double crouch = (prior * kPriorCrouch + (double)c[kGuardsCrouch]) / (prior + g);
+    if (sight)
+        crouch = 1 - kSightStand;
     shares[0] = guard * crouch;
     shares[1] = guard * (1 - crouch);
     shares[2] = rev;
@@ -202,7 +206,7 @@ void Counts::Belief(double prior, double shares[kAnswers]) const
     shares[4] = mash;
 }
 
-void Counts::PressBelief(double prior, double shares[kAnswers]) const
+void Counts::PressBelief(double prior, double shares[kAnswers], bool sight) const
 {
     // pressplan.PRIOR: what a guarding player does next, the community's.
     const double kReversal = 0.05, kMash = 0.22, kJump = 0.15, kCrouch = 0.8;
@@ -215,6 +219,8 @@ void Counts::PressBelief(double prior, double shares[kAnswers]) const
     double guard = std::max(0.0, 1.0 - rev - mash - jump);
     double g = c[kGuards];
     double crouch = (prior * kCrouch + (double)c[kGuardsCrouch]) / (prior + g);
+    if (sight)
+        crouch = 1 - kSightStand;
     shares[0] = guard * crouch;
     shares[1] = guard * (1 - crouch);
     shares[2] = rev;
@@ -281,6 +287,8 @@ void MixPlanner::Begin(int side, const std::vector<int>& actions, const float* h
     temperature_ = lib.temperature;
     hitWorth_ = lib.hitWorth;
     hurtWorth_ = lib.hurtWorth;
+    sight_ = lib.sight;
+    bait_ = lib.bait;
     side_ = side;
     actions_ = actions;
     history_.assign(history, history + (size_t)policy_->history * kInputFeatures);
@@ -486,6 +494,8 @@ void MixPlanner::BeginPress(int side, const std::vector<int>& actions, const flo
     temperature_ = lib.temperature;
     hitWorth_ = lib.hitWorth;
     hurtWorth_ = lib.hurtWorth;
+    sight_ = lib.sight;
+    bait_ = 0;
 }
 
 // pressplan.Followups.pick.
@@ -805,6 +815,11 @@ bool MixPlanner::Run(Play& p, Clock::time_point deadline)
             p.history = history_;
             p.prev = prev_;
         }
+        if (sight_ > 0) { // what the opponent has seen of the agent so far: as it is now
+            float at[kObsDim];
+            world_->View(side_, at);
+            p.air.assign(1, at[kSelfAir] > 0);
+        }
     }
     const int total = lead + window_;
     float now[kObsDim];
@@ -837,6 +852,8 @@ bool MixPlanner::Run(Play& p, Clock::time_point deadline)
         uint8_t theirs = kCrouchGuard;
         if (p.answer == 1)
             theirs = kBack;
+        else if (p.answer == 0 && sight_ > 0 && p.air[(size_t)std::max(0, p.t - sight_)])
+            theirs = kBack; // the guard by sight, `sight` frames late
         else if (p.answer == 2 && p.t < (int)schedule_.size())
             theirs = schedule_[p.t];
         else if (p.answer == 3 && p.t >= lead - 2)
@@ -851,6 +868,10 @@ bool MixPlanner::Run(Play& p, Clock::time_point deadline)
             return true;
         frames++;
         world_->View(side_, now);
+        if (sight_ > 0)
+            p.air.push_back(now[kSelfAir] > 0);
+        if (p.t >= lead - 2 && Rint(now[kOppAct]) >= kFirstOwn)
+            p.moved = true;
         if (own) {
             Push(p.history, p.prev, ToScreen(world_->Read(side_), facing[side_]));
             std::copy_backward(p.delayed.begin(), p.delayed.end() - kObsDim, p.delayed.end());
@@ -927,6 +948,8 @@ void MixPlanner::Choose()
         double dealt = std::max(hp0_[1] - p.hp[1], 0), taken = std::max(hp0_[0] - p.hp[0], 0);
         double w = (p.first > 0 ? std::max(dealt, hitWorth_) : dealt) -
                    (p.first < 0 ? std::max(taken, hurtWorth_) : taken);
+        if (bait_ > 0 && p.answer == 2 && p.moved && p.first == 0)
+            w += bait_; // its reversal came out and missed: the punish
         worth[(size_t)p.option * kAnswers + p.answer] = w;
         first[(size_t)p.option * kAnswers + p.answer] = p.first;
     }

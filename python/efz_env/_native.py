@@ -235,6 +235,12 @@ def _bind(lib):
                                                       ctypes.c_int32, P, ctypes.c_uint8,
                                                       ctypes.c_int32, ctypes.POINTER(OkiPlan)]),
         'efz_env_agent_air_stats': (None, [P, P]),
+        'efz_env_agent_rise_stats': (None, [P, P]),
+        'efz_env_agent_next_match': (None, [P]),
+        'efz_env_agent_risk_stats': (None, [P, P]),
+        'efz_env_agent_modules': (ctypes.c_int32, [P, ctypes.c_char_p, ctypes.c_size_t]),
+        'efz_env_agent_risk_starts': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32,
+                                                       ctypes.c_int32, ctypes.POINTER(ctypes.c_double)]),
     }
     sig.update({name: s for name, s in newer.items() if hasattr(lib, name)})
     for name, (restype, argtypes) in sig.items():

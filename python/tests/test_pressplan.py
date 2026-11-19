@@ -113,6 +113,8 @@ class Belief(unittest.TestCase):
         b = pressplan.belief(c)
         self.assertGreater(float(b[names.index('jump')]), 0.75)
         self.assertLess(float(b[names.index('crouch')]), 0.2)
+        b = pressplan.belief(np.zeros(len(K)), sight=True)   # the guard by sight (okiplan's)
+        self.assertAlmostEqual(float(b[1] / (b[0] + b[1])), okiplan.SIGHT_STAND)
 
 
 class Planner:

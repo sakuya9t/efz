@@ -29,8 +29,8 @@ const int kOppCharacter = 66; // opp_character
 const struct {
     const char* name;
     int version;
-} kModules[] = {{"policy", 1}, {"routes", 1}, {"chooser", 1}, {"okiplan", 1},
-               {"pressplan", 1}, {"airthrow", 1}};
+} kModules[] = {{"policy", 1}, {"routes", 1}, {"chooser", 1}, {"okiplan", 2},
+               {"pressplan", 2}, {"airthrow", 1}, {"rise", 1}, {"risk", 1}};
 
 int Hits(const float* view)
 {
@@ -659,6 +659,8 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         mix.decay = std::min(1.0f, std::max(0.0f, ToFloat(keys, "oki_decay", 0.7f)));
         mix.skip = std::min(1.0f, std::max(0.0f, ToFloat(keys, "oki_skip", 0)));
         mix.think = std::min(60, std::max(0, ToInt(keys, "oki_think", 0)));
+        mix.sight = std::min(60, std::max(0, ToInt(keys, "oki_sight", 0)));
+        mix.bait = std::max(0.0f, ToFloat(keys, "oki_bait", 0));
         mix.source = keys["oki_source"];
     }
 
@@ -748,6 +750,7 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         press.hurtWorth = ToFloat(keys, "press_hurt_worth", 1200);
         press.prior = std::max(0.0f, ToFloat(keys, "press_prior", 8));
         press.skip = std::min(1.0f, std::max(0.0f, ToFloat(keys, "press_skip", 0.05f)));
+        press.sight = std::min(60, std::max(0, ToInt(keys, "press_sight", 0)));
         press.source = keys["press_source"];
     }
 
@@ -761,6 +764,83 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         }
         air.on = true;
         air.near = std::max(1, ToInt(keys, "air_near", 320));
+    }
+
+    // rise:1 (Rise)
+    rise = Rise();
+    if (Has(names, "rise")) {
+        if (frameSkip != 1 || delay <= 0) {
+            *error = "the agent's guard on rising needs it to decide every frame, with a delay";
+            return false;
+        }
+        // (the control bytes relative: back 0x02, down 0x04)
+        for (size_t a = 0; a < table.size(); a++) {
+            if (table[a] == 0x02 && rise.stand < 0)
+                rise.stand = (int)a;
+            if (table[a] == 0x06 && rise.crouch < 0)
+                rise.crouch = (int)a;
+        }
+        if (rise.stand < 0 || rise.crouch < 0) {
+            *error = "the agent's guard on rising needs actions that hold back and down-back";
+            return false;
+        }
+        rise.on = true;
+        rise.prior = std::max(0.01f, ToFloat(keys, "rise_prior", 2));
+        rise.meaty = ToFloat(keys, "rise_meaty", 0.56f);
+        rise.low = ToFloat(keys, "rise_low", 0.3f);
+        rise.high = std::max(rise.low + 1e-6f, ToFloat(keys, "rise_high", 0.6f));
+        rise.near = std::max(0.0f, ToFloat(keys, "rise_near", 0));
+        rise.fly = std::max(0.0f, ToFloat(keys, "rise_fly", 200));
+        rise.decay = std::min(1.0f, std::max(0.0f, ToFloat(keys, "rise_decay", 0.7f)));
+    }
+
+    // risk:1 (Risk)
+    risk = Risk();
+    if (Has(names, "risk")) {
+        if (frameSkip != 1 || delay <= 0) {
+            *error = "the agent's raw specials by their accounts need it to decide every "
+                     "frame, with a delay";
+            return false;
+        }
+        // risk_moves: "action:prior,..." (the action in hex or decimal)
+        const std::string& list = keys["risk_moves"];
+        for (size_t at = 0; at < list.size();) {
+            size_t end = list.find(',', at);
+            if (end == std::string::npos)
+                end = list.size();
+            std::string item = list.substr(at, end - at);
+            size_t colon = item.find(':');
+            if (colon == std::string::npos || colon == 0 || colon + 1 >= item.size()) {
+                *error = "the agent's risk_moves is not a list of action:prior";
+                return false;
+            }
+            risk.moves.push_back((int)strtol(item.substr(0, colon).c_str(), nullptr, 0));
+            risk.worth.push_back((float)atof(item.substr(colon + 1).c_str()));
+            at = end + 1;
+        }
+        if (risk.moves.empty()) {
+            *error = "the agent's risk module names no move";
+            return false;
+        }
+        risk.plain.assign(table.size(), -1);
+        for (size_t a = 0; a < table.size(); a++) {
+            for (size_t b = 0; b < table.size(); b++) {
+                if (table[b] == (table[a] & 0x0f))
+                    risk.plain[a] = (int)b;
+            }
+            if (risk.plain[a] < 0) {
+                *error = "the agent's risk module needs every direction without a button";
+                return false;
+            }
+        }
+        risk.on = true;
+        risk.prior = std::max(0.01f, ToFloat(keys, "risk_prior", 4));
+        risk.temperature = std::max(1.0f, ToFloat(keys, "risk_temperature", 75));
+        risk.window = std::max(1, ToInt(keys, "risk_window", 180));
+        risk.ahead = ToInt(keys, "risk_ahead", 0) != 0;
+        risk.look = std::min(120, std::max(1, ToInt(keys, "risk_look", 10)));
+        risk.lookDown = std::min(240, std::max(1, ToInt(keys, "risk_look_down", 50)));
+        risk.decay = std::min(1.0f, std::max(0.0f, ToFloat(keys, "risk_decay", 0.7f)));
     }
     return true;
 }
@@ -866,6 +946,8 @@ Player::Player(const Policy* policy, uint64_t seed) : policy_(policy), rng_(seed
     inputs_.assign((size_t)policy->history * kInputFeatures, 0.0f);
     in_.assign((size_t)kObsDim + inputs_.size(), 0.0f);
     probs_.assign(policy->Actions(), 0.0f);
+    riskCount_.assign(policy->risk.moves.size(), 0.0);
+    riskTotal_.assign(policy->risk.moves.size(), 0.0);
     Reset();
 }
 
@@ -878,6 +960,7 @@ void Player::Reset()
     last_ = -1;
     bytes_ = 0;
     queue_.clear();
+    queueOwn_.clear();
     pending_ = pendingFirst_ = false;
     route_.clear();
     routeAt_ = 0;
@@ -906,6 +989,234 @@ void Player::Reset()
         counts_.End(policy_->mix.decay);
         counted_ = false;
     }
+    // (rise.py's reset with carry: the counts older)
+    riseDown_ = riseMet_ = riseDrawn_ = riseVeto_ = false;
+    if (risen_) { // (once a match: a fight's end and the next one's start both come here)
+        riseSeen_ *= policy_->rise.decay;
+        riseOn_ *= policy_->rise.decay;
+        risen_ = false;
+    }
+    rise_ = RiseStats();
+    // (risk.py's reset with carry)
+    riskDrawn_ = riskOpen_ = -1;
+    if (risked_) {
+        for (size_t k = 0; k < riskCount_.size(); k++) {
+            riskCount_[k] *= policy_->risk.decay;
+            riskTotal_[k] *= policy_->risk.decay;
+        }
+        risked_ = false;
+    }
+    risks_ = RiskStats();
+}
+
+namespace {
+
+const int kRoundOver = 3, kDx = 4, kSelfHp = 8, kOppHp = 40, kSelfAct = 18, kOppAir = 71;
+const int kOppHitstun = 52;
+const int kRiskAgain = 12; // steps in which the same move tried again is the same press
+const int kRiskCame = 24;  // steps after the agent could see the move in which it must
+
+// Forward and back as the screen's right and left.
+uint8_t RiskScreen(uint8_t bits, int facing)
+{
+    if (facing < 0)
+        bits = (uint8_t)((bits & ~3) | (bits & 1) << 1 | (bits & 2) >> 1);
+    return bits;
+}
+
+const int kFirstOwnMove = 0xc8; // a character's own moves from here (src/efz.h)
+const float kHp = 9999.0f, kPixels = 640.0f;
+
+} // namespace
+
+void Player::Queue(const std::vector<int>& actions, size_t planned, size_t own)
+{
+    queue_.assign(actions.begin(), actions.end());
+    queueOwn_.assign(actions.size(), false);
+    for (size_t k = planned; k < own && k < actions.size(); k++)
+        queueOwn_[k] = true;
+}
+
+// rise.py's Rise.guard_chance.
+double Player::RiseChance() const
+{
+    const Rise& r = policy_->rise;
+    double rate = ((double)r.prior * r.meaty + riseOn_) / (r.prior + riseSeen_);
+    return std::min(1.0, std::max(0.0, (rate - r.low) / ((double)r.high - r.low)));
+}
+
+void Player::SetRisk(World* world, int side)
+{
+    riskWorld_ = policy_->risk.on ? world : nullptr;
+    riskSide_ = side;
+}
+
+// risk.py's Risk.chance.
+double Player::RiskChance(int move) const
+{
+    const Risk& r = policy_->risk;
+    if (move < 0 || move >= (int)r.moves.size() || riskCount_.size() != r.moves.size())
+        return 0;
+    double worth = (r.prior * r.worth[move] + riskTotal_[move]) / (r.prior + riskCount_[move]);
+    return 1.0 / (1.0 + exp(std::min(50.0, std::max(-50.0, worth / r.temperature))));
+}
+
+// risk.py's Risk.starts: the press, then nothing, on the game as it is; the first action
+// the agent was not in that is a move with an account.
+int Player::RiskStarts(const float* view, int action)
+{
+    const Risk& r = policy_->risk;
+    World* w = riskWorld_;
+    if (!w || action < 0 || action >= (int)policy_->table.size())
+        return -1;
+    int was = (int)nearbyintf(view[kSelfAct]);
+    int frames = was >= 0x60 && was <= 0x63 ? r.lookDown : r.look;
+    uint8_t bits = policy_->table[action];
+    int found = -1;
+    float seen[kObsDim];
+    w->Enter();
+    w->Save(&riskSnap_);
+    for (int k = 0; k < frames && found < 0; k++) {
+        uint8_t input[2] = {0, 0};
+        input[riskSide_] = RiskScreen(bits, w->Facing(riskSide_));
+        if (!w->Step(input))
+            break;
+        bits = 0;
+        w->View(riskSide_, seen);
+        int a = (int)nearbyintf(seen[kSelfAct]);
+        if (a == was)
+            continue;
+        for (size_t m = 0; m < r.moves.size(); m++) {
+            if (r.moves[m] == a)
+                found = (int)m;
+        }
+    }
+    w->Load(riskSnap_);
+    w->Leave();
+    return found;
+}
+
+// risk.py's Risk.settle: the followed use's swing into its move's account.
+void Player::RiskSettle()
+{
+    int move = riskOpen_;
+    riskOpen_ = -1;
+    if (move < 0 || !riskCame_)
+        return;
+    const float* v = in_.data();
+    double mine = std::max(0.0f, riskHp_ - v[kSelfHp] * kHp);
+    double theirs = std::max(0.0f, riskOppHp_ - v[kOppHp] * kHp);
+    riskCount_[move] += 1;
+    riskTotal_[move] += theirs - mine;
+}
+
+// risk.py's Risk.watch.
+void Player::RiskWatch()
+{
+    const Risk& r = policy_->risk;
+    const float* v = in_.data();
+    riskT_++;
+    risked_ = true;
+    if (riskOpen_ < 0)
+        return;
+    riskAge_++;
+    if (!riskCame_ && (int)nearbyintf(v[kSelfAct]) == r.moves[riskOpen_]) {
+        riskCame_ = true;
+        risks_.came++;
+    }
+    if (!riskCame_ && riskAge_ > policy_->delay + kRiskCame)
+        riskOpen_ = -1; // (the press started nothing it saw)
+    else if (v[kRoundOver] != 0 || riskAge_ >= r.window)
+        RiskSettle();
+}
+
+// risk.py's Risk.act, for a step that is its own play's: `action` or, stopped, the same
+// direction with no button. view: the game as it is.
+int Player::RiskAct(const float* view, int action)
+{
+    const Risk& r = policy_->risk;
+    const float* v = in_.data();
+    if (!riskWorld_ || (policy_->table[action] & 0xf0) == 0 || v[kRoundOver] != 0)
+        return action;
+    if (v[kOppHitstun] > 0 && !IsGuard((int)nearbyintf(v[kOppAction])))
+        return action; // (a combo it has seen)
+    int move = RiskStarts(view, action);
+    if (move < 0)
+        return action;
+    bool again = riskDrawn_ == move && riskT_ - riskDrawnAt_ <= kRiskAgain;
+    if (!again) {
+        riskStop_ = std::uniform_real_distribution<double>(0.0, 1.0)(rng_) < RiskChance(move);
+        risks_.seen++;
+        (riskStop_ ? risks_.stopped : risks_.let)++;
+    }
+    riskDrawn_ = move;
+    riskDrawnAt_ = riskT_;
+    if (riskStop_)
+        return r.plain[action];
+    if (!again) { // followed from its first press (a use still followed ends here)
+        RiskSettle();
+        riskOpen_ = move;
+        riskAge_ = 0;
+        riskCame_ = false;
+        riskHp_ = v[kSelfHp] * kHp;
+        riskOppHp_ = v[kOppHp] * kHp;
+    }
+    return action;
+}
+
+// rise.py's Rise.watch, the guard's part: from what it sees (in_), a knockdown noted,
+// the attacker on it noted, and as it sees itself up whether the attacker is in a move.
+void Player::RiseWatch()
+{
+    const Rise& r = policy_->rise;
+    const float* v = in_.data();
+    int a = (int)nearbyintf(v[kSelfAct]);
+    bool down = a >= 0x60 && a <= 0x63;
+    risen_ = true;
+    if (down && !riseDown_) {
+        rise_.knockdowns++;
+        riseMet_ = riseDrawn_ = riseVeto_ = false;
+    }
+    if (down) {
+        float d = fabsf(v[kDx]) * kPixels;
+        if ((int)nearbyintf(v[kOppAction]) >= kFirstOwnMove || d < r.near ||
+            (v[kOppAir] > 0 && d <= r.fly))
+            riseMet_ = true;
+    }
+    if (riseDown_ && !down) {
+        riseVeto_ = false;
+        if (v[kRoundOver] == 0) {
+            riseSeen_ += 1;
+            if ((int)nearbyintf(v[kOppAction]) >= kFirstOwnMove)
+                riseOn_ += 1;
+        }
+    }
+    riseDown_ = down;
+}
+
+// rise.py's Rise.act: while it sees itself down with the attacker on it, the rising's
+// guard drawn once, and a rising guarded through held by sight in place of `action`.
+int Player::RiseAct(int action)
+{
+    const Rise& r = policy_->rise;
+    if (!riseDown_ || !riseMet_)
+        return action;
+    if (!riseDrawn_) {
+        riseDrawn_ = true;
+        rise_.met++;
+        if (std::uniform_real_distribution<double>(0.0, 1.0)(rng_) < RiseChance()) {
+            riseVeto_ = true;
+            rise_.guarded++;
+        }
+    }
+    if (!riseVeto_)
+        return action;
+    rise_.steps++;
+    if (in_[kOppAir] > 0) {
+        rise_.stood++;
+        return r.stand;
+    }
+    return action == r.stand || action == r.crouch ? action : r.crouch;
 }
 
 void Player::SetMix(MixPlanner* mix, int side, double patienceMs)
@@ -952,9 +1263,9 @@ void Player::OkiBegin(const float* view, bool deterministic)
         Push(hist, prev, policy_->table[guard]);
     }
     double shares[kAnswers];
-    counts_.Belief(policy_->mix.prior, shares);
+    counts_.Belief(policy_->mix.prior, shares, policy_->mix.sight > 0);
     mix_->Begin(side_, actions, hist.data(), prev, deterministic, shares);
-    queue_.assign(actions.begin(), actions.end());
+    Queue(actions, 0, (size_t)delay);
     okiPending_ = true;
     okiWanted_ = false;
     okiOn_ = false;
@@ -1025,7 +1336,7 @@ void Player::ThrowBegin(const float* view, bool deterministic)
         Push(hist, prev, policy_->table[a]);
     }
     mix_->BeginThrow(side_, actions, inputs_.data(), prev_, deterministic, policy_->air.near);
-    queue_.assign(actions.begin(), actions.end());
+    Queue(actions, 0, actions.size());
     throwPending_ = true;
     throwWanted_ = false;
     air_.asked++;
@@ -1106,13 +1417,13 @@ void Player::PressBegin(const float* view, bool deterministic)
     if ((int)rest.size() > delay)
         pressRest_.assign(rest.begin() + delay, rest.end());
     double shares[kAnswers];
-    counts_.PressBelief(policy_->press.prior, shares);
+    counts_.PressBelief(policy_->press.prior, shares, policy_->press.sight > 0);
     int theirs = (int)nearbyintf(view[kOppAction]);
     bool crouching = (theirs >= 0x99 && theirs <= 0x9b) || theirs == 0xa9;
     // (its history as it is now: the planner pushes each input as it plays it)
     mix_->BeginPress(side_, actions, inputs_.data(), prev_, deterministic, shares,
                      crouching ? 0x06 : 0x02);
-    queue_.assign(actions.begin(), actions.end());
+    Queue(actions, rest.size(), actions.size());
     pressPending_ = true;
     press_.asked++;
 }
@@ -1298,7 +1609,7 @@ void Player::Begin(const float* view, bool deterministic)
     planner_->Begin(side_, hitMove_, actions, hist.data(), prev, deterministic, view, hitAge_, extra);
     pendingMove_ = hitMove_;
     pendingOffset_ = delay + hitAge_;
-    queue_.assign(actions.begin(), actions.end());
+    Queue(actions, rest.size(), actions.size());
     pending_ = true;
     routeOn_ = false;
     planned_ = true;
@@ -1410,9 +1721,15 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
                                                          : policy_->mix.invincible);
         counted_ = true;
     }
+    if (policy_->rise.on)
+        RiseWatch();
+    if (policy_->risk.on)
+        RiskWatch();
     int action;
+    bool own = false; // the step is its own play's
     if (!planner_ && !mix_) {
         action = Sample(in_.data(), deterministic);
+        own = true;
     } else if (!planner_) {
         // Its okizeme and pressure planned, its combos its own.
         MixResults(view);
@@ -1422,10 +1739,13 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
         if (!queue_.empty()) {
             action = queue_.front();
             queue_.pop_front();
+            own = policy_->risk.ahead && queueOwn_.front();
+            queueOwn_.pop_front();
         } else if (okiOn_) {
             action = okiRoute_[okiAt_++];
         } else {
             action = Sample(in_.data(), deterministic);
+            own = true;
         }
     } else {
         // LiveRoutes.__call__: the inputs chosen at its hit, then the route chosen (until
@@ -1461,15 +1781,26 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
         if (!queue_.empty()) {
             action = queue_.front();
             queue_.pop_front();
+            own = policy_->risk.ahead && queueOwn_.front();
+            queueOwn_.pop_front();
         } else if (routeOn_) {
             action = route_[routeAt_++];
         } else if (okiOn_) {
             action = okiRoute_[okiAt_++];
         } else {
             action = Sample(in_.data(), deterministic);
+            own = true;
         }
         prevHits_ = hits;
     }
+    if (policy_->rise.on) {
+        int guarded = RiseAct(action);
+        if (guarded != action)
+            own = false; // (its guard on rising: not a press)
+        action = guarded;
+    }
+    if (policy_->risk.on && own)
+        action = RiskAct(view, action);
     last_ = action;
     bytes_ = policy_->table[action];
     PushInput(bytes_);

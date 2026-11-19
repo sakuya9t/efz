@@ -381,7 +381,7 @@ void LogPressure(const char* who, const Side& s)
         return;
     const agent::Press& lib = s.policy->press;
     double shares[agent::kAnswers];
-    s.player->Seen().PressBelief(lib.prior, shares);
+    s.player->Seen().PressBelief(lib.prior, shares, lib.sight > 0);
     LogInfo("agent", "%s's pressure: %d guarded moves planned from: %d plans made, %d played "
                      "(%s); %d dropped (late %d, the game elsewhere %d, nothing to plan %d, the "
                      "fight over %d); planning %.1f ms a plan (at most %.1f), the game waited "
@@ -411,9 +411,38 @@ void LogCatches(const char* who, const Side& s)
             o.frames / std::max(1, o.asked - o.late), o.waitedMs / o.asked, o.waitedMsMost);
 }
 
+// What an agent's guard on rising did, for the log.
+void LogRising(const char* who, const Side& s)
+{
+    if (!s.player || !s.policy || !s.policy->rise.on)
+        return;
+    const agent::RiseStats& r = s.player->Rising();
+    if (!r.knockdowns)
+        return;
+    LogInfo("agent", "%s's risings: %d knockdowns, the attacker on it in %d, %d of those "
+                     "guarded through (%d steps, %d standing); the next one guarded with "
+                     "probability %.2f",
+            who, r.knockdowns, r.met, r.guarded, r.steps, r.stood, s.player->RiseChance());
+}
+
+// What an agent's raw specials by their accounts did, for the log.
+void LogRisks(const char* who, const Side& s)
+{
+    if (!s.player || !s.policy || !s.policy->risk.on)
+        return;
+    const agent::RiskStats& r = s.player->Risks();
+    if (!r.seen)
+        return;
+    LogInfo("agent", "%s's raw specials: %d presses that would start a move with an account: "
+                     "%d stopped, %d let out (%d of them seen to start)",
+            who, r.seen, r.stopped, r.let, r.came);
+}
+
 // What an agent's planned okizeme did, for the log.
 void LogOkizeme(const char* who, const Side& s)
 {
+    LogRising(who, s);
+    LogRisks(who, s);
     if (!s.player || !s.player->Mixing())
         return;
     LogPressure(who, s);
@@ -424,7 +453,7 @@ void LogOkizeme(const char* who, const Side& s)
     const agent::Mix& lib = s.policy->mix;
     std::string drawn = Drawn(o, lib.kinds);
     double shares[agent::kAnswers];
-    s.player->Seen().Belief(lib.prior, shares);
+    s.player->Seen().Belief(lib.prior, shares, lib.sight > 0);
     LogInfo("agent", "%s's okizeme: %d knockdowns planned for: %d plans made, %d played (%s); "
                      "%d dropped (late %d, the game elsewhere %d, the opponent up too soon %d, "
                      "the fight over %d); planning %.1f ms a plan (at most %.1f), %ld frames on "
@@ -499,6 +528,10 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
         }
         if (p->air.on)
             combos += "; an air throw of an opponent's air recovery when one catches inside it";
+        if (p->rise.on)
+            combos += "; its rising guarded by sight when the attacker is on it";
+        if (p->risk.on)
+            combos += "; its raw specials let out or stopped by how each has paid in the match";
         LogInfo("agent", "%s: \"%s\"%s, %s, format %d (%s), deciding every %d frame(s), %d "
                          "frames late, %d inputs of history; %s",
                 e.path.c_str(), p->name.c_str(),
@@ -527,6 +560,8 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
         if (!s->player->Mixing())
             s->mix.reset();
     }
+    if (player >= 0 && s->policy->risk.on)
+        s->player->SetRisk(&g_world, player);
     return true;
 }
 
