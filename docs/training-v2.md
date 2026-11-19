@@ -5,6 +5,26 @@ games of 8-10 November. What was measured, what changes, how round 14 is judged.
 results go in `runs/human-ayu/README.md` ("Round 14") as each phase ends; the last
 section here says where each phase stands.
 
+## The goal (written 18 November, the user's words)
+
+"We are not targetting to get an average player, but a very strong agent that can beat
+the best players." Within the human limits, which stay the hard line (what it sees 14
+frames late, people's input speed, no instant confirm).
+
+What that fixes in this document and the code, where people's numbers appear:
+
+- **People's averages are not a bar.** They are used for two things only: as the prior
+  of what an opponent not yet seen will do (a planner's shares before its counts), and
+  to describe. A round is not judged against them and an opponent is not made to play
+  like them.
+- **The bar is the strongest players**: in the community's replays the Ayu players who
+  win most (the table in "The games of 18 November"), the opponents who beat Ayu
+  players most, and the user; and past them, since the aim is to beat them.
+- **Opponents in training are to punish as the strongest do, or harder**, not as the
+  crowd does on average. The `crowd` profile (rounds 16 to 19) was set to the replay
+  collection's averages, which was this session's reading of "don't overfit on me" and
+  is too weak a teacher for this goal: many players, yes; their average, no.
+
 ## What was measured
 
 **The rounds pick peaks, they don't learn.** In all ten arms of rounds 8-12 the mean
@@ -1579,6 +1599,106 @@ fixed before the runs:**
 - The pick is then measured with the planned okizeme and pressure through the game's
   own code (`--p1-native`) before it is packed.
 
+**3. The result (17 November).** Five runs ended on the 16th; `agent-league18-tech-s2`
+was killed by the kernel at 10:00 when six trainers and four planner evaluations filled
+the machine's 92 GB (the evaluations were mine and too many), and was trained again from
+the start once the others had ended. Every run's `avg.zip` (the ten chunks' mean), 64
+matches an opponent:
+
+| Run | `exploiter17`s (11) | `crowd` (8) | `crowdt` (8) | big combos to a knockdown | `learner` sets | their matches 3-4 | the 46 | presses a second, hit or guarding | frontal jump-ins that hit |
+|---|---|---|---|---|---|---|---|---|---|
+| round 17's agent | 80.1% (66%) | 89.6% (59%) | 90.6% (58%) | 42.5% | 88.1% (58%) | 88.3% | 99.4% (32%) | 2.73 | 46% |
+| `agent-league18-s1` | 87.8% (59%) | 93.2% (52%) | 90.8% (53%) | 41.5% | 93.2% (52%) | 92.2% | 99.3% (31%) | 1.89 | 45% |
+| **`agent-league18-s2`** | **88.9% (60%)** | **96.9% (52%)** | 93.6% (54%) | 43.5% | 91.4% (53%) | 89.1% | 99.5% (30%) | 2.02 | 43% |
+| `agent-league18-tech-s1` | 84.7% (61%) | 92.8% (52%) | 93.2% (54%) | 42.8% | 92.2% (53%) | 92.2% | 99.7% (29%) | 1.92 | 35% |
+| `agent-league18-tech-s2` | 86.5% (60%) | 94.5% (52%) | 94.5% (52%) | 41.8% | 92.4% (52%) | 91.0% | 99.3% (31%) | 1.63 | 38% |
+| `agent-league18-adapt-s1` | 86.9% (62%) | 91.2% (56%) | 93.4% (54%) | 41.2% | 93.4% (53%) | 91.8% | 98.8% (32%) | 2.07 | 41% |
+| `agent-league18-adapt-s2` | 84.4% (61%) | 92.0% (53%) | 91.6% (53%) | 43.6% | 90.6% (53%) | 89.5% | 99.2% (31%) | 1.83 | 34% |
+
+By the rules:
+
+- Every seed of every arm can replace round 17's agent: four to nine points over it
+  against its own exploiters, over it on the `crowd` set, level over the 46.
+- `-tech` is not taken. Opponents that recover from 0.7 of the combos they take in the
+  air did not move how its combos end: 42.8% and 41.8% of the big ones in a knockdown
+  for 41.5% and 43.5% without (round 17's 42.5%), and its first seed is 3.6 points under
+  the control's mean against the `exploiter17`s. So the answer to the arm's question is
+  no: an ending that costs in training is not enough for the policy to learn the other
+  ending, at this weight and in 20M steps. The combos' endings stay the routes' business
+  (the planner's `--ending`, which a person has to judge: the `-kd` file).
+- `-adapt` is not taken: 91.8% and 89.5% of the third and fourth matches for `-tech`'s
+  92.2% and 91.0%. No run gets better within a set against an opponent that repeats what
+  worked: by the match's number (128 matches a cell, so about three points of noise)
+
+  | Run | match 1 | 2 | 3 | 4 |
+  |---|---|---|---|---|
+  | round 17's agent | 88.3% | 87.5% | 89.8% | 86.7% |
+  | `agent-league18-s1` | 94.5% | 93.8% | 93.0% | 91.4% |
+  | `agent-league18-s2` | 94.5% | 93.0% | 87.5% | 90.6% |
+  | `agent-league18-tech-s1` | 94.5% | 89.8% | 90.6% | 93.8% |
+  | `agent-league18-tech-s2` | 94.5% | 93.0% | 90.6% | 91.4% |
+  | `agent-league18-adapt-s1` | 96.9% | 93.0% | 93.0% | 90.6% |
+  | `agent-league18-adapt-s2` | 93.8% | 89.8% | 89.8% | 89.1% |
+
+  Round 18's runs all start a set higher than round 17's agent and lose three or four
+  points by its end, the arm trained against such opponents no less than the others. As
+  the told experiment said: what adapts has to be outside the policy (the planners'
+  counts), and these sets are the measure for it.
+- Within `agent-league18` the second seed, by the `crowd` set (96.9% for 93.2%). It is
+  also the best against the `exploiter17`s, and the only run that holds the hardest of
+  them, Nayuki's, over half (67%; round 17's agent 41%, the others 39-53%); Ikumi's 72%
+  for 59%. Its weak cell is the third match of the `learner` sets (87.5%).
+
+**Round 18's agent is `agent-league18-s2/avg.zip`** (281M steps). What 20M steps more and
+the `exploiter17`s gave, against round 17's agent: 80 to 89% against the opponents trained
+to beat round 17's, 90 to 97% on the `crowd` set with less of its own HP lost (59 to 52%),
+and 2.0 presses a second while hit or guarding for 2.7 (the target was 2.2: reached, with
+the press cost at 0.004 in every arm). Not moved: the 46 (99.5%), how its combos end, and
+the frontal jump-ins that hit it (43% for 46%; the `-tech` and `-adapt` runs took fewer,
+34-41%, which I have no account of and did not gate on).
+
+(On those fewer jump-ins: all four runs with opponents that recover in the air guard more
+of them, 55-60% for the control's 49-51%. An opponent that recovers comes down on the
+agent attacking, so those arms met more attacks from the air; a guess, with nothing
+measured behind it. If the next round wants the jump-ins guarded, `--vs-tech` is a
+cheaper way to try than the jump-in exploiters were.)
+
+**4. The pick as the game plays it.** `agent-league18-s2-round18.efzagent`: the pick
+with `round17c`'s parts as they are (`export_agent.py --parts-from`: the routes planned
+again, the planned okizeme and pressure, the catch). Through the game's own code
+(`--p1-native`), 64 matches an opponent, beside `round17c` (round 17's agent, the same
+parts):
+
+| | the `exploiter17`s (704) | `crowd` (512) | `crowdt` (512) | presses a second, hit or guarding | frontal jump-ins that hit |
+|---|---|---|---|---|---|
+| `round17c` | 96.9% (49%) | 94.9% (48%) | 93.8% (50%) | 2.25 / 2.64 / 2.72 | 49% / 33% / 50% |
+| `round18` | 95.5% (47%) | 95.3% (45%) | 95.7% (48%) | 1.57 / 1.89 / 1.90 | 41% / 37% / 39% |
+| round 18's agent, routes only (Python) | 88.9% (60%) | 96.9% (52%) | 93.6% (54%) | | 43% / 28% / 36% |
+
+- **With the game's modules the two files win as often**: a point and a half under on
+  one set, two over on another, level on the third, each difference inside the noise
+  (about a point and a half on 512 matches). The exploiters of round 17's agent, which
+  beat it in one match of five when it plays with its routes alone, take 3% from the
+  whole `round17c`: they were trained against the bare policy, and its okizeme and
+  pressure are not what they learned to answer. So what round 18's training gained on
+  them (80 to 89%) the modules had already covered, by other means.
+- **What is left of the round in the file**: two to three points less of its own HP lost
+  on every set, 1.6-1.9 presses a second while hit or guarding for 2.3-2.7 (the modules
+  do not change that; it is the policy's), and fewer jump-ins that hit on two sets of
+  three.
+- **The leagues no longer tell whole agents apart.** Everything here is at 94-97%. The
+  next measure has to be opponents trained against the agent as the game plays it (the
+  file through `--p1-native` as the training's opponent; not built), or people.
+- Round 18's file a match on `crowdt`: 73 route plans, 5 okizeme plans (none late), 11
+  pressure plans, 4 recoveries looked at for a catch, of which 0.7 with a sure throw; a
+  route plan 100 ms, an okizeme plan 184 ms, a pressure plan 48 ms, a catch 14 ms. The
+  recoveries caught: 44% for 34% without the modules; air throws 0.36 a minute.
+
+Handed over, `~/dev/efz/tmp/agent-league18-s2-round18.efzagent` (16.0 MB with the
+training part; no path under a home folder, no login or mail name, no player's name;
+unpacked once: the model and its critic back within 5e-05). It needs the game of
+`release/next` at c45725f or later, as `round17c` does.
+
 ## The air (16 November): the recovery caught, and the jump at the agent
 
 The user's fourth point of 15 November ("Air still weak. In-air throwing is a very
@@ -1713,3 +1833,1344 @@ of which a jump with an air throw in two of five, a move from the ground in one 
 a guard in one of ten. A gain of the size of the noise on four opponents, with the plan
 made at once; the other seven and the plan a game could make (`think=6`: back held six
 steps while it is made, dropped if the jumper did something in them) are running.
+
+**The jump at the agent, over the eleven** (round 17's agent with its routes against all
+the `exploiter17`s in the plain game, 704 matches a row):
+
+| | Wins (own HP lost) | Air throws a minute, landed (tried) | Air exchanges a minute, won / lost | Frontal jump-ins that hit |
+|---|---|---|---|---|
+| no module | 80.1% (66%) | 0.00 (0.02) | 0.78 / 1.06 | 46% of 1,384 |
+| `jumpplan`, the plan made at once | 84.1% (64%) | 0.24 (0.30) | 1.02 / 1.03 | 46% of 1,324 |
+| `jumpplan`, `think=6` (4 entries, 40 steps, a guard after an option) | 83.2% (66%) | 0.22 (0.26) | 0.96 / 1.07 | 44% of 1,380 |
+
+Four and three points, about two and one and a half times the noise of 704 matches, the
+same way in both. What it buys is not the guard: the jump-ins that hit it are as many.
+It is the jump met in the air, with an air throw in two plans of five (2.3 plans a
+match): a quarter more air exchanges won. The plan a game could make (six steps of
+holding back while it is made, dropped if the jumper acted meanwhile) keeps three of the
+four points. Not in the game yet: it needs its library in the agent file and its answers
+in `mix.cpp`, as the okizeme's; and the jump-ins that hit are still the open half of the
+user's point.
+
+**The same on round 18's agent** (17 November; `agent-league18-s2` with its routes, the
+plan made at once, the same 704 matches): 88.6% (59%) for 88.9% (60%) without. The air
+throws are there as before (0.26 a minute landed of 0.31 tried, air exchanges won 1.16 a
+minute for 0.92, lost 1.04 for 1.15) and the wins don't move; the frontal jump-ins that
+hit, 42% for 43%. So the four points on round 17's agent were a hole that round 18's
+training closed by itself, and on wins the planner is not worth its port to the game.
+What it still gives is what the user asked for by name, a jump met with an air throw
+(none without it), at no cost: whether that is worth a library in the file and its
+answers in the game's code is the user's call.
+
+## Opponents trained against the whole agent (17 November)
+
+Round 18's file and `round17c` win 94-97% of everything the leagues have, because every
+exploiter so far was trained against a bare policy: what a person meets in the game (the
+policy with its routes, its planned okizeme and pressure, its catch) no opponent has
+ever trained against. So the next exploiters do.
+
+**`finetune.py --vs FILE.efzagent --vs-native`**: a `--vs` opponent that is an agent file
+is played by the game's own code in the training's matches and in the evaluation's
+(`native_agent.NativeOpponent`: a player of the file attached to each of its matches,
+as `evaluate.py --p1-native` attaches P1's; `EfzSB3VecEnv.opponent_controls`, a hook
+that lets a player 2 write its own control bytes). The file plays with its own reaction
+time and settings. Checked: with a file without planners the attached player's bytes
+are the file's player's for the same views; the same bytes again on a second run and
+with its players' steps on threads (`tests.test_agents.NativeAsOpponent`).
+
+What it costs: the file's plans are made to their end inside the step that needs them
+(about 100 ms a route plan, 70 a match), so a training process makes about 1,250 steps a
+second whatever its number of matches (threads help only when two matches plan on the
+same step), a tenth of training against a bare policy; and each player holds 20 to 50 MB
+of game copies, so a trainer of 48 such matches with a 64-match evaluation peaks at
+about 5 GB once the chunk's players are closed before the evaluation (8 GB before that
+was done: the first six runs, two of which I stopped and started again for the room).
+
+**The `exploiter18`s**: for each of the eleven characters, from its `exploiter17`,
+against `agent-league18-s2/round18.efzagent` (the file handed over), round 17's recipe
+otherwise (`--focus air` at 0.05, Kano's `charge`, Mizuka's `setup`; 64 matches an
+evaluation; the stop at 70%), 12M steps more at most. Before any training, the
+`exploiter17`s against the whole agent, 64 matches each (as P1: their wins): Nayuki's
+12%, Sayuri's 11%, Mayu's 6%, Ikumi's 5%, Nanase's 2%, Kaori's 0%.
+
+### The first to end: Nayuki's, and what it found (17 November)
+
+Nayuki's `exploiter18` held 72% of 64 matches after 6M steps and stopped (12% before
+any training; 28, 16, 52, 55, 50% on the way). The same 64 matches before and after, the
+agent's side of them:
+
+| the whole `round18` against Nayuki's exploiter | before (its `exploiter17`) | after 6M steps |
+|---|---|---|
+| the agent's wins | 88% | 28% |
+| damage a minute: the agent's / the exploiter's | 10,200 / 6,300 | 7,400 / 9,000 |
+| the agent's bigger combos ending in a knockdown / in a recovery | 87% / 12% | 55% / 44% |
+| after such a recovery: the agent catches it / is hit back | 57% / 10% | 23% / 47% |
+| the agent's throws a minute | 0.88 | 0.40 |
+| its wake-up reversals that hit | 47% | 32% |
+| two of its whiffed moves punished (`0xc9`, `0xcc`) | 3%, 4% | 31%, 29% |
+| the exploiter's frontal jump-ins a minute (hit) | 4.5 (33%) | 2.8 (13%) |
+
+It stopped jumping in, learned not to be thrown, and **recovers in the air out of the
+agent's combos and hits back**: the user's point 2 of 15 November, found by an opponent
+because it trained against the agent as the game plays it (round 18's `--vs-tech`
+opponents recovered and punished nothing, and the learner they were shown to doesn't
+choose its combos: the planner does).
+
+So the planner's knockdown ending, tried again where a recovery is punished: `round18`
+with `route_ending` 400 and 800 (the same file otherwise; `export_agent.py --parts-from
+FILE --ending HP` now changes the setting of the routes it takes, it was ignored
+before), by the game's code, 64 seeded matches against Nayuki's `exploiter18`:
+
+| a knockdown ending worth | wins (own HP lost) | bigger combos ending in a knockdown / a recovery | after a recovery: hit back | a combo's damage | its damage a minute |
+|---|---|---|---|---|---|
+| 0 HP (`round18`) | 45% (85%) | 55% / 44% | 53% of 192 | 1,650 | 7,900 |
+| 400 HP | 25% (88%) | 85% / 15% | 45% of 93 | 1,531 | 7,200 |
+| 800 HP | 30% (90%) | 90% / 9% | 38% of 69 | 1,427 | 6,900 |
+
+**It loses here too**, by 15 to 20 points (two standard errors of a difference of 64
+matches near 40% are about 17, the seeds the same: one opponent, so a lead and not a
+proof). The knob does what it says, the recoveries fall from 192 to 69, and the damage
+it gives up is not paid back by the okizeme that follows (40% more knockdowns planned
+for: 546-560 for 388). Twice measured, against opponents that recover and don't punish
+and against one that does: the ending stays at 0. What is left of point 2 is the other
+half, what the agent does when its combo does end in a recovery (it is hit back in half
+of them): the catch looks at a recovery only when a throw is sure, and the policy,
+trained against opponents that never recovered, is in a move of its own two times in
+three.
+
+Why the knockdowns pay nothing, from the same matches: this opponent has learned the
+agent's okizeme. An okizeme of the agent's is worth 18 HP to it at 0, -122 at 400 and 33
+at 800 (the attacker's hit in 28-33% of them, the riser's in 17-22%), against the 120
+to 220 HP of damage a combo that the ending gives up. And the fewer hits back change
+nothing that shows: the opponent's damage is 8,550 to 8,700 a minute at all three, so
+what it wins by is elsewhere (its own openings: the two whiffed moves it punishes, the
+agent's jump-ins it stops), not in the recoveries. The hit back after a recovery is
+real, and here it is not what decides.
+
+(The agent's wins differ between the exploiter's own evaluation, 28%, and this one, 45%:
+other seeds and the agent as player 1; 64 matches each.)
+
+### The learner with its planners: `finetune.py --module` (17 November)
+
+The other half of the same gap. The league's learner has always trained as a bare policy
+(round 15's `-routes` arm apart) and is then played with its routes, its planned okizeme
+and pressure and its catch. Round 18 showed what that costs: what 20M steps taught the
+policy against the `exploiter17`s (80 to 89% of them with the routes alone) the planners
+already did by other means (97% and 96% as whole agents). A share of every round goes to
+steps the game never asks of the policy.
+
+`--module KIND:key=value,...` (several; `evaluate.py --p1-module`'s kinds and options)
+makes the learner play with those modules in the training's matches and in its
+evaluations (`efz_env.sb3.ModularLearner`, which `--assist`'s routes already used; the
+planners are the Python ones, with the options that play as the game's do). A module's
+steps are kept out of the policy's loss and the critic learns from all of them, as with
+`--assist`. What had to be added: the wrapper tells a module its batch and shows it the
+learner's delayed views where an `Agent`'s are (the planned okizeme and pressure keep
+their count of the opponent's answers from them), and passes on the environment's
+attributes to the wrappers around it (`--press-cost` reads the input history).
+
+A trial (round 18's agent, 16 matches against Nayuki's and Sayuri's `exploiter17`, two
+chunks of 16,384 steps, the game's four modules: routes planned again with 24 tried,
+`okiplan` and `pressplan` with the game's options, `airplan` with the sure throw only):
+
+- **The modules play 27-28% of the learner's steps**: the routes 14-15%, the okizeme
+  4-8%, the pressure 6-9%, the catch 0.2% at most. A bare learner spends that quarter of
+  its steps (and more of its reward: they are the steps around its hits and knockdowns)
+  on play the game replaces.
+- It costs: about 160 plans in 16,384 steps, each on copies of the game in the training's
+  own process, so about 400 steps a second with 16 matches where a bare learner makes
+  2,300 with 128; the plans, not the matches, set the pace. Measured afterwards with 128
+  matches (one rollout of 131,072 steps, the machine loaded): 560 steps a second, 2,557
+  plans (about 85 ms each, most of the time), the process 5.2 GB; so 20M steps in about
+  ten hours without the evaluations.
+- Memory: each planner holds its own batch of game copies (26 to 35 of them, 20-50 MB
+  each), so a set of the four is about 2.5 GB whatever the number of matches. The
+  evaluations in the training's process use the training's set; each evaluation worker
+  has its own.
+- The evaluations are plan-bound too. With two workers (the trial again, Nayuki's
+  `exploiter18` added: 64 matches an evaluation) one took 580-630 s, about 19 s a match
+  a worker on a machine that six other trainers were loading, where a bare learner's
+  takes under 4 s; the three processes held 10.5 GB at most. Round 18's evaluation
+  (1,300 matches) would take two hours a chunk at that pace.
+
+### Round 19: the plan (17 November, before the `exploiter18`s have ended)
+
+Fixed before the runs, as every round's. From round 18's agent (`agent-league18-s2/
+avg.zip`, 282M steps), round 14's loop, 20M steps, `--press-cost 0.004`, `person` and
+`crowd` as in round 18's control arm (no `--vs-tech`, no habits: neither taught
+anything). The league: round 18's, and the eleven `exploiter18`s as they end
+(`CHAR/exploiter18/model.zip`; they are plain policies, so they cost nothing more than
+the others to meet). Two arms of two seeds:
+
+| Arm | Change | Question |
+|---|---|---|
+| `agent-league19` | the `exploiter18`s in the league | the control: does a bare learner gain on opponents that learned the whole agent? |
+| `agent-league19-whole` | the learner trains and is evaluated with the game's four modules (`--module`, the trial's) | does the policy learn more of what is left to it when the planners play their part in training? |
+
+Both arms evaluate 8 matches an opponent a chunk where round 18 played 16 (fixed after
+the trial with workers and before the runs: with the planners an evaluation of the 91
+opponents is about 730 matches, half an hour to an hour with four workers, so a
+`-whole` run is sixteen to twenty hours where a control run is four or five). The
+evaluations choose the league's opponents (`--pfsp`, over the last three: 24 matches an
+opponent where round 18 had 48) and nothing else: the judging is the native one below.
+
+Judged as a person meets them: each run's `avg.zip` packed as an agent file with
+`round18`'s parts and played by the game's code (`evaluate.py --p1-native`), 64 seeded
+matches an opponent, on the `exploiter18`s (704 matches), `crowd` and `crowdt` (512
+each), with `round18` itself on the same matches as the mark. The rules:
+
+1. A run can replace `round18` if it wins more of the `exploiter18`s by more than four
+   points (two standard errors of a difference on 704 matches near 50-90%) and is not
+   more than two points under it on `crowd` or on `crowdt`.
+2. `-whole` is the arm taken if both its seeds are over both of the control's on the
+   `exploiter18`s; the control otherwise (it is the cheaper way to train).
+3. Within the arm, the seed with the better `crowd`, as in round 18.
+4. The `exploiter18`s are opponents the round trains against, so a gain on them is a gain
+   on seen opponents: what a run does against opponents that never met it is `crowdt`'s
+   and a person's to say. If rule 1 passes, exploiters of the new file (as the
+   `exploiter18`s were made) are the next measure; if nothing passes, the round says the
+   league's way of training has run out against the whole agent, and the next work is in
+   the planners and their options rather than in the policy.
+
+Own HP lost, presses a second, frontal jump-ins that hit and the modules' plans a match
+are reported beside the wins and decide nothing.
+
+## The games of 16 November, evening: `round17c` in the game (measured 17 November)
+
+The user played `round17c` (round 17's policy with the routes planned again, the planned
+okizeme and pressure and the catch) in the game: 23 matches, all replayed exactly by
+`from_record.py`, 56 minutes. **The agent took 7 of 23** (15 November, round 17 with
+routes only: 13 of 28; other characters and another evening, so not a step back by
+itself), dealing 6,700 HP a minute and taking 8,800. The user's points, and what the
+records say of each (`people` is the community's Ayu, 1,908 matches, 4,800 minutes;
+scratch `six.py` and `trap.py` for the new counts):
+
+| | agent, 16 Nov (`round17c`) | agent, 15 Nov (r17) | the user, 16 Nov | people's Ayu |
+|---|---|---|---|---|
+| a combo's damage, on average | 1,263 | 1,298 | 942 | |
+| combos of 1,000 HP or more ending in the victim's air recovery | 41% | 41% | 16% | 14% |
+| after that recovery: caught again / hit back | 33% / 29% | 28% / 28% | 61% / 12% | 33% / 25% |
+| the corner trap (a flight back, then 214A, in a combo): matches with one | 0 of 23 | 0 of 28 | | 52 of 1,908 |
+| flights a minute | 2.2 | 2.0 | | 5.5 |
+| ... that end in a hit or a guard / in being hit | 15% / 10% | 10% / 6% | | 32% / 14% |
+| okizeme: the commonest opener's share; the attacker's hit; worth | 35%; 38%; +234 HP | 80%; 19%; +25 HP | | |
+| a frontal jump-in at it hits | 43% of 68 | 29% of 103 | | 14% |
+| air exchanges a minute: won / lost | 0.81 / 1.94 | 0.80 / 1.43 | 1.94 / 0.81 | 0.76 / 1.00 |
+| the opponent's invincible moves: it is hit by | 25% of 87 | 32% of 88 | 30% of 138 | 21% |
+| ... the ones that miss it, punished | 9% (6 of 65) | 7% (4 of 60) | 36% | 12% |
+| 236C a minute; of those that don't hit, punished | 1.02; 71% (15 of 21) | 0.95; 50% | | 0.48; 40% |
+| 623C a minute; of those that don't hit, punished | 0.25; 3 of 4 | 0.50; 62% (8 of 13) | | 0.12; 53% |
+| what a punished 236C / 623C costs | 730 / 1,770 HP | 820 / 1,960 HP | | 640 / 380 HP |
+| its move recoil-guarded: it recoil-guards back | 0 of 2 | 0 of 8 | | 28 of 324 |
+| throws landed a minute (tried) | 0.19 (0.21) | 0.00 (0.00) | 0.08 | 0.21 (0.24) |
+| air throws landed a minute (tried) | 0.12 (0.12) | 0.00 (0.06) | 0.33 (0.58) | 0.04 (0.12) |
+| presses a second | 1.99 | 2.11 | | 1.2-2.1 |
+
+1. **"Combo damage is good; it still fails to catch escapes. Ayu players end corner air
+   combos with a flight back and 214A to catch the recovery."** Both halves hold. The
+   combos are worth what they were, and 41% of the bigger ones still end in the victim's
+   air recovery (people: 14%), after which it catches a third and is hit back as often;
+   the user catches 61% of the agent's. The catch that is in the file (`airthrow:1`)
+   landed 0.12 air throws a minute, all it tried: it only looks at a recovery when a
+   throw is sure. The trap the user names is in the community's replays exactly as
+   described: a flight back (0xa6) then 214A (0x100) inside a corner combo, 49 of the 57
+   times it appears. It is a few players' habit, not the crowd's (52 of 1,908 matches,
+   never more than two a match), and it works: when the victim recovers the 214A hits 8
+   of 13, and when it doesn't the attacker has lost nothing (36 of 38 times nothing
+   happens and the knockdown stands). The agent has never done it. The commonest catch
+   in the crowd is plainer, an air normal after the last hit (0xd0: 62% of 162
+   recoveries caught in the corner).
+2. **"More variance and mix-ups, but still green: easy to predict and to see. Expert
+   Ayu players fly and land in ways that are hard to predict."** The variance is there
+   in the okizeme (the commonest opener 35% of them where it was 80%, the attacker's hit
+   38% for 19%, worth 234 HP a knockdown for 25). The flights are not: 2.2 a minute
+   against people's 5.5, and only 15% of them end in a hit or a guard (people's 32%):
+   three in four of the agent's flights lead to nothing. No module plans an approach:
+   routes, okizeme, pressure and the catch all start from a hit, a knockdown or a guard.
+3. **"Still easy to hit with invincible moves; it doesn't bait."** It is hit by a
+   quarter of the user's invincible moves, about people's rate (21%), and by half of the
+   12 on wake-up (people: 47%). What it lacks is the other half of a bait: of the 65 that
+   missed it, it punished 6 (the user punishes 36% of the agent's; people 12%), and none
+   of the 6 on wake-up (people: a third).
+4. **"Throws are coming up."** 0.19 ground throws a minute, people's rate (0.21), from
+   none.
+5. **"Risk management: a vulnerable move guarded or recoil-guarded (623) leaves Ayu open
+   to a big air combo; it should mind the hit back."** It does 236C twice as often as
+   people and 623C twice as often, and when they don't hit they are punished 71% and 3
+   times in 4 (people: 40% and 53%), for 730 and 1,770 HP a time (people: 640 and 380):
+   its invincible moves are thrown where a miss is at its most expensive. Its moves were
+   recoil-guarded only twice in these matches (ten times over the two evenings) and it
+   never recoil-guarded back (people: 9%), so that part is a few cases; the cost of the
+   guarded and whiffed ones is the larger. The frontal jump-in is no better (43% hit it)
+   and the air exchanges are worse (lost 1.94 a minute to 0.81).
+
+What follows, in the order of what the counts say costs most (after round 19's judging,
+which already trains against opponents that punish its whiffs): **the end of a combo**
+(people's endings from the last hit on, the trap among them, tried on copies against a
+victim that recovers each way or not at all: the routes' family, begun before the
+recovery and not on seeing it); **the cost of a miss** (the non-hitting 236C and 623C
+counted in every evaluation, as `six.py` counts them, and opponents that guard and
+punish in the league); **the approach** (people's flights into contact, as a planner of
+the okizeme's kind); the bait is the planned okizeme's to do, and what it did with the
+user's eleven wake-up reversals is to be read from the game's log before anything is
+built.
+
+### The end of a combo: `endplan` (17 November, the first build)
+
+Point 1's answer as a module of the planners' family (Python only so far:
+`runs/human-ayu/airplan.py`, kind `endplan`, before `routes` in the stack):
+
+- **The library** (`air_library.py --kind ending`): the community's Ayu players from the
+  last hit of each combo of 600 HP or more that ended on an opponent in the air, to the
+  next contact: 10,253 of them. The victim came down in 82% and recovered in 18% (then
+  fell 39%, pressed 33%, dashed 14%, jumped 10%, guarded 4%). After the last hit the
+  player pressed a move in the air in half (it caught 21% of the recoveries), one from
+  the ground in a quarter (20%), an air throw in 1.2% (63%, tried once the recovery was
+  seen), and flew or dashed back first in 0.9% (an air move after it: 8 of 19 recoveries
+  caught).
+- **When it plans.** When the agent sees a hit of its own on an opponent in the air, a
+  copy of the game is played on with the route's remaining inputs against a victim that
+  presses out at its first chance: if that victim is in its recovery within 30 steps,
+  the combo is about to let go and the end is planned now; if not, the combo holds it and
+  nothing is done (the next hit asks again). The first trigger tried, the last hit of the
+  route as its plan foresaw it, was wrong by hundreds of steps: the route planner's
+  copies are played against a victim that never presses out, and what they count as one
+  combo ends much earlier against one that does.
+- **What it tries**, each on copies against a victim that comes down, and one that
+  recovers and then falls, guards, presses, jumps or dashes back: the library's ends from
+  where the agent is (as many steps after its last hit), the trap of its own timing (a
+  flight back, then 214A after 2, 8 or 14 steps), the route's own rest, a wait, its own
+  play. The draw is the okizeme planner's, by what this opponent did at the ends of the
+  combos the agent saw over the community's prior.
+
+A first look (8 matches against Nayuki's `exploiter18`, the routes and this module
+alone): 632 hits seen on an opponent in the air, the combo held it at 604, 28 plans,
+about one for each recovery that followed. On the copies the trap after 2 steps is worth
+300 to 700 HP against every way of recovering (its own play: 150 to 650), a timed air
+throw 600 to 750 where the library has one. Being measured: 64 matches each against
+Nayuki's and Ikumi's `exploiter18` and two of the `crowdt` set, the four modules of the
+file with and without it.
+
+### Round 19: the control arm, judged (18 November)
+
+Started 17 November about 17:15 (a first start at 16:11 stalled: the worktree that held
+the Python environment was removed under the runs; rebuilt with the versions the
+checkpoints record, a seeded evaluation repeated on it to the last digit). The two
+control seeds ended at 21:00 (20M steps, 22 minutes a chunk with its evaluation). The
+`-whole` seeds take three hours a chunk on the machine as loaded (100 minutes of training
+at 340 steps a second, 75 of evaluation) and end in the night of 18 to 19 November.
+
+Each `avg.zip` as an agent file with `round18`'s parts, through the game's own code, 64
+matches an opponent:
+
+| | `exploiter18`s (704) | `crowd` (512) | `crowdt` (512) |
+|---|---|---|---|
+| `round18` (the mark) | 86.2% (own HP lost 62%) | 95.3% (45%) | 95.7% (48%) |
+| `round17c` | 81.5% (66%) | 94.9% (48%) | 93.8% (50%) |
+| `agent-league19-s1` | 89.6% (61%) | 96.1% (46%) | 95.5% (46%) |
+| `agent-league19-s2` | 89.8% (60%) | 96.5% (45%) | 93.0% (49%) |
+
+By opponent (Sayuri, Mio, Mayu, Nanase, Kaori, Mishio, Ikumi, Nayuki, Kano, Mizuka,
+Makoto's): `round18` 84 91 94 86 98 100 81 **45** 81 95 92; s1 91 92 88 97 94 100 78
+**64** 89 98 95; s2 84 94 94 94 95 97 83 **58** 95 97 97.
+
+**Rule 1 does not pass.** Both seeds gain on the `exploiter18`s, by 3.4 and 3.6 points
+where the rule asks for more than four, and s2 is 2.7 under the mark on `crowdt`. The
+gain is the same in both seeds and most of it is one opponent (Nayuki's: 45% to 64% and
+58%), so it is likely real and it is small: a bare learner that trains against the
+opponents that learned the whole agent closes a third of the gap to the one that found
+a hole, and nothing else moves (own HP lost 60-61% for 62%, a frontal jump-in hits it 47%
+and 41% for 45%, its bigger combos end in a recovery as often). `round18` stays the
+file; whether `-whole` does more is the other arm's to say.
+
+Against all eleven, `round18` is ahead of `round17c` (86.2% to 81.5%): the opponents
+were trained against `round18` and beat the older file more, which says the hole they
+found is not `round18`'s own.
+
+**Measured (18 November): it does not pay yet.** Round 18's policy with the file's four
+modules in Python, with and without `endplan`, 64 seeded matches an opponent (Nayuki's
+and Ikumi's `exploiter18`, and Nayuki's and Kaori's `exploiter15` with the `crowdt`
+profile, which recover at the first chance and do not punish):
+
+| build | wins: N18 / I18 / N15t / K15t | mean | recoveries caught (same four) |
+|---|---|---|---|
+| without | 43.8 / 68.8 / 84.4 / 98.4% | 73.9% | 32 / 49 / 38 / 42% |
+| 1: the options against the answers, drawn | 40.6 / 65.6 / 93.8 / 96.9% | 74.2% | 21 / 51 / 38 / 49% |
+| 2: the same, a recovering victim's HP counted from its recovery's end | 37.5 / - / 93.8 / -% | | 24 / - / 37 / -% |
+| 3: a timed air throw or nothing | 37.5 / 65.6 / 92.2 / 92.2% | 71.9% | 31 / 66 / 46 / 50% |
+| 4: ... only one that catches both ways of recovering, against an opponent seen to recover where it could | 35.9 / 75.0 / 82.8 / 95.3% | 72.3% | 23 / 52 / 43 / 47% |
+
+What the builds told, each plan followed in the game to how it went:
+
+- **The copies' answers do not say which end catches.** They valued the trap highest
+  (300 to 700 HP against every way of recovering) and people's air moves lowest; in the
+  game the trap as scripted caught 16 to 36% of the recoveries it was played into, its
+  own play 7 to 36%. Counting a recovering victim's HP only from its recovery's end
+  changed nothing: on a copy the agent's own play catches a victim that falls or
+  presses, and in the game the opponent does neither on cue.
+- **An air throw timed into the recovery does catch, when it covers both ways.** One
+  found on copies to connect whether the victim recovers backward or forward caught 80
+  of 88 recoveries in build 3 and 39 of 47 in build 4; one that covers a single way 41
+  of 94, no better than nothing.
+- **It is seldom there, and a throw at a victim that stays down costs.** Such a throw
+  exists at about one chance to recover in nine (the limit is where the route leaves
+  the agent, as for the catch after a recovery it sees: `airthrow:1`'s one in six).
+  Against the `exploiter18`s, which stay down at 60 to 85% of their chances, build 3
+  whiffed and gave up the route's end and the okizeme; build 4 waits until it has seen
+  the opponent recover where a copy said it could (the chances and the recoveries are
+  counted from the game, not from knockdowns it had no way out of).
+- **No build wins more.** The differences are within what 64 matches tell, and against
+  Nayuki's `exploiter18` every active build is under the mark (36 to 41% for 44%).
+
+So the end of a combo is not a thing to bolt on after the route: twenty throws in 64
+matches cannot move a result, and for more of them the route itself has to end where a
+throw covers both recoveries. That is the route planner's to weigh (a route's worth: its
+damage, and what its end leaves against an opponent that recovers as this one has), on
+copies whose victim presses out; today its copies' victim never does, and a route it
+counts as one combo runs hundreds of steps past where a recovering opponent leaves it.
+`endplan` stays in the tree as built, off unless asked for, Python only, without a unit
+test of its own yet; `air_library.py --kind ending` and the per-plan follow-up
+(`came`, `asked` in its report) are the parts that will be used again.
+
+### Round 19: the `-whole` arm's first seed, judged (18 November, evening)
+
+`agent-league19-whole-s1` ended 18 November 19:52 (ten chunks; one was lost to memory at
+noon and the run continued from its seventh, whose evaluation is the one missing from
+its log; its `avg.zip` is the mean of all ten). As an agent file with `round18`'s parts,
+through the game's own code, 64 matches an opponent, the eleven `exploiter18`s in the
+order above: 83 88 94 94 94 91 70 75 80 97 94: **87.1%** (own HP lost
+63%), for `round18`'s 86.2% and the control seeds' 89.6% and 89.8%.
+
+**Rule 1 does not pass and rule 2 cannot.** It is 0.9 points over the mark where the
+rule asks for more than four, and under both control seeds, so the `-whole` arm is not
+the arm taken whatever its second seed does (which ends in the night and is judged on
+the eleven for the record). It beats Nayuki's `exploiter18` 75% of the time, where
+`round18` wins 45% and the control seeds 64% and 58%, and gives that back against
+Ikumi's (70% for 81%), Mishio's and Kaori's: training with the planners in the loop
+closed the hole one opponent had found and opened others. Sixteen hours of training for
+the result of a four-hour control run.
+
+**So round 19 ends as its rule 4 said it might**: nothing passes, "the league's way of
+training has run out against the whole agent, and the next work is in the planners and
+their options rather than in the policy". The same evening one option of a planner (the
+okizeme's `sight`, below) moved the same measure by more than either arm, and the
+user's games of the same evening said the measure itself is the wrong one ("The games
+of 18 November", at the end).
+
+**The second seed** (ended 18 November 23:32, judged the same way): 81 94 92 97 94 89 69
+41 80 97 94 = **84.2%** (own HP lost 64%), under `round18`'s 86.2% and with the first
+seed's hole back (Nayuki's 41%). The two seeds, 87.1% and 84.2%, straddle `round18`:
+the arm taught nothing a seed's luck does not cover. Not taken.
+
+## Opponents that get away, and the corner held (18 November)
+
+The user, on point 1 and on the pressure: *an opponent that always recovers, or tries to
+whenever it is safe, so that catching it or not makes a difference; and one that tries
+to escape corner pressure whenever possible, so that how long the agent keeps it in the
+corner can be observed.* Three things came of it.
+
+**The scripted opponent** (`advantages.py`, with `tech`): `techsafe` (it presses out
+only while the agent cannot throw it: in a move of its own, or more than 110 pixels
+away; otherwise it falls), `techhit` (out of its recovery it attacks at the agent:
+forward and B while it is in the air and the agent within 160 pixels), `techway` (the
+share of its recoveries made forward), and `escape` (free on the ground in a corner, the
+agent on the open side within 220 pixels, it jumps out over the agent: up-forward, a
+second jump, forward held). Profiles on top of `crowd`: `crowdth` (`tech=1,techhit=1`),
+`crowdts` (and `techsafe=1`), `crowde` (and `escape=1`).
+
+**The measure** (`evaluate.py`'s `corner`, in every evaluation's report from now): the
+opponent held in a corner from the step it is within 0.80 of a wall (positions run to
+0.95) with the player on the open side within 220 pixels, until it is out past 0.68,
+the player is no longer on the open side or is 330 pixels away, or the round ends; stays
+of 20 steps or more: how many a minute, how long, the share of the match, the HP dealt
+and lost a stay, how it ended. In the user's games:
+
+| | stays a minute | seconds: mean (median) | of the match | HP dealt a stay | ended: out by air / the holder hit away |
+|---|---|---|---|---|---|
+| the agent holding the user, 16 Nov (`round17c`) | 2.7 | 4.1 (2.7) | 18% | 870 | 51% / 33% |
+| the user holding the agent, 16 Nov | 3.7 | 4.4 (2.7) | 28% | 1,040 | 47% / 26% |
+| the agent holding the user, 15 Nov (r17) | 3.0 | 4.2 (2.8) | 21% | 810 | 49% / 32% |
+| the user holding the agent, 15 Nov | 3.9 | 3.9 (2.6) | 25% | 780 | 46% / 23% |
+
+A hold of the agent's lasts as long as one of the user's; the user gets there more often
+(3.7 to 2.7 a minute), and the agent is hit out of a third of its own.
+
+**`round18` against the scripted ones** (the file through the game's code, Sayuri's,
+Mayu's, Kaori's and Nayuki's `exploiter15`, 64 matches each):
+
+| profile | wins (own HP lost) | bigger combos ending in a recovery | after it: caught / hit back | the corner held: seconds, mean (median) | of the match | ended: out by air / hit away |
+|---|---|---|---|---|---|---|
+| `crowd` | 92.6% (51%) | 8% | 49% / 12% | 8.4 (5.6) | 46% | 28% / 47% |
+| `crowdth` | 92.6% (52%) | 60% | 49% / 19% | 7.5 (5.4) | 45% | 33% / 45% |
+| `crowde` | 98.4% (39%) | 54% | 62% / 14% | 5.2 (3.1) | 34% | 77% / 14% |
+
+The scripts do what they say (1,186 recoveries, 1,158 of them followed by the attack;
+2,087 jumps out of a corner) and **they are not hard**: a fixed attack out of a
+recovery hits the agent after 19% of them for 12%, and wins do not move; an opponent
+that always jumps out of the corner the same way leaves it sooner (holds of 5.2 seconds
+for 8.4) and is hit doing it (the agent wins 98%). They measure: the corner's hold and
+the share of recoveries caught are read off them. They do not make a recovery left
+uncaught cost anything, which was the point.
+
+**The learned one** (`finetune.py --focus out`, `focus.py`): an exploiter paid 0.05
+(500 HP's worth) for an air recovery of its own after which it is not hit or thrown
+again within 40 steps, and for leaving a corner it was held in for 20 steps under
+contact, and left to learn from the game's own reward what to do next. From each
+character's `exploiter18` against `round18` as the game plays it, 6M steps at most, the
+stop at 70% of 64 matches (`CHAR/exploiter18o`; Nayuki's first, Sayuri's, Ikumi's and
+Mayu's queued behind round 19's `-whole` runs).
+
+**The routes planned against a victim that presses out** (18 November; `route_ending`
+1: the copies' victim recovers at its first chance and a knockdown is worth one HP more,
+so nothing but the damage it really takes decides; `round18`'s file otherwise, through
+the game, 64 matches an opponent):
+
+| `route_ending` | `exploiter18`s (704) | `crowdt` (512) | a combo's damage | bigger combos ending in a recovery (`crowdt`) |
+|---|---|---|---|---|
+| 0 (`round18`) | 86.2% (own HP lost 62%) | 95.7% (48%) | 1,414 / 1,541 | 56% |
+| 1 | 81.7% (65%) | 95.9% (46%) | 1,330 / 1,464 | 53% |
+
+No better, and against the `exploiter18`s a little worse (5% less damage a combo). And
+the recoveries stay: against opponents that always press out, half the agent's bigger
+combos still end with the victim free in the air whichever victim the routes were
+planned on. They are not combos that a recovery breaks; they are air combos whose last
+hit leaves the victim in the air with its untech time running out, and a route that
+ends otherwise (a knockdown: `route_ending` 400, 800) costs more damage than its
+okizeme returns. What decides point 1 is then what happens after that last hit, against
+an opponent for which it matters: the learned ones (`--focus out`, above).
+
+**The first learned one: Nayuki's `exploiter18o`** (18 November). It ended at the stop
+(70% of 64 matches against the file) after 4M steps, getting away 3.4 to 3.5 times a
+minute by the bonus's count. `round18` through the game against it and against the
+`exploiter18` it started from, 64 matches each:
+
+| against Nayuki's | wins (own HP lost) | bigger combos ending in a recovery | after it: caught / hit back | the corner held: seconds, mean (median) | of the match | HP dealt / lost a stay | ended: out by air / the agent hit away |
+|---|---|---|---|---|---|---|---|
+| `exploiter18` | 45.3% (85%) | 44% | 24% / 53% | 8.8 (6.5) | 62% | 447 / 607 | 29% / 60% |
+| `exploiter18o` | 34.4% (87%) | 46% | 20% / 47% | 6.6 (5.0) | 48% | 388 / 550 | 37% / 53% |
+
+Two things the new measure shows that the wins did not. **The agent's corner is where
+this opponent beats it**: it keeps Nayuki's `exploiter18` in the corner for 62% of the
+match and loses more HP there than it takes (607 to 447 a stay; against the `crowd`
+opponents 167 to 744), six holds in ten ending with the agent hit out of its own
+pressure. And **the escape artist is harder to hold and no easier to catch**: a quarter
+shorter holds (6.6 seconds for 8.8), more of them left through the air, a recovery
+caught one time in five and answered with a hit one time in two. Here a recovery left
+uncaught and a pressure that does not hold cost the agent the match (34%): the
+opponent the user asked for. Sayuri's, Ikumi's and Mayu's follow when round 19's runs
+leave the room.
+
+**Round 19, a run lost and resumed** (18 November). `agent-league19-whole-s1` was ended
+by the kernel for memory about 12:20, in its seventh evaluation of ten: my doing, two
+more evaluations and an exploiter's training started beside the two `-whole` runs while
+both were at their evaluations' peak (40 GB between them), on a day the machine's other
+use had grown. Its four evaluation workers lived on as orphans (12 GB) until found. It
+was started again at 12:45 from its chunk 7 (`finetune.py` picks up `model.zip`,
+`avg.zip` and `finetune.json` from the run's folder; the average's count set to the 7
+chunks `avg.zip` holds). What differs from a run left alone: its seventh evaluation is
+not in its history, so the opponents of chunk 8 were chosen from evaluations 4 to 6.
+Since then: nothing else of this session's beside the two runs but one evaluation at a
+time, and `memwatch.sh` ends the evaluations under 8 GB available.
+
+## What a miss costs, the flights, the bait: three more measures (18 November)
+
+The user's points 5, 2 and 3 of 17 November ("risk management ... Ayu's 623 being RGed",
+"flying and landing mixups", "doesn't know how to bait") had counts only in a script
+over the user's own recordings. They are in `evaluate.py` now, for every evaluation
+(`tactics.py`; `tests/test_endings.py`):
+
+- **`risks`**, per risky move (Ayu's 623A, 623B, 623C and 236C by name, any other
+  invincible move of the frame data by its number): how often a minute, the share that
+  were a combo's piece (the opponent already hit: no risk taken), and of the raw ones the
+  shares that hit, were guarded, recoil-guarded and whiffed, the HP a hit led to; of the
+  misses the share the opponent punished (it hit the player first, from the guard or the
+  move's start until 40 steps after the player is out of its move), the HP a miss cost,
+  the shares answered with a recoil guard (`back`) and cancelled with an Instant Charge
+  (`ic`); and **`net`**, the HP a raw use is worth: (all dealt − all lost) / uses.
+- **`faced_risks`**, the same of the opponent's risky moves: `hit` is how often the
+  player is hit by them, `punished` how often it punishes their misses. A bait is a miss
+  made and punished.
+- **`flights`**, the player's air dashes (Ayu's flights): a minute, the share flown
+  back, what it did next (a move in the air, a move once landed, a throw, nothing), what
+  came of it, and `mix`, the entropy in bits of what it did next.
+
+The yardstick, people's Ayu in the community's replays (1,908 matches, 80 hours), and
+the user's games of 16 November against `round17c` (23 matches; a few uses a move):
+
+| | a minute | raw uses: hit / guarded / RG / whiff | a hit leads to | a miss: punished | costs | cancelled | **net HP a raw use** |
+|---|---|---|---|---|---|---|---|
+| people's 623A | 0.23 | 34% / 18% / 7% / 41% | 1,009 | 66% | 748 | 24% | **−155** |
+| people's 623B | 0.33 | 35% / 18% / 7% / 41% | 1,152 | 59% | 668 | 27% | **−37** |
+| people's 623C | 0.12 | 62% / 10% / 8% / 21% | 879 | 73% | 683 | 11% | **+278** |
+| people's 236C | 0.48 | 55% / 22% / 6% / 17% | 1,121 | 56% | 690 | 7% | **+309** |
+| the agent's 623B, against the user (15 raw) | 0.47 | 27% / 20% / 0 / 53% | 544 | 91% | 1,053 | 0 | **−627** |
+| the agent's 623C, against the user (13) | 0.23 | 69% / 8% / 0 / 23% | 712 | 75% | 1,325 | 0 | **+85** |
+| the agent's 236C, against the user (53) | 0.95 | 62% / 25% / 4% / 9% | 817 | 80% | 569 | 0 | **+294** |
+
+So the user's point holds beyond the user: for people too a raw 623A or 623B loses HP on
+average, 623C and 236C (invincible from their first steps) pay about 300 a use. People
+are hit by 44% of the risky moves they face and punish 40% of the misses (428 HP a
+miss); people fly 5.5 times a minute, 11% of it back, with 0.86 bits of mix in what
+follows (82% a move in the air, 12% nothing, 5% a move once landed).
+
+**The cancel.** What people do about a guarded 623 is the Instant Charge: of their raw
+623A and 623B that were guarded while they had the gauge for one (500 of the RF gauge,
+or cyan), 69% and 81% were cancelled with 22C, and the opponent then hit them first 29%
+and 23% of the time; left uncancelled, 86% and 76%. They start these moves with that
+gauge in hand (77-87% of the raw ones that touched the opponent; of 623C and 236C,
+which spend the gauge themselves, 17-28%).
+Half of the cancels come within 13 steps of the guard, pressed without waiting to see:
+the same 22C goes on into a combo when the move hits (47-52% of the hits). The agent's
+routes take the hit's side, planned when it sees its hit; nothing took the guard's:
+against the user it cancelled none of its misses. In the game (`ic_check.py` of the
+session: Ayu's 623B guarded by Mai, 600 of gauge): 22C begun up to 20 steps after the
+first guarded step comes out as the charge (2 steps later), from 24 steps on it is too
+late; an agent that sees 14 steps late and presses on sight is inside the window, with
+the charge 16 steps after the contact. People's cancels as late as that (17 steps or
+more) still leave them punished 35-38% of the time, for 76-86%.
+
+`cancel.py`, the module `cancel` (`tests/test_cancel.py`): when the agent sees a move
+named in `moves` (default `623A+623B`) of its own guarded, or recoil-guarded (`rg`), and
+has the gauge, it presses 22C, once a move; `stats()`: guarded, no_gauge, tried, came. In
+Python only so far; it goes before `pressplan` in the list, whose follow-up to a guarded
+move it replaces for these moves. What it costs is the gauge, which a combo would have
+used. Its measure (`risks`' ic, punished and net, the wins and HP) is below.
+
+### The league by the three measures (18 November, evening)
+
+`round18`, the file through the game's own code, against the eleven `exploiter18`s (704
+matches; `avg-native-risk-x19-*.json`), beside people's numbers:
+
+| raw uses | a match | hit / guarded / RG / whiff | a hit leads to | a miss: punished | costs | cancelled | **net HP a use** |
+|---|---|---|---|---|---|---|---|
+| 623A | 0.26 | 17% / 27% / 4% / 52% | 1,462 | 56% | 485 | 2% | **−159** |
+| 623B | 0.45 | 29% / 24% / 5% / 42% | 728 | 49% | 400 | 6% | **−73** |
+| 623C | 0.62 | 44% / 15% / 7% / 34% | 696 | 56% | 382 | 0 | **+91** |
+| 236C | 2.2 | 38% / 37% / 8% / 17% | 1,514 | 46% | 530 | 1% | **+248** |
+| 641236A (0x132) | 0.61 | 22% / 32% / 4% / 42% | 1,787 | 27% | 210 | 0 | **+230** |
+| **236236A (0x13b)** | **0.75** | 10% / 58% / 2% / 30% | 1,287 | 68% | 812 | 0 | **−611** |
+| people's 641236A | 0.40 | 38% / 23% / 15% / 23% | 2,432 | 44% | 596 | 30% | **+571** |
+| people's 236236A | 0.08 | 13% / 34% / 18% / 35% | 1,531 | 38% | 305 | 18% | **−63** |
+
+- **The 623s are people's.** A raw 623A or 623B is worth about what people's is (−159 and
+  −73 for −155 and −37), 623C and 236C pay less than people's (+91 and +248 for +278 and
+  +309) because they hit less often (44% and 38% for 62% and 55%), and the agent cancels
+  almost none of its misses (0-6% for people's 7-27%). Half of its raw 623A and 623B
+  whiff, which no cancel helps; a quarter are guarded.
+- **The leak is one move: the level-one super 236236A, raw.** Nine times as often as
+  people (0.75 a match for 0.08), it hits one time in ten, is guarded 58% of the time and
+  costs 611 HP a use against every one of the eleven (−195 to −932): 460 HP a match,
+  where the 623A and 623B together cost 75. Against the user (16 November) the same:
+  27 raw uses in 23 matches at −569.
+- **It is a wake-up reversal.** `risks` now tells the raw uses that began within 10 steps
+  of the player's own knockdown (`wake`, `wake_hit`, `wake_net`). Against the user 23 of
+  the 27 raw 236236A were wake-up ones (−625 each), as were 12 of its 15 raw 641236A
+  (−273), 10 of its 15 raw 623B (−771, a move that is not invincible) and 12 of its 13
+  raw 623C (+120): about 1,100 HP a match lost rising with a move, which is the user's
+  point 5 more than the guarded 623 in a string is. People's wake-up reversals are
+  641236A (67% of their raw ones are wake-up ones, +509 each, hitting 37%) and 623C (74%,
+  +316, hitting 61%); their raw 236236A is rare and a wake-up one 29% of the time (+4).
+- **Whether to rise with a move is a matter of how often, and the league does not say.**
+  People's Ayu (the same replays, 17,355 wake-ups) rise with an invincible move on 10%
+  of them and are 527 HP ahead for it (it hits first 48% of the time, the opponent 20%),
+  with another move on 19% (+86), and guard on 56% (168 behind). The agent against the
+  league (the older `wakeup` measure, the same 704 matches, 9.9 wake-ups a match): an
+  invincible move on 22% (+122 by that measure's 96 steps, which end before a guarded
+  super's punishment does), a guard on 22% (−161). The league's opponents attack its
+  rising, and the `crowd` profile waits out 8% of its reversals (65 of 826 in the set),
+  so the league does not teach it to guard more. What it gets wrong there is which
+  move: 236236A, which hits one time in ten, where people's wake-up supers are 641236A.
+  Twenty million steps against the `exploiter18`s do not remove it: round 19's first
+  `-whole` seed still rises with it (34 and 56 raw uses against Sayuri's and Mio's,
+  three in four and five in six of them wake-up ones at −166 and −494 each, where its
+  wake-up 641236A makes +252 and +572). Against a person who waits it is how often: the
+  user saw the reversal whiff or guarded it four times in five. That is a choice by the
+  match's counts, as its okizeme's is; the module `rise` below makes it.
+
+**The bait** (`faced_risks`): the agent is hit by 59% of the 816 raw risky moves it
+faced (people 44%) and punishes 41% of the misses (people 40%; 635 HP a miss). Two
+opponents make two thirds of it: Nanase's `exploiter18` rises with 623B (0x101) on 41% of
+its wake-ups and with another move on 30%, and the agent is hit by 77% of them; Mayu's
+uses 236C (0x105) 304 times, 74% hitting. Without the two it is hit by 36%. Against
+Nanase's the planned okizeme loses 503 HP a knockdown (all eleven: +9 when the riser
+guards, −645 when it reverses, −403 when it presses), and it waits on 5% of them. The
+reason is in the planner as the file runs it (`after=guard`): after an option's inputs
+the copies hold a crouching guard, so a reversal that is guarded or whiffs is worth
+nothing to any option, and the wait, worth nothing against every answer, is not drawn
+however often the opponent has reversed. The punish is the policy's to play and the
+copies do not play it.
+
+`okiplan`'s new option **`bait`** (default 0: as before; `tests/test_okiplan.py`) is the
+worth of that punish: on a copy where the riser's reversal came out and neither side hit
+first, the option is credited `bait` HP. 600 is the league's measure (a miss of the
+opponent's costs it 635 with the agent's punishes as they are, 428 among people). With
+it a wait is worth 600 times the reversal's share, so an opponent seen to reverse draws
+it, and one that never does costs a wait only as often as the prior's 10% makes it
+attractive.
+
+*Measured (Python, Nanase's `exploiter18`, 64 matches): nothing.* 85.9% (own HP lost
+62%) for 89.1% (61%), the okizeme −596 HP a knockdown for −476. The credit went to one
+plan in eight, mostly to attacks that the copy's reversal happened to miss, and the
+wait was drawn at 3.6% of the knockdowns for 2.0%. On the copies the reversal comes at
+one timing; the opponent's comes when it has seen the agent commit. Waiting the
+reversal out is not something a worth on these copies finds: the option stays (0 by
+default) and is in the game's planner for the measure with `sight` (`round18sb`).
+
+**The flights**: 3.0 a minute (people 5.5), 9% of them back (11%); what follows is a
+move in the air 90% of the time, nothing 7%, a move once landed 3%, a throw 0.2% (people
+82 / 12 / 5 / 0.4%): 0.47 bits of mix for people's 0.86. What comes of a flight: the
+opponent hit 5%, its guard 19%, the agent hit 6%, nothing 70% (people 16 / 16 / 14 /
+54%). People's flights are three times as dangerous to the opponent and twice as
+dangerous to themselves: the agent flies seldom, safely and to little effect, as the
+user saw.
+
+Where a flight is flown from (`flights`' `where`, added the same evening: inside a combo,
+over an opponent that is down, out of a guarded string, in the open), a minute, with the
+shares that came to a hit and to being hit:
+
+| | in a combo | okizeme | out of a string | **in the open** |
+|---|---|---|---|---|
+| people's Ayu | 1.74 | 0.67 (26% / 13%) | 0.26 (25% / 16%) | **2.81 (22% / 23%)** |
+| the user, 16 November | 1.48 | 0.86 (25% / 13%) | 0.11 | **1.40 (22% / 14%)** |
+| `round17c` against the user | 1.22 | 0.32 (39% / 0) | 0.02 | **0.50 (4% / 43%)** |
+
+The combos' flights are there (the routes'). The gap is the open field: people fly at
+the opponent nearly three times a minute and are hit as often as they hit; the agent
+does it once in two minutes, lands one in twenty-five and is knocked out of the air by
+the user nearly every second time. Out of a guarded string, people's pressure reset, it
+does not fly at all. Nothing is built for either yet; the league's numbers by `where`
+come with the next evaluations.
+
+### The agent's own rising by the match's record: `rise` (18 November, the first build)
+
+`rise.py`, the module `rise` (`tests/test_rise.py`; Python only). From what the agent
+sees it keeps two accounts for the match: the HP swing (the opponent's HP lost less its
+own, over 240 steps after it sees itself up, or until it sees itself down again or the
+round ends) of the wake-ups it rose with a move on (a move of its own seen within 10
+steps of rising) and of the others. An account's worth is its mean over a prior: +150
+for a move and −165 for the others, counting as four wake-ups each (between people's
+and the league's numbers above). When it sees itself knocked down it draws: with the
+probability 1 / (1 + exp((a move's worth − the others') / 75)) this rising is guarded
+through. A rising guarded through: while it sees itself down, the policy's own action if
+that is a back direction without a button (its guard, standing or crouching by its own
+read, or a jump back), else a guard, standing if it sees the opponent in the air. It
+sees 14 steps late, so that covers the first 14 steps after it is up, where a wake-up
+move would come out; then its own play again.
+
+Nothing changes until a wake-up move was punished: 1.5% of the risings are guarded
+through at a match's start, 42% after one wake-up move that cost a combo (1,300 HP), 90%
+after two; a wake-up move that hit puts it back under 0.1%, and a guard that is opened
+as often brings the move back. `carry=true` keeps the accounts for the next match
+against the same opponent, scaled by 0.7, as the planners' counts are kept.
+
+**Measured: the class is not the leak** (the file's four modules in Python with and
+without `rise`, `carry=true`, 64 matches an opponent): Ikumi's `exploiter18` 71.9% (own
+HP lost 70%) for 68.8% (72%); Kaori's `exploiter15` with the profile `crowdb` (the
+`crowd` profile waiting out nine in ten of the wake-up reversals it is free to guard)
+93.8% (50%) for 95.3% (47%). It guarded 13% and 22% of the risings through and nothing
+moved, because by its own accounts a wake-up move pays there as a class: against
+Ikumi's +174 HP a rising with a move (332) and −77 without (542). The loss is one move
+inside the class: against that opponent the baseline's level-one 236236 super came out
+raw 88 times in 64 matches, nine in ten of them wake-up ones, at −960 HP each (its
+wake-up 641236A: +198).
+
+**The second build: that move, seen coming.** The level-one 236236 super (0x13b: the
+agent enters it as 236236C with one bar, which the game makes the level-one one; called
+236236A above) has an account of its own, with a prior of −400 (the league's −166 to
+−960, the user's −625; people's is +4 and rare). The module draws and plays the
+policy's own inputs while it sees itself down, so what it reads is what is played; when
+they hold two down-to-forward sweeps within 24 steps and then a button that makes the
+level-one super (A, or any with one bar), the rising is guarded through with the
+probability that account gives against the others' (94% at the priors; less where its
+guard has been losing in this match). A first run of eight matches against Ikumi's: 12
+seen coming, 8 stopped, 2 came out (−1,040 each).
+
+**Measured: stopping the super does not pay either** (64 matches an opponent, the four
+modules with and without). With the class's draw and the super's (`pyrise2`), Ikumi's:
+93 of 103 supers seen coming stopped, 65.6% for 68.8%; the class's draw guarded another
+fifth of the risings through and halved the wake-up 641236A that pays, so it is off
+unless asked for (`moves=true`). With the super's alone (`pyrise3`):
+
+| `exploiter18` | wins (own HP lost), without | with `rise` | supers seen coming, stopped | raw wake-up supers | HP it loses a minute |
+|---|---|---|---|---|---|
+| Ikumi's | 68.8% (72%) | 56.2% (74%) | 166, 149 | 79 to 18 | 5,162 to 5,194 |
+| Kaori's | 93.8% (63%) | 96.9% (56%) | 88, 76 | 37 to 9 | 5,480 to 5,133 |
+| Nanase's | 89.1% (61%) | 90.6% (66%) | 26, 23 | 15 to 3 | 6,781 to 7,278 |
+| Kaori's `exploiter15`, `crowd` | 95.3% (47%) | 96.9% (48%) | 65, 59 | | 5,488 to 5,188 |
+
+86.8% to 85.2% over the four: nothing, with the super gone. The guard that takes its
+place loses as much (against Ikumi's the largest loss in the ledger is then being
+thrown, 2,191 HP a minute: that opponent grabs a rising that guards). The wake-up super
+is a symptom; what is wrong is underneath, in the next section but one ("Its own rising
+against an attacker who is on it"). `rise` stays a Python module, not in the game.
+
+### The landing mix-up: a riser that guards by sight (18 November, evening)
+
+The user's point 2 ("flying and landing mixups that are very hard to predict") has a
+number in the okizeme. By kind (`okizeme.mixups`; people's Ayu at 13,706 knockdowns of
+the replays, `round18` at 5,831 against the eleven `exploiter18`s), the share and the HP
+a knockdown is then worth:
+
+| okizeme | people's share | hits first | worth | the agent's share | hits first | worth |
+|---|---|---|---|---|---|---|
+| a jump, then a high (jump high) | 19% | 37% | +34 | **35%** | 23% | **−115** |
+| from the ground, low | 17% | 48% | +329 | 15% | 27% | −75 |
+| from the ground, mid | 11% | 40% | +88 | 12% | 34% | +141 |
+| **a jump, then a low** | **11%** | **54%** | **+375** | 4% | 46% | 0 |
+| a flight, then a high | 9% | 40% | +106 | 12% | 27% | +66 |
+| **a flight, then a low** | **7%** | 46% | **+230** | 1% | | |
+| a dash, then a high | 4% | 36% | +7 | 8% | 34% | +97 |
+| nothing | 9% | | −419 | 4% | | −443 |
+
+People's commonest kind is one knockdown in five and their mix is 3.14 bits; the agent's
+is one in three and 2.89 bits. The kind the planner draws most loses HP on average
+(against seven of the eleven); the landing lows, people's best, are a twentieth of its
+okizeme.
+
+**Why: the copies' riser does not look.** Its two guard answers are a crouching guard
+and a standing guard held whatever the agent does, in the shares the opponent's guards
+have shown over a prior of 0.8 crouching. So on the copies an overhead off a jump hits
+four times in five and a low after landing is guarded four times in five. People guard
+by sight (the replays, the first touch of an attack on a defender on the ground): of
+their guards against an attack from the air 95% stand (Ayu's opponents; 82% Ayu's own),
+of those against one from the ground 92% crouch (87%). The 0.8 was every guard counted
+together. An overhead off a jump is guarded by nearly everyone who is guarding at all;
+what opens a guard is the height changed faster than it is seen: the low on landing.
+
+**`okiplan`'s option `sight`** (0: as before; N: `tests/test_okiplan.py`): the riser's
+'crouch' answer guards by what it saw of the agent N steps ago, standing against one in
+the air and crouching otherwise; the 'stand' answer (a standing guard throughout) is 8%
+of its guards, whatever its guards showed (`SIGHT_STAND`; from the two shares above:
+87% by sight, 8% standing, 5% crouching, the last left out). With N = 14, the reaction
+the agent itself has, a low within 14 steps of landing finds the riser standing and an
+overhead within 14 steps of leaving the ground finds it crouching. The pressure planner
+has the same option (`pressplan`'s `sight`: a guarding player looks too).
+
+**First measure** (round 18's policy with the file's four modules in Python, 64 seeded
+matches an opponent; `pyall2` without, `pysight` with `sight=14`):
+
+| | wins (own HP lost) | HP a knockdown is worth | its okizeme hits first | jump, then high | landing lows (jump or flight, then low) | lows / highs | mix |
+|---|---|---|---|---|---|---|---|
+| Ikumi's `exploiter18`, without | 68.8% (72%) | −21 | 20% | 36% | 3% | 17% / 61% | 2.80 bits |
+| ... with `sight` | **82.8% (63%)** | **+78** | **38%** | 8% | **30%** (hit 67%: +865 and +946) | 48% / 20% | 3.08 bits |
+| Nanase's, without | 89.1% (61%) | −476 | 25% | 36% | 7% | 26% / 58% | 2.78 bits |
+| ... with `sight` | **96.9% (62%)** | −538 | 30% | 29% | 11% | 31% / 45% | 2.91 bits |
+
+Fourteen and eight points on the two (64 matches each: about two standard errors and
+one), the landing lows hitting two times in three against Ikumi's, and the combo damage
+a minute up by a fifth there (7,402 for 6,050). Against Nanase's the okizeme still loses
+HP: that opponent reverses, which is `bait`'s side. The rest of the measure is through
+the game's own code, below.
+
+**In the game** (`port/agent/mix.h`, `mix.cpp`; `okiplan:2`, `pressplan:2`). The keys
+`oki_sight`, `oki_bait` and `press_sight`; a play keeps what the opponent has seen of the
+agent (in the air or not, a frame each) and whether the opponent's own move came out.
+A file says `okiplan:2` or `pressplan:2` only when it uses one of them, so a file
+without is one a game of the first version still loads, and that game refuses a file
+that needs them rather than reading past the keys. `export_agent.py --okizeme-option
+sight=14`, `bait=600`, `--pressure-option sight=14`. `tests.test_agents`: the game's
+plans are `okiplan.py`'s and `pressplan.py`'s with the options on (worths, who hit
+first, the mix; seven and five settings). Three files of round 18's policy for the
+measure: `round18s` (the okizeme by sight), `round18sb` (and the bait at 600),
+`round18sp` (the okizeme and the pressure by sight); against the eleven `exploiter18`s:
+
+| through the game's code, 64 matches each | Sayuri | EX Nanase | Mayu | Nanase | Kaori | Mishio | Ikumi | Nayuki | Kano | Mizuka | Makoto | all |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `round18` | 84 | 91 | 94 | 86 | 98 | 100 | 81 | 45 | 81 | 95 | 92 | 86.2% (own HP lost 62%) |
+| `round18s` | 95 | 98 | 98 | 88 | 92 | 92 | 89 | 58 | 83 | 97 | 94 | **89.5%** (55%) |
+
+Three points and a ninth less HP lost, ahead or level against nine of the eleven. The
+bait (`round18sb`: Nanase's 91, Ikumi's 88, Nayuki's 56) and the pressure by sight
+(`round18sp`: 91, 89, 53) are the same as `round18s` on the three measured (78.1% and
+77.6% for 78.1%): not kept on, and their other jobs were dropped.
+
+## The games of 18 November: `round18` in the game, and where the HP goes
+
+The user's session of 18 November (`efz-session-20261118-213601-4cd2.zip`, 14 matches
+with `round18` against Mio, Mishio, Ikumi, Shiori, Mizuka and Sayuri, all replayed frame
+for frame), beside the session of 16 November with `round17c` (23 matches). The user's
+words: "I feel it's weaker than 17c"; pressure more varied but more conservative, "I can
+easily get out from corners"; combos worse, "unnecessary ICs in mid screen", the ending
+"doesn't stop me from getting away"; the air "is becoming a real threat now"; against
+Mizuka "its behavior becomes random at the end of the round"; "it's not calculating
+what'd be the outcome if that doesn't work"; and: "we are dropping into another local
+optima other than the previous one".
+
+**The result did not move.** `round18` won 4 of 14 matches and 13 of 35 rounds;
+`round17c` 7 of 23 and 19 of 53: 29% and 30% of the matches, 37% and 36% of the rounds,
+while the same step was +4.7 points against the `exploiter18`s (81.5% to 86.2%).
+
+**The user's points, counted** (`h1118.py`, `ic_use.py` of the session's scratch):
+
+| | `round17c`, 16 Nov | `round18`, 18 Nov |
+|---|---|---|
+| a corner hold: seconds, HP dealt / lost in it | 4.1 s, 867 / 240 | 3.6 s, 643 / 298 |
+| ... ended by the agent being hit away | 33% | 40% |
+| after a guarded move with the advantage: its next attack hits / the pressure is lost | 25% / 17% | 15% / 19% |
+| ... at a small disadvantage: the pressure is lost | 30% | 54% |
+| combo damage on average, hits | 1,263, 5.3 | 1,200, 4.5 |
+| mid-screen Instant Charges inside a combo: HP the combo makes after it; nothing after it | 959; 19% | 471; 41% |
+| big combos that end in the user's air recovery | 41% | 33% |
+| okizeme: HP a knockdown, the agent / the user hits first | +234, 38% / 25% | +173, 32% / 35% |
+| air exchanges a minute, won / lost | 0.80 / 1.93 | 1.08 / 1.46 |
+| frontal jump-ins that hit it | 43% | 36% |
+
+Each of the five has its number: the pressure lets go more and holds the corner less,
+the mid-screen charge buys half of what it did, the air is better.
+
+**Where the HP goes** (`account3.py`: each loss of HP by what the loser was doing when
+it began, a minute; people's Ayu are the 1,908 matches of the community's replays):
+
+| the agent loses HP | to the user, `round17c` | to the user, `round18` | people's Ayu lose |
+|---|---|---|---|
+| **in the air, attacking** | **2,587 (2.00 times)** | **2,508 (1.91)** | **1,161 (1.22)** |
+| in a move, in neutral | 1,363 | 1,330 | 1,177 |
+| free on the ground | 1,368 | 753 | 1,050 |
+| in the air, not attacking | 973 | 676 | 862 |
+| rising (with a move, or not acting) | 885 | 1,018 | 638 |
+| opened after guarding | 519 | 488 | 938 |
+| in a move after guarding | 387 | 527 | 438 |
+| its move guarded, then punished | 150 | 429 | 441 |
+| thrown in the air | 92 | 361 | 133 |
+| all | 8,811 | 8,505 | 7,429 |
+
+- The agent deals the user 6,725 and 6,832 HP a minute in combos; people's Ayu deal
+  their opponents 6,796 on average. That average is no bar (the goal, at the top): it
+  is twelve players from 0% to 72% of their matches won. The ones who win:
+
+  | (`people_ledger.py`, `people-ledger.json`) | deals a minute | loses a minute | hit attacking in the air: HP a minute (times), of it from the open |
+  |---|---|---|---|
+  | the Ayu player with the most matches (487, 72% won) | 8,480 | 6,049 | 1,056 (1.25), 468 |
+  | the next (120, 65% won) | 7,822 | 6,662 | 924 (1.06), 515 |
+  | all 1,908 matches (44% won) | 6,929 | 7,428 | 1,161 (1.22), 609 |
+  | the three who win under 5% | 4,100 to 4,700 | 8,700 to 11,300 | 1,650 to 2,320 (1.8 to 2.2) |
+  | Ayu players against the strongest opponent of the collection (534 matches, 13% won) | 5,278 | 9,108 | 1,523 (1.66), 825 |
+  | the agent against the user, `round17c` | 6,856 | 8,704 | 2,570 (1.98), 1,779 |
+  | the agent against the user, `round18` | 7,043 | 8,403 | 2,466 (1.85), 1,336 |
+
+  The bar: the strongest Ayu player is 2,400 a minute ahead of the opposition they met;
+  the agent is 1,400 to 1,800 behind against the user. Against an opponent of the
+  user's kind (the collection's strongest wins 87% of 534 matches against Ayu players)
+  the collection's Ayu players do worse than the agent does, so it is above them and
+  both sides of its ledger are still short of the bar: the offence by a fifth to a
+  quarter, the defence by 2,400 a minute, of which the air is the largest part.
+- It loses 1,100 a minute more than people's Ayu do, and one line is more than all of
+  that: hit while attacking in the air, twice a minute for 1,300 each where people are
+  hit 1.2 times for 950. Under pressure it loses half of what people do.
+- That line by situation (`airloss.py`): half in the open (1,343 to 1,891 a minute: a
+  jump-in from 120 to 250 pixels or closer, met by a normal from the ground or in the
+  air), 420 to 440 in its okizeme, 300 to 660 in its pressure, 210 to 320 on a combo
+  that dropped.
+- The league does not charge for it: the `exploiter18`s hit `round18` in the air 2.3
+  times a minute and the `crowd` set 1.7 times, the user 3.8 to 4.4, and people's Ayu
+  are hit 2.6 times. So a round can gain against the league, as this one did, and
+  change nothing here.
+
+**Netted, it is not one line** (`tactics.exchanges`, `evaluate.py`'s `net_ledger`, added
+the same night: every loss of HP of either player by the situation it began in, from the
+agent's side, so that what a situation costs is set against what it brings; HP a
+minute, net with what was gained and lost):
+
+| | the agent against the user, `round17c` | ... `round18` | the strongest Ayu player of the replays (487 matches, 72% won) | Ayu players against the strongest opponent of the replays (534, 13% won) |
+|---|---|---|---|---|
+| its okizeme (the opponent rising) | +926 | +684 (1,348 − 664) | +1,165 | −10 |
+| the opponent's okizeme (its own rising) | −345 | **−877** (1,077 − 1,954) | +219 | −793 |
+| its pressure (the opponent guarded just before) | +100 | **−547** (962 − 1,509) | +492 | −455 |
+| the opponent's pressure | −369 | −379 | +86 | −1,054 |
+| it came by air | −819 | **−652** (1,217 − 1,869) | −77 | −840 |
+| the opponent came by air | −241 | +429 | +556 | +47 |
+| both in the air | −934 | −267 | +114 | −288 |
+| on the ground | −306 | +147 | −123 | −438 |
+| **all** | **−1,987** | **−1,464** | **+2,431** | **−3,830** |
+
+- The first reading above ("one line is more than all of the deficit") counted the cost
+  of the air and not what it brings, and compared with an average: wrong twice. Netted
+  and against the bar, `round18` is behind in six of the eight situations, most on its
+  own rising (1,100 a minute under the strongest Ayu player's), in its own pressure
+  (1,040 under: it loses more than it gains while it presses, which is the user's first
+  point exactly, and it was +100 with `round17c`), coming in by air (575), in its
+  okizeme (480) and under pressure (465).
+- What did improve from `round17c` is what the user named: the opponent coming by air
+  (−241 to +429) and the air-to-air (−934 to −267). What got worse: its own rising and
+  its own pressure.
+- Against an opponent of the user's strength the collection's Ayu players lose 3,830 a
+  minute, in the same places (their rising, their pressure, coming by air, under
+  pressure); the agent loses 1,464. To beat such a player the total has to be above
+  zero against them, not level with anyone's.
+
+**The local optimum, as the numbers put it.** Two loops have been run: the league
+trains the policy against opponents made from the agent, and the planners decide what
+follows once the agent has touched the opponent (a hit, a knockdown, a guarded move, a
+recovery). The games against a person are decided before that, by who touches first in
+the open, and there the policy plays alone, without a look ahead and without what it
+saw earlier in the match, against a league that does not punish its approach. Both
+loops can go on improving their own measures without the result moving. What follows
+from it is in the next round's plan, not yet written: the measure a round is judged by
+(the net ledger against the strongest players' and the user's, not the wins against the
+league), opponents that punish by line as the strongest players do or harder, and the
+lines in the order the net ledger gives them: its own rising, its own pressure, the
+approach by air.
+
+### Its own rising against an attacker who is on it (18 November, night)
+
+The net ledger's largest gap to the bar is the agent's own rising. By the knockdown
+(`tactics.wakeup`, in every evaluation's `wakeup`: the HP the attacker gains less what it
+loses in the three seconds after the rise, and the riser's first choice):
+
+| the riser | knockdowns a minute | HP a knockdown, for the attacker | a move of the attacker's is out as it rises | guards | an invincible move | another move | jumps |
+|---|---|---|---|---|---|---|---|
+| the agent against the user, `round17c` | 4.56 | +248 | 72% | 25% (+265) | 24% (−70) | 31% (+485) | 17% (+146) |
+| ... `round18` | 4.78 | **+302** | 75% | 33% (+372) | 28% (+126) | 20% (+636) | 16% (−38) |
+| the strongest Ayu player of the replays | 3.28 | **+13** | 58% | 53% (+112) | 13% (−486) | 18% (−104) | 11% (+131) |
+| Ayu players against the strongest opponent | 5.00 | +71 | 57% | 53% (+182) | 9% (−411) | 25% (−35) | 7% (+13) |
+| all Ayu players of the replays | 3.86 | +51 | 56% | 56% (+168) | 10% (−527) | 19% (−86) | 10% (+24) |
+| `round18` against the eleven `exploiter18`s | 4.08 | **+27** | 16-36% for eight of them | 11-35% | 15-34% | 20-38% | 12-55% |
+
+290 HP a knockdown over the strongest player's, 4.8 times a minute: about 1,400 HP a
+minute, the size of the whole deficit against the user (−1,464). And the league does not
+see it: its opponents leave the rising alone (a move out on 16-36% of the agent's
+knockdowns for eight of the eleven, and +27 a knockdown over all), so the agent's
+wake-up habits were learned where a move on rising wins. The exceptions say the same:
+Kano's `exploiter18` is on it (70%) and takes +322 a knockdown (the agent's guard +482,
+its jump +233); the `crowd` profile's scripted jump-in, one knockdown in five, hits the
+rising agent 35-55% of the times against the eight `exploiter15`s, in matches it wins
+89-100%.
+
+What it loses to, in the user's games with `round18` (173 knockdowns; `risedetail.py`,
+`riseguard.py` in the scratch folder, by what the agent could see 14 steps before it
+rose):
+
+- **The user on it (129, 75%): +427 a knockdown; not on it (44): −65.** Its guard there
+  +404, an invincible move +292, another move +697 (236B: 7 times, hit every time, 963
+  each; 623B: 8 times, 935 each).
+- **The attacker close and in the air (56, a third): +540.** It guards 34% of them and
+  loses 742 doing it. Of the 26 air attacks that hit it rising, the attacker was in the
+  air in its own late view for 25, at a median of 5.5 steps after the rise; it held a
+  standing guard under 7 of them, a crouching one under 4, up under 4, nothing or forward
+  under 11, and had pressed a button in the last 12 steps under 14. `round17c`: 31 air
+  attacks, 29 in view, a standing guard under 2.
+- **Its invincible moves** come out on 28% of its risings and hit first 19% of the times
+  (the attacker first 40%); the strongest player's on 13%, first 54% (the attacker 16%).
+
+So three things, by size: moves into a meaty (about 145 HP a knockdown over the strongest
+player's), invincible moves that are read or late (100), and a guard that is not held (65).
+None needs a read to fix at the first step: an attacker in the air above a rising player
+is guarded standing, and it is in view.
+
+**The guard by sight** (`rise.py`, `guard=true`; `tests.test_rise`, 8 tests). A rising
+on which the agent sees the attacker on it (while it sees itself down: the attacker in a
+move of its own, or within 130 pixels, or in the air within 200) is guarded through with
+the probability two accounts of the match give (`met_move`, `met_still`: the risings the
+attacker was on, with a move of the agent's own and without; priors −300 and −150 over
+four risings: 88% guarded at a match's start, its own play back when the guard is what
+gets opened, 4% after two guards opened for a combo each). The guard is held by sight:
+standing while it sees the attacker in the air, else its own play's guard, else
+crouching; no button, no jump. It covers what the agent's delay covers: the rising and
+the first 14 steps after it.
+
+**Measured** (64 matches each; `pyall2` and `pyrise4` in Python, `round18s` and
+`round18r` through the game's code; wins, own HP lost, and the HP a knockdown is worth
+to the attacker; a new profile `crowdj` is the `crowd` profile jumping in on nine
+knockdowns in ten):
+
+| | without | with the guard | hold=40 | game: without | game: with |
+|---|---|---|---|---|---|
+| Kano's `exploiter18` (on it 70%) | 73.4% (68%) +272 | 84.4% (62%) +306 | 82.8% (66%) +326 | 82.8% (59%) +272 | 92.2% (61%) +361 |
+| Mishio's `exploiter15`, `crowdj` | 92.2% (51%) +105 | 100% (42%) +96 | 98.4% (51%) +164 | 100% (46%) +53 | 98.4% (45%) +65 |
+| Sayuri's `exploiter15`, `crowdj` | 79.7% (63%) +113 | 87.5% (63%) +164 | | | |
+| Ikumi's `exploiter18` (on it 18%; throws) | 68.8% (72%) −51 | 64.1% (74%) −20 | 82.8% (68%) −3 | 89.1% (51%) −182 | 79.7% (65%) −53 |
+| EX Nanase's | 95.3% (56%) −7 | 95.3% (54%) +84 | | | |
+| Kaori's | 93.8% (63%) +10 | 93.8% (58%) +25 | | | |
+
+- Against the attackers that are on it the wins go up 8 to 11 points, in Python and in
+  the game; against the scripted jump-in the guard's own worth goes from +548 to +95 a
+  knockdown (Mishio's) and +325 to +195 (Sayuri's), and the highs that hit from 48% to
+  35-39%.
+- **The guard itself holds**: with it always on (a debug run, Sayuri's `crowdj`, 131
+  risings guarded through) 4 were hit while it was held: one thrown, one by a low after
+  the landing, two in a string. What hits afterwards is the pressure that follows, 14
+  steps after the rising and on, where its own play presses again: the guarded risings
+  are still hit first 28% of the times over the next 96 steps.
+- **"Near" was too wide.** With `near` at 130 pixels every rising against Ikumi's was one
+  the attacker was "on" (it stands close, to throw), the guard was held through them,
+  and the wins fell 9 points in the game (5 in Python): the policy's own answers there (a
+  jump, 33% of its risings at −48; a move, −206) are the right ones. `near` is 0 now:
+  on it means in a move, or in the air within 200 pixels. Measured again (`round18r2`).
+- The hold (`hold=40`: the guard goes on while the attacker's string does) is level
+  with the plain guard on three opponents (88.0% for 82.8%, carried by Ikumi's alone):
+  left off.
+- **The accounts were split the wrong way.** `near` at 0 did not bring Ikumi's back
+  (`round18r2`: 82.8% for 89.1%, own HP lost 64% for 51%): that opponent is in a move or
+  in the air on 88% of the risings too, and the agent's own answer to it, a jump away (a
+  third of its risings, 429 HP ahead each), is worth far more than a guard (+36 for the
+  attacker). The accounts should have found that within a match and did not: they
+  compared the risings with a move of the agent's own against all the others, so the
+  jump's wins were counted beside the guard's and the guard went on at 79%. They are now
+  what the draw decides between: the risings left to its own play, whatever it did
+  (`met_own`), and those the module guarded through (`met_guard`), with a prior that
+  counts as two risings. `round18r3`, `round18k2`.
+- The HP a knockdown is worth does not fall against the trained opponents, though the
+  wins rise: there the policy's own mix of answers was already matched to each opponent,
+  and a held guard gives up the rising's own counter-hits. The gain is where the
+  attacker's move is what hits a rising that is doing something else: the scripted
+  jump-in, and the user's games.
+
+**The accounts of HP say nothing in time** (19 November; `round18r3`: the guard with the
+corrected accounts; `round18k2`: with `risk` as well; through the game's code, 64 matches
+each, wins and own HP lost):
+
+| | `round18s` | `round18r3` | `round18k2` |
+|---|---|---|---|
+| Sayuri's `exploiter18` | 95.3% (51%) | 90.6% (59%) | 95.3% (56%) |
+| EX Nanase's | 98.4% (48%) | 96.9% (47%) | 96.9% (48%) |
+| Mayu's | 98.4% (55%) | 100% (47%) | 92.2% (54%) |
+| Nanase's | 87.5% (57%) | 89.1% (62%) | 98.4% (56%) |
+| Kaori's | 92.2% (55%) | 92.2% (55%) | 93.8% (56%) |
+| Mishio's | 92.2% (57%) | 95.3% (52%) | 96.9% (57%) |
+| Ikumi's | 89.1% (51%) | 85.9% (61%) | 84.4% (64%) |
+| Nayuki's (awake) | 57.8% (80%) | 60.9% (77%) | 57.8% (78%) |
+| Kano's | 82.8% (59%) | 84.4% (59%) | 87.5% (58%) |
+| Mizuka's | 96.9% (48%) | 98.4% (47%) | 98.4% (44%) |
+| Makoto's | 93.8% (47%) | 100% (45%) | 96.9% (44%) |
+| **the eleven** | **89.5% (55%)** | **90.3% (56%)** | **90.8% (56%)** |
+| Mishio's `exploiter15`, `crowdj` | 100% (46%) | 100% (42%) | 100% (46%) |
+| Sayuri's `exploiter15`, `crowdj` | 84.4% (68%) | 81.2% (66%) | 81.2% (65%) |
+
+Level, all three; the league does not tell them apart. What it does show:
+
+- The sight works. The high attacks at its rising that hit: Sayuri's `crowdj` 53% of 412
+  to 36-38%, Ikumi's 56% to 33-42%, Mayu's 29% to 17%, Sayuri's 30% to 23%.
+- The accounts did not adapt. Against Ikumi's the module's own accounts had its own play
+  232 HP ahead a rising and the guard 4 ahead, and it still guarded 70% of them: about
+  eleven risings a match, a thousand HP either way each, a prior that starts at 88%
+  guarded so that the other account is hardly ever fed. Against Kano's the guard loses
+  394 a rising, as much as before, and was held at 68-75%.
+- **"The attacker on it" is nearly every knockdown.** 704 of 804 against Ikumi's, 451 of
+  459 against Kano's, 786 of 810 against Sayuri's: the move that knocked it down is a
+  move of the attacker's, seen while it is down. The measure that tells the opponents
+  apart is the one this section began with, a move of the attacker's out *as the agent
+  rises*: 18% Ikumi's, 23% Nanase's, 30% Sayuri's, 34% Mayu's, 55-63% the two `crowdj`,
+  71% Kano's, 75% the user, 56% the community's replays. Where it is low the guard
+  costs (own HP lost: Ikumi's 51% to 61-64%, Sayuri's 51% to 56-59%), where it is
+  high it is level or ahead.
+
+**The read of the attacker** (19 November; `round18r4`: the guard; `round18k3`: with
+`risk`). The accounts of HP are gone. The guard's probability is read from what the
+match has shown of this attacker: the share of the risings the agent has seen in it at
+which the attacker was in a move of its own as the agent saw itself up (what the agent
+did then, and what it cost, has no part in it), over the community's 0.56 counting as
+two risings; none are guarded at 0.3, all at 0.6, in a line between. 87% at a match's
+start; after one rising left alone 24%, after two none; all against an attacker who is
+there each time; kept into the next match at 0.7. Through the game's code:
+
+| | a move out as it rises | the module's read | risings guarded | `round18s` | `round18r4` | `round18k3` |
+|---|---|---|---|---|---|---|
+| Ikumi's `exploiter18` | 18% | 19% | 21% | 89.1% (51%) | 92.2% (62%) | 93.8% (60%) |
+| Makoto's | 24% | 24% | 32% | 93.8% (47%) | | 98.4% (42%) |
+| Nanase's | 24% | 25% | 44% | 87.5% (57%) | 92.2% (62%) | 95.3% (56%) |
+| Kaori's | 24% | 25% | 36% | 92.2% (55%) | | 95.3% (52%) |
+| Nayuki's (awake) | 24% | 25% | 31% | 57.8% (80%) | | 43.8% (82%) |
+| Mishio's | 33% | 33% | 47% | 92.2% (57%) | | 92.2% (54%) |
+| Sayuri's | 36% | 37% | 49% | 95.3% (51%) | 95.3% (57%) | 93.8% (55%) |
+| Mayu's | 36% | 39% | 52% | 98.4% (55%) | 93.8% (50%) | 98.4% (50%) |
+| EX Nanase's | 49% | 50% | 70% | 98.4% (48%) | | 96.9% (46%) |
+| Mizuka's | 57% | 57% | 74% | 96.9% (48%) | | 100% (44%) |
+| Kano's | 65% | 65% | 86% | 82.8% (59%) | 87.5% (60%) | 92.2% (60%) |
+| **the eleven** | | | | **89.5% (55.3%)** | | **90.9% (54.6%)** |
+| Mishio's `exploiter15`, `crowdj` | 54% | 54% | 75% | 100% (46%) | 100% (45%) | 100% (45%) |
+| Sayuri's `exploiter15`, `crowdj` | 63% | 63% | 86% | 84.4% (68%) | 81.2% (69%) | 87.5% (62%) |
+
+- The read is the measure (the module's count against `evaluate.py`'s, within three
+  points for every opponent), and the guard follows it: one rising in five against
+  Ikumi's, six in seven against Kano's and the scripted jump-in.
+- Level in the league again (90.9% for 89.5%, own HP lost 54.6% for 55.3%; the earlier
+  builds 90.3% and 90.8% at 56%): a league whose opponents were trained against this
+  agent's own risings has little to give a guard. Ikumi's is back (93.8% for 84-86%);
+  its own HP lost there stays at 60%, as in every build with the guard, at the same
+  damage taken a minute (4,839 for 4,802): what it gives up is its own damage (7,676 a
+  minute for 8,802, 4.7 combos a minute for 5.2), the risings it used to win against an
+  attacker coming to throw, and the matches last longer. Nayuki's is 43.8% for 57.8%
+  (the Python stack without either module: 43.8%; 64 matches near an even pairing).
+- What the league cannot show is what it was built for: an attacker in a move at three
+  risings in four, with high attacks that hit a rising that is doing something else.
+  That is the user's play and the strongest replay players', and the next games.
+
+**In the game** (`port/agent/policy.h`'s `Rise`, `policy.cpp`'s `RiseWatch` and
+`RiseAct`; the module `rise:1`, keys `rise_prior`, `rise_meaty`, `rise_low`, `rise_high`,
+`rise_near`, `rise_fly`, `rise_decay`). The guard and its read only (not the super's
+draw, which measured nothing), with the counts kept from match to match at 0.7 as
+`carry=true` keeps them (once a match: the game resets an agent at a fight's end and at
+the next one's start). `export_agent.py --rise`
+(`--rise-option KEY=VALUE`); a file packed from another keeps it (`--keep`). The log
+says what it did ("P1's risings: ..."). `tests.test_agents.RiseAsRisePy`: from the same
+views the guard is held on the same steps (standing under an attacker in the air), its
+own play elsewhere, and the read gives the same probability as `rise.py`'s after
+each rising and into the next match. `efz_env_agent_rise_stats`,
+`efz_env_agent_next_match` (`NativeAgent.next_match()`: a new match against the same
+opponent for an agent that is not attached; `reset()` there starts it afresh). The files:
+`round18r4` is `round18s` (the okizeme by sight) with `rise`, `round18k3` with `rise` and
+`risk` (`round18r`, `r2`, `r3`, `k`, `k2`: the builds before, above). `round18k3` and
+`round18k4` (the same with `risk_ahead`, below: the one to play) are in `~/dev/efz/tmp`
+as `agent-league18-s2-round18k3.efzagent` and `...-round18k4.efzagent` (modules
+`okiplan:2`, `rise:1`, `risk:1`: they need a game built from this code).
+
+### The raw moves: the whole of the deficit (19 November)
+
+`evaluate.py`'s `risks` (a raw special: not a combo's piece; its HP on net a use), with
+236A and 236B added to it (`tactics.RISKY`: they were never measured), HP a minute as
+uses a minute times the net of one:
+
+| raw move | the agent against the user, `round18` | ... `round17c` | the strongest Ayu player of the replays | Ayu players against the strongest opponent |
+|---|---|---|---|---|
+| 623B | 0.64 × −644 = **−412** | 0.50 × −627 = −314 | 0.17 × −326 = −55 | 0.51 × −270 |
+| 236236, level one | 1.13 × −367 = **−415** (nine in ten on rising) | 0.92 × −569 = −523 | 0.16 × −232 = −37 (one in fourteen on rising) | 0.19 × +21 |
+| 236B | 0.78 × −402 = **−314** (`move_use.py`: 13 of 27 whiff at −969, 6 guarded at −503) | 0.59 × −591 = −349 | 0.14 × −131 = −18 | 0.48 × −264 |
+| 623C | 0.19 × −898 = −171 | 0.25 × +85 | 0.11 × +580 = +64 | 0.25 × +144 |
+| 623A | 0.22 × −672 = −148 | 0.19 × +118 | 0.25 × −180 = −45 | 0.40 × −197 |
+| 236C | 1.19 × +11 = +13 | 1.01 × +294 = +297 | 0.59 × +333 = +196 | 0.47 × +129 |
+| 641236A | 0.47 × −49 = −23 | 0.34 × −46 | 0.15 × +195 = +29 | 0.14 × +188 |
+| **all raw specials** | **about −1,470** | about −900 | **about +150** | |
+
+The agent's whole deficit against the user (−1,464 a minute) is the size of what its raw
+specials lose. The strongest player has the same moves and uses the losing ones four to
+seven times less often. Two of the three largest are wake-up moves, which the guard by
+sight takes; the third, 236B thrown in the open, belongs to no situation the planners
+cover. (What the pressure tables called "0x107 guarded" is this too: 0x107 is the end of
+236A/B/C on contact, `src/efz.h`'s `k236End`, not a follow-up; `who.py`, a module that
+only counts, has every one of them started by the policy's own play, not by a planner.)
+This is the user's "risk management" (17 November) and "it's not calculating what'd be
+the outcome if that doesn't work" (18 November) as a number.
+
+**`risk`** (`risk.py`, `tests/test_risk.py`; Python). The last of the modules: a step no
+planner took is its own play's, drawn by this module. When that action presses a button
+and the agent does not see its opponent in a hit reaction, the press is tried on a copy
+of the game as it is, the opponent pressing nothing: the press, then ten frames of
+nothing (fifty while the agent is down), and the first action the agent was not in
+already. Which move its own hands are about to start is its own knowledge, not the
+opponent's; one frame shows a special started from standing (`risk_probe.py`), but the
+game keeps a press made during a move, or while rising, and plays it later: the first
+build looked one frame ahead, stopped 31 of 31 presses that started 623B at once against
+Kano's `exploiter18`, and the match's record still had 21 raw 623B. If what starts is a
+move with an account, the account decides. An account: the mean HP swing over 180 steps of the times
+the move was let out in this match, over a prior of four uses at the strongest player's
+HP a raw use (the column above); the press is stopped (the same direction, no button)
+with the probability 1 / (1 + exp(worth / 75)): 623B 99 times in 100 at a match's start,
+the level-one super 96, 623A 92, 236B and 236A 85, 236C 1, 623C and the 641236 supers
+almost never. A move that hits in this match comes back; one that is punished goes (236C
+after one that cost a combo: half; after two: 94 in 100). With it `rise` runs `plain`
+(the guard alone; the super's account is `risk`'s). First eight matches against Nanase's
+`exploiter18`: 11 of 14 raw 236B stopped, 4 of 4 level-one supers, 623B and 623A; 15 of
+19 236C and every 641236 let out. A combo it has seen is let through whatever the game
+is now (its own late view, as everything it decides by).
+
+**In the game** (`port/agent/policy.h`'s `Risk`; `Player::SetRisk`, `RiskStarts`,
+`RiskAct`, `RiskWatch`; the module `risk:1`, keys `risk_prior`, `risk_temperature`,
+`risk_window`, `risk_look`, `risk_look_down`, `risk_decay` and `risk_moves`, a list of
+action:prior). The look is made on the fight itself through the planners' `World` (saved,
+the press and the frames after it played, put back: a millisecond for ten frames), on
+the steps that are its own play's and not the guard on rising's. `export_agent.py --risk`
+(`--risk-option 623B=-326`, `look=10`, ...), kept by `--keep` when a file is packed from
+another. `tests.test_agents.RiskAsRiskPy`: from the same game the same move started (or
+none) by seven presses at every step of 236, 623, 236236 and 641236, the game left as it
+was; a press the game keeps inside a normal is found by both; the same probability at
+the priors. `efz_env_agent_risk_starts`, `efz_env_agent_risk_stats`,
+`efz_env_agent_modules` (a file's modules whole: the info structure holds 63 characters,
+and a file with every module is past that). The file `round18k`: `round18s` with `rise`
+and `risk`. A first eight matches through the game's code against Kano's: 25 presses
+drawn for, 8 stopped, and no raw 623B, 236B or level-one super in the record.
+
+**In the league** (`raw_table.py`: the eleven `exploiter18`s, 704 matches a file, through
+the game's code; raw uses a match × the net HP of one; `round18r3` is the same file
+without `risk`):
+
+| raw move | `round18r3` | `round18k2`, with `risk` |
+|---|---|---|
+| 623B | 0.22 × −102 = −22 | 0.06 × −194 = −11 |
+| 623A | 0.15 × −275 = −42 | 0.08 × −327 = −27 |
+| 236236, level one | 0.40 × −662 = −267 | 0.12 × −929 = −111 |
+| 236B | 0.88 × −295 = −258 | 0.34 × −366 = −125 |
+| 236A | 1.24 × −200 = −248 | 1.14 × −270 = −307 |
+| 236C | 2.12 × +296 = +627 | 2.09 × +297 = +621 |
+| 623C | 0.34 × +40 = +13 | 0.30 × +43 = +13 |
+| 641236A/B/C | 0.37 a match: +117 | 0.44: +188 |
+| 236236, levels two and three | 0.18: +117 | 0.21: +118 |
+| **all** | **+36 a match** | **+359 a match** |
+
+The moves it stops are a quarter to a third as frequent (623B, the level-one super,
+236B), the ones that pay are untouched, and the wins are level (90.3% and 90.8%, above):
+320 HP a match that the league's win rate does not see. Against the user the same moves
+were the whole deficit.
+
+What it does not reach, and why (`who.py` on sixteen matches against Mishio's
+`exploiter18`, `round18k2`'s modules in Python): of 20 raw 236A and 236B on a guard, 15
+were played by the pressure planner, not by the policy's own steps. Not as its options:
+they are the agent's own inputs for the 14 steps between a contact on a guard and its
+seeing it, which the live plan draws at once and plays itself ("what it would have
+pressed anyway": a normal cancelled into the special before it knows the normal was
+guarded), so `risk`, which draws the steps no planner took, never sees them. A first
+try at the planner's side (its guarding answers punishing a special they guarded:
+`punish`, Python, taken out again) changed nothing, for the same reason: 11 for 12.
+
+**The inputs chosen ahead** (`risk_ahead`, the game's code; `export_agent.py
+--risk-option ahead=1`; `round18k4`). The inputs of its own play that a planner chooses
+ahead (the routes' at a hit, the okizeme's at a knockdown, the pressure's at a contact on
+a guard, the catch's) are now drawn for as they are played, as any step of its own play
+is: every one of them, whatever the contact was, since the agent has not seen it (drawn
+for only after a guard it would be a confirm inside the 14 frames; before this they were
+drawn for only where nothing had touched, which was one too). A plan made from an input
+that is then left out finds the game elsewhere and is dropped. Over the eleven
+`exploiter18`s (`round18k3` to `round18k4`): raw 236A 1.04 a match to 0.49 (−261 HP a
+match to −142), all raw specials +280 a match to +377, presses drawn for 3,741 to 4,408
+and stopped 1,504 to 2,052; its combos as many and as long (6.13 and 6.15 a minute, 1,529
+and 1,522 HP each); wins 91.6% (own HP lost 55.1%) for 90.9% (54.6%), 100% (42%) and
+85.9% (69%) against the two `crowdj`. Raw 236B does not move (0.34 a match to 0.32, −407 and
+−453 each): those are not its own inputs but the plans' (people's follow-ups that end in
+236B, against a guarding player that never punishes on the copies; the `punish` try
+above did not change the choice, and why not is open: a 2A may not reach after it). Not
+in Python (`risk.py` draws the steps no module took); the file's key is tested, the
+behaviour only by the measure above.
+
+## Round 20: the plan (19 November; proposed, not started)
+
+The goal is an agent that beats the best players within a person's limits; the bar is the
+strongest replay players and the user's games, never the league's average. Three rounds
+of results say the same thing about the league: its win rate no longer tells builds apart
+(86-92% over the eleven `exploiter18`s for every build since round 18, two more seeds of
+round 19 included), while the measures taken from a person's games move by whole
+deficits. So round 20 is judged by those measures and trains against opponents that make
+them matter.
+
+**Judged by** (each beside the strongest replay player's row and the last games against
+the user; a build is taken when none is worse and one is better by more than its noise):
+
+1. the HP a knockdown of its own is worth to the attacker (`wakeup`: +302 against the
+   user, +13 for the strongest player), by how often the attacker is in a move as it
+   rises;
+2. its raw specials, HP a minute (`risks`: −1,470 against the user, +150 for the
+   strongest player);
+3. its guarded strings: what a guarded move of its own leads to (`exchanges`: its next
+   attack hits 15% for 27%, punishable 26% for 15%), with the raw 236B the plans end on;
+4. the corner: escapes allowed (`escapes`) and the HP a combo's end leaves on the table;
+5. wins and own HP lost over the eleven and the `crowd` sets, as a floor only.
+
+**Opponents that make them matter** (the league's own exploiters leave its rising alone
+on two knockdowns in three and punish half of what a person punishes):
+
+- `crowdj` (jumps in on its rising) and Kano's `exploiter18` kept in every set;
+- a punishing profile for the scripted opponents: after guarding a special, the largest
+  combo that reaches (the routes' planner on its side), so that a guarded 236B costs in
+  the league what it costs against a person;
+- exploiters trained against the agent *with its modules on* (`round18k4` through the
+  game's code as the frozen opponent), which the last ones were not: they found the
+  wake-up habits the modules now cover.
+
+**The work, in the order of what the user's games lost** (modules where the policy does
+not use what it saw; training where it does):
+
+1. the plans' own unsafe ends (236B on a guard: the planner's guarding answer must punish
+   what a person punishes);
+2. pressure when ahead (the user's first point: too careful with the advantage; the
+   corner let go);
+3. the combo's end and the mid-screen IC (the second point; `endplan`'s first build);
+4. the end of a round against Mizuka (the fourth point: not looked at yet);
+5. then a training round against the opponents above, the modules on while it trains.
