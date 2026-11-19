@@ -192,6 +192,129 @@ def jumps(obs, inputs, look=90, tail=20, near=320):
                    up=np.round(up[e:end]).astype(np.int16), air=me.air[e:end].copy())
 
 
+def endings(obs, inputs, look=90, tail=20, near=320, least=600):
+    """A dict per combo of the viewer's that ends on an opponent in the air: from the step
+    of its last hit (the opponent in a hit reaction, off the ground, the combo worth
+    `least` HP by then) to the next contact after the opponent is out of that reaction (it
+    recovered in the air, or came down) and `tail` steps more, or `look` steps."""
+    c = obs[:, OBS].astype(np.float32)
+    me, opp = Side(c, 0), Side(c, 1)
+    live = (c[:, 16] == 0) & (c[:, 17] == 0)
+    px = np.abs(c[:, 18]) * 640
+    up = -(obs[:, DY].astype(np.float32)) * 240
+    T = len(obs)
+    grab = air_throw(tactics.names()[me.char])
+    thrown = np.isin(opp.act, list(THROWN))
+    thrown_in = thrown & ~_prev(thrown, False)
+    touch = opp.contact | opp.hit | thrown_in
+    rec = np.isin(opp.act, AIR_RECOVERY)
+    react = ((opp.act >= 0x32) & (opp.act < 0x60)) | thrown
+    lying = np.isin(opp.act, tactics.DOWN)
+    air_in = me.air & ~_prev(me.air, False)
+    hp = opp.hp
+    drop = np.concatenate([[False], np.diff(hp) < -1])
+    starts = np.flatnonzero(react & ~_prev(react, False))
+    for s in starts:
+        s = int(s)
+        if s < 2:
+            continue
+        e = s
+        while e < T and react[e]:
+            e += 1
+        if e + look + tail >= T:
+            continue
+        hits = np.flatnonzero(drop[s:e])
+        if not len(hits):
+            continue
+        last = s + int(hits[-1])
+        dealt = float(hp[s - 1] - hp[e])
+        if dealt < least or not opp.air[last] or thrown[last] or px[last] > near or \
+                not live[last:last + look + tail].all() or hp[e] <= 0:
+            continue
+        lead = e - last
+        out = ('recovery' if rec[e] else 'down' if lying[e] or not opp.air[e] else 'air')
+        hi = last + look + 1
+        # After it is out: the next contact of the viewer's, and a hit on the viewer.
+        t, h = _first(touch, e, hi), _first(me.hit, last, hi)
+        g = _first(me.new & (me.act == grab), last + 1, hi)
+        b = _first(me.move, last + 1, hi)
+        first = min([x for x in (t, h) if x is not None], default=None)
+        if g is not None and (first is None or g <= first):
+            cls, at, act = 'air throw', g, grab
+        elif b is not None and (first is None or b <= first):
+            cls, at, act = ('air move' if me.air[b] else 'ground move'), b, int(me.act[b])
+        else:
+            at, act = None, 0
+            cls = 'none: jump' if air_in[last + 1:last + look].any() else 'none'
+        stop = at if at is not None else last + look
+        if np.isin(me.act[last:stop + 1], [tactics.AIRDASH[1], tactics.BACKDASH]).any():
+            cls = 'back, ' + cls   # (a flight or a dash back first: the trap's shape)
+        hurt = h is not None and (t is None or h <= t)
+        result = ('hurt' if hurt else 'none' if t is None else 'throw' if thrown_in[t] else
+                  'hit' if opp.hit[t] else 'guard')
+        end = min(T, (h if hurt else t if t is not None else last + look) + tail)
+        theirs = 'down'
+        if out == 'recovery':
+            o2 = _first(~rec, e, e + 60)
+            theirs = 'fall'
+            if o2 is not None:
+                landed = _first(~opp.air, o2, o2 + 30)
+                w = slice(o2, landed if landed is not None else min(T, o2 + 30))
+                theirs = ('guard' if (opp.guard[w] | np.isin(opp.act[w], tactics.BLOCKING)).any() and
+                          not opp.move[w].any() else
+                          'move' if opp.move[w].any() else
+                          'dash' if np.isin(opp.act[w], tactics.AIRDASH).any() else
+                          'jump' if (np.isin(opp.act[w], AIR_JUMP) & opp.new[w]).any() else 'fall')
+        yield dict(start=last, cls=cls, result=result, move=act,
+                   move_at=int(at - last) if at is not None else -1,
+                   contact=int(t - last) if t is not None else -1,
+                   lead=int(lead), out=out, theirs=theirs, dealt=round(dealt),
+                   own_air=bool(me.air[last]), distance=round(float(px[last])),
+                   height=round(float(up[last])), corner=bool(abs(float(obs[last, OPP_X])) > 0.8),
+                   prev=int(inputs[last - 1]), inputs=inputs[last:end].copy(),
+                   dist=np.round(px[last:end]).astype(np.int16),
+                   up=np.round(up[last:end]).astype(np.int16), air=me.air[last:end].copy())
+
+
+def endings_main(args, rows, dataset):
+    found = []
+    for r in rows:
+        with np.load(os.path.join(dataset, f"{r['id']}-{r['side']}.npz")) as z:
+            obs, inputs = z['obs'], z['input']
+        for m in endings(obs, inputs, args.look, args.tail, args.near, args.least):
+            m.update(id=r['id'], side=int(r['side']), opponent=r['opponent'])
+            found.append(m)
+    n = len(found)
+    print(f"{n} combos ending on an opponent in the air, in {len(rows)} matches")
+    for key in ('lead', 'distance', 'height', 'dealt'):
+        x = np.array([m[key] for m in found])
+        print(f'  {key}: 10th {np.percentile(x, 10):.0f}, median {np.median(x):.0f}, '
+              f'90th {np.percentile(x, 90):.0f}')
+    outs = collections.Counter(m['out'] for m in found)
+    print('  how the opponent left the combo: ' + ', '.join(f'{k} {v / n:.0%}' for k, v in outs.most_common()) +
+          f"; in the corner {np.mean([m['corner'] for m in found]):.0%}")
+    theirs = collections.Counter(m['theirs'] for m in found if m['out'] == 'recovery')
+    nr = max(1, sum(theirs.values()))
+    print('  out of a recovery it did first: ' + ', '.join(f'{k} {v / nr:.0%}' for k, v in theirs.most_common()))
+    by = collections.defaultdict(list)
+    for m in found:
+        by[m['cls']].append(m)
+    print('  by what the player did after its last hit (count, share; against a recovery: caught '
+          '(a hit or a throw), guarded, no contact, the player hit first; against none: hit again):')
+    for cls, ms in sorted(by.items(), key=lambda kv: -len(kv[1])):
+        rs = [m for m in ms if m['out'] == 'recovery']
+        ds = [m for m in ms if m['out'] != 'recovery']
+        res = collections.Counter(m['result'] for m in rs)
+        k = max(1, len(rs))
+        again = np.mean([m['result'] in ('hit', 'throw') for m in ds]) if ds else 0
+        hurt_d = np.mean([m['result'] == 'hurt' for m in ds]) if ds else 0
+        print(f"    {cls:20s} {len(ms):5d} {len(ms) / n:5.1%}   recovery ({len(rs):4d}): caught "
+              f"{(res['hit'] + res['throw']) / k:4.0%}  guarded {res['guard'] / k:4.0%}  none "
+              f"{res['none'] / k:4.0%}  hurt {res['hurt'] / k:4.0%}   no recovery ({len(ds):4d}): hit again "
+              f"{again:4.0%}  hurt {hurt_d:4.0%}   its move at step {np.median([m['move_at'] for m in ms]):.0f}")
+    _save(os.path.expanduser(args.out), found)
+
+
 def _save(out, found):
     arrays = ('inputs', 'dist', 'up', 'air')
     meta = [{k: v for k, v in m.items() if k not in arrays} for m in found]
@@ -243,9 +366,11 @@ def jumps_main(args, rows, dataset):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    p.add_argument('--kind', choices=('recovery', 'jump'), default='recovery',
-                   help="the opponent's air recoveries out of the player's combos, or its "
-                        'jumps at the player')
+    p.add_argument('--kind', choices=('recovery', 'jump', 'ending'), default='recovery',
+                   help="the opponent's air recoveries out of the player's combos, its "
+                        "jumps at the player, or the ends of the player's combos on an "
+                        'opponent in the air (from the last hit)')
+    p.add_argument('--least', type=int, default=600, help="--kind ending: a combo's least damage")
     p.add_argument('--dataset', required=True)
     p.add_argument('--out', required=True)
     p.add_argument('--look', type=int, default=70)
@@ -262,6 +387,10 @@ def main():
         if args.look == 70:
             args.look = 90
         return jumps_main(args, rows, dataset)
+    if args.kind == 'ending':
+        if args.look == 70:
+            args.look = 90
+        return endings_main(args, rows, dataset)
     found = []
     for r in rows:
         with np.load(os.path.join(dataset, f"{r['id']}-{r['side']}.npz")) as z:

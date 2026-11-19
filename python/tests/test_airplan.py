@@ -2,7 +2,9 @@
 out of the viewer's combo and its catch are in a recorded match, which of the library's
 entries a recovery is given, the shares its answers get, what the opponent of the copies
 presses, and the module's steps around a plan (a planner that tries nothing); with the
-game's data ($EFZ_DATA) the options tried from a game."""
+game's data ($EFZ_DATA) the options tried from a game. And the end of a combo: what
+air_library.endings reads of one that ends on an opponent in the air, and when the
+module 'endplan' plans (a hit seen, the opponent able to recover, expected to)."""
 
 import os
 import sys
@@ -89,6 +91,57 @@ class Library(unittest.TestCase):
         obs, inputs = self.match()
         obs[60:87, 50] = RECOVERY      # (no hit reaction before it)
         self.assertEqual(list(air_library.catches(obs, inputs)), [])
+
+
+@unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class Ends(unittest.TestCase):
+    """air_library.endings: a combo's last hit on an opponent in the air, and what came."""
+
+    def match(self, T=400):
+        obs = np.zeros((T, 168), np.float32)
+        obs[:, 4] = 60 / 640
+        obs[:, SELF_CHAR] = AYU
+        obs[:, 8] = obs[:, 40] = 1.0     # both at full HP
+        return obs, np.zeros(T, np.uint8)
+
+    def combo(self, obs, at, last, out, damage=0.1):
+        """The viewer's combo: the opponent hit in the air from `at`, the last hit at
+        `last`, out of the reaction at `out`."""
+        obs[at:out, 50], obs[at:out, 52] = HIT, 1
+        obs[at:out + 40, 71] = 1
+        obs[at + 1:, 40] -= damage / 2
+        obs[last:, 40] -= damage / 2
+
+    def test_the_trap_a_flight_back_and_a_move_that_hits_the_recovery(self):
+        obs, inputs = self.match()
+        self.combo(obs, 50, 80, 100)
+        obs[100:127, 50] = RECOVERY            # it recovers 20 steps after the last hit
+        obs[84:96, 18] = 0xa6                  # the viewer flies back,
+        obs[84:130, 39] = 1
+        obs[104:120, 18] = 0x100               # then 214A,
+        obs[110:125, 50], obs[110:125, 52] = HIT, 1   # which hits it in its recovery
+        inputs[103] = 0x14
+        m, = air_library.endings(obs, inputs)
+        self.assertEqual((m['start'], m['cls'], m['result'], m['out'], m['lead']),
+                         (80, 'back, air move', 'hit', 'recovery', 20))
+        self.assertEqual((m['move'], m['move_at'], m['contact']), (0x100, 24, 30))
+        self.assertEqual(m['dealt'], 1000)
+        self.assertEqual(m['inputs'][23], 0x14)
+        self.assertEqual(len(m['dist']), len(m['inputs']))
+
+    def test_one_that_comes_down_and_one_too_small(self):
+        obs, inputs = self.match()
+        self.combo(obs, 50, 80, 100)
+        obs[100:140, 50] = 0x62                # lying
+        obs[100:, 71] = 0
+        m, = air_library.endings(obs, inputs)
+        self.assertEqual((m['out'], m['theirs'], m['cls'], m['result']),
+                         ('down', 'down', 'none', 'none'))
+        obs, inputs = self.match()
+        self.combo(obs, 50, 80, 100, damage=0.03)
+        obs[100:127, 50] = RECOVERY
+        self.assertEqual(list(air_library.endings(obs, inputs)), [])
+        self.assertEqual(len(list(air_library.endings(obs, inputs, least=200))), 1)
 
 
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
@@ -391,6 +444,105 @@ class Module(unittest.TestCase):
         self.run_steps(m, [(HIT, HIT), (RECOVERY, RECOVERY), (0xc9, 0xc9)])
         m.reset()
         self.assertAlmostEqual(float(m.counts[0, names.index('move')]), 0.7)
+
+
+class EndPlanner:
+    """An EndPlanner that tries nothing: the opponent can recover `lead` steps from now
+    (None: the combo holds it), and the plan is always `kind`."""
+
+    def __init__(self, option, lead=12, kind='trap'):
+        self.option, self.can, self.kind, self.calls, self.last = option, lead, kind, [], None
+
+    def lead(self, state, side, rest=None, horizon=30):
+        return 0, self.can, None
+
+    def plan(self, state, side, hist, prev, seen, policy, shares, since=0, rest=None, horizon=30):
+        self.calls.append(int(since))
+        self.last = dict(lead=self.can, kinds=[self.kind, 'wait', 'own'], chosen=0,
+                         expected=np.array([500.0, 100.0, 0.0]), mix=np.array([1.0, 0, 0]),
+                         worth=np.zeros((3, len(airplan.END_ANSWERS))))
+        return self.option
+
+
+@unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class EndModule(unittest.TestCase):
+    def module(self, option=(7, 8, 9), lead=12, kind='trap', **kw):
+        m = airplan.EndPlan(EndPlanner(np.array(option), lead, kind), 3, **kw)
+        m.batch(1)
+        self.step(m, opp=0)                # the match's first step: nothing yet
+        return m
+
+    def step(self, m, hits=0, opp=HIT, hp=1.0, air=True, last=None):
+        """A step: the hits of its combo it sees; the opponent's action, HP and height as
+        the game is (and as it sees them)."""
+        view = np.zeros(168, np.float32)
+        now = np.zeros(168, np.float32)
+        for v in (view, now):
+            v[okiplan.OPP_ACT] = opp
+            v[okiplan.OPP_HITSTUN] = float(airplan.REACT[0] <= opp < airplan.REACT[1])
+            v[airplan.OPP_AIR] = float(air)
+            v[airplan.OPP_HP] = hp
+            v[okiplan.DX] = 60 / 640
+        view[airplan.SELF_HITS] = hits / 30
+        ctx = modules.Context(view, now, save=lambda: b'', last=last)
+        m.watch(0, ctx)
+        return m.act(0, ctx)
+
+    def recovers_once(self, m):
+        """A combo on it in the air at whose end it recovers, and nothing comes of it
+        (what a chance came to is counted when its 150 steps are over)."""
+        self.step(m, hits=1, hp=0.9)
+        self.step(m, hits=0, opp=RECOVERY, hp=0.9)
+        for _ in range(150):
+            self.step(m, hits=0, opp=0, hp=0.9)
+
+    def test_not_against_one_that_has_not_recovered_yet_then_it_plans(self):
+        m = self.module()
+        self.assertIsNone(self.step(m, hits=1, hp=0.9))      # a hit seen, a chance: unlikely
+        self.assertEqual((m.asked['seen'], m.asked.get('unlikely'), m.asked['planned']), (1, 1, 0))
+        self.step(m, hits=0, opp=RECOVERY, hp=0.9)           # it recovers,
+        for _ in range(150):                                 # and is out, not caught
+            self.step(m, hits=0, opp=0, hp=0.9)
+        self.assertEqual((float(m.chances[0]), float(m.recovered[0])), (1.0, 1.0))
+        self.assertEqual(m.came, {'chance': {'neither': 1}})
+        got = [self.step(m, hits=1, hp=0.8)]                 # the next combo's hit: planned
+        got += [self.step(m, hits=1, hp=0.8, last=m.name) for _ in range(3)]
+        self.assertEqual(got, [7, 8, 9, None])
+        self.assertEqual(m.asked['planned'], 1)
+        self.assertEqual(m.planner.calls, [0])               # the hit's clock, as the game is
+
+    def test_one_that_stays_down_is_not_planned_against(self):
+        m = self.module()
+        for k in range(3):
+            self.step(m, hits=1, hp=0.9 - k / 10)
+            self.step(m, hits=0, opp=0x62, hp=0.9 - k / 10, air=False)
+        self.assertEqual((float(m.chances[0]), float(m.recovered[0])), (3.0, 0.0))
+        self.assertEqual(m.asked['planned'], 0)
+
+    def test_not_when_the_combo_holds_it_and_not_on_the_ground(self):
+        m = self.module(lead=None)
+        self.recovers_once(m)
+        self.assertIsNone(self.step(m, hits=1, hp=0.8))
+        self.assertEqual((m.asked['held'], m.asked['planned']), (2, 0))
+        m = self.module()
+        self.recovers_once(m)
+        self.assertIsNone(self.step(m, hits=1, hp=0.8, air=False))
+        self.assertEqual(m.asked['seen'], 1)                 # (the one of recovers_once)
+
+    def test_the_route_s_own_rest_leaves_the_route_playing(self):
+        class Host:
+            pass
+        routes = type('Routes', (), dict(playing={0: [np.arange(9), 2]}))()
+        for kind, cleared in (('route', False), ('trap', True)):
+            routes.playing = {0: [np.arange(9), 2]}
+            m = self.module(kind=kind)
+            host = Host()
+            host.stack = dict(routes=routes)
+            m.attach(host)
+            self.recovers_once(m)
+            got = self.step(m, hits=1, hp=0.8)
+            self.assertEqual(got, None if kind == 'route' else 7)
+            self.assertEqual(routes.playing[0] is None, cleared)
 
 
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')

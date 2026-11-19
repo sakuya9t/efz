@@ -65,6 +65,7 @@ from okiplan import (DX, INDEX, OPP_ACT, OPP_CHAR, OPP_HITSTUN, OPP_X, ROUND_OVE
                      SELF_HITSTUN, TABLE)
 
 DY, OPP_AIR, SELF_X = 5, 71, 13
+SELF_HITS, OPP_HP = 30, 40
 ANSWERS = ('fall', 'guard', 'move', 'jump', 'dash')
 # What the community's players did first out of an air recovery (air_library.py's count
 # over 3,808 of them).
@@ -714,6 +715,367 @@ class JumpPlan(AirPlan):
         return super().act(i, ctx)
 
 
+END_ANSWERS = ('down', 'fall', 'guard', 'move', 'jump', 'dash')
+# What the victims of the community's Ayu players did at the end of a combo on them in the
+# air (air_library.py --kind ending, 10,253 of them): no recovery in 0.82; out of a
+# recovery, nothing in 0.39, a move 0.33, a dash 0.14, a jump 0.10, a guard 0.04.
+END_PRIOR = dict(down=0.82, fall=0.07, guard=0.01, move=0.06, jump=0.02, dash=0.02)
+END_LOOK = 110      # the most steps the victim's recovery (and its end) is looked for
+RECOVER = encode(4) | encode(5, 'A')  # back and a button: the air recovery (redteam.BACK_PRESS)
+BACK_AIR, DOWN_BACK_A = INDEX[(4, '')], INDEX[(4, 'A')]
+TRAP_AFTER = (2, 8, 14)   # steps of the flight back before 214A
+
+
+class EndPlanner(AirPlanner):
+    """Tries the ends of a combo on copies of the game and draws one: from the step after
+    the last hit of the route being played, on an opponent in the air: the library's
+    (air_library.py --kind ending: what people did from there), Ayu's trap of its own
+    timing (a flight back, then 214A), the rest of the route, a wait and its own play;
+    against a victim that does not recover (it comes down), and one that recovers at the
+    first chance and then falls, guards, presses a button, jumps or dashes back."""
+
+    ANSWERS = END_ANSWERS
+    from_lead = True   # (okiplan's tryout: a recovering victim's HP counted from its recovery's end)
+    ways = 2           # a sure throw catches this many of the two ways of recovering (1: either)
+
+    def __init__(self, *args, **kwargs):
+        # sure (default): an air throw timed into the recovery of a victim that presses
+        # out at its first chance is looked for (sure_end) and played if there is one.
+        # matrix (default off): without one, the options against the answers; measured,
+        # the copies' answers did not tell which end catches (docs/training-v2.md).
+        kwargs.setdefault('sure', True)
+        kwargs.setdefault('matrix', False)
+        super().__init__(*args, **kwargs)
+
+    def sure_end(self, state, side, begun, lead, now):
+        """An air throw that catches a victim pressing out at its first chance while its
+        recovery holds it, whether it recovers backward or forward: the agent's actions,
+        or None. Tried: C with forward held after every second step from a little before
+        the recovery can begin to its end, of holding forward in the air, of a second jump
+        or a dash at the opponent; from the ground, that many steps into a jump at it or
+        straight up. The one that catches both ways first, then the soonest.
+        self.caught: how many of the two ways it catches."""
+        self.caught = 0
+        sim = self.sim
+        air = now[SELF_AIR] > 0
+        seqs = []
+        for d in range(max(0, begun - 6), lead, 2):
+            if air:
+                seqs.append([FORWARD] * d + [THROW] * 2)
+                if d >= 4:
+                    seqs.append([NEUTRAL, UP_FORWARD] + [FORWARD] * (d - 2) + [THROW] * 2)
+                    seqs.append([FORWARD, NEUTRAL, FORWARD] + [FORWARD] * (d - 3) + [THROW] * 2)
+            elif d >= 4:
+                seqs.append([UP_FORWARD] * d + [THROW] * 2)
+                seqs.append([UP] * d + [THROW] * 2)
+        seqs = seqs[:sim.num_envs // 2]
+        E = len(seqs)
+        if not E:
+            return None
+        for e in range(2 * E):
+            sim.load_state(e, state)
+        controls = np.zeros((sim.num_envs, 2), np.uint8)
+        caught = np.full(2 * E, -1)
+        way = np.repeat([4, 6], E)   # the victim's direction: back, forward
+        for t in range(lead + 2):
+            mine = np.array([q[t] if t < len(q) else NEUTRAL for q in seqs] * 2)
+            controls[:2 * E, side] = TABLE.table[mine]
+            stunned = sim.obs[:2 * E, side, OPP_HITSTUN] > 0
+            press = t % 2 == 0
+            theirs = np.full(2 * E, encode(5), np.uint8)
+            for w in (4, 6):
+                theirs[stunned & (way == w)] = encode(w, 'A') if press else encode(w)
+            controls[:2 * E, 1 - side] = theirs
+            obs, *_ = sim.step(controls)
+            thrown = np.isin(np.round(obs[:2 * E, side, OPP_ACT]), THROWN) & (caught < 0)
+            caught[thrown] = t
+        got = (caught[:E] >= 0).astype(int) + (caught[E:] >= 0).astype(int)
+        if got.max() < self.ways:
+            return None
+        when = np.where(caught[:E] >= 0, caught[:E], caught[E:])
+        best = min(np.flatnonzero(got > 0), key=lambda e: (-got[e], when[e], len(seqs[e]), e))
+        self.caught = int(got[best])
+        return np.array(seqs[best])
+
+    def count_from(self, lead):
+        return lead  # (hits before the victim is out are the combo's own)
+
+    def their_controls(self, t, lead, answer, side, schedule, logic):
+        E = len(answer)
+        obs = self.sim.obs[:E, side]
+        stunned = obs[:, OPP_HITSTUN] > 0
+        rec = np.isin(np.round(obs[:, OPP_ACT]).astype(int), RECOVERY)
+        press = t % 2 == 0
+        theirs = np.full(E, encode(4), np.uint8)                       # down: back held
+        up = answer > 0
+        theirs[up & stunned] = RECOVER if press else encode(4)         # out at the first chance
+        free = up & ~stunned & ~rec
+        theirs[free & (answer == 1)] = encode(5)                       # then: falls
+        theirs[free & (answer == 2)] = encode(4)                       # a guard
+        theirs[free & (answer == 3)] = encode(5, 'A') if press else encode(5)
+        theirs[free & (answer == 4)] = encode(7) if press else encode(5)
+        theirs[free & (answer == 5)] = encode(5) if t % 3 == 1 else encode(4)
+        return theirs
+
+    def lead(self, state, side, rest=None, horizon=END_LOOK):
+        """(the steps until a victim that recovers at the first chance is in its recovery,
+        the agent playing `rest` (its route's actions from now; none: pressing nothing),
+        and until it is out of it; the game's view now), or (None, None, the view) if the
+        opponent is not being hit in the air, cannot recover before it is down, or not
+        within `horizon` steps."""
+        one = self.one
+        one.load_state(0, state)
+        now = one.obs[0, side].copy()
+        if now[OPP_AIR] <= 0 or now[OPP_HITSTUN] <= 0 or \
+                int(round(float(now[OPP_ACT]))) in THROWN:
+            return None, None, now
+        controls = np.zeros((1, 2), np.uint8)
+        obs, begun = one.obs, None
+        for t in range(END_LOOK):
+            act = int(round(float(obs[0, side, OPP_ACT])))
+            if begun is None and act in RECOVERY:
+                begun = t
+            elif begun is not None and act not in RECOVERY:
+                return begun, t, now
+            elif begun is None and (t > horizon or act in DOWN or
+                                    (t > 0 and obs[0, side, OPP_HITSTUN] <= 0)):
+                break  # not soon; or down, or on its feet: nothing to recover from
+            controls[0, side] = TABLE.table[int(rest[t])] if rest is not None and t < len(rest) \
+                else encode(5)
+            controls[0, 1 - side] = RECOVER if t % 2 == 0 else encode(4)
+            obs, _, term, trunc, _ = one.step(controls)
+            if term[0] or trunc[0]:
+                break
+        return None, None, now
+
+    def plan(self, state, side, hist, prev, seen, policy, shares, since=0, rest=None,
+             horizon=30):
+        """state: the game now (the opponent hit in the air, `since` steps after the last
+        hit); rest: the actions of the route being played from now on. A plan is made only
+        if a victim pressing out would be in its recovery within `horizon` steps, the
+        route going on: until then the combo holds it. The rest as okiplan's."""
+        self.last = None
+        begun, lead, now = self.lead(state, side, rest, horizon)
+        if lead is None:
+            return None
+        if self.sure:
+            throw = self.sure_end(state, side, begun, lead, now)
+            if throw is not None or not self.matrix:
+                self.last = dict(lead=int(lead), begun=int(begun), caught=self.caught,
+                                 kinds=['sure throw' if throw is not None else 'none', 'own'],
+                                 worth=np.zeros((2, self.R)), expected=np.zeros(2), chosen=0,
+                                 mix=np.array([1.0, 0.0]), first=np.zeros((2, self.R), int),
+                                 entries=[])
+                return throw
+        elif not self.matrix:
+            return None
+        victim = self.names[int(round(float(now[OPP_CHAR])))]
+        air = now[SELF_AIR] > 0
+        cands = self.entries.pick(int(since), begun, abs(float(now[DX])) * 640,
+                                  -float(now[DY]) * 240, air, victim,
+                                  abs(float(now[OPP_X])) > 0.8)
+        cands = cands[:self.entries.per_plan - 1]  # (the copies: the route's rest too)
+        options = [a for _, a in cands]
+        kinds = [str(self.entries.cls[k]) for k, _ in cands]
+        if air:
+            for d in TRAP_AFTER:
+                options.append(np.array([BACK_AIR, NEUTRAL, BACK_AIR] + [NEUTRAL] * d +
+                                        [INDEX[(2, '')], INDEX[(1, '')], DOWN_BACK_A, DOWN_BACK_A]))
+                kinds.append(f'trap +{d}')
+        if rest is not None and len(rest):
+            options.append(np.asarray(rest))
+            kinds.append('route')
+        options += [np.full(lead + self.wait, BACK), np.zeros(0, int)]
+        kinds += ['wait', 'own']
+        out = self.tryout(state, side, lead, options, kinds, [k for k, _ in cands], hist, prev,
+                          seen, policy, shares, schedule=[])
+        if self.last is not None:
+            self.last['begun'] = int(begun)
+        return out
+
+
+class EndPlan(AirPlan):
+    """The module 'endplan': when the agent sees a hit of its own on an opponent in the air
+    and that opponent, pressing out at its first chance, would be in its recovery within
+    `horizon` steps (30) with the route going on (looked for on a copy), EndPlanner's
+    plan. It goes before 'routes' in the stack and takes the route's place when it chooses
+    anything but the route's own rest. Its belief: what this opponent did
+    at the end of the combos on it in the air that the agent saw (came down, or recovered
+    and then fell, guarded, pressed, jumped, dashed) over the community's prior.
+
+        endplan:library=~/data/efz-replays/end-library.npz[,least=0.3,ways=2,horizon=30,...]
+
+    options: airplan's (sure true, matrix false by default); least, ways, horizon."""
+    name = 'endplan'
+    ANSWERS, PRIOR = END_ANSWERS, END_PRIOR
+    horizon = 30
+    # least: it plans only against an opponent expected to recover at least this often
+    # where it can: of the ends of combos at which a copy showed it could press out
+    # (its chances), the share at which it did, over a prior of CHANCE_PRIOR chances at
+    # CHANCE_SHARE: off until it has seen this opponent recover once. A throw at one
+    # that stays down whiffs and gives up the route and the okizeme.
+    least = 0.34
+    CHANCE_PRIOR, CHANCE_SHARE = 3.0, 0.3
+
+    def stats(self):
+        return dict(super().stats(), asked=dict(self.asked),
+                    came={k: dict(v) for k, v in sorted(self.came.items())})
+
+    def batch(self, n):
+        super().batch(n)
+        self.react_air = np.zeros(n, bool)   # it saw the opponent hit in the air, not out yet
+        self.hits_seen = np.zeros(n, int)    # its combo's hits as it saw them last step
+        self.new_hit = np.zeros(n, bool)     # it sees a new hit of its own this step
+        self.hp_now = np.zeros(n)            # the opponent's HP as the game is
+        self.since_hit = np.full(n, 10 ** 6)  # steps since its last hit, as the game is
+        if not hasattr(self, 'asked'):       # hits seen on an opponent in the air; and of them
+            self.asked = dict(seen=0, held=0, planned=0)
+            self.came = {}                   # kind chosen -> how its plans went in the game
+        self.track = {}                      # env -> [kind, steps left, the opponent recovered]
+        self.chances = np.zeros(n)           # the ends at which it could press out
+        self.recovered = np.zeros(n)         # ... and did
+
+    def reset(self, mask=None):
+        super().reset(mask)
+        mask = np.ones(self.n, bool) if mask is None else np.asarray(mask, bool)
+        self.react_air[mask] = False
+        self.hits_seen[mask] = 0
+        self.new_hit[mask] = False
+        self.hp_now[mask] = 0
+        self.since_hit[mask] = 10 ** 6
+        for i in np.flatnonzero(mask):
+            self.track.pop(int(i), None)
+        keep = 0.7 if self.carry else 0.0
+        self.chances[mask] *= keep
+        self.recovered[mask] *= keep
+
+    def watch(self, i, ctx):
+        # The game as it is: how long since its last hit (the entries' clock). What it
+        # sees: a new hit of its combo.
+        hp = float(ctx.now[OPP_HP])
+        self.since_hit[i] = 0 if hp < self.hp_now[i] - 1e-6 else min(self.since_hit[i] + 1, 10 ** 6)
+        self.hp_now[i] = hp
+        hits = int(round(float(ctx.view[SELF_HITS]) * 30))
+        self.new_hit[i] = hits > self.hits_seen[i]
+        self.hits_seen[i] = hits
+        # How a plan went, as the game is: the opponent came down, or recovered and was
+        # then caught (hit or thrown again), hit the agent back, or neither.
+        tr = self.track.get(i)
+        if tr is not None:
+            a_now = int(round(float(ctx.now[OPP_ACT])))
+            tr[1] -= 1
+            went = None
+            if not tr[2]:
+                if a_now in RECOVERY:
+                    tr[2], tr[3] = True, hp
+                elif a_now in DOWN or tr[1] <= 0:
+                    went = 'down'
+            elif a_now not in RECOVERY or tr[1] <= 0:
+                if hp < tr[3] - 1e-6 or a_now in THROWN:
+                    went = 'caught'
+                elif ctx.now[SELF_HITSTUN] > 0:
+                    went = 'hit back'
+                elif tr[1] <= 0:
+                    went = 'neither'
+            if went is not None:
+                c = self.came.setdefault(tr[0], {})
+                c[went] = c.get(went, 0) + 1
+                self.chances[i] += 1
+                self.recovered[i] += went != 'down'
+                self.track.pop(i)
+        # What it sees: the opponent leaves a hit reaction it was in off the ground, down
+        # or into a recovery; and, a recovery over, what it does first.
+        act, was = int(round(float(ctx.view[OPP_ACT]))), int(self.was[i])
+        self.was[i] = act
+        reacting = REACT[0] <= act < REACT[1]
+        if reacting and ctx.view[OPP_AIR] > 0:
+            self.react_air[i] = True
+        elif self.react_air[i] and not reacting:
+            self.react_air[i] = False
+            if act in RECOVERY:
+                self.watching[i] = WATCH + 40   # (the recovery itself, then its choice)
+            elif act in DOWN:
+                self.counts[i, 0] += 1
+        if self.watching[i] > 0 and act not in RECOVERY:
+            self.watching[i] -= 1
+            what = None
+            if ctx.view[OPP_HITSTUN] > 0 or act in THROWN:
+                self.watching[i] = 0       # caught before it chose
+            elif act >= tactics.FIRST_OWN:
+                what = 'move'
+            elif act in AIRDASH:
+                what = 'dash'
+            elif act in AIR_JUMP and act != was:
+                what = 'jump'
+            elif act in GUARDS:
+                what = 'guard'
+            elif ctx.view[OPP_AIR] <= 0 or self.watching[i] == 0:
+                what = 'fall'
+            if what is not None:
+                self.counts[i, self.ANSWERS.index(what)] += 1
+                self.watching[i] = 0
+
+    def act(self, i, ctx):
+        p = self.playing.get(i)
+        if p is not None:
+            interrupted = p[1] > 0 and ctx.last != self.name
+            if interrupted or p[1] >= len(p[0]) or ctx.view[SELF_HITSTUN] > 0:
+                self.playing.pop(i)
+            else:
+                p[1] += 1
+                return int(p[0][p[1] - 1])
+        if not self.new_hit[i]:
+            return None
+        now = ctx.now
+        if now[OPP_HITSTUN] <= 0 or now[OPP_AIR] <= 0 or now[SELF_HITSTUN] > 0 or \
+                self.since_hit[i] > 60 or abs(float(now[DX])) * 640 > self.near:
+            return None
+        self.asked['seen'] += 1
+        shares = self.fixed if self.fixed is not None else \
+            belief(self.counts[i], self.prior, self.ANSWERS, self.PRIOR)
+        routes = self.host.stack.get('routes') if self.host is not None else None
+        r = routes.playing.get(i) if routes is not None else None
+        rest = r[0][r[1]:] if r is not None else None
+        state = ctx.save()
+        if self.planner.lead(state, ctx.side, rest, self.horizon)[1] is None:
+            self.asked['held'] += 1   # (the combo holds it, or it cannot recover at all)
+            return None
+        if i not in self.track:       # a chance to press out: what it does with it is counted
+            self.track[i] = ['chance', 150, False, 0.0]
+        expects = (self.CHANCE_PRIOR * self.CHANCE_SHARE + self.recovered[i]) / \
+            (self.CHANCE_PRIOR + self.chances[i])
+        if self.fixed is None and expects < self.least:
+            self.asked['unlikely'] = self.asked.get('unlikely', 0) + 1
+            return None
+        chosen = self.planner.plan(state, ctx.side, ctx.hist, ctx.prev, ctx.seen,
+                                   ctx.policy, shares, since=int(self.since_hit[i]), rest=rest,
+                                   horizon=self.horizon)
+        last = self.planner.last
+        if last is None:
+            return None
+        self.asked['planned'] += 1
+        c = last['chosen']
+        kind = last['kinds'][c]
+        own = last['kinds'].index('own')
+        self.plans.append(dict(kind=kind, options=len(last['kinds']) - 2,
+                               spread=float(-(last['mix'] * np.log(last['mix'] + 1e-12)).sum()),
+                               expected=float(last['expected'][c]),
+                               own=float(last['expected'][own]), shares=shares,
+                               lead=last['lead'], worth=last['worth'], kinds=last['kinds'],
+                               at=None))
+        if kind == 'sure throw':
+            kind = f"sure throw ({last.get('caught', 0)} ways)"
+        self.track[i][0] = kind
+        if kind in ('route', 'none'):
+            return None                     # the route goes on
+        if r is not None:
+            routes.playing[i] = None        # its end is this plan's (or its own play's)
+        if chosen is None or not len(chosen):
+            return None
+        self.playing[i] = [chosen, 1, 0, None]
+        return int(chosen[0])
+
+
 def _build(agent, where, files, options, data, name, planner, module, near):
     if where != 'batch':
         raise ValueError(f'{name}: evaluations only so far (a match in real time needs its '
@@ -722,15 +1084,23 @@ def _build(agent, where, files, options, data, name, planner, module, near):
     keys = ('per_plan', 'per_class', 'window', 'wait', 'tolerance', 'tolerance_up',
             'temperature', 'hit_worth', 'hurt_worth', 'doubt', 'seed', 'after', 'skip', 'think',
             'sure', 'matrix')
+    extra = {k: o.pop(k) for k in ('least', 'ways', 'horizon') if k in o and name == 'endplan'}
     unknown = sorted(set(o) - set(keys) - {'carry', 'prior', 'fixed', 'near'})
     if unknown:
         raise ValueError(f"{name}: no option {', '.join(unknown)}")
     made = planner(data, load_library(files['library']),
                    agent.model.observation_space.shape[0], agent.delay,
                    history=agent.history, **{k: o[k] for k in keys if k in o})
-    return module(made, agent.delay, carry=o.get('carry', False),
-                  prior=float(o.get('prior', 6.0)), fixed=o.get('fixed'),
-                  near=float(o.get('near', near)))
+    mod = module(made, agent.delay, carry=o.get('carry', False),
+                 prior=float(o.get('prior', 6.0)), fixed=o.get('fixed'),
+                 near=float(o.get('near', near)))
+    if 'least' in extra:
+        mod.least = float(extra['least'])
+    if 'horizon' in extra:
+        mod.horizon = int(extra['horizon'])
+    if 'ways' in extra:
+        made.ways = int(extra['ways'])
+    return mod
 
 
 @modules.register('airplan')
@@ -743,3 +1113,9 @@ def airplan(agent, where, files, options, data):
 def jumpplan(agent, where, files, options, data):
     """files: library (air_library.py --kind jump's). options: airplan's."""
     return _build(agent, where, files, options, data, 'jumpplan', JumpPlanner, JumpPlan, 260)
+
+
+@modules.register('endplan')
+def endplan(agent, where, files, options, data):
+    """files: library (air_library.py --kind ending's). options: airplan's."""
+    return _build(agent, where, files, options, data, 'endplan', EndPlanner, EndPlan, 320)
