@@ -82,6 +82,18 @@ Habits (docs/training-v2.md, "Adapting during a match": an opponent a read pays 
   (the agent's bigger combos end in their air recovery 10% of the time, in the user's
   41%, 15 November), so a combo that leaves its victim free in the air costs the agent
   nothing against them.
+  With it: techway, the share of those recoveries made forward (0: all backward);
+  techsafe (1: it presses out only while the agent cannot throw it, in a move of its own
+  or more than TECH_SAFE pixels away, and otherwise falls: a recovery when it is safe);
+  techhit, the share of its recoveries it follows with an attack at the agent (forward
+  and B, pressed again every other step for TECH_HIT steps, while it is in the air and
+  the agent within TECH_REACH pixels: what a person's recovery is for, and what makes a
+  recovery left uncaught cost something).
+- escape: the share of the times it is free on the ground in a corner, the agent on the
+  open side within ESCAPE_NEAR pixels, that it jumps out over the agent: up-forward, a
+  second jump forward at the top, then forward held (drawn once each time it comes free
+  there; over its other habits, under the recovery). What a person does against pressure
+  it cannot guard forever: how long the agent keeps it there is evaluate.py's `corner`.
 """
 
 import json
@@ -132,7 +144,12 @@ WAKE_HOLD = 3     # steps the button is held
 THROW_UP = 12     # steps after its own rising in which a person profile's throw isn't tried
                   # (it fails there: its forward + C comes out as an attack, punished)
 KEYS = ('rg', 'reversal', 'throw', 'damage', 'bait', 'patient', 'wake', 'jumpin', 'blind',
-        'crouch', 'habits', 'adapt', 'wide', 'tech')
+        'crouch', 'habits', 'adapt', 'wide', 'tech', 'techway', 'techsafe', 'techhit',
+        'escape')
+SELF_X, OPP_X = 13, 45
+ESCAPE_X, ESCAPE_NEAR = 0.8, 220   # a corner (of +-0.95), and the agent this close
+ESCAPE_AGAIN, ESCAPE_STEPS = 14, 44  # the second jump's step, and the script's length
+TECH_SAFE, TECH_HIT, TECH_REACH = 110, 24, 160  # (the air throw reaches 100 pixels)
 AIR_HIT = range(0x32, 0x60)  # the hit reactions (src/efz.h); in the air: what a recovery ends
 THROWN = tuple(range(0x64, 0x79))  # evaluate.THROWN: the poses a throw puts its victim in
 THROW_WATCH = 30  # steps after its throw's press in which how it went is looked for
@@ -153,7 +170,8 @@ SPAN = {name: (min(v), max(v)) for name, v in HABITS.items()}  # adapt's least a
 def parse(spec):
     """'rg=0.5,reversal=0.8,throw=0.3,damage=2' -> dict (left out: none)."""
     out = dict(rg=0.0, reversal=0.0, throw=0.0, damage=1.0, bait=0.0, patient=0.0, wake=0.0,
-               jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0, adapt=0.0, wide=1.0, tech=0.0)
+               jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0, adapt=0.0, wide=1.0, tech=0.0,
+               techway=0.0, techsafe=0.0, techhit=0.0, escape=0.0)
     for part in filter(None, (spec or '').split(',')):
         k, v = part.split('=')
         if k not in out:
@@ -248,8 +266,10 @@ class Advantages:
 
     def __init__(self, char, n, reversal=0.0, throw=0.0, seed=0, bait=0.0, learner='ayu',
                  patient=0.0, wake=0.0, jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0,
-                 adapt=0.0, wide=1.0, tech=0.0):
-        self.wide, self.tech = wide, tech
+                 adapt=0.0, wide=1.0, tech=0.0, techway=0.0, techsafe=0.0, techhit=0.0,
+                 escape=0.0):
+        self.wide, self.tech, self.escape = wide, tech, escape
+        self.techway, self.techsafe, self.techhit = techway, techsafe, techhit
         self.base = dict(wake=wake, blind=blind, patient=patient, crouch=crouch, throw=throw,
                          reversal=reversal, jumpin=jumpin, bait=bait)
         self.habits, self.adapt = habits, adapt
@@ -302,6 +322,10 @@ class Advantages:
 
     def resize(self, n):
         self.tech_on, self.tech_step = np.zeros(n, bool), np.zeros(n, int)
+        self.tech_fwd, self.tech_hits = np.zeros(n, bool), np.zeros(n, bool)
+        self.tech_rec, self.tech_left = np.zeros(n, bool), np.zeros(n, int)
+        self.esc_step, self.esc_drawn = np.zeros(n, int), np.zeros(n, bool)
+        self.tech_waited = np.zeros(n, bool)
         self.k = {name: np.full(n, 0.0 if name in self.off else float(v))
                   for name, v in self.base.items()}  # each environment's, this match
         for i in range(n if self.habits > 0 else 0):  # (an evaluation's matches: one each)
@@ -390,20 +414,75 @@ class Advantages:
                     + [(last, ''), (last, button)] * MASH), delay
         return None
 
+    def escaping(self, i, v):
+        """The jump out of a corner: its controls on this step, or None."""
+        a = int(round(v[SELF_ACT]))
+        k = self.esc_step[i]
+        if k > 0:  # on its way out
+            if v[SELF_HITSTUN] > 0.5 or k >= ESCAPE_STEPS or (k > 8 and v[SELF_AIRBORNE] < 0.5):
+                self.esc_step[i] = 0
+                return None
+            self.esc_step[i] += 1
+            if k < ESCAPE_AGAIN:
+                return (9, '')
+            if k == ESCAPE_AGAIN:
+                return (5, '')       # (the stick let go: the second jump is a new press)
+            return (9, '') if k < ESCAPE_AGAIN + 4 else (6, '')
+        cornered = (abs(float(v[SELF_X])) > ESCAPE_X and abs(float(v[OPP_X])) < abs(float(v[SELF_X]))
+                    and abs(float(v[DX])) * 640 <= ESCAPE_NEAR)
+        free = a in FREE and v[SELF_AIRBORNE] < 0.5 and v[SELF_HITSTUN] < 0.5
+        if not (cornered and free):
+            self.esc_drawn[i] = False
+            return None
+        if self.esc_drawn[i]:
+            return None
+        self.esc_drawn[i] = True
+        if self.rng.random() >= self.escape:
+            return None
+        self.counts['escapes'] = self.counts.get('escapes', 0) + 1
+        self.esc_step[i] = 1
+        return (9, '')
+
     def step(self, i, v):
         out = self.act(i, v)
+        if self.escape > 0:
+            esc = self.escaping(i, v)
+            if esc is not None:
+                out = esc
         if self.tech > 0:  # recovering in the air from the agent's combo: over anything else
             a = int(round(v[SELF_ACT]))
             if a in AIR_HIT:
                 if self.tech_step[i] == 0:  # a new combo on it: does it recover from this one
                     self.tech_on[i] = self.rng.random() < self.tech
+                    if self.techway > 0 or self.techhit > 0:
+                        self.tech_fwd[i] = self.rng.random() < self.techway
+                        self.tech_hits[i] = self.rng.random() < self.techhit
                 self.tech_step[i] += 1
+                self.tech_left[i] = 0
                 if self.tech_on[i] and v[SELF_AIRBORNE] > 0.5:
-                    return (4, 'A' if self.tech_step[i] % 2 else '')
+                    if self.techsafe > 0 and v[OPP_ACT] < FIRST_OWN - 0.5 and \
+                            abs(float(v[DX])) * 640 <= TECH_SAFE:
+                        if not self.tech_waited[i]:  # (once a combo)
+                            self.counts['tech_unsafe'] = self.counts.get('tech_unsafe', 0) + 1
+                        self.tech_waited[i] = True
+                        return (4, '')  # the agent free beside it: it falls
+                    return (6 if self.tech_fwd[i] else 4, 'A' if self.tech_step[i] % 2 else '')
             else:
-                if self.tech_step[i] and self.tech_on[i] and a in (0x9d, 0x9e):
+                rec = a in (0x9d, 0x9e)
+                if self.tech_step[i] and self.tech_on[i] and rec:
                     self.counts['recoveries'] += 1
                 self.tech_step[i] = 0
+                self.tech_waited[i] = False
+                if self.tech_rec[i] and not rec and self.tech_hits[i]:
+                    self.tech_left[i] = TECH_HIT   # out of its recovery: the attack
+                    self.counts['tech_hits'] = self.counts.get('tech_hits', 0) + 1
+                self.tech_rec[i] = rec
+                if self.tech_left[i] > 0:
+                    self.tech_left[i] -= 1
+                    if v[SELF_AIRBORNE] > 0.5 and v[SELF_HITSTUN] < 0.5 and \
+                            abs(float(v[DX])) * 640 <= TECH_REACH:
+                        return (6, 'B' if self.tech_left[i] % 2 else '')
+                    self.tech_left[i] = 0
         return out
 
     def act(self, i, v):
@@ -711,7 +790,9 @@ class AdvantagedOpponent:
                                            a.get('wake', 0.0), a.get('jumpin', 0.0),
                                            a.get('blind', 0.0), a.get('crouch', CROUCH),
                                            a.get('habits', 0.0), a.get('adapt', 0.0),
-                                           a.get('wide', 1.0), a.get('tech', 0.0))
+                                           a.get('wide', 1.0), a.get('tech', 0.0),
+                                a.get('techway', 0.0), a.get('techsafe', 0.0),
+                                a.get('techhit', 0.0), a.get('escape', 0.0))
         self.logic = logic(adv, seed)
         self.alt = logic(alt, seed + 7919) if alt is not None else None
         self.venv = None
@@ -785,7 +866,9 @@ class AdvantagedAgent:
                                 adv.get('wake', 0.0), adv.get('jumpin', 0.0),
                                 adv.get('blind', 0.0), adv.get('crouch', CROUCH),
                                 adv.get('habits', 0.0), adv.get('adapt', 0.0),
-                                adv.get('wide', 1.0), adv.get('tech', 0.0))
+                                adv.get('wide', 1.0), adv.get('tech', 0.0),
+                                adv.get('techway', 0.0), adv.get('techsafe', 0.0),
+                                adv.get('techhit', 0.0), adv.get('escape', 0.0))
         self.env = self.side = None
 
     def __getattr__(self, name):  # the rest is the agent's

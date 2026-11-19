@@ -1332,7 +1332,7 @@ to write such a part and one host for each place an agent plays
 | `Module` | a part of an agent: every step it is shown each environment's step (`watch(i, ctx)`) and asked for its action (`act(i, ctx)`): an action, or None, "not mine". `ctx` is what the host knows: `ctx.view`, what the player sees, `delay` steps old (a module keeps the human limits by deciding from it); its input history; and for planning on copies of the game `ctx.save()` and `ctx.now` |
 | `Stack` | several modules in order: the first that wants the step has it, the agent's own play the last; a module that was playing sees in `ctx.last` that another took the step |
 | `ModularAgent` | an `Agent` with modules, for evaluations (a batch) and for a person's match (`play.py`) |
-| `ModularOpponent`, `efz_env.sb3.ModularLearner` | the same for an opponent and for the learner of `finetune.py`'s environment (a module's steps marked for the loss to leave out, as the routes' were) |
+| `ModularOpponent`, `efz_env.sb3.ModularLearner` | the same for an opponent and for the learner of `finetune.py`'s environment (a module's steps marked for the loss to leave out, as the routes' were): `finetune.py --assist` (the routes alone) and `--module KIND:key=value,...` (any of them, in training and in its evaluations) |
 | `agent.json` | what an agent is made of, beside its model (and in a pack): the model, the modules in the order they are asked, each one's files and options. `play.py` reads it (a pack without one is its model and, if it holds a library, the routes); `--module KIND:key=value,...` and `--no-module KIND` change it, `evaluate.py --p1-module` adds one |
 
 A kind of module is registered by the file that writes it (`agent_modules.py` imports

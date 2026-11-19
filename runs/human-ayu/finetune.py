@@ -28,7 +28,8 @@ another run), which play --vs-share of the matches against agents (1: only they)
 --focus the learner also gets focus.py's shaping reward for what it is meant to be good
 at ('setup': objects put out in free time, Mizuka's and Misuzu's traps; 'charge': Kano's
 charge moves in free time; 'reversal': an invincible attack at wake-up or after a recoil
-guard that hits; 'air': a jump-in that lands): an exploiter with a style, trained against a frozen agent
+guard that hits; 'air': a jump-in that lands; 'out': an air recovery that gets away, a
+corner left under pressure): an exploiter with a style, trained against a frozen agent
 (--vs) and kept close to its people's clone. --stop-win ends it once it beats every --vs
 opponent that often. best.zip is the chunk whose evaluation won most (the mean over the
 --vs opponents and the CPU; with --cpu-chars a character, the share of its HP taken
@@ -160,7 +161,7 @@ def parse():
                         "of these lengths (one drawn a set): the opponent's habits "
                         "(--vs-habits) are a set's, and the memory is kept over it "
                         "(default: every match a set)")
-    p.add_argument('--focus', choices=('setup', 'charge', 'reversal', 'air'),
+    p.add_argument('--focus', choices=('setup', 'charge', 'reversal', 'air', 'out'),
                    help="a shaping reward (focus.py)")
     p.add_argument('--focus-coef', type=float, default=0.02)
     p.add_argument('--press-cost', type=float, default=0,
@@ -224,6 +225,13 @@ def parse():
                    help="--assist's and --vs-assist's choice of route: the most damaging, or the "
                         "most worth to the player (damage plus its critic's value of the game it "
                         "left: redteam.Planner)")
+    p.add_argument('--module', action='append', default=[], metavar='KIND:key=value,...',
+                   help="the learner plays with this module (evaluate.py --p1-module's kinds and "
+                        "options; several: asked in this order), in the training's matches and "
+                        "the evaluations': an agent's routes, its planned okizeme and pressure, "
+                        "its catch, as it is played with them, so that the policy learns the "
+                        "game they leave it. Their steps are kept out of the policy's loss, as "
+                        "--assist's (routes here: --module routes:library=...)")
     p.add_argument('--vs-assist', help="the --vs opponents play with built-in combos, routes from "
                                        "this library (combo_support.FairAssistOpponent): agents "
                                        "trained with --assist, met as they play")
@@ -275,12 +283,23 @@ def parse():
                    help='0: leave the curriculum agent (--old) out of the evaluations')
     p.add_argument('--ent-coef', type=float, default=0.005)
     p.add_argument('--torch-threads', type=int, default=8)
+    p.add_argument('--vs-native', action='store_true',
+                   help="a --vs opponent that is an agent file (.efzagent) is played by the "
+                        "game's own code, with its routes and planners as the game plays them "
+                        "(native_agent.NativeOpponent), in the training's matches and the "
+                        "evaluation's: what learns to beat it meets what a person meets. "
+                        "Without it, a file's model alone")
+    p.add_argument('--vs-native-threads', type=int, default=4,
+                   help="--vs-native: the file's players' steps on this many threads (their "
+                        "plans are most of a step; the same play as on one)")
     args = p.parse_args()
     if args.delay_most is not None and args.delay_most != args.delay:
         if args.delay_most < args.delay:
             p.error('--delay-most: at least --delay')
-        if args.assist or args.vs_assist or args.practice:  # (they plan with one delay)
-            p.error('--delay-most: not with --assist, --vs-assist or --practice')
+        if args.assist or args.vs_assist or args.practice or args.module:  # (they plan with one delay)
+            p.error('--delay-most: not with --assist, --vs-assist, --practice or --module')
+    if args.module and (args.assist or args.delay <= 0):
+        p.error('--module: with --delay, and without --assist (its routes: --module routes:...)')
     if args.cpu_chars not in ('tiers', 'random'):
         from efz_env.vec import character_names
         if args.cpu_chars not in character_names():
@@ -525,6 +544,10 @@ def make_env(args, opponents, vs, seed, level, wins=None, pool=None):
         env = combo_support.ComboAssist(env, ASSIST['planner'], ASSIST['policy'],
                                         ASSIST.get('value'),
                                         only=cpu_envs if args.assist_where == 'cpu' else None)
+    if args.module:
+        from efz_env.sb3 import ModularLearner
+        env = ModularLearner(env, MODULES['train'], ASSIST['policy'])
+        MODULES['stack'] = env.stack
     if args.focus:
         import focus
         env = focus.Focus(env, args.focus, args.focus_coef, args.char)
@@ -686,24 +709,103 @@ class _Eval:
     pass
 
 
+def native(path):
+    """An agent file: with --vs-native the game's own code plays it (main keeps its path
+    then; without, the path is its unpacked model's by now)."""
+    return str(path).endswith('.efzagent')
+
+
+def release(*players):
+    """The game's players of an agent file (--vs-native) closed, and what they held given
+    back to the system: each is tens of MB of game copies, a batch of them GBs."""
+    closed = False
+    for p in players:
+        if isinstance(p, (list, tuple)):
+            p = p[0]
+        if type(p).__name__ in ('NativePlayers', 'NativeOpponent'):
+            p.close()
+            closed = True
+    if closed and sys.platform.startswith('linux'):
+        import ctypes
+        try:
+            ctypes.CDLL('libc.so.6').malloc_trim(0)
+        except (OSError, AttributeError):
+            pass
+
+
+def their_agent(path):
+    """An evaluation's opponent."""
+    if native(path):
+        import native_agent
+        return native_agent.NativePlayers(path)
+    return ev.Agent(path)
+
+
+def their_player(path, seed=0, threads=1):
+    """A --vs opponent in the training's matches."""
+    if native(path):
+        import native_agent
+        return native_agent.NativeOpponent(path, seed=seed, threads=threads)
+    return frozen(PPO.load(path, device='cpu'))
+
+
+def learner_modules(specs, data, player):
+    """--module's modules for a player (its model's width, its delay and history; an
+    efz_env Agent, or anything with those three)."""
+    from efz_env import modules
+    import agent_modules  # noqa: F401  (the kinds)
+    return modules.build(player, [modules.parse_spec(m) for m in specs], 'batch', data=data)
+
+
+def with_modules(me, specs, data):
+    """An evaluation's learner with --module's modules: the training's own set (a set is
+    GBs of game copies; what it holds of a match is new at every batch, and the training's
+    environment is made again after an evaluation), or a worker process's, built at its
+    first pairing."""
+    from efz_env import modules
+    if 'train' not in MODULES:
+        MODULES['train'] = learner_modules(specs, data, me)
+    return modules.ModularAgent(me, MODULES['train'])
+
+
+def forget_plans(mods):
+    for m in mods:
+        if isinstance(getattr(m, 'plans', None), list):
+            m.plans = []
+
+
+def take_modules(stack):
+    """What the modules did since the last call: Stack.stats(), their plans forgotten."""
+    out = stack.stats()
+    forget_plans(stack)
+    stack.steps = 0
+    stack.played = {name: 0 for name in stack.played}
+    return out
+
+
 def _eval_one(job):
     """One pairing of evaluate()'s in a worker process: (key, result)."""
     key, data, minutes, chars, model_path, opponent, matches, level = job[:8]
     torch.set_num_threads(1)
     a = _Eval()
     a.data, a.minutes, a.chars = data, minutes, chars
-    them = 'cpu' if opponent == 'cpu' else ev.Agent(opponent)
+    them = 'cpu' if opponent == 'cpu' else their_agent(opponent)
     me = ev.Agent(model_path)
-    if len(job) > 8:  # --assist: with its built-in combos (the worker's own planner)
+    routes, specs = job[8:10]
+    if routes:  # --assist: with its built-in combos (the worker's own planner)
         import combo_support
-        library, how = job[8:]
+        library, how = routes
         if 'planner' not in ASSIST:
             import macros
             import redteam
             ASSIST['planner'] = redteam.Planner(data, macros.load_library(library), me.model,
                                                 score=how)
         me = combo_support.FairComboAgent(me, ASSIST['planner'])
-    return key, ev.play(a, me, them, matches, level)
+    if specs:  # --module: with its modules (the worker's own)
+        me = with_modules(me, specs, data)
+    result = ev.play(a, me, them, matches, level)
+    release(them)
+    return key, result
 
 
 def evaluate(args, model_path, level):
@@ -713,6 +815,8 @@ def evaluate(args, model_path, level):
     if args.assist and not args.assist_distill:  # it plays with its built-in combos
         import combo_support
         me = combo_support.FairComboAgent(me, ASSIST['planner'])
+    if args.module:  # it plays with its modules
+        me = with_modules(me, args.module, args.data)
     out = {}
     cpu_chars = (args.char, args.cpu_chars if level == 4 or args.cpu_chars not in
                  ('tiers', 'random') else 'random')  # tiers: level 4's; one character: any
@@ -728,15 +832,17 @@ def evaluate(args, model_path, level):
         routes = (args.assist, args.assist_score) if args.assist and not args.assist_distill \
             else ()
         pending = pool.map_async(_eval_one, [(k, args.data, args.minutes, c, model_path, o,
-                                              args.eval, lv) + routes for k, c, o, lv in jobs])
+                                              args.eval, lv, routes, tuple(args.module))
+                                             for k, c, o, lv in jobs])
     else:
         for key, chars, opponent, lv in jobs:
             a.chars = chars
-            them = 'cpu' if opponent == 'cpu' else ev.Agent(opponent)
+            them = 'cpu' if opponent == 'cpu' else their_agent(opponent)
             if args.vs_assist and key.startswith('vs'):  # as it plays: its built-in combos
                 import combo_support
                 them = combo_support.FairComboAgent(them, VS_ASSIST[int(key[2:])])
             out[key] = ev.play(a, me, them, args.eval, lv)
+            release(them)
     if args.combo:
         a.chars = (args.char, args.char)
         red = RED['agent'] if RED else ev.Agent(args.combo)
@@ -763,6 +869,7 @@ def evaluate(args, model_path, level):
 RED = {}  # the lookahead red team: its planner, opponent and agent
 ASSIST = {}  # --assist: its planner, the learner's own play on the copies, counts
 VS_ASSIST = []  # --vs-assist: each --vs opponent's planner
+MODULES = {}  # --module: the modules (the training's and the evaluations'), their stack in this chunk's matches
 
 
 def show(results):
@@ -803,7 +910,8 @@ def main():
     args.prior, args.old, args.combo = (model_file(p) if p else p
                                         for p in (args.prior, args.old, args.combo))
     args.team = [model_file(p) for p in args.team]
-    args.vs = [(model_file(p), c) for p, c in args.vs]
+    args.vs = [(os.path.abspath(p) if args.vs_native and native(p) else model_file(p), c)
+               for p, c in args.vs]
     history, start, level = [], unpacked(args.start, args.out), args.level
     saved = {}
     cpu_hp = args.cpu_chars not in ('tiers', 'random')  # best.zip: its HP taken, not wins
@@ -835,7 +943,7 @@ def main():
                        team=[os.path.relpath(t, REPO) for t in given['team']],
                        combo=args.combo and os.path.relpath(args.combo, REPO),
                        combo_teacher=args.combo_teacher, combo_delay=args.combo_delay,
-                       lookahead=args.lookahead, assist=args.assist, vs_assist=args.vs_assist,
+                       lookahead=args.lookahead, assist=args.assist, vs_assist=args.vs_assist, vs_native=args.vs_native, module=args.module,
                        assist_score=args.assist_score, assist_distill=args.assist_distill,
                        assist_where=args.assist_where,
                        practice=args.practice, practice_starts=args.practice_starts,
@@ -870,7 +978,8 @@ def main():
             VS_ASSIST.append(redteam.Planner(args.data, library, m, score=args.assist_score))
             vs.append((combo_support.FairAssistOpponent(VS_ASSIST[-1], m), c))
     else:
-        vs = [(frozen(PPO.load(p, device='cpu')), c) for p, c in args.vs]
+        vs = [(their_player(p, args.seed + 1000 * j, args.vs_native_threads), c)
+              for j, (p, c) in enumerate(args.vs)]
     if (args.vs_reversal or args.vs_throw or args.vs_bait or args.vs_patient or args.vs_wake
             or args.vs_jumpin or args.vs_profile2):  # their inputs' (advantages.py)
         import advantages
@@ -887,6 +996,11 @@ def main():
         ASSIST['planner'] = redteam.Planner(args.data, macros.load_library(args.assist),
                                             PPO.load(start, device='cpu'), score=args.assist_score)
         ASSIST['policy'] = None  # (set to each chunk's learner before its environment)
+    if args.module:
+        from types import SimpleNamespace
+        MODULES['train'] = learner_modules(args.module, args.data, SimpleNamespace(
+            model=PPO.load(start, device='cpu'), delay=args.delay, history=args.history))
+        ASSIST['policy'] = None
     pool = None
     if args.practice:
         import practice
@@ -901,7 +1015,7 @@ def main():
     if args.tell or args.memory:
         start = widened(start, env.observation_space.shape[0], args.out, args.widen_gain)
     model = PPO.load(start, env=env, device='cpu', **settings)
-    if args.assist:
+    if args.assist or args.module:
         model.normalize_advantage = False  # AssistMask normalises, the routes' steps left out
     if args.prior_coef > 0:
         teacher = master.policy if master is not None and args.combo_teacher else None
@@ -926,7 +1040,8 @@ def main():
     if args.average and avg_n and os.path.exists(avg_path):
         avg_state = {k: v.clone() for k, v in
                      PPO.load(avg_path, device='cpu').policy.state_dict().items()}
-    assist_cb = AssistMask(args.assist_distill) if args.assist else None  # (the whole run's)
+    assist_cb = (AssistMask(args.assist_distill) if args.assist or args.module
+                 else None)  # (the whole run's)
     print('starting from', start, flush=True)
     if not history:
         before = evaluate(args, start, level)
@@ -939,7 +1054,7 @@ def main():
     while model.num_timesteps < args.budget:
         env.close()
         wins = recent_wins(history, len(vs), args.pfsp_window)
-        if args.assist:
+        if args.assist or args.module:
             ASSIST['policy'] = frozen(model)
             if args.assist_score == 'value':
                 import redteam
@@ -953,7 +1068,7 @@ def main():
         t = time.time()
         train_log = TrainLog()
         set_lr()
-        callbacks = [KLLog(), train_log] + ([assist_cb] if args.assist else [])
+        callbacks = [KLLog(), train_log] + ([assist_cb] if assist_cb else [])
         model.learn(int(args.chunk), reset_num_timesteps=False, callback=callbacks)
         seconds = time.time() - t
         path = os.path.join(args.out, 'model.zip')
@@ -971,8 +1086,14 @@ def main():
             model.policy.load_state_dict(cur)
             eval_path = avg_path
         due = len(history) % args.eval_every == 0 or model.num_timesteps >= args.budget
+        played = None
+        if args.module:  # the chunk's modules: the share of its steps each played, their plans
+            played = dict(take_modules(MODULES['stack']),  # (before the evaluation plays them)
+                          assisted=round(ASSIST.pop('assisted', 0) / max(1, ASSIST.pop('steps', 1)), 4))
         t_eval = time.time()
+        release(*vs)  # (the chunk's own players of a file: not held through the evaluation)
         results = evaluate(args, eval_path, level) if due else None
+        forget_plans(MODULES.get('train', ()))  # (the evaluation's: not the next chunk's)
         eval_seconds = time.time() - t_eval
         ppo = train_log.take()
         returns = [e['r'] for e in model.ep_info_buffer]
@@ -1008,7 +1129,7 @@ def main():
                             average_n=avg_n if args.average else None,
                             ep_return=float(np.mean(returns)) if returns else None,
                             focus_per_min=focus_rate, practice=trials, assist=assist,
-                            vs_assist=vs_plans, eval=results))
+                            vs_assist=vs_plans, modules=played, eval=results))
         print(f'[{model.num_timesteps / 1e6:.1f}M steps, {seconds:.0f}s + eval {eval_seconds:.0f}s, '
               f'L{level}, KL {model.policy.prior_kl:.3f}'
               + ('' if getattr(model.policy, 'prior_where_seen', None) is None else
@@ -1026,6 +1147,11 @@ def main():
                   + (f"; routes learnt: {assist['distill']['pairs']} steps, cross-entropy "
                      f"{assist['distill']['ce']}, agreement {assist['distill']['acc']:.0%}"
                      if assist.get('distill') else ''), flush=True)
+        if played:
+            print(f"  modules: {played['assisted']:.1%} of steps ("
+                  + ', '.join(f'{k} {v:.1%}' for k, v in played['played'].items()) + '); plans: '
+                  + ', '.join(f"{k} {v.get('plans', 0)}" for k, v in played.items()
+                              if isinstance(v, dict) and k != 'played'), flush=True)
         for j, v in enumerate(vs_plans or []):
             if v.get('plans'):
                 print(f"  vs{j} assist: {v['plans']} plans, a route in {v['route']:.0%}, best "

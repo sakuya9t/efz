@@ -1,7 +1,7 @@
 """How combos end and what a throw is, as runs/human-ayu counts them (tactics.endings,
 tactics.grabs: evaluate.py's combo_ends and grabs), and the scripted opponents' air
-recovery (advantages.py's tech), a corner held (evaluate.corner) and a risky move's cost
-(tactics.risks)."""
+recovery (advantages.py's tech), a corner held (evaluate.corner), a risky move's cost
+(tactics.risks) and the reward for getting away (focus.py's 'out')."""
 
 import os
 import sys
@@ -18,6 +18,12 @@ try:
     MISSING = None
 except ImportError as e:  # pragma: no cover
     MISSING = str(e)
+
+try:
+    import focus
+    NO_FOCUS = None
+except ImportError as e:  # pragma: no cover (stable-baselines3)
+    NO_FOCUS = str(e)
 
 N = len(tactics.OBS) if not MISSING else 0
 # (the opponents' moves, made on each machine from the game: not in the repository)
@@ -298,6 +304,72 @@ class Ledger(unittest.TestCase):
         self.assertEqual(rep['both in the air'], dict(net=0, gained=0, lost=0))
 
 
+class Game:
+    """What focus.Focus reads of EfzSB3VecEnv: player 1's current views."""
+
+    def __init__(self, n=1):
+        self.obs = np.zeros((n, 2, 168), np.float32)
+        self.final_obs = np.zeros((n, 2, 168), np.float32)
+
+
+class Venv:
+    def __init__(self, n=1):
+        self.num_envs, self.env = n, Game(n)
+        self.observation_space = self.action_space = None
+
+    def reset(self):
+        return self.env.obs[:, 0]
+
+    def step_wait(self):
+        n = self.num_envs
+        return self.env.obs[:, 0], np.zeros(n, np.float32), np.zeros(n, bool), [{}] * n
+
+
+@unittest.skipIf(MISSING or NO_FOCUS, f'needs runs/human-ayu and stable-baselines3: {MISSING or NO_FOCUS}')
+class Out(unittest.TestCase):
+    """focus.py's 'out': an air recovery not caught, and a corner left."""
+
+    def play(self, views):
+        venv = Venv()
+        f = focus.Focus(venv, 'out', coef=0.5)
+        venv.env.obs[0, 0] = views[0]
+        f.reset()
+        total = 0.0
+        for v in views[1:]:
+            venv.env.obs[0, 0] = v
+            total += float(f.step_wait()[1][0])
+        return total, f.take()
+
+    def view(self, act=0, x=0.0, opp_x=0.0, dx=100, guard=False):
+        v = np.zeros(168, np.float32)
+        v[focus.ACT_SELF], v[focus.X_SELF], v[focus.X_OPP] = act, x, opp_x
+        v[focus.DX], v[focus.GUARDING_SELF] = dx / 640, float(guard)
+        return v
+
+    def test_a_recovery_pays_when_it_is_not_caught(self):
+        hit, rec, free = self.view(0x3b), self.view(0x9e), self.view(0)
+        total, n = self.play([hit] * 3 + [rec] * 10 + [free] * focus.OUT_WINDOW)
+        self.assertEqual((total, n['recoveries']), (0.5, 1))
+        total, n = self.play([hit] * 3 + [rec] * 10 + [hit] * 5 + [free] * focus.OUT_WINDOW)
+        self.assertEqual((total, n['recoveries']), (0.0, 0))   # hit again inside the window
+        total, n = self.play([free] * 3 + [rec] * 10 + [free] * focus.OUT_WINDOW)
+        self.assertEqual(total, 0.0)                           # not out of a hit
+
+    def test_a_corner_left_pays_when_it_was_pressed_there(self):
+        held = self.view(x=0.9, opp_x=0.6, guard=True)
+        out = self.view(x=0.4, opp_x=0.6)
+        total, n = self.play([held] * 30 + [out] * 5)
+        self.assertEqual((total, n['corners']), (0.5, 1))
+        total, n = self.play([held] * 5 + [out] * 5)           # too short a stay
+        self.assertEqual(total, 0.0)
+        idle = self.view(x=0.9, opp_x=0.6)
+        total, n = self.play([idle] * 30 + [out] * 5)          # never pressed there
+        self.assertEqual(total, 0.0)
+        knocked = self.view(0x3b, x=0.4, opp_x=0.6)
+        total, n = self.play([held] * 30 + [knocked] * 5)      # hit out of it: not its doing
+        self.assertEqual(total, 0.0)
+
+
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
 class Corner(unittest.TestCase):
     def test_a_stay_in_the_corner_and_how_it_ends(self):
@@ -344,6 +416,53 @@ class Tech(unittest.TestCase):
         logic.step(0, self.view(0x3b, air=True))
         logic.step(0, self.view(0x9e, air=True))                 # it recovered
         self.assertEqual(logic.take()['recoveries'], 1)
+
+    def test_it_recovers_only_when_it_is_safe(self):
+        logic = advantages.Advantages('mai', 1, tech=1.0, techsafe=1.0)
+        logic.clear(0)
+        near = self.view(0x3b, air=True)
+        near[advantages.DX] = 60 / 640                           # the agent free beside it
+        self.assertEqual(logic.step(0, near), (4, ''))           # it falls
+        busy = near.copy()
+        busy[advantages.OPP_ACT] = advantages.FIRST_OWN + 5      # the agent in a move of its own
+        self.assertIn(logic.step(0, busy), [(4, 'A'), (4, '')])
+        far = self.view(0x3b, air=True)                          # 300 pixels away
+        self.assertEqual(sorted(logic.step(0, far) for _ in range(2)), [(4, ''), (4, 'A')])
+        self.assertEqual(logic.take()['tech_unsafe'], 1)
+
+    def test_it_attacks_out_of_its_recovery_and_recovers_forward(self):
+        self.assertEqual(advantages.parse('tech=1,techhit=1,techway=1')['techhit'], 1.0)
+        logic = advantages.Advantages('mai', 1, tech=1.0, techhit=1.0, techway=1.0)
+        logic.clear(0)
+        self.assertEqual(logic.step(0, self.view(0x3b, air=True)), (6, 'A'))   # forward
+        logic.step(0, self.view(0x9d, air=True))                 # in its recovery
+        free = self.view(0xe, air=True)
+        free[advantages.DX] = 80 / 640
+        got = [logic.step(0, free) for _ in range(4)]            # out of it, the agent near
+        self.assertEqual(sorted(set(got)), [(6, ''), (6, 'B')])
+        away = self.view(0xe, air=True)                          # the agent 300 pixels away
+        self.assertIsNone(logic.step(0, away))
+        self.assertEqual(logic.take()['tech_hits'], 1)
+
+    def test_it_jumps_out_of_a_corner_when_it_is_free_there(self):
+        self.assertEqual(advantages.parse('escape=1')['escape'], 1.0)
+        logic = advantages.Advantages('mai', 1, escape=1.0)
+        logic.clear(0)
+        v = self.view()                                          # standing, free
+        v[advantages.SELF_X], v[advantages.OPP_X] = 0.9, 0.7     # in the corner, the agent inside
+        v[advantages.DX] = 100 / 640
+        self.assertEqual(logic.step(0, v), (9, ''))
+        up = v.copy()
+        up[advantages.SELF_AIRBORNE] = 1.0
+        got = [logic.step(0, up) for _ in range(20)]
+        self.assertIn((5, ''), got)                              # the stick let go once,
+        self.assertEqual(got[-1], (6, ''))                       # the second jump, then forward
+        self.assertEqual(logic.take()['escapes'], 1)
+        mid = self.view()                                        # midscreen: nothing
+        mid[advantages.SELF_X], mid[advantages.OPP_X] = 0.2, 0.0
+        logic2 = advantages.Advantages('mai', 1, escape=1.0)
+        logic2.clear(0)
+        self.assertIsNone(logic2.step(0, mid))
 
     def test_none_of_it_at_zero(self):
         logic = advantages.Advantages('mai', 1)
