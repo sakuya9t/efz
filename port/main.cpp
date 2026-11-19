@@ -24,6 +24,22 @@
 //                     replays a recorded fight (fight-NNN.jsonl) instead of the menus,
 //                     comparing each tick with the record, and quits: exit code 0 if
 //                     every tick is as recorded, 3 if not, 4 if it couldn't replay
+//   --record-to-rep FIGHT.jsonl... [--out DIR]
+//                     each record as a replay (.rep) in DIR (default the current folder):
+//                     replayed with the game recording a replay of it, then that replay
+//                     played back and compared with the record tick by tick; not a
+//                     record with the CPU in it, which a replay can't hold
+//   --rep-to-record REPLAY.rep...
+//                     each replay (the game's, or EfzRevival's) played as the REPLAY
+//                     menu plays one, its fight recorded in this run's session folder
+//   --export-mp4 FILE... [--out DIR] [--video-size 640|1280]
+//                     each record or replay as a video, DIR/<name>.mp4: H.264 pictures
+//                     640x480 or 1280x960 (the default) and Opus sound, 64 frames a second
+//                     These quit when done, without a window or sound: exit code 0 all
+//                     converted, 3 a replay played otherwise than its record, 4 one not
+//                     converted; each says how it went on stdout. With --out, a record
+//                     made of a replay goes to DIR, named for the replay
+//   --tool [FILE...]  the replay tool (efz-convert starts with it): the same in a window
 //   --seed N          rand()'s seed (default: the clock), logged either way
 //   --crash-test KIND crash on purpose (segv, abort or fatal) to test the crash report
 //
@@ -36,6 +52,9 @@
 //   --delay N         the input delay (default: the recommended one)
 //   --agent FILE      this computer's side is played by the agent file FILE (NET PLAY's
 //                     PLAYED BY)
+//
+// The REPLAY menu has a page after EXIT, RECORDS: the fight records in the logs folder,
+// each played as the game plays a replay (Esc: back to the menu, F8: pause).
 //
 // Agents (docs/agents.md): an agent file (.efzagent) in the agents folder of the game's
 // folder or of the save folder plays a side of VS HUMAN, chosen on character select (F5
@@ -62,6 +81,7 @@
 #include "netplay.h"
 #include "record.h"
 #include "agents.h"
+#include "tool.h"
 
 namespace {
 
@@ -194,7 +214,7 @@ void PumpEvents()
     Heartbeat(); // the watchdog's: the game's own waits pump events too
     g_pumps++;
     while (SDL_PollEvent(&e)) {
-        if (NetplayEvent(e))
+        if (NetplayEvent(e) || ToolEvent(e))
             continue;
         switch (e.type) {
         case SDL_EVENT_QUIT:
@@ -315,7 +335,9 @@ static void Usage(const char* name)
             "usage: %s [--data DIR] [--save DIR] [--fullscreen] [--log-dir DIR] "
             "[--log-level L] [--log-keep N] [--log-max-mb N] [--verbose] "
             "[--record | --no-record] "
-            "[--replay-fight FILE] [--seed N] [--crash-test KIND] [--frames N] [--fast] "
+            "[--replay-fight FILE] [--record-to-rep FIGHT.jsonl... [--out DIR]] "
+            "[--rep-to-record REPLAY.rep...] [--export-mp4 FILE... [--video-size 640|1280]] "
+            "[--tool [FILE...]] [--seed N] [--crash-test KIND] [--frames N] [--fast] "
             "[--keys SCRIPT] [--dump DIR] [--dump-every N] "
             "[--host | --join ADDRESS] [--port N] [--name NAME] [--delay N] [--agent FILE] "
             "[--agent-p1 FILE] [--agent-p2 FILE]\n",
@@ -328,7 +350,11 @@ int EfzMain(int argc, char** argv)
     int stackMark;
     efz::SetStack(&stackMark);
     efz::InstallCrashHandler();
-    std::string data, save, dump, logDir, replay, crashTest;
+    std::string data, save, dump, logDir, replay, crashTest, outDir;
+    std::vector<efz::Conversion> conversions;
+    bool tool = false;
+    int videoScale = 2;
+    std::vector<std::string> toolFiles;
     bool fullscreen = false, fast = false, verbose = false, seeded = false;
     long frames = -1, dumpEvery = 60;
     int record = -1, keep = 20;
@@ -375,6 +401,24 @@ int EfzMain(int argc, char** argv)
             record = 0;
         else if (a == "--replay-fight" && more)
             replay = argv[++i];
+        else if ((a == "--record-to-rep" || a == "--rep-to-record" || a == "--export-mp4") &&
+                 more) {
+            for (; i + 1 < argc && strncmp(argv[i + 1], "--", 2) != 0; i++) {
+                efz::Conversion c;
+                c.kind = a == "--record-to-rep"   ? efz::Conversion::kToRep
+                         : a == "--rep-to-record" ? efz::Conversion::kToRecord
+                                                  : efz::Conversion::kToVideo;
+                c.in = argv[i + 1];
+                conversions.push_back(c);
+            }
+        } else if (a == "--out" && more)
+            outDir = argv[++i];
+        else if (a == "--video-size" && more)
+            videoScale = atoi(argv[++i]) <= 640 ? 1 : 2;
+        else if (a == "--tool")
+            tool = true;
+        else if (tool && !a.empty() && a[0] != '-')
+            toolFiles.push_back(a); // (a file dropped on the program)
         else if (a == "--seed" && more) {
             seed = (unsigned)strtoul(argv[++i], nullptr, 0);
             seeded = true;
@@ -469,6 +513,19 @@ int EfzMain(int argc, char** argv)
         gameSave = scratch;
     }
     efz::SetDataDir(data.c_str(), gameSave.c_str());
+    // Conversions run fast, without a window to see or sound to hear; their files go to
+    // a scratch folder too (record.cpp's tasks), and the replays they write to --out.
+    bool converting = !conversions.empty();
+    if (converting) {
+        fast = true;
+        SDL_SetHint(SDL_HINT_AUDIO_DRIVER, "dummy");
+        if (!outDir.empty())
+            SDL_CreateDirectory(outDir.c_str());
+        for (efz::Conversion& c : conversions) {
+            c.outDir = outDir;
+            c.videoScale = videoScale;
+        }
+    }
 
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
         efz::LogError("main", "SDL: %s", SDL_GetError());
@@ -488,7 +545,8 @@ int EfzMain(int argc, char** argv)
     efz::SetSessionString("audio", audio ? audio : "none");
     SDL_SetHint(SDL_HINT_RENDER_VSYNC, "0");
     g_window = SDL_CreateWindow("ETENAL FIGHTER ZERO", 640, 480,
-                                SDL_WINDOW_RESIZABLE | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0));
+                                SDL_WINDOW_RESIZABLE | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0) |
+                                    (converting ? SDL_WINDOW_HIDDEN : 0));
     if (!g_window) {
         efz::LogError("main", "cannot open the window: %s", SDL_GetError());
         efz::EndLog(1);
@@ -542,14 +600,19 @@ int EfzMain(int argc, char** argv)
             g_quit = true;
             code = 4;
         }
+    } else if (converting && !efz::StartConversions(conversions, &g_scene)) {
+        g_quit = true; // (none needed the game: copied, or refused)
     }
     // Netplay: the title's NET PLAY, or a match from the command line. Not under the
     // compatibility test's harness, whose fights mustn't see a NET PLAY row.
     // The agents too: they play through the controls, which the harness gives.
-    if (!harness && replay.empty()) {
+    if (tool && !converting && replay.empty()) {
+        efz::InitTool(toolFiles); // the replay tool: no menus, no agents, no network
+    } else if (!harness && replay.empty() && !converting) {
         agentOptions.fast = fast;
         efz::InitAgents(agentOptions);
         efz::InitNetplay(netOptions);
+        efz::InitRecords(); // the REPLAY menu's RECORDS page
     }
     efz::StartWatchdog(15);
 
@@ -591,18 +654,53 @@ int EfzMain(int argc, char** argv)
             continue;
         }
         efz::SetLogFrame(n, g_scene);
-        efz::RecorderFrameStart(n, g_scene);
-        efz::AgentsFrame();
-        g_game->m_oddFrame = !g_game->m_oddFrame;
+        // The replay tool between its conversions: its window, the game not run.
+        if (efz::ToolOn() && !efz::RecordTasksRunning()) {
+            efz::ToolFrame(&g_scene);
+            if (!efz::RecordTasksRunning()) {
+                efz::PresentAgain();
+                next += frame;
+                Uint64 now = SDL_GetTicksNS();
+                if (fast)
+                    continue;
+                if (now < next)
+                    SDL_DelayPrecise(next - now);
+                else
+                    next = now;
+                continue;
+            }
+        }
+        // A record played from the REPLAY menu and paused (F8): its frame shown again, the
+        // game not run.
+        bool paused = efz::RecordPaused(g_scene);
+        if (!paused) {
+            efz::RecorderFrameStart(n, g_scene);
+            efz::AgentsFrame();
+            g_game->m_oddFrame = !g_game->m_oddFrame;
+        }
+        // A replay written or checked: its frames neither drawn nor waited for, the page's
+        // progress shown now and then; a video made: drawn, not waited for.
+        bool hurry = efz::RecordHurry();
+        bool undrawn = efz::RecordUndrawn();
         BYTE scene = g_scene;
         Uint64 start = SDL_GetTicksNS();
         long pumps = g_pumps;
         if (g_scenes[g_scene] != NULL) {
             g_sound->UpdateLoop(g_game->m_music);
-            g_scene = g_scenes[g_scene]->Update();
+            efz::g_skipDrawing = undrawn;
+            if (paused)
+                efz::PresentAgain();
+            else
+                g_scene = g_scenes[g_scene]->Update();
+            efz::g_skipDrawing = false;
+        }
+        static Uint64 shown = 0;
+        if (undrawn && SDL_GetTicksNS() - shown > SDL_NS_PER_SECOND / 10) {
+            efz::PresentAgain();
+            shown = SDL_GetTicksNS();
         }
         Uint64 spent = SDL_GetTicksNS() - start;
-        bool replayed = efz::RecorderFrameEnd(g_scene);
+        bool replayed = !paused && efz::RecorderFrameEnd(&g_scene);
         visitFrames++;
         visitTime += spent;
         worstFrame = spent > worstFrame ? spent : worstFrame;
@@ -626,11 +724,11 @@ int EfzMain(int argc, char** argv)
             efz::SaveFrame((dump + path).c_str());
         }
         if (replayed) {
-            why = "the replay is over";
+            why = converting ? "the conversions are done" : "the replay is over";
             break;
         }
         next += frame;
-        if (fast)
+        if (fast || hurry)
             continue;
         efz::AgentsIdle(next); // the agents' plans, in the time left
         Uint64 now = SDL_GetTicksNS();
@@ -648,6 +746,8 @@ int EfzMain(int argc, char** argv)
     efz::StopRecorder();
     if (!replay.empty() && code == 0)
         code = efz::ReplayResult();
+    if (converting && code == 0)
+        code = efz::ConversionResult();
 
     // What WM_DESTROY did.
     efz::DeleteGame();

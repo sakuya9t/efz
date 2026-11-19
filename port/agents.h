@@ -27,7 +27,8 @@ struct AgentOptions {
 };
 void InitAgents(const AgentOptions& options);
 // main.cpp, each frame before the scene's update, out of netplay: the agents' inputs of
-// the frame, and F5/F6 (Shift+F5/F6) on character select.
+// the frame, and F5/F6 (Shift+F5/F6) on character select. Nothing while a record plays
+// from the REPLAY menu (record.h): its inputs are the record's.
 void AgentsFrame();
 // input.cpp's CInput::GetInput out of netplay: an agent's side gets its input instead of
 // the controls'; with one side an agent, the other side's player may use P1's controls.
@@ -42,6 +43,10 @@ void StopAgents();
 // While set, the game is running frames of an agent's plan on a copy of the fight:
 // sound.cpp, input.cpp and netplay leave those frames out.
 bool AgentPlanning();
+// The fight recorder (record.cpp), as a fight of VS HUMAN begins: the agent playing a
+// side, its name (with its version) and its file's name; null for a person's side.
+const char* AgentName(int side);
+const char* AgentFileName(int side);
 
 // --- Netplay (port/netplay/): this computer's side played by an agent.
 

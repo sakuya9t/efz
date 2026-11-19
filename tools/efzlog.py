@@ -160,8 +160,9 @@ def read_session(path):
 
 
 def players(header):
-    return ' vs '.join(f"{p['name']} ({'cpu' if p['cpu'] else 'human'})"
-                       for p in header['players'])
+    def who(p):
+        return 'cpu' if p['cpu'] else f"agent {p['agent']}" if p.get('agent') else 'human'
+    return ' vs '.join(f"{p['name']} ({who(p)})" for p in header['players'])
 
 
 def fight_line(fight):

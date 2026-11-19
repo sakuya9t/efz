@@ -158,6 +158,9 @@ generator of its own.
 `--agent-p1 FILE` and `--agent-p2 FILE` on the command line start with those sides played
 by those agent files (a name in the agents folders, or a path).
 
+Each fight's record ([logging.md](logging.md)) names the agent that played each side, and
+the REPLAY menu's RECORDS page plays it back, the agent's side labelled as in the fight.
+
 ## Its combos: the routes
 
 An agent file with routes plays its combos as `play.py --assist` does
