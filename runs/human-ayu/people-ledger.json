@@ -1,0 +1,4848 @@
+{
+ "all": {
+  "matches": 1908,
+  "ayu_won": 0.44,
+  "minutes": 4501,
+  "ledger": {
+   "hp": 7428,
+   "times": 8.12,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1177,
+     "times": 1.25,
+     "each": 943
+    },
+    "in the air, attacking": {
+     "hp": 1161,
+     "times": 1.22,
+     "each": 949
+    },
+    "free on the ground": {
+     "hp": 1050,
+     "times": 0.98,
+     "each": 1066
+    },
+    "opened after guarding": {
+     "hp": 936,
+     "times": 0.93,
+     "each": 1001
+    },
+    "in the air, not attacking": {
+     "hp": 861,
+     "times": 0.86,
+     "each": 996
+    },
+    "rising, not acting": {
+     "hp": 485,
+     "times": 0.36,
+     "each": 1353
+    },
+    "its move guarded, then punished": {
+     "hp": 441,
+     "times": 0.33,
+     "each": 1340
+    },
+    "in a move, after guarding": {
+     "hp": 437,
+     "times": 0.47,
+     "each": 931
+    },
+    "thrown": {
+     "hp": 368,
+     "times": 0.27,
+     "each": 1354
+    },
+    "chip": {
+     "hp": 229,
+     "times": 1.19,
+     "each": 192
+    },
+    "in a move, rising": {
+     "hp": 153,
+     "times": 0.14,
+     "each": 1080
+    },
+    "its invincible move beaten": {
+     "hp": 117,
+     "times": 0.09,
+     "each": 1362
+    },
+    "dashing": {
+     "hp": 13,
+     "times": 0.01,
+     "each": 933
+    }
+   },
+   "air_where": {
+    "combo": 131,
+    "okizeme": 145,
+    "open": 609,
+    "pressure": 276
+   },
+   "air_by": {
+    "air": 345,
+    "ground": 784,
+    "reversal": 31
+   }
+  },
+  "dealt_ledger": {
+   "hp": 6929,
+   "times": 7.01,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1449,
+     "times": 1.5,
+     "each": 963
+    },
+    "in the air, attacking": {
+     "hp": 900,
+     "times": 0.79,
+     "each": 1141
+    },
+    "rising, not acting": {
+     "hp": 895,
+     "times": 0.54,
+     "each": 1643
+    },
+    "free on the ground": {
+     "hp": 786,
+     "times": 0.8,
+     "each": 988
+    },
+    "opened after guarding": {
+     "hp": 739,
+     "times": 0.77,
+     "each": 958
+    },
+    "in the air, not attacking": {
+     "hp": 494,
+     "times": 0.45,
+     "each": 1103
+    },
+    "in a move, after guarding": {
+     "hp": 451,
+     "times": 0.5,
+     "each": 900
+    },
+    "its move guarded, then punished": {
+     "hp": 428,
+     "times": 0.36,
+     "each": 1195
+    },
+    "thrown": {
+     "hp": 230,
+     "times": 0.21,
+     "each": 1085
+    },
+    "its invincible move beaten": {
+     "hp": 157,
+     "times": 0.13,
+     "each": 1195
+    },
+    "in a move, rising": {
+     "hp": 152,
+     "times": 0.14,
+     "each": 1084
+    },
+    "chip": {
+     "hp": 134,
+     "times": 0.7,
+     "each": 191
+    },
+    "dashing": {
+     "hp": 114,
+     "times": 0.12,
+     "each": 978
+    }
+   },
+   "air_where": {
+    "combo": 109,
+    "okizeme": 146,
+    "open": 455,
+    "pressure": 190
+   },
+   "air_by": {
+    "air": 341,
+    "ground": 487,
+    "reversal": 72
+   }
+  },
+  "net_ledger": {
+   "net": -499,
+   "my okizeme": {
+    "net": 584,
+    "gained": 1356,
+    "lost": 773
+   },
+   "its okizeme": {
+    "net": -326,
+    "gained": 869,
+    "lost": 1195
+   },
+   "my pressure": {
+    "net": 133,
+    "gained": 1248,
+    "lost": 1116
+   },
+   "its pressure": {
+    "net": -513,
+    "gained": 848,
+    "lost": 1361
+   },
+   "I came by air": {
+    "net": -361,
+    "gained": 844,
+    "lost": 1205
+   },
+   "it came by air": {
+    "net": 305,
+    "gained": 667,
+    "lost": 362
+   },
+   "both in the air": {
+    "net": -137,
+    "gained": 537,
+    "lost": 674
+   },
+   "on the ground": {
+    "net": -183,
+    "gained": 559,
+    "lost": 743
+   }
+  }
+ },
+ "opponent/1": {
+  "matches": 80,
+  "ayu_won": 0.825,
+  "minutes": 162,
+  "ledger": {
+   "hp": 5068,
+   "times": 7.07,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1069,
+     "times": 1.41,
+     "each": 761
+    },
+    "in the air, attacking": {
+     "hp": 858,
+     "times": 1.07,
+     "each": 800
+    },
+    "free on the ground": {
+     "hp": 822,
+     "times": 1.06,
+     "each": 775
+    },
+    "opened after guarding": {
+     "hp": 731,
+     "times": 0.81,
+     "each": 906
+    },
+    "in the air, not attacking": {
+     "hp": 482,
+     "times": 0.7,
+     "each": 686
+    },
+    "in a move, after guarding": {
+     "hp": 279,
+     "times": 0.39,
+     "each": 708
+    },
+    "thrown": {
+     "hp": 234,
+     "times": 0.15,
+     "each": 1522
+    },
+    "rising, not acting": {
+     "hp": 179,
+     "times": 0.18,
+     "each": 999
+    },
+    "its move guarded, then punished": {
+     "hp": 144,
+     "times": 0.17,
+     "each": 865
+    },
+    "chip": {
+     "hp": 119,
+     "times": 0.96,
+     "each": 124
+    },
+    "in a move, rising": {
+     "hp": 98,
+     "times": 0.12,
+     "each": 834
+    },
+    "its invincible move beaten": {
+     "hp": 54,
+     "times": 0.06,
+     "each": 967
+    }
+   },
+   "air_where": {
+    "combo": 81,
+    "okizeme": 135,
+    "open": 387,
+    "pressure": 255
+   },
+   "air_by": {
+    "air": 237,
+    "ground": 537,
+    "reversal": 84
+   }
+  },
+  "dealt_ledger": {
+   "hp": 9809,
+   "times": 9.34,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1731,
+     "times": 1.74,
+     "each": 996
+    },
+    "rising, not acting": {
+     "hp": 1499,
+     "times": 0.99,
+     "each": 1511
+    },
+    "in the air, attacking": {
+     "hp": 1256,
+     "times": 1.0,
+     "each": 1250
+    },
+    "free on the ground": {
+     "hp": 1241,
+     "times": 1.11,
+     "each": 1119
+    },
+    "opened after guarding": {
+     "hp": 1159,
+     "times": 1.27,
+     "each": 913
+    },
+    "in the air, not attacking": {
+     "hp": 881,
+     "times": 0.86,
+     "each": 1021
+    },
+    "its move guarded, then punished": {
+     "hp": 720,
+     "times": 0.55,
+     "each": 1313
+    },
+    "in a move, after guarding": {
+     "hp": 380,
+     "times": 0.49,
+     "each": 780
+    },
+    "in a move, rising": {
+     "hp": 359,
+     "times": 0.26,
+     "each": 1389
+    },
+    "thrown": {
+     "hp": 193,
+     "times": 0.19,
+     "each": 1008
+    },
+    "dashing": {
+     "hp": 190,
+     "times": 0.19,
+     "each": 995
+    },
+    "its invincible move beaten": {
+     "hp": 105,
+     "times": 0.1,
+     "each": 1002
+    },
+    "chip": {
+     "hp": 95,
+     "times": 0.59,
+     "each": 163
+    }
+   },
+   "air_where": {
+    "combo": 138,
+    "okizeme": 96,
+    "open": 802,
+    "pressure": 220
+   },
+   "air_by": {
+    "air": 548,
+    "ground": 670,
+    "reversal": 38
+   }
+  },
+  "net_ledger": {
+   "net": 4742,
+   "my okizeme": {
+    "net": 1840,
+    "gained": 2518,
+    "lost": 678
+   },
+   "its okizeme": {
+    "net": 477,
+    "gained": 1016,
+    "lost": 539
+   },
+   "my pressure": {
+    "net": 652,
+    "gained": 1426,
+    "lost": 775
+   },
+   "its pressure": {
+    "net": 414,
+    "gained": 1340,
+    "lost": 926
+   },
+   "I came by air": {
+    "net": 85,
+    "gained": 957,
+    "lost": 872
+   },
+   "it came by air": {
+    "net": 654,
+    "gained": 972,
+    "lost": 318
+   },
+   "both in the air": {
+    "net": 608,
+    "gained": 983,
+    "lost": 375
+   },
+   "on the ground": {
+    "net": 11,
+    "gained": 597,
+    "lost": 586
+   }
+  }
+ },
+ "player/1": {
+  "matches": 109,
+  "ayu_won": 0.147,
+  "minutes": 235,
+  "ledger": {
+   "hp": 9233,
+   "times": 9.88,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1671,
+     "times": 1.7,
+     "each": 983
+    },
+    "free on the ground": {
+     "hp": 1468,
+     "times": 1.32,
+     "each": 1115
+    },
+    "opened after guarding": {
+     "hp": 1135,
+     "times": 1.14,
+     "each": 998
+    },
+    "in the air, attacking": {
+     "hp": 1043,
+     "times": 1.1,
+     "each": 945
+    },
+    "in the air, not attacking": {
+     "hp": 964,
+     "times": 1.01,
+     "each": 951
+    },
+    "rising, not acting": {
+     "hp": 834,
+     "times": 0.66,
+     "each": 1254
+    },
+    "in a move, after guarding": {
+     "hp": 624,
+     "times": 0.74,
+     "each": 842
+    },
+    "thrown": {
+     "hp": 473,
+     "times": 0.32,
+     "each": 1479
+    },
+    "its move guarded, then punished": {
+     "hp": 451,
+     "times": 0.34,
+     "each": 1341
+    },
+    "chip": {
+     "hp": 290,
+     "times": 1.3,
+     "each": 222
+    },
+    "in a move, rising": {
+     "hp": 179,
+     "times": 0.17,
+     "each": 1049
+    },
+    "its invincible move beaten": {
+     "hp": 76,
+     "times": 0.06,
+     "each": 1371
+    },
+    "dashing": {
+     "hp": 25,
+     "times": 0.02,
+     "each": 1456
+    }
+   },
+   "air_where": {
+    "combo": 116,
+    "okizeme": 95,
+    "open": 625,
+    "pressure": 206
+   },
+   "air_by": {
+    "air": 408,
+    "ground": 626,
+    "reversal": 9
+   }
+  },
+  "dealt_ledger": {
+   "hp": 5348,
+   "times": 6.37,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1272,
+     "times": 1.46,
+     "each": 871
+    },
+    "in the air, attacking": {
+     "hp": 764,
+     "times": 0.82,
+     "each": 934
+    },
+    "free on the ground": {
+     "hp": 761,
+     "times": 0.81,
+     "each": 936
+    },
+    "opened after guarding": {
+     "hp": 580,
+     "times": 0.57,
+     "each": 1016
+    },
+    "in the air, not attacking": {
+     "hp": 422,
+     "times": 0.45,
+     "each": 935
+    },
+    "in a move, after guarding": {
+     "hp": 301,
+     "times": 0.4,
+     "each": 761
+    },
+    "its move guarded, then punished": {
+     "hp": 286,
+     "times": 0.31,
+     "each": 934
+    },
+    "thrown": {
+     "hp": 275,
+     "times": 0.24,
+     "each": 1134
+    },
+    "rising, not acting": {
+     "hp": 242,
+     "times": 0.2,
+     "each": 1233
+    },
+    "chip": {
+     "hp": 161,
+     "times": 0.76,
+     "each": 211
+    },
+    "its invincible move beaten": {
+     "hp": 132,
+     "times": 0.14,
+     "each": 966
+    },
+    "in a move, rising": {
+     "hp": 93,
+     "times": 0.14,
+     "each": 663
+    },
+    "dashing": {
+     "hp": 57,
+     "times": 0.08,
+     "each": 747
+    }
+   },
+   "air_where": {
+    "combo": 123,
+    "okizeme": 131,
+    "open": 372,
+    "pressure": 138
+   },
+   "air_by": {
+    "air": 235,
+    "ground": 478,
+    "reversal": 51
+   }
+  },
+  "net_ledger": {
+   "net": -3885,
+   "my okizeme": {
+    "net": 4,
+    "gained": 699,
+    "lost": 695
+   },
+   "its okizeme": {
+    "net": -979,
+    "gained": 756,
+    "lost": 1735
+   },
+   "my pressure": {
+    "net": -326,
+    "gained": 847,
+    "lost": 1172
+   },
+   "its pressure": {
+    "net": -1038,
+    "gained": 784,
+    "lost": 1822
+   },
+   "I came by air": {
+    "net": -597,
+    "gained": 640,
+    "lost": 1237
+   },
+   "it came by air": {
+    "net": 17,
+    "gained": 629,
+    "lost": 612
+   },
+   "both in the air": {
+    "net": -304,
+    "gained": 430,
+    "lost": 734
+   },
+   "on the ground": {
+    "net": -662,
+    "gained": 564,
+    "lost": 1226
+   }
+  }
+ },
+ "player/143": {
+  "matches": 48,
+  "ayu_won": 0.688,
+  "minutes": 104,
+  "ledger": {
+   "hp": 7884,
+   "times": 7.47,
+   "kinds": {
+    "in the air, attacking": {
+     "hp": 1388,
+     "times": 1.31,
+     "each": 1063
+    },
+    "in the air, not attacking": {
+     "hp": 1214,
+     "times": 1.0,
+     "each": 1216
+    },
+    "free on the ground": {
+     "hp": 1060,
+     "times": 0.83,
+     "each": 1269
+    },
+    "in a move, in neutral": {
+     "hp": 1057,
+     "times": 0.94,
+     "each": 1124
+    },
+    "opened after guarding": {
+     "hp": 1022,
+     "times": 0.95,
+     "each": 1076
+    },
+    "in a move, after guarding": {
+     "hp": 657,
+     "times": 0.53,
+     "each": 1244
+    },
+    "rising, not acting": {
+     "hp": 541,
+     "times": 0.25,
+     "each": 2170
+    },
+    "its move guarded, then punished": {
+     "hp": 431,
+     "times": 0.33,
+     "each": 1320
+    },
+    "chip": {
+     "hp": 153,
+     "times": 1.0,
+     "each": 154
+    },
+    "thrown": {
+     "hp": 131,
+     "times": 0.1,
+     "each": 1366
+    },
+    "in a move, rising": {
+     "hp": 121,
+     "times": 0.11,
+     "each": 1146
+    },
+    "its invincible move beaten": {
+     "hp": 110,
+     "times": 0.13,
+     "each": 816
+    }
+   },
+   "air_where": {
+    "combo": 235,
+    "okizeme": 169,
+    "open": 707,
+    "pressure": 276
+   },
+   "air_by": {
+    "air": 459,
+    "ground": 862,
+    "reversal": 66
+   }
+  },
+  "dealt_ledger": {
+   "hp": 9517,
+   "times": 7.3,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1919,
+     "times": 1.42,
+     "each": 1351
+    },
+    "rising, not acting": {
+     "hp": 1400,
+     "times": 0.83,
+     "each": 1697
+    },
+    "in the air, attacking": {
+     "hp": 1113,
+     "times": 0.75,
+     "each": 1487
+    },
+    "in the air, not attacking": {
+     "hp": 980,
+     "times": 0.55,
+     "each": 1791
+    },
+    "free on the ground": {
+     "hp": 933,
+     "times": 0.74,
+     "each": 1262
+    },
+    "its move guarded, then punished": {
+     "hp": 894,
+     "times": 0.54,
+     "each": 1664
+    },
+    "opened after guarding": {
+     "hp": 830,
+     "times": 0.73,
+     "each": 1138
+    },
+    "in a move, after guarding": {
+     "hp": 575,
+     "times": 0.48,
+     "each": 1198
+    },
+    "thrown": {
+     "hp": 317,
+     "times": 0.28,
+     "each": 1141
+    },
+    "its invincible move beaten": {
+     "hp": 230,
+     "times": 0.15,
+     "each": 1500
+    },
+    "in a move, rising": {
+     "hp": 179,
+     "times": 0.15,
+     "each": 1167
+    },
+    "chip": {
+     "hp": 91,
+     "times": 0.65,
+     "each": 140
+    },
+    "dashing": {
+     "hp": 56,
+     "times": 0.04,
+     "each": 1462
+    }
+   },
+   "air_where": {
+    "combo": 198,
+    "okizeme": 241,
+    "open": 403,
+    "pressure": 270
+   },
+   "air_by": {
+    "air": 707,
+    "ground": 382,
+    "reversal": 24
+   }
+  },
+  "net_ledger": {
+   "net": 1633,
+   "my okizeme": {
+    "net": 849,
+    "gained": 1945,
+    "lost": 1096
+   },
+   "its okizeme": {
+    "net": -232,
+    "gained": 1230,
+    "lost": 1461
+   },
+   "my pressure": {
+    "net": 537,
+    "gained": 1667,
+    "lost": 1130
+   },
+   "its pressure": {
+    "net": 39,
+    "gained": 1313,
+    "lost": 1274
+   },
+   "I came by air": {
+    "net": -55,
+    "gained": 1056,
+    "lost": 1111
+   },
+   "it came by air": {
+    "net": 261,
+    "gained": 573,
+    "lost": 312
+   },
+   "both in the air": {
+    "net": 190,
+    "gained": 1032,
+    "lost": 842
+   },
+   "on the ground": {
+    "net": 44,
+    "gained": 702,
+    "lost": 659
+   }
+  }
+ },
+ "opponent/160": {
+  "matches": 63,
+  "ayu_won": 0.397,
+  "minutes": 165,
+  "ledger": {
+   "hp": 7594,
+   "times": 7.77,
+   "kinds": {
+    "in the air, attacking": {
+     "hp": 1317,
+     "times": 1.16,
+     "each": 1137
+    },
+    "free on the ground": {
+     "hp": 1267,
+     "times": 0.85,
+     "each": 1482
+    },
+    "opened after guarding": {
+     "hp": 1248,
+     "times": 1.06,
+     "each": 1177
+    },
+    "in a move, in neutral": {
+     "hp": 962,
+     "times": 0.86,
+     "each": 1117
+    },
+    "in the air, not attacking": {
+     "hp": 747,
+     "times": 0.76,
+     "each": 978
+    },
+    "its move guarded, then punished": {
+     "hp": 554,
+     "times": 0.32,
+     "each": 1724
+    },
+    "in a move, after guarding": {
+     "hp": 462,
+     "times": 0.47,
+     "each": 976
+    },
+    "rising, not acting": {
+     "hp": 456,
+     "times": 0.32,
+     "each": 1419
+    },
+    "chip": {
+     "hp": 232,
+     "times": 1.54,
+     "each": 151
+    },
+    "thrown": {
+     "hp": 160,
+     "times": 0.18,
+     "each": 910
+    },
+    "in a move, rising": {
+     "hp": 116,
+     "times": 0.16,
+     "each": 738
+    },
+    "its invincible move beaten": {
+     "hp": 63,
+     "times": 0.07,
+     "each": 868
+    },
+    "dashing": {
+     "hp": 9,
+     "times": 0.01,
+     "each": 1511
+    }
+   },
+   "air_where": {
+    "combo": 143,
+    "okizeme": 187,
+    "open": 641,
+    "pressure": 345
+   },
+   "air_by": {
+    "air": 523,
+    "ground": 794
+   }
+  },
+  "dealt_ledger": {
+   "hp": 6071,
+   "times": 6.0,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1545,
+     "times": 1.48,
+     "each": 1045
+    },
+    "opened after guarding": {
+     "hp": 692,
+     "times": 0.63,
+     "each": 1098
+    },
+    "rising, not acting": {
+     "hp": 661,
+     "times": 0.38,
+     "each": 1758
+    },
+    "in the air, attacking": {
+     "hp": 626,
+     "times": 0.61,
+     "each": 1033
+    },
+    "its move guarded, then punished": {
+     "hp": 521,
+     "times": 0.39,
+     "each": 1323
+    },
+    "free on the ground": {
+     "hp": 518,
+     "times": 0.49,
+     "each": 1068
+    },
+    "in a move, after guarding": {
+     "hp": 467,
+     "times": 0.5,
+     "each": 940
+    },
+    "in the air, not attacking": {
+     "hp": 315,
+     "times": 0.28,
+     "each": 1129
+    },
+    "thrown": {
+     "hp": 225,
+     "times": 0.21,
+     "each": 1059
+    },
+    "dashing": {
+     "hp": 139,
+     "times": 0.13,
+     "each": 1041
+    },
+    "its invincible move beaten": {
+     "hp": 137,
+     "times": 0.09,
+     "each": 1505
+    },
+    "in a move, rising": {
+     "hp": 114,
+     "times": 0.1,
+     "each": 1110
+    },
+    "chip": {
+     "hp": 110,
+     "times": 0.72,
+     "each": 154
+    }
+   },
+   "air_where": {
+    "combo": 35,
+    "okizeme": 103,
+    "open": 442,
+    "pressure": 46
+   },
+   "air_by": {
+    "air": 402,
+    "ground": 221,
+    "reversal": 3
+   }
+  },
+  "net_ledger": {
+   "net": -1523,
+   "my okizeme": {
+    "net": 216,
+    "gained": 958,
+    "lost": 742
+   },
+   "its okizeme": {
+    "net": -737,
+    "gained": 661,
+    "lost": 1398
+   },
+   "my pressure": {
+    "net": 200,
+    "gained": 1296,
+    "lost": 1096
+   },
+   "its pressure": {
+    "net": -496,
+    "gained": 914,
+    "lost": 1410
+   },
+   "I came by air": {
+    "net": -32,
+    "gained": 864,
+    "lost": 896
+   },
+   "it came by air": {
+    "net": -51,
+    "gained": 336,
+    "lost": 387
+   },
+   "both in the air": {
+    "net": -335,
+    "gained": 531,
+    "lost": 866
+   },
+   "on the ground": {
+    "net": -287,
+    "gained": 512,
+    "lost": 799
+   }
+  }
+ },
+ "player/282": {
+  "matches": 57,
+  "ayu_won": 0.596,
+  "minutes": 145,
+  "ledger": {
+   "hp": 7162,
+   "times": 8.24,
+   "kinds": {
+    "opened after guarding": {
+     "hp": 1511,
+     "times": 1.29,
+     "each": 1170
+    },
+    "in a move, in neutral": {
+     "hp": 1077,
+     "times": 1.17,
+     "each": 923
+    },
+    "in the air, attacking": {
+     "hp": 1010,
+     "times": 0.94,
+     "each": 1075
+    },
+    "in the air, not attacking": {
+     "hp": 770,
+     "times": 0.95,
+     "each": 807
+    },
+    "free on the ground": {
+     "hp": 659,
+     "times": 0.62,
+     "each": 1061
+    },
+    "in a move, after guarding": {
+     "hp": 557,
+     "times": 0.55,
+     "each": 1009
+    },
+    "rising, not acting": {
+     "hp": 507,
+     "times": 0.33,
+     "each": 1530
+    },
+    "chip": {
+     "hp": 322,
+     "times": 1.73,
+     "each": 186
+    },
+    "its move guarded, then punished": {
+     "hp": 308,
+     "times": 0.25,
+     "each": 1237
+    },
+    "thrown": {
+     "hp": 265,
+     "times": 0.23,
+     "each": 1161
+    },
+    "in a move, rising": {
+     "hp": 105,
+     "times": 0.1,
+     "each": 1015
+    },
+    "its invincible move beaten": {
+     "hp": 70,
+     "times": 0.07,
+     "each": 1014
+    }
+   },
+   "air_where": {
+    "combo": 102,
+    "okizeme": 152,
+    "open": 480,
+    "pressure": 276
+   },
+   "air_by": {
+    "air": 182,
+    "ground": 781,
+    "reversal": 47
+   }
+  },
+  "dealt_ledger": {
+   "hp": 7507,
+   "times": 6.55,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 2211,
+     "times": 1.67,
+     "each": 1323
+    },
+    "opened after guarding": {
+     "hp": 883,
+     "times": 0.79,
+     "each": 1112
+    },
+    "in the air, attacking": {
+     "hp": 868,
+     "times": 0.79,
+     "each": 1093
+    },
+    "free on the ground": {
+     "hp": 807,
+     "times": 0.55,
+     "each": 1479
+    },
+    "its move guarded, then punished": {
+     "hp": 694,
+     "times": 0.46,
+     "each": 1499
+    },
+    "in a move, after guarding": {
+     "hp": 566,
+     "times": 0.58,
+     "each": 976
+    },
+    "rising, not acting": {
+     "hp": 493,
+     "times": 0.35,
+     "each": 1428
+    },
+    "in the air, not attacking": {
+     "hp": 403,
+     "times": 0.36,
+     "each": 1121
+    },
+    "in a move, rising": {
+     "hp": 153,
+     "times": 0.12,
+     "each": 1304
+    },
+    "its invincible move beaten": {
+     "hp": 149,
+     "times": 0.11,
+     "each": 1351
+    },
+    "dashing": {
+     "hp": 121,
+     "times": 0.17,
+     "each": 701
+    },
+    "chip": {
+     "hp": 114,
+     "times": 0.57,
+     "each": 199
+    },
+    "thrown": {
+     "hp": 44,
+     "times": 0.02,
+     "each": 2128
+    }
+   },
+   "air_where": {
+    "combo": 123,
+    "okizeme": 143,
+    "open": 420,
+    "pressure": 182
+   },
+   "air_by": {
+    "air": 288,
+    "ground": 533,
+    "reversal": 47
+   }
+  },
+  "net_ledger": {
+   "net": 345,
+   "my okizeme": {
+    "net": 130,
+    "gained": 968,
+    "lost": 838
+   },
+   "its okizeme": {
+    "net": -320,
+    "gained": 1083,
+    "lost": 1402
+   },
+   "my pressure": {
+    "net": 559,
+    "gained": 1379,
+    "lost": 820
+   },
+   "its pressure": {
+    "net": -222,
+    "gained": 1318,
+    "lost": 1540
+   },
+   "I came by air": {
+    "net": -124,
+    "gained": 1085,
+    "lost": 1208
+   },
+   "it came by air": {
+    "net": 283,
+    "gained": 586,
+    "lost": 302
+   },
+   "both in the air": {
+    "net": -48,
+    "gained": 449,
+    "lost": 497
+   },
+   "on the ground": {
+    "net": 87,
+    "gained": 640,
+    "lost": 553
+   }
+  }
+ },
+ "player/379": {
+  "matches": 60,
+  "ayu_won": 0.133,
+  "minutes": 136,
+  "ledger": {
+   "hp": 9374,
+   "times": 8.0,
+   "kinds": {
+    "opened after guarding": {
+     "hp": 1591,
+     "times": 1.22,
+     "each": 1299
+    },
+    "in the air, not attacking": {
+     "hp": 1305,
+     "times": 1.02,
+     "each": 1281
+    },
+    "free on the ground": {
+     "hp": 1168,
+     "times": 0.83,
+     "each": 1410
+    },
+    "in the air, attacking": {
+     "hp": 1124,
+     "times": 0.92,
+     "each": 1227
+    },
+    "rising, not acting": {
+     "hp": 820,
+     "times": 0.46,
+     "each": 1774
+    },
+    "in a move, in neutral": {
+     "hp": 715,
+     "times": 0.61,
+     "each": 1174
+    },
+    "thrown": {
+     "hp": 700,
+     "times": 0.6,
+     "each": 1164
+    },
+    "its move guarded, then punished": {
+     "hp": 673,
+     "times": 0.37,
+     "each": 1800
+    },
+    "in a move, after guarding": {
+     "hp": 634,
+     "times": 0.5,
+     "each": 1273
+    },
+    "chip": {
+     "hp": 220,
+     "times": 1.21,
+     "each": 182
+    },
+    "in a move, rising": {
+     "hp": 211,
+     "times": 0.13,
+     "each": 1600
+    },
+    "its invincible move beaten": {
+     "hp": 210,
+     "times": 0.11,
+     "each": 1914
+    },
+    "dashing": {
+     "hp": 4,
+     "times": 0.01,
+     "each": 290
+    }
+   },
+   "air_where": {
+    "combo": 111,
+    "okizeme": 72,
+    "open": 694,
+    "pressure": 247
+   },
+   "air_by": {
+    "air": 341,
+    "ground": 761,
+    "reversal": 22
+   }
+  },
+  "dealt_ledger": {
+   "hp": 5645,
+   "times": 4.9,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1674,
+     "times": 1.28,
+     "each": 1305
+    },
+    "free on the ground": {
+     "hp": 705,
+     "times": 0.63,
+     "each": 1119
+    },
+    "rising, not acting": {
+     "hp": 685,
+     "times": 0.38,
+     "each": 1797
+    },
+    "in the air, attacking": {
+     "hp": 563,
+     "times": 0.4,
+     "each": 1423
+    },
+    "opened after guarding": {
+     "hp": 414,
+     "times": 0.37,
+     "each": 1106
+    },
+    "its move guarded, then punished": {
+     "hp": 408,
+     "times": 0.27,
+     "each": 1504
+    },
+    "in a move, after guarding": {
+     "hp": 299,
+     "times": 0.23,
+     "each": 1318
+    },
+    "in the air, not attacking": {
+     "hp": 268,
+     "times": 0.21,
+     "each": 1307
+    },
+    "thrown": {
+     "hp": 181,
+     "times": 0.16,
+     "each": 1123
+    },
+    "chip": {
+     "hp": 137,
+     "times": 0.76,
+     "each": 180
+    },
+    "its invincible move beaten": {
+     "hp": 121,
+     "times": 0.09,
+     "each": 1370
+    },
+    "in a move, rising": {
+     "hp": 100,
+     "times": 0.07,
+     "each": 1513
+    },
+    "dashing": {
+     "hp": 89,
+     "times": 0.06,
+     "each": 1522
+    }
+   },
+   "air_where": {
+    "combo": 25,
+    "okizeme": 144,
+    "open": 215,
+    "pressure": 181
+   },
+   "air_by": {
+    "air": 231,
+    "ground": 287,
+    "reversal": 45
+   }
+  },
+  "net_ledger": {
+   "net": -3729,
+   "my okizeme": {
+    "net": 276,
+    "gained": 924,
+    "lost": 649
+   },
+   "its okizeme": {
+    "net": -1120,
+    "gained": 1176,
+    "lost": 2296
+   },
+   "my pressure": {
+    "net": -617,
+    "gained": 760,
+    "lost": 1378
+   },
+   "its pressure": {
+    "net": -1138,
+    "gained": 857,
+    "lost": 1995
+   },
+   "I came by air": {
+    "net": -431,
+    "gained": 792,
+    "lost": 1223
+   },
+   "it came by air": {
+    "net": 75,
+    "gained": 370,
+    "lost": 295
+   },
+   "both in the air": {
+    "net": -438,
+    "gained": 322,
+    "lost": 760
+   },
+   "on the ground": {
+    "net": -335,
+    "gained": 444,
+    "lost": 779
+   }
+  }
+ },
+ "opponent/23": {
+  "matches": 41,
+  "ayu_won": 0.585,
+  "minutes": 115,
+  "ledger": {
+   "hp": 5872,
+   "times": 5.85,
+   "kinds": {
+    "opened after guarding": {
+     "hp": 1072,
+     "times": 0.84,
+     "each": 1273
+    },
+    "in a move, in neutral": {
+     "hp": 876,
+     "times": 0.82,
+     "each": 1074
+    },
+    "in the air, not attacking": {
+     "hp": 835,
+     "times": 0.5,
+     "each": 1659
+    },
+    "in the air, attacking": {
+     "hp": 707,
+     "times": 0.63,
+     "each": 1115
+    },
+    "thrown": {
+     "hp": 440,
+     "times": 0.32,
+     "each": 1370
+    },
+    "free on the ground": {
+     "hp": 430,
+     "times": 0.43,
+     "each": 991
+    },
+    "in a move, after guarding": {
+     "hp": 420,
+     "times": 0.42,
+     "each": 1009
+    },
+    "rising, not acting": {
+     "hp": 387,
+     "times": 0.25,
+     "each": 1539
+    },
+    "its move guarded, then punished": {
+     "hp": 314,
+     "times": 0.19,
+     "each": 1646
+    },
+    "chip": {
+     "hp": 188,
+     "times": 1.34,
+     "each": 141
+    },
+    "its invincible move beaten": {
+     "hp": 99,
+     "times": 0.05,
+     "each": 1907
+    },
+    "in a move, rising": {
+     "hp": 95,
+     "times": 0.04,
+     "each": 2196
+    },
+    "dashing": {
+     "hp": 7,
+     "times": 0.01,
+     "each": 820
+    }
+   },
+   "air_where": {
+    "combo": 134,
+    "okizeme": 18,
+    "open": 373,
+    "pressure": 182
+   },
+   "air_by": {
+    "air": 356,
+    "ground": 351
+   }
+  },
+  "dealt_ledger": {
+   "hp": 6653,
+   "times": 5.09,
+   "kinds": {
+    "rising, not acting": {
+     "hp": 1199,
+     "times": 0.55,
+     "each": 2193
+    },
+    "in the air, attacking": {
+     "hp": 1167,
+     "times": 0.61,
+     "each": 1921
+    },
+    "in a move, in neutral": {
+     "hp": 1000,
+     "times": 0.8,
+     "each": 1252
+    },
+    "free on the ground": {
+     "hp": 608,
+     "times": 0.53,
+     "each": 1149
+    },
+    "in a move, after guarding": {
+     "hp": 593,
+     "times": 0.54,
+     "each": 1101
+    },
+    "its move guarded, then punished": {
+     "hp": 536,
+     "times": 0.31,
+     "each": 1716
+    },
+    "opened after guarding": {
+     "hp": 488,
+     "times": 0.43,
+     "each": 1125
+    },
+    "in the air, not attacking": {
+     "hp": 461,
+     "times": 0.36,
+     "each": 1294
+    },
+    "dashing": {
+     "hp": 221,
+     "times": 0.12,
+     "each": 1822
+    },
+    "thrown": {
+     "hp": 205,
+     "times": 0.2,
+     "each": 1025
+    },
+    "chip": {
+     "hp": 97,
+     "times": 0.57,
+     "each": 169
+    },
+    "its invincible move beaten": {
+     "hp": 58,
+     "times": 0.03,
+     "each": 1663
+    },
+    "in a move, rising": {
+     "hp": 19,
+     "times": 0.03,
+     "each": 557
+    }
+   },
+   "air_where": {
+    "combo": 2,
+    "okizeme": 118,
+    "open": 700,
+    "pressure": 347
+   },
+   "air_by": {
+    "air": 634,
+    "ground": 449,
+    "reversal": 85
+   }
+  },
+  "net_ledger": {
+   "net": 780,
+   "my okizeme": {
+    "net": 1003,
+    "gained": 1428,
+    "lost": 424
+   },
+   "its okizeme": {
+    "net": -600,
+    "gained": 393,
+    "lost": 994
+   },
+   "my pressure": {
+    "net": 295,
+    "gained": 1137,
+    "lost": 842
+   },
+   "its pressure": {
+    "net": -429,
+    "gained": 1116,
+    "lost": 1545
+   },
+   "I came by air": {
+    "net": -115,
+    "gained": 563,
+    "lost": 678
+   },
+   "it came by air": {
+    "net": 143,
+    "gained": 537,
+    "lost": 394
+   },
+   "both in the air": {
+    "net": 228,
+    "gained": 827,
+    "lost": 599
+   },
+   "on the ground": {
+    "net": 256,
+    "gained": 651,
+    "lost": 395
+   }
+  }
+ },
+ "player/402": {
+  "matches": 41,
+  "ayu_won": 0.707,
+  "minutes": 115,
+  "ledger": {
+   "hp": 5625,
+   "times": 6.22,
+   "kinds": {
+    "opened after guarding": {
+     "hp": 871,
+     "times": 0.65,
+     "each": 1350
+    },
+    "in a move, in neutral": {
+     "hp": 798,
+     "times": 0.74,
+     "each": 1076
+    },
+    "in the air, not attacking": {
+     "hp": 752,
+     "times": 0.76,
+     "each": 991
+    },
+    "in the air, attacking": {
+     "hp": 627,
+     "times": 0.72,
+     "each": 877
+    },
+    "free on the ground": {
+     "hp": 603,
+     "times": 0.58,
+     "each": 1048
+    },
+    "its move guarded, then punished": {
+     "hp": 601,
+     "times": 0.34,
+     "each": 1768
+    },
+    "thrown": {
+     "hp": 377,
+     "times": 0.26,
+     "each": 1440
+    },
+    "in a move, after guarding": {
+     "hp": 371,
+     "times": 0.35,
+     "each": 1064
+    },
+    "rising, not acting": {
+     "hp": 287,
+     "times": 0.18,
+     "each": 1567
+    },
+    "chip": {
+     "hp": 218,
+     "times": 1.56,
+     "each": 140
+    },
+    "its invincible move beaten": {
+     "hp": 90,
+     "times": 0.05,
+     "each": 1723
+    },
+    "in a move, rising": {
+     "hp": 22,
+     "times": 0.03,
+     "each": 850
+    },
+    "dashing": {
+     "hp": 7,
+     "times": 0.01,
+     "each": 820
+    }
+   },
+   "air_where": {
+    "combo": 120,
+    "okizeme": 50,
+    "open": 344,
+    "pressure": 112
+   },
+   "air_by": {
+    "air": 292,
+    "ground": 327,
+    "reversal": 8
+   }
+  },
+  "dealt_ledger": {
+   "hp": 6912,
+   "times": 5.35,
+   "kinds": {
+    "rising, not acting": {
+     "hp": 1525,
+     "times": 0.67,
+     "each": 2272
+    },
+    "in a move, in neutral": {
+     "hp": 1010,
+     "times": 0.77,
+     "each": 1316
+    },
+    "in the air, attacking": {
+     "hp": 829,
+     "times": 0.55,
+     "each": 1509
+    },
+    "opened after guarding": {
+     "hp": 752,
+     "times": 0.53,
+     "each": 1414
+    },
+    "in a move, after guarding": {
+     "hp": 623,
+     "times": 0.51,
+     "each": 1231
+    },
+    "its move guarded, then punished": {
+     "hp": 495,
+     "times": 0.37,
+     "each": 1353
+    },
+    "in the air, not attacking": {
+     "hp": 487,
+     "times": 0.38,
+     "each": 1270
+    },
+    "free on the ground": {
+     "hp": 439,
+     "times": 0.4,
+     "each": 1094
+    },
+    "thrown": {
+     "hp": 420,
+     "times": 0.3,
+     "each": 1418
+    },
+    "dashing": {
+     "hp": 137,
+     "times": 0.09,
+     "each": 1577
+    },
+    "chip": {
+     "hp": 114,
+     "times": 0.72,
+     "each": 158
+    },
+    "in a move, rising": {
+     "hp": 64,
+     "times": 0.05,
+     "each": 1232
+    },
+    "its invincible move beaten": {
+     "hp": 14,
+     "times": 0.02,
+     "each": 810
+    }
+   },
+   "air_where": {
+    "okizeme": 57,
+    "open": 505,
+    "pressure": 267
+   },
+   "air_by": {
+    "air": 374,
+    "ground": 450,
+    "reversal": 5
+   }
+  },
+  "net_ledger": {
+   "net": 1287,
+   "my okizeme": {
+    "net": 1294,
+    "gained": 1756,
+    "lost": 462
+   },
+   "its okizeme": {
+    "net": -698,
+    "gained": 199,
+    "lost": 896
+   },
+   "my pressure": {
+    "net": 587,
+    "gained": 1648,
+    "lost": 1061
+   },
+   "its pressure": {
+    "net": -377,
+    "gained": 876,
+    "lost": 1253
+   },
+   "I came by air": {
+    "net": -168,
+    "gained": 668,
+    "lost": 836
+   },
+   "it came by air": {
+    "net": 491,
+    "gained": 682,
+    "lost": 191
+   },
+   "both in the air": {
+    "net": 73,
+    "gained": 625,
+    "lost": 552
+   },
+   "on the ground": {
+    "net": 85,
+    "gained": 459,
+    "lost": 374
+   }
+  }
+ },
+ "player/435": {
+  "matches": 46,
+  "ayu_won": 0.109,
+  "minutes": 119,
+  "ledger": {
+   "hp": 8183,
+   "times": 7.54,
+   "kinds": {
+    "opened after guarding": {
+     "hp": 1372,
+     "times": 1.1,
+     "each": 1244
+    },
+    "in the air, attacking": {
+     "hp": 1067,
+     "times": 0.93,
+     "each": 1142
+    },
+    "in the air, not attacking": {
+     "hp": 992,
+     "times": 0.83,
+     "each": 1190
+    },
+    "free on the ground": {
+     "hp": 980,
+     "times": 0.77,
+     "each": 1279
+    },
+    "in a move, in neutral": {
+     "hp": 861,
+     "times": 0.65,
+     "each": 1328
+    },
+    "thrown": {
+     "hp": 851,
+     "times": 0.78,
+     "each": 1087
+    },
+    "rising, not acting": {
+     "hp": 742,
+     "times": 0.41,
+     "each": 1797
+    },
+    "in a move, after guarding": {
+     "hp": 505,
+     "times": 0.4,
+     "each": 1248
+    },
+    "its move guarded, then punished": {
+     "hp": 237,
+     "times": 0.13,
+     "each": 1762
+    },
+    "chip": {
+     "hp": 236,
+     "times": 1.26,
+     "each": 187
+    },
+    "in a move, rising": {
+     "hp": 224,
+     "times": 0.14,
+     "each": 1566
+    },
+    "its invincible move beaten": {
+     "hp": 110,
+     "times": 0.09,
+     "each": 1183
+    },
+    "dashing": {
+     "hp": 5,
+     "times": 0.02,
+     "each": 283
+    }
+   },
+   "air_where": {
+    "combo": 130,
+    "okizeme": 64,
+    "open": 726,
+    "pressure": 148
+   },
+   "air_by": {
+    "air": 166,
+    "ground": 894,
+    "reversal": 7
+   }
+  },
+  "dealt_ledger": {
+   "hp": 5846,
+   "times": 4.24,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1718,
+     "times": 1.26,
+     "each": 1360
+    },
+    "in the air, attacking": {
+     "hp": 805,
+     "times": 0.5,
+     "each": 1619
+    },
+    "rising, not acting": {
+     "hp": 780,
+     "times": 0.34,
+     "each": 2315
+    },
+    "free on the ground": {
+     "hp": 455,
+     "times": 0.35,
+     "each": 1316
+    },
+    "its move guarded, then punished": {
+     "hp": 444,
+     "times": 0.19,
+     "each": 2291
+    },
+    "in the air, not attacking": {
+     "hp": 362,
+     "times": 0.2,
+     "each": 1789
+    },
+    "opened after guarding": {
+     "hp": 282,
+     "times": 0.26,
+     "each": 1080
+    },
+    "in a move, after guarding": {
+     "hp": 276,
+     "times": 0.15,
+     "each": 1822
+    },
+    "its invincible move beaten": {
+     "hp": 240,
+     "times": 0.09,
+     "each": 2587
+    },
+    "thrown": {
+     "hp": 176,
+     "times": 0.17,
+     "each": 1044
+    },
+    "in a move, rising": {
+     "hp": 115,
+     "times": 0.05,
+     "each": 2285
+    },
+    "chip": {
+     "hp": 98,
+     "times": 0.52,
+     "each": 188
+    },
+    "dashing": {
+     "hp": 96,
+     "times": 0.15,
+     "each": 634
+    }
+   },
+   "air_where": {
+    "combo": 61,
+    "okizeme": 249,
+    "open": 301,
+    "pressure": 194
+   },
+   "air_by": {
+    "air": 175,
+    "ground": 488,
+    "reversal": 143
+   }
+  },
+  "net_ledger": {
+   "net": -2337,
+   "my okizeme": {
+    "net": 649,
+    "gained": 1082,
+    "lost": 433
+   },
+   "its okizeme": {
+    "net": -647,
+    "gained": 1148,
+    "lost": 1796
+   },
+   "my pressure": {
+    "net": -81,
+    "gained": 598,
+    "lost": 680
+   },
+   "its pressure": {
+    "net": -1082,
+    "gained": 818,
+    "lost": 1900
+   },
+   "I came by air": {
+    "net": -701,
+    "gained": 730,
+    "lost": 1432
+   },
+   "it came by air": {
+    "net": 210,
+    "gained": 581,
+    "lost": 371
+   },
+   "both in the air": {
+    "net": -482,
+    "gained": 349,
+    "lost": 831
+   },
+   "on the ground": {
+    "net": -202,
+    "gained": 539,
+    "lost": 741
+   }
+  }
+ },
+ "opponent/438": {
+  "matches": 48,
+  "ayu_won": 0.167,
+  "minutes": 116,
+  "ledger": {
+   "hp": 8927,
+   "times": 9.3,
+   "kinds": {
+    "in the air, not attacking": {
+     "hp": 1500,
+     "times": 1.16,
+     "each": 1299
+    },
+    "in the air, attacking": {
+     "hp": 1460,
+     "times": 1.3,
+     "each": 1121
+    },
+    "opened after guarding": {
+     "hp": 1148,
+     "times": 1.0,
+     "each": 1148
+    },
+    "free on the ground": {
+     "hp": 1124,
+     "times": 0.96,
+     "each": 1174
+    },
+    "in a move, in neutral": {
+     "hp": 1012,
+     "times": 0.97,
+     "each": 1048
+    },
+    "in a move, after guarding": {
+     "hp": 853,
+     "times": 0.69,
+     "each": 1236
+    },
+    "rising, not acting": {
+     "hp": 521,
+     "times": 0.39,
+     "each": 1343
+    },
+    "thrown": {
+     "hp": 512,
+     "times": 0.37,
+     "each": 1382
+    },
+    "its move guarded, then punished": {
+     "hp": 245,
+     "times": 0.16,
+     "each": 1495
+    },
+    "in a move, rising": {
+     "hp": 195,
+     "times": 0.11,
+     "each": 1738
+    },
+    "its invincible move beaten": {
+     "hp": 180,
+     "times": 0.15,
+     "each": 1230
+    },
+    "chip": {
+     "hp": 168,
+     "times": 2.03,
+     "each": 83
+    },
+    "dashing": {
+     "hp": 9,
+     "times": 0.02,
+     "each": 541
+    }
+   },
+   "air_where": {
+    "combo": 55,
+    "okizeme": 145,
+    "open": 989,
+    "pressure": 271
+   },
+   "air_by": {
+    "air": 412,
+    "ground": 1048
+   }
+  },
+  "dealt_ledger": {
+   "hp": 5178,
+   "times": 4.38,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1625,
+     "times": 1.32,
+     "each": 1232
+    },
+    "in the air, attacking": {
+     "hp": 854,
+     "times": 0.62,
+     "each": 1377
+    },
+    "rising, not acting": {
+     "hp": 825,
+     "times": 0.36,
+     "each": 2280
+    },
+    "free on the ground": {
+     "hp": 456,
+     "times": 0.36,
+     "each": 1261
+    },
+    "in the air, not attacking": {
+     "hp": 335,
+     "times": 0.23,
+     "each": 1438
+    },
+    "opened after guarding": {
+     "hp": 226,
+     "times": 0.23,
+     "each": 972
+    },
+    "its move guarded, then punished": {
+     "hp": 211,
+     "times": 0.16,
+     "each": 1358
+    },
+    "in a move, after guarding": {
+     "hp": 203,
+     "times": 0.23,
+     "each": 871
+    },
+    "in a move, rising": {
+     "hp": 127,
+     "times": 0.07,
+     "each": 1843
+    },
+    "thrown": {
+     "hp": 111,
+     "times": 0.1,
+     "each": 1073
+    },
+    "chip": {
+     "hp": 96,
+     "times": 0.59,
+     "each": 164
+    },
+    "dashing": {
+     "hp": 68,
+     "times": 0.06,
+     "each": 1135
+    },
+    "its invincible move beaten": {
+     "hp": 40,
+     "times": 0.04,
+     "each": 928
+    }
+   },
+   "air_where": {
+    "combo": 133,
+    "okizeme": 188,
+    "open": 369,
+    "pressure": 165
+   },
+   "air_by": {
+    "air": 338,
+    "ground": 438,
+    "reversal": 78
+   }
+  },
+  "net_ledger": {
+   "net": -3749,
+   "my okizeme": {
+    "net": 345,
+    "gained": 1113,
+    "lost": 768
+   },
+   "its okizeme": {
+    "net": -729,
+    "gained": 873,
+    "lost": 1603
+   },
+   "my pressure": {
+    "net": -403,
+    "gained": 446,
+    "lost": 849
+   },
+   "its pressure": {
+    "net": -1819,
+    "gained": 542,
+    "lost": 2361
+   },
+   "I came by air": {
+    "net": -563,
+    "gained": 801,
+    "lost": 1364
+   },
+   "it came by air": {
+    "net": 75,
+    "gained": 398,
+    "lost": 322
+   },
+   "both in the air": {
+    "net": -539,
+    "gained": 509,
+    "lost": 1047
+   },
+   "on the ground": {
+    "net": -115,
+    "gained": 497,
+    "lost": 613
+   }
+  }
+ },
+ "player/461": {
+  "matches": 41,
+  "ayu_won": 0.244,
+  "minutes": 103,
+  "ledger": {
+   "hp": 8425,
+   "times": 7.77,
+   "kinds": {
+    "in the air, not attacking": {
+     "hp": 1590,
+     "times": 1.17,
+     "each": 1358
+    },
+    "in the air, attacking": {
+     "hp": 1452,
+     "times": 1.13,
+     "each": 1282
+    },
+    "opened after guarding": {
+     "hp": 1141,
+     "times": 0.85,
+     "each": 1339
+    },
+    "in a move, in neutral": {
+     "hp": 912,
+     "times": 0.86,
+     "each": 1058
+    },
+    "free on the ground": {
+     "hp": 904,
+     "times": 0.74,
+     "each": 1229
+    },
+    "in a move, after guarding": {
+     "hp": 597,
+     "times": 0.44,
+     "each": 1371
+    },
+    "rising, not acting": {
+     "hp": 489,
+     "times": 0.31,
+     "each": 1577
+    },
+    "thrown": {
+     "hp": 377,
+     "times": 0.3,
+     "each": 1256
+    },
+    "its invincible move beaten": {
+     "hp": 328,
+     "times": 0.18,
+     "each": 1784
+    },
+    "its move guarded, then punished": {
+     "hp": 288,
+     "times": 0.16,
+     "each": 1748
+    },
+    "chip": {
+     "hp": 187,
+     "times": 1.54,
+     "each": 122
+    },
+    "in a move, rising": {
+     "hp": 153,
+     "times": 0.08,
+     "each": 1975
+    },
+    "dashing": {
+     "hp": 8,
+     "times": 0.01,
+     "each": 867
+    }
+   },
+   "air_where": {
+    "combo": 111,
+    "okizeme": 65,
+    "open": 942,
+    "pressure": 333
+   },
+   "air_by": {
+    "air": 382,
+    "ground": 1065,
+    "reversal": 5
+   }
+  },
+  "dealt_ledger": {
+   "hp": 5939,
+   "times": 4.51,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1599,
+     "times": 1.12,
+     "each": 1424
+    },
+    "rising, not acting": {
+     "hp": 1188,
+     "times": 0.46,
+     "each": 2558
+    },
+    "in the air, attacking": {
+     "hp": 899,
+     "times": 0.54,
+     "each": 1659
+    },
+    "free on the ground": {
+     "hp": 575,
+     "times": 0.45,
+     "each": 1265
+    },
+    "in the air, not attacking": {
+     "hp": 516,
+     "times": 0.28,
+     "each": 1839
+    },
+    "its move guarded, then punished": {
+     "hp": 312,
+     "times": 0.18,
+     "each": 1699
+    },
+    "opened after guarding": {
+     "hp": 223,
+     "times": 0.22,
+     "each": 1001
+    },
+    "in a move, after guarding": {
+     "hp": 221,
+     "times": 0.26,
+     "each": 844
+    },
+    "chip": {
+     "hp": 120,
+     "times": 0.75,
+     "each": 160
+    },
+    "thrown": {
+     "hp": 99,
+     "times": 0.1,
+     "each": 1018
+    },
+    "in a move, rising": {
+     "hp": 87,
+     "times": 0.04,
+     "each": 2238
+    },
+    "dashing": {
+     "hp": 59,
+     "times": 0.05,
+     "each": 1226
+    },
+    "its invincible move beaten": {
+     "hp": 40,
+     "times": 0.04,
+     "each": 1031
+    }
+   },
+   "air_where": {
+    "combo": 134,
+    "okizeme": 163,
+    "open": 402,
+    "pressure": 200
+   },
+   "air_by": {
+    "air": 340,
+    "ground": 499,
+    "reversal": 60
+   }
+  },
+  "net_ledger": {
+   "net": -2486,
+   "my okizeme": {
+    "net": 945,
+    "gained": 1488,
+    "lost": 543
+   },
+   "its okizeme": {
+    "net": -67,
+    "gained": 982,
+    "lost": 1048
+   },
+   "my pressure": {
+    "net": -391,
+    "gained": 530,
+    "lost": 920
+   },
+   "its pressure": {
+    "net": -1654,
+    "gained": 571,
+    "lost": 2225
+   },
+   "I came by air": {
+    "net": -674,
+    "gained": 710,
+    "lost": 1383
+   },
+   "it came by air": {
+    "net": 268,
+    "gained": 553,
+    "lost": 285
+   },
+   "both in the air": {
+    "net": -545,
+    "gained": 542,
+    "lost": 1087
+   },
+   "on the ground": {
+    "net": -369,
+    "gained": 565,
+    "lost": 934
+   }
+  }
+ },
+ "player/208": {
+  "matches": 120,
+  "ayu_won": 0.65,
+  "minutes": 315,
+  "ledger": {
+   "hp": 6662,
+   "times": 7.39,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1078,
+     "times": 1.25,
+     "each": 863
+    },
+    "free on the ground": {
+     "hp": 1012,
+     "times": 0.96,
+     "each": 1050
+    },
+    "in the air, attacking": {
+     "hp": 924,
+     "times": 1.06,
+     "each": 873
+    },
+    "opened after guarding": {
+     "hp": 848,
+     "times": 0.75,
+     "each": 1128
+    },
+    "in a move, after guarding": {
+     "hp": 536,
+     "times": 0.57,
+     "each": 940
+    },
+    "in the air, not attacking": {
+     "hp": 534,
+     "times": 0.55,
+     "each": 962
+    },
+    "its move guarded, then punished": {
+     "hp": 496,
+     "times": 0.4,
+     "each": 1251
+    },
+    "rising, not acting": {
+     "hp": 484,
+     "times": 0.33,
+     "each": 1469
+    },
+    "thrown": {
+     "hp": 396,
+     "times": 0.25,
+     "each": 1581
+    },
+    "chip": {
+     "hp": 155,
+     "times": 1.08,
+     "each": 143
+    },
+    "in a move, rising": {
+     "hp": 109,
+     "times": 0.11,
+     "each": 982
+    },
+    "its invincible move beaten": {
+     "hp": 91,
+     "times": 0.07,
+     "each": 1251
+    }
+   },
+   "air_where": {
+    "combo": 97,
+    "okizeme": 105,
+    "open": 515,
+    "pressure": 207
+   },
+   "air_by": {
+    "air": 290,
+    "ground": 614,
+    "reversal": 19
+   }
+  },
+  "dealt_ledger": {
+   "hp": 7822,
+   "times": 6.92,
+   "kinds": {
+    "in the air, attacking": {
+     "hp": 1471,
+     "times": 1.05,
+     "each": 1406
+    },
+    "rising, not acting": {
+     "hp": 1279,
+     "times": 0.78,
+     "each": 1633
+    },
+    "in a move, in neutral": {
+     "hp": 1215,
+     "times": 1.29,
+     "each": 944
+    },
+    "opened after guarding": {
+     "hp": 892,
+     "times": 0.95,
+     "each": 935
+    },
+    "in the air, not attacking": {
+     "hp": 813,
+     "times": 0.56,
+     "each": 1458
+    },
+    "free on the ground": {
+     "hp": 685,
+     "times": 0.55,
+     "each": 1250
+    },
+    "in a move, after guarding": {
+     "hp": 519,
+     "times": 0.54,
+     "each": 957
+    },
+    "its move guarded, then punished": {
+     "hp": 342,
+     "times": 0.25,
+     "each": 1383
+    },
+    "thrown": {
+     "hp": 248,
+     "times": 0.23,
+     "each": 1087
+    },
+    "in a move, rising": {
+     "hp": 131,
+     "times": 0.12,
+     "each": 1113
+    },
+    "its invincible move beaten": {
+     "hp": 110,
+     "times": 0.09,
+     "each": 1196
+    },
+    "chip": {
+     "hp": 83,
+     "times": 0.47,
+     "each": 176
+    },
+    "dashing": {
+     "hp": 36,
+     "times": 0.05,
+     "each": 749
+    }
+   },
+   "air_where": {
+    "combo": 234,
+    "okizeme": 208,
+    "open": 647,
+    "pressure": 382
+   },
+   "air_by": {
+    "air": 449,
+    "ground": 965,
+    "reversal": 56
+   }
+  },
+  "net_ledger": {
+   "net": 1160,
+   "my okizeme": {
+    "net": 973,
+    "gained": 1762,
+    "lost": 789
+   },
+   "its okizeme": {
+    "net": -253,
+    "gained": 765,
+    "lost": 1018
+   },
+   "my pressure": {
+    "net": 391,
+    "gained": 1515,
+    "lost": 1124
+   },
+   "its pressure": {
+    "net": -606,
+    "gained": 741,
+    "lost": 1347
+   },
+   "I came by air": {
+    "net": -97,
+    "gained": 772,
+    "lost": 869
+   },
+   "it came by air": {
+    "net": 681,
+    "gained": 1169,
+    "lost": 487
+   },
+   "both in the air": {
+    "net": 159,
+    "gained": 679,
+    "lost": 520
+   },
+   "on the ground": {
+    "net": -89,
+    "gained": 419,
+    "lost": 508
+   }
+  }
+ },
+ "player/473": {
+  "matches": 487,
+  "ayu_won": 0.725,
+  "minutes": 1112,
+  "ledger": {
+   "hp": 6049,
+   "times": 7.45,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1222,
+     "times": 1.44,
+     "each": 849
+    },
+    "in the air, attacking": {
+     "hp": 1056,
+     "times": 1.25,
+     "each": 847
+    },
+    "free on the ground": {
+     "hp": 1045,
+     "times": 1.16,
+     "each": 900
+    },
+    "in the air, not attacking": {
+     "hp": 740,
+     "times": 0.86,
+     "each": 863
+    },
+    "opened after guarding": {
+     "hp": 597,
+     "times": 0.75,
+     "each": 797
+    },
+    "in a move, after guarding": {
+     "hp": 283,
+     "times": 0.37,
+     "each": 774
+    },
+    "its move guarded, then punished": {
+     "hp": 263,
+     "times": 0.26,
+     "each": 1027
+    },
+    "chip": {
+     "hp": 263,
+     "times": 0.84,
+     "each": 311
+    },
+    "rising, not acting": {
+     "hp": 232,
+     "times": 0.22,
+     "each": 1038
+    },
+    "thrown": {
+     "hp": 160,
+     "times": 0.12,
+     "each": 1296
+    },
+    "its invincible move beaten": {
+     "hp": 98,
+     "times": 0.08,
+     "each": 1268
+    },
+    "in a move, rising": {
+     "hp": 69,
+     "times": 0.08,
+     "each": 822
+    },
+    "dashing": {
+     "hp": 22,
+     "times": 0.02,
+     "each": 924
+    }
+   },
+   "air_where": {
+    "combo": 128,
+    "okizeme": 171,
+    "open": 468,
+    "pressure": 288
+   },
+   "air_by": {
+    "air": 294,
+    "ground": 698,
+    "reversal": 64
+   }
+  },
+  "dealt_ledger": {
+   "hp": 8480,
+   "times": 8.94,
+   "kinds": {
+    "rising, not acting": {
+     "hp": 1426,
+     "times": 0.94,
+     "each": 1517
+    },
+    "in a move, in neutral": {
+     "hp": 1421,
+     "times": 1.62,
+     "each": 875
+    },
+    "free on the ground": {
+     "hp": 1027,
+     "times": 1.13,
+     "each": 911
+    },
+    "in the air, attacking": {
+     "hp": 1015,
+     "times": 0.91,
+     "each": 1113
+    },
+    "opened after guarding": {
+     "hp": 943,
+     "times": 1.13,
+     "each": 838
+    },
+    "in the air, not attacking": {
+     "hp": 573,
+     "times": 0.55,
+     "each": 1036
+    },
+    "its move guarded, then punished": {
+     "hp": 500,
+     "times": 0.48,
+     "each": 1039
+    },
+    "in a move, after guarding": {
+     "hp": 474,
+     "times": 0.64,
+     "each": 740
+    },
+    "thrown": {
+     "hp": 294,
+     "times": 0.28,
+     "each": 1037
+    },
+    "in a move, rising": {
+     "hp": 266,
+     "times": 0.24,
+     "each": 1127
+    },
+    "its invincible move beaten": {
+     "hp": 238,
+     "times": 0.22,
+     "each": 1088
+    },
+    "dashing": {
+     "hp": 166,
+     "times": 0.18,
+     "each": 911
+    },
+    "chip": {
+     "hp": 137,
+     "times": 0.62,
+     "each": 223
+    }
+   },
+   "air_where": {
+    "combo": 128,
+    "okizeme": 122,
+    "open": 587,
+    "pressure": 178
+   },
+   "air_by": {
+    "air": 352,
+    "ground": 593,
+    "reversal": 70
+   }
+  },
+  "net_ledger": {
+   "net": 2431,
+   "my okizeme": {
+    "net": 1165,
+    "gained": 2111,
+    "lost": 945
+   },
+   "its okizeme": {
+    "net": 219,
+    "gained": 839,
+    "lost": 620
+   },
+   "my pressure": {
+    "net": 492,
+    "gained": 1500,
+    "lost": 1008
+   },
+   "its pressure": {
+    "net": 86,
+    "gained": 915,
+    "lost": 829
+   },
+   "I came by air": {
+    "net": -77,
+    "gained": 1060,
+    "lost": 1138
+   },
+   "it came by air": {
+    "net": 556,
+    "gained": 858,
+    "lost": 302
+   },
+   "both in the air": {
+    "net": 114,
+    "gained": 636,
+    "lost": 523
+   },
+   "on the ground": {
+    "net": -123,
+    "gained": 562,
+    "lost": 685
+   }
+  }
+ },
+ "opponent/473": {
+  "matches": 534,
+  "ayu_won": 0.127,
+  "minutes": 1162,
+  "ledger": {
+   "hp": 9108,
+   "times": 10.08,
+   "kinds": {
+    "in the air, attacking": {
+     "hp": 1523,
+     "times": 1.66,
+     "each": 919
+    },
+    "in a move, in neutral": {
+     "hp": 1436,
+     "times": 1.57,
+     "each": 912
+    },
+    "free on the ground": {
+     "hp": 1222,
+     "times": 1.15,
+     "each": 1066
+    },
+    "opened after guarding": {
+     "hp": 1129,
+     "times": 1.18,
+     "each": 957
+    },
+    "in the air, not attacking": {
+     "hp": 783,
+     "times": 0.83,
+     "each": 942
+    },
+    "rising, not acting": {
+     "hp": 750,
+     "times": 0.59,
+     "each": 1278
+    },
+    "its move guarded, then punished": {
+     "hp": 586,
+     "times": 0.46,
+     "each": 1288
+    },
+    "in a move, after guarding": {
+     "hp": 561,
+     "times": 0.65,
+     "each": 864
+    },
+    "thrown": {
+     "hp": 529,
+     "times": 0.34,
+     "each": 1536
+    },
+    "in a move, rising": {
+     "hp": 270,
+     "times": 0.26,
+     "each": 1055
+    },
+    "chip": {
+     "hp": 193,
+     "times": 1.29,
+     "each": 150
+    },
+    "its invincible move beaten": {
+     "hp": 115,
+     "times": 0.1,
+     "each": 1147
+    },
+    "dashing": {
+     "hp": 12,
+     "times": 0.01,
+     "each": 1006
+    }
+   },
+   "air_where": {
+    "combo": 159,
+    "okizeme": 177,
+    "open": 825,
+    "pressure": 363
+   },
+   "air_by": {
+    "air": 475,
+    "ground": 1031,
+    "reversal": 17
+   }
+  },
+  "dealt_ledger": {
+   "hp": 5278,
+   "times": 7.35,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1259,
+     "times": 1.83,
+     "each": 689
+    },
+    "in the air, attacking": {
+     "hp": 808,
+     "times": 0.93,
+     "each": 867
+    },
+    "free on the ground": {
+     "hp": 718,
+     "times": 0.91,
+     "each": 790
+    },
+    "opened after guarding": {
+     "hp": 552,
+     "times": 0.73,
+     "each": 760
+    },
+    "in the air, not attacking": {
+     "hp": 425,
+     "times": 0.52,
+     "each": 817
+    },
+    "rising, not acting": {
+     "hp": 355,
+     "times": 0.3,
+     "each": 1199
+    },
+    "in a move, after guarding": {
+     "hp": 334,
+     "times": 0.45,
+     "each": 739
+    },
+    "its move guarded, then punished": {
+     "hp": 247,
+     "times": 0.31,
+     "each": 791
+    },
+    "thrown": {
+     "hp": 166,
+     "times": 0.15,
+     "each": 1117
+    },
+    "chip": {
+     "hp": 162,
+     "times": 0.91,
+     "each": 178
+    },
+    "its invincible move beaten": {
+     "hp": 113,
+     "times": 0.12,
+     "each": 934
+    },
+    "in a move, rising": {
+     "hp": 86,
+     "times": 0.11,
+     "each": 777
+    },
+    "dashing": {
+     "hp": 53,
+     "times": 0.08,
+     "each": 645
+    }
+   },
+   "air_where": {
+    "combo": 126,
+    "okizeme": 174,
+    "open": 364,
+    "pressure": 143
+   },
+   "air_by": {
+    "air": 335,
+    "ground": 388,
+    "reversal": 85
+   }
+  },
+  "net_ledger": {
+   "net": -3830,
+   "my okizeme": {
+    "net": -10,
+    "gained": 692,
+    "lost": 703
+   },
+   "its okizeme": {
+    "net": -793,
+    "gained": 913,
+    "lost": 1706
+   },
+   "my pressure": {
+    "net": -455,
+    "gained": 919,
+    "lost": 1374
+   },
+   "its pressure": {
+    "net": -1054,
+    "gained": 620,
+    "lost": 1674
+   },
+   "I came by air": {
+    "net": -840,
+    "gained": 627,
+    "lost": 1467
+   },
+   "it came by air": {
+    "net": 47,
+    "gained": 521,
+    "lost": 474
+   },
+   "both in the air": {
+    "net": -288,
+    "gained": 506,
+    "lost": 793
+   },
+   "on the ground": {
+    "net": -438,
+    "gained": 479,
+    "lost": 917
+   }
+  }
+ },
+ "opponent/449": {
+  "matches": 34,
+  "ayu_won": 0.118,
+  "minutes": 93,
+  "ledger": {
+   "hp": 7790,
+   "times": 7.45,
+   "kinds": {
+    "opened after guarding": {
+     "hp": 1426,
+     "times": 1.15,
+     "each": 1242
+    },
+    "in the air, not attacking": {
+     "hp": 1020,
+     "times": 0.82,
+     "each": 1251
+    },
+    "free on the ground": {
+     "hp": 874,
+     "times": 0.74,
+     "each": 1180
+    },
+    "in a move, in neutral": {
+     "hp": 856,
+     "times": 0.62,
+     "each": 1375
+    },
+    "in the air, attacking": {
+     "hp": 815,
+     "times": 0.81,
+     "each": 1013
+    },
+    "thrown": {
+     "hp": 807,
+     "times": 0.83,
+     "each": 977
+    },
+    "rising, not acting": {
+     "hp": 782,
+     "times": 0.45,
+     "each": 1735
+    },
+    "in a move, after guarding": {
+     "hp": 375,
+     "times": 0.29,
+     "each": 1295
+    },
+    "in a move, rising": {
+     "hp": 274,
+     "times": 0.16,
+     "each": 1702
+    },
+    "chip": {
+     "hp": 228,
+     "times": 1.38,
+     "each": 165
+    },
+    "its move guarded, then punished": {
+     "hp": 217,
+     "times": 0.12,
+     "each": 1837
+    },
+    "its invincible move beaten": {
+     "hp": 110,
+     "times": 0.08,
+     "each": 1461
+    },
+    "dashing": {
+     "hp": 4,
+     "times": 0.01,
+     "each": 352
+    }
+   },
+   "air_where": {
+    "combo": 120,
+    "okizeme": 16,
+    "open": 592,
+    "pressure": 87
+   },
+   "air_by": {
+    "air": 81,
+    "ground": 725,
+    "reversal": 9
+   }
+  },
+  "dealt_ledger": {
+   "hp": 5666,
+   "times": 4.19,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1640,
+     "times": 1.27,
+     "each": 1295
+    },
+    "rising, not acting": {
+     "hp": 792,
+     "times": 0.33,
+     "each": 2379
+    },
+    "in the air, attacking": {
+     "hp": 739,
+     "times": 0.46,
+     "each": 1601
+    },
+    "its move guarded, then punished": {
+     "hp": 482,
+     "times": 0.24,
+     "each": 2041
+    },
+    "free on the ground": {
+     "hp": 388,
+     "times": 0.32,
+     "each": 1206
+    },
+    "in the air, not attacking": {
+     "hp": 345,
+     "times": 0.18,
+     "each": 1889
+    },
+    "its invincible move beaten": {
+     "hp": 292,
+     "times": 0.11,
+     "each": 2722
+    },
+    "opened after guarding": {
+     "hp": 236,
+     "times": 0.21,
+     "each": 1098
+    },
+    "thrown": {
+     "hp": 213,
+     "times": 0.2,
+     "each": 1045
+    },
+    "in a move, after guarding": {
+     "hp": 179,
+     "times": 0.09,
+     "each": 2088
+    },
+    "in a move, rising": {
+     "hp": 130,
+     "times": 0.05,
+     "each": 2413
+    },
+    "dashing": {
+     "hp": 123,
+     "times": 0.19,
+     "each": 634
+    },
+    "chip": {
+     "hp": 108,
+     "times": 0.53,
+     "each": 205
+    }
+   },
+   "air_where": {
+    "combo": 53,
+    "okizeme": 188,
+    "open": 311,
+    "pressure": 188
+   },
+   "air_by": {
+    "air": 178,
+    "ground": 426,
+    "reversal": 136
+   }
+  },
+  "net_ledger": {
+   "net": -2125,
+   "my okizeme": {
+    "net": 706,
+    "gained": 1099,
+    "lost": 393
+   },
+   "its okizeme": {
+    "net": -807,
+    "gained": 1013,
+    "lost": 1820
+   },
+   "my pressure": {
+    "net": -44,
+    "gained": 458,
+    "lost": 502
+   },
+   "its pressure": {
+    "net": -988,
+    "gained": 780,
+    "lost": 1768
+   },
+   "I came by air": {
+    "net": -544,
+    "gained": 709,
+    "lost": 1253
+   },
+   "it came by air": {
+    "net": 179,
+    "gained": 580,
+    "lost": 401
+   },
+   "both in the air": {
+    "net": -535,
+    "gained": 368,
+    "lost": 903
+   },
+   "on the ground": {
+    "net": -91,
+    "gained": 660,
+    "lost": 750
+   }
+  }
+ },
+ "opponent/87": {
+  "matches": 53,
+  "ayu_won": 0.415,
+  "minutes": 111,
+  "ledger": {
+   "hp": 8245,
+   "times": 7.56,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1584,
+     "times": 1.31,
+     "each": 1204
+    },
+    "in the air, attacking": {
+     "hp": 1540,
+     "times": 1.24,
+     "each": 1239
+    },
+    "chip": {
+     "hp": 1428,
+     "times": 1.18,
+     "each": 1210
+    },
+    "in the air, not attacking": {
+     "hp": 1152,
+     "times": 1.0,
+     "each": 1152
+    },
+    "free on the ground": {
+     "hp": 954,
+     "times": 1.11,
+     "each": 862
+    },
+    "in a move, after guarding": {
+     "hp": 413,
+     "times": 0.42,
+     "each": 975
+    },
+    "opened after guarding": {
+     "hp": 396,
+     "times": 0.57,
+     "each": 699
+    },
+    "its move guarded, then punished": {
+     "hp": 259,
+     "times": 0.32,
+     "each": 797
+    },
+    "rising, not acting": {
+     "hp": 219,
+     "times": 0.18,
+     "each": 1216
+    },
+    "thrown": {
+     "hp": 172,
+     "times": 0.09,
+     "each": 1904
+    },
+    "in a move, rising": {
+     "hp": 76,
+     "times": 0.09,
+     "each": 842
+    },
+    "its invincible move beaten": {
+     "hp": 50,
+     "times": 0.03,
+     "each": 1843
+    },
+    "dashing": {
+     "hp": 3,
+     "times": 0.01,
+     "each": 386
+    }
+   },
+   "air_where": {
+    "combo": 172,
+    "okizeme": 222,
+    "open": 722,
+    "pressure": 424
+   },
+   "air_by": {
+    "air": 382,
+    "ground": 1150,
+    "reversal": 8
+   }
+  },
+  "dealt_ledger": {
+   "hp": 8115,
+   "times": 8.27,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1329,
+     "times": 1.29,
+     "each": 1032
+    },
+    "rising, not acting": {
+     "hp": 1211,
+     "times": 0.78,
+     "each": 1546
+    },
+    "free on the ground": {
+     "hp": 1046,
+     "times": 1.02,
+     "each": 1028
+    },
+    "opened after guarding": {
+     "hp": 831,
+     "times": 1.0,
+     "each": 831
+    },
+    "in the air, attacking": {
+     "hp": 828,
+     "times": 0.8,
+     "each": 1033
+    },
+    "in the air, not attacking": {
+     "hp": 453,
+     "times": 0.4,
+     "each": 1144
+    },
+    "thrown": {
+     "hp": 448,
+     "times": 0.41,
+     "each": 1082
+    },
+    "in a move, after guarding": {
+     "hp": 443,
+     "times": 0.55,
+     "each": 807
+    },
+    "its move guarded, then punished": {
+     "hp": 408,
+     "times": 0.46,
+     "each": 888
+    },
+    "its invincible move beaten": {
+     "hp": 370,
+     "times": 0.34,
+     "each": 1082
+    },
+    "in a move, rising": {
+     "hp": 346,
+     "times": 0.26,
+     "each": 1325
+    },
+    "chip": {
+     "hp": 321,
+     "times": 0.9,
+     "each": 356
+    },
+    "dashing": {
+     "hp": 80,
+     "times": 0.05,
+     "each": 1477
+    }
+   },
+   "air_where": {
+    "combo": 59,
+    "okizeme": 57,
+    "open": 468,
+    "pressure": 244
+   },
+   "air_by": {
+    "air": 209,
+    "ground": 559,
+    "reversal": 60
+   }
+  },
+  "net_ledger": {
+   "net": -130,
+   "my okizeme": {
+    "net": 964,
+    "gained": 2034,
+    "lost": 1070
+   },
+   "its okizeme": {
+    "net": 131,
+    "gained": 846,
+    "lost": 716
+   },
+   "my pressure": {
+    "net": 480,
+    "gained": 1479,
+    "lost": 999
+   },
+   "its pressure": {
+    "net": -16,
+    "gained": 866,
+    "lost": 882
+   },
+   "I came by air": {
+    "net": -1694,
+    "gained": 1096,
+    "lost": 2789
+   },
+   "it came by air": {
+    "net": 583,
+    "gained": 914,
+    "lost": 332
+   },
+   "both in the air": {
+    "net": -373,
+    "gained": 317,
+    "lost": 690
+   },
+   "on the ground": {
+    "net": -205,
+    "gained": 562,
+    "lost": 767
+   }
+  }
+ },
+ "opponent/477": {
+  "matches": 91,
+  "ayu_won": 0.89,
+  "minutes": 244,
+  "ledger": {
+   "hp": 5334,
+   "times": 5.34,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1088,
+     "times": 1.05,
+     "each": 1038
+    },
+    "free on the ground": {
+     "hp": 1079,
+     "times": 0.86,
+     "each": 1255
+    },
+    "in the air, attacking": {
+     "hp": 859,
+     "times": 1.15,
+     "each": 747
+    },
+    "opened after guarding": {
+     "hp": 629,
+     "times": 0.59,
+     "each": 1074
+    },
+    "in the air, not attacking": {
+     "hp": 604,
+     "times": 0.7,
+     "each": 868
+    },
+    "its move guarded, then punished": {
+     "hp": 386,
+     "times": 0.28,
+     "each": 1385
+    },
+    "its invincible move beaten": {
+     "hp": 137,
+     "times": 0.08,
+     "each": 1761
+    },
+    "in a move, after guarding": {
+     "hp": 129,
+     "times": 0.18,
+     "each": 699
+    },
+    "rising, not acting": {
+     "hp": 119,
+     "times": 0.14,
+     "each": 832
+    },
+    "thrown": {
+     "hp": 118,
+     "times": 0.07,
+     "each": 1604
+    },
+    "chip": {
+     "hp": 77,
+     "times": 0.14,
+     "each": 552
+    },
+    "in a move, rising": {
+     "hp": 58,
+     "times": 0.07,
+     "each": 784
+    },
+    "dashing": {
+     "hp": 53,
+     "times": 0.03,
+     "each": 1848
+    }
+   },
+   "air_where": {
+    "combo": 112,
+    "okizeme": 98,
+    "open": 317,
+    "pressure": 331
+   },
+   "air_by": {
+    "air": 83,
+    "ground": 769,
+    "reversal": 7
+   }
+  },
+  "dealt_ledger": {
+   "hp": 7886,
+   "times": 8.58,
+   "kinds": {
+    "rising, not acting": {
+     "hp": 1589,
+     "times": 0.88,
+     "each": 1797
+    },
+    "in a move, in neutral": {
+     "hp": 1455,
+     "times": 1.65,
+     "each": 880
+    },
+    "free on the ground": {
+     "hp": 1078,
+     "times": 1.33,
+     "each": 810
+    },
+    "opened after guarding": {
+     "hp": 1045,
+     "times": 1.33,
+     "each": 783
+    },
+    "its move guarded, then punished": {
+     "hp": 499,
+     "times": 0.49,
+     "each": 1016
+    },
+    "in a move, after guarding": {
+     "hp": 484,
+     "times": 0.68,
+     "each": 716
+    },
+    "in the air, attacking": {
+     "hp": 447,
+     "times": 0.34,
+     "each": 1333
+    },
+    "in the air, not attacking": {
+     "hp": 432,
+     "times": 0.4,
+     "each": 1078
+    },
+    "thrown": {
+     "hp": 282,
+     "times": 0.28,
+     "each": 1000
+    },
+    "dashing": {
+     "hp": 272,
+     "times": 0.35,
+     "each": 772
+    },
+    "chip": {
+     "hp": 123,
+     "times": 0.61,
+     "each": 203
+    },
+    "in a move, rising": {
+     "hp": 115,
+     "times": 0.14,
+     "each": 829
+    },
+    "its invincible move beaten": {
+     "hp": 64,
+     "times": 0.1,
+     "each": 652
+    }
+   },
+   "air_where": {
+    "combo": 60,
+    "okizeme": 114,
+    "open": 191,
+    "pressure": 82
+   },
+   "air_by": {
+    "air": 186,
+    "ground": 211,
+    "reversal": 50
+   }
+  },
+  "net_ledger": {
+   "net": 2552,
+   "my okizeme": {
+    "net": 1300,
+    "gained": 2022,
+    "lost": 722
+   },
+   "its okizeme": {
+    "net": 326,
+    "gained": 758,
+    "lost": 432
+   },
+   "my pressure": {
+    "net": 244,
+    "gained": 1599,
+    "lost": 1355
+   },
+   "its pressure": {
+    "net": 279,
+    "gained": 743,
+    "lost": 464
+   },
+   "I came by air": {
+    "net": 31,
+    "gained": 1323,
+    "lost": 1292
+   },
+   "it came by air": {
+    "net": 385,
+    "gained": 448,
+    "lost": 63
+   },
+   "both in the air": {
+    "net": 302,
+    "gained": 436,
+    "lost": 134
+   },
+   "on the ground": {
+    "net": -314,
+    "gained": 557,
+    "lost": 871
+   }
+  }
+ },
+ "opponent/208": {
+  "matches": 50,
+  "ayu_won": 0.14,
+  "minutes": 135,
+  "ledger": {
+   "hp": 8122,
+   "times": 9.37,
+   "kinds": {
+    "in the air, attacking": {
+     "hp": 1470,
+     "times": 1.35,
+     "each": 1085
+    },
+    "in a move, in neutral": {
+     "hp": 1236,
+     "times": 1.44,
+     "each": 857
+    },
+    "free on the ground": {
+     "hp": 1069,
+     "times": 1.19,
+     "each": 897
+    },
+    "opened after guarding": {
+     "hp": 1028,
+     "times": 1.23,
+     "each": 837
+    },
+    "in the air, not attacking": {
+     "hp": 924,
+     "times": 0.97,
+     "each": 953
+    },
+    "rising, not acting": {
+     "hp": 778,
+     "times": 0.59,
+     "each": 1315
+    },
+    "in a move, after guarding": {
+     "hp": 602,
+     "times": 0.56,
+     "each": 1084
+    },
+    "its move guarded, then punished": {
+     "hp": 368,
+     "times": 0.23,
+     "each": 1602
+    },
+    "thrown": {
+     "hp": 264,
+     "times": 0.27,
+     "each": 990
+    },
+    "its invincible move beaten": {
+     "hp": 159,
+     "times": 0.12,
+     "each": 1345
+    },
+    "chip": {
+     "hp": 148,
+     "times": 1.34,
+     "each": 111
+    },
+    "in a move, rising": {
+     "hp": 67,
+     "times": 0.06,
+     "each": 1133
+    },
+    "dashing": {
+     "hp": 8,
+     "times": 0.02,
+     "each": 347
+    }
+   },
+   "air_where": {
+    "combo": 185,
+    "okizeme": 131,
+    "open": 818,
+    "pressure": 335
+   },
+   "air_by": {
+    "air": 448,
+    "ground": 966,
+    "reversal": 55
+   }
+  },
+  "dealt_ledger": {
+   "hp": 5870,
+   "times": 6.77,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1263,
+     "times": 1.54,
+     "each": 821
+    },
+    "in the air, attacking": {
+     "hp": 883,
+     "times": 1.0,
+     "each": 884
+    },
+    "free on the ground": {
+     "hp": 757,
+     "times": 0.87,
+     "each": 874
+    },
+    "rising, not acting": {
+     "hp": 714,
+     "times": 0.41,
+     "each": 1755
+    },
+    "in the air, not attacking": {
+     "hp": 445,
+     "times": 0.41,
+     "each": 1094
+    },
+    "opened after guarding": {
+     "hp": 408,
+     "times": 0.53,
+     "each": 766
+    },
+    "in a move, after guarding": {
+     "hp": 381,
+     "times": 0.59,
+     "each": 643
+    },
+    "its move guarded, then punished": {
+     "hp": 292,
+     "times": 0.35,
+     "each": 839
+    },
+    "in a move, rising": {
+     "hp": 194,
+     "times": 0.18,
+     "each": 1093
+    },
+    "dashing": {
+     "hp": 182,
+     "times": 0.18,
+     "each": 1026
+    },
+    "thrown": {
+     "hp": 138,
+     "times": 0.13,
+     "each": 1098
+    },
+    "its invincible move beaten": {
+     "hp": 113,
+     "times": 0.09,
+     "each": 1267
+    },
+    "chip": {
+     "hp": 99,
+     "times": 0.51,
+     "each": 193
+    }
+   },
+   "air_where": {
+    "combo": 147,
+    "okizeme": 101,
+    "open": 485,
+    "pressure": 149
+   },
+   "air_by": {
+    "air": 290,
+    "ground": 479,
+    "reversal": 113
+   }
+  },
+  "net_ledger": {
+   "net": -2252,
+   "my okizeme": {
+    "net": 189,
+    "gained": 1112,
+    "lost": 923
+   },
+   "its okizeme": {
+    "net": -324,
+    "gained": 1018,
+    "lost": 1343
+   },
+   "my pressure": {
+    "net": -240,
+    "gained": 851,
+    "lost": 1090
+   },
+   "its pressure": {
+    "net": -808,
+    "gained": 686,
+    "lost": 1494
+   },
+   "I came by air": {
+    "net": -560,
+    "gained": 725,
+    "lost": 1285
+   },
+   "it came by air": {
+    "net": 191,
+    "gained": 709,
+    "lost": 518
+   },
+   "both in the air": {
+    "net": -414,
+    "gained": 423,
+    "lost": 837
+   },
+   "on the ground": {
+    "net": -285,
+    "gained": 348,
+    "lost": 632
+   }
+  }
+ },
+ "opponent/520": {
+  "matches": 34,
+  "ayu_won": 1.0,
+  "minutes": 60,
+  "ledger": {
+   "hp": 4623,
+   "times": 7.37,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 992,
+     "times": 1.65,
+     "each": 601
+    },
+    "free on the ground": {
+     "hp": 867,
+     "times": 1.28,
+     "each": 675
+    },
+    "in the air, attacking": {
+     "hp": 852,
+     "times": 1.13,
+     "each": 751
+    },
+    "in the air, not attacking": {
+     "hp": 593,
+     "times": 0.83,
+     "each": 711
+    },
+    "opened after guarding": {
+     "hp": 451,
+     "times": 0.48,
+     "each": 934
+    },
+    "in a move, after guarding": {
+     "hp": 259,
+     "times": 0.42,
+     "each": 622
+    },
+    "chip": {
+     "hp": 211,
+     "times": 0.98,
+     "each": 214
+    },
+    "rising, not acting": {
+     "hp": 152,
+     "times": 0.25,
+     "each": 608
+    },
+    "its move guarded, then punished": {
+     "hp": 88,
+     "times": 0.13,
+     "each": 656
+    },
+    "in a move, rising": {
+     "hp": 66,
+     "times": 0.12,
+     "each": 565
+    },
+    "its invincible move beaten": {
+     "hp": 64,
+     "times": 0.05,
+     "each": 1279
+    },
+    "thrown": {
+     "hp": 30,
+     "times": 0.03,
+     "each": 908
+    }
+   },
+   "air_where": {
+    "combo": 167,
+    "okizeme": 100,
+    "open": 359,
+    "pressure": 227
+   },
+   "air_by": {
+    "air": 294,
+    "ground": 371,
+    "reversal": 187
+   }
+  },
+  "dealt_ledger": {
+   "hp": 11163,
+   "times": 10.72,
+   "kinds": {
+    "rising, not acting": {
+     "hp": 2646,
+     "times": 1.67,
+     "each": 1587
+    },
+    "in the air, attacking": {
+     "hp": 1652,
+     "times": 1.3,
+     "each": 1270
+    },
+    "in a move, in neutral": {
+     "hp": 1071,
+     "times": 1.33,
+     "each": 803
+    },
+    "in the air, not attacking": {
+     "hp": 1020,
+     "times": 0.88,
+     "each": 1154
+    },
+    "opened after guarding": {
+     "hp": 1016,
+     "times": 1.13,
+     "each": 897
+    },
+    "free on the ground": {
+     "hp": 842,
+     "times": 0.88,
+     "each": 953
+    },
+    "in a move, after guarding": {
+     "hp": 721,
+     "times": 1.05,
+     "each": 687
+    },
+    "its move guarded, then punished": {
+     "hp": 675,
+     "times": 0.58,
+     "each": 1157
+    },
+    "its invincible move beaten": {
+     "hp": 477,
+     "times": 0.63,
+     "each": 754
+    },
+    "thrown": {
+     "hp": 472,
+     "times": 0.52,
+     "each": 913
+    },
+    "in a move, rising": {
+     "hp": 453,
+     "times": 0.27,
+     "each": 1700
+    },
+    "chip": {
+     "hp": 70,
+     "times": 0.37,
+     "each": 191
+    },
+    "dashing": {
+     "hp": 47,
+     "times": 0.1,
+     "each": 466
+    }
+   },
+   "air_where": {
+    "combo": 122,
+    "okizeme": 332,
+    "open": 752,
+    "pressure": 446
+   },
+   "air_by": {
+    "air": 527,
+    "ground": 1055,
+    "reversal": 70
+   }
+  },
+  "net_ledger": {
+   "net": 6539,
+   "my okizeme": {
+    "net": 3333,
+    "gained": 3871,
+    "lost": 538
+   },
+   "its okizeme": {
+    "net": 549,
+    "gained": 963,
+    "lost": 413
+   },
+   "my pressure": {
+    "net": 786,
+    "gained": 1527,
+    "lost": 741
+   },
+   "its pressure": {
+    "net": 771,
+    "gained": 1480,
+    "lost": 710
+   },
+   "I came by air": {
+    "net": 128,
+    "gained": 721,
+    "lost": 592
+   },
+   "it came by air": {
+    "net": 651,
+    "gained": 1058,
+    "lost": 407
+   },
+   "both in the air": {
+    "net": 478,
+    "gained": 1015,
+    "lost": 537
+   },
+   "on the ground": {
+    "net": -157,
+    "gained": 528,
+    "lost": 685
+   }
+  }
+ },
+ "player/596": {
+  "matches": 173,
+  "ayu_won": 0.029,
+  "minutes": 404,
+  "ledger": {
+   "hp": 8651,
+   "times": 9.92,
+   "kinds": {
+    "in the air, attacking": {
+     "hp": 1651,
+     "times": 1.95,
+     "each": 847
+    },
+    "in a move, in neutral": {
+     "hp": 1613,
+     "times": 1.8,
+     "each": 898
+    },
+    "opened after guarding": {
+     "hp": 1005,
+     "times": 1.17,
+     "each": 859
+    },
+    "free on the ground": {
+     "hp": 946,
+     "times": 0.99,
+     "each": 952
+    },
+    "in the air, not attacking": {
+     "hp": 709,
+     "times": 0.83,
+     "each": 859
+    },
+    "its move guarded, then punished": {
+     "hp": 633,
+     "times": 0.51,
+     "each": 1231
+    },
+    "rising, not acting": {
+     "hp": 585,
+     "times": 0.44,
+     "each": 1321
+    },
+    "in a move, after guarding": {
+     "hp": 491,
+     "times": 0.57,
+     "each": 864
+    },
+    "thrown": {
+     "hp": 426,
+     "times": 0.29,
+     "each": 1461
+    },
+    "in a move, rising": {
+     "hp": 305,
+     "times": 0.29,
+     "each": 1038
+    },
+    "chip": {
+     "hp": 175,
+     "times": 0.97,
+     "each": 181
+    },
+    "its invincible move beaten": {
+     "hp": 110,
+     "times": 0.11,
+     "each": 1031
+    },
+    "dashing": {
+     "hp": 2,
+     "times": 0.0,
+     "each": 449
+    }
+   },
+   "air_where": {
+    "combo": 210,
+    "okizeme": 170,
+    "open": 850,
+    "pressure": 421
+   },
+   "air_by": {
+    "air": 560,
+    "ground": 1067,
+    "reversal": 23
+   }
+  },
+  "dealt_ledger": {
+   "hp": 4690,
+   "times": 8.18,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1351,
+     "times": 2.19,
+     "each": 618
+    },
+    "free on the ground": {
+     "hp": 767,
+     "times": 1.13,
+     "each": 682
+    },
+    "in the air, attacking": {
+     "hp": 625,
+     "times": 0.93,
+     "each": 669
+    },
+    "opened after guarding": {
+     "hp": 427,
+     "times": 0.67,
+     "each": 639
+    },
+    "in the air, not attacking": {
+     "hp": 413,
+     "times": 0.62,
+     "each": 666
+    },
+    "in a move, after guarding": {
+     "hp": 319,
+     "times": 0.49,
+     "each": 652
+    },
+    "chip": {
+     "hp": 209,
+     "times": 1.29,
+     "each": 162
+    },
+    "its move guarded, then punished": {
+     "hp": 152,
+     "times": 0.25,
+     "each": 604
+    },
+    "rising, not acting": {
+     "hp": 126,
+     "times": 0.21,
+     "each": 590
+    },
+    "its invincible move beaten": {
+     "hp": 111,
+     "times": 0.14,
+     "each": 815
+    },
+    "thrown": {
+     "hp": 85,
+     "times": 0.08,
+     "each": 1048
+    },
+    "dashing": {
+     "hp": 56,
+     "times": 0.1,
+     "each": 540
+    },
+    "in a move, rising": {
+     "hp": 49,
+     "times": 0.08,
+     "each": 602
+    }
+   },
+   "air_where": {
+    "combo": 95,
+    "okizeme": 148,
+    "open": 335,
+    "pressure": 47
+   },
+   "air_by": {
+    "air": 345,
+    "ground": 172,
+    "reversal": 109
+   }
+  },
+  "net_ledger": {
+   "net": -3961,
+   "my okizeme": {
+    "net": -151,
+    "gained": 397,
+    "lost": 548
+   },
+   "its okizeme": {
+    "net": -687,
+    "gained": 930,
+    "lost": 1617
+   },
+   "my pressure": {
+    "net": -496,
+    "gained": 839,
+    "lost": 1335
+   },
+   "its pressure": {
+    "net": -1031,
+    "gained": 441,
+    "lost": 1471
+   },
+   "I came by air": {
+    "net": -626,
+    "gained": 690,
+    "lost": 1316
+   },
+   "it came by air": {
+    "net": -83,
+    "gained": 365,
+    "lost": 448
+   },
+   "both in the air": {
+    "net": -273,
+    "gained": 526,
+    "lost": 799
+   },
+   "on the ground": {
+    "net": -614,
+    "gained": 504,
+    "lost": 1117
+   }
+  }
+ },
+ "player/479": {
+  "matches": 41,
+  "ayu_won": 0.0,
+  "minutes": 75,
+  "ledger": {
+   "hp": 10864,
+   "times": 12.61,
+   "kinds": {
+    "free on the ground": {
+     "hp": 2399,
+     "times": 1.72,
+     "each": 1395
+    },
+    "in the air, attacking": {
+     "hp": 1742,
+     "times": 1.77,
+     "each": 982
+    },
+    "opened after guarding": {
+     "hp": 1512,
+     "times": 1.64,
+     "each": 922
+    },
+    "thrown": {
+     "hp": 1240,
+     "times": 0.73,
+     "each": 1691
+    },
+    "rising, not acting": {
+     "hp": 795,
+     "times": 0.69,
+     "each": 1146
+    },
+    "its move guarded, then punished": {
+     "hp": 735,
+     "times": 0.57,
+     "each": 1281
+    },
+    "in a move, in neutral": {
+     "hp": 716,
+     "times": 0.99,
+     "each": 726
+    },
+    "in a move, after guarding": {
+     "hp": 590,
+     "times": 0.6,
+     "each": 984
+    },
+    "in the air, not attacking": {
+     "hp": 433,
+     "times": 0.61,
+     "each": 707
+    },
+    "in a move, rising": {
+     "hp": 353,
+     "times": 0.33,
+     "each": 1060
+    },
+    "chip": {
+     "hp": 247,
+     "times": 2.83,
+     "each": 87
+    },
+    "its invincible move beaten": {
+     "hp": 78,
+     "times": 0.07,
+     "each": 1165
+    },
+    "dashing": {
+     "hp": 24,
+     "times": 0.05,
+     "each": 452
+    }
+   },
+   "air_where": {
+    "combo": 96,
+    "okizeme": 230,
+    "open": 831,
+    "pressure": 585
+   },
+   "air_by": {
+    "air": 137,
+    "ground": 1592,
+    "reversal": 12
+   }
+  },
+  "dealt_ledger": {
+   "hp": 4667,
+   "times": 6.12,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1048,
+     "times": 1.67,
+     "each": 629
+    },
+    "free on the ground": {
+     "hp": 1008,
+     "times": 1.16,
+     "each": 869
+    },
+    "opened after guarding": {
+     "hp": 495,
+     "times": 0.52,
+     "each": 952
+    },
+    "its move guarded, then punished": {
+     "hp": 480,
+     "times": 0.41,
+     "each": 1161
+    },
+    "in a move, after guarding": {
+     "hp": 445,
+     "times": 0.52,
+     "each": 856
+    },
+    "in the air, attacking": {
+     "hp": 386,
+     "times": 0.49,
+     "each": 783
+    },
+    "rising, not acting": {
+     "hp": 262,
+     "times": 0.2,
+     "each": 1308
+    },
+    "in the air, not attacking": {
+     "hp": 261,
+     "times": 0.31,
+     "each": 852
+    },
+    "in a move, rising": {
+     "hp": 94,
+     "times": 0.11,
+     "each": 884
+    },
+    "chip": {
+     "hp": 80,
+     "times": 0.59,
+     "each": 137
+    },
+    "its invincible move beaten": {
+     "hp": 51,
+     "times": 0.08,
+     "each": 634
+    },
+    "thrown": {
+     "hp": 47,
+     "times": 0.05,
+     "each": 885
+    },
+    "dashing": {
+     "hp": 11,
+     "times": 0.01,
+     "each": 810
+    }
+   },
+   "air_where": {
+    "combo": 76,
+    "okizeme": 240,
+    "open": 70
+   },
+   "air_by": {
+    "air": 110,
+    "ground": 273,
+    "reversal": 4
+   }
+  },
+  "net_ledger": {
+   "net": -6197,
+   "my okizeme": {
+    "net": -411,
+    "gained": 459,
+    "lost": 870
+   },
+   "its okizeme": {
+    "net": -998,
+    "gained": 996,
+    "lost": 1994
+   },
+   "my pressure": {
+    "net": -1152,
+    "gained": 790,
+    "lost": 1942
+   },
+   "its pressure": {
+    "net": -1296,
+    "gained": 696,
+    "lost": 1992
+   },
+   "I came by air": {
+    "net": -1405,
+    "gained": 938,
+    "lost": 2342
+   },
+   "it came by air": {
+    "net": -214,
+    "gained": 160,
+    "lost": 375
+   },
+   "both in the air": {
+    "net": -113,
+    "gained": 285,
+    "lost": 397
+   },
+   "on the ground": {
+    "net": -608,
+    "gained": 344,
+    "lost": 952
+   }
+  }
+ },
+ "player/639": {
+  "matches": 66,
+  "ayu_won": 0.0,
+  "minutes": 116,
+  "ledger": {
+   "hp": 11277,
+   "times": 11.75,
+   "kinds": {
+    "in the air, attacking": {
+     "hp": 2316,
+     "times": 2.18,
+     "each": 1063
+    },
+    "opened after guarding": {
+     "hp": 1765,
+     "times": 1.64,
+     "each": 1075
+    },
+    "in a move, in neutral": {
+     "hp": 1269,
+     "times": 1.24,
+     "each": 1026
+    },
+    "free on the ground": {
+     "hp": 1176,
+     "times": 0.86,
+     "each": 1360
+    },
+    "rising, not acting": {
+     "hp": 1031,
+     "times": 0.78,
+     "each": 1326
+    },
+    "in a move, after guarding": {
+     "hp": 850,
+     "times": 0.99,
+     "each": 862
+    },
+    "in the air, not attacking": {
+     "hp": 812,
+     "times": 0.86,
+     "each": 939
+    },
+    "thrown": {
+     "hp": 746,
+     "times": 0.5,
+     "each": 1488
+    },
+    "its move guarded, then punished": {
+     "hp": 695,
+     "times": 0.48,
+     "each": 1437
+    },
+    "in a move, rising": {
+     "hp": 309,
+     "times": 0.25,
+     "each": 1234
+    },
+    "its invincible move beaten": {
+     "hp": 178,
+     "times": 0.13,
+     "each": 1369
+    },
+    "chip": {
+     "hp": 126,
+     "times": 1.82,
+     "each": 69
+    },
+    "dashing": {
+     "hp": 4,
+     "times": 0.01,
+     "each": 405
+    }
+   },
+   "air_where": {
+    "combo": 164,
+    "okizeme": 254,
+    "open": 1350,
+    "pressure": 549
+   },
+   "air_by": {
+    "air": 817,
+    "ground": 1490,
+    "reversal": 9
+   }
+  },
+  "dealt_ledger": {
+   "hp": 4105,
+   "times": 6.22,
+   "kinds": {
+    "in a move, in neutral": {
+     "hp": 1119,
+     "times": 1.65,
+     "each": 677
+    },
+    "opened after guarding": {
+     "hp": 536,
+     "times": 0.67,
+     "each": 805
+    },
+    "in the air, attacking": {
+     "hp": 478,
+     "times": 0.83,
+     "each": 577
+    },
+    "free on the ground": {
+     "hp": 417,
+     "times": 0.57,
+     "each": 731
+    },
+    "its move guarded, then punished": {
+     "hp": 396,
+     "times": 0.61,
+     "each": 644
+    },
+    "in a move, after guarding": {
+     "hp": 373,
+     "times": 0.43,
+     "each": 862
+    },
+    "in the air, not attacking": {
+     "hp": 270,
+     "times": 0.46,
+     "each": 590
+    },
+    "its invincible move beaten": {
+     "hp": 168,
+     "times": 0.11,
+     "each": 1495
+    },
+    "rising, not acting": {
+     "hp": 118,
+     "times": 0.11,
+     "each": 1054
+    },
+    "chip": {
+     "hp": 89,
+     "times": 0.57,
+     "each": 156
+    },
+    "in a move, rising": {
+     "hp": 72,
+     "times": 0.11,
+     "each": 643
+    },
+    "dashing": {
+     "hp": 38,
+     "times": 0.06,
+     "each": 631
+    },
+    "thrown": {
+     "hp": 30,
+     "times": 0.03,
+     "each": 1167
+    }
+   },
+   "air_where": {
+    "combo": 92,
+    "okizeme": 94,
+    "open": 163,
+    "pressure": 130
+   },
+   "air_by": {
+    "air": 289,
+    "ground": 156,
+    "reversal": 33
+   }
+  },
+  "net_ledger": {
+   "net": -7172,
+   "my okizeme": {
+    "net": -458,
+    "gained": 428,
+    "lost": 886
+   },
+   "its okizeme": {
+    "net": -1263,
+    "gained": 920,
+    "lost": 2182
+   },
+   "my pressure": {
+    "net": -728,
+    "gained": 822,
+    "lost": 1550
+   },
+   "its pressure": {
+    "net": -1797,
+    "gained": 974,
+    "lost": 2771
+   },
+   "I came by air": {
+    "net": -1537,
+    "gained": 236,
+    "lost": 1774
+   },
+   "it came by air": {
+    "net": -279,
+    "gained": 154,
+    "lost": 433
+   },
+   "both in the air": {
+    "net": -756,
+    "gained": 277,
+    "lost": 1033
+   },
+   "on the ground": {
+    "net": -354,
+    "gained": 293,
+    "lost": 648
+   }
+  }
+ }
+}

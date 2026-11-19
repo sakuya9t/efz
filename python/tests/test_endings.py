@@ -1,6 +1,7 @@
 """How combos end and what a throw is, as runs/human-ayu counts them (tactics.endings,
 tactics.grabs: evaluate.py's combo_ends and grabs), and the scripted opponents' air
-recovery (advantages.py's tech)."""
+recovery (advantages.py's tech), a corner held (evaluate.corner) and a risky move's cost
+(tactics.risks)."""
 
 import os
 import sys
@@ -90,6 +91,236 @@ class Endings(unittest.TestCase):
                          (1, 1, 1, 0))
         self.assertGreaterEqual(g['throw_chances'], 1)
         self.assertGreaterEqual(g['air_chances'], 1)
+
+
+@unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class Risks(unittest.TestCase):
+    """A risky move's result and what a miss costs (tactics.risks: evaluate.py's risks)."""
+
+    def ayu(self, T=900):
+        c = match(T)
+        c[:, 10] = tactics.names().index('ayu')   # the viewer's character
+        return c
+
+    def test_a_hit_a_punished_guard_a_whiff_and_a_combo_piece(self):
+        c = self.ayu()
+        c[20:54, ME_ACT] = 0xfb                              # 623C that hits:
+        c[24:60, OPP_ACT], c[24:60, OPP_STUN] = 0x3b, 1
+        c[26:, OPP_HP] -= 0.1
+        c[200:234, ME_ACT] = 0xfb                            # one recoil-guarded,
+        c[204:214, OPP_ACT] = 0xa8
+        c[240:290, ME_ACT], c[240:290, ME_STUN] = 0x3b, 1    # and punished for a fifth
+        c[242:, ME_HP] -= 0.2
+        c[400:434, ME_ACT] = 0xfc                            # 623B in the air: nothing came
+        c[600:640, OPP_ACT], c[600:640, OPP_STUN] = 0x3b, 1  # 236C inside a combo
+        c[610:635, ME_ACT] = 0x106
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        got = tactics.risks(me, opp, np.ones(len(c), bool))
+        self.assertEqual([(r['move'], r['combo'], r.get('result')) for r in got],
+                         [('623C', False, 'hit'), ('623C', False, 'rg'), ('623B', False, 'whiff'),
+                          ('236C', True, None)])
+        self.assertAlmostEqual(got[0]['dealt'], 0.1 * 9999, delta=1)
+        self.assertTrue(got[1]['punished'])
+        self.assertAlmostEqual(got[1]['lost'], 0.2 * 9999, delta=1)
+        self.assertFalse(got[1]['back'] or got[1]['ic'])
+        self.assertFalse(got[2]['punished'])
+        rep = tactics.risks_report(got, 1.0)
+        self.assertEqual((rep['623C']['n'], rep['623C']['hit'], rep['623C']['rg']), (2, 0.5, 0.5))
+        self.assertEqual((rep['623C']['punished'], rep['623C']['lost']), (1.0, 2000))
+        self.assertEqual(rep['623C']['net'], -500)           # (1000 dealt - 2000 lost) / 2
+        self.assertEqual((rep['236C']['in_combo'], rep['236C']['n']), (1.0, 0))
+
+    def test_a_wake_up_one_is_told_from_the_others(self):
+        c = self.ayu(600)
+        c[80:120, ME_ACT] = 0x62                             # down, rising,
+        c[120:140, ME_ACT] = 0x60
+        c[140:200, ME_ACT] = 0x13b                           # and a super as it gets up:
+        c[160:175, OPP_ACT] = 0x96                           # guarded,
+        c[210:250, ME_ACT], c[210:250, ME_STUN] = 0x3b, 1    # punished for a tenth;
+        c[212:, ME_HP] -= 0.1
+        c[400:460, ME_ACT] = 0x13b                           # one in the open that hits
+        c[420:450, OPP_ACT], c[420:450, OPP_STUN] = 0x3b, 1
+        c[422:, OPP_HP] -= 0.3
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        got = tactics.risks(me, opp, np.ones(len(c), bool))
+        self.assertEqual([(r['result'], r['wake']) for r in got], [('guarded', True), ('hit', False)])
+        rep = tactics.risks_report(got, 1.0)['0x13b']
+        self.assertEqual((rep['wake'], rep['wake_hit'], rep['wake_net'], rep['net']),
+                         (0.5, 0.0, -1000, 1000))
+
+    def test_an_answer_recoil_guarded_and_a_cancel_are_seen(self):
+        c = self.ayu(400)
+        c[20:40, ME_ACT] = 0xfa                              # 623A guarded,
+        c[24:34, OPP_ACT] = 0x96
+        c[40:50, ME_ACT] = 0xa7                              # cancelled (Instant Charge),
+        c[60:66, ME_ACT] = 0xa8                              # and the answer recoil-guarded
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        got = tactics.risks(me, opp, np.ones(len(c), bool))
+        self.assertEqual(len(got), 1)
+        self.assertEqual((got[0]['result'], got[0]['punished'], got[0]['back'], got[0]['ic']),
+                         ('guarded', False, True, True))
+
+
+@unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class Flights(unittest.TestCase):
+    """An air dash, what followed it and what came of it (tactics.flights)."""
+
+    def test_a_flight_into_a_move_that_hits_one_back_into_nothing(self):
+        c = match(500)
+        c[:, 10] = tactics.names().index('ayu')
+        c[40:110, ME_AIR] = 1
+        c[50:62, ME_ACT] = 0xa5                              # a flight forward,
+        c[66:80, ME_ACT] = 0xc9                              # a move in the air,
+        c[72:90, OPP_ACT], c[72:90, OPP_STUN] = 0x32, 1      # that hits
+        c[300:312, ME_ACT] = 0xa6                            # one back: nothing after it
+        c[300:330, ME_AIR] = 1
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        got = tactics.flights(me, opp, np.ones(len(c), bool))
+        self.assertEqual([(r['back'], r['next'], r['came']) for r in got],
+                         [(False, 'air move', 'hit'), (True, 'nothing', 'nothing')])
+        rep = tactics.flights_report(got, 1.0)
+        self.assertEqual((rep['n'], rep['back'], rep['mix']), (2, 0.5, 1.0))
+        self.assertEqual(rep['came']['hit'], 0.5)
+        self.assertEqual(rep['where'], {'open': dict(per_min=2.0, hit=0.5, was_hit=0.0)})
+
+    def test_where_a_flight_is_flown_from(self):
+        c = match(600)
+        c[:, 10] = tactics.names().index('ayu')
+        c[40:50, OPP_ACT] = 0x96                             # the opponent guards,
+        c[60:72, ME_ACT] = 0xa5                              # a flight out of the string;
+        c[200:260, OPP_ACT], c[200:260, OPP_STUN] = 0x32, 1  # it is hit,
+        c[220:232, ME_ACT] = 0xa5                            # one inside the combo;
+        c[300:360, OPP_ACT] = 0x62                           # it is down,
+        c[320:332, ME_ACT] = 0xa5                            # one over it;
+        c[500:512, ME_ACT] = 0xa6                            # and one in the open
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        got = tactics.flights(me, opp, np.ones(len(c), bool))
+        self.assertEqual([r['where'] for r in got], ['string', 'combo', 'okizeme', 'open'])
+        self.assertEqual(tactics.flights_report([], 1.0), dict(per_min=0.0, n=0))
+
+    def test_the_opponent_s_risks_are_the_player_s_to_punish(self):
+        c = match(300)
+        c[:, 11] = tactics.names().index('ayu')              # the opponent is Ayu
+        c[20:54, OPP_ACT] = 0xfb                             # her 623C, guarded,
+        c[24:34, ME_ACT] = 0x96
+        c[60:80, OPP_ACT], c[60:80, OPP_STUN] = 0x32, 1      # and punished
+        c[62:, OPP_HP] -= 0.1
+        got = tactics.measure(c)['risks_def']
+        self.assertEqual([(r['move'], r['result'], r['punished']) for r in got],
+                         [('623C', 'guarded', True)])
+
+
+@unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class Ledger(unittest.TestCase):
+    """Where the HP goes (tactics.losses: evaluate.py's ledger)."""
+
+    def hit(self, c, at, lost=0.1, steps=30):
+        c[at:at + steps, ME_ACT], c[at:at + steps, ME_STUN] = 0x3b, 1
+        c[at + 1:, ME_HP] -= lost
+
+    def test_a_jump_in_hit_by_where_it_came_from_and_by_what(self):
+        c = match(900)
+        c[40:60, ME_AIR], c[45:60, ME_ACT] = 1, 0xd0         # a jump with a move, in the open,
+        self.hit(c, 60)                                      # met from the ground
+        c[200:260, OPP_ACT] = 0x62                           # the opponent is down:
+        c[240:262, ME_AIR], c[245:262, ME_ACT] = 1, 0xd0     # a jump at its rising,
+        c[255:300, OPP_AIR] = 1                              # met in the air
+        self.hit(c, 262)
+        c[400:410, OPP_ACT] = 0x96                           # it guards,
+        c[420:440, ME_AIR], c[425:440, ME_ACT] = 1, 0xd0     # a jump out of the string,
+        self.hit(c, 440)
+        c[600:620, ME_AIR] = 1                               # and one hit without a move out
+        self.hit(c, 620, lost=0.05)
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        got = tactics.losses(me, opp, np.ones(len(c), bool))
+        self.assertEqual([(r['kind'], r.get('where'), r.get('by')) for r in got],
+                         [('in the air, attacking', 'open', 'ground'),
+                          ('in the air, attacking', 'okizeme', 'air'),
+                          ('in the air, attacking', 'pressure', 'ground'),
+                          ('in the air, not attacking', None, None)])
+        rep = tactics.losses_report(got, 1.0)
+        self.assertEqual((rep['hp'], rep['times']), (3500, 4.0))
+        self.assertEqual(rep['kinds']['in the air, attacking'], dict(hp=3000, times=3.0, each=1000))
+        self.assertEqual(rep['air_where'], dict(okizeme=1000, open=1000, pressure=1000))
+        self.assertEqual(rep['air_by'], dict(air=1000, ground=2000))
+
+    def test_on_the_ground_and_between_rounds(self):
+        c = match(900)
+        c[20:40, ME_ACT] = 0xca                              # a move in neutral, beaten
+        self.hit(c, 40)
+        c[200:215, ME_ACT] = 0x99                            # a guard, then opened
+        self.hit(c, 220)
+        c[400:432, ME_ACT] = 0xca                            # a move the opponent guarded,
+        c[405:415, OPP_ACT] = 0x96
+        self.hit(c, 432)                                     # punished before it is over
+        c[600:640, ME_ACT] = 0x62                            # down, then hit as it stands
+        self.hit(c, 650)
+        self.hit(c, 800)                                     # and standing free
+        live = np.ones(len(c), bool)
+        c[870:, ME_HP] = 1.0                                 # a new round: nothing lost by it
+        c[860:, OPP_HP] -= 0.3
+        live[860:880] = False                                # (the opponent's HP between rounds)
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        self.assertEqual([r['kind'] for r in tactics.losses(me, opp, live)],
+                         ['in a move, in neutral', 'opened after guarding',
+                          'its move guarded, then punished', 'rising, not acting',
+                          'free on the ground'])
+        self.assertEqual(tactics.losses(opp, me, live), [])
+        m = tactics.measure(c)
+        self.assertEqual((len(m['losses']), len(m['losses_opp'])), (5, 1))
+
+    def test_the_net_by_the_situation_an_exchange_began_in(self):
+        c = match(1200)
+        c[20:60, OPP_ACT] = 0x62                             # the opponent is down, rises,
+        c[70:100, OPP_ACT], c[70:100, OPP_STUN] = 0x3b, 1    # and is hit: my okizeme
+        c[72:, OPP_HP] -= 0.2
+        c[200:240, ME_ACT] = 0x62                            # I am down, rise, and am hit
+        self.hit(c, 250)
+        c[400:410, OPP_ACT] = 0x96                           # it guards, then hits me out of it
+        self.hit(c, 430)
+        c[600:625, ME_AIR], c[605:625, ME_ACT] = 1, 0xd0     # I jump in and am hit
+        self.hit(c, 625)
+        c[800:830, OPP_AIR] = 1                              # it jumps in and is hit
+        c[825:860, OPP_ACT], c[825:860, OPP_STUN] = 0x3b, 1
+        c[827:, OPP_HP] -= 0.1
+        c[1000:1030, ME_ACT] = 0xca                          # on the ground, I am hit
+        self.hit(c, 1030, lost=0.05)
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        got = tactics.exchanges(me, opp, np.ones(len(c), bool))
+        self.assertEqual(sorted((s, round(v)) for s, v in got),
+                         sorted([('my okizeme', 2000), ('its okizeme', -1000), ('my pressure', -1000),
+                                 ('I came by air', -1000), ('it came by air', 1000),
+                                 ('on the ground', -500)]))
+        rep = tactics.exchanges_report(got, 1.0)
+        self.assertEqual(rep['net'], -500)
+        self.assertEqual(rep['my okizeme'], dict(net=2000, gained=2000, lost=0))
+        self.assertEqual(rep['my pressure'], dict(net=-1000, gained=0, lost=1000))
+        self.assertEqual(rep['both in the air'], dict(net=0, gained=0, lost=0))
+
+
+@unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class Corner(unittest.TestCase):
+    def test_a_stay_in_the_corner_and_how_it_ends(self):
+        import evaluate
+        import tactics
+        T = 200
+        c = np.zeros((T, len(tactics.OBS)), np.float32)
+        c[:, 14], c[:, 15] = 1.0, 1.0                 # both at full HP
+        c[:, 18] = 100 / 640                          # 100 pixels apart
+        x = np.zeros((T, 2), np.float32)
+        x[:, 0] = 0.5                                 # the player
+        x[20:140, 1] = 0.9                            # the opponent in the corner for 120 steps,
+        x[140:, 1], x[140:, 0] = 0.3, 0.6             # then over the player and out,
+        c[136:150, 7] = 1.0                           # through the air
+        c[60:, 15] = 0.9                              # having lost a tenth of its HP there
+        stays = evaluate.corner(c, x)
+        self.assertEqual(len(stays), 1)
+        steps, dealt, lost, how = stays[0]
+        self.assertEqual((steps, how), (120, 1))
+        self.assertAlmostEqual(dealt, 999.9, delta=1)
+        self.assertEqual(lost, 0)
+        x[:, 1] = 0.2                                 # midscreen all along: none
+        self.assertEqual(evaluate.corner(c, x), [])
 
 
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')

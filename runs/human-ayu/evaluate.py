@@ -45,9 +45,15 @@ COLUMNS = [18, 20, 39, 50, 52, 67, 30, 38, 23, 35,  # + self_hitstop, self_own_a
            31,  # + self_proration (/ 10000)
            8, 62, 70, 41, 42, 43,  # + self_hp (/ 9999); the combo done to one: opp_combo_hits,
            # opp_combo_damage; and the attacker's resources: opp_gauge, opp_rf_gauge, opp_rf_blue
-           ] + tactics.OBS  # + what tactics.py reads
+           ] + tactics.OBS + [13, 45]  # + what tactics.py reads; + self_x, opp_x (corner())
 TAKEN = 14  # where those start
 TACTICS = 20  # and tactics.OBS
+POSITIONS = TACTICS + len(tactics.OBS)  # and the two positions
+# corner(): the opponent is held in a corner from the step it is within CORNER_IN of a
+# wall (positions run to +-0.95) with the player on the open side within CORNER_NEAR
+# pixels, until it is CORNER_OUT from the wall, the player is no longer on the open side
+# or is CORNER_FAR pixels away, or the round ends; a stay of CORNER_LEAST steps counts.
+CORNER_IN, CORNER_OUT, CORNER_NEAR, CORNER_FAR, CORNER_LEAST = 0.80, 0.68, 220, 330, 20
 # Where a press is made (presses_where): hit or guarding; the opponent in its combo; the
 # opponent guarding; neither.
 WHERE = ('defending', 'combo', 'pressure', 'neutral')
@@ -101,6 +107,37 @@ def invincible_moves(char):
         return tactics.frame_data().get(tactics.names().index(char), (set(), []))[0]
     except ValueError:
         return set()
+
+def corner(c, x):
+    """The stays of the opponent in a corner under the player (tactics.OBS's columns `c`,
+    the two positions `x`: self_x, opp_x): a list of (steps, HP the opponent lost in it,
+    HP the player lost in it, how it ended: 0 the round ended or the match's record did,
+    1 the opponent left through the air (over the player or past it), 2 it left on the
+    ground or the player backed off, 3 the player was hit away)."""
+    me, op = tactics.Side(c, 0), tactics.Side(c, 1)
+    live = (c[:, 16] == 0) & (c[:, 17] == 0)
+    dist = np.abs(c[:, 18]) * 640
+    mx, ox = np.abs(x[:, 0]), np.abs(x[:, 1])
+    open_side = (mx < ox) & (np.sign(x[:, 0]) * np.sign(x[:, 1]) >= 0) | (mx < 0.3)
+    start = live & (ox > CORNER_IN) & open_side & (dist <= CORNER_NEAR)
+    hold = live & (ox > CORNER_OUT) & open_side & (dist <= CORNER_FAR)
+    out, T, t = [], len(c), 0
+    while t < T:
+        if not start[t]:
+            t += 1
+            continue
+        e = t
+        while e < T and hold[e]:
+            e += 1
+        if e - t >= CORNER_LEAST:
+            how = (0 if e >= T or not live[e] else
+                   3 if me.hitstun[e] or me.hitstun[max(t, e - 20):e].any() else
+                   1 if op.air[e] or op.air[max(t, e - 6):e].any() else 2)
+            out.append((e - t, float(op.hp[t] - op.hp[min(e, T - 1)]),
+                        float(me.hp[t] - me.hp[min(e, T - 1)]), how))
+        t = e + 1
+    return out
+
 
 def jumpins(c):
     """The opponent's airborne attacks that met the player on the ground and not in a move of
@@ -180,7 +217,32 @@ class Events:
         and how each went, the attacker's setup; free_time and opponent_free_time: the
         steps free while the other can't act, and what they were used for (a setup: an
         object out, a trap; a move; closing in; waiting);
+    risks (tactics.risks): per risky move (Ayu's 623A/B/C and 236C, and any invincible
+        one): a minute, the share inside a combo, and of the raw ones the shares that
+        hit, were guarded, recoil-guarded and whiffed, the share of the misses the
+        opponent punished and the HP a miss cost, net, the HP a raw use is worth, and
+        of the raw ones the wake-up reversals: their share, their hits, their own net;
+        faced_risks: the same of the opponent's risky moves (hit: it was hit by them;
+        punished: it punished their misses: what a bait is for);
+    ledger (tactics.losses): where its HP goes: every loss of HP by what it was doing
+        when the loss began (in the air attacking, by where it came from and what hit
+        it; in a move in neutral, after guarding, rising; opened after guarding; free
+        on the ground; rising; thrown; chip ...), HP a minute, times a minute, HP a
+        time; dealt_ledger: the same of the opponent's losses to it; net_ledger
+        (tactics.exchanges): the HP a minute it is ahead or behind in all and by the
+        situation an exchange began in, whoever was hit (its okizeme, the opponent's,
+        its pressure, the opponent's, it came by air, the opponent did, both in the
+        air, on the ground: net, gained, lost). What a round is judged by, beside the
+        strongest players' (people-ledger.json; docs/training-v2.md);
+    flights (tactics.flights): its air dashes a minute (Ayu's flights), the share back,
+        what it did next and what came of it, and how mixed what it did next was;
     presses_where: its presses a second, and the share of the time, in each of WHERE;
+    corner: the opponent held in a corner (corner(): within CORNER_IN of a wall, the
+        player on the open side and near): stays a minute, their length in seconds (mean,
+        median, 90th percentile), the share of the match spent so, the HP dealt and lost
+        a stay, and how the stays ended (the round over, the opponent out through the
+        air, out on the ground or the player backing off, the player hit away): how well
+        its pressure keeps an opponent that wants out (the user's, 18 November);
     jumpins: the opponent's airborne attacks that met it on the ground, able to guard: a
         minute, and from the front and crossing sides the share hit, guarded, recoil-guarded,
         and what it was doing just before (walking back, crouching, walking forward, other);
@@ -204,13 +266,16 @@ class Events:
         self.n['presses'] = np.zeros(4)
         self.n['press_where'] = np.zeros((len(WHERE), 2))  # presses, steps in each of WHERE
         self.n['jumpin'] = np.zeros((2, 7))  # jumpins()'s
+        self.n['corner_list'] = []  # corner()'s stays
+        self.n['corner_steps'] = 0  # the live steps they are out of
         self.n['combo_list'] = []  # each combo's (hits, damage, resource group)
         self.n['proration_left'] = []  # at the end of each of 3 hits or more
         self.n['hp_lost'] = 0.0
         self.n['throw_list'] = []  # each throw landed: (HP the victim lost, of it after the throw)
         self.n['taken_list'] = []  # each of the opponent's combos on one: (damage, its group)
         for k in ('press_off', 'press_def', 'oki_off', 'oki_def', 'free_self', 'free_opp',
-                  'strings', 'ends_off', 'ends_def', 'grabs'):
+                  'strings', 'ends_off', 'ends_def', 'grabs', 'risks', 'risks_def',
+                  'flights', 'losses', 'losses_opp', 'exchanges'):
             self.n[k] = []  # tactics.measure()'s
 
     def add_match(self, cols, controls):
@@ -347,6 +412,11 @@ class Events:
                                         controls).items():
                 n[k] += v
             n['jumpin'] += jumpins(cols[:, TACTICS:TACTICS + len(tactics.OBS)])
+            if cols.shape[1] >= POSITIONS + 2:
+                n['corner_list'] = n['corner_list'] + corner(
+                    cols[:, TACTICS:TACTICS + len(tactics.OBS)], cols[:, POSITIONS:POSITIONS + 2])
+                n['corner_steps'] += int(((cols[:, TACTICS + 16] == 0) &
+                                          (cols[:, TACTICS + 17] == 0)).sum())
         # The guesses: a counter hit is a hit on an opponent in a move of its own.
         for g, acts in self.moves['guess'].items():
             for t in np.flatnonzero(enter & np.isin(a, acts)):
@@ -429,6 +499,23 @@ class Events:
             out['presses_where'] = {w: [round(float(pw[i, 0] / max(1, pw[i, 1]) * 64), 2),
                                         round(float(pw[i, 1] / pw[:, 1].sum()), 3)]
                                     for i, w in enumerate(WHERE)}
+        cl = n['corner_list']
+        if n['corner_steps']:
+            # The opponent held in a corner: stays a minute, how long (seconds: 60 steps),
+            # the share of the match spent so, the HP dealt and lost a stay, and how the
+            # stays ended.
+            steps = np.array([x[0] for x in cl], float)
+            ends = np.array([x[3] for x in cl], int)
+            out['corner'] = dict(
+                per_min=round(len(cl) * 3600 / n['corner_steps'], 2), n=len(cl),
+                share=round(float(steps.sum() / n['corner_steps']), 3),
+                seconds=round(float(steps.mean() / 60), 2) if len(cl) else None,
+                seconds_median=round(float(np.median(steps) / 60), 2) if len(cl) else None,
+                seconds_p90=round(float(np.percentile(steps, 90) / 60), 2) if len(cl) else None,
+                dealt=round(float(np.mean([x[1] for x in cl]))) if len(cl) else None,
+                lost=round(float(np.mean([x[2] for x in cl]))) if len(cl) else None,
+                ended={k: share(int((ends == j).sum()), len(cl)) for j, k in
+                       enumerate(('round', 'out by air', 'out on the ground', 'hit away'))})
         ji = n['jumpin']
         if ji.sum():  # met a minute; from the front and crossing: how many, and how they ended
             out['jumpins'] = dict(per_min=round(float(ji[:, :3].sum() * per_min), 2), **{
