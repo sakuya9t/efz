@@ -895,6 +895,10 @@ EFZ_DIR=/path/to/EFZ tools/revival-test.sh                        # the original
 EFZ_DIR=/path/to/EFZ tools/revival-test.sh --revival DIR --name x # rebuilt binaries in DIR
 ```
 
+`tools/nettest.py revival` goes on from there in the same image: the originals in a
+netplay match against the native game, hosting and joining ([compat.md](compat.md),
+"Running the network test").
+
 ## The launcher and the DLL: shared memory
 
 **Observed** (`revival/EfzRevivalLauncher/SharedQueue.h`, `SharedData.h`). The two processes

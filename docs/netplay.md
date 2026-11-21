@@ -211,6 +211,13 @@ match's replay stands in for them.
   `EFZ_NET_LAG=MS[:JITTER]` delays every datagram one side sends (a slow link on one
   machine, for the rollback), and `EFZ_DUMP_WINDOW=DIR` saves the window as shown,
   screens included, every `EFZ_DUMP_WINDOW_EVERY` frames.
+- `tools/nettest.py native` does that and checks it ([compat.md](compat.md), "The
+  network layer"): two games at the game's speed, as they are and with 60 ± 20 ms of
+  lag, random presses of P1's controls through character select into a fight, Esc on the
+  host's end out of it and a second fight; both ends' sync records must agree and their
+  replays be the same. CI runs it, on the compatibility pack.
+- `tools/nettest.py revival`: the same against `efz.exe` 4.02 with EfzRevival 1.02h
+  under wine (below).
 
 What was run (Windows, MSVC, November 2026), each a match from the title through
 character select into a fight with both players' input random:
@@ -227,9 +234,16 @@ side stopped first.
 ## Against EfzRevival 1.02h
 
 The protocol and the rules are Revival 1.02h's as recovered, so a native game and an
-`efz.exe` with EfzRevival 1.02h are meant to play each other. That hasn't been tried:
-the machine this was written on has EfzRevival 1.02a, whose protocol differs. It is the
-network layer of [compat.md](compat.md), which can now be run. What to expect there:
+`efz.exe` with EfzRevival 1.02h are meant to play each other. **Observed** (21 November
+2026, `tools/nettest.py revival`, the network layer of [compat.md](compat.md)): they do,
+the native game hosting or joining, on one Linux machine with Revival and the original
+`efz.exe` 4.02 under wine: connected, the delay agreed, character select, fights with
+rollback, Esc back to character select and another fight, with and without lag; the
+sync records the same on every frame both ends compared, Revival's own comparison
+(`logNet.txt`) without an error, and each fight's replay the same, byte for byte, on
+both ends. Revival 1.02h hosting is always P1 (its `Config` sets `player = 1` whatever
+`Player` says); this game hosting draws the sides, and Revival joining takes the one it
+is given. What could still part them, none of which these matches showed:
 
 - **The x87.** Revival's `sin`, `cos` and `atan2` are the CPU's, the native game's are
   correctly rounded ([compat.md](compat.md), "Answered"); a velocity set from an angle can
@@ -237,9 +251,10 @@ network layer of [compat.md](compat.md), which can now be run. What to expect th
 - **Uninitialised memory.** `efz.exe`'s heap holds garbage where the native game's holds
   zeros, which decides a few first hits (`m_hitsLeft`, [compat.md](compat.md)).
 - **The FPU control word** in the sync records is sent as `0x9001f` (53-bit precision,
-  rounding to nearest, every exception masked), what `_controlfp_s` should give in
-  `efz.exe` under Revival; it is assumed, not read from a running game. The records are
-  compared only on request, which Revival makes only with `Debug = 1`.
+  rounding to nearest, every exception masked), what `_controlfp_s` gives in `efz.exe`
+  under Revival: **observed** in those matches, in every record Revival logged
+  (`logEfz.txt`, under wine) and in its comparison. Revival compares the records only
+  with `Debug = 1`.
 - **Palettes.** A custom (EDIT COLOR) palette isn't sent, so the other side shows that
   player's colour as the character's own. Colours don't change the game.
 
