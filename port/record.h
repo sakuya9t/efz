@@ -54,6 +54,7 @@ struct RecordSummary {
     int chars[2] = {-1, -1};
     bool cpu[2] = {false, false};
     std::string agent[2]; // the agent that played the side ("": a person or the CPU)
+    std::string cpuCombos[2]; // the file that played the CPU's combos ("": none)
     bool unknown[2] = {false, false}; // a person or an agent: the record doesn't say
     bool replayed = false; // the record of a replayed fight (replay_of)
     // The end: why ("" none: the record stops short, as after a crash), the winner (-1

@@ -383,6 +383,71 @@ between frames, out of the session's frames; nothing of it reaches the match, it
 its replay or the sync records. A plan is dropped more often online (the game elsewhere):
 the opponent's inputs, or a rollback, change the frames it was made for.
 
+## The CPU's combos
+
+The game's own CPU (`CpuInput`) guards, recoil-guards and wakes up well at level 4, but its
+combos are short. With **CPU COMBO** on in OPTIONS, the CPU of ARCADE (with score or not)
+and VS CPU plays its combos from an agent file of its character, planned on copies of the
+fight as an agent's are. This is the training's level-4 CPU with combos
+(`evaluate.py --p2-cpu-combos`, the benchmark's `cpu` drill), in the game.
+
+**The files.** One for each character, in the `cpu` folder of an agents folder
+(`agents/cpu/` in the save folder or the game's; the first by name of each character is
+the one played). `league_combos.py cpu` gathers them from the league's trained
+opponents, each the newest exploiter's model with its character's combo library
+(`league_combos.py files`):
+
+```sh
+python runs/human-ayu/league_combos.py cpu --out ~/dev/efz/tmp/cpu-combos
+#   kano: kano/exploiter18/combos.efzagent -> .../cpu-combos/kano.efzagent (5.2 MB)
+#   ...  (22 characters on 20 November: all but Kanna, Mizuka and Nayuki's other form)
+```
+
+A character with no file there keeps the CPU's own combos; the log says so at the fight.
+
+**How it plays.** The CPU plays as it always does: its neutral, its guard, its recoil
+guards and okizeme are its own. The file's player watches the whole fight as it would play
+it, and while the CPU's opponent is in a hit reaction (and not down) the side is the
+file's: `CPlayer::m_cpu` is off for those frames, so the CPU's decisions stop and the
+side reads its controls, which the file gives. Once the opponent is out of the hit
+reaction, down, or the round over, the CPU has the side back. The file's player sees what
+the CPU pressed in the frames it played, as its own inputs (`Player::Played`).
+
+Its route begins 8 frames after its hit (`kCpuLead`), whatever the file says (the
+league's files begin theirs on the step after, which needs a plan made at once); the
+plan is made in the time between frames, as an agent's, and a frame waits at most 8 ms
+for one, so the person's side never stutters. A plan not done when it is due is chosen
+from the routes played by then: for the CPU the routes are played first and the file's
+own play last (`Planner::SetOwnLast`), the network's frames on the copies being half of a
+plan's time.
+
+**The level.** OPTIONS' CPU level (in ARCADE with score, the stage's: the CPU's
+`m_cpuSkill`) sets what a combo aims at (`Planner::SetShare`): at level 4 the most
+damaging option the planner finds at the hit; at 3 the one nearest three quarters of
+that, at 2 half, at 1 a quarter, its own play among the options. A later plan of the same
+combo (the routes are planned again at each new move's hit) aims at what is left of the
+combo's target, so that the shares don't compound.
+
+**Records.** A fight's record names the file (`cpu_combos`, and `cpu_combo_share`) and has
+a `cpu` line at each tick the side changed hands ([logging.md](logging.md)); replaying the
+record hands the side over at the same ticks, so it plays as it was played. A network
+match has no CPU, and a record being watched or converted runs none of this.
+
+**The setting** is in `options.ini` in the save folder (`cpu_combos=1`), not in
+`key.ini`: that file is the original's, which config.exe and EfzRevival also read and
+write. `--cpu-combos on` or `off` sets it for one run. On the OPTIONS page the row is
+CPUコンボ, なし / あり, after CPU難易度; the rows are 16 pixels apart instead of 18 to make
+room for it (src/scene6.cpp). Its letters are the page's own (CPU from CPU難易度, コンボ
+from the character record page's 最大コンボ数) and, for なし and あり, which no picture of
+the game has, glyphs drawn in the page's colours (port/options.cpp). With pictures other
+than 4.02's (a translation patch), the row's text is written over it in SDL's font.
+
+Measured on 20 November (this Linux machine; VS CPU, Akane's file against an idle
+Nagamori): with no time limit on the plans (`--fast`), the combos' damage rose with the
+level, a mean of 400, 489, 688 and 1,244 HP from level 1 to 4 (the CPU's first hit
+included); in real time at level 4, 51 plans in a minute's fight, a route played in 48,
+49 of them chosen from the routes played by then, the game waiting 8 ms a plan.
+
 ## Checking it
 
 - `python/tests/test_agents.py`: an exported EfzPolicy and an exported MlpPolicy give the

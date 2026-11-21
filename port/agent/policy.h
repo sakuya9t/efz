@@ -374,6 +374,12 @@ public:
     uint8_t Step(const float* view, bool actionable, bool deterministic = false);
     // The action of the last decision (-1 before the first).
     int LastAction() const { return last_; }
+    // The controls its player read on the frame just run (relative to where it faces),
+    // when they were not the ones it gave: the game's CPU had the side (the CPU with
+    // combos, play.cpp). Its input history then holds those, as evaluate.py's agent
+    // observes the game's input, in place of what it chose. Nothing after a step it gave
+    // nothing on (not actionable, or a held decision).
+    void Played(uint8_t controls);
     const Policy* policy() const { return policy_; }
 
     // Its combos from the routes, planned by `planner` for player `side` (nullptr: its
@@ -475,6 +481,9 @@ private:
     bool fresh_ = true;
     std::vector<float> inputs_; // history x 6, newest first
     uint8_t prev_ = 0;
+    std::vector<float> inputsBefore_; // (Played) the history and last control byte before
+    uint8_t prevBefore_ = 0;          // the last step's input was pushed,
+    bool pushed_ = false;             // and whether that step pushed one
     int held_ = 0;
     int last_ = -1;
     uint8_t bytes_ = 0;

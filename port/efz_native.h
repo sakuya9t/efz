@@ -217,6 +217,19 @@ enum RecordsAction {
 extern RecordsHooks g_records;
 const int kRecordsPage = 10; // CScene8::m_page
 
+// --- The OPTIONS page's CPU COMBO row (port/options.cpp, docs/agents.md): after CPU
+// LEVEL, whether the game's CPU plays its combos from its character's agent file. Empty
+// in a build without it (the headless library): the page then has its eight rows.
+struct OptionsHooks {
+    // The row at (0, y), drawn from the page's pictures (its own, and the character record
+    // page's, both loaded with the colours from 161), selected or not, on or off.
+    void (*drawCpuCombo)(CGraphics* graphics, IDirectDrawSurface* menu, IDirectDrawSurface* score,
+                         BYTE colorKey, int y, bool selected, bool on);
+    bool (*cpuCombo)();
+    void (*setCpuCombo)(bool on);
+};
+extern OptionsHooks g_options;
+
 } // namespace efz
 
 #endif

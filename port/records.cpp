@@ -91,7 +91,7 @@ std::string Side(const RecordSummary& s, int side)
     if (!s.agent[side].empty())
         return name + " (AI)";
     if (s.cpu[side])
-        return name + " (CPU)";
+        return name + (s.cpuCombos[side].empty() ? " (CPU)" : " (CPU+combos)");
     return name;
 }
 
@@ -101,6 +101,8 @@ std::string Who(const RecordSummary& s, int side)
         return "agent " + s.agent[side];
     if (s.unknown[side])
         return "a person or an agent (older records don't say)";
+    if (s.cpu[side] && !s.cpuCombos[side].empty())
+        return "the CPU, its combos from " + s.cpuCombos[side];
     return s.cpu[side] ? "the CPU" : "a person";
 }
 

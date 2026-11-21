@@ -125,8 +125,15 @@ python python/examples/export_agent.py --show FILE.efzagent
 python python/examples/unpack_agent.py FILE.efzagent  # back to a model, to train it further
 ```
 
-[docs/agents.md](docs/agents.md) has what goes in the file, how the game plays it, and
-what keeps an agent's side of a network match compatible.
+With **CPU COMBO** on in OPTIONS, the game's own CPU in ARCADE and VS CPU plays its combos
+from such files too, one for each character in `agents/cpu` (`python
+runs/human-ayu/league_combos.py cpu --out DIR` gathers them from the league's trained
+opponents). The CPU keeps its own neutral and guard and hands its side to the file while
+its opponent is in a hit reaction. Its level sets the combos' damage: level 4 the most
+damaging the planner finds at the hit, level 1 a quarter of that.
+
+[docs/agents.md](docs/agents.md) has what goes in the file, how the game plays it, the
+CPU's combos, and what keeps an agent's side of a network match compatible.
 
 ## Training agents
 

@@ -1040,6 +1040,7 @@ void Player::Reset()
     fresh_ = true;
     std::fill(inputs_.begin(), inputs_.end(), 0.0f);
     prev_ = 0;
+    pushed_ = false;
     held_ = 0;
     last_ = -1;
     bytes_ = 0;
@@ -1860,6 +1861,16 @@ void Player::PushInput(uint8_t c)
     Push(inputs_, prev_, c);
 }
 
+void Player::Played(uint8_t controls)
+{
+    if (!pushed_)
+        return;
+    pushed_ = false;
+    inputs_ = inputsBefore_;
+    prev_ = prevBefore_;
+    Push(inputs_, prev_, controls);
+}
+
 int Player::Sample(const float* in, bool deterministic)
 {
     policy_->LogProbs(in, probs_.data());
@@ -1915,7 +1926,8 @@ void Player::Begin(const float* view, bool deterministic)
     if (keptOn_)
         extra.assign(rest.begin() + lead, rest.end());
     kept_ = keptOn_ ? rest : std::vector<int>();
-    planner_->Begin(side_, hitMove_, actions, hist.data(), prev, deterministic, view, hitAge_, extra);
+    planner_->Begin(side_, hitMove_, actions, hist.data(), prev, deterministic, view, hitAge_, extra,
+                    planned_);
     pendingMove_ = hitMove_;
     pendingOffset_ = lead + hitAge_;
     Queue(actions, rest.size(), actions.size());
@@ -2009,6 +2021,7 @@ void Player::Result(const float* view)
 
 uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
 {
+    pushed_ = false;
     if (held_ > 0) {
         held_--;
         return bytes_;
@@ -2118,6 +2131,9 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
         action = RiskAct(view, action);
     last_ = action;
     bytes_ = policy_->table[action];
+    inputsBefore_ = inputs_;
+    prevBefore_ = prev_;
+    pushed_ = true;
     PushInput(bytes_);
     held_ = policy_->frameSkip - 1;
     return bytes_;

@@ -7,6 +7,10 @@
 // nothing else. An agent file with routes (a combo library) plans its combos on copies
 // of the fight in the time between frames (agent/routes.h), as play.py --assist does;
 // the copies' frames are heard, drawn, recorded and sent nowhere.
+//
+// With OPTIONS' CPU COMBO on, the game's CPU in ARCADE and VS CPU plays its combos from
+// an agent file of its character in the agents folders' `cpu` folder: the CPU hands the
+// file its side while its opponent is in a hit reaction (port/agent/play.cpp).
 #ifndef EFZ_AGENTS_H
 #define EFZ_AGENTS_H
 
@@ -24,6 +28,9 @@ struct AgentOptions {
     const char* p2 = nullptr;
     // --fast: no time between frames, so a plan is waited for until it is done.
     bool fast = false;
+    // --cpu-combos on|off: the CPU's combos for this run, whatever OPTIONS says (-1: as it
+    // says).
+    int cpuCombos = -1;
 };
 void InitAgents(const AgentOptions& options);
 // main.cpp, each frame before the scene's update, out of netplay: the agents' inputs of
@@ -47,6 +54,18 @@ bool AgentPlanning();
 // side, its name (with its version) and its file's name; null for a person's side.
 const char* AgentName(int side);
 const char* AgentFileName(int side);
+
+// --- The game's CPU with combos (docs/agents.md, "The CPU's combos").
+
+// OPTIONS' CPU COMBO (port/options.cpp keeps it in options.ini): whether the CPU plays
+// its combos from its character's file.
+void SetCpuCombos(bool on);
+bool CpuCombos();
+// The fight recorder, as a fight begins: the file that plays side's combos for the CPU
+// (its file name; null: none) and the share of the most damaging combo its level aims
+// at (1 at level 4).
+const char* CpuComboFile(int side);
+float CpuComboShare(int side);
 
 // --- Netplay (port/netplay/): this computer's side played by an agent.
 
