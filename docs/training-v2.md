@@ -4088,6 +4088,30 @@ the opponent and 95 in 100 after one that cost a combo (1 in 100, and a half, be
 `round20b` (the round 20 file with them), on the `combos`, `sparring` and league drills
 as this is written.
 
+Judged (21 November; opponents at 11 steps, 64 matches a pairing):
+
+| | round 20 file | `round20b` | z |
+|---|---|---|---|
+| opponents with combos: wins | 55.8 ±1.8 | 56.1 ±1.8 | +0.1 |
+| ... own HP lost | 74.8 ±0.7 | 74.0 ±0.7 | −0.8 |
+| ... HP a combo of its own | 1,641 ±15 | 1,679 ±15 | +1.8 |
+| sparring: wins | 90.0 ±1.6 | 90.9 ±1.6 | +0.4 |
+| league: wins | 95.3 ±0.7 | 93.5 ±1.0 | −1.5 |
+| league: own HP lost | 50.2 ±0.8 | 50.2 ±0.8 | 0.0 |
+
+Nothing outside noise in the matches won. What changed is what it was meant to change:
+against the opponents with combos its raw specials went from 2,532 to 1,966 uses (704
+matches) and from +94 to +238 HP a use (league: 2,759 at +309 to 2,076 at +404;
+sparring: 953 at +266 to 701 at +498); the risk account stopped 68% of the presses it
+saw for 43%; 623C and the level-one super are gone, 236C 869 uses to 674. `round20b` is
+the base of the next file.
+
+What is left, and is not the account's: 236A (102 uses at −622) and 236B (103 at −799)
+are guarded 75-80% of the time, hit 6-7%, punished 38%: cancels out of a guarded string
+(236A is counted "in combo" 80% of the time), which a planner's string or the policy's
+own cancel plays and the account, which reads a press tried from where it stands with
+the opponent pressing nothing, lets by. About 200 HP a match; not traced yet.
+
 ### The jump at the opponent, by how it has paid in the match (`risk_jump`; 20 November, night)
 
 The user's first and third points say one thing in two ways: its game is the air, and
@@ -4124,3 +4148,122 @@ dozen jumps have lost) or at the +55 measured against opponents with combos (38%
 from the start, which is a different agent). Both builds (`r20c`, `r20d`: the round 20
 policy with the day's modules and the new starting worths of the raw specials) are on
 the `combos` drill against the six opponents that punish the air most.
+
+Judged (21 November; Kano, Nayuki, Ikumi, Sayuri, Mizuka, Mishio with their combos, 64
+matches each):
+
+| | `round20b` | `r20c` (+250) | `r20d` (+50) |
+|---|---|---|---|
+| wins (mean of the six) | 45.6 ±2.5 | 46.6 ±2.5 | 45.1 ±2.4 |
+| own HP lost | 77.2 | 78.5 | 77.1 |
+| draws stopped | - | 37% | 56% |
+| jumps a minute | 20.4 | 19.7 | 19.3 |
+
+Nothing, and the last row says why: the account stopped half of what it drew and the
+match had as many jumps. A draw holds for the same press (12 steps); the policy asks for
+the jump again a moment later, and that is a new draw: at a half a time the jump is out
+two tries later. The account delayed jumps; it did not choose the ground.
+
+So a stop lasts: `jump_hold` (`Risk::jumpHold`, `risk_jump_hold`; steps): after a draw
+that stops one, every jump at the opponent for that many steps is stopped without a new
+draw (a jump let out holds nothing). At 128 steps (two seconds) a match whose account
+stops half the draws should lose about four jumps in ten. Builds `r20e` (+50, hold 128)
+and `r20f` (+250, hold 128) are on the same six.
+
+Judged (the same six, 64 matches each):
+
+| | `round20b` | `r20d` (+50) | `r20e` (+50, hold 128) | `r20f` (+250, hold 128) |
+|---|---|---|---|---|
+| wins (mean of the six) | 45.6 ±2.5 | 45.1 ±2.4 | 41.9 ±2.2 | 40.9 ±2.4 |
+| own HP lost | 77.2 | 77.1 | 79.5 | 79.2 |
+| HP ahead a minute | −329 | −194 | −940 | −856 |
+| draws stopped | - | 56% | 55% | 33% |
+| jumps a minute | 20.4 | 19.3 | 18.9 | 19.5 |
+
+Worse, if anything (z −1.1 and −1.4 in the wins, both builds and the HP the same way),
+and still as many jumps. Sixteen traced matches against Mishio of the base and of
+`r20e` say where they come from (jumps a minute, by the direction pressed):
+
+| | forward | straight up | back | from a move (a cancel) | all |
+|---|---|---|---|---|---|
+| `round20b` | 11.0 | 1.1 | 0.7 | 3.2 | 16.0 |
+| `r20e` | 8.6 | 2.3 | 1.1 | 4.0 | 16.0 |
+
+The account let out 45% of the forward jumps it drew there, and the forward jumps fell
+by a fifth: 318 forward jumps for the 110 or so the account let out, so two in three
+were never drawn (it draws for its own play's jump with the opponent free: a planner's
+jump, or one over an opponent in a hit reaction or down, passes; which of the two was
+not traced), and what it lost of its own it took back straight up, backwards and out of
+its moves. The forward jumps that were
+left were worth more (−42 HP a jump to +98), and the match was not: the time it did not
+spend jumping in was not spent on anything that pays.
+
+What this says about the user's third point: an account can take a losing move away;
+it cannot put a ground game in its place, and this policy has none to fall back on
+(every league it trained in paid for the air). The jump's account stays in the code,
+off (no `risk_jump` in the next file), until the policy has trained against opponents
+that punish the air with a combo's worth: which is round 21.
+
+## Round 21, judged; round 22 started (21 November)
+
+Round 21 as run: `agent-league21-combos-s1`, from round 20's `agent-league20-spar-s1`
+average, 20.9M steps (ten chunks, 20:00 to 03:56), every trained opponent of the league
+its file with its character's combos through the game's code (`--vs-native`), 11 steps
+for every player, the sparring profile as round 20's arm. Its own score against those
+opponents (two matches each, so noisy): 0.52 at the start, then 0.51 0.52 0.52 0.58 0.57
+0.52 0.59 0.60 0.54 0.61.
+
+Its average as a file with the day's modules (`round21`: the modules of `round20b`, no
+jump account), beside `round20b` (the same modules on round 20's policy); opponents at
+11 steps, 64 matches a pairing:
+
+| | `round20b` | `round21` | z |
+|---|---|---|---|
+| opponents with combos: wins | 56.1 ±1.8 | 63.1 ±1.7 | +2.8 |
+| ... own HP lost | 74.0 ±0.7 | 71.8 ±0.7 | −2.2 |
+| ... HP ahead a minute | 558 ±138 | 1,087 ±125 | +2.8 |
+| ... HP a combo: theirs / its own | 1,714 / 1,679 | 1,732 / 1,683 | |
+| league (no combos): wins | 93.5 ±1.0 | 96.2 ±0.6 | +2.3 |
+| ... own HP lost | 50.2 ±0.8 | 47.0 ±0.8 | −2.8 |
+| ... HP ahead a minute | 4,644 ±125 | 5,037 ±123 | +2.2 |
+| ... by air, HP a minute | 970 ±63 | 1,137 ±66 | +1.8 |
+| sparring: wins | 90.9 ±1.6 | 90.6 ±1.3 | −0.1 |
+| ... own HP lost | 55.0 ±1.4 | 52.3 ±1.3 | −1.4 |
+| recoil: wins (round 20 file 88.8 ±1.3) | - | 88.4 ±1.7 | |
+| ... hit after its recoil-guarded moves (25.9 ±0.8) | - | 23.8 ±0.8 | −1.9 |
+| level-4 CPU with combos: wins (43.8 ±4.8) | - | 42.2 ±6.3 | |
+
+The first round judged where the opponents hit as hard as it does, and the gain is there
+and outside noise: seven points of wins against the opponents with combos, and the
+league without combos better too (it loses less HP: what a combo's worth of punishment
+taught carries over). Sparring, the recoil drill and the CPU are level.
+
+Against the opponents with combos, by opponent (wins; own HP lost):
+
+| | `round20b` | `round21` |
+|---|---|---|
+| Mishio | 31 ±6 (84%) | 58 ±6 (78%) |
+| Kaori | 42 ±6 (80%) | 56 ±7 (76%) |
+| Mizuka | 53 ±7 (71%) | 69 ±5 (71%) |
+| Makoto | 77 ±6 (61%) | 86 ±5 (58%) |
+| Ikumi | 72 ±7 (68%) | 80 ±4 (66%) |
+| Nayuki | 17 ±4 (87%) | 25 ±6 (83%) |
+| Kano | 64 ±7 (72%) | 67 ±4 (70%) |
+| Sayuri | 36 ±6 (81%) | 39 ±6 (79%) |
+| Doppel Nanase | 69 ±5 (73%) | 72 ±6 (71%) |
+| Nanase | 84 ±5 (67%) | 83 ±4 (67%) |
+| Mayu | 72 ±6 (70%) | 59 ±7 (71%) |
+
+Up against nine of eleven, Mishio most (where it came by air: −2,252 HP a minute to
+−1,121); Nayuki (25%) and Sayuri (39%) are still lost. It takes fewer combos a minute
+against ten of the eleven and jumps as often as before (18-24 a minute): it is the same
+air game, played with more care, not a different one.
+
+Pick: `agent-league21-combos-s1` (one seed; its gain is 2.8 errors on the drill it
+trained for and 2.3-2.8 on the league it did not). File for the game:
+`agent-league21-combos-s1-round21.efzagent`.
+
+Round 22, started 05:28: the same league from round 21's average (its ten chunks, kept
+as `avg10.zip`), two seeds (`agent-league22-combos-s1`, `-s2`; 20.9M steps each): the
+score was still rising when round 21 ended, and two seeds from one start say what a
+seed is worth here.
