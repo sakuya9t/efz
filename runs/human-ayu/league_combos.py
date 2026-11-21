@@ -20,7 +20,23 @@ of what it cost them, in training and in every benchmark.
     python runs/human-ayu/league_combos.py cpu --out ~/dev/efz/tmp/cpu-combos
 
 libraries: combo_library.py's, --keep most damaging overall and --per-victim on each
-character they were landed on, with the join points (--marks), as the agent's own.
+character they were landed on, with the join points (--marks), as the agent's own. With
+--kind oki or press, each character's people's okizeme (oki_library.py) or pressure
+(pressure_library.py) instead, with the answers beside it: for the planners of files'
+--oki and --press.
+
+Planners for the league (docs/training-v2.md, "Playing to the opponent's weak areas": the
+league varied a third as much as people do in the okizeme on the agent and in the
+opponent's pressure, where people differ most): files --oki DIR and --press DIR give each
+file its character's planned okizeme and pressure (the modules okiplan and pressplan,
+port/agent/mix.h), with the agent's own settings (OKI, PRESS); --oki-skip and --press-skip
+are the shares of its chances it leaves to its model, an opponent's strength there.
+
+    python runs/human-ayu/league_combos.py libraries --kind oki --datasets ~/data/efz-replays/datasets \
+        --out ~/data/efz-replays/oki
+    python runs/human-ayu/league_combos.py files --libraries ~/data/efz-replays/combos \
+        --oki ~/data/efz-replays/oki --press ~/data/efz-replays/press --name planners.efzagent \
+        runs/human-ayu/kano/exploiter18/model.zip:kano ...
 
 files: export_agent's file of the model with its character's library, planned again at
 each new move's hit, without its training part. Two settings are an opponent's and not an
@@ -48,17 +64,29 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, os.path.join(REPO, 'python'))
+# The planners' settings, the agent's own (its round 21 file's, where they differ from
+# efz_env.export's defaults).
+OKI = dict(per_plan=5, window=40, think=14, sight=14)
+PRESS = dict(doubt=0.3)
 
 
 def libraries(args):
     os.makedirs(args.out, exist_ok=True)
     chars = args.chars or sorted(d for d in os.listdir(args.datasets)
                                  if os.path.exists(os.path.join(args.datasets, d, 'matches.csv')))
-    tool = os.path.join(HERE, 'combo_library.py')
+    tool = os.path.join(HERE, dict(combo='combo_library.py', oki='oki_library.py',
+                                   press='pressure_library.py')[args.kind])
     for c in chars:
         data, out = os.path.join(args.datasets, c), os.path.join(args.out, c + '.npz')
         if os.path.exists(out) and not args.again:
             print(f'{c}: {out} is there')
+            continue
+        if args.kind != 'combo':
+            log = subprocess.run([sys.executable, tool, '--dataset', data, '--out', out],
+                                 capture_output=True, text=True, check=True).stdout
+            subprocess.run([sys.executable, tool, '--answers', out], capture_output=True, text=True,
+                           check=True)
+            print(f'{c}: {log.splitlines()[0]}')
             continue
         log = subprocess.run([sys.executable, tool, '--dataset', data, '--keep', str(args.keep),
                               '--per-victim', str(args.per_victim), '--show', '0', '--out', out],
@@ -68,8 +96,10 @@ def libraries(args):
         print(f'{c}: {log.splitlines()[0]}; {log.splitlines()[-1]}; {marks.strip().split(": ")[-1]}')
 
 
-def one_file(model, char, library, out, delay, confirm, per_start, version):
-    """model (a model.zip with its config.json beside it) as an agent file at out."""
+def one_file(model, char, library, out, delay, confirm, per_start, version, okiplan=None,
+             pressplan=None):
+    """model (a model.zip with its config.json beside it) as an agent file at out; okiplan,
+    pressplan: its planners (export_agent's), or None."""
     from efz_env.export import export_agent
     with tempfile.TemporaryDirectory() as folder:
         cfg = json.load(open(os.path.join(os.path.dirname(model), 'config.json')))
@@ -80,7 +110,7 @@ def one_file(model, char, library, out, delay, confirm, per_start, version):
         name = os.path.basename(os.path.dirname(os.path.abspath(model)))
         export_agent(os.path.join(folder, 'model.zip'), out, name=f'{char}-{name}', library=library,
                      replan=True, per_start=per_start, train=False, version=version,
-                     confirm=confirm or None)
+                     confirm=confirm or None, okiplan=okiplan, pressplan=pressplan)
 
 
 def files(args):
@@ -95,7 +125,16 @@ def files(args):
         if os.path.exists(out) and not args.again:
             print(f'{out} is there')
             continue
-        one_file(model, char, library, out, args.delay, args.confirm, args.per_start, args.version)
+        plans = {}
+        for kind, folder, skip, opts in (('okiplan', args.oki, args.oki_skip, OKI),
+                                         ('pressplan', args.press, args.press_skip, PRESS)):
+            if folder and skip < 1:
+                lib = os.path.join(folder, char + '.npz')
+                if not os.path.exists(lib):
+                    sys.exit(f'{char}: no library at {lib} (league_combos.py libraries --kind)')
+                plans[kind] = dict(opts, library=lib, skip=skip)
+        one_file(model, char, library, out, args.delay, args.confirm, args.per_start, args.version,
+                 **plans)
         print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB')
 
 
@@ -141,6 +180,8 @@ def main():
     a.add_argument('--keep', type=int, default=300)
     a.add_argument('--per-victim', type=int, default=40)
     a.add_argument('--again', action='store_true', help='also those already there')
+    a.add_argument('--kind', default='combo', choices=('combo', 'oki', 'press'),
+                   help="combos (combo_library.py), or people's okizeme or pressure")
     b = sub.add_parser('files', help="trained opponents as agent files with their characters' combos")
     b.add_argument('models', nargs='+', metavar='MODEL.zip:CHAR')
     b.add_argument('--libraries', required=True)
@@ -152,6 +193,12 @@ def main():
     b.add_argument('--per-start', type=int, default=None)
     b.add_argument('--version', default='combos')
     b.add_argument('--again', action='store_true')
+    b.add_argument('--oki', help='planned okizeme from CHAR.npz here (libraries --kind oki)')
+    b.add_argument('--press', help='planned pressure from CHAR.npz here (libraries --kind press)')
+    b.add_argument('--oki-skip', type=float, default=0.05,
+                   help='the share of its knockdowns left to its model (1: no planner)')
+    b.add_argument('--press-skip', type=float, default=0.05,
+                   help='the share of its guarded moves left to its model (1: no planner)')
     c = sub.add_parser('cpu', help="a file a character for the game's CPU with combos (agents/cpu)")
     c.add_argument('--out', required=True, help='CHAR.efzagent here')
     c.add_argument('--chars', nargs='*', help="only these (default: every character with a file)")

@@ -96,6 +96,12 @@ Habits (docs/training-v2.md, "Adapting during a match": an opponent a read pays 
   and B, pressed again every other step for TECH_HIT steps, while it is in the air and
   the agent within TECH_REACH pixels: what a person's recovery is for, and what makes a
   recovery left uncaught cost something).
+- weak: the share of matches (of sets, in an environment with sets) in which one area of
+  the profile is drawn to be its weak one, its knobs (WEAK_AREAS) at WEAK of the profile's
+  values, the others as they are: an opponent strong everywhere but in one area, which
+  area drawn afresh (docs/training-v2.md, "Playing to the opponent's weak areas": the
+  best players are about 10/10 everywhere with a relative 8/10 somewhere). The area is
+  drawn among those the profile has a knob above 0 in; with habits, after them.
 - escape: the share of the times it is free on the ground in a corner, the agent on the
   open side within ESCAPE_NEAR pixels, that it jumps out over the agent: up-forward, a
   second jump forward at the top, then forward held (drawn once each time it comes free
@@ -152,7 +158,7 @@ THROW_UP = 12     # steps after its own rising in which a person profile's throw
                   # (it fails there: its forward + C comes out as an attack, punished)
 KEYS = ('rg', 'reversal', 'throw', 'damage', 'bait', 'patient', 'wake', 'jumpin', 'blind',
         'crouch', 'habits', 'adapt', 'wide', 'tech', 'techway', 'techsafe', 'techhit',
-        'escape', 'low')
+        'escape', 'low', 'weak')
 LOW_PRESSES = 3   # an empty jump's low: the button this many times, every other step, from its landing
 SELF_X, OPP_X = 13, 45
 ESCAPE_X, ESCAPE_NEAR = 0.8, 220   # a corner (of +-0.95), and the agent this close
@@ -173,13 +179,18 @@ PEOPLE = dict(wake=(0.0, 0.05, 0.1, 0.2, 0.3), blind=(0.0, 0.5, 1.0),
               patient=(0.2, 0.3, 0.5, 0.9), crouch=(0.6, 0.85, 1.0), throw=(0.4, 0.7, 0.9),
               reversal=(0.0, 0.04, 0.1, 0.3), jumpin=(0.0, 0.2, 0.4))
 SPAN = {name: (min(v), max(v)) for name, v in HABITS.items()}  # adapt's least and most
+# weak's areas (areas.py's names for the opponent's skills) and their knobs, and the share
+# of the profile's value an area's knobs keep where it is drawn to be the weak one.
+WEAK_AREAS = {'okizeme': ('jumpin', 'bait'), 'okizeme defence': ('wake', 'blind'),
+              'anti-pressure': ('reversal', 'patient', 'throw')}
+WEAK = 0.25
 
 
 def parse(spec):
     """'rg=0.5,reversal=0.8,throw=0.3,damage=2' -> dict (left out: none)."""
     out = dict(rg=0.0, reversal=0.0, throw=0.0, damage=1.0, bait=0.0, patient=0.0, wake=0.0,
                jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0, adapt=0.0, wide=1.0, tech=0.0,
-               techway=0.0, techsafe=0.0, techhit=0.0, escape=0.0, low=0.0)
+               techway=0.0, techsafe=0.0, techhit=0.0, escape=0.0, low=0.0, weak=0.0)
     for part in filter(None, (spec or '').split(',')):
         k, v = part.split('=')
         if k not in out:
@@ -285,8 +296,9 @@ class Advantages:
     def __init__(self, char, n, reversal=0.0, throw=0.0, seed=0, bait=0.0, learner='ayu',
                  patient=0.0, wake=0.0, jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0,
                  adapt=0.0, wide=1.0, tech=0.0, techway=0.0, techsafe=0.0, techhit=0.0,
-                 escape=0.0, low=0.0):
+                 escape=0.0, low=0.0, weak=0.0):
         self.wide, self.tech, self.escape = wide, tech, escape
+        self.weak, self.weak_area = weak, None
         self.low = low
         self.low_button = low_normal(char) if low > 0 else None
         self.techway, self.techsafe, self.techhit = techway, techsafe, techhit
@@ -338,7 +350,8 @@ class Advantages:
                            rise_reversals=0, rise_reversals_blind=0, rise_reversals_held=0, rise_reversals_started=0, rise_reversal_hit=0,
                            rise_reversal_hit_back=0, rise_patient=0, knockdowns=0,
                            jumpins_armed=0, jumpins=0, lowins=0, jumpin_hit=0, jumpin_guarded=0,
-                           jumpin_hit_back=0, jumpin_late=0, adapted=0)
+                           jumpin_hit_back=0, jumpin_late=0, adapted=0, weak_okizeme=0,
+                           weak_okizeme_defence=0, weak_anti_pressure=0)
 
     def resize(self, n):
         self.tech_on, self.tech_step = np.zeros(n, bool), np.zeros(n, int)
@@ -348,8 +361,9 @@ class Advantages:
         self.tech_waited = np.zeros(n, bool)
         self.k = {name: np.full(n, 0.0 if name in self.off else float(v))
                   for name, v in self.base.items()}  # each environment's, this match
-        for i in range(n if self.habits > 0 else 0):  # (an evaluation's matches: one each)
-            self.draw(i)
+        self.weak_area = [None] * n  # each environment's weak area this match, or None
+        for i in range(n if self.habits > 0 or self.weak > 0 else 0):  # (an evaluation's
+            self.draw(i)                                                # matches: one each)
         self.queue = [[] for _ in range(n)]
         self.prev = np.full(n, -1)
         self.prev_opp = np.full(n, -1)
@@ -394,12 +408,27 @@ class Advantages:
     def draw(self, i):
         """The match's habits for environment i: HABITS' in a share `habits` of the
         matches, else the profile's."""
-        drawn = self.habit_rng.random() < self.habits
-        table = HABITS if self.wide >= 1 or self.habit_rng.random() < self.wide else PEOPLE
+        if self.habits > 0:
+            drawn = self.habit_rng.random() < self.habits
+            table = HABITS if self.wide >= 1 or self.habit_rng.random() < self.wide else PEOPLE
+        else:
+            drawn, table = False, {}
         for name, v in self.base.items():
             if drawn and name in table:
                 v = table[name][int(self.habit_rng.integers(len(table[name])))]
             self.k[name][i] = 0.0 if name in self.off else v
+        self.weak_area[i] = None
+        if self.weak > 0 and self.habit_rng.random() < self.weak:
+            areas = [a for a, knobs in WEAK_AREAS.items() if any(self.k[k][i] > 0 for k in knobs)]
+            if areas:
+                area = areas[int(self.habit_rng.integers(len(areas)))]
+                for k in WEAK_AREAS[area]:
+                    self.k[k][i] *= WEAK
+                self.weak_area[i] = area
+                counts = getattr(self, 'counts', None)  # (not yet, while the constructor sizes)
+                if counts is not None:
+                    key = 'weak_' + area.replace(' ', '_').replace('-', '_')
+                    counts[key] = counts.get(key, 0) + 1
 
     def told(self, i):
         """What a player told of environment i's habits this match sees (TOLD features):
@@ -821,7 +850,7 @@ class AdvantagedOpponent:
                                            a.get('wide', 1.0), a.get('tech', 0.0),
                                 a.get('techway', 0.0), a.get('techsafe', 0.0),
                                 a.get('techhit', 0.0), a.get('escape', 0.0),
-                                a.get('low', 0.0))
+                                a.get('low', 0.0), a.get('weak', 0.0))
         self.logic = logic(adv, seed)
         self.alt = logic(alt, seed + 7919) if alt is not None else None
         self.venv = None
@@ -872,7 +901,7 @@ class AdvantagedOpponent:
             if self.mine is not None and not self.mine[i]:
                 continue
             logic = self.of(i)
-            if logic is not None and (logic.habits > 0 or logic.adapt > 0) and \
+            if logic is not None and (logic.habits > 0 or logic.adapt > 0 or logic.weak > 0) and \
                     (fresh is None or fresh[i]):
                 logic.draw(i)
             if v.extra is not None:
@@ -927,7 +956,7 @@ class AdvantagedAgent:
                                 adv.get('wide', 1.0), adv.get('tech', 0.0),
                                 adv.get('techway', 0.0), adv.get('techsafe', 0.0),
                                 adv.get('techhit', 0.0), adv.get('escape', 0.0),
-                                adv.get('low', 0.0))
+                                adv.get('low', 0.0), adv.get('weak', 0.0))
         self.env = self.side = None
 
     def __getattr__(self, name):  # the rest is the agent's

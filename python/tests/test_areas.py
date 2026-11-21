@@ -11,11 +11,14 @@ RUNS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.absp
                     'runs', 'human-ayu')
 sys.path.insert(0, RUNS)
 try:
+    import advantages
     import areas
     import tactics
     MISSING = None
 except ImportError as e:  # pragma: no cover
     MISSING = str(e)
+# (the characters' moves, made on each machine from the game: not in the repository)
+NO_MOVES = not os.path.exists(os.path.join(RUNS, 'motions.json'))
 
 N = len(tactics.OBS) if not MISSING else 0
 ME_ACT, OPP_ACT, ME_STUN, OPP_STUN, ME_AIR, OPP_AIR, ME_HP, OPP_HP = 0, 1, 4, 5, 6, 7, 14, 15
@@ -130,6 +133,36 @@ class ReadOut(unittest.TestCase):
         s = areas.summary(groups[1])
         self.assertAlmostEqual(s['my pressure']['won'], 0.5)
         self.assertAlmostEqual(s['my pressure']['share'], 1 / 8)
+
+
+@unittest.skipIf(MISSING or NO_MOVES, f'needs runs/human-ayu and motions.json: {MISSING}')
+class WeakArea(unittest.TestCase):
+    """advantages.py's weak: one area of the profile drawn to be its weak one."""
+    PROFILE = dict(reversal=0.8, throw=0.5, jumpin=0.5, bait=0.5)
+
+    def logic(self, weak):
+        return advantages.Advantages('kano', 1, seed=4, weak=weak, **self.PROFILE)
+
+    def test_one_area_of_those_it_has(self):
+        a = self.logic(1.0)
+        seen = {}
+        for _ in range(200):
+            a.draw(0)
+            area = a.weak_area[0]
+            seen[area] = seen.get(area, 0) + 1
+            for name, v in self.PROFILE.items():
+                low = name in advantages.WEAK_AREAS[area]
+                self.assertAlmostEqual(a.k[name][0], v * advantages.WEAK if low else v)
+        self.assertEqual(set(seen), {'okizeme', 'anti-pressure'})  # none of wake, blind
+        self.assertGreater(min(seen.values()), 60)
+        self.assertEqual(a.counts['weak_okizeme'] + a.counts['weak_anti_pressure'], 200)
+
+    def test_without_it_the_profile_as_it_is(self):
+        a = self.logic(0.0)
+        a.draw(0)
+        self.assertIsNone(a.weak_area[0])
+        self.assertEqual({n: a.k[n][0] for n in self.PROFILE}, self.PROFILE)
+        self.assertEqual(advantages.parse('weak=0.5')['weak'], 0.5)
 
 
 if __name__ == '__main__':
