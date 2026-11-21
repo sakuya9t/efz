@@ -33,3 +33,24 @@ makoto/**/*.zip
 minagi/**/*.zip
 nayuki/**/*.zip
 agent-league*/*.zip
+
+# Since round 14 a run's files are not kept in the repository: its models are on Hugging
+# Face (runs/hub.py), what it found is in docs/training-v2.md, and what a run, an
+# evaluation or a benchmark writes is made again from those. (The runs added before stay.)
+agent-league1[4-9]*/
+agent-league[2-9][0-9]*/
+agent-league11-avg/
+*/exploiter1[4-9]*/
+*/exploiter[2-9][0-9]*/
+*/target1[4-9]*.config.json
+*/target[2-9][0-9]*.config.json
+eval/kanna/agent-league1[4-9]*
+eval/kanna/agent-league[2-9][0-9]*
+eval/kanna/agent-league11-avg.*
+combo-net1[4-9]*/
+combo-chooser1[4-9]*/
+told-exp/
+# The benchmark's results (bench.py: 64-match pairings with every match's numbers)
+bench/
+# Agent files are built from a model and its parts (export_agent.py, league_combos.py)
+*.efzagent
