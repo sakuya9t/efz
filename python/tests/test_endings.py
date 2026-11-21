@@ -6,6 +6,7 @@ recovery (advantages.py's tech), a corner held (evaluate.corner), a risky move's
 import os
 import sys
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -147,8 +148,14 @@ class Risks(unittest.TestCase):
         c[400:460, ME_ACT] = 0x13b                           # one in the open that hits
         c[420:450, OPP_ACT], c[420:450, OPP_STUN] = 0x3b, 1
         c[422:, OPP_HP] -= 0.3
-        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
-        got = tactics.risks(me, opp, np.ones(len(c), bool))
+        # The super is a risky move as one of the frame data's invincible ones; the frame
+        # data (framedata.json) is made on each machine, not in the repository: given here,
+        # and no startups.
+        ayu = tactics.names().index('ayu')
+        with mock.patch.object(tactics, 'frame_data', lambda: {ayu: ({0x13b}, [])}), \
+                mock.patch.object(tactics, 'startups', lambda: {}):
+            me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+            got = tactics.risks(me, opp, np.ones(len(c), bool))
         self.assertEqual([(r['result'], r['wake']) for r in got], [('guarded', True), ('hit', False)])
         rep = tactics.risks_report(got, 1.0)['0x13b']
         self.assertEqual((rep['wake'], rep['wake_hit'], rep['wake_net'], rep['net']),
@@ -180,8 +187,12 @@ class OverAnAgentFile(unittest.TestCase):
         table = ActionTable()
         venv = SimpleNamespace(env=SimpleNamespace(num_envs=3, obs=np.zeros((3, 2, 168), np.float32)),
                                _length=np.ones(3, int), opponent_controls=[], extra=None)
-        opp = advantages.AdvantagedOpponent(lambda obs: np.zeros(len(obs), np.int64), 'kano',
-                                            advantages.parse('reversal=1'))
+        # (The character's moves, motions.json, are made on each machine, not in the
+        # repository: none here, the script below plays for them.)
+        with mock.patch.object(advantages, 'motions', lambda char: {}), \
+                mock.patch.object(advantages, 'invincible_moves', lambda char: []):
+            opp = advantages.AdvantagedOpponent(lambda obs: np.zeros(len(obs), np.int64), 'kano',
+                                                advantages.parse('reversal=1'))
         opp.attach(venv)
         venv.opponent_controls.insert(0, lambda out: out.__setitem__(slice(None), 0x55))  # the file's own
         venv.opponent_controls.append(lambda out: out.__setitem__(2, 0x66))  # (one registered later)
