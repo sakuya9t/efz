@@ -1,11 +1,15 @@
 """Released agents on Hugging Face (https://huggingface.co/sakuya9t/efz): agent files
 (.efzagent, docs/agents.md) and nothing else, one per released build, at the top of the
-Hub's repository, with its model card (runs/hub-card.md, the Hub's README.md) beside them.
+Hub's repository, with its model card (runs/hub-card.md, the Hub's README.md) beside them;
+in its cpu/ folder, a file a character for the game's CPU with combos (OPTIONS' CPU COMBO,
+docs/agents.md: league_combos.py cpu makes them).
 
     python runs/hub.py list                                   # the files there
     python runs/hub.py download                               # every file, into agents/
     python runs/hub.py download agent-league20-spar-s1-round20 --out tmp
+    python runs/hub.py download cpu                           # a folder's: into agents/cpu/
     python runs/hub.py upload tmp/NAME.efzagent ... --names ~/data/efz-replays/player_names.csv
+    python runs/hub.py upload --into cpu DIR/*.efzagent --names ...  # into the Hub's cpu/
     python runs/hub.py card                                   # the card alone, after editing it
     python runs/hub.py remove NAME ...                        # (the Hub's history keeps it)
 
@@ -95,16 +99,24 @@ def main():
     p.add_argument('--allow', action='append', default=[],
                    help="upload: a name of --names that is an ordinary word of the file's "
                    "header (seen there, not a player's); repeatable")
+    p.add_argument('--into', default='',
+                   help="upload: the Hub's folder for the files (cpu: the game's CPU's, a "
+                   "file a character; default: the top)")
     p.add_argument('--card', default=CARD, help='the model card (default: runs/hub-card.md)')
     p.add_argument('--message', default=None)
-    args = p.parse_args()
+    args = p.parse_intermixed_args()  # (upload --into cpu FILES: files after an option)
     from huggingface_hub import CommitOperationAdd, CommitOperationDelete, HfApi, hf_hub_download
     api = HfApi()
     on_hub = _hub_files(api, args.repo)
-    wanted = [n if n.endswith(SUFFIX) else n + SUFFIX for n in args.files]
+
+    def named(n):  # a folder on the Hub (cpu) names its files
+        inside = [f for f in on_hub if f.startswith(n.strip('/') + '/')]
+        return inside or [n if n.endswith(SUFFIX) else n + SUFFIX]
+    wanted = [f for n in args.files for f in named(n)]
 
     if args.action == 'list':
-        sizes = {f.path: f.size for f in api.list_repo_tree(args.repo) if hasattr(f, 'size')}
+        sizes = {f.path: f.size for f in api.list_repo_tree(args.repo, recursive=True)
+                 if hasattr(f, 'size')}
         for n in on_hub:
             print(f'{sizes.get(n, 0) / 1e6:6.1f} MB  {n}')
         return
@@ -134,10 +146,12 @@ def main():
             print(f'{f}: {why}', file=sys.stderr)
         if bad:
             sys.exit('nothing sent')
-        ops = [CommitOperationAdd(path_in_repo=os.path.basename(f), path_or_fileobj=f)
-               for f in args.files]
-        message = args.message or (', '.join(os.path.basename(f) for f in args.files)
-                                    or 'The model card')
+        into = args.into.strip('/')
+        paths = [f'{into}/{os.path.basename(f)}' if into else os.path.basename(f)
+                 for f in args.files]
+        ops = [CommitOperationAdd(path_in_repo=at, path_or_fileobj=f)
+               for at, f in zip(paths, args.files)]
+        message = args.message or (', '.join(paths) or 'The model card')
     if os.path.isfile(args.card):  # (the card goes with every change: its table is of the files)
         ops.append(CommitOperationAdd(path_in_repo='README.md', path_or_fileobj=args.card))
     info = api.create_commit(args.repo, ops, commit_message=message)
