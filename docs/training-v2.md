@@ -4442,7 +4442,62 @@ none makes a string).
   That gives an opponent strong everywhere but in one area, drawn afresh. The area is drawn
   among those the profile has; the sparring profile has no okizeme defence (`wake` 0).
 
-Queued behind round 22's benchmarks: the `planners` drill for round 21's file, five at a
-time. With its results beside the `combos` drill's (the same opponents without planners),
-the league of both kinds is judged by the rule above: half the community's spread in its
-okizeme (290 HP a minute) and its pressure (340).
+### Step 2, measured (21 November): the rule is not met
+
+Round 21's file against the eleven with planners (`bench/r21p`, 64 matches each through
+the game's own code), beside the same eleven with combos only (`bench/r21`). The spread
+across opponents of the agent's net, HP a minute (`areas.py bench DIR --net`; in brackets
+the range a resampling of the opponents and of their errors gives, 16th to 84th
+percentile):
+
+| | Its okizeme | Its pressure | bar (half the community's) |
+|---|---|---|---|
+| combos only | 177 (0-269) | 202 (0-277) | |
+| with planners | 273 (0-360) | 0 (0-111) | |
+| both kinds, 22 opponents | 279 (175-336) | 125 (0-192) | 290 and 340 |
+
+By the rule fixed before, the league with planners is **not taken as the answer to
+diversity**: its okizeme stops just under the bar, inside its error either way, and its
+pressure is nowhere near.
+
+What the planners did change is the level of the opponents' okizeme, not how far they
+differ:
+
+| The opponents' side, mean of eleven | combos only | with planners | people's opponents |
+|---|---|---|---|
+| The agent's wins | 63% | 56% | |
+| The agent's net under their okizeme, HP a minute | +164 | −168 (a fall of 333 ± 85) | −326 (the strongest player: +219) |
+| Their okizeme hits first | 18% | 28% | |
+| Their okizeme meaty | 38% | 49% | |
+| Their strings a minute | 2.3 | 2.6 | 5.2 |
+| Guards a string | 1.19 | 1.23 | 1.41 |
+| After a guard, guarded again | 20% | 22% | 35% |
+| The agent's net under their pressure, HP a minute | +142 | +102 (−40 ± 72) | −513 (the strongest: +86) |
+
+No other area moved by more than its error. Nayuki's file gains most (the agent wins 11%,
+from 25%), Ikumi's next (50% from 80%).
+
+Two readings:
+
+- **The okizeme planner makes the league's okizeme as strong as people's** (the agent's
+  net under it is now below zero, as the community's players' is). That is a change of
+  level in an area the play-tests named (19 November: rising lost to lows), to be judged
+  as the combos were: a round trained against these files, kept if it gains against them
+  and loses nothing elsewhere. The spread between opponents can come from the share of
+  chances the planner takes (`--oki-skip`), drawn per opponent, since the planner's effect
+  already differs by character (a spread of 320 in the shift).
+- **The pressure planner does not make pressure.** It continues a string after a guard,
+  but the league's opponents start half as many strings as people and the agent is under
+  pressure 3.3% of a match (people 10.7%, the strongest player 8.5%; 2.3 times a minute
+  against 4.7 and 4.1). What is missing is the start of pressure (the approach that makes
+  the agent guard on the ground) and staying on it, neither of which a follow-up planner
+  supplies. At 3% of a match an opponent's pressure cannot be read at all: the errors on
+  the per-second rate are 38-171 HP against a community spread of 104.
+
+So step 2 stays open for pressure. The scripted profile has no knob that starts
+pressure (it throws, jumps in on a knockdown and reverses), so the candidates are all new
+work, in the order of their cost: clones of the community's players who press most
+(`people.json`'s by-player figures give who: 5.9 strings a minute for the strongest
+against 3.4 for the least), as league opponents; a scripted approach that seeks the
+agent's guard, drawn strong for some opponents as `weak` draws an area weak; a pressure
+exploiter trained with a reward for time on the agent's guard.
