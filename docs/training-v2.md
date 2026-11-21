@@ -3174,3 +3174,763 @@ not use what it saw; training where it does):
 3. the combo's end and the mid-screen IC (the second point; `endplan`'s first build);
 4. the end of a round against Mizuka (the fourth point: not looked at yet);
 5. then a training round against the opponents above, the modules on while it trains.
+
+## The benchmark suite (19 November): measures that have room to move
+
+The user's question: "How applicable can we find some new benchmarks? Improving from 85 to
+87 in something is likely more noisy than improving from 10 to 50 in something else." The
+league's win rate is the 85-to-87 kind: at 92% over 704 matches its error is 0.9 of a
+point and two builds differ by 1.3 before anything is real, and every build since round
+18 is inside that. `runs/human-ayu/bench.py` is the other kind: a set of drills, each
+whole matches against an `exploiter18` with one scripted habit on top (advantages.py), so
+that the measure read from it has many events a match and a known cause; every number
+with its error; beside it the same number of the strongest Ayu player of the replays.
+
+**What was built.**
+
+- `evaluate.py --folds K` (16): every number of a result with its standard error, by the
+  jackknife over K groups of the matches (`spread()`; the result's `se`, the same tree),
+  and `per_match` for a paired count outside. A measure made of events (a rate of the
+  combos that end in a recovery) has no simple error; this gives one for all of them.
+- `bench.py jobs FILE.efzagent --tag T`: the suite's commands. The drills: `league` (the
+  eleven, no habit), `handicap` (the eleven, the agent taking twice the damage), `hold`
+  (`escape=1`: opponents that leave a corner), `ends` (`tech=1`: opponents that recover
+  from every combo they can), `rise` (`jumpin=0.9,throw=0.7`: its own rising attacked),
+  `bait` (`bait=0.9`: its raw moves punished), `reversal` (`wake=0.6,blind=0.5`: its
+  okizeme met with reversals), the last five against Kano's, Nayuki's, Ikumi's,
+  Sayuri's and Mizuka's; `mirror`: another build's file as the opponent (the game's code
+  on both sides).
+- `bench.py table A [B]`: the scoreboard, a measure a row, pooled over its drill's
+  opponents; with two builds the difference in errors (past 3 real, 2 to 3 likely, under
+  2 noise). `bench.py noise A B`: two seeds of one build, which should differ by one
+  error. `bench.py record TAG FOLDER --name N`: a person's games (from_record.py's
+  recordings) scored the same way, so a play-test sits on the scoreboard with what its
+  few matches can tell.
+- New measures in tactics.py: `rounds` (a lead of 3,000 HP kept, a deficit turned, the
+  seconds and the HP it takes to close a round whose opponent is under 2,500), `raw` (the
+  raw risky moves as one account, HP a minute), `corner.left` (corner stays the opponent
+  ended by leaving), `after_recovery.net`, and `ledger.into` (below, "The games of 19
+  November").
+- `people.json` made again with all of them, by player: the reference column is the
+  player with the most wins among those with 100 matches (72% of 487).
+
+**The first scoreboard** (`round18k4`, 64 matches a pairing, seed 7):
+
+| measure | drill | `round18k4` | strongest player | all players |
+|---|---|---|---|---|
+| wins | league | 91.6 ±0.9 % | | |
+| own HP lost a round | league | 55.1 ±0.7 % | | |
+| raw specials, HP a minute | league | +183 ±41 | +235 | +197 |
+| lead of 3,000 kept | league | 93.7 ±0.7 % | 88.8 | 78.9 |
+| deficit of 3,000 turned | league | 66.5 ±2.2 % | 26.9 | 15.4 |
+| a round closed, seconds | league | 18.6 ±0.4 | 18.9 | 18.8 |
+| wins taking twice the damage | handicap | 49.9 ±1.8 % | | |
+| corner stays the opponent left | hold | 84.4 ±0.5 % | 63.9 | 61.6 |
+| a corner stay, median seconds | hold | 1.78 ±0.07 | 3.12 | 2.70 |
+| HP a minute out of its pressure | hold | +102 ±72 | +492 | +133 |
+| big combos that end in a recovery | ends | 52.4 ±1.0 % | 12.1 | 13.9 |
+| recoveries caught less hit back | ends | +13.2 ±2.6 % | +22.6 | +8.6 |
+| HP a minute on its own rising | rise | −36 ±62 | +219 | −326 |
+| jump-ins on it that hit | rise | 21.8 ±1.5 % | 17.6 | 14.1 |
+| its misses punished | bait | 47.5 ±1.5 % | 46.7 | 49.3 |
+| HP a minute on its okizeme | reversal | +668 ±86 | +1,165 | +584 |
+
+What it says:
+
+- **The handicap is a scale that does not run out.** Twice the damage puts the wins at a
+  half and spreads the opponents from 14% (Nayuki's) to 69% (Mizuka's), where the plain
+  league shows 48% to 100%.
+- **Three drills have the room the user asked for.** An opponent that recovers gets out
+  of 52% of its big combos (the strongest player's opponents: 12%); one that leaves the
+  corner leaves 84% of the stays (64%) after 1.8 seconds (3.1); its pressure is worth a
+  fifth of the strongest player's. These are the user's points of 18 November (the
+  corner let go, the endings), now at tens of points with errors of one.
+- **The lead measures are saturated against the league**: it keeps leads and closes
+  rounds there as the strongest player does against people. Against the user it kept
+  61% (`round17c`, `round18`) and 78% (`round18k4`): that weakness shows only against a
+  person, and a drill has to make it show before it measures anything.
+- **The rising drill does not hold what the user sees** (below): it attacks the rising
+  with a jump-in and a throw and never with a low, and the agent's rising is now lost to
+  lows.
+- The strongest player's column is a prior, not the same test: their numbers are against
+  people, the agent's against trained opponents.
+
+**What a play-test can tell.** With 14 to 24 matches a session the error of the win rate
+is 10 to 12 points: two builds at 25 matches each differ for certain (3 errors) only 39
+points apart. The measures made of many events are better: the share of jump-ins that
+hit has an error of 2 to 9 points, the raw specials 200 to 260 HP a minute. So a session
+is read by those, and the wins as the floor.
+
+**The cost.** An evaluation through the game's code is 4 to 5.5 GB at 64 matches (the
+planners' copies), 7 GB with an agent file on both sides. Nine at once drove the
+machine's available memory to 6 GB and the watcher stopped the queue (nothing else was
+touched); five at once leaves 24 GB. A build's whole suite is 49 pairings, about two and
+a half hours at five at once.
+
+## The games of 19 November: `round18k4` in the game
+
+`round18k4` is round 18's policy with the modules of 18 and 19 November (`okiplan:2`,
+`rise:1` with the guard by sight, `risk:1`: the raw moves' accounts). The user played it
+24 matches (59 minutes, against ten characters; session `20261119-195241-01c9`, the game
+at `f4062f7`); all 24 play again exactly (from_record.py). **The agent took 12 of 24**
+(`round17c` 7 of 23, `round18` 4 of 14), and the user's points:
+
+1. "Air strike absolutely strong."
+2. "Combo strong, but not as much damage as 17c. Some mid-finish and weird choices are
+   observed, but better than 18."
+3. "When being okizeme, upper guard is good, but often hit by lower hit, especially when
+   opponent approach in air but hit low."
+4. "Not calm enough when under pressure to look for opportunities. Sometimes it behaves
+   like it cannot predict what is going to happen after 1s, given the case where the
+   opponent is sending out a strike. This is more severe when handling objects."
+5. "Still not doing good pressure, better than 18, but still sometimes wastes frame
+   advantages. Baits are seldom."
+
+The three sessions on the scoreboard (`bench.py record`; each number's error from the
+jackknife over the session's matches):
+
+| against the user | `round17c` (23) | `round18` (14) | `round18k4` (24) | strongest player |
+|---|---|---|---|---|
+| matches won | 30 ±10 % | 29 ±13 % | 50 ±10 % | |
+| HP ahead a minute, all exchanges | −1,848 ±712 | −1,360 ±765 | −363 ±487 | +2,431 |
+| raw specials, HP a minute | −571 ±259 | −989 ±198 | +278 ±239 | +235 |
+| where it came by air, HP a minute | −761 ±360 | −606 ±619 | +283 ±289 | −77 |
+| both in the air | −869 ±350 | −248 ±240 | +222 ±220 | |
+| frontal jump-ins on it that hit | 43 ±10 % | 36 ±7 % | 13 ±2 % | 18 |
+| the opponent's missed risky moves punished | 29 ±18 % | 27 ±19 % | 54 ±8 % | 46 |
+| a lead of 3,000 kept | 61 ±11 % | 61 ±10 % | 78 ±9 % | 89 |
+| HP a combo | 1,263 ±61 | 1,200 ±63 | 1,283 ±49 | 891 |
+| big combos that end in a recovery | 41 ±4 % | 33 ±5 % | 35 ±4 % | 12 |
+| on its own rising, HP a minute | −321 ±191 | −815 ±422 | −872 ±231 | +219 |
+| out of its pressure, HP a minute | +93 ±199 | −508 ±347 | −398 ±180 | +492 |
+| lost starting something into what was out | 421 ±135 | 645 ±246 | 767 ±125 | 288 |
+
+What moved for certain (3 errors): the raw specials (the accounts stop 100 of 225 presses
+that would start one: from −989 to +278 HP a minute, the strongest player's +235), and
+the jump-ins that hit it (36% to 13%). Likely (2 errors): the air, the net of all
+exchanges. Not moved: its rising, its pressure, the endings.
+
+**1, the air: confirmed.** Coming by air is worth +283 HP a minute where it lost 600 to
+760; air to air +222 for −869; the HP it loses attacking in the air halved (2,570 to
+1,270 a minute).
+
+**2, the combos: the same damage by count, and a cause for the odd ends that is not the
+build's.** The mean is 1,283 HP for `round17c`'s 1,263, the 90th percentile 2,950 for
+2,960; only the largest is lower (5,340 for 6,150). One combo in five ends with the
+opponent standing (20%; 16% for `round17c`). And the game's log says that **26% of the
+route plans are dropped as late** in every session (300 of 1,119, 184 of 707, 355 of
+1,372: 109 ms a plan on the user's machine, 193 ms at most), where an evaluation works
+every plan to its end: a quarter of the re-plans at a later hit never arrive, and the
+combo goes on with what it had. The evaluated agent and the played one differ by that
+quarter. Not looked into further yet; it is the first thing to check for "mid-finish and
+weird choices".
+
+**3, the rising: the standing guard holds, the low opens it, and the cause is in the
+module.** `rise` guards 359 of 360 risings through (a guard 92% of the wake-ups by the
+measure, 25-33% before; a reversal 0.3% for 24-28%), standing where it sees the
+attacker in the air. High okizeme now hits 29-31% (a jump-in, a flight, a dash and an air
+move: 65-71% before for the dash). The user answered within the session: lows are 25% of
+the okizeme on it for 13-16%, and they hit: from the ground 45% (13 of 29), after a dash
+35%, **after a jump 70% (7 of 10)**. That last is the user's sentence. The module picks
+the guard's height by whether it sees the opponent in the air, 14 steps late: an empty
+jump that lands into a low is past before the view shows the landing. A person holds
+the standing guard until the last moment a jump attack could still hit and then
+crouches; the landing can be predicted from the height and the fall the agent does see.
+Next work. The `rise` drill of the suite has no low in it (a jump-in and a throw), so
+it shows −36 HP a minute where the user's games show −872: the drill needs the empty
+jump into a low before it measures this.
+
+**4, what is on the screen: confirmed with a new measure.** `ledger.into` (tactics.py,
+`losses`): of the hits it takes, those by a move that had been out 20 steps or more (or
+by an object whose owner was free again), which a player 14 steps late could have seen
+and answered (`seen`); of them those where it started something of its own (a move, a
+jump, a dash) after it could see it (`began`); and of those the ones an object made.
+`round18k4` against the user: hit by something there to be seen 2.0 times a minute
+(1.1-1.2 for the two builds before), started into it 1.08 times a minute for 767 HP
+(0.50, 0.64); by objects 0.43 times a minute (0.10, 0.30). People's Ayu in the replays:
+0.35 times a minute, 341 HP; the strongest player 0.30 and 288, by objects 0.06. The
+user, against the agent, in the first count of the same thing: 0.02 times a minute. So
+the agent walks into what is already out three times as often as people do and seven
+times as often with objects, and `round18k4` more than the builds before it (2 errors:
+likely). Under the opponent's pressure itself the count is calmer than before (it starts
+a move after 25% of its guards for 36%, nothing after 43% for 27%) and its net there is
+level (−61 ±290 a minute): the user's point is the strike that is coming, not the string.
+
+**5, the pressure: confirmed.** −398 HP a minute out of its own pressure (`round17c`
++93, the strongest player +492); when a guard leaves it ahead its next attack hits 26%
+and 18% of the times nothing follows; the planned pressure chose the bait (`wait`) 37
+times in 437 guarded moves, 0.6 a minute.
+
+### The level-4 CPU with the agent's combos (19 November)
+
+The user: "I'm wondering how it would behave with cpu lv4, but with very good combos like
+itself. CPU lv4's RG and counter rate is very high, I'm curious how the agent would
+handle that."
+
+**How it is made.** `evaluate.py --p2 FILE --p2-cpu-combos 4`: the game's level-4 CPU
+plays P2, and on the step after one of its hits lands the side is handed to `--p2` (here
+`round18k4` itself: its policy and its routes, planned on copies as in the game) until
+the agent is out of the hit reaction or lies on the ground; then the CPU has it back.
+The neutral, the guard, the recoil guards, the counters and the okizeme are the CPU's;
+the combos are the agent's. The environment got the call that hands a side over in the
+middle of a match (`efz_env_set_cpu`, `EfzVecEnv.set_cpu`; tests.test_agents.HandOver),
+and one correction with it: on the copies an attached agent plans on, neither side is
+the CPU's for the frames played there. Before, a plan against a CPU side played the CPU
+itself on the copy, with the game's own rand(): the plan saw the CPU's coming decisions,
+and the inputs it meant for the opponent were ignored. Now a plan against the CPU is
+what a plan against a person is.
+
+**The result** (the mirror: Ayu against the CPU's Ayu, 64 matches, seed 7):
+
+| `round18k4` against | wins | own HP lost a round | the opponent's combo, HP | 90th pct. | its combos a minute |
+|---|---|---|---|---|---|
+| the level-4 CPU | 92.2 ±3.8 % (59) | 63.6 ±2.2 % | 651 | 1,300 | 10.2 |
+| the level-4 CPU with its combos | 28.1 ±5.0 % (18) | 87.8 ±1.9 % | 1,287 | 3,258 | 8.1 |
+
+The agent's own combos are the same in both (1,243 and 1,372 HP, 8.2 and 6.3 a minute).
+So the plain CPU hits it more often than it hits the CPU (10.2 combos a minute for 8.2)
+and loses only because a hit of the CPU's is worth half of one of the agent's; with the
+same combos on both sides the agent loses 72% of the matches.
+
+**How it handles the recoil guard: it does not.** In both settings the CPU recoil-guards
+half of the agent's guarded moves (55%, 50%; the user 27%, people's opponents 36%) and
+answers 98% of those at once (an invincible move 42%, another move 56%). After a recoil
+guard the agent is hit 63-64% of the times and its own next attack lands 15-17% (against
+the user: hit 36%, lands 30%; people: 24% and 25%). The lines of the ledger against the
+CPU with combos: a move of its own started in neutral and beaten 2,380 HP a minute, its
+move guarded and then punished 1,850 (1.5 times a minute at 1,230 each), free on the
+ground 1,730. A lead of 3,000 HP is kept in 56% of the rounds (93% against the plain CPU)
+and a deficit turned in 18% (72%).
+
+**What to read from it.** (1) The agent's neutral and its strings against something that
+recoil-guards and counters are worth less than nothing; its results rest on what its
+hits are worth. A person who guards as the CPU does and has combos beats it; the user's
+own recoil guards (27% of its guarded moves, answered successfully 36%) are the same
+lever at half strength. (2) The league teaches little of it: the `exploiter18`s
+recoil-guard 10-21% of its guarded moves (the CPU 50-55%) and hit it after 19-40% of
+those (the CPU 64%). The advantages' `rg` and `reversal` knobs exist (9 November) and
+are in no drill of the suite; a drill with them is the measure ("hit after its move was
+recoil-guarded": 64% here, 24% for people). (3) Its okizeme and
+its pressure against the CPU say little about a person (the CPU's guard is at the right
+height by construction: docs, "No CPU but Kanna"); the recoil guard and the counter are
+what this opponent adds. It is a benchmark, not a training opponent.
+
+Still playing when this was written: the same pair against the other eleven characters
+(the plain CPU, and the CPU with that character's `exploiter18` playing its combos).
+
+## After the games of 19 November: the three fixes, the plans' time, the reaction (19 November, night)
+
+The user, on the three proposals (the wake-up guard, the late plans, a recoil-guard
+drill): "go ahead with all three, and we can slightly tune the 14f. From some sources it
+says the best competitive players' reaction times are 120-170ms, we can adjust the
+prediction a bit." Then: "it seems we got a benchmark it doesn't beat so far. I think
+during the tuning and training, you can write better heuristics other than the factory
+cpu logic." And: "you mentioned that the planner timeout caused combo drops. Can we
+improve its efficiency so it keeps better quality?"
+
+The game runs 64 frames a second: 14 frames are 219 ms, and 120-170 ms are 8 to 11.
+
+### The plans' time: where it goes, and a plan that is late
+
+**Where a plan's time goes** (`round18k4` against Kano's `exploiter18`, 270 plans, this
+machine): a plan plays 26 options, 3,445 frames on copies, of them 119 its own play's.
+A frame on a copy costs 14 µs; one of its own play's cost 0.36 ms more, the network's
+decision. So its own play, one option of 26, was 45% of a plan's time (43 of 94 ms); the
+25 routes the rest. The routes share next to nothing: playing common beginnings once
+would save 3% of their frames.
+
+**What was changed.**
+
+1. *The network.* `Net::Forward` summed each row in one running double, a chain the
+   compiler must keep in order; it now sums sixteen lanes side by side in single
+   precision (`Dot`, port/agent/policy.cpp) and adds them in double. A decision goes
+   from 0.33 ms to 0.20 ms here (the weights no longer fit the cache they are read
+   from: that is the rest); the log-probabilities agree with the model's within 5e-05
+   as before. It is also what every frame of the agent's play costs.
+2. *A plan that is not done when it is due is no longer dropped whole*
+   (`Planner::Settle`): it is chosen from the options played to their end. For that the
+   options are now played in another order: first what the agent goes on with if no
+   plan comes (the rest of the route it is on, else its own play), then the routes by
+   damage, its own play last unless it was first. A settled plan takes the first unless
+   another played option is worth more. A plan done in time is chosen exactly as before
+   (tests.test_agents.PlansAsRedteam: the same plans as redteam.py's).
+3. *An evaluation can play as a machine with less time does*
+   (`efz_env_agent_plan_budget`, `evaluate.py --p1-plan-budget COST[,OWN]`,
+   `--p1-plan-drop`): a plan may take COST frames on copies before it is due, one of
+   its own play's counting OWN (27 with the old network, 15 with the new). At 7,700
+   and 27 a quarter of the plans are late, as in the user's sessions.
+
+**What the lateness cost, and what is back** (64 matches against Kano's):
+
+| | every plan to its end | the user's machine, before | after |
+|---|---|---|---|
+| plans dropped as late | 0 | 19% | 0 (11% settled) |
+| HP a combo | 1,801 ±39 | 1,631 ±40 | 1,805 ±30 |
+| combo HP a minute | 9,986 ±310 | 9,260 ±390 | 9,620 ±280 |
+
+The late plans cost a tenth of each combo (3 errors); with the faster network and the
+settled plans the combos are the unlimited planner's again. (The other two opponents and
+the window of an 11-frame delay, 6,050: below, when they have played.)
+
+What is left for the game itself: plans are worked only in the frames' idle time (each
+frame's 15.6 ms less the game's own work and a 1.5 ms margin), on the game's one fight,
+so a second thread cannot take them. The headless library can run several fights; a
+planner on a thread of its own with its own copy of the fight would have the whole
+window (219 ms a plan at 14 frames, 172 at 11) and is the next step if the settled
+plans still leave quality behind on the user's machine. The log line of the routes now
+says how many plans were settled.
+
+### The wake-up guard: standing until the landing, then crouching (`rise_land`, `rise_sight`)
+
+The cause (above): the guard stood while it saw the attacker in the air, 14 steps late,
+so an empty jump had landed and its low had hit before the view showed the landing.
+
+**The landing can be predicted.** From the user's 1,888 flights in the three sessions:
+a step moves the height by 2.478 vy + 2.037 g (g the fall's gain a step, read from two
+views, 0.09 where they give none), and the landing predicted from a view 11 steps old is
+within 2 steps of the true one in 94% of the flights that do not change course after
+(87% at 14 steps, 97% at 8); a third of the flights do change course (a second jump, an
+air dash) and land later than predicted. And the timing leaves room: a low after a
+landing makes contact 4 steps or more after it in 97% (median 9), an air attack 4 steps
+or more before it in 95%.
+
+**The rule** (`Rise::land`, `rise.py`'s `land`; `StepsToLand` / `steps_to_land`): under
+an attacker it sees in the air the standing guard is held while the predicted landing
+has not passed, the crouching one from the step after. On the user's 1,712 clean
+flights the crouch then begins within 3 steps of the landing in 98% (the old rule: 14
+steps after, every time), at the cost of crouching 3 steps or more too early on 7.5% of
+the steps under a flight (5.2% at 11 steps of sight).
+
+**The reaction** (`rise_sight`): the guard's height may be chosen from a view fewer
+steps old than the agent's delay. The file made for the test uses 11 (172 ms: the slow
+end of the range the user gave); the policy itself is trained at 14 and stays there
+until a round trains it at another (the trial of the same policy seeing 11 late,
+untrained: below).
+
+**The opponent that makes it measurable**: advantages.py's `low`, the share of its
+jump-ins on the agent's rising that are empty, with its fastest low normal from the
+landing (2A for ten of the eleven, 2B for Kano); the drill `riselow`
+(`jumpin=0.9,low=0.6,throw=0.3`).
+
+### The recoil guard, the CPU and a sparring partner in the suite
+
+- `recoil` (`rg=0.3,reversal=0.8` on the five): the opponent recoil-guards three guards
+  in ten and counters with an invincible move when the agent presses on.
+- `cpu`: the level-4 CPU with the file's own combos, as a drill (`bench.py jobs` writes
+  `--p2 FILE --p2-cpu-combos 4`).
+- `sparring`: every scripted habit at once (`rg`, `reversal`, `tech`, `escape`,
+  `jumpin` with `low`, `throw`, `bait`) with hits worth half as much again: the first
+  opponent written to be what the factory CPU is not, one whose guard can be opened
+  (the CPU's is at the right height by construction) and that punishes what a person
+  punishes. It is the benchmark the user asked for in place of the CPU's logic, and the
+  profile the next round trains against.
+
+### What the four changes measured (19 November, midnight)
+
+**The plans' time** (64 matches each against Kano's, Nayuki's and Sayuri's `exploiter18`;
+"before": 7,700 frames a plan at 27 a frame of its own play, late plans dropped, the
+user's machine as it was; "after": the same time with the faster network, 15, and late
+plans settled; the last column a window of 11 frames instead of 14, 6,050):
+
+| HP a combo | every plan to its end | before | after | after, 11-frame window |
+|---|---|---|---|---|
+| Kano's | 1,801 ±39 | 1,631 ±40 | 1,805 ±30 | 1,784 ±38 |
+| Nayuki's | 1,748 ±46 | 1,540 ±31 | 1,690 ±44 | 1,749 ±45 |
+| Sayuri's | 1,460 ±33 | 1,302 ±39 | 1,459 ±34 | 1,450 ±38 |
+| plans dropped late / settled | 0 | 19-20% / 0 | 0 / 4-11% | 0 / 18-22% |
+
+The plans dropped as late cost a tenth of every combo (1,491 for 1,670 over the three:
+6 errors), and its own HP lost rose two points with it. With the two changes the combos
+are the unlimited planner's again (1,651; and 1,661 with the shorter window, where one
+plan in five is settled). The wins do not separate (74 to 79 ±2.5 in all four).
+
+**The wake-up guard** (`riselow` on the five; the opponents' own counts of their
+scripted jump-ins, six in ten of them empty jumps into a low):
+
+| the scripted jump-ins | `round18k4` | `land`, 14 steps of sight | `land`, 11 |
+|---|---|---|---|
+| played | 1,130 | 1,120 | 1,174 |
+| hit the agent | 425 (38%) | 211 (19%) | 232 (20%) |
+| guarded | 219 | 422 | 433 |
+| the agent hit first | 195 | 172 | 208 |
+| its own rising, HP a minute | +65 ±69 | +233 ±85 | +122 ±68 |
+| wins | 84.1 ±2.0 | 85.3 ±1.9 | 83.1 ±1.9 |
+
+The jump-ins on its rising hit half as often, and are guarded twice as often. The
+drill's totals are inside their errors: a scripted jump-in comes 3.5 times a match there
+and the 0.7 hits fewer are a point of its HP a round. The two sights do not differ on a
+script's plain jump; the shorter is for the flights that change course (5.2% of the steps
+under a flight crouched too early for 7.5%). `tactics.wakeup`'s kinds do not hold the
+scripted low apart (it is counted among the lows from the ground and the mids), so the
+drill is read by the opponents' counts.
+
+**The reaction: the policy 11 steps late instead of 14, untrained there**
+(`round18k5`: `config.json`'s delay 11, the guard above at the same sight, everything
+else `round18k4`'s; the league's Sayuri's, Kano's and Nayuki's):
+
+| | `round18k4` (14) | `round18k5` (11) |
+|---|---|---|
+| wins | 79.2 ±2.5 | 90.1 ±1.9 |
+| own HP lost a round | 65.1 ±1.4 | 56.9 ±1.6 |
+| HP ahead a minute | 2,353 ±240 | 3,953 ±284 |
+| against Nayuki's | 48 ±6 | 81 ±4 |
+
+Three and a half to four errors on each, with no training: the policy was trained seeing
+14 steps late and plays better seeing 11. Its routes are played from where it sees its
+hit, 11 steps after it now (still no instant confirm); the planned okizeme's own
+settings (`oki_think`, `oki_sight`: 14) were left as they were. 172 ms is the slow end
+of the range the user gave for the best players. Its input rate is unchanged (1.6-1.9 presses a second). The whole
+suite for it is playing; a round trained at 11 is the next step after it.
+
+**The new drills, `round18k4`:**
+
+| measure | drill | `round18k4` | strongest player |
+|---|---|---|---|
+| wins against every habit at once | `sparring` | 67.2 ±2.6 % (55 to 83 by opponent) | |
+| own HP lost a round there | `sparring` | 67.8 ±1.3 % | |
+| hit after its move was recoil-guarded | `recoil` | 40.7 ±0.9 % | 22.0 |
+| its next attack lands after one | `recoil` | 22.2 ±0.9 % | 29.9 |
+| HP a minute out of its pressure there | `recoil` | −370 ±81 | +492 |
+| wins against the level-4 CPU with its combos | `cpu` | 28.1 ±5.0 % | |
+
+**The level-4 CPU of the other characters, with their `exploiter18` playing its combos**
+(`--p2-cpu-combos 4`, 64 matches each, all eleven): 94 to 100% (Nanase 94, Nayuki 97,
+Makoto and Mizuka 98, the other seven 100; the plain CPU: 95 to 100), its own HP lost a
+round 26 to 55% for 24 to 58%. The CPU's combos are no larger for it (595-781 HP for
+561-784): an `exploiter18` handed a hit the CPU started does not turn it into its
+own combo. So the hard benchmark is the mirror alone, where the combos are the routes'
+planner's; for the other characters "combos as good as the agent's" needs routes of
+their own (their combos on Ayu are in the same replays), or a scale on the damage as
+`handicap` and `sparring` have.
+
+## 20 November: equal reactions, the recoil guard answered, round 20 started
+
+### The reaction, with opponents that react as fast
+
+The trial of 19 November gave the agent 11 steps and left its opponents their 14: an
+`exploiter18` reads its delay from its own `config.json`. `evaluate.py --p2-delay N`
+gives P2 another, and the same three pairings were played with both sides at 11:
+
+| 64 matches each | `round18k4`, 14 against 14 | `round18k5`, 11 against 14 | `round18k5`, 11 against 11 |
+|---|---|---|---|
+| Sayuri's | 95 ±3 % | 97 ±2 | 92 ±3 |
+| Kano's | 94 ±4 | 92 ±3 | 89 ±4 |
+| Nayuki's | 48 ±6 | 81 ±4 | 73 ±7 |
+| the three | 79.2 ±2.5 | 90.1 ±1.9 | 84.9 ±2.8 |
+| own HP lost a round | 65.1 ±1.4 % | 56.9 ±1.6 | 62.2 ±1.6 |
+| HP ahead a minute | 2,353 | 3,953 | 2,953 |
+
+About half of the gain was the agent reacting faster than its opponents. With equal
+reactions it is 5.7 points ahead of the 14-step agent (1.5 errors: likely no more than
+that), nearly all of it against Nayuki's. So the suite's numbers for an 11-step build
+against 14-step opponents flatter it, and a round trained at 11 has its opponents at 11
+too (finetune.py's `--delay` is every player's). Against a person the question is what
+the person's reaction is; the user's range for the best players is the agent's.
+
+**The whole suite for `round18k5`** (60 pairings, the opponents at their own 14 steps:
+read it with the table above in mind):
+
+| measure | drill | `round18k4` | `round18k5` | errors |
+|---|---|---|---|---|
+| wins | league | 91.6 ±0.9 % | 96.2 ±0.6 | +4.2 |
+| own HP lost a round | league | 55.1 ±0.7 % | 48.3 ±0.8 | −6.3 |
+| wins taking twice the damage | handicap | 49.9 ±1.8 % | 63.9 ±1.9 | +5.4 |
+| wins against every habit at once | sparring | 67.2 ±2.6 % | 80.6 ±2.1 | +4.1 |
+| jump-ins on its rising that hit | rise | 21.8 ±1.5 % | 12.9 ±1.1 | −4.8 |
+| scripted jump-ins, six in ten into a low, that hit | riselow | 37.5 ±1.9 % | 26.3 ±1.7 | −4.5 |
+| ... that it guarded | riselow | 21.0 ±1.7 % | 36.5 ±1.8 | +6.3 |
+| HP a minute on its own rising | rise | −36 ±62 | +206 ±65 | +2.7 |
+| HP a minute out of its pressure against recoil guards | recoil | −370 ±81 | −21 ±99 | +2.7 |
+| hit after its move was recoil-guarded | recoil | 40.7 ±0.9 % | 38.8 ±0.8 | −1.6 |
+| scripted reversals after a recoil guard that hit it | recoil | 70.6 ±2.8 % | 71.6 ±3.7 | +0.2 |
+| wins against the level-4 CPU with its combos | cpu | 28.1 ±5.0 % | 34.4 ±6.0 | +0.8 |
+| corner stays the opponent left | hold | 84.4 ±0.5 % | 83.5 ±0.7 | −1.1 |
+| big combos that end in a recovery | ends | 52.4 ±1.0 % | 52.6 ±1.2 | +0.1 |
+| its misses punished | bait | 47.5 ±1.5 % | 45.7 ±2.0 | −0.7 |
+
+What a faster reaction and the landing rule move: everything decided by seeing in time
+(wins, HP, its rising, jump-ins). What they do not move at all: the corner let go, the
+endings that let the opponent recover, the recoil guard and the CPU. Those four are
+what it does, not how fast it sees. (The two `riselow` rows are new: the scripted
+opponents' own counts, `bench.py`'s `script` measures.)
+
+### The recoil guard: what the game does, and an answer inside a person's reaction
+
+The measure (the `recoil` drill, and the level-4 CPU with the agent's combos): the agent
+is the one hit after 39-41% of its recoil-guarded moves against the scripted habit and
+62-64% against the CPU, the strongest replay player after 22%.
+
+**What happens after one** (24 traced matches against Kano's `exploiter18` with
+`rg=0.3,reversal=0.8`, the agent's side; 193 recoil guards): the hit lands 32 steps after
+the recoil guard at the median and 28 at the tenth percentile (26 and 23 against the
+CPU); a move of the agent's own comes out as the freeze ends after 40% of them (a chain
+pressed before it could see the recoil guard, or its next press); it guards the counter
+after 19%. It sees the recoil guard 11 steps after it: there is time.
+
+**The game's rules, frame by frame** (a scripted mirror in the headless game: Ayu's 2A,
+2C, 5B, 5C recoil-guarded, the other side countering with a 2A at every delay; and
+src/scene3.cpp, src/player.cpp):
+
+- Both players are frozen for about 20 steps. The first counter lands at step 23 (the
+  CPU's) to 25.
+- A guard is a recoil guard when back was pressed from neutral no more than 9 steps
+  before the hit; a second press does not count for 18 steps after the first. A guard
+  held from early in the freeze is a plain one by the time anything lands.
+- The player whose move was recoil-guarded can recoil-guard the counter even from the
+  recovery of that move (`m_canRecoilCounter`, until its next move starts). A plain
+  guard is not there until the move has ended: 29 steps after the recoil guard for a
+  2A, 40 for a 2C.
+- The last button pressed during a move is kept without an end (`m_bufferedPress`) and
+  comes out as the freeze ends, at step 19: a chain pressed blind ends the recoil
+  counter and is in its start as the counter lands. A later press takes its place, and
+  an A does not chain from a normal of the same stance or a stronger one.
+
+**The answer** (`rise_recoil`, in the module that guards by sight: port/agent/policy.cpp
+`RiseWatch` / `RiseAct`, runs/human-ayu/rise.py; the same step for step,
+tests.test_agents.RiseAsRisePy.test_a_move_recoil_guarded): when it sees its opponent
+enter a recoil guard within 240 pixels while it sees itself in a move, its inputs are
+the module's: nothing held until step 22 after the recoil guard, on the second of those
+steps an A where the move was a ground normal (in the kept chain's place:
+`rise_recoil_clear`), then the guard by sight (crouching; standing under an opponent in
+the air until its landing), until it sees its own guard touched, itself hit, or the
+opponent free on the ground for 8 steps; 60 steps at most. Everything in it is a
+reaction to what it has seen, at its delay.
+
+**The traced drill** (24 matches each, the agent's side; the first two builds are the
+record of what the timing costs):
+
+| after its move is recoil-guarded | no answer | back at step 12 | back at step 23 | and the A |
+|---|---|---|---|---|
+| recoil guards | 193 | 172 | 184 | 238 |
+| it is hit | 51% | 42% | 28% | 29% |
+| its next attack hits | 21% | 9% | 16% | 10% |
+| counters guarded (with a recoil guard) | 37 (7) | 71 (1) | 107 (66) | 142 (69) |
+| a move of its own out as the freeze ends | 40% | 27% | 26% | 13% |
+
+A guard held as soon as it sees the recoil guard is hit in the move that was
+recoil-guarded as often as before (46 times of 172): the press has run out. Timed, the
+counters are guarded 58% of the time and it is hit half as often. After its own recoil
+guard it does nothing with the advantage yet (neither side hits in 80 of 107): a punish
+there is the next piece.
+
+**The drills** (`recoil` on the five and `cpu`, 64 matches a pairing; `round18k6`: the
+answer with the press at 22 and the A, `round18k6n`: without the A; both still let go at
+the first guard they see touched):
+
+| | `round18k5` | `round18k6` | `round18k6n` | strongest player |
+|---|---|---|---|---|
+| hit after its move was recoil-guarded | 38.8 ±0.8 % | 18.4 ±0.6 | 22.5 ±0.8 | 22.0 |
+| its next attack lands after one | 25.9 ±0.9 % | 9.1 ±0.5 | 9.3 ±0.6 | 29.9 |
+| HP a minute out of its pressure there | −21 ±99 | −298 ±78 | −323 ±71 | +492 |
+| wins there | 82.8 ±1.9 % | 85.9 ±1.6 | 82.2 ±1.9 | |
+| against the CPU with its combos: hit after | 62.3 ±2.0 % | 34.7 ±1.5 | 33.8 ±2.2 | |
+| ... wins | 34.4 ±6.0 % | 50.0 ±5.6 | 35.9 ±6.4 | |
+
+It is hit after a recoil guard as seldom as the strongest replay player, and half as
+often against the CPU. The price is its own pressure: its next attack lands a third as
+often and the pressure's net falls by 280 HP a minute (2 errors); the wins do not fall
+(with the A they rise against the CPU by 16 points, 1.9 errors). So the guard is right
+and what is missing is what comes after it.
+
+**Two flaws the traces showed, mended** (`round18k7`). The guard ended at the first guard
+of its own it saw touched, and its own play then let the guard go inside the opponent's
+string (22 hits after 107 counters guarded): the guard now goes on through the string,
+until the opponent has been free for 8 steps. And the A in the kept chain's place
+completed a motion where one had been entered (an A after 236 is 236A: a traced 5C went
+into a special by it): it is pressed only where its last 12 inputs held one direction.
+
+| | `round18k5` | `round18k7` | strongest player |
+|---|---|---|---|
+| hit after its move was recoil-guarded (`recoil`) | 38.8 ±0.8 % | 14.0 ±0.6 | 22.0 |
+| HP a minute out of its pressure there | −21 ±99 | −82 ±80 | +492 |
+| wins there | 82.8 ±1.9 % | 86.9 ±1.7 | |
+| the CPU with its combos: hit after | 62.3 ±2.0 % | 32.9 ±2.2 | |
+| ... wins | 34.4 ±6.0 % | 43.8 ±6.2 | |
+| wins against every habit at once (`sparring`) | 80.6 ±2.1 % | 80.9 ±2.0 | |
+| wins, the league's Sayuri's, Kano's, Nayuki's | 90.1 ±1.9 % | 84.9 ±2.1 | |
+
+The pressure's net is back within its error, and the drill it was built for is won more.
+But the three league pairings fall by 5 points (1.8 errors), nearly all against Nayuki's
+(81 ±4 to 66 ±5; a second sample of 24 matches each went the other way, 67 and 88:
+together 77% and 72% of 88, inside the noise). Whether or not that fall is real, the
+traces say why it could be: her recoil guards carry no counter in time (a move of hers
+starts 61 steps after one at the median, the CPU's 22, the scripted drill's 27), and
+against her the agent's next attack lands after 32% of them unanswered and 9% answered.
+
+**So the answer is read from the match** (`round18k8`: `rise_recoil_counter`,
+`rise_recoil_prior`, `rise_recoil_low`, `rise_recoil_high`, `rise_recoil_soon`), as the
+guard on rising is: the share of this opponent's recoil guards of its moves after which
+it saw a move of the opponent's (or itself hit) within 34 steps, over a prior of 0.6
+counting as two; none answered at 0.3, all at 0.6. By the traces that share is 0.74 for
+the CPU (every one answered), 0.66 for the scripted drill unanswered and 0.46 answered
+(the script and the opponent's own play counter less into a guard: about half answered,
+which is the mix that holds), 0.20 to 0.24 for Nayuki's (the first one answered, none
+after the second).
+
+| | `round18k5` | `round18k7` (every one answered) | `round18k8` (by the match) |
+|---|---|---|---|
+| wins, the league's eleven | 96.2 ±0.6 % | 94.7 ±0.7 | 95.0 ±0.7 |
+| HP ahead a minute there | 5,162 ±132 | 4,721 ±116 | 4,990 ±125 |
+| against Nayuki's | 81 ±4 % | 66 ±5 | 72 ±5 |
+| hit after its move was recoil-guarded (`recoil`) | 38.8 ±0.8 % | 14.0 ±0.6 | 22.4 ±0.8 |
+| wins there | 82.8 ±1.9 % | 86.9 ±1.7 | 84.1 ±2.2 |
+| wins against every habit at once | 80.6 ±2.1 % | 80.9 ±2.0 | 81.2 ±1.9 |
+| the CPU with its combos: hit after | 62.3 ±2.0 % | 32.9 ±2.2 | 35.2 ±2.6 |
+| ... wins | 34.4 ±6.0 % | 43.8 ±6.2 | 31.2 ±6.2 |
+
+Read plainly: the answer does what it was built to do (hit after a recoil guard as
+seldom as the strongest replay player, or less) and the matches' results do not move by
+more than their noise either way: +1 to +4 points where the opponents counter after
+their recoil guards, −1.2 to −1.5 in the plain league, the CPU anywhere between 31% and
+50% over four builds whose answer is the same there. The read from the match recovers
+most of the league's net (4,990 for 4,721; the league's opponents are still answered six
+times in ten: they do counter, late), not Nayuki's. A defence that is right and wins
+nothing yet says the same as the pressure's rows: the HP is in what follows the guard,
+its own recoil guard included, and nothing follows yet. `round18k8` is the file kept
+(`agent-league18-s2-round18k8.efzagent`), for the recoil guards of a person.
+
+**What follows its own recoil guard** (`rise_recoil_punish`, `round18k9`). The same
+scripted mirror, one step on: Ayu recoil-guards the counter (a 2A the other side goes on
+pressing, or follows with a guard), and plays something from the pose.
+
+| played after its own recoil guard | against a 2A pressed on | against a guard after the one 2A |
+|---|---|---|
+| the guard, on | guards it | nothing |
+| 2A or 2B at steps 21 to 23 | hit at 23 by the kept chain (−338 HP) | hit (−175) |
+| 623A at 21, 22 | hit (−489) | hit (−175) |
+| 623B, its button at 20 to 23 | hits (+745, a knockdown) | hits (+745) |
+| 623B, its button at 24 | too late: hit (−339) | |
+
+The opponent's kept chain comes out at step 20 and is active at 23, before anything
+pressed from the pose (which the game lets go at 22) can be: a normal loses, 623B wins
+against both. So when it sees itself in a recoil guard on the ground, the opponent in a
+move within 80 pixels and not in the air, the guard goes on and 6, 2, 3, 3+B are played
+so that the button lands 22 steps after its recoil guard, which is 11 steps after it
+sees it. First trace (24 matches against Kano's with the recoil habit): 56 of its own
+recoil guards followed by it; after a counter it guarded it is the one that hits 32
+times of 77 (5 of 107 before) and is hit 10; all 24 matches won, 49% of its HP lost a
+round (57% for `round18k5` on the same matches, 62% with the guard alone).
+
+**Its drills** (`round18k9`, the opponents at their 14 steps as the columns beside it):
+
+| | `round18k5` | `round18k8` (the guard) | `round18k9` (and the punish) |
+|---|---|---|---|
+| wins, the league's eleven | 96.2 ±0.6 % | 95.0 ±0.7 | 95.0 ±0.6 |
+| own HP lost a round there | 48.3 ±0.8 % | 48.6 ±0.7 | 46.2 ±0.8 |
+| HP ahead a minute there | 5,162 ±132 | 4,990 ±125 | 5,469 ±134 |
+| wins against every habit at once | 80.6 ±2.1 % | 81.2 ±1.9 | 86.9 ±1.9 |
+| HP ahead a minute there | 3,597 ±244 | 3,389 ±200 | 4,161 ±217 |
+| wins, `recoil` | 82.8 ±1.9 % | 84.1 ±2.2 | 89.7 ±1.6 |
+| HP a minute out of its pressure there | −21 ±99 | −148 ±67 | +364 ±96 |
+| wins against the CPU with its combos | 34.4 ±6.0 % | 31.2 ±6.2 | 34.4 ±6.0 |
+
+With something after it the guard pays: six points in `sparring` (2.2 errors), seven in
+`recoil` (2.8), the pressure there from nothing to +364 HP a minute (the strongest
+player's +492), and in the plain league the same wins for two points less of its HP.
+Not against the CPU: its 623B there hits 40% and misses 39% of 190 (the CPU moves out,
+and recoil-guards one in ten), +214 HP a use for +709 against Sayuri's and +1,083
+against Nayuki's.
+
+**The distance.** By the trace the punish hit 22 of 24 times from under 40 pixels, 8 of
+12 from 40 to 55 and 3 of 15 from further, and a miss was punished 15 times of 17. With
+`rise_recoil_punish_near` 48 (it was 80) it hits 86% for 69% and misses 7% for 27% (24
+matches again), 1,350 HP a use for 990. That is the build kept: `k10`.
+
+**The queues stopped once** (20 November 08:59): nine evaluations at once (seven of
+round 20's judging and two of these) with the machine's other use growing left 9 GB
+available, and the watcher stopped both queues (nothing else); the 32 evaluations not
+done were run again four at a time. Four or five at once in all is the limit here.
+
+A reading error on the way, for whoever reads such traces again: evaluate.py's
+`Events.add_match` is given all of P1's matches and then all of P2's, not the two sides
+of a match in turn; the first breakdowns here took every other entry and were half the
+opponent's.
+
+### The level-4 CPU of all eleven, with their `exploiter18`'s combos
+
+Finished for all eleven (the table of 19 November had five): 94 to 100% for the agent,
+as against the plain CPU. The mirror is the one hard CPU benchmark.
+
+### Round 20, as started
+
+`agent-league20-spar-s1` (started 20 November 01:53; scratch `league20.sh`,
+`round20-arm.sh`, the code frozen as `snap20`): round 19's league and loop from round
+18's agent, with two changes. Every player sees the game 11 steps late (`--delay 11`;
+the prior is still the clone trained at 14, at its weak pull of 0.01). And the scripted
+habits of the matches with advantages are the suite's `sparring` profile in two of three
+(`rg=0.3,reversal=0.8,damage=1.5,tech=1,techsafe=1,techhit=1,escape=1,jumpin=0.5,
+low=0.6,throw=0.5,bait=0.5`), `person` in the rest, six in ten of the `--vs` matches
+with advantages. The other arm (`d11`: the same at 11 steps with round 19's `crowd`
+profile, which tells the delay's part from the profile's) starts when the suite's
+evaluations leave the memory for it. Judged by the suite with the opponents at 11
+steps, beside `round18k5` played the same way.
+
+### Round 20, judged (20 November)
+
+Both arms ended in the morning (20M steps each, about five hours with the machine as
+loaded). Each `avg.zip` as an agent file with `round18k8`'s parts, through the game's
+code, 64 matches a pairing, **the opponents at 11 steps too** (`bench.py jobs --p2-delay
+11`), beside `round18k8` played the same way:
+
+| | `round18k8` | `-d11-s1` (the delay alone) | `-spar-s1` (and the sparring profile) |
+|---|---|---|---|
+| wins, the league's eleven | 93.5 ±0.9 % | 95.9 ±0.7 | 95.2 ±0.8 |
+| own HP lost a round there | 54.8 ±0.7 % | 49.9 ±0.8 | 51.3 ±0.8 |
+| HP ahead a minute there | 3,914 ±109 | 4,508 ±127 | 4,408 ±123 |
+| where it came by air, HP a minute | 644 ±65 | 1,070 ±67 | 904 ±61 |
+| wins against every habit at once | 75.0 ±2.3 % | 80.3 ±2.0 | 86.2 ±2.0 |
+| own HP lost a round there | 63.5 ±1.3 % | 61.9 ±1.3 | 57.6 ±1.4 |
+| wins, `recoil` | 80.0 ±2.0 % | 85.0 ±2.0 | 87.2 ±1.7 |
+| HP a minute out of its pressure there | −35 ±95 | −301 ±71 | −95 ±74 |
+| wins against the CPU with its combos | 31.2 ±6.2 % | 28.1 ±5.5 | 50.0 ±7.9 |
+| own HP lost a round there | 84.4 ±1.8 % | 88.5 ±2.0 | 79.4 ±2.8 |
+
+By opponent in the league (Sayuri, Mio, Mayu, Nanase, Kaori, Mishio, Ikumi, Nayuki,
+Kano, Mizuka, Makoto's): `round18k8` 88 98 97 97 97 97 95 77 84 100 98; `-d11` 98 100
+97 97 100 98 89 81 95 100 98; `-spar` 97 100 100 97 100 98 95 75 86 98 100.
+
+**The round passes, and the sparring arm is the one taken.** A policy trained at the
+delay it plays at is better than one trained at 14 and run at 11: the league's HP by
+three to four and a half errors in both arms, the wins by 1.4 and 2.1. The sparring
+profile adds what it was written for and costs nothing measurable in the league: eleven
+points against every habit at once (3.7 errors over the mark, 2.1 over the other arm),
+seven in `recoil`, and against the level-4 CPU with its combos a half of the matches for
+three in ten (1.9 errors: likely, on 64 matches). The first round since 18 whose gain is
+outside the noise, and the first trained against an opponent written for the purpose
+rather than found. One seed an arm; a second seed of the sparring arm
+(`agent-league20-spar-s2`) is training as a check.
+
+What it did not move: the pressure against recoil guards (−95 ±74: the module's part),
+Nayuki's (75%), Kano's in the sparring arm (86 for the other arm's 95).
+
+**The build** is the sparring arm's policy with `k10`'s modules (the guard read from the
+match, the punish within 48 pixels), judged the same way (the opponents at 11 steps):
+
+| | `round18k8` (the mark) | round 18's policy, `k10` | round 20's, `k8` | **round 20's, `k10`** |
+|---|---|---|---|---|
+| wins, the league's eleven | 93.5 ±0.9 % | | 95.2 ±0.8 | 95.3 ±0.7 |
+| own HP lost a round there | 54.8 ±0.7 % | | 51.3 ±0.8 | 50.2 ±0.8 |
+| HP ahead a minute there | 3,914 ±109 | | 4,408 ±123 | 4,679 ±126 |
+| wins against every habit at once | 75.0 ±2.3 % | 81.9 ±2.2 | 86.2 ±2.0 | 90.0 ±1.6 |
+| wins, `recoil` | 80.0 ±2.0 % | 86.6 ±2.1 | 87.2 ±1.7 | 88.8 ±1.3 |
+| HP a minute out of its pressure there | −35 ±95 | | −95 ±74 | +250 ±79 |
+| wins against the CPU with its combos | 31.2 ±6.2 % | 25.0 ±4.0 | 50.0 ±7.9 | 43.8 ±4.8 |
+
+The round's policy and the day's modules add up: against every scripted habit at once
+75% to 90% (five errors), `recoil` 80% to 89%, the league's HP ahead by 770 a minute
+(four and a half errors) for the same reactions on both sides. The file is
+`agent-league20-spar-s1-round20.efzagent` (the policy at 11 steps; `rise:1` with
+`rise_land`, `rise_sight` 11, `rise_recoil` and its punish; the routes' planner that
+settles a late plan). What is still as it was: the level-4 CPU with its combos wins more
+than half, Nayuki's `exploiter18` a fifth to a quarter, and the suite's three rows that
+no build of the day moved (the corner let go, the endings that let the opponent recover,
+what it starts into a strike already out).
+
+**The second seed** (`agent-league20-spar-s2`, ended 20 November about noon; with `k10`'s
+modules, judged the same way): league 94.5 ±0.8% (own HP lost 49.7%, 4,675 HP ahead a
+minute), every habit at once 87.5 ±1.9%, `recoil` 87.8 ±1.9%, the CPU with its combos
+34 ±9%. Beside the first seed's 95.3, 90.0, 88.8 and 44 ±5, and the mark's 93.5, 75.0,
+80.0 and 31: the league's HP, the sparring drill and the recoil drill repeat within an
+error; the gain against the CPU does not (a seed's 44% and a seed's 34% around the
+mark's 31%: nothing can be said of it on 64 matches a build). The first seed stays the
+file.
