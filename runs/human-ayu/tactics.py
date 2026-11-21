@@ -86,6 +86,13 @@ def _prev(x, fill):
     return np.concatenate([[fill], x[:-1]])
 
 
+def _recent(x, w):
+    """x (T,) bool -> (T,): x held on one of the w + 1 steps up to and including each."""
+    cs = np.concatenate([[0], np.cumsum(x, dtype=np.int64)])
+    t = np.arange(len(x))
+    return cs[t + 1] - cs[np.maximum(0, t - w)] > 0
+
+
 def _runs(mask):
     """Starts and ends (exclusive) of the runs of True."""
     d = np.diff(np.concatenate([[0], mask.astype(np.int8), [0]]))
@@ -845,26 +852,49 @@ def exchanges(me, opp, live, mine=None, theirs=None):
     is ahead and where it is behind, whoever was hit."""
     mine = losses(me, opp, live) if mine is None else mine
     theirs = losses(opp, me, live) if theirs is None else theirs
-    mdown, odown = np.isin(me.act, DOWN), np.isin(opp.act, DOWN)
+    where = situations(me, opp)
+    return [(SITUATIONS[where[r['t']]], sign * r['hp'])
+            for sign, recs in ((-1, mine), (1, theirs)) for r in recs]
+
+
+def situations(me, opp):
+    """The situation each step is in, from me's side, by exchanges()' rule (the first that
+    holds over the steps before it): an index into SITUATIONS for each step."""
+    odown = _recent(np.isin(opp.act, DOWN), EXCHANGE_DOWN)
+    mdown = _recent(np.isin(me.act, DOWN), EXCHANGE_DOWN)
+    oguard, mguard = _recent(opp.guard, EXCHANGE_GUARD), _recent(me.guard, EXCHANGE_GUARD)
+    a, b = _recent(me.air, EXCHANGE_AIR), _recent(opp.air, EXCHANGE_AIR)
+    air = np.where(a & b, 6, np.where(a, 4, np.where(b, 5, 7)))
+    return np.select([odown, mdown, oguard, mguard], [0, 1, 2, 3], air).astype(np.int8)
+
+
+def situation_time(me, opp, live):
+    """The live steps spent in each situation (situations()): [(situation, steps)], those
+    with any: what the areas' rates are per (areas_report())."""
+    n = np.bincount(situations(me, opp)[live], minlength=len(SITUATIONS))
+    return [(k, int(v)) for k, v in zip(SITUATIONS, n) if v]
+
+
+def episodes(me, opp, live, mine=None, theirs=None):
+    """Each time a situation is entered (situations()' runs of one situation over live
+    steps: a jump, a guarded string and the steps after it, a knockdown and the rising):
+    (the situation, who hit first in it: +1 me, -1 the opponent, 0 neither, the HP on
+    net: + me ahead). An attempt and how it went: many a match where the HP's are few and
+    large, so that an opponent is read in fewer matches by these (areas.py)."""
+    mine = losses(me, opp, live) if mine is None else mine
+    theirs = losses(opp, me, live) if theirs is None else theirs
+    lab = np.where(live, situations(me, opp), -1)
+    edge = np.flatnonzero(np.diff(lab) != 0) + 1
+    starts, ends = np.concatenate([[0], edge]), np.concatenate([edge, [len(lab)]])
+    ev = sorted([(r['t'], -1, r['hp']) for r in mine] + [(r['t'], 1, r['hp']) for r in theirs])
+    ts = np.array([t for t, _, _ in ev], int)
     out = []
-    for sign, recs in ((-1, mine), (1, theirs)):
-        for r in recs:
-            t = r['t']
-            lo = max(0, t - EXCHANGE_GUARD)
-            if odown[max(0, t - EXCHANGE_DOWN):t + 1].any():
-                where = 'my okizeme'
-            elif mdown[max(0, t - EXCHANGE_DOWN):t + 1].any():
-                where = 'its okizeme'
-            elif opp.guard[lo:t + 1].any():
-                where = 'my pressure'
-            elif me.guard[lo:t + 1].any():
-                where = 'its pressure'
-            else:
-                a = me.air[max(0, t - EXCHANGE_AIR):t + 1].any()
-                b = opp.air[max(0, t - EXCHANGE_AIR):t + 1].any()
-                where = ('both in the air' if a and b else 'I came by air' if a else
-                         'it came by air' if b else 'on the ground')
-            out.append((where, sign * r['hp']))
+    for s, e in zip(starts, ends):
+        if lab[s] < 0:
+            continue
+        lo, hi = np.searchsorted(ts, s), np.searchsorted(ts, e)
+        first = ev[lo][1] if lo < hi else 0
+        out.append((SITUATIONS[lab[s]], first, sum(sign * hp for _, sign, hp in ev[lo:hi])))
     return out
 
 
@@ -877,6 +907,40 @@ def exchanges_report(recs, per_min):
         gained, lost = sum(x for x in v if x > 0), -sum(x for x in v if x < 0)
         out[k] = dict(net=round((gained - lost) * per_min), gained=round(gained * per_min),
                       lost=round(lost * per_min))
+    return out
+
+
+def areas_report(recs, times, dealt, taken, eps=(), per_min=None):
+    """The scorecard by area (the user's, 21 November: score the opponent on pressure,
+    anti-pressure, the air, okizeme and its defence, combo damage, and fight where it is
+    weak; docs/training-v2.md, "Playing to the opponent's weak areas"): for each of
+    SITUATIONS (exchanges()' records `recs`, situation_time()'s `times`), `share`, of the
+    live time spent in it; `rate`, the HP a second ahead on net while in it (+: the
+    player's; per second in the situation, so that how often it comes up does not enter:
+    what one more second spent there is worth); `gained`, `lost`, HP a second; and by its
+    episodes (episodes()' `eps`: each time it is entered), `entered` a minute, `won` and
+    `lost_first`, the shares in which the player hit first and was hit first, and `each`, the
+    HP on net an episode. And `opening`: the HP of a loss of the opponent's (`dealt`:
+    losses()' records) and of its own (`taken`), on average: what a hit is worth, either
+    way."""
+    steps = collections.Counter()
+    for k, n in times:
+        steps[k] += n
+    total = sum(steps.values())
+    out = {}
+    for k in SITUATIONS:
+        v = [x for s, x in recs if s == k]
+        sec = steps[k] / 64
+        gained, lost = sum(x for x in v if x > 0), -sum(x for x in v if x < 0)
+        out[k] = dict(share=round(steps[k] / total, 4) if total else None,
+                      rate=round((gained - lost) / sec, 1) if sec else None,
+                      gained=round(gained / sec, 1) if sec else None,
+                      lost=round(lost / sec, 1) if sec else None)
+        e = [(first, hp) for s, first, hp in eps if s == k]
+        out[k].update(entered=round(len(e) * per_min, 2) if per_min else None,
+                      won=_mean([f > 0 for f, _ in e]), lost_first=_mean([f < 0 for f, _ in e]),
+                      each=round(float(np.mean([hp for _, hp in e]))) if e else None)
+    out['opening'] = dict(dealt=_mean([r['hp'] for r in dealt]), taken=_mean([r['hp'] for r in taken]))
     return out
 
 
@@ -970,6 +1034,8 @@ def measure(c, controls=None):
                 flights=flights(me, opp, live), rounds=rounds(me, opp, live),
                 losses=lost, losses_opp=dealt,
                 exchanges=exchanges(me, opp, live, lost, dealt),
+                situation_time=situation_time(me, opp, live),
+                episodes=episodes(me, opp, live, lost, dealt),
                 grabs=grabs(me, opp, dx, live),
                 press_off=pressure(me, opp, dx, live), press_def=pressure(opp, me, dx, live),
                 oki_off=wakeup(opp, me, dx, live), oki_def=wakeup(me, opp, dx, live),
@@ -1187,6 +1253,9 @@ def report(n, per_min):
                 ledger=losses_report(n.get('losses', []), per_min),
                 dealt_ledger=losses_report(n.get('losses_opp', []), per_min),
                 net_ledger=exchanges_report(n.get('exchanges', []), per_min),
+                areas=areas_report(n.get('exchanges', []), n.get('situation_time', []),
+                                   n.get('losses_opp', []), n.get('losses', []),
+                                   n.get('episodes', []), per_min),
                 rounds=rounds_report(n.get('rounds', [])),
                 pressure=pressure_report(n['press_off'], per_min, moves=True),
                 under_pressure=pressure_report(n['press_def'], per_min),

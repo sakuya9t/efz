@@ -243,7 +243,10 @@ class Events:
         situation an exchange began in, whoever was hit (its okizeme, the opponent's,
         its pressure, the opponent's, it came by air, the opponent did, both in the
         air, on the ground: net, gained, lost). What a round is judged by, beside the
-        strongest players' (people-ledger.json; docs/training-v2.md);
+        strongest players' (people-ledger.json; docs/training-v2.md); areas
+        (tactics.areas_report): the same situations as a scorecard, by the time spent
+        in each: its share of the match and the HP a second ahead while in it, and the
+        HP of a hit either way (areas.py tabulates them by opponent);
     flights (tactics.flights): its air dashes a minute (Ayu's flights), the share back,
         what it did next and what came of it, and how mixed what it did next was;
     raw (tactics.raw_report): the raw risky moves as one account: a minute, the HP a use
@@ -294,7 +297,8 @@ class Events:
         self.n['taken_list'] = []  # each of the opponent's combos on one: (damage, its group)
         for k in ('press_off', 'press_def', 'oki_off', 'oki_def', 'free_self', 'free_opp',
                   'strings', 'ends_off', 'ends_def', 'grabs', 'risks', 'risks_def',
-                  'flights', 'losses', 'losses_opp', 'exchanges', 'rounds'):
+                  'flights', 'losses', 'losses_opp', 'exchanges', 'situation_time', 'episodes',
+                  'rounds'):
             self.n[k] = []  # tactics.measure()'s
 
     def add_match(self, cols, controls):
