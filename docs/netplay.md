@@ -32,13 +32,16 @@ On the title, NET PLAY (after VS HUMAN) opens netplay's screen over the title:
 | ADDRESS | To join: the host's address, `192.168.1.5`, `example.org:10800`, `[2001:db8::1]:10800` (Ctrl+V pastes) |
 | PORT | The UDP port: the host's to listen on, or the joiner's default for an address without one. 10800, as Revival's |
 | NAME | What the other player sees, up to 20 characters |
-| YOUR SIDE | The host's: P1, P2 or at random. The joiner gets the other |
 | PLAYED BY | YOU, or an agent file of the `agents` folder, which then plays this computer's side: it picks its character, you pick the stage, it plays the fights ([agents.md](agents.md)) |
 | START | Host or join |
 
 The arrow keys move and change, typing edits, Enter starts, Esc goes back; P1's controls
 work too (A to start, B to go back). The settings are kept in `netplay.ini` in the save
 folder.
+
+Neither player picks a side: the host draws P1 or P2 at random for each match (a new
+draw each START) and tells the joiner, which takes the other, so the two can't both be
+P1. The connect screen says which one each got.
 
 Hosting lists this computer's addresses, each with the network adapter it is on ("Wi-Fi",
 "Radmin VPN", "eth0"), and reads them again every second while it waits, so a VPN

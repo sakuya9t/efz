@@ -72,7 +72,7 @@ macOS (arm64, x64).
 
 - **Logs.** Each run keeps a folder in `logs/` under the save folder: `efz.log`, a
   report when the game crashes or hangs, and a record of each fight, which the REPLAY
-  menu's RECORDS page (after EXIT) and `--replay-fight` replay tick for tick
+  menu's records (Tab) and `--replay-fight` replay tick for tick
   ([logging.md](logging.md)).
 
 For tests the game runs without a display (`SDL_VIDEO_DRIVER=offscreen
@@ -200,7 +200,7 @@ lists what a platform provides).
 | `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second; `MessageBox`, `PostMessage`, `timeGetTime` |
 | `log.cpp`, `crash.cpp`, `record.cpp` | The log and its session folder, crash and hang reports, and the fight records, checks and replays ([logging.md](logging.md)) |
 | `options.cpp` | `options.ini`, and the OPTIONS page's CPU COMBO row, made from the page's own pictures ([agents.md](agents.md), "The CPU's combos") |
-| `records.cpp` | The REPLAY menu's RECORDS page: the logs folder's fight records, each played as a replay or saved as one in a replay slot ([logging.md](logging.md)) |
+| `records.cpp` | The REPLAY menu's records, Tab from the game's replays: the logs folder's fight records (not the title's demos), each played as a replay or saved as one in a replay slot ([logging.md](logging.md)) |
 | `tool.cpp`, `toolmain.cpp` | The replay tool, `efz-convert`: the game in a window of its own that converts records and replays and makes videos ([logging.md](logging.md)) |
 | `mp4.cpp`, `minih264.c` | Videos of fights: H.264 (minih264's encoder) and Opus (libopus) in an MP4 ([third-party.md](third-party.md)) |
 

@@ -222,12 +222,16 @@ bytes), so `tools/compat.py`'s tools read it.
 
 ## Replaying a fight
 
-In the game: the REPLAY menu's last page, **RECORDS** (after EXIT), lists the fight
-records of the logs folder, newest first: when, the mode, each side's character (with
-"AI" for an agent and "CPU" for the CPU), the rounds won (the winner's name in colour),
-how long the fight was; and for the one chosen, who played each side, its session and
-the build that recorded it. Up and down choose (held, they go on), A plays it, left and
-right go to the other pages and B leaves, as on the menu's other pages. The fight plays
+In the game: the REPLAY menu has two modes. It opens on the game's replays, its pages
+and DATA slots as ever; **Tab** shows the **fight records** of the logs folder instead,
+and Tab again goes back to the page it left. The records are listed newest first, the
+title's demos (the CPU against itself) left out: when, the mode, each side's character
+(with "AI" for an agent and "CPU" for the CPU), the rounds won (the winner's name in
+colour), how long the fight was; and for the one chosen, who played each side, its
+session and the build that recorded it. Up and down choose (held, they go on), left and
+right go a screen up or down, A plays it and B leaves the menu, as on its pages. The
+menu opens on the game's replays each time, but comes back to the records from a record
+played or saved. The fight plays
 as the replay below plays it, at the game's speed: Esc goes back to the menu, F8 pauses
 and goes on (the game's own F8 is the record's), and the menu comes back by itself after
 the record's last tick, on the same record. A record that this build plays otherwise
@@ -303,7 +307,7 @@ the game and found where it is, as the game is, does the same in a window of its
 Records and replays are dropped on the window (a session's folder brings all its records)
 or picked with Add files; the buttons, or 1, 2 and 3, make the records into replays, the
 replays into records, or videos of them all. What is made goes to `converted` in the logs
-folder, which the game's RECORDS page lists (Change picks another folder, Open shows it);
+folder, which the game's REPLAY menu lists with the records (Tab) (Change picks another folder, Open shows it);
 each file says how it went, and the one under the mouse why. Stop leaves the one going
 and the rest. A video's fight plays in the window as it is made.
 
@@ -321,7 +325,7 @@ record whose fight had the CPU in it makes a video too: the CPU decides again, a
 when the record is watched.
 
 **A record to a .rep** (`--record-to-rep`, `<session>-fight-NNN.rep` in `--out`, the
-current folder by default; in the game, C on the RECORDS page, then a REPLAY page and
+current folder by default; in the game, C on a record (Tab in the REPLAY menu), then a REPLAY page and
 DATA slot, A to save, A again to replace a slot's replay, Esc to stop). The game itself
 writes the replay: the record is replayed, as above, with the game recording a replay as
 the REPLAY menu's RECORD item records one, so the file is what a recording of that fight
@@ -352,11 +356,11 @@ the fight doesn't.
 **A .rep to a record** (`--rep-to-record`): the replay is played as the REPLAY menu plays
 it, and its fight recorded in the run's session folder (`--log-dir`), or with `--out`
 (and in the tool) in that folder, named for the replay, with a copy of the replay beside
-it, as any fight playing a replay is; its record replays from the RECORDS page and with
+it, as any fight playing a replay is; its record replays from the REPLAY menu's records and with
 `--replay-fight`. EfzRevival's replays (its netplay's, and this game's
 `replay/netplay/`: the game's words, then Revival's trailer) play to Revival's rules: two
 rounds, 100% damage, normal effects, every frame drawn. In the game, a replay played from
-the REPLAY menu is recorded as any fight is, and is on the RECORDS page after.
+the REPLAY menu is recorded as any fight is, and is with the records (Tab) after.
 
 Checked: the 23 matches of a session against an agent (records of the native game on
 Windows, 15 to 44 thousand ticks) each became a `.rep` whose every tick played back as

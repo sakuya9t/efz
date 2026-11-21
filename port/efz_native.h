@@ -194,28 +194,30 @@ extern NetplayHooks g_netplay;
 // CReplayFile's handle while the session keeps the replay.
 const HANDLE kNetplayReplay = 0xef2e0001u;
 
-// --- The REPLAY menu's RECORDS page (port/records.cpp, docs/logging.md): after EXIT,
-// the fight records of the logs folder, each played as the game plays a replay, or saved
-// as one in a replay slot. Empty in a build without records (the headless library): the
-// menu then has its ten pages.
+// --- The REPLAY menu's records (port/records.cpp, docs/logging.md): the menu has two
+// modes, Tab going from one to the other: the game's replays, its pages and slots, as it
+// opens; and the fight records of the logs folder, each played as the game plays a
+// replay, or saved as one in a replay slot. Empty in a build without records (the
+// headless library): the menu then has only the game's replays.
 struct RecordsHooks {
     // CScene8::Enter: the records are read again.
     void (*enter)();
-    // Each frame on the page, per side: the controls' directions (-1, 0, 1), A, B and C
-    // pressed this frame, and whether a direction or B was held already. What the menu
+    // Each frame on the records, per side: the controls' directions (-1, 0, 1), A, B and
+    // C pressed this frame, and whether a direction or B was held already. What the menu
     // does then: a RecordsAction.
     int (*update)(int side, int dx, int dy, bool a, bool b, bool c, bool held);
+    // Tab from the records to the game's replays: a slot picker open closes.
+    void (*leave)();
 };
 enum RecordsAction {
     kRecordsNothing,
-    kRecordsMoved,  // the page's choice moved (the menu's move sound)
-    kRecordsChosen, // something chosen on the page (the menu's choice sound)
-    kRecordsTurn,   // left or right: to the menu's next page
+    kRecordsMoved,  // the choice moved (the menu's move sound)
+    kRecordsChosen, // something chosen (the menu's choice sound)
     kRecordsStart,  // a record set up to play or to be saved: match setup next
     kRecordsBack,   // B: leave the menu
 };
 extern RecordsHooks g_records;
-const int kRecordsPage = 10; // CScene8::m_page
+const int kRecordsPage = 10; // CScene8::m_page while the menu shows the records
 
 // --- The OPTIONS page's CPU COMBO row (port/options.cpp, docs/agents.md): after CPU
 // LEVEL, whether the game's CPU plays its combos from its character's agent file. Empty

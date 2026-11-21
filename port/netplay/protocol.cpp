@@ -213,8 +213,11 @@ bool Protocol::Start(const Settings& settings, std::string* error)
     rollback = std::min(abs(settings.maxRollback), 9);
     practiceKeys = settings.practiceKeys;
     delay = 0;
-    // setPlayer: 0 or 1, else a side at random.
-    localPlayer = settings.side == 0 || settings.side == 1 ? settings.side : rand() % 2;
+    // setPlayer: the host's side at random, a new draw for each match, so that neither
+    // player chooses (both would take P1); the joiner learns its side from the host's
+    // answer (ReceiveConnectConfirm). SDL_rand seeds itself from the clock; the C
+    // library's rand(), never seeded here, drew the same side every time.
+    localPlayer = settings.host ? (int)SDL_rand(2) : 0;
     remotePlayer = (localPlayer + 1) % 2;
     names[0] = "Player1";
     names[1] = "Player2";

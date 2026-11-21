@@ -159,7 +159,7 @@ generator of its own.
 by those agent files (a name in the agents folders, or a path).
 
 Each fight's record ([logging.md](logging.md)) names the agent that played each side, and
-the REPLAY menu's RECORDS page plays it back, the agent's side labelled as in the fight.
+the REPLAY menu's records (Tab) play it back, the agent's side labelled as in the fight.
 
 ## Its combos: the routes
 

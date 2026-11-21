@@ -75,7 +75,6 @@ struct Settings {
     std::string address;    // to join: host[:port]
     uint16_t port = kDefaultPort;
     std::string name = "Player";
-    int side = 0;           // the host's: 0 P1, 1 P2, anything else at random
     int maxRollback = 4;    // MaxRollback, at most 9
     bool practiceKeys = false;
     // For tests: every datagram this side sends waits this long first, plus up to

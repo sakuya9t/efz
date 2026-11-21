@@ -4,7 +4,8 @@
 //
 // The screens, drawn over the title with SDL's own small font:
 //   setup    host or join, the address to join, the UDP port, the name, who plays this
-//            side (you, or an agent: agents.h); START
+//            computer's side (you, or an agent: agents.h); START. The sides aren't
+//            chosen: the host draws them at random for each match (Protocol::Start)
 //   connect  waiting for a player, or for the host; then measuring the connection
 //   delay    the input delay to start with (the recommended one chosen)
 //   match    the game runs the match; the screen shows the names, wins, ping and delay
@@ -46,7 +47,6 @@ enum Row {
     kRowAddress,
     kRowPort,
     kRowName,
-    kRowSide,
     kRowAgent,
     kRowStart,
     kRowBack,
@@ -60,7 +60,6 @@ struct Menu {
     std::string address;
     std::string port = "10800";
     std::string name = "Player";
-    int side = 0; // 0 P1, 1 P2, 2 random
     int agent = -1;        // who plays this side: -1 you, else an agent (agents.h)
     std::string agentFile; // that agent's file name, as netplay.ini keeps it
     std::string error;
@@ -112,8 +111,6 @@ void LoadSettings()
             g_menu.port = value;
         else if (key == "name" && !value.empty())
             g_menu.name = value;
-        else if (key == "side")
-            g_menu.side = std::max(0, std::min(atoi(value.c_str()), 2));
         else if (key == "agent")
             g_menu.agentFile = value;
     }
@@ -125,9 +122,9 @@ void SaveSettings()
     FILE* f = OpenGameFile("netplay.ini", "wb");
     if (!f)
         return;
-    fprintf(f, "mode=%s\naddress=%s\nport=%s\nname=%s\nside=%d\nagent=%s\n",
+    fprintf(f, "mode=%s\naddress=%s\nport=%s\nname=%s\nagent=%s\n",
             g_menu.host ? "host" : "join", g_menu.address.c_str(), g_menu.port.c_str(),
-            g_menu.name.c_str(), g_menu.side, g_menu.agentFile.c_str());
+            g_menu.name.c_str(), g_menu.agentFile.c_str());
     fclose(f);
 }
 
@@ -224,7 +221,6 @@ void Begin()
     s.address = g_menu.address;
     s.port = (uint16_t)port;
     s.name = g_menu.name.empty() ? "Player" : g_menu.name;
-    s.side = g_menu.side;
     s.lagMs = g_menu.lagMs;
     s.jitterMs = g_menu.jitterMs;
     if (!g_menu.automatic)
@@ -271,8 +267,6 @@ bool RowShown(int row)
 {
     if (row == kRowAddress)
         return !g_menu.host;
-    if (row == kRowSide)
-        return g_menu.host;
     return true;
 }
 
@@ -301,8 +295,6 @@ void Act(Action a)
             while (!RowShown(g_menu.row));
         } else if ((a == kLeft || a == kRight) && g_menu.row == kRowMode) {
             g_menu.host = !g_menu.host;
-        } else if ((a == kLeft || a == kRight) && g_menu.row == kRowSide) {
-            g_menu.side = (g_menu.side + (a == kLeft ? 2 : 1)) % 3;
         } else if ((a == kLeft || a == kRight) && g_menu.row == kRowAgent) {
             // You, then each agent found.
             int n = AgentCount() + 1;
@@ -499,8 +491,8 @@ void Footer(SDL_Renderer* r, const std::string& text)
 void DrawSetup(SDL_Renderer* r)
 {
     Panel(r, "NET PLAY");
-    static const char* const labels[kRowCount] = {"MODE", "ADDRESS", "PORT", "NAME",
-                                                  "YOUR SIDE", "PLAYED BY", "START", "BACK"};
+    static const char* const labels[kRowCount] = {"MODE",      "ADDRESS", "PORT", "NAME",
+                                                  "PLAYED BY", "START",   "BACK"};
     float y = kPanelY + 64;
     bool blink = (SDL_GetTicks() / 400) % 2 == 0;
     for (int row = 0; row < kRowCount; row++) {
@@ -520,9 +512,6 @@ void DrawSetup(SDL_Renderer* r)
         switch (row) {
         case kRowMode:
             value = g_menu.host ? "< HOST >" : "< JOIN >";
-            break;
-        case kRowSide:
-            value = g_menu.side == 0 ? "< P1 >" : g_menu.side == 1 ? "< P2 >" : "< RANDOM >";
             break;
         case kRowAgent:
             value = g_menu.agent >= 0 ? std::string("< ") + AgentLabel(g_menu.agent) + " >"
@@ -726,7 +715,6 @@ void InitNetplay(const NetplayOptions& options)
             g_menu.port = std::to_string(options.port);
         if (options.name)
             g_menu.name = options.name;
-        g_menu.side = 0;
         RescanAgents();
         g_menu.agent = -1;
         if (options.agent && (g_menu.agent = FindAgent(options.agent)) < 0) {

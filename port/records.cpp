@@ -1,12 +1,13 @@
-// The REPLAY menu's RECORDS page (efz::RecordsHooks, docs/logging.md): the page after
-// EXIT lists the fight records of the logs folder, newest first, and plays the one
-// chosen as the game plays a replay (record.h's PlayRecord): from the record's state at
-// its first tick, with its inputs and F-keys, the CPU deciding again as it did. C saves
-// it as a replay in a slot of the menu's, picked on the page (SaveRecordAsReplay).
+// The REPLAY menu's records (efz::RecordsHooks, docs/logging.md): the menu opens on the
+// game's replays, and Tab shows the fight records of the logs folder instead (the title's
+// CPU demos left out), newest first; the one chosen plays as the game plays a replay
+// (record.h's PlayRecord): from the record's state at its first tick, with its inputs and
+// F-keys, the CPU deciding again as it did. C saves it as a replay in a slot of the
+// menu's, picked over the list (SaveRecordAsReplay).
 //
-// The menu's picture (system\replay.dat) has no letters for the page, so the page draws
-// its label, its list and a record's information as it plays over the frame, with SDL's
-// 8x8 font, as netplay's screens and the agents' labels do.
+// The menu's picture (system\replay.dat) has no letters for the records, so they draw
+// their title, their list and a record's information as it plays over the frame, with
+// SDL's 8x8 font, as netplay's screens and the agents' labels do.
 #include <SDL3/SDL.h>
 #include <algorithm>
 #include <string>
@@ -22,6 +23,7 @@ namespace efz {
 namespace {
 
 const int kRows = 18; // the list's rows on the screen
+const int kDemoMode = 6; // CGame::m_gameMode of the title's demo
 
 struct Color {
     Uint8 r, g, b, a;
@@ -157,9 +159,10 @@ void Scan()
         SDL_EnumerateDirectory(base.c_str(), Collect, &files);
         for (const std::string& name : fights) {
             RecordSummary s;
-            // A replayed fight's record is the record it replayed, again.
+            // A replayed fight's record is the record it replayed, again; the title's
+            // demo is the CPU against itself, nobody's fight.
             if (ReadRecordSummary((base + "/" + name).c_str(), &s) && !s.replayed &&
-                s.ticks > 0)
+                s.ticks > 0 && s.mode != kDemoMode)
                 g_list.push_back(s);
         }
     }
@@ -235,6 +238,13 @@ void Enter()
             g_logs.empty() ? "no logs folder" : g_logs.c_str());
 }
 
+// Tab to the game's replays.
+void Leave()
+{
+    g_picker.open = g_picker.confirm = false;
+    g_note.clear();
+}
+
 // Up or down this frame: a step on pressing, then on and on while held.
 bool Step(int side, int dy)
 {
@@ -255,12 +265,21 @@ bool Step(int side, int dy)
     return step;
 }
 
-bool Move(int dy)
+// dy rows on, round from one end to the other; or a screen on (screens -1 or 1), up to
+// an end.
+bool Move(int dy, int screens = 0)
 {
     if (g_list.empty())
         return false;
     int n = (int)g_list.size();
-    g_cursor = (g_cursor + dy + n) % n;
+    if (screens != 0) {
+        int to = std::max(0, std::min(g_cursor + screens * kRows, n - 1));
+        if (to == g_cursor)
+            return false;
+        g_cursor = to;
+    } else {
+        g_cursor = (g_cursor + dy + n) % n;
+    }
     if (g_cursor < g_top)
         g_top = g_cursor;
     if (g_cursor >= g_top + kRows)
@@ -373,8 +392,8 @@ int Update(int side, int dx, int dy, bool a, bool b, bool c, bool held)
     }
     if (Step(side, dy) && Move(dy))
         return kRecordsMoved;
-    if (!held && dx != 0)
-        return kRecordsTurn;
+    if (!held && dx != 0 && Move(0, dx))
+        return kRecordsMoved;
     if (a)
         return Play() ? kRecordsStart : kRecordsNothing;
     if (c)
@@ -524,17 +543,25 @@ void DrawPicker(SDL_Renderer* r)
 void DrawMenu(SDL_Renderer* r, CScene8* menu)
 {
     bool on = menu->m_page == kRecordsPage;
-    // The page's label, after EXIT in the row of pages, as large as theirs.
-    Text(r, 524, 16, "RECORDS", 2, on ? kWhite : Color{100, 100, 100, 255});
-    if (on && menu->m_state == 0) {
+    if (!on) {
+        // The game's replays: the other mode, after EXIT in the row of pages.
+        Text(r, 640 - 6 - Width("TAB: RECORDS", 1), 20, "TAB: RECORDS", 1, kGrey);
+        return;
+    }
+    // The records' title where the pages would be, on a bar as theirs, and the way back
+    // to them.
+    Box(r, 0, 8, 640, 32, Color{0, 0, 0, 255});
+    Text(r, 20, 16, "FIGHT RECORDS", 2, kWhite);
+    Text(r, 640 - 6 - Width("TAB: GAME REPLAYS", 1), 20, "TAB: GAME REPLAYS", 1, kGrey);
+    if (menu->m_state == 0) {
         DrawList(r);
         if (g_picker.open && !g_list.empty())
             DrawPicker(r);
-        std::string keys = "Up/Down: choose   A: play   C: save as a replay   "
-                           "Left/Right: pages   B: back";
+        std::string keys = "Up/Down: choose  Left/Right: a screen  A: play  "
+                           "C: save as a replay  B: back";
         Text(r, 320 - Width(keys, 1) / 2, 458, keys, 1, kGrey);
     }
-    if (on && !g_picker.open && !g_note.empty() && SDL_GetTicks() < g_noteUntil) {
+    if (!g_picker.open && !g_note.empty() && SDL_GetTicks() < g_noteUntil) {
         // Over the list, in lines that fit.
         std::vector<std::string> lines;
         std::string rest = g_note;
@@ -611,6 +638,7 @@ void InitRecords()
 {
     g_records.enter = Enter;
     g_records.update = Update;
+    g_records.leave = Leave;
 }
 
 void DrawRecords(SDL_Renderer* r)
