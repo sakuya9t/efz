@@ -185,6 +185,7 @@ struct Recorder {
     unsigned keys = 0;   // the F-keys held, a bit per kSysKeys entry
     long keyFrame = -1;  // the fight frame whose keyboard was read last
     unsigned char pad[2] = {0, 0}; // GetInput outside the ticks
+    bool cpu[2] = {false, false}; // each player's CPlayer::m_cpu at the last tick's start
     Observed obs[2];
     Anomaly anomalies[64];
     int anomalyCount = 0;
@@ -335,6 +336,10 @@ struct Replay {
     uint32_t stateHashes[TRACE_BLOCKS];
     std::vector<ReplayTick> ticks;
     std::vector<Change> keys, pads;
+    // The CPU's side handed to its combo file and back ("cpu" lines: f the tick, the
+    // player, value m_cpu), in tick order; the next to apply.
+    std::vector<Change> handoffs;
+    size_t handoffAt = 0;
     std::vector<unsigned char> state;
     const void* blocks[TRACE_BLOCKS];
     unsigned sizes[TRACE_BLOCKS];
@@ -761,6 +766,10 @@ bool LoadRecord(const char* path)
             } else if (type == "pad") {
                 Change c = {(long)j.Number("f"), (int)j.Number("p"), (unsigned)j.Number("v")};
                 r.pads.push_back(c);
+            } else if (type == "cpu") {
+                Change c = {(long)j.Number("t"), (int)j.Number("p"), (unsigned)j.Number("v")};
+                if (c.player == 0 || c.player == 1)
+                    r.handoffs.push_back(c);
             }
         }
         p = e + 1;
@@ -1061,6 +1070,8 @@ void BeginFight(CScene3* scene)
     g.prevOver = game->m_roundOver != 0;
     g.prevWon[0] = p[0]->m_roundsWon;
     g.prevWon[1] = p[1]->m_roundsWon;
+    g.cpu[0] = p[0]->m_cpu != 0;
+    g.cpu[1] = p[1]->m_cpu != 0;
     g.matchEnd = false;
     g.winner = -1;
     g.anomalyCount = 0;
@@ -1136,6 +1147,14 @@ void BeginFight(CScene3* scene)
                  p[i]->m_cpu != 0);
         l.Double(p[i]->m_cpuSkill);
         l.Printf(",\"edit_color\":%d", game->m_editColor[i] != 0);
+        // The CPU with combos (agents.h): the file that plays its combos, and the share
+        // of the most damaging its level aims at. Its "cpu" lines say when it had the side.
+        if (const char* combos = p[i]->m_cpu ? CpuComboFile(i) : nullptr) {
+            l.Add(",\"cpu_combos\":");
+            l.String(combos);
+            l.Add(",\"cpu_combo_share\":");
+            l.Double(CpuComboShare(i));
+        }
         // VS HUMAN: the agent that plays the side (agents.h), null for a person.
         if (game->m_gameMode == 4) {
             const char* agent = AgentName(i);
@@ -1485,6 +1504,23 @@ void OnTickStart(CScene3* scene)
             r.loaded = true;
         }
         BeginFight(scene);
+    }
+    // The CPU's side handed to its combo file, or back (agents.h): a replay does it at the
+    // record's ticks; a record notes it, a line before the tick's.
+    if (r.active && r.loaded) {
+        while (r.handoffAt < r.handoffs.size() && r.handoffs[r.handoffAt].f <= g.tick) {
+            const Change& c = r.handoffs[r.handoffAt++];
+            if (c.f == g.tick)
+                scene->m_players[c.player]->m_cpu = c.value ? 1 : 0;
+        }
+    }
+    for (int i = 0; i < 2 && g.started; i++) {
+        bool cpu = scene->m_players[i]->m_cpu != 0;
+        if (cpu != g.cpu[i]) {
+            Event("{\"type\":\"cpu\",\"t\":%ld,\"f\":%ld,\"p\":%d,\"v\":%d}", g.tick,
+                  g.fightFrame, i, cpu ? 1 : 0);
+            g.cpu[i] = cpu;
+        }
     }
     g.rng = RandState();
     g.inTick = true;
@@ -2058,6 +2094,7 @@ bool ReadRecordSummary(const char* path, RecordSummary* out)
         out->chars[i] = (int)p.Number("char", -1);
         out->cpu[i] = p.Number("cpu") != 0;
         out->agent[i] = p.String("agent");
+        out->cpuCombos[i] = p.String("cpu_combos");
         // Records before agents were noted say nothing of who played VS HUMAN's sides.
         out->unknown[i] = !out->cpu[i] && out->mode == 4 && !p.Get("agent");
     }

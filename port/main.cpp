@@ -63,6 +63,11 @@
 //   --agent-p1 FILE, --agent-p2 FILE
 //                     VS HUMAN's P1 or P2 played by the agent file FILE from the start
 //
+// The CPU's combos (docs/agents.md): with OPTIONS' CPU COMBO on (options.ini), the CPU of
+// ARCADE and VS CPU plays its combos from its character's file in agents/cpu.
+//   --cpu-combos on|off
+//                     on or off for this run, whatever OPTIONS says (not saved)
+//
 // For tests, which run it without a display (SDL_VIDEO_DRIVER=offscreen):
 //   --frames N        quit after N frames
 //   --fast            don't wait between frames
@@ -82,6 +87,7 @@
 #include "record.h"
 #include "agents.h"
 #include "tool.h"
+#include "options.h"
 
 namespace {
 
@@ -340,7 +346,7 @@ static void Usage(const char* name)
             "[--tool [FILE...]] [--seed N] [--crash-test KIND] [--frames N] [--fast] "
             "[--keys SCRIPT] [--dump DIR] [--dump-every N] "
             "[--host | --join ADDRESS] [--port N] [--name NAME] [--delay N] [--agent FILE] "
-            "[--agent-p1 FILE] [--agent-p2 FILE]\n",
+            "[--agent-p1 FILE] [--agent-p2 FILE] [--cpu-combos on|off]\n",
             name);
 }
 
@@ -440,6 +446,9 @@ int EfzMain(int argc, char** argv)
             agentOptions.p1 = argv[++i];
         else if (a == "--agent-p2" && more)
             agentOptions.p2 = argv[++i];
+        else if (a == "--cpu-combos" && more && (std::string(argv[i + 1]) == "on" ||
+                                                 std::string(argv[i + 1]) == "off"))
+            agentOptions.cpuCombos = std::string(argv[++i]) == "on";
         else {
             Usage(argv[0]);
             return 2;
@@ -610,6 +619,7 @@ int EfzMain(int argc, char** argv)
         efz::InitTool(toolFiles); // the replay tool: no menus, no agents, no network
     } else if (!harness && replay.empty() && !converting) {
         agentOptions.fast = fast;
+        efz::InitOptions(); // options.ini, and OPTIONS' CPU COMBO row
         efz::InitAgents(agentOptions);
         efz::InitNetplay(netOptions);
         efz::InitRecords(); // the REPLAY menu's RECORDS page

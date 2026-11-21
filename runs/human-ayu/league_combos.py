@@ -15,6 +15,10 @@ of what it cost them, in training and in every benchmark.
     python runs/human-ayu/league_combos.py files --libraries ~/data/efz-replays/combos \\
         runs/human-ayu/kano/exploiter18/model.zip:kano ...
 
+    # the game's CPU with combos (OPTIONS' CPU COMBO, docs/agents.md): a file a character,
+    # the newest exploiter's, as the game's agents/cpu folder wants them
+    python runs/human-ayu/league_combos.py cpu --out ~/dev/efz/tmp/cpu-combos
+
 libraries: combo_library.py's, --keep most damaging overall and --per-victim on each
 character they were landed on, with the join points (--marks), as the agent's own.
 
@@ -95,6 +99,38 @@ def files(args):
         print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB')
 
 
+def newest(char_dir):
+    """Of a character's trained opponents with a file (combos.efzagent), the newest
+    exploiter's (exploiterN, the highest N; else `exploiter`), else the first by name."""
+    have = sorted(d for d in os.listdir(char_dir)
+                  if os.path.exists(os.path.join(char_dir, d, 'combos.efzagent')))
+    def rank(d):
+        n = d[len('exploiter'):]
+        return (2, int(n)) if d.startswith('exploiter') and n.isdigit() else \
+               (1, 0) if d == 'exploiter' else (0, 0)
+    best = max(have, key=rank, default=None)
+    return best if best is None or rank(best)[0] > 0 else have[0]
+
+
+def cpu(args):
+    """The game's CPU with combos: a file a character, CHAR.efzagent in --out, for the
+    game's agents/cpu folder (port/agent/play.cpp takes the first by name of each
+    character there). The game begins their routes later than the file says (its plans
+    are made between frames)."""
+    os.makedirs(args.out, exist_ok=True)
+    runs = args.runs
+    chars = args.chars or sorted(c for c in os.listdir(runs)
+                                 if os.path.isdir(os.path.join(runs, c)) and newest(os.path.join(runs, c)))
+    for c in chars:
+        d = newest(os.path.join(runs, c)) if os.path.isdir(os.path.join(runs, c)) else None
+        if d is None:
+            print(f'{c}: no trained opponent with a file (league_combos.py files)')
+            continue
+        out = os.path.join(args.out, c + '.efzagent')
+        shutil.copyfile(os.path.join(runs, c, d, 'combos.efzagent'), out)
+        print(f'{c}: {c}/{d}/combos.efzagent -> {out} ({os.path.getsize(out) / 1e6:.1f} MB)')
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     sub = p.add_subparsers(dest='what', required=True)
@@ -116,10 +152,14 @@ def main():
     b.add_argument('--per-start', type=int, default=None)
     b.add_argument('--version', default='combos')
     b.add_argument('--again', action='store_true')
+    c = sub.add_parser('cpu', help="a file a character for the game's CPU with combos (agents/cpu)")
+    c.add_argument('--out', required=True, help='CHAR.efzagent here')
+    c.add_argument('--chars', nargs='*', help="only these (default: every character with a file)")
+    c.add_argument('--runs', default=HERE, help='the trained opponents, CHAR/NAME/ (default: beside this script)')
     args = p.parse_args()
     if args.what == 'files' and args.delay is not None and args.delay < 0:
         args.delay = None
-    (libraries if args.what == 'libraries' else files)(args)
+    {'libraries': libraries, 'files': files, 'cpu': cpu}[args.what](args)
 
 
 if __name__ == '__main__':

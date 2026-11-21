@@ -186,7 +186,9 @@ game mode (`mode`: 0 arcade, 1 practice, 3 vs cpu, 4 vs human, 5 replay, 6 demo)
 one), the stage, the round and rounds to win, the CPU level, each player's character
 number and name, palette, whether the CPU plays it and its skill, and in VS HUMAN the
 agent that plays it (`agent`, its name and version, and `agent_file`; null for a person:
-[agents.md](agents.md)); `rng`, `rand()`'s
+[agents.md](agents.md)), and for the CPU with CPU COMBO on, the file that plays its
+combos (`cpu_combos`) and the share of the most damaging combo its level aims at
+(`cpu_combo_share`, 1 at level 4: [agents.md](agents.md), "The CPU's combos"); `rng`, `rand()`'s
 state, and `fkey_held`, at the first tick; `state`, the state file, and `state_hashes`,
 its blocks' hashes; and the names of the tick lines' fields.
 
@@ -207,7 +209,9 @@ draw, rounds won and HP), `match_end` (the winner), `pause` and `resume`; `keys`
 keys the fight scene reads itself changing (Esc, F1-F12 as DIK codes: F4 and F5 refill
 the gauges in practice, F6 restarts a replay's recording or changes the dummy's stance,
 F7 its guard, F8 pauses); `pad` for the controls read outside a tick (the demo's "press
-a button"); `anomaly` for the checks. **The end**: why (`match_end`, `escape`,
+a button"); `cpu` for the CPU's side handed to its combo file and back (`t` the tick it
+happened at, `p` the player, `v` the CPU's again or not: `CPlayer::m_cpu`), which a
+replay of the record does at the same ticks; `anomaly` for the checks. **The end**: why (`match_end`, `escape`,
 `replay_end`, `left`, `exit` when the game quit, `crash`), the winner, rounds won, HP and
 the anomalies' counts.
 

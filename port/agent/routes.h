@@ -100,10 +100,24 @@ public:
     // view: its player's view of the game now (whose opponent says if it plans). late:
     // the frames since the hit (a plan awaited when it landed): the routes are played from
     // that much further in. extra: one more option, actions from where `actions` leave
-    // the game (the rest of the route being played).
+    // the game (the rest of the route being played). again: a later plan of a combo
+    // already planned for (the target below goes on from that combo's).
     void Begin(int side, int starter, const std::vector<int>& actions, const float* history,
                uint8_t prev, bool deterministic, const float* view, int late = 0,
-               const std::vector<int>& extra = std::vector<int>());
+               const std::vector<int>& extra = std::vector<int>(), bool again = false);
+    // What the plans aim at. 1 (an agent's, the default): the option worth the most, if
+    // that is more than its own play. Less (the game's CPU with combos: its level's share,
+    // play.cpp): a combo's first plan takes the option nearest that share of the most any
+    // option is worth, and a later plan of the combo the one nearest what is left of that
+    // target (the target less what the combo has dealt between the two plans' starts); its
+    // own play is one of the options. Ties go to what it would go on with (the first
+    // played: the rest of its route, else its own play).
+    void SetShare(float share) { share_ = share; }
+    float Share() const { return share_; }
+    // Its own play played last of the options, not first (the game's CPU with combos):
+    // a plan due before it is done is then chosen from the routes played by then, and the
+    // network's frames on the copies, half a plan's time, come after them.
+    void SetOwnLast(bool on) { ownLast_ = on; }
     // Works on the plan until `deadline`, or until it is done; true once done.
     bool Work(Clock::time_point deadline);
     bool Busy() const { return phase_ == kPrelude || phase_ == kOptions; }
@@ -141,6 +155,7 @@ public:
     std::vector<int> ends;    // how each left the victim: 1 lying, 2 recovered in the air, 0
                               // neither (routes.ending; else all 0)
     float best = 0, own = 0;  // the most any option dealt, its own play's
+    float target = -1;        // with a share under 1: the worth it aimed at (else -1)
     float expected[kObsDim];  // the agent's view when it sees its hit, on the copy
     double ms = 0;            // time worked on it
     long frames = 0;          // frames run on copies
@@ -188,6 +203,12 @@ private:
     int ownCost_ = 15;
     int longest_ = 0;
     int hp0_ = 0;
+    float share_ = 1;
+    bool ownLast_ = false;
+    bool again_ = false;
+    bool comboSet_ = false;  // a target set by this combo's first plan:
+    int comboHp0_ = 0;       // the victim's HP where that plan's options began,
+    float comboTarget_ = 0;  // and the worth aimed at from there
     std::vector<float> in_, probs_;
 };
 

@@ -84,9 +84,13 @@ void Planner::Finish(Outcome why)
 
 void Planner::Begin(int side, int starter, const std::vector<int>& actions, const float* history,
                     uint8_t prev, bool deterministic, const float* view, int late,
-                    const std::vector<int>& extra)
+                    const std::vector<int>& extra, bool again)
 {
     Cancel();
+    again_ = again;
+    if (!again)
+        comboSet_ = false;
+    target = -1;
     side_ = side;
     starter_ = starter;
     actions_ = actions;
@@ -186,14 +190,19 @@ bool Planner::Prelude()
     self.entry = kOwnPlay;
     options_.push_back(std::move(self));
     // Played first: what the agent goes on with if no plan comes (Settle): the rest of
-    // its route, else its own play. Then the others as they stand.
+    // its route, else its own play. Then the others as they stand. (SetOwnLast: the rest
+    // of its route, the routes, its own play.)
     const size_t n = options_.size();
-    const size_t first = extra_.empty() ? n - 1 : n - 2;
+    size_t first = extra_.empty() ? n - 1 : n - 2;
+    if (ownLast_ && extra_.empty() && n > 1)
+        first = 0;
     work_.assign(1, first);
     for (size_t j = 0; j < n; j++) {
-        if (j != first)
+        if (j != first && !(ownLast_ && j == n - 1))
             work_.push_back(j);
     }
+    if (ownLast_ && first != n - 1)
+        work_.push_back(n - 1);
     current_ = 0;
     return true;
 }
@@ -317,10 +326,38 @@ void Planner::Choose(size_t done)
             top = j;
     }
     own = options_[n - 1].dealt;
-    if (partial)
+    if (share_ < 1.0f) {
+        // A share of the most: the first plan's target, or what is left of it.
+        float most = 0;
+        for (size_t j = 0; j < n; j++) {
+            if (have[j])
+                most = std::max(most, worth[j]);
+        }
+        if (again_ && comboSet_) {
+            target = std::max(0.0f, comboTarget_ - (float)(comboHp0_ - hp0_));
+        } else {
+            target = share_ * most;
+            comboTarget_ = target;
+            comboHp0_ = hp0_;
+            comboSet_ = true;
+        }
+        // The nearest, in the order played (ties: what it would go on with).
+        size_t pick = work_[0];
+        for (size_t k = 0; k < done && k < n; k++) {
+            size_t j = work_[k];
+            if (fabsf(worth[j] - target) < fabsf(worth[pick] - target))
+                pick = j;
+        }
+        top = pick;
         chosen = top + 1 < n ? (int)top : -1;
-    else
+    } else if (partial) {
+        chosen = top + 1 < n ? (int)top : -1;
+    } else {
         chosen = top + 1 < n && worth[top] > worth[n - 1] ? (int)top : -1;
+    }
+    // (its own play last and not played: a route that dealt nothing isn't taken for it)
+    if (ownLast_ && partial && !have[n - 1] && chosen >= 0 && worth[top] <= 0)
+        chosen = -1;
     route.clear();
     if (chosen >= 0 && options_[top].entry == kExtra) {
         route = extra_;

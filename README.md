@@ -1,154 +1,57 @@
-# efz-decomp
+# efz
 
-A matching decompilation of **Eternal Fighter ZERO 4.02** (`efz.exe`, Twilight Frontier, 2005):
-C++ source that the original compiler, Visual C++ .NET 2003, builds back into a byte-identical
-`efz.exe` (SHA-256 `3a1616d6…6dd66481`). The recovered source is then the base for a maintained,
-modernised version of the game.
+**Eternal Fighter ZERO 4.02**, recovered as source and carried on: a native 64-bit game
+for Windows, macOS and Linux that plays the original's game tick for tick, with
+EfzRevival's rollback netplay built in, and agents trained to play it, which play inside
+the game.
 
-**Status: `make check` rebuilds a byte-identical `efz.exe`.** All 630 game functions
-(`0x401000`–`0x77697e`) are recovered: the platform layer, the `CPlayer` base class,
-all 24 character classes, the animated stage backgrounds and the eight scenes. Linked
-with the static CRT, the original's import libraries and its icon, they give a file
-whose SHA-256 is the original's. Only the timestamp, the PDB's GUID and one count in the
-Rich header are set after linking (`tools/postlink.py`). `tools/progress.py` prints the
-per-function numbers.
+It began as a matching decompilation of `efz.exe` (Twilight Frontier, 2005) and of
+EfzRevival 1.02h, the community's add-on for netplay and practice. That part is done:
+the tag `compat-reference` builds a byte-identical `efz.exe` with the original's
+compiler, Visual C++ .NET 2003 ([docs/decomp.md](docs/decomp.md)). Since 31 October
+2026 the source is free to change, and what holds it to the original is the game, not
+the bytes: the compatibility suite plays 254 fights in every build and compares the
+whole game state with the original's after every tick.
 
-The source reads fields through named members rather than the lifter's raw offsets
-(`m_pointY[4] = -0x1d` for `*(short*)((char*)this + 0x2b00) = -0x1d`, `(*m_opponent)->x`).
-[docs/readability.md](docs/readability.md) records how, and which readability changes
-keep the compiled code. Members, methods, locals, actions (`pattern = kInstantCharge`),
-commands (`m_command == kCmd236A`), input bits (`input & kInputC`) and frame flags
-(`kStateCancellable`) have names, and quantities are decimal (`m_freezeTime = 120`);
-[docs/naming/](docs/naming/README.md) has the research behind them: each character's
-move list and mechanics, and the original's bugs found on the way.
-
-**Since 31 October 2026 the source is free to change** for readability and the fork:
-the git tag `compat-reference` keeps the last source that builds the identical exe, and
-the compatibility suite of [docs/compat.md](docs/compat.md), not the bytes, checks that
-every change still plays the original's game. It plays 254 fights (replays, and the
-game's CPU against itself and against scripted input; 1.2 million ticks) in the build
-under test and compares the whole game state, hashed after every tick, with the
-original's.
-
-**The same sources also build into a native game** for Windows, macOS and Linux:
-64-bit, on SDL3, without wine. It plays the suite exactly as the original does, every
-byte of the game state on every tick ([docs/compat.md](docs/compat.md)).
-See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
-
-**With EfzRevival's netplay built in:** NET PLAY on the title hosts or joins a match over
-the network, rollback and all, with EfzRevival 1.02h's protocol and rules, recovered
-from its binaries and made native (no launcher, no injected DLL). See
-[docs/netplay.md](docs/netplay.md).
-
-**And trained agents to play:** an agent trained here, written as one agent file (its
-network, its combo library's routes, their join points and its chooser), plays a side of
-VS HUMAN (chosen on character select) or this computer's side of a network match, run by
-the game itself, no Python needed, its combos from people's routes planned on copies of
-the fight. See [docs/agents.md](docs/agents.md).
-
-**And headless, for training agents:** `efz_env`, a library (C API, and a Python
-package) that runs batches of matches without a window or sound on every core, 3,000
-to 4,700 times real time on an 8-core laptop, with the game's CPU as an opponent, save
-states and rewards. See [The headless game](#the-headless-game) and
-[docs/headless.md](docs/headless.md).
-
-| Source | What it is |
-|---|---|
-| `src/main.cpp` | `WinMain`, the window procedure, the 64 FPS frame timer |
-| `src/effect.cpp` | `CGame::UpdateEffect`, the per-frame update of the 640 effect slots |
-| `src/file.cpp` | `CFile`, the file wrapper the loaders use |
-| `src/config.cpp` | `key.ini`, per-character `.rec` records, the replay stream |
-| `src/game.cpp` | `CGame`: effects, sound effects and music, screen shake, palette flashes |
-| `src/graphics.cpp` | `CGraphics`: DirectDraw setup, `.dat`/`.bmp` sprite loaders, software blitters (inline assembly), palettes, screenshots |
-| `src/input.cpp` | `CInput`: DirectInput keyboard and joysticks, key bindings |
-| `src/sound.cpp` | `CSound`: DirectSound buffers, `.wav` loading, music loop points |
-| `src/player.cpp` | `CPlayer`, the base of the character classes: movement, guard and damage, the `.pal`/`.dat`/`.pat`/`.wav` loaders, round reset |
-| `src/playerobj.cpp` | `CPlayer`'s table of 64 spawned objects (projectiles and the like) |
-| `src/<character>.cpp` | One character class each (`shiori.cpp`, `sayuri.cpp`, ...) |
-| `src/<character>_states.cpp` | Each character's per-state update, `UpdatePattern`, a file of its own as in the original |
-| `src/bg01.cpp` | `CAnimBg`, the animated stage backgrounds' base, and stage 01's background |
-| `src/bg10.cpp`, `bg12.cpp`, `bg16.cpp` | The other three animated backgrounds |
-| `src/scene0.cpp` ... `scene8.cpp` | The scenes `WinMain` runs: 0 title, 1 character select, 2 match setup, 3 the fight, 5 results, 6 config, 7 staff roll, 8 replays |
-| `src/scene3_draw.cpp` | The drawing helpers of scene 3, the fight |
-| `src/efz.rc` | The icon resource (the icon itself is taken from the original at build time) |
-| `src/trace.cpp` | The compatibility test's harness (`make trace` and the native game), not part of efz.exe |
-| `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point; the log, crash reports and fight records |
-| `port/netplay/` | Netplay: EfzRevival 1.02h's launcher protocol and online session (rollback) in the game's process, its UDP messages, the NET PLAY screens ([docs/netplay.md](docs/netplay.md)) |
-| `port/agent/` | Trained agents: their view of a fight (shared with `efz_env`), their network read from an agent file and run, their combos' routes planned on copies of the fight, and their play in the game: character select, the fight, netplay ([docs/agents.md](docs/agents.md)) |
-| `port/headless/` | The headless platform and the training library `efz_env` (C API: `efz_env.h`), `efz-headless`, `efz-bench` |
-| `python/efz_env/` | The Python package over `efz_env`: `EfzVecEnv`, action tables, a Gymnasium adapter |
+- **The native game** ([docs/native.md](docs/native.md)). The same sources on SDL3
+  instead of Win32, DirectDraw, DirectInput and DirectSound, without wine. It keeps the
+  original's memory layout and floating point, so it computes the same game on every
+  machine. Every run keeps a log, crash reports and a record of every fight, which plays
+  back from the REPLAY menu, converts to and from the game's `.rep` and to video
+  ([docs/logging.md](docs/logging.md)).
+- **Netplay** ([docs/netplay.md](docs/netplay.md)). NET PLAY on the title hosts or joins
+  a match over the network, with rollback. It is EfzRevival 1.02h's own protocol and
+  rules, recovered from its binaries and made native: no launcher, no injected DLL.
+- **Agents in the game** ([docs/agents.md](docs/agents.md)). A trained agent, one
+  `.efzagent` file, plays a side of VS HUMAN or this computer's side of a network match.
+  The game runs it on its own, no Python needed: its network, and its combos, okizeme and
+  pressure planned on copies of the fight.
+- **The headless game** ([docs/headless.md](docs/headless.md)). `efz_env`, a library
+  (C API, and a Python package) that runs batches of matches without a window or sound
+  on every core, thousands of times real time, with save states, the game's CPU as an
+  opponent and rewards. The same game: the compatibility suite runs in it too.
+- **Training** ([runs/human-ayu/](runs/human-ayu/README.md),
+  [docs/training-v2.md](docs/training-v2.md)). Agents that start as clones of people
+  from the community's replays, then train on against a league of opponents trained to
+  beat them, with scripted habits on top. The goal is an agent that beats the best
+  players within a person's limits: it sees the game a reaction time late, presses at
+  people's speed and doesn't confirm a hit instantly.
 
 ## Game files
 
 This repository contains no original game files: no executables, sprites, sounds or music.
 EFZ's readme prohibits redistributing its data and decompiling it. Everything here works
-against a legitimately obtained EFZ 4.02 install, which `EFZ_DIR` points at.
+against a legitimately obtained EFZ 4.02 install, which `--data` or `EFZ_DIR` points at.
 
 One file is made from the game's data: `tests/compat/pack.tar.gz.enc`, encrypted. It
 holds what the compatibility test reads (the frame data, palettes and the pictures'
 sizes; no pictures or sounds), so that CI can run the test, and the repository holds no
 key to it: CI gets that from a secret ([docs/compat.md](docs/compat.md), "In CI").
 
-## Setup
-
-You need Docker, Python 3 with `pefile`, GNU `objdump`, `iconv`, `curl` and `sha1sum`.
-
-```sh
-toolchain/setup.sh                 # ~1 GB download, once; builds the efz-msvc71 image
-export EFZ_DIR=/path/to/EFZ        # folder containing the original efz.exe
-tools/peinfo.py                    # check it is the 4.02 build
-make diff                          # compile src/ and compare with the original
-make check                         # link build/efz.exe and compare it with the original
-```
-
-`make check` ends with `cmp` finding no difference and the original's SHA-256. The
-build takes the icon from `$EFZ_DIR/efz.exe` and sets three things after linking that
-no build can reproduce: the link timestamp, the GUID the linker gives the PDB, and the
-Rich header's count of objects from the Standard Edition compiler (the original's 152
-against the source's 71; the other 81 left nothing in the file).
-
-`toolchain/setup.sh` fetches Microsoft's own installers from archive.org, pinned by SHA-1:
-- **Visual C++ Toolkit 2003 1.01**, the free release of the exact compiler build
-- **Windows Server 2003 SP1 Platform SDK**, for headers
-- **Platform SDK, February 2003**: the `gdi32`, `winmm` and `user32` import libraries
-  and `rc.exe` of the release Visual Studio .NET 2003 shipped. Its `user32.lib` differs
-  from the one efz.exe was linked with, so `toolchain/user32lib.py` derives a stand-in
-  with the original's import hints.
-- **DirectX SDK (August 2005)**
-- **.NET Framework 1.1**, for `cvtres.exe` 7.10.3052, which converted the original's
-  resources
-
-It unpacks them in the container into `~/tools/efz-toolchain`. `cl.exe` runs under wine in
-that container; `tools/msvc <tool> <args>` runs any of the tools.
-
 ## Playing
 
-`make play` (or `tools/play.sh`) runs `build/efz.exe` under wine in a window on the X
-display in `$DISPLAY`. From a terminal in your desktop session that is already set; over
-ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp desktop.
-`tools/play.sh --original` runs `$EFZ_DIR/efz.exe` instead.
-
-- **Where it runs.** Wine from the host if it is installed, otherwise the `efz-play`
-  docker image (`toolchain/play.Dockerfile`, built on first use from the toolchain's
-  image), which gets the display's socket and cookie, and the session's PulseAudio or
-  PipeWire socket for sound.
-- **What it writes.** The game runs in `~/.local/share/efz-decomp/game` (`EFZ_PLAY`
-  moves it), which links to the data in `$EFZ_DIR` and holds real copies of what the game
-  writes: `key.ini`, the `.rec` records, replays and screenshots; the container also
-  mounts `$EFZ_DIR` read-only. The wine prefix is in `~/.local/share/efz-decomp/wine`.
-- **The window.** The game switches the screen to 640×480 (or 320×240) fullscreen; it
-  runs inside a 640×480 wine desktop window, so only that window changes.
-  `EFZ_DESKTOP=off` lets it change the real screen mode instead.
-- **Sound.** The game can't run without a DirectSound device: it shows "DirectSound
-  オブジェクトが生成できません" and crashes after it. Without a sound server, the image's
-  ALSA device discards the sound so the game still runs.
-- **Controls.** The keyboard, as bound in `key.ini`. Joysticks aren't passed into the
-  container.
-
-## The native game
-
-One command builds the game from this checkout, as far as anything changed, and
-starts it:
+One command builds the game from this checkout, as far as anything changed, and starts
+it:
 
 ```sh
 tools/run.sh --data /path/to/EFZ           # Linux, macOS
@@ -161,40 +64,27 @@ command line tools and CMake; on Linux, also the development files of X11 and of
 or PulseAudio, which SDL3 builds its back ends from. A Linux machine without them builds
 in docker instead, if it has docker. The script says what is missing and how to install
 it. The first build downloads SDL3 and takes a few minutes; `--build-only` only builds.
-The game's data can also come from `EFZ_DIR`, and the scripts pass other options to
-the game (`--fullscreen`, `--save DIR`).
 
-In docker, and for Windows from Linux:
+The game reads its data from `--data` (a folder with an EFZ 4.02 install, or
+`EFZ_DIR`) and writes `key.ini`, records, replays and screenshots to `--save` (default:
+the data folder, or the user's preferences folder if that is read-only). Alt+Enter
+toggles full screen (`--fullscreen` starts in it); controllers work as DirectInput
+joysticks did and can be plugged in at any time.
+
+Other ways to build it:
 
 ```sh
+cmake -B build/native && cmake --build build/native   # any of the three systems
 tools/native.sh                    # build/native/efz for Linux, in docker; runs the tests
-tools/native.sh windows            # build/windows/efz.exe for 64-bit Windows
-build/native/efz --data "$EFZ_DIR"
+tools/native.sh windows            # build/windows/efz.exe for 64-bit Windows, from Linux
 ```
 
-Or with CMake directly, on any of the three systems: `cmake -B build/native && cmake
---build build/native`. SDL3 is downloaded and linked statically. The game reads its
-data from `--data` (a folder with an EFZ 4.02 install) and writes `key.ini`, records,
-replays and screenshots to `--save` (default: the data folder, or the user's
-preferences folder if that is read-only). Alt+Enter toggles full screen; controllers
-work as DirectInput joysticks did and can be plugged in at any time.
+### Fight records
 
-The original's compiler still builds the same sources: where the native build needs
-something else, `src/efz.h`'s macros expand to the original's casts.
-[docs/native.md](docs/native.md) has how the native game keeps the original's memory
-layout (32-bit handles in place of pointers) and floating point (the x87's, on every
-CPU); [docs/compat.md](docs/compat.md) the suite that checks it:
-
-```sh
-tools/compat.py check               # the 254 cases in the native game and headless (about 4 minutes)
-tools/compat.py explain cpu-03      # where a failing case parts from the original, by member
-tools/compat.py coverage            # which lines of src/ the suite runs
-```
-
-Each run of the native game keeps a log folder (`logs/` in the save folder):
-`efz.log`, a report with a stack trace when it crashes or hangs, checks of the game's
-state on every tick of a fight, and a record of every fight, which replays it tick for
-tick (in the game, from the REPLAY menu's RECORDS page) and is data to learn from
+Each run keeps a log folder (`logs/` in the save folder): `efz.log`, a report with a
+stack trace when it crashes or hangs, checks of the game's state on every tick of a
+fight, and a record of every fight, which replays it tick for tick (in the game, from the
+REPLAY menu's RECORDS page) and is data to learn from
 ([docs/logging.md](docs/logging.md)):
 
 ```sh
@@ -207,33 +97,54 @@ tools/efzlog.py show logs/<session>  # what happened: warnings, errors, crash, f
 tools/efzlog.py export logs/<session>/fight-003.jsonl fight.npz       # a row a tick
 ```
 
-NET PLAY, on the title menu after VS HUMAN, plays a match over the network: one side hosts,
-the other joins its address, and both play from character select on, with rollback.
-It is EfzRevival 1.02h's netplay, built in ([docs/netplay.md](docs/netplay.md)):
+### Netplay
+
+NET PLAY, on the title menu after VS HUMAN: one side hosts, the other joins its address,
+and both play from character select on, with rollback.
 
 ```sh
 efz --data DIR --host                       # or from the command line: host on UDP 10800
 efz --data DIR --join 192.168.1.5          # join it
 ```
 
-A trained agent plays in the game too: export it (`python python/examples/export_agent.py
-PACK.zip`, the whole pack in one file: its model, its combo library's routes and their
-join points, its chooser, played as the pack's `play.py --assist` plays them; or
-`MODEL.zip`), put the `.efzagent` file in the game's `agents`
-folder, and on VS HUMAN's character select F5 or F6 has it play P1 or P2 (Shift+F5 and
-Shift+F6 go back through the agents); NET PLAY's
-PLAYED BY has it play your side of a network match ([docs/agents.md](docs/agents.md)).
+Two native games are checked against each other frame by frame. Against `efz.exe` with
+EfzRevival 1.02h, which it is built to play, it hasn't been tried yet
+([docs/netplay.md](docs/netplay.md), "Against EfzRevival 1.02h").
 
-## The headless game
+### Playing against an agent
 
-For reinforcement learning and other programs that play: the game without a window,
-sound or keyboard, many matches to a process, stepped in parallel in C++ and handed to
-Python as numpy arrays (or straight into pinned memory for a GPU).
+Put an `.efzagent` file in the game's `agents` folder. On VS HUMAN's character select,
+F5 has it play P1 and F6 P2 (pressed again, the next agent; Shift+F5 and Shift+F6 go
+back); it picks its own character and you pick the stage. On NET PLAY, PLAYED BY has it
+play your side of a network match. `--agent-p1 FILE` and `--agent-p2 FILE` do the same
+from the command line. An agent file is made from a trained model or a pack:
+
+```sh
+python python/examples/export_agent.py PACK.zip     # the model, its routes, its chooser: one file
+python python/examples/export_agent.py --show FILE.efzagent
+python python/examples/unpack_agent.py FILE.efzagent  # back to a model, to train it further
+```
+
+With **CPU COMBO** on in OPTIONS, the game's own CPU in ARCADE and VS CPU plays its combos
+from such files too, one for each character in `agents/cpu` (`python
+runs/human-ayu/league_combos.py cpu --out DIR` gathers them from the league's trained
+opponents). The CPU keeps its own neutral and guard and hands its side to the file while
+its opponent is in a hit reaction. Its level sets the combos' damage: level 4 the most
+damaging the planner finds at the hit, level 1 a quarter of that.
+
+[docs/agents.md](docs/agents.md) has what goes in the file, how the game plays it, the
+CPU's combos, and what keeps an agent's side of a network match compatible.
+
+## Training agents
+
+The headless game is for reinforcement learning and other programs that play: many
+matches to a process, stepped in parallel in C++ and handed to Python as numpy arrays
+(or straight into pinned memory for a GPU).
 
 ```sh
 cmake -B build/headless -DEFZ_GAME=OFF && cmake --build build/headless --config Release
 build/headless/efz-bench --data "$EFZ_DIR"          # speed; --check: determinism
-python python/examples/bench.py --data "$EFZ_DIR"   # the same from Python
+pip install -e "python[all]"
 ```
 
 ```python
@@ -244,215 +155,95 @@ obs = env.reset()                                   # (256, 2, 168)
 obs, reward, terminated, truncated, info = env.step(ActionTable().to_bytes(actions))
 ```
 
-Adapters for Gymnasium (`efz/VsCpu-v0`), Stable-Baselines3 and PettingZoo, a PPO
-training script, and a window to play a trained agent yourself, which records every
-match and can let the agent learn from them:
+There are adapters for Gymnasium (`efz/VsCpu-v0`), Stable-Baselines3 and PettingZoo, a
+PPO training script, and a window to play an agent yourself, which records every match:
 
 ```sh
-pip install -e "python[all]"
 python python/examples/train.py --data "$EFZ_DIR" --opponent self --steps 2e6 --out runs/self
 python python/examples/play.py --data "$EFZ_DIR" --agent runs/self/model.zip
-python python/examples/train.py --data "$EFZ_DIR" --opponent human --load runs/self/model.zip
 ```
 
-[runs/](runs/README.md) has the first trained agents (Ayu against Ayu): the best wins 77%
-of full matches against the level-4 CPU. Play it with
-`python python/examples/play.py --data "$EFZ_DIR" --agent runs/curriculum/model.zip --chars ayu ayu`.
+So far the agent plays Ayu, other characters only as its opponents
+([runs/](runs/README.md)). The current line,
+[runs/human-ayu/](runs/human-ayu/README.md), starts from a clone of people (1,908 of
+the community's in-sync Ayu matches) and is trained in rounds: a league of exploiters of
+each character trained against it, scripted habits on top of them, its combos from
+people's routes planned on copies of the fight. Each round is judged by a benchmark
+suite of drills with error bars, beside the strongest Ayu player of the replays, and by
+people's games against it in the native game. [docs/training-v2.md](docs/training-v2.md) is the
+plan and the record of every round; [docs/training.md](docs/training.md) the research
+before it (the training frameworks, how other fighting games' AIs and EFZ's own CPU are
+built). The models are on Hugging Face (https://huggingface.co/sakuya9t/efz):
+`python runs/hub.py download` fetches them into `runs/`.
 
-It is the same game: `tools/compat.py check` plays every case of the compatibility
-suite both in the SDL3 game and headless, and the logs must agree with the reference
-and with each other; CI runs the headless library's tests that need no game data
-(`ctest -L headless`). [docs/headless.md](docs/headless.md) has the observations,
-actions, rewards, save states, the GPU and the measurements;
-[docs/training.md](docs/training.md) the training frameworks it can be used from (and
-the gaps to close first), how Touhou 12.3's AIs and EFZ's own CPU are built, and what
-follows for training.
+## Checking a change
 
-## Matching workflow
+Every change has to play the original's game. `tools/compat.py` plays the suite
+(`tests/compat/`: 204 replays, and 50 fights of the game's CPU against itself and
+against scripted input; 1.2 million ticks) in the native game and headless, and
+compares the whole game state, hashed after every tick, with the reference's: the
+original source at `compat-reference`, built with the test's harness and run under wine
+([docs/compat.md](docs/compat.md)).
 
-1. **Annotate.** Put `// FUNCTION: 0xADDR` above the function or its declaration, and
-   `// GLOBAL: 0xADDR` above globals. Method declarations inside a class body are picked up
-   too.
-2. **Write the C++** in `src/`. Pseudocode from Ghidra or REA is a starting point.
-3. **Compare.** Run `make diff` (or `make diff F=Name` for one function).
-   `tools/funcdiff.py` lays the compiled function over the original and checks every byte
-   and every relocation:
-   - calls and globals must hit the annotated addresses
-   - imports must hit the right IAT slot
-   - string literals must have identical contents
+```sh
+tools/compat.py check               # the 254 cases in the native game and headless (about 4 minutes)
+tools/compat.py explain cpu-03      # where a failing case parts from the original, by member
+tools/compat.py coverage            # which lines of src/ the suite runs
+```
 
-   It prints an instruction diff of whatever differs, plus the addresses of symbols that
-   aren't annotated yet (`learned:`).
-4. **Or lift a whole object.** `tools/lift.py` turns this compiler's unoptimised x86
-   back into C++ that compiles to the same bytes. Describe the object in
-   `tools/objdefs.py` (address range, class, names), then run
-   `tools/objcheck.sh <obj>`: it regenerates `src/<obj>.cpp` (keeping its leading comment,
-   `#include`s and the globals right after them), updates the declarations in
-   `src/efz.h`, compiles and diffs.
-   Whatever still differs points at a lifter rule to add. `tools/lifttest.py` relifts
-   every matched function to check that the lifter doesn't regress. The lifter writes
-   fields as raw offsets and predates the names in `src/`: after regenerating an
-   object, `tools/members.py rewrite src/<obj>.cpp` turns its accesses into members
-   again, and its methods need renaming back. Then `tools/portify.py src/<obj>.cpp`
-   marks its casts between pointers and ints for the native build
-   ([docs/native.md](docs/native.md)), without changing the matched code.
-5. **Fix stack-layout differences by renaming.** This compiler orders stack variables by a
-   hash of their names, not by declaration order. If only `[ebp-N]` offsets differ:
-   - list each local's slot in the original, top of the frame first
-   - run `tools/stackorder.py solve` with a few candidate names per local; one probe
-     compile ranks all candidates
-   - use the names and declaration order it prints
+CI builds the game on Linux (x64, arm64), Windows and macOS (arm64, x64), runs the tests
+that need no game data, and runs the suite from the encrypted compatibility pack.
 
-## Tools
+## The repository
 
-| Tool | Purpose |
+| Path | What it is |
 |---|---|
-| `tools/peinfo.py` | Build identity, Rich header (toolchain), PDB record, sections, imports |
-| `tools/inventory.py` | Function, vtable and region inventory, used to size and split the work |
-| `tools/compid.py` | `@comp.id` build stamps in `.lib`/`.obj` files, to match the SDKs |
-| `tools/funcdiff.py` | Per-function byte and relocation comparison |
-| `tools/stackorder.py` | Picks local names that reproduce the original stack layout (`--globals`: `.bss` layout) |
-| `tools/progress.py` | Matched functions and bytes, and where the matched prefix of `.text` ends |
-| `tools/lift.py` | Lifts a function (`body 0xADDR`) or an object (`write <obj>`) to C++ |
-| `tools/members.py` | Rewrites raw offset accesses into `efz.h`'s members, renames members and methods, checks `efz.h`'s layout ([docs/readability.md](docs/readability.md)) |
-| `tools/objdefs.py` | Object ranges, class names and signatures for the lifter |
-| `tools/objcheck.sh` | Regenerate, compile and diff objects |
-| `tools/batch.sh` | `objcheck.sh` over many objects, one summary line each |
-| `tools/regfix.py` | Find dead code the compiler dropped from where register choice diverges |
-| `tools/undefined.py` | C++ symbols some object uses and none defines (would break the link) |
-| `tools/lifttest.py` | Relift the matched functions and check they still match |
-| `tools/objorder.py` | Function order in `.obj` files as the linker will lay them out |
-| `tools/msvc` | Run `cl`, `link`, `lib` or `rc` in the container |
-| `tools/stdstamp.py` | Stamps objects as the Standard Edition compiler's, as in the original's Rich header |
-| `tools/icon.py` | Writes the original's icon as an `.ico` for `src/efz.rc` |
-| `tools/postlink.py` | Sets the timestamp, PDB GUID and Rich header count after linking |
-| `tools/play.sh` | Plays the built (or original) `efz.exe` under wine on an X display |
-| `tools/run.sh`, `tools/run.cmd` | Build the native game and start it, on Linux and macOS, or on Windows |
-| `tools/native.sh` | Builds the native game (Linux, or Windows with MinGW-w64) in docker |
-| `tools/portify.py` | Marks the pointer casts of lifted code for the native build's 32-bit handles |
-| `tools/constants.py` | Names bare action, command, flag and effect numbers: declares `tools/constants.txt`'s constants in `src/efz.h` and puts them in the code where clang shows what a number is |
-| `tools/compat.py` | The compatibility test: plays the suite (`tests/compat/`) in a build and compares its state, tick by tick, with the original's (the `compat-reference` tag, under wine) |
-| `tools/compatpack.py` | A compatibility pack: what the suite reads of the game's data (frame data, palettes, picture sizes, sound headers; 1.3 MB), for running it where the install can't be; `encrypt` and `unpack` its encrypted copy in `tests/compat/` for CI |
-| `tools/efzlog.py` | The native game's logs and fight records: sessions, warnings and crashes, fights, export of a fight's ticks as a table, where two records part ([docs/logging.md](docs/logging.md)) |
-| `tools/buildinfo.cmake` | Writes the revision the native game's log names, at each build |
-| `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
-| `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |
-| `tools/rtti.py` | Lists an MSVC binary's vtables, with their classes, through its RTTI |
-| `tools/revdiff.py` | Per-function comparison for EfzRevival, addresses from annotations or unique byte matches |
-| `tools/revlayout.py` | Predicts where an object's functions land (name order, identical-function folding) |
-| `tools/revorder.py` | Pairs a rebuilt launcher's functions with the original's and writes the link order file |
-| `tools/revpostlink.py` | Sets the launcher's timestamp, PDB GUID and age, Rich counts and `.reloc` size after linking |
-| `tools/ghidra/ExportFunctions.java` | Ghidra headless script: every function's entry, extent, name source and callees as JSON |
+| `src/` | The game, recovered: `CPlayer` and the 24 character classes, effects, the scenes, the loaders; Win32 and DirectX in four files of its own ([docs/decomp.md](docs/decomp.md) has a table of them) |
+| `port/` | The native game's platform layer on SDL3, in place of those four files: 32-bit handles for the game's pointers, the original's floating point, the log, crash reports and fight records |
+| `port/netplay/` | Netplay: EfzRevival 1.02h's launcher protocol and online session (rollback) in the game's process, its UDP messages, the NET PLAY screens |
+| `port/agent/` | Agents in the game: their view of a fight (shared with `efz_env`), their network read from an agent file, their combos, okizeme and pressure planned on copies of the fight |
+| `port/headless/` | The headless platform and the training library `efz_env` (`efz_env.h`), `efz-headless`, `efz-bench` |
+| `python/` | The Python package over `efz_env`: `EfzVecEnv`, action tables, the framework adapters, agent files; examples to train, play, export and unpack |
+| `runs/` | The trained agents and the scripts that made them: cloning, fine-tuning, leagues of exploiters, the planners, evaluation and the benchmark suite |
+| `revival/` | EfzRevival 1.02h, recovered: the launcher, `EfzRevival.dll` and `DDRAW.dll` |
+| `tests/` | The compatibility suite and the native game's own tests |
+| `tools/` | Building and running the game, the compatibility test, the logs; the decompilation's tools |
+| `toolchain/` | The original compilers in docker (Visual C++ .NET 2003, Visual C++ 2012), and the native build's image |
+| `docs/` | Below |
 
-## EfzRevival
+## Documentation
 
-The second target is EfzRevival 1.02h, the add-on that provides EFZ's rollback netplay,
-spectating, replays and training tools (frame step, save states, hit/hurt/collision
-boxes): `EfzRevival.exe` (the launcher and network side), `EfzRevival.dll` (injected
-into `efz.exe`: rollback, practice features, replays) and its `DDRAW.dll` (a Direct3D 9
-renderer). It is being decompiled the same way, to source that rebuilds its binaries
-byte for byte. Its binaries aren't in the repository either; `REVIVAL_DIR` points at a
-copy of the 1.02h files (default `~/.local/share/efz-decomp/revival/1.02h`).
-
-```sh
-toolchain/setup-vs2012.sh          # ~3.5 GB download, once; after toolchain/setup.sh
-toolchain/setup-vs2012-windows.sh  # the same on Windows, in Git Bash: no container, no admin
-```
-
-lays out Visual C++ 2012 with Update 5's compiler, the Windows SDK 7.1A, the DirectX SDK
-(June 2010), boost 1.56, protobuf 2.6.1 and zlib 1.2.8, which is what the binaries'
-Rich headers and code show; `tools/msvc11` runs it. On Windows it runs the tools as they
-are, with a `subst` drive `Z:` and junctions (`C:\Git`, `C:\Programming`) for the
-container's paths, and the setup also puts GNU make and a `python3` with pefile in the
-toolchain's `bin`; add it to `PATH` and the targets below run the same way.
-
-```sh
-make revival-diff                  # compare the launcher's functions with $REVIVAL_DIR's
-make revival-dll-diff              # link EfzRevival.dll (/LTCG) and compare its functions
-make revival-ddraw-diff            # the same for DDRAW.dll
-make revival-launcher              # link EfzRevival.exe
-EFZ_DIR=... tools/revival-test.sh --revival DIR   # run binaries from DIR with efz.exe
-EFZ_DIR=... tools/play.sh --revival  # play the rebuilt Revival on your X display
-```
-
-The comparisons use a Ghidra export of the originals for function boundaries
-(`GHIDRA_HOME`, made once). **All three binaries' code is recovered** and links:
-
-| Binary | Source | Functions matching |
-|---|---|---|
-| `EfzRevival.exe` | `revival/EfzRevivalLauncher/`: config, console menu, game launch and injection, UDP network, the protocol state machine, shared memory with the DLL, the network messages (`EfzPackets.proto`) | 3342 of 3365 |
-| `EfzRevival.dll` | `revival/EfzRevival/`: hooks into `efz.exe`, the box display, save states, rollback (`OnlineSession`), practice (pause, frame step, record/replay), spectating, replays, tournaments, music | 413 of 416 |
-| `DDRAW.dll` | `revival/DDRAW/`: DirectDraw on Direct3D 9, the text overlay and box renderer | 221 of 221 |
-
-The rebuilt binaries inject into the rebuilt `efz.exe` and run like the originals
-(`tools/revival-test.sh`). `DDRAW.dll` rebuilds byte for byte (`make revival-ddraw-check`).
-The other two can't be made identical: which of several identical functions and data
-the linker keeps is decided by an unstable sort over everything it loaded, including the
-original's unused code that the link dropped, and the outcome behaves like a hash of all
-of it. `EfzRevival.exe` has the original's size, sections, data and static initializers;
-`EfzRevival.dll` its imports, static initializers and string order, with 413 of 416
-functions matching. Apart from those three functions and a few orderings, what differs is
-the copies the linker keeps and what follows from where they sit. See [docs/revival.md](docs/revival.md) for the binaries, the toolchain, the
-rules that decide the code layout, the protocol, rollback and the practice tools.
-
-## Findings so far
-
-See [docs/recon.md](docs/recon.md). In short:
-
-- **Toolchain:** VS .NET 2003 (`cl` 13.10.3077), Standard Edition. It has no optimiser,
-  so `/Od /GS` reproduces the code.
-- **Size:** about 3.6 MB of game code in 71 objects. The Rich header counts 152 objects
-  built by this compiler; the other 81 left nothing in the file.
-- **Libraries:** the static CRT plus DirectDraw, DirectInput and DirectSound, using
-  DirectX 7-era interfaces through the DirectX 9 SDK.
-- **Structure:**
-  - 630 game functions, mostly virtual methods of 24 character classes that derive from
-    `CPlayer` (13-slot vtables)
-  - 8 top-level scene objects, driven from `WinMain`
+| Document | |
+|---|---|
+| [native.md](docs/native.md) | The native game: building it, how it keeps the original's memory layout and floating point, known differences |
+| [compat.md](docs/compat.md) | The compatibility suite: what it compares, the reference, the rules a change follows, the recorded and network layers |
+| [logging.md](docs/logging.md) | Logs, crash reports and fight records: what is written, the formats, the tools |
+| [netplay.md](docs/netplay.md) | Netplay: playing, the protocol and the session, Revival's rules, how it was checked |
+| [agents.md](docs/agents.md) | Agents in the game: the agent file, how the game plays it, its planners, over the network |
+| [headless.md](docs/headless.md) | `efz_env`: observations, actions, rewards, save states, speed, the GPU, the API |
+| [training.md](docs/training.md) | Research before training: the frameworks, Hisoutensoku's AIs, EFZ's CPU, human-like agents |
+| [training-v2.md](docs/training-v2.md) | The training plan since 11 November 2026 and the record of every round |
+| [progress.md](docs/progress.md) | Where the agent work stood on 7 November 2026, what lives outside the repository |
+| [decomp.md](docs/decomp.md) | The decompilation: rebuilding the original `efz.exe` and EfzRevival, the matching workflow and its tools |
+| [readability.md](docs/readability.md), [naming/](docs/naming/README.md) | How the source got its names, and the research behind them: each character's moves and mechanics |
+| [recon.md](docs/recon.md), [revival.md](docs/revival.md) | What the original binaries are: `efz.exe`, and EfzRevival 1.02h |
+| [third-party.md](docs/third-party.md) | The libraries the native game links, and their licences |
 
 ## Roadmap
 
-1. **Reconnaissance:** toolchain, layout and inventory. *Done.*
-2. **Toolchain:** VS .NET 2003 under wine in Docker, plus a per-function compare loop.
-   *Done:* `src/main.cpp` matches its original object byte for byte.
-3. **Function matching**, in this order:
-   1. platform layer and file loaders. *Done:* `0x401000`–`0x40e62f`, 8 objects.
-   2. shared base classes. *Done:* `CPlayer`, `0x40e630`–`0x4136cf`, 2 objects.
-   3. effects and projectiles. *Done:* `CGame::UpdateEffect` and `CPlayer`'s object table.
-   4. the 24 character classes. *Done.*
-   5. the scenes and menus (`0x750d30`–`0x77697e`). *Done.*
-4. **Byte-identical exe.** *Done:* `make check`, kept at the tag `compat-reference`.
-5. **Compatibility suite.** *Done:* [docs/compat.md](docs/compat.md). 254 fights
-   compared on every byte of the game state with the original; what it runs is
-   measured (`tools/compat.py coverage`). Still to do: run it in CI (that needs a
-   legitimately obtained EFZ on the runner).
-6. **Modern fork.** Starting from the matched source:
-   - run natively on Windows, macOS and Linux, 64-bit. *Done:* the native game
-     ([docs/native.md](docs/native.md)), checked against the original by replays.
-   - replace DirectDraw, DirectInput and DirectSound with SDL3. *Done* (`port/`).
-   - separate the deterministic 64 FPS simulation from the platform layer. *Begun:* the
-     headless platform runs it without a window, many games to a process
-     ([docs/headless.md](docs/headless.md))
-   - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools.
-     *Begun:* rollback netplay is built in, with EfzRevival 1.02h's protocol and rules
-     ([docs/netplay.md](docs/netplay.md)); native against native is checked frame by frame.
-     Netplay is to be tested against the original game running EfzRevival 1.02h, over the network
-     ([docs/compat.md](docs/compat.md), "The network layer")
-   - add widescreen and HD output, in-game input binding and controller hot-plug
-   - add mod support for characters, stages and palettes
-7. **UE5.** Host the simulation core as a UE5 C++ module and render it with new assets.
-
-EfzRevival 1.02h, alongside:
-
-1. **Reconnaissance:** binaries, toolchain, libraries, layout. *Done:*
-   [docs/revival.md](docs/revival.md).
-2. **Toolchain:** Visual C++ 2012 Update 5 for `v110_xp`, boost 1.56. *Done:* a test
-   link reproduces the Rich header's products and builds.
-3. **Function matching:** the launcher first (no `/GL`, so objects compare one by one),
-   then `EfzRevival.dll` and `DDRAW.dll` (`/GL`: compared after linking). *Done:* all
-   code recovered; 3342/3365, 413/416 and 221/221 functions match; the rebuilt binaries
-   inject and run like the originals.
-4. **Byte-identical binaries.** *Done* for `DDRAW.dll`. `EfzRevival.exe`: as far as
-   its sources go (see "The launcher, byte for byte" in [docs/revival.md](docs/revival.md)).
-   `EfzRevival.dll`: as far as its sources go, with three functions whose compiled form
-   wasn't reproduced (see "The whole image").
+1. **The source.** *Done:* `efz.exe` byte for byte (`v1.0.0`), EfzRevival 1.02h
+   (`v2.0.0`), names for nearly everything, the compatibility suite in place of the
+   bytes (`compat-reference`).
+2. **The native game** on Windows, macOS and Linux, 64-bit, on SDL3. *Done*, checked
+   against the original by the suite in CI.
+3. **Revival's features, native.** *Begun:* rollback netplay is built in; native against
+   native is checked frame by frame. Still to do: a match against `efz.exe` with
+   EfzRevival 1.02h over the network (the network layer of
+   [docs/compat.md](docs/compat.md)), spectating, and the training tools (frame step,
+   save states, hit and hurt boxes).
+4. **Agents.** *Done:* the headless library, and agents that play in the game, offline
+   and over the network. *Under way:* an Ayu that beats the best players within a
+   person's limits; then other characters.
+5. **The game itself:** widescreen and HD output, in-game input binding, mod support for
+   characters, stages and palettes; the simulation hosted as a UE5 C++ module, drawn
+   with new assets.

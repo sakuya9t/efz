@@ -5,6 +5,46 @@
 #include <math.h>
 #include "efz.h"
 
+#ifdef EFZ_NATIVE
+// The native game's page has a row more, CPU COMBO, after CPU LEVEL, when it has the CPU's
+// combos (efz::OptionsHooks, port/options.cpp): drawn in the page's own letters, and the
+// rows 16 pixels apart instead of 18, so that the nine take the eight's room.
+static int OptionRows()
+{
+    return efz::g_options.drawCpuCombo ? 9 : 8;
+}
+
+// CPU COMBO is item 8 (m_cursor keeps the original's item numbers) and the fifth row,
+// after CPU LEVEL: the row an item is on, and the item on a row.
+static const int kCpuComboItem = 8;
+static const int kCpuComboRow = 4;
+
+static int OptionRow(int item)
+{
+    if (OptionRows() == 8)
+        return item;
+    return item == kCpuComboItem ? kCpuComboRow : item < kCpuComboRow ? item : item + 1;
+}
+
+static int OptionItem(int row)
+{
+    if (OptionRows() == 8)
+        return row;
+    return row == kCpuComboRow ? kCpuComboItem : row < kCpuComboRow ? row : row - 1;
+}
+
+// The top of an item's row on the page (before it slides: m_pageY).
+static int OptionY(int item)
+{
+    return 95 + (OptionRows() == 8 ? 18 : 16) * OptionRow(item);
+}
+#else
+static int OptionY(int item)
+{
+    return 95 + 18 * item;
+}
+#endif
+
 CScene6::CScene6(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound)
     : CScene(hwnd, player1Ref, player2Ref, game, graphics, input, sound)
 {
@@ -124,6 +164,16 @@ BYTE CScene6::Update()
         menuSide = 0;
         for (; menuSide < 2; menuSide++) {
             if (m_game->m_inputY[menuSide] != 0 && m_held[menuSide] == 0) {
+#ifdef EFZ_NATIVE
+                int row = OptionRow(m_cursor) + m_game->m_inputY[menuSide];
+                if (row > OptionRows() - 1) {
+                    row = 0;
+                }
+                if (row < 0) {
+                    row = OptionRows() - 1;
+                }
+                m_cursor = (char)OptionItem(row);
+#else
                 m_cursor += m_game->m_inputY[menuSide];
                 if (m_cursor > 7) {
                     m_cursor = 0;
@@ -131,6 +181,7 @@ BYTE CScene6::Update()
                 if (m_cursor < 0) {
                     m_cursor = 7;
                 }
+#endif
                 m_game->PlaySE(8);
                 m_held[menuSide] = 1;
             }
@@ -229,6 +280,15 @@ BYTE CScene6::Update()
                     SlidePage(1);
                 }
                 break;
+#ifdef EFZ_NATIVE
+            case kCpuComboItem:
+                if (m_game->m_inputX[menuSide] != 0 && m_held[menuSide] == 0) {
+                    efz::g_options.setCpuCombo(!efz::g_options.cpuCombo());
+                    m_game->PlaySE(8);
+                    m_held[menuSide] = 1;
+                }
+                break;
+#endif
             case 7:
                 if (m_game->m_pressA[menuSide] == 1) {
                     m_leave = 1;
@@ -341,64 +401,73 @@ void CScene6::Draw()
         dst = MakeRect(0, 0, 320, 240);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_bgSurface), src, 255, 0);
         m_graphics->Blit(MakeRect(0, 0 - m_pageY, 320, 40), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 320, 40), m_colorKey, 0);
+#ifdef EFZ_NATIVE
+        if (OptionRows() == 9) {
+            // A row at a time, 16 pixels apart, CPU COMBO among them.
+            m_graphics->Blit(MakeRect(0, m_pageY + 40, 320, 55), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 40, 320, 55), m_colorKey, 0);
+            for (int item = 0; item < 8; item++)
+                m_graphics->Blit(MakeRect(0, m_pageY + OptionY(item), 320, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 95 + 18 * item, 320, 14), m_colorKey, 0);
+            efz::g_options.drawCpuCombo(m_graphics, TOPTR(IDirectDrawSurface*, m_menuSurface), TOPTR(IDirectDrawSurface*, m_scoreSurface), (BYTE)m_colorKey, m_pageY + OptionY(kCpuComboItem), m_cursor == kCpuComboItem, efz::g_options.cpuCombo());
+        } else
+#endif
         m_graphics->Blit(MakeRect(0, m_pageY + 40, 320, 200), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 40, 320, 200), m_colorKey, 0);
         switch (m_cursor) {
         case 0:
-            m_graphics->Blit(MakeRect(0, m_pageY + 95, 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 261, 112, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0, m_pageY + OptionY(0), 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 261, 112, 14), m_colorKey, 0);
             break;
         case 1:
-            m_graphics->Blit(MakeRect(0, m_pageY + 113, 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 279, 112, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0, m_pageY + OptionY(1), 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 279, 112, 14), m_colorKey, 0);
             break;
         case 2:
-            m_graphics->Blit(MakeRect(0, m_pageY + 131, 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 297, 112, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0, m_pageY + OptionY(2), 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 297, 112, 14), m_colorKey, 0);
             break;
         case 3:
-            m_graphics->Blit(MakeRect(0, m_pageY + 149, 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 315, 112, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0, m_pageY + OptionY(3), 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 315, 112, 14), m_colorKey, 0);
             break;
         case 4:
-            m_graphics->Blit(MakeRect(0, m_pageY + 167, 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 333, 112, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0, m_pageY + OptionY(4), 112, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 333, 112, 14), m_colorKey, 0);
             break;
         case 5:
-            m_graphics->Blit(MakeRect(0, m_pageY + 185, 320, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 351, 320, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0, m_pageY + OptionY(5), 320, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 351, 320, 14), m_colorKey, 0);
             break;
         case 6:
-            m_graphics->Blit(MakeRect(0, m_pageY + 203, 320, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 369, 320, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0, m_pageY + OptionY(6), 320, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 369, 320, 14), m_colorKey, 0);
             break;
         case 7:
-            m_graphics->Blit(MakeRect(0, m_pageY + 221, 320, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 387, 320, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0, m_pageY + OptionY(7), 320, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 387, 320, 14), m_colorKey, 0);
         }
         if (m_game->m_drawEveryFrame == 0) {
-            m_graphics->Blit(MakeRect(112, m_pageY + 95, 80, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(112, 261, 80, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(112, m_pageY + OptionY(0), 80, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(112, 261, 80, 14), m_colorKey, 0);
         } else if (m_game->m_drawEveryFrame == 1) {
-            m_graphics->Blit(MakeRect(192, m_pageY + 95, 80, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(192, 261, 80, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(192, m_pageY + OptionY(0), 80, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(192, 261, 80, 14), m_colorKey, 0);
         }
         if (m_game->m_damageLevel == 1) {
-            m_graphics->Blit(MakeRect(112, m_pageY + 113, 64, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(112, 279, 64, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(112, m_pageY + OptionY(1), 64, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(112, 279, 64, 14), m_colorKey, 0);
         } else if (m_game->m_damageLevel == 2) {
-            m_graphics->Blit(MakeRect(176, m_pageY + 113, 64, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(176, 279, 64, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(176, m_pageY + OptionY(1), 64, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(176, 279, 64, 14), m_colorKey, 0);
         } else if (m_game->m_damageLevel == 3) {
-            m_graphics->Blit(MakeRect(240, m_pageY + 113, 64, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(240, 279, 64, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(240, m_pageY + OptionY(1), 64, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(240, 279, 64, 14), m_colorKey, 0);
         }
         if (m_game->m_fullEffects == 0) {
-            m_graphics->Blit(MakeRect(112, m_pageY + 131, 48, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(112, 297, 48, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(112, m_pageY + OptionY(2), 48, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(112, 297, 48, 14), m_colorKey, 0);
         } else if (m_game->m_fullEffects == 1) {
-            m_graphics->Blit(MakeRect(160, m_pageY + 131, 48, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(160, 297, 48, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(160, m_pageY + OptionY(2), 48, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(160, 297, 48, 14), m_colorKey, 0);
         }
         if (m_game->m_cpuLevel == 1) {
-            m_graphics->Blit(MakeRect(128, m_pageY + 149, 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(128, 315, 24, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(128, m_pageY + OptionY(3), 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(128, 315, 24, 14), m_colorKey, 0);
         } else if (m_game->m_cpuLevel == 2) {
-            m_graphics->Blit(MakeRect(152, m_pageY + 149, 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(152, 315, 24, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(152, m_pageY + OptionY(3), 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(152, 315, 24, 14), m_colorKey, 0);
         } else if (m_game->m_cpuLevel == 3) {
-            m_graphics->Blit(MakeRect(176, m_pageY + 149, 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(176, 315, 24, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(176, m_pageY + OptionY(3), 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(176, 315, 24, 14), m_colorKey, 0);
         } else if (m_game->m_cpuLevel == 4) {
-            m_graphics->Blit(MakeRect(200, m_pageY + 149, 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(200, 315, 24, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(200, m_pageY + OptionY(3), 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(200, 315, 24, 14), m_colorKey, 0);
         }
         if (m_game->m_roundsSetting == 1) {
-            m_graphics->Blit(MakeRect(128, m_pageY + 167, 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(128, 333, 24, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(128, m_pageY + OptionY(4), 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(128, 333, 24, 14), m_colorKey, 0);
         } else if (m_game->m_roundsSetting == 2) {
-            m_graphics->Blit(MakeRect(152, m_pageY + 167, 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(152, 333, 24, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(152, m_pageY + OptionY(4), 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(152, 333, 24, 14), m_colorKey, 0);
         } else if (m_game->m_roundsSetting == 3) {
-            m_graphics->Blit(MakeRect(176, m_pageY + 167, 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(176, 333, 24, 14), m_colorKey, 0);
+            m_graphics->Blit(MakeRect(176, m_pageY + OptionY(4), 24, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(176, 333, 24, 14), m_colorKey, 0);
         }
     } else if ((char)m_held[2] == 1) {
         src = MakeRect(0, 0, 320, 240);
