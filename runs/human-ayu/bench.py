@@ -82,6 +82,11 @@ DRILLS = {
                "(league_combos.py: people's routes for its character through the game's "
                "planner, a route from the step after its hit, its model 11 steps late), so "
                "that a hit costs the agent what its own costs them"),
+    'planners': (ELEVEN, 'file=exploiter18/planners.efzagent',
+                 "the same with their characters' planned okizeme and pressure too "
+                 "(league_combos.py files --oki --press: people's okizeme and follow-ups to a "
+                 "guard for its character, the agent's own planners' settings): the areas "
+                 "where the league varied a third as much as people do"),
 }
 
 # (name, drill, path, better: +1 more is better or -1, what). The path is into the
