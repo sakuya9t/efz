@@ -5,7 +5,7 @@ league's); and how many matches it takes to read an opponent's area.
 
     python runs/human-ayu/areas.py people ~/data/efz-replays --out runs/human-ayu/people-areas.json
     python runs/human-ayu/areas.py table runs/human-ayu/people-areas.json
-    python runs/human-ayu/areas.py bench r21 [--drill league combos] [--people runs/human-ayu/people-areas.json]
+    python runs/human-ayu/areas.py bench r21 [--drill league combos] [--net] [--people runs/human-ayu/people-areas.json]
 
 Everything is from the viewer's side (the agent's, or the community's Ayu player's):
 the HP it is ahead by in a situation. The opponent's skill in an area is the other side
@@ -206,7 +206,8 @@ def bench(args):
         for f in files:
             d = json.load(open(f))['vs']
             side, se = d['sides'][0], d['se']['sides'][0]
-            areas = side.get('areas')
+            # --net: the ledger's HP a minute, which files from before the areas carry too
+            areas = None if args.net else side.get('areas')
             field = 'rate' if areas else 'net'
             src, err = (areas, se.get('areas', {})) if areas else (side['net_ledger'], se.get('net_ledger', {}))
             name = os.path.basename(f)[len(drill) + 1:-5]
@@ -254,6 +255,9 @@ def main():
     a.add_argument('tag')
     a.add_argument('--drill', nargs='+', default=['league', 'combos'])
     a.add_argument('--people', default=os.path.join(HERE, 'people-areas.json'))
+    a.add_argument('--net', action='store_true',
+                   help="HP a minute (the ledger) even where a file has the areas: the unit "
+                        'older files have, for one drill beside another')
     args = p.parse_args()
     if args.cmd == 'people':
         people(args)
