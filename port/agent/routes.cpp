@@ -17,6 +17,14 @@ namespace agent {
 namespace {
 
 const uint8_t kBack = 0x02;     // efz_env.actions.BACK: back, relative to facing
+const uint8_t kBackPress = 0x12; // redteam.BACK_PRESS: with A, the victim's air recovery
+const int kEndingTail = 12;      // redteam.ENDING_TAIL
+const int kOppAction = 50;       // the view's opp_action
+
+// redteam.LYING and AIR_RECOVERY (src/efz.h: wake-up, the knockdowns, lying; the air
+// recoveries forward and back).
+bool Lying(int action) { return action >= 0x60 && action <= 0x63; }
+bool Recovering(int action) { return action == 0x9d || action == 0x9e; }
 const int kOppCharacter = 66;   // opp_character
 const int kInputFeatures = 6;
 const int kShortest = 240;      // its own play's combo is played this long at least
@@ -76,9 +84,13 @@ void Planner::Finish(Outcome why)
 
 void Planner::Begin(int side, int starter, const std::vector<int>& actions, const float* history,
                     uint8_t prev, bool deterministic, const float* view, int late,
-                    const std::vector<int>& extra)
+                    const std::vector<int>& extra, bool again)
 {
     Cancel();
+    again_ = again;
+    if (!again)
+        comboSet_ = false;
+    target = -1;
     side_ = side;
     starter_ = starter;
     actions_ = actions;
@@ -94,6 +106,9 @@ void Planner::Begin(int side, int starter, const std::vector<int>& actions, cons
     best = own = 0;
     ms = 0;
     frames = 0;
+    cost = 0;
+    played = 0;
+    partial = false;
     memset(expected, 0, sizeof(expected));
     // Redteam's plans_against: only against the routes' victims, if it has any.
     const Routes& routes = policy_->routes;
@@ -126,6 +141,7 @@ bool Planner::Prelude()
         if (!world_->Step(input) || world_->Over())
             return false;
         frames++;
+        cost++;
         View(side_, &seen_[(size_t)(delay - 1 - k) * kObsDim]);
     }
     memcpy(expected, seen_.data(), sizeof(expected));
@@ -173,6 +189,20 @@ bool Planner::Prelude()
     Option self;
     self.entry = kOwnPlay;
     options_.push_back(std::move(self));
+    // Played first: what the agent goes on with if no plan comes (Settle): the rest of
+    // its route, else its own play. Then the others as they stand. (SetOwnLast: the rest
+    // of its route, the routes, its own play.)
+    const size_t n = options_.size();
+    size_t first = extra_.empty() ? n - 1 : n - 2;
+    if (ownLast_ && extra_.empty() && n > 1)
+        first = 0;
+    work_.assign(1, first);
+    for (size_t j = 0; j < n; j++) {
+        if (j != first && !(ownLast_ && j == n - 1))
+            work_.push_back(j);
+    }
+    if (ownLast_ && first != n - 1)
+        work_.push_back(n - 1);
     current_ = 0;
     return true;
 }
@@ -193,7 +223,7 @@ bool Planner::Play(Option& o, Clock::time_point deadline)
     }
     float now[kObsDim];
     while (o.t < longest_) {
-        if (Clock::now() >= deadline)
+        if (Clock::now() >= deadline || (budget_ > 0 && cost >= budget_))
             return false;
         uint8_t bits = 0;
         if (o.entry >= 0) {
@@ -235,37 +265,99 @@ bool Planner::Play(Option& o, Clock::time_point deadline)
         }
         int facing[2] = {world_->Facing(0), world_->Facing(1)};
         uint8_t input[2];
+        const int ending = routes.ending;
         input[side_] = ToScreen(bits, facing[side_]);
-        input[1 - side_] = ToScreen(kBack, facing[1 - side_]);
+        input[1 - side_] = ToScreen(ending > 0 && o.t % 2 ? kBackPress : kBack, facing[1 - side_]);
         if (!world_->Step(input))
             return true;
         frames++;
+        cost += o.entry == kOwnPlay ? ownCost_ : 1;
         if (o.entry == kOwnPlay) // its history: the controls the game read (info['input'])
             Push(o.history, o.prev, ToScreen(world_->Read(side_), facing[side_]));
-        o.dealt = std::max(o.dealt, (float)(hp0_ - world_->Hp(1 - side_)));
+        if (o.over < 0) {
+            o.dealt = std::max(o.dealt, (float)(hp0_ - world_->Hp(1 - side_)));
+            // Its combo over, or the round (a KO: what it dealt can't grow).
+            if (world_->ComboHits(side_) == 0 || world_->Over())
+                o.over = o.t;
+        }
+        if (ending > 0) { // how it leaves the victim, to a little after its combo's end
+            View(side_, now);
+            int action = (int)lround(now[kOppAction]);
+            o.recovered = o.recovered || Recovering(action);
+            o.down = o.down || Lying(action);
+        }
         o.t++;
-        // Its combo over, or the round (a KO: what it dealt can't grow).
-        if (world_->ComboHits(side_) == 0 || world_->Over())
+        if (o.over >= 0 && (ending <= 0 || o.t - 1 - o.over >= kEndingTail))
             return true;
     }
     return true;
 }
 
-void Planner::Choose()
+// The choice among the first `done` options of work_: all of them, the most any is worth
+// if that is more than its own play's; some of them (Settle), the one it goes on with
+// otherwise (the first played) unless another played is worth more.
+void Planner::Choose(size_t done)
 {
     tried.clear();
     dealt.clear();
     size_t n = options_.size();
-    size_t top = 0;
+    std::vector<char> have(n, 0);
+    for (size_t k = 0; k < done && k < n; k++)
+        have[work_[k]] = 1;
+    partial = done < n;
+    played = (int)std::min(done, n);
+    size_t top = partial ? work_[0] : 0;
+    const float ending = (float)policy_->routes.ending;
+    ends.clear();
+    std::vector<float> worth(n);
+    best = 0;
     for (size_t j = 0; j < n; j++) {
-        tried.push_back(options_[j].entry);
-        dealt.push_back(options_[j].dealt);
-        if (options_[j].dealt > options_[top].dealt)
+        const Option& o = options_[j];
+        tried.push_back(o.entry);
+        dealt.push_back(o.dealt);
+        ends.push_back(o.recovered ? 2 : o.down ? 1 : 0);
+        worth[j] = o.dealt + (o.down && !o.recovered ? ending : 0.0f);
+    }
+    for (size_t j = 0; j < n; j++) {
+        if (!have[j])
+            continue;
+        best = std::max(best, options_[j].dealt);
+        if (worth[j] > worth[top])
             top = j;
     }
-    best = options_[top].dealt;
     own = options_[n - 1].dealt;
-    chosen = top + 1 < n && options_[top].dealt > own ? (int)top : -1;
+    if (share_ < 1.0f) {
+        // A share of the most: the first plan's target, or what is left of it.
+        float most = 0;
+        for (size_t j = 0; j < n; j++) {
+            if (have[j])
+                most = std::max(most, worth[j]);
+        }
+        if (again_ && comboSet_) {
+            target = std::max(0.0f, comboTarget_ - (float)(comboHp0_ - hp0_));
+        } else {
+            target = share_ * most;
+            comboTarget_ = target;
+            comboHp0_ = hp0_;
+            comboSet_ = true;
+        }
+        // The nearest, in the order played (ties: what it would go on with).
+        size_t pick = work_[0];
+        for (size_t k = 0; k < done && k < n; k++) {
+            size_t j = work_[k];
+            if (fabsf(worth[j] - target) < fabsf(worth[pick] - target))
+                pick = j;
+        }
+        top = pick;
+        chosen = top + 1 < n ? (int)top : -1;
+    } else if (partial) {
+        chosen = top + 1 < n ? (int)top : -1;
+    } else {
+        chosen = top + 1 < n && worth[top] > worth[n - 1] ? (int)top : -1;
+    }
+    // (its own play last and not played: a route that dealt nothing isn't taken for it)
+    if (ownLast_ && partial && !have[n - 1] && chosen >= 0 && worth[top] <= 0)
+        chosen = -1;
     route.clear();
     if (chosen >= 0 && options_[top].entry == kExtra) {
         route = extra_;
@@ -291,12 +383,13 @@ bool Planner::Work(Clock::time_point deadline)
         if (!Prelude())
             apart = true;
         else if (options_.size() == 1) // no route to try: its own play, unplayed
-            Choose();
+            Choose(1);
         else
             phase_ = kOptions;
     }
-    while (!apart && phase_ == kOptions && Clock::now() < deadline) {
-        Option& o = options_[current_];
+    while (!apart && phase_ == kOptions && Clock::now() < deadline &&
+           !(budget_ > 0 && cost >= budget_)) {
+        Option& o = options_[work_[current_]];
         bool loaded = o.started && o.state.valid ? world_->Load(o.state) : world_->Load(afterDelay_);
         if (!loaded) {
             apart = true;
@@ -308,7 +401,7 @@ bool Planner::Work(Clock::time_point deadline)
         }
         o.state = Snapshot();
         if (++current_ == options_.size())
-            Choose();
+            Choose(current_);
     }
     world_->Load(real_);
     world_->Leave();
@@ -316,6 +409,14 @@ bool Planner::Work(Clock::time_point deadline)
         Finish(kApart);
     ms += std::chrono::duration<double, std::milli>(Clock::now() - t0).count();
     return phase_ == kDone;
+}
+
+bool Planner::Settle()
+{
+    if (phase_ != kOptions || current_ == 0)
+        return false;
+    Choose(current_);
+    return true;
 }
 
 } // namespace agent

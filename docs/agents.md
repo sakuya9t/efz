@@ -139,8 +139,10 @@ python python/examples/export_agent.py runs/mine/avg.zip --parts-from agents/ayu
 
 On the title, VS HUMAN, then on character select:
 
-- **F5** switches who plays P1: you, then each agent in the folders in turn, then you
-  again. **F6** does the same for P2. The bottom of the screen says who plays each side.
+- **F5** switches who plays P1: you, then each agent in the folders in turn (by the name
+  in the file), then you again. **F6** does the same for P2. **Shift+F5** and
+  **Shift+F6** go the other way, so the last agent is one press from you. The bottom of
+  the screen says who plays each side.
 - An agent's side picks its own character (the one it was trained to play) by moving the
   cursor and pressing A, and keeps the colour it lands on. The stage is yours to pick.
 - With P1 an agent, you play P2 with P1's controls (your usual keys) as well as P2's.
@@ -155,6 +157,9 @@ generator of its own.
 
 `--agent-p1 FILE` and `--agent-p2 FILE` on the command line start with those sides played
 by those agent files (a name in the agents folders, or a path).
+
+Each fight's record ([logging.md](logging.md)) names the agent that played each side, and
+the REPLAY menu's RECORDS page plays it back, the agent's side labelled as in the fight.
 
 ## Its combos: the routes
 
@@ -206,6 +211,144 @@ counted at what it dealt, the opponent's whole HP. The Python planner's copies r
 through a KO within a step (`skip_noninteractive`), so they miss the KO's last blow and
 count such a route short.
 
+## Its okizeme: planned from people's
+
+An agent file with the module `okiplan:1` plans what it does at its opponent's knockdowns
+as `runs/human-ayu/okiplan.py` does in evaluations (`port/agent/mix.h`; the reasons and
+the measures: docs/training-v2.md, "The planned okizeme"). Without it an agent's okizeme
+is its network's, which is one low attack whoever it plays.
+
+    python runs/human-ayu/oki_library.py --answers ~/data/efz-replays/oki-library.npz
+    python python/examples/export_agent.py runs/human-ayu/agent-league17-s1/avg.zip \
+        --library ~/data/efz-replays/combo-library-victims.npz --replan \
+        --okizeme ~/data/efz-replays/oki-library.npz \
+        --okizeme-option per_plan=5 --okizeme-option window=40 \
+        --okizeme-option skip=0.05 --okizeme-option think=14
+
+The library (`oki_library.py`) is what a character's players did in the community's
+replays from each knockdown they made to their first contact on the riser, with its
+timing: 8,499 for Ayu. `--answers` writes beside it what the game needs and has no other
+way to know: each character's reversals on rising and the moves that are invincible from
+their start. The file is about 5 MB larger for them.
+
+- **When.** On the frame its opponent is knocked down (as the game is), it chooses its
+  inputs for the 14 frames until it sees the knockdown, as the routes do at a hit, and
+  then `think` frames of crouching guard; the planner works in the game's spare time
+  over those frames, from where they leave the fight. A knockdown at a combo's end
+  waits until the routes' plan and route are done.
+- **What it tries.** The library's okizeme whose player stood where the agent stands, as
+  many frames before the rising as are left (an entry is played with its recorded rising
+  on the frame this opponent rises), at most `per_class` of a kind (how it comes in, how
+  it is guarded, the side; a throw) and `per_plan` in all; a wait (a crouching guard
+  through the rising: the bait); and its own play. Each against a riser that guards
+  crouching, guards standing, reverses, jumps away, or presses a button; an answer this
+  opponent is expected to give less than `skip` of the time isn't played.
+- **What it draws.** Each answer's share comes from what it has seen this opponent do on
+  its wake-ups and how it guards (counted from its own late view; kept from one match to
+  the next of the same seat, older matches counting 0.7 each), over a prior of the
+  community's players. An option's worth is the HP it took less the HP it lost by
+  `window` frames after the rising, a first hit either way counted as a combo; the draw
+  is by exp(expected worth / `temperature`), or with `doubt` the mix that still does
+  well if the shares are wrong.
+- **Playing it.** Once it sees the knockdown and the game is where the plan expected, it
+  plays what was drawn, until the inputs end or it sees itself hit. If the okizeme hits,
+  the routes plan from that hit with the rest of the okizeme as one of their options.
+
+The game's planner differs from an evaluation's `okiplan` module in what a frame's spare
+time affords: fewer options (5 or 6, not 10), a shorter look after the rising, a
+crouching guard after an option's inputs on the copies instead of the network on every
+copy (`okiplan.py`'s `after=guard`), and the `think` frames. An evaluation with those
+settings is what the game plays; `evaluate.py --p1 FILE.efzagent --p1-native` runs the
+game's own code (`runs/human-ayu/native_agent.py`: each match's player attached to its
+environment, `NativeAgent.attach`), which is how a file is measured before a person
+meets it. `tests.test_agents.OkizemeAsOkiplan`: the same counts from the same views as
+`efz_env.memory`, at a knockdown the same options, the same worth against each answer
+and the same mix as `okiplan.py`, and plans made and played in a match.
+
+The log has a line a fight: knockdowns planned for, plans made and played and what was
+drawn by kind, plans dropped and why, the time a plan took and the game waited, and what
+it now expects of this opponent's wake-ups.
+
+A file's okizeme is carried into a file of a model trained further by `--parts-from`
+(`--keep routes chooser okiplan pressplan airthrow`, the default); `unpack_agent.py` doesn't write the
+library back as a file. A game older than the module refuses the file and says which
+module it doesn't play.
+
+## Its pressure: planned from people's
+
+An agent file with the module `pressplan:1` plans what follows each of its guarded moves
+as `runs/human-ayu/pressplan.py`'s live plan does (`mix.h`'s `Press`, the okizeme's
+planner from a guard instead of a knockdown; docs/training-v2.md, "The planned
+pressure"). Without it an agent's pressure is a low or nothing after each guard, with no
+throw.
+
+    python runs/human-ayu/pressure_library.py --answers ~/data/efz-replays/pressure-library.npz
+    python python/examples/export_agent.py MODEL.zip --library ... --okizeme ... \
+        --pressure ~/data/efz-replays/pressure-library.npz
+
+The library is what a character's players did next when a move of theirs was guarded and
+they could act again beside the guarding player (17,963 for Ayu: the next move, a throw,
+an overhead, holding, backing off), each with the frame advantage it was done at.
+
+- **When.** A plan has no time between seeing a guard and acting on it. So on the frame a
+  move of the agent's touches the opponent's guard (as the game is), its inputs for the
+  14 frames until it sees the guard are chosen at once (its own play's, from what it has
+  seen: what it would have pressed anyway), and the planner works over those frames, from
+  where they leave the fight with the opponent holding its guard: then a crouching guard
+  until the agent is free (at most `max_wait` frames, else nothing is planned), then the
+  follow-up.
+- **What it tries.** The library's follow-ups done at the same frame advantage (within
+  `slack` frames) and distance (within `tolerance` pixels), a wait (the bait) and its own
+  play, each against a guarding player that goes on guarding crouching or standing,
+  reverses on its first free frame, jumps away, or presses a button. The shares come from
+  what this opponent did after its guards so far; the draw is the mix that holds up if
+  those shares are wrong (`doubt` 0.3).
+- **Playing it.** When it sees the guard and the game is where the plan expected (the
+  opponent did hold its guard), it plays the wait and the follow-up; if the follow-up is
+  guarded it plans again from that contact, and if it hits the routes take it from the
+  hit. Nothing planned (a hit either way first, the agent not free in time, the opponent
+  gone): its own play.
+
+A plan is about 0.6 of a route plan (4 options, the answers expected 5% of the time or
+more, 40 frames past the guard). `tests.test_agents.PressureAsPressplan`: from the frame
+of a contact the same wait, the same view expected, the same options and worth as
+`pressplan.live_plan`, and plans made in a match. The log has a line a fight, as the
+okizeme's.
+
+## Its catch: an air throw inside the recovery
+
+An agent file with the module `airthrow:1` air-throws an opponent that recovers in the air
+out of its combo, when a throw catches before the recovery is over (`mix.h`'s `Catch`,
+`runs/human-ayu/airplan.py`'s sure throw; docs/training-v2.md, "The air"). An opponent
+that presses out of a combo in the air is free again beside the agent, and nothing
+touches it until its recovery ends, except an air throw (`src/ayu.cpp`: C with forward
+held, in the air within 100 pixels of an opponent in the air that is in no hit reaction
+and no guard). In the community's replays that is the catch that works: half of the air
+throws tried on a recovery catch, a fifth of anything else.
+
+    python python/examples/export_agent.py MODEL.zip --library ... --air-throw
+
+No library and no guess about the opponent: until its recovery ends it can do nothing,
+so what a copy of the fight shows is what will happen.
+
+- **When.** On the frame the opponent goes from a hit reaction into its air recovery (as
+  the game is), the agent's inputs for the 14 frames until it sees the recovery are
+  chosen at once (its own play's), and the planner works over those frames from where
+  they leave the fight.
+- **What it tries.** C with forward held after every second frame, up to 24 and the
+  recovery's end: of holding forward in the air, of a second jump at the opponent, of a
+  dash at it; from the ground, that far into a jump at it or straight up. Each on a copy
+  until the recovery's end; the one that catches soonest.
+- **Playing it.** When it sees the recovery and the game is where the plan expected, it
+  plays that throw. None that catches (the opponent too far, the agent still in a move,
+  under 3 frames of the recovery left, further apart than `air_near` pixels): its own
+  play, as before.
+
+A plan is at most 32 throws of at most 60 frames on copies. `tests.test_agents.
+CatchAsAirplan`: from the frame of a recovery the same view expected, the same frames of
+the recovery left and the same throw as `airplan.live_throw`, and plans made in a match.
+The log has a line a fight ("...'s catches").
+
 ## Over the network
 
 NET PLAY's screen has a row **PLAYED BY**: YOU, or an agent (left and right switch; it is
@@ -239,6 +382,71 @@ Its routes too: a plan starts from the frame shown, the one it sees, and is made
 between frames, out of the session's frames; nothing of it reaches the match, its sounds,
 its replay or the sync records. A plan is dropped more often online (the game elsewhere):
 the opponent's inputs, or a rollback, change the frames it was made for.
+
+## The CPU's combos
+
+The game's own CPU (`CpuInput`) guards, recoil-guards and wakes up well at level 4, but its
+combos are short. With **CPU COMBO** on in OPTIONS, the CPU of ARCADE (with score or not)
+and VS CPU plays its combos from an agent file of its character, planned on copies of the
+fight as an agent's are. This is the training's level-4 CPU with combos
+(`evaluate.py --p2-cpu-combos`, the benchmark's `cpu` drill), in the game.
+
+**The files.** One for each character, in the `cpu` folder of an agents folder
+(`agents/cpu/` in the save folder or the game's; the first by name of each character is
+the one played). `league_combos.py cpu` gathers them from the league's trained
+opponents, each the newest exploiter's model with its character's combo library
+(`league_combos.py files`):
+
+```sh
+python runs/human-ayu/league_combos.py cpu --out ~/dev/efz/tmp/cpu-combos
+#   kano: kano/exploiter18/combos.efzagent -> .../cpu-combos/kano.efzagent (5.2 MB)
+#   ...  (22 characters on 20 November: all but Kanna, Mizuka and Nayuki's other form)
+```
+
+A character with no file there keeps the CPU's own combos; the log says so at the fight.
+
+**How it plays.** The CPU plays as it always does: its neutral, its guard, its recoil
+guards and okizeme are its own. The file's player watches the whole fight as it would play
+it, and while the CPU's opponent is in a hit reaction (and not down) the side is the
+file's: `CPlayer::m_cpu` is off for those frames, so the CPU's decisions stop and the
+side reads its controls, which the file gives. Once the opponent is out of the hit
+reaction, down, or the round over, the CPU has the side back. The file's player sees what
+the CPU pressed in the frames it played, as its own inputs (`Player::Played`).
+
+Its route begins 8 frames after its hit (`kCpuLead`), whatever the file says (the
+league's files begin theirs on the step after, which needs a plan made at once); the
+plan is made in the time between frames, as an agent's, and a frame waits at most 8 ms
+for one, so the person's side never stutters. A plan not done when it is due is chosen
+from the routes played by then: for the CPU the routes are played first and the file's
+own play last (`Planner::SetOwnLast`), the network's frames on the copies being half of a
+plan's time.
+
+**The level.** OPTIONS' CPU level (in ARCADE with score, the stage's: the CPU's
+`m_cpuSkill`) sets what a combo aims at (`Planner::SetShare`): at level 4 the most
+damaging option the planner finds at the hit; at 3 the one nearest three quarters of
+that, at 2 half, at 1 a quarter, its own play among the options. A later plan of the same
+combo (the routes are planned again at each new move's hit) aims at what is left of the
+combo's target, so that the shares don't compound.
+
+**Records.** A fight's record names the file (`cpu_combos`, and `cpu_combo_share`) and has
+a `cpu` line at each tick the side changed hands ([logging.md](logging.md)); replaying the
+record hands the side over at the same ticks, so it plays as it was played. A network
+match has no CPU, and a record being watched or converted runs none of this.
+
+**The setting** is in `options.ini` in the save folder (`cpu_combos=1`), not in
+`key.ini`: that file is the original's, which config.exe and EfzRevival also read and
+write. `--cpu-combos on` or `off` sets it for one run. On the OPTIONS page the row is
+CPUコンボ, なし / あり, after CPU難易度; the rows are 16 pixels apart instead of 18 to make
+room for it (src/scene6.cpp). Its letters are the page's own (CPU from CPU難易度, コンボ
+from the character record page's 最大コンボ数) and, for なし and あり, which no picture of
+the game has, glyphs drawn in the page's colours (port/options.cpp). With pictures other
+than 4.02's (a translation patch), the row's text is written over it in SDL's font.
+
+Measured on 20 November (this Linux machine; VS CPU, Akane's file against an idle
+Nagamori): with no time limit on the plans (`--fast`), the combos' damage rose with the
+level, a mean of 400, 489, 688 and 1,244 HP from level 1 to 4 (the CPU's first hit
+included); in real time at level 4, 51 plans in a minute's fight, a route played in 48,
+49 of them chosen from the routes played by then, the game waiting 8 ms a plan.
 
 ## Checking it
 
@@ -321,9 +529,11 @@ the opponent's inputs, or a rollback, change the frames it was made for.
 
 ## Not yet
 
-- **Other modules**: an `agent.json`'s modules besides `routes` (`oki`, people's okizeme
-  played by a second network) can't go into a file yet; nor routes chosen by the chooser
-  alone (`by: chooser`).
+- **Other modules**: of an `agent.json`'s modules the file takes `routes` and, through
+  `--okizeme`, `--pressure` and `--air-throw`, the planned okizeme and pressure and the
+  catch; not `oki` (people's okizeme played by a second network), routes chosen by the
+  chooser alone (`by: chooser`), or `airplan`'s and `jumpplan`'s options tried against
+  answers (measured in evaluations only: docs/training-v2.md, "The air").
 - **A real EfzRevival 1.02h peer**: the network matches above are this game against
   itself.
 - **A controller's button** for F5 and F6: the keyboard only.

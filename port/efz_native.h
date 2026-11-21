@@ -194,6 +194,42 @@ extern NetplayHooks g_netplay;
 // CReplayFile's handle while the session keeps the replay.
 const HANDLE kNetplayReplay = 0xef2e0001u;
 
+// --- The REPLAY menu's RECORDS page (port/records.cpp, docs/logging.md): after EXIT,
+// the fight records of the logs folder, each played as the game plays a replay, or saved
+// as one in a replay slot. Empty in a build without records (the headless library): the
+// menu then has its ten pages.
+struct RecordsHooks {
+    // CScene8::Enter: the records are read again.
+    void (*enter)();
+    // Each frame on the page, per side: the controls' directions (-1, 0, 1), A, B and C
+    // pressed this frame, and whether a direction or B was held already. What the menu
+    // does then: a RecordsAction.
+    int (*update)(int side, int dx, int dy, bool a, bool b, bool c, bool held);
+};
+enum RecordsAction {
+    kRecordsNothing,
+    kRecordsMoved,  // the page's choice moved (the menu's move sound)
+    kRecordsChosen, // something chosen on the page (the menu's choice sound)
+    kRecordsTurn,   // left or right: to the menu's next page
+    kRecordsStart,  // a record set up to play or to be saved: match setup next
+    kRecordsBack,   // B: leave the menu
+};
+extern RecordsHooks g_records;
+const int kRecordsPage = 10; // CScene8::m_page
+
+// --- The OPTIONS page's CPU COMBO row (port/options.cpp, docs/agents.md): after CPU
+// LEVEL, whether the game's CPU plays its combos from its character's agent file. Empty
+// in a build without it (the headless library): the page then has its eight rows.
+struct OptionsHooks {
+    // The row at (0, y), drawn from the page's pictures (its own, and the character record
+    // page's, both loaded with the colours from 161), selected or not, on or off.
+    void (*drawCpuCombo)(CGraphics* graphics, IDirectDrawSurface* menu, IDirectDrawSurface* score,
+                         BYTE colorKey, int y, bool selected, bool on);
+    bool (*cpuCombo)();
+    void (*setCpuCombo)(bool on);
+};
+extern OptionsHooks g_options;
+
 } // namespace efz
 
 #endif

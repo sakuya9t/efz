@@ -13,6 +13,9 @@
 // to play) by moving the cursor and pressing A as a person would, then leaves the stage
 // to the person. In a fight it acts as play.py's HumanMatch runs it (policy.h's Player).
 //
+// With OPTIONS' CPU COMBO on, the game's CPU plays its combos from agent files too ("The
+// game's CPU with combos" below).
+//
 // An agent file with routes plans its combos as play.py --assist does (agent/routes.h):
 // on copies of the fight, saved and written back as netplay's rollback does it (the
 // regions Revival copies, and rand's state), worked on between frames (AgentsIdle). The
@@ -41,9 +44,11 @@
 #include "log.h"
 #include "netplay.h"
 #include "platform.h"
+#include "record.h"
 #include "agent/observe.h"
 #include "agent/policy.h"
 #include "agent/routes.h"
+#include "agent/mix.h"
 
 extern int g_fkeyHeld; // src/scene3.cpp
 
@@ -219,9 +224,16 @@ bool g_fast = false;
 // (ms): a local match can stutter a little, a network match should not; for a later plan
 // of the combo (replan), half a frame: the combo goes on with its route meanwhile.
 const double kPatienceLocal = 40, kPatienceNet = 8, kPatienceAgain = 8;
+// The CPU's combos: the steps after its hit at which a route begins (at most: a file's
+// route_confirm or delay may be fewer), the frames' idle time for its plan meanwhile;
+// and how long a frame waits for one not done then: hardly, the stutter would be the
+// person's.
+const int kCpuLead = 8;
+const double kCpuPatience = 8;
+const int kArcade = 0, kArcadeScore = 2, kVsCpu = 3; // CGame::m_gameMode
 
 const unsigned char kRight = 0x01, kLeft = 0x02, kDown = 0x04, kUp = 0x08, kA = 0x10, kC = 0x40;
-const int kDikF5 = 0x3f, kDikF6 = 0x40;
+const int kDikF5 = 0x3f, kDikF6 = 0x40, kDikLShift = 0x2a, kDikRShift = 0x36;
 const int kVsHuman = 4;   // CGame::m_gameMode
 const int kSelectWait = 3; // frames between character select presses, at the least
 
@@ -246,9 +258,18 @@ struct Side {
     std::shared_ptr<agent::Policy> policy;
     std::unique_ptr<agent::Player> player;
     std::unique_ptr<agent::Planner> planner; // its routes', if it has some
+    std::unique_ptr<agent::MixPlanner> mix;  // its okizeme's, if it has a library of them
     unsigned char input = 0; // this frame's
     bool playing = false;    // this frame's input is the agent's
     int wait = 0;            // character select: frames before the next press
+    // The game's CPU with combos: the side is the CPU's but for its combos.
+    bool cpu = false;
+    bool handed = false;    // the file has the side now (CPlayer::m_cpu off)
+    bool cpuPlayed = false; // the CPU played the frame just run
+    int level = 0;          // the CPU's level (1-4), and the share of the best it aims at
+    float share = 1;
+    int handoffs = 0;       // the times the CPU handed it the side, this fight
+    std::string file;       // its file's name
 };
 
 Side g_sides[2];
@@ -357,9 +378,131 @@ int IndexOf(const std::string& path)
     return -1;
 }
 
+// What was drawn, by kind, for the log.
+std::string Drawn(const agent::OkiStats& o, const std::vector<std::string>& kinds)
+{
+    std::string drawn;
+    for (size_t k = 0; k < o.drawn.size(); k++) {
+        if (!o.drawn[k])
+            continue;
+        std::string name = k < kinds.size() ? kinds[k]
+                                            : k == kinds.size() ? "wait" : "its own play";
+        drawn += (drawn.empty() ? "" : ", ") + name + " " + std::to_string(o.drawn[k]);
+    }
+    return drawn.empty() ? "none" : drawn;
+}
+
+// What an agent's planned pressure did, for the log.
+void LogPressure(const char* who, const Side& s)
+{
+    const agent::OkiStats& o = s.player->Pressure();
+    if (!o.asked)
+        return;
+    const agent::Press& lib = s.policy->press;
+    double shares[agent::kAnswers];
+    s.player->Seen().PressBelief(lib.prior, shares, lib.sight > 0);
+    LogInfo("agent", "%s's pressure: %d guarded moves planned from: %d plans made, %d played "
+                     "(%s); %d dropped (late %d, the game elsewhere %d, nothing to plan %d, the "
+                     "fight over %d); planning %.1f ms a plan (at most %.1f), the game waited "
+                     "%.2f ms a plan (at most %.1f); it expects of this opponent after a guard: "
+                     "a crouching guard %.0f%%, a standing one %.0f%%, a reversal %.0f%%, a "
+                     "jump %.0f%%, a button %.0f%%",
+            who, o.asked, o.plans, o.played, Drawn(o, lib.kinds).c_str(),
+            o.late + o.elsewhere + o.nothing + o.apart, o.late, o.elsewhere, o.nothing, o.apart,
+            o.planMs / std::max(1, o.asked - o.late), o.planMsMost, o.waitedMs / o.asked,
+            o.waitedMsMost, shares[0] * 100, shares[1] * 100, shares[2] * 100, shares[3] * 100,
+            shares[4] * 100);
+}
+
+// What an agent's air throws of its opponent's recoveries did, for the log.
+void LogCatches(const char* who, const Side& s)
+{
+    const agent::OkiStats& o = s.player->Air();
+    if (!o.asked)
+        return;
+    LogInfo("agent", "%s's catches: %d air recoveries of its opponent planned from: an air "
+                     "throw that catches inside the recovery found and played in %d; none in "
+                     "%d; %d dropped (late %d, the game elsewhere %d, the fight over %d); "
+                     "planning %.1f ms a plan (at most %.1f), %ld frames on copies a plan, the "
+                     "game waited %.2f ms a plan (at most %.1f)",
+            who, o.asked, o.played, o.nothing, o.late + o.elsewhere + o.apart, o.late,
+            o.elsewhere, o.apart, o.planMs / std::max(1, o.asked - o.late), o.planMsMost,
+            o.frames / std::max(1, o.asked - o.late), o.waitedMs / o.asked, o.waitedMsMost);
+}
+
+// What an agent's guard on rising did, for the log.
+void LogRising(const char* who, const Side& s)
+{
+    if (!s.player || !s.policy || !s.policy->rise.on)
+        return;
+    const agent::RiseStats& r = s.player->Rising();
+    if (r.recoils)
+        LogInfo("agent", "%s's moves seen recoil-guarded: %d, %d answered with a guard for %d steps "
+                         "(%d with a press in a kept chain's place); the next one answered with "
+                         "probability %.2f; %d of its own recoil guards followed by its punish",
+                who, r.recoils, r.recoilAnswered, r.recoilSteps, r.recoilCleared,
+                s.player->RecoilChance(), r.recoilPunished);
+    if (!r.knockdowns)
+        return;
+    LogInfo("agent", "%s's risings: %d knockdowns, the attacker on it in %d, %d of those "
+                     "guarded through (%d steps, %d standing, %d crouching under a flight "
+                     "taken to have landed); the next one guarded with probability %.2f",
+            who, r.knockdowns, r.met, r.guarded, r.steps, r.stood, r.landed,
+            s.player->RiseChance());
+}
+
+// What an agent's raw specials by their accounts did, for the log.
+void LogRisks(const char* who, const Side& s)
+{
+    if (!s.player || !s.policy || !s.policy->risk.on)
+        return;
+    const agent::RiskStats& r = s.player->Risks();
+    if (r.jumps)
+        LogInfo("agent", "%s's jumps at the opponent: %d drawn for, %d stopped, %d let out (%d seen "
+                         "to start); the account now: %.1f jumps worth %.0f HP each, the next "
+                         "stopped with probability %.2f",
+                who, r.jumps, r.jumpsStopped, r.jumpsLet, r.jumpsCame, s.player->JumpCount(),
+                s.player->JumpWorth(), s.player->JumpChance());
+    if (!r.seen)
+        return;
+    LogInfo("agent", "%s's raw specials: %d presses that would start a move with an account: "
+                     "%d stopped, %d let out (%d of them seen to start)",
+            who, r.seen, r.stopped, r.let, r.came);
+}
+
+// What an agent's planned okizeme did, for the log.
+void LogOkizeme(const char* who, const Side& s)
+{
+    LogRising(who, s);
+    LogRisks(who, s);
+    if (!s.player || !s.player->Mixing())
+        return;
+    LogPressure(who, s);
+    LogCatches(who, s);
+    const agent::OkiStats& o = s.player->Oki();
+    if (!o.asked)
+        return;
+    const agent::Mix& lib = s.policy->mix;
+    std::string drawn = Drawn(o, lib.kinds);
+    double shares[agent::kAnswers];
+    s.player->Seen().Belief(lib.prior, shares, lib.sight > 0);
+    LogInfo("agent", "%s's okizeme: %d knockdowns planned for: %d plans made, %d played (%s); "
+                     "%d dropped (late %d, the game elsewhere %d, the opponent up too soon %d, "
+                     "the fight over %d); planning %.1f ms a plan (at most %.1f), %ld frames on "
+                     "copies a plan, the game waited %.2f ms a plan (at most %.1f); it expects "
+                     "of this opponent's wake-ups: a crouching guard %.0f%%, a standing one "
+                     "%.0f%%, a reversal %.0f%%, a jump %.0f%%, a button %.0f%%",
+            who, o.asked, o.plans, o.played, drawn.c_str(),
+            o.late + o.elsewhere + o.nothing + o.apart, o.late, o.elsewhere, o.nothing, o.apart,
+            o.planMs / std::max(1, o.asked - o.late), o.planMsMost,
+            o.frames / std::max(1, o.asked - o.late), o.waitedMs / o.asked, o.waitedMsMost,
+            shares[0] * 100, shares[1] * 100, shares[2] * 100, shares[3] * 100, shares[4] * 100);
+}
+
 // What an agent's routes did, for the log.
 void LogRoutes(const char* who, const Side& s)
 {
+    LogOkizeme(who, s);
     if (!s.player || !s.player->Planning())
         return;
     const agent::RouteStats& r = s.player->Stats();
@@ -367,13 +510,14 @@ void LogRoutes(const char* who, const Side& s)
     if (!asked)
         return;
     LogInfo("agent", "%s's routes: %d plans asked (%d at a later move's hit of a combo): %d "
-                     "made, a route chosen in %d; %d dropped (late %d, of them %d a combo's "
-                     "first played by the chooser's route; the game elsewhere %d, the combo "
-                     "over %d, not this opponent %d, the fight over %d); planning %.1f ms a "
-                     "plan (at most %.1f), the game waited %.2f ms a plan (at most %.1f)",
-            who, asked, r.again, r.plans, r.routes, r.dropped(), r.late, r.chooser, r.elsewhere,
-            r.over, r.own, r.apart, r.planMs / std::max(1, asked - r.late - r.own), r.planMsMost,
-            r.waitedMs / asked, r.waitedMsMost);
+                     "made (%d of them not done when due and chosen from the options played "
+                     "by then), a route chosen in %d; %d dropped (late %d, of them %d a "
+                     "combo's first played by the chooser's route; the game elsewhere %d, the "
+                     "combo over %d, not this opponent %d, the fight over %d); planning %.1f "
+                     "ms a plan (at most %.1f), the game waited %.2f ms a plan (at most %.1f)",
+            who, asked, r.again, r.plans, r.settled, r.routes, r.dropped(), r.late, r.chooser,
+            r.elsewhere, r.over, r.own, r.apart, r.planMs / std::max(1, asked - r.late - r.own),
+            r.planMsMost, r.waitedMs / asked, r.waitedMsMost);
 }
 
 // Has the side played by the agent at `path` (empty: a person); false with *error.
@@ -405,6 +549,22 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
                      ", " + std::to_string(p->routes.perStart) + " tried" +
                      (p->chooser.Empty() ? "" : "; the chooser's when a plan is late");
         }
+        if (!p->mix.Empty()) {
+            combos += "; its okizeme planned from " + std::to_string(p->mix.entries.size()) +
+                      " of people's (" + p->mix.source + "), " + std::to_string(p->mix.perPlan) +
+                      " tried a knockdown";
+        }
+        if (!p->press.Empty()) {
+            combos += "; its pressure after a guarded move planned from " +
+                      std::to_string(p->press.entries.size()) + " of people's (" +
+                      p->press.source + "), " + std::to_string(p->press.perPlan) + " tried";
+        }
+        if (p->air.on)
+            combos += "; an air throw of an opponent's air recovery when one catches inside it";
+        if (p->rise.on)
+            combos += "; its rising guarded by sight when the attacker is on it";
+        if (p->risk.on)
+            combos += "; its raw specials let out or stopped by how each has paid in the match";
         LogInfo("agent", "%s: \"%s\"%s, %s, format %d (%s), deciding every %d frame(s), %d "
                          "frames late, %d inputs of history; %s",
                 e.path.c_str(), p->name.c_str(),
@@ -425,6 +585,16 @@ bool Choose(Side* s, const std::string& path, std::string* error, int player, bo
         if (!s->player->Planning())
             s->planner.reset();
     }
+    if (player >= 0 && (!s->policy->mix.Empty() || !s->policy->press.Empty() ||
+                        s->policy->air.on)) {
+        s->mix.reset(new agent::MixPlanner(s->policy.get(), &g_world, Seed()));
+        s->player->SetMix(s->mix.get(), player,
+                          g_fast ? -1 : net ? kPatienceNet : kPatienceLocal);
+        if (!s->player->Mixing())
+            s->mix.reset();
+    }
+    if (player >= 0 && s->policy->risk.on)
+        s->player->SetRisk(&g_world, player);
     return true;
 }
 
@@ -515,14 +685,19 @@ unsigned char FightInput(Side& s, int side)
     return ToScreen(s.player->Step(view, seen && actionable), facing);
 }
 
-void Cycle(int side)
+// F5/F6: the side's next player, `step` 1 (on through the agents) or -1 (Shift: back),
+// the person between the last agent and the first.
+void Cycle(int side, int step)
 {
     Scan();
     Side& s = g_sides[side];
+    int count = (int)g_agents.size();
     int at = s.path.empty() ? -1 : IndexOf(s.path);
     std::string error;
-    for (int next = at + 1;; next++) {
-        if (next >= (int)g_agents.size()) {
+    for (int next = at + step;; next += step) {
+        if (next < -1)
+            next = count - 1;
+        if (next < 0 || next >= count) {
             Choose(&s, "", &error, side);
             Note(std::string(side ? "P2" : "P1") + ": a person");
             return;
@@ -533,6 +708,216 @@ void Cycle(int side)
         }
         Note("can't play " + error);
     }
+}
+
+// --- The game's CPU with combos.
+//
+// With OPTIONS' CPU COMBO on (agents.h's SetCpuCombos; port/options.cpp keeps it), a side
+// the game's CPU plays in ARCADE (with score or not) or VS CPU plays its combos from an
+// agent file of its character: the first by name in the `cpu` folder of the agents
+// folders (the save folder's before the game's), made by runs/human-ayu/league_combos.py
+// (a trained model with its character's combo library, as the agent's league plays). The
+// CPU plays as it always does: its neutral, guard, recoil guards and okizeme are its own.
+// While its opponent is in a hit reaction and not down, the side is the file's: its
+// player, which has watched the fight all along, plays the combo, planned from its routes
+// on copies of the fight (CPlayer::m_cpu off for those frames: the CPU's decisions stop
+// and the side reads its controls, which the file gives); once the opponent is out of
+// it, or the round over, the CPU has the side back. This is evaluate.py --p2-cpu-combos,
+// in the game.
+//
+// The CPU's level sets what the combos aim at (Planner::SetShare): its skill (OPTIONS'
+// level; in arcade with score, the stage's), level 4 the most damaging option the planner
+// finds at the hit, 3 the one nearest three quarters of that, 2 half, 1 a quarter. A
+// route begins kCpuLead steps after the hit.
+//
+// The fight's record holds when the side was the file's (record.cpp's "cpu" lines), so
+// the record replays it; a network match has no CPU, and a record watched or converted
+// runs none of this.
+
+struct CpuFile {
+    std::string path, file, name, version;
+    int character = -1;
+    std::shared_ptr<agent::Policy> policy; // read when first played
+    bool broken = false;                   // couldn't be read
+};
+
+std::vector<CpuFile> g_cpuFiles;
+bool g_cpuCombos = false;   // the setting
+int g_cpuForced = -1;       // --cpu-combos: on (1) or off (0) for the run, whatever the setting
+Side g_cpu[2];
+bool g_cpuDecided = false;  // this fight's CPU sides set up
+
+bool CpuCombosWanted()
+{
+    return g_cpuForced >= 0 ? g_cpuForced != 0 : g_cpuCombos;
+}
+
+void ScanCpu()
+{
+    std::vector<CpuFile> found;
+    for (const char* base : {SaveDir(), DataDir()}) {
+        std::string dir = std::string(base) + "/agents/cpu";
+        int count = 0;
+        char** files = SDL_GlobDirectory(dir.c_str(), "*.efzagent", SDL_GLOB_CASEINSENSITIVE, &count);
+        std::vector<std::string> names;
+        for (int i = 0; files && i < count; i++)
+            names.push_back(files[i]);
+        SDL_free(files);
+        std::sort(names.begin(), names.end());
+        for (const std::string& name : names) {
+            CpuFile e;
+            e.path = dir + "/" + name;
+            e.file = name;
+            std::string error;
+            if (!agent::Policy::Peek(e.path.c_str(), &e.name, &e.character, &e.version, &error)) {
+                LogWarn("agent", "%s: %s", e.path.c_str(), error.c_str());
+                continue;
+            }
+            bool seen = false;
+            for (const CpuFile& f : found)
+                seen = seen || f.character == e.character;
+            if (!seen && e.character >= 0)
+                found.push_back(std::move(e));
+        }
+    }
+    for (CpuFile& e : found) { // (read already: kept)
+        for (CpuFile& old : g_cpuFiles) {
+            if (old.path == e.path) {
+                e.policy = std::move(old.policy);
+                e.broken = old.broken;
+            }
+        }
+    }
+    g_cpuFiles.swap(found);
+}
+
+CpuFile* CpuFileFor(int character)
+{
+    for (CpuFile& e : g_cpuFiles) {
+        if (e.character == character)
+            return &e;
+    }
+    return nullptr;
+}
+
+bool CpuLoad(CpuFile& e)
+{
+    if (e.policy || e.broken)
+        return e.policy != nullptr;
+    auto p = std::make_shared<agent::Policy>();
+    std::string error;
+    if (!p->Load(e.path.c_str(), &error) || p->routes.Empty()) {
+        LogWarn("agent", "%s: %s", e.path.c_str(),
+                error.empty() ? "no routes: nothing to play the CPU's combos with" : error.c_str());
+        e.broken = true;
+        return false;
+    }
+    // The route as soon after the hit as the frames' time for a plan allows (a file made
+    // for training begins it the step after: league_combos.py's route_confirm).
+    if (p->routes.confirm <= 0 || p->routes.confirm < kCpuLead)
+        p->routes.confirm = kCpuLead;
+    e.policy = p;
+    LogInfo("agent", "%s: \"%s\"%s, %s, the CPU's combos from %d routes (%s), planned %s, %d "
+                     "tried, the route %d steps after its hit",
+            e.path.c_str(), p->name.c_str(), p->version.empty() ? "" : (" " + p->version).c_str(),
+            CharacterLabel(p->character).c_str(), (int)p->routes.list.size(),
+            p->routes.source.c_str(),
+            p->routes.replan ? "again at each new move's hit" : "at the first hit",
+            p->routes.perStart, std::min(p->routes.confirm, p->delay));
+    return true;
+}
+
+// A fight begins (before its first tick: the players match setup made, which the fight
+// scene takes as it enters): its CPU sides, with their characters' files.
+void CpuSetUp(CPlayer* const players[2], CGame* game)
+{
+    for (Side& s : g_cpu)
+        s = Side();
+    if (!CpuCombosWanted() || g_netplay.active || RecordTasksRunning())
+        return;
+    int mode = game->m_gameMode;
+    if (mode != kArcade && mode != kArcadeScore && mode != kVsCpu)
+        return;
+    ScanCpu();
+    for (int side = 0; side < 2; side++) {
+        CPlayer* p = players[side];
+        if (!p || !p->m_cpu)
+            continue;
+        const char* who = side ? "P2" : "P1";
+        CpuFile* e = CpuFileFor(p->m_charId);
+        if (!e) {
+            LogInfo("agent", "%s, the CPU (%s): no file of its character in the agents folders' "
+                             "cpu folder, its combos its own",
+                    who, CharacterLabel(p->m_charId).c_str());
+            continue;
+        }
+        if (!CpuLoad(*e))
+            continue;
+        Side& s = g_cpu[side];
+        s.path = e->path;
+        s.file = e->file;
+        s.name = e->name + (e->version.empty() ? "" : " " + e->version);
+        s.policy = e->policy;
+        s.player.reset(new agent::Player(s.policy.get(), Seed()));
+        s.planner.reset(new agent::Planner(s.policy.get(), &g_world, Seed()));
+        s.level = std::max(1, std::min(4, (int)lround(p->m_cpuSkill)));
+        s.share = s.level / 4.0f;
+        s.planner->SetShare(s.share);
+        s.planner->SetOwnLast(true);
+        s.player->SetPlanner(s.planner.get(), side, g_fast ? -1 : kCpuPatience,
+                             g_fast ? -1 : kPatienceAgain);
+        if (!s.player->Planning()) {
+            LogWarn("agent", "%s: can't plan combos (it must decide every frame, see the game "
+                             "late and see its own inputs)", e->path.c_str());
+            s = Side();
+            continue;
+        }
+        s.cpu = true;
+        LogInfo("agent", "%s, the CPU (%s, level %d): its combos from %s, aimed at %d%% of the "
+                         "most damaging found at each hit",
+                who, CharacterLabel(p->m_charId).c_str(), s.level, e->file.c_str(),
+                (int)lround(s.share * 100));
+    }
+}
+
+// What a CPU side's combos did, for the log.
+void LogCpu(int side)
+{
+    Side& s = g_cpu[side];
+    if (!s.cpu)
+        return;
+    std::string who = std::string(side ? "P2" : "P1") + ", the CPU,";
+    LogInfo("agent", "%s handed its side for its combos %d time(s) (level %d, %d%% of the most "
+                     "damaging)",
+            who.c_str(), s.handoffs, s.level, (int)lround(s.share * 100));
+    LogRoutes(who.c_str(), s);
+}
+
+// A frame of a fight: whose the CPU side is, and the file's input for it.
+void CpuFrame(int side, CScene3* fight, CGame* game)
+{
+    Side& s = g_cpu[side];
+    CPlayer* p = fight->m_players[side];
+    CPlayer* q = fight->m_players[1 - side];
+    if (!p || !q)
+        return;
+    // What the CPU pressed on the frame just run goes in the player's history, as the
+    // game read it (forward and back: ToScreen turns the screen's into those too).
+    if (s.cpuPlayed)
+        s.player->Played(ToScreen(agent::ControlsRead(p), p->facing));
+    if (fight->m_paused == 0) {
+        bool live = game->m_intro == 0 && game->m_roundOver == 0;
+        bool down = q->pattern >= 0x60 && q->pattern <= 0x63; // wake-up, the knockdowns, lying
+        bool want = live && q->IsInHitstun() && !down;
+        if (want != s.handed) {
+            p->m_cpu = want ? 0 : 1;
+            s.handed = want;
+            s.handoffs += want;
+        }
+    }
+    s.input = FightInput(s, side);
+    s.playing = s.handed;
+    s.cpuPlayed = !s.handed;
 }
 
 // --- Drawing, with SDL's 8x8 font over the 640x480 screen (as netplay's screens).
@@ -566,8 +951,13 @@ void InitAgents(const AgentOptions& options)
 {
     g_on = true;
     g_fast = options.fast;
+    g_cpuForced = options.cpuCombos;
     Scan();
-    LogInfo("agent", "%d agent(s) in the agents folders", (int)g_agents.size());
+    ScanCpu();
+    LogInfo("agent", "%d agent(s) in the agents folders; the CPU's combos for %d character(s) in "
+                     "their cpu folder, %s",
+            (int)g_agents.size(), (int)g_cpuFiles.size(),
+            CpuCombosWanted() ? "on" : "off (OPTIONS' CPU COMBO)");
     const char* given[2] = {options.p1, options.p2};
     for (int side = 0; side < 2; side++) {
         if (!given[side])
@@ -583,16 +973,17 @@ void InitAgents(const AgentOptions& options)
 
 void AgentsFrame()
 {
-    if (!g_on)
+    if (!g_on || ViewingRecord())
         return;
     GameObjects o = Objects();
     int scene = *o.scene;
     bool vs = o.game && o.game->m_gameMode == kVsHuman;
     const unsigned char* keys = KeyboardState();
+    bool shift = ((keys[kDikLShift] | keys[kDikRShift]) & 0x80) != 0;
     for (int k = 0; k < 2; k++) {
         bool down = (keys[k ? kDikF6 : kDikF5] & 0x80) != 0;
         if (down && !g_keyDown[k] && scene == 1 && vs)
-            Cycle(k);
+            Cycle(k, shift ? -1 : 1);
         g_keyDown[k] = down;
     }
     if (scene == 3 && g_lastScene != 3)
@@ -623,6 +1014,33 @@ void AgentsFrame()
             s.playing = true;
         }
     }
+    // The game's CPU with combos.
+    if (g_lastScene == 3 && scene != 3) {
+        LogCpu(0);
+        LogCpu(1);
+        for (Side& s : g_cpu)
+            s = Side();
+    }
+    if (scene == 3 && g_lastScene != 3)
+        g_cpuDecided = false;
+    for (Side& s : g_cpu) {
+        s.playing = false;
+        s.input = 0;
+    }
+    CScene3* fight = (CScene3*)o.scenes[3];
+    if (scene == 3 && fight) {
+        // Set up before the fight's first tick, at which its record's header is written:
+        // the players match setup made, which the scene takes as it enters.
+        CPlayer* players[2] = {*fight->m_player1Ref, *fight->m_player2Ref};
+        if (!g_cpuDecided && players[0] && players[1]) {
+            CpuSetUp(players, o.game);
+            g_cpuDecided = true;
+        }
+        for (int side = 0; side < 2 && fight->m_enter == 0 && fight->m_players[side]; side++) {
+            if (g_cpu[side].cpu)
+                CpuFrame(side, fight, o.game);
+        }
+    }
     g_lastScene = scene;
 }
 
@@ -630,6 +1048,10 @@ void AgentInput(int player, unsigned char* input)
 {
     if (!g_on || player < 0 || player > 1)
         return;
+    if (g_cpu[player].playing) { // the CPU's side, handed to its file for a combo
+        *input = g_cpu[player].input;
+        return;
+    }
     if (g_sides[player].playing) {
         *input = g_sides[player].input;
         return;
@@ -646,6 +1068,24 @@ bool AgentPlanning()
     return g_planning;
 }
 
+const char* AgentName(int side)
+{
+    GameObjects o = Objects();
+    if (!g_on || side < 0 || side > 1 || !g_sides[side].player || !o.game ||
+        o.game->m_gameMode != kVsHuman)
+        return nullptr;
+    return g_sides[side].name.c_str();
+}
+
+const char* AgentFileName(int side)
+{
+    if (!AgentName(side))
+        return nullptr;
+    const std::string& path = g_sides[side].path;
+    size_t slash = path.find_last_of("/\\");
+    return path.c_str() + (slash == std::string::npos ? 0 : slash + 1);
+}
+
 void StopAgents()
 {
     if (!g_on)
@@ -653,16 +1093,18 @@ void StopAgents()
     if (g_lastScene == 3) {
         LogRoutes("P1", g_sides[0]);
         LogRoutes("P2", g_sides[1]);
+        LogCpu(0);
+        LogCpu(1);
     }
-    for (Side& s : g_sides) {
-        if (s.planner)
-            s.planner->Cancel();
+    for (Side* s : {&g_sides[0], &g_sides[1], &g_cpu[0], &g_cpu[1]}) {
+        if (s->planner)
+            s->planner->Cancel();
     }
 }
 
 void AgentsIdle(uint64_t deadlineNs)
 {
-    if (!g_on)
+    if (!g_on || ViewingRecord())
         return;
     GameObjects o = Objects();
     CScene3* fight = (CScene3*)o.scenes[3];
@@ -675,16 +1117,18 @@ void AgentsIdle(uint64_t deadlineNs)
         return;
     agent::Planner::Clock::time_point until =
         agent::Planner::Clock::now() + std::chrono::nanoseconds(deadlineNs - now - margin);
-    Side* sides[3] = {&g_sides[0], &g_sides[1], &g_net};
+    Side* sides[5] = {&g_sides[0], &g_sides[1], &g_net, &g_cpu[0], &g_cpu[1]};
     for (Side* s : sides) {
         if (s->planner && s->planner->Busy())
             s->planner->Work(until);
+        if (s->mix && s->mix->Busy())
+            s->mix->Work(until);
     }
 }
 
 void DrawAgents(SDL_Renderer* r)
 {
-    if (!g_on)
+    if (!g_on || ViewingRecord())
         return;
     GameObjects o = Objects();
     int scene = *o.scene;
@@ -705,12 +1149,34 @@ void DrawAgents(SDL_Renderer* r)
         if (scene == 1) {
             std::string hint = g_agents.empty()
                                    ? "Agents: put .efzagent files in the game's agents folder"
-                                   : "F5 / F6: P1 / P2 played by an agent";
+                                   : "F5 / F6: P1 / P2 played by an agent (Shift: back)";
             Text(r, 320 - Width(hint, 1) / 2, 468, hint, 1, kGrey);
         }
     }
     if (!g_note.empty() && SDL_GetTicks() < g_noteUntil)
         Text(r, 320 - Width(g_note, 1) / 2, 24, g_note, 1, kYellow);
+}
+
+// --- The game's CPU with combos
+
+void SetCpuCombos(bool on)
+{
+    g_cpuCombos = on;
+}
+
+bool CpuCombos()
+{
+    return g_cpuCombos;
+}
+
+const char* CpuComboFile(int side)
+{
+    return side >= 0 && side < 2 && g_cpu[side].cpu ? g_cpu[side].file.c_str() : nullptr;
+}
+
+float CpuComboShare(int side)
+{
+    return side >= 0 && side < 2 && g_cpu[side].cpu ? g_cpu[side].share : 0.0f;
 }
 
 // --- Netplay

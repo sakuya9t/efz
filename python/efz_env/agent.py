@@ -59,6 +59,9 @@ class Agent:
         self.history = int(history if history is not None else cfg.get('history', 0))
         self.delay = int(delay if delay is not None else cfg.get('delay', 0))
         self.width = self.model.observation_space.shape[0]
+        # memory: efz_env.memory.Memory's arguments, for a model trained with a match
+        # memory (EfzSB3VecEnv's memory=): its features are the last of what it sees.
+        self.memory_config = cfg.get('memory')
         self.deterministic = deterministic
         self.table = ActionTable()
         self.batch(n)
@@ -69,24 +72,58 @@ class Agent:
         self.seen = None  # Delay, made at the first view (its width)
         self.n = n
         self.last = None
+        # What it is told beyond the game's view, (n, k): the features after its input
+        # history, for a model trained with them (EfzSB3VecEnv's extra); its host writes
+        # them (evaluate.py: the opponent's habits), 0 where nobody does.
+        self.told = None
+        self.memory = None
+        self._next = None
+        if self.memory_config is not None:
+            from .memory import Memory
+            self.memory = Memory(n, **self.memory_config)
 
-    def reset(self, mask=None):
-        """A new match (where mask): no inputs yet."""
+    def reset(self, mask=None, won=None, new_set=None):
+        """A new match (where mask): no inputs yet. Its memory, if it has one: where
+        new_set (default: everywhere) the match is against someone new and nothing is
+        kept; elsewhere the set goes on (won: where it won the match that ended)."""
         if self.hist is not None:
             self.hist.clear(mask)
         if self.seen is not None:
             self.seen.clear(mask)
+        if self.memory is not None:
+            ended = np.ones(self.n, bool) if mask is None else np.asarray(mask, bool)
+            if won is None and new_set is None and self._next is not None:
+                won, new_set = self._next  # (said before, through hosts that pass a mask only)
+            self._next = None
+            self.memory.end(ended, won, ended if new_set is None else new_set)
         if mask is None:
             self.last = None
+
+    def set_next(self, won=None, new_set=None):
+        """What the next reset(mask) is to know, for a host whose wrappers pass it a
+        mask only: where the agent won the matches that end, and where a new set starts."""
+        self._next = (won, new_set)
 
     def view(self, obs):
         if self.delay:
             if self.seen is None:
                 self.seen = Delay((len(obs),), self.delay, obs.shape[1])
             obs = self.seen.push(obs)
-        if self.hist is None:
-            return obs[:, :self.width]
-        return np.concatenate([obs, self.hist.features()], axis=1)[:, :self.width]
+        remembered = None
+        if self.memory is not None:  # of what it sees (late, if it sees late)
+            self.memory.update(obs)
+            remembered = self.memory.features()
+        if self.hist is not None:
+            obs = np.concatenate([obs, self.hist.features()], axis=1)
+        room = self.width - obs.shape[1] - (0 if remembered is None else remembered.shape[1])
+        if room > 0:  # a model that is told more
+            more = np.zeros((len(obs), room), np.float32)
+            if self.told is not None:
+                more[:] = self.told
+            obs = np.concatenate([obs, more], axis=1)
+        if remembered is not None:
+            obs = np.concatenate([obs, remembered], axis=1)
+        return obs[:, :self.width]
 
     def decide(self, obs):
         """Action indices for a batch of observations (n, obs_dim)."""
@@ -95,7 +132,8 @@ class Agent:
     def controls(self, obs, step):
         """Control bytes: a new decision every frame_skip steps, held in between (call
         it every step: a delayed agent sees every step)."""
-        if self.delay and not (self.last is None or step % self.frame_skip == 0):
+        if (self.delay or self.memory is not None) and \
+                not (self.last is None or step % self.frame_skip == 0):
             self.view(obs)  # seen, though not decided on
         if self.last is None or len(self.last) != len(obs) or step % self.frame_skip == 0:
             self.last = self.decide(obs)

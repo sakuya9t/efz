@@ -304,6 +304,18 @@ class EfzVecEnv:
             raise ValueError(f'efz_env: no recoil-guard chance {chance} for environment '
                              f'{index}, player {player}')
 
+    def set_cpu(self, index, player, on):
+        """Who plays `player` of environment `index`'s match from its next step on: the
+        game's CPU (on) or the step's actions, until the match ends or it is set again.
+        For an opponent that is the CPU in part (its neutral and guard the CPU's, its
+        combos an agent's). The observation buffer is written again. False if the
+        environment has no fight now."""
+        self._finish()
+        f = getattr(self._lib, 'efz_env_set_cpu', None)
+        if f is None:
+            raise RuntimeError('efz_env: this library cannot hand a side over: rebuild it')
+        return f(self._h, int(index), int(player), 1 if on else 0) == 0
+
     def seed(self, index, seed):
         """Seeds environment `index`: its following matches (characters and stages drawn
         from pools, the game's rand) follow from `seed` alone, from its next match on."""

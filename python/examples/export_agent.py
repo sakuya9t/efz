@@ -83,6 +83,16 @@ def main():
                       help='planned once, at the first hit (round 15\'s)')
     p.add_argument('--per-start', type=int, help='routes tried a plan (default 12, '
                                                  'replanning 24)')
+    p.add_argument('--ending', type=int, metavar='HP',
+                   help="what a knockdown at a combo's end is worth to the planner over any "
+                        "other end (default: damage alone, or the pack's, or the "
+                        "--parts-from file's)")
+    p.add_argument('--confirm', type=int, metavar='STEPS',
+                   help="its routes begin this many steps after its hit instead of its delay: "
+                        "a combo confirmed before it has seen the hit. For the opponents an "
+                        "agent trains and is measured against (their own play before a route "
+                        "begins does not carry people's combos); never for an agent that is "
+                        "to play within a person's limits")
     p.add_argument('--no-train', dest='train', action='store_false',
                    help="without the training part (the critic, config.json, PPO's settings): "
                         "a file to play, not to train further")
@@ -90,8 +100,40 @@ def main():
                    help="the training part with Adam's moments too")
     p.add_argument('--parts-from', metavar='FILE.efzagent',
                    help="a model's routes and chooser from this agent file, as they are")
-    p.add_argument('--keep', nargs='+', choices=('routes', 'chooser'),
-                   default=['routes', 'chooser'], help='--parts-from: which of them')
+    p.add_argument('--okizeme', metavar='LIBRARY.npz',
+                   help="its okizeme planned in the game from this library of people's "
+                        "(runs/human-ayu/oki_library.py's, its .answers.json beside it: "
+                        "oki_library.py --answers)")
+    p.add_argument('--okizeme-option', action='append', default=[], metavar='KEY=VALUE',
+                   help="the game's okizeme planner's settings (efz_env.export.OKI_OPTIONS: "
+                        "per_plan, window, think, skip, doubt, ...)")
+    p.add_argument('--pressure', metavar='LIBRARY.npz',
+                   help="its pressure after a guarded move planned in the game from this "
+                        "library of people's (runs/human-ayu/pressure_library.py's, its "
+                        ".answers.json beside it: pressure_library.py --answers)")
+    p.add_argument('--pressure-option', action='append', default=[], metavar='KEY=VALUE',
+                   help="the game's pressure planner's settings (efz_env.export.PRESS_OPTIONS)")
+    p.add_argument('--air-throw', action='store_true',
+                   help="in the game it air-throws an opponent that recovers in the air out "
+                        "of its combo, when a throw catches inside the recovery (the module "
+                        "airthrow:1; runs/human-ayu/airplan.py's sure throw: no library)")
+    p.add_argument('--rise', action='store_true',
+                   help="in the game it guards its own rising by sight when it sees the "
+                        "attacker on it, as often as guarding has paid in the match (the "
+                        "module rise:1; runs/human-ayu/rise.py's guard)")
+    p.add_argument('--rise-option', action='append', default=[], metavar='KEY=VALUE',
+                   help="its settings (efz_env.export.RISE_OPTIONS)")
+    p.add_argument('--risk', action='store_true',
+                   help="in the game a raw special of its own play is let out or stopped at "
+                        "its input by how that move has paid in the match (the module risk:1; "
+                        "runs/human-ayu/risk.py, whose moves and priors it takes)")
+    p.add_argument('--risk-option', action='append', default=[], metavar='KEY=VALUE',
+                   help="its settings (efz_env.export.RISK_OPTIONS), or a move's name for its "
+                        "prior (623B=-326)")
+    p.add_argument('--keep', nargs='+',
+                   choices=('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow', 'rise', 'risk'),
+                   default=['routes', 'chooser', 'okiplan', 'pressplan', 'airthrow', 'rise', 'risk'],
+                   help='--parts-from: which of them')
     args = p.parse_args()
     if args.show:
         return show(args.model)
@@ -111,7 +153,7 @@ def main():
                                         version=args.version, character=args.char,
                                         drop=args.drop, replan=args.replan,
                                         per_start=args.per_start, train=args.train,
-                                        optimizer=args.optimizer)
+                                        optimizer=args.optimizer, ending=args.ending)
         except ValueError as e:
             sys.exit(str(e))
     else:
@@ -132,12 +174,70 @@ def main():
             name = folder if stem in ('avg', 'model', 'best') and folder else stem
         file = f'{name}-{args.version}' if args.version else name
         out = args.out or os.path.join(os.path.dirname(os.path.abspath(model)), file + '.efzagent')
-        check = export_agent(model, out, name=name, character=args.char, library=args.library,
-                             victims=args.victims, replan=bool(args.replan),
-                             per_start=args.per_start, chooser=args.chooser,
-                             version=args.version, train=args.train,
-                             optimizer=args.optimizer, parts_from=args.parts_from,
-                             keep=tuple(args.keep))
+        rise = None
+        if args.rise or args.rise_option:
+            from efz_env.export import RISE_OPTIONS
+            rise = {}
+            for kv in args.rise_option:
+                k, _, v = kv.partition('=')
+                if k not in RISE_OPTIONS:
+                    sys.exit(f"--rise-option {k}: one of {', '.join(RISE_OPTIONS)}")
+                rise[k] = type(RISE_OPTIONS[k])(v)
+        risk = None
+        if args.risk or args.risk_option:
+            from efz_env.export import RISK_OPTIONS
+            sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+                os.path.abspath(__file__)))), 'runs', 'human-ayu'))
+            import risk as risk_module  # (the moves and their priors)
+            priors = dict(risk_module.PRIORS)
+            risk = {}
+            for kv in args.risk_option:
+                k, _, v = kv.partition('=')
+                if k in risk_module.MOVES:
+                    priors[k] = float(v)
+                elif k == 'jump':  # (the jump's account: its starting worth, HP a jump)
+                    risk[k] = float(v)
+                elif k in RISK_OPTIONS:
+                    risk[k] = type(RISK_OPTIONS[k])(v)
+                else:
+                    sys.exit(f"--risk-option {k}: one of {', '.join(RISK_OPTIONS)}, or a move "
+                             f"({', '.join(risk_module.MOVES)})")
+            risk['moves'] = {risk_module.MOVES[k]: w for k, w in priors.items()}
+        okiplan = None
+        if args.okizeme:
+            from efz_env.export import OKI_OPTIONS
+            okiplan = dict(library=args.okizeme)
+            for kv in args.okizeme_option:
+                k, _, v = kv.partition('=')
+                if k not in OKI_OPTIONS:
+                    sys.exit(f"--okizeme-option {k}: one of {', '.join(OKI_OPTIONS)}")
+                okiplan[k] = type(OKI_OPTIONS[k])(v)
+        elif args.okizeme_option:
+            sys.exit('--okizeme-option: the planner of an --okizeme library')
+        pressplan = None
+        if args.pressure:
+            from efz_env.export import PRESS_OPTIONS
+            pressplan = dict(library=args.pressure)
+            for kv in args.pressure_option:
+                k, _, v = kv.partition('=')
+                if k not in PRESS_OPTIONS:
+                    sys.exit(f"--pressure-option {k}: one of {', '.join(PRESS_OPTIONS)}")
+                pressplan[k] = type(PRESS_OPTIONS[k])(v)
+        elif args.pressure_option:
+            sys.exit('--pressure-option: the planner of a --pressure library')
+        try:
+            check = export_agent(model, out, name=name, character=args.char, library=args.library,
+                                 victims=args.victims, replan=bool(args.replan),
+                                 per_start=args.per_start, chooser=args.chooser,
+                                 version=args.version, train=args.train,
+                                 optimizer=args.optimizer, parts_from=args.parts_from,
+                                 keep=tuple(args.keep), ending=args.ending,
+                                 confirm=args.confirm,
+                                 okiplan=okiplan, pressplan=pressplan,
+                                 airthrow={} if args.air_throw else None, rise=rise,
+                                 risk=risk)
+        except ValueError as e:
+            sys.exit(str(e))
     bad = []
     if check['policy'] > POLICY_MOST:
         bad.append(f"its log-probabilities differ from the model's by up to {check['policy']:.2g}")
@@ -155,6 +255,17 @@ def main():
                   + (f' ({agent.pool - agent.routes} joined at a later move)'
                      if agent.pool > agent.routes else '')
                   + ('; the chooser\'s when a plan is late' if agent.chooser else ''))
+    if agent.oki:
+        combos += f"; its okizeme planned from {agent.oki} of people's"
+    if agent.press:
+        combos += f"; its pressure planned from {agent.press} of people's"
+    if getattr(agent, 'airthrow', False):
+        combos += "; an air throw of an air recovery when one catches inside it"
+    if getattr(agent, 'rise', False):
+        combos += "; its rising guarded by sight when the attacker is on it"
+    if getattr(agent, 'risk', False):
+        combos += "; its raw specials let out or stopped by how each has paid in the match"
+
     label = agent.name + (f' {agent.version}' if agent.version else '')
     sure = f"log-probabilities within {check['policy']:.1g}"
     if check['chooser'] is not None:

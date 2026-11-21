@@ -28,6 +28,10 @@ namespace efz {
 
 // Set by netplay (port/netplay/) in the game; empty elsewhere (efz_native.h).
 NetplayHooks g_netplay;
+// Set by the REPLAY menu's records page (port/records.cpp) in the game; empty elsewhere.
+RecordsHooks g_records;
+// Set by the OPTIONS page's CPU COMBO row (port/options.cpp) in the game; empty elsewhere.
+OptionsHooks g_options;
 
 namespace {
 

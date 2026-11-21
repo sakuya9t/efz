@@ -212,7 +212,7 @@ class FairComboAgent(ModularAgent):
 
 
 def _live_worker(conn, data_dir, model_path, library, env_config, deterministic, victims,
-                 per_start, replan):
+                 per_start, replan, ending=0.0):
     """LiveRoutes's planner, a process of its own: a copy of the match (not drawn), played
     the same inputs frame by frame, and redteam's planner on copies of that."""
     import time
@@ -226,7 +226,8 @@ def _live_worker(conn, data_dir, model_path, library, env_config, deterministic,
     try:
         model = PPO.load(model_path, device='cpu')
         planner = redteam.Planner(data_dir, macros.load_library(library), model,
-                                  per_start=per_start, victims=victims, replan=replan)
+                                  per_start=per_start, victims=victims, replan=replan,
+                                  ending=ending)
         shadow = EfzVecEnv(data_dir, 1, frame_skip=1, skip_noninteractive=False,
                            autoreset='disabled', **env_config)
         policy, table, sim = sampler(model, deterministic), ActionTable().table, planner.sim
@@ -330,7 +331,7 @@ class LiveRoutes(Module):
     name = 'routes'
 
     def __init__(self, agent, data_dir, library, victims=None, per_start=12, patience=0.1,
-                 replan=False, patience_again=0.008):
+                 replan=False, patience_again=0.008, ending=0.0):
         import multiprocessing
         if agent.frame_skip != 1 or not agent.delay or agent.hist is None:
             raise ValueError('LiveRoutes: an agent deciding every frame, with a delay and '
@@ -342,6 +343,7 @@ class LiveRoutes(Module):
         self.table = agent.table
         self.data_dir, self.library = data_dir, library
         self.victims, self.per_start, self.replan = victims, per_start, replan
+        self.ending = ending
         self.mp = multiprocessing.get_context('spawn')
         self.conn = self.worker = self.env = None
         self.side = 0
@@ -371,7 +373,8 @@ class LiveRoutes(Module):
         self.worker = self.mp.Process(
             target=_live_worker, daemon=True,
             args=(child, self.data_dir, self.agent.path, self.library, config,
-                  self.agent.deterministic, self.victims, self.per_start, self.replan))
+                  self.agent.deterministic, self.victims, self.per_start, self.replan,
+                  self.ending))
         self.worker.start()
         child.close()
         kind, error = self.conn.recv()
@@ -550,7 +553,8 @@ def routes(agent, where, files, options, data):
     .marks.json beside it), chooser (combo_net.py's chooser.pt, optional). options: replan
     (default true), per_start (24), victims, by ('planner', the default: the combos tried
     on copies; 'chooser': the chooser picks, nothing is tried), margin (the chooser's,
-    200), score;
+    200), score, ending (the HP a knockdown at a combo's end is worth over any other end,
+    default 0: redteam.Planner's);
     a person's match: patience, patience_again (LiveRoutes's: the seconds the game waits
     for a plan)."""
     library, o = files['library'], dict(options)
@@ -567,9 +571,10 @@ def routes(agent, where, files, options, data):
     if where == 'play':
         waits = {k: float(o[k]) for k in ('patience', 'patience_again') if k in o}
         return LiveRoutes(agent, data, library, victims=o.get('victims'), per_start=per_start,
-                          replan=replan, **waits)
+                          replan=replan, ending=float(o.get('ending', 0.0)), **waits)
     import macros
     import redteam
     return FairAssist(redteam.Planner(data, macros.load_library(library), agent.model,
                                       score=o.get('score', 'damage'), victims=o.get('victims'),
-                                      per_start=per_start, replan=replan), agent.delay)
+                                      per_start=per_start, replan=replan,
+                                      ending=float(o.get('ending', 0.0))), agent.delay)

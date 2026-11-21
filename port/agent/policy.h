@@ -37,6 +37,21 @@
 //   "chooser.": chooser.features.*, chooser.layer.K.*, chooser.out.* (routes + 1 outputs,
 //   in thousands of HP).
 //
+// okiplan:1, its okizeme planned from a library of people's (mix.h, which has its keys and
+//   tensors). okiplan:2: with oki_sight (the riser guards by sight) or oki_bait (a
+//   reversal waited out is worth its punish), which a game of the first version would
+//   read past: a file that uses either says 2.
+// pressplan:1, its pressure after a guarded move planned from another (mix.h's Press).
+//   pressplan:2: with press_sight.
+// airthrow:1, an air throw of an opponent that recovers in the air out of its combo, when
+//   one catches inside the recovery (mix.h's Catch; key air_near).
+// rise:1, its own rising guarded by sight when it sees the attacker on it (Rise, below;
+//   keys rise_prior, rise_meaty, rise_low, rise_high, rise_near, rise_fly, rise_decay).
+// risk:1, a raw special of its own play let out or stopped at its input by how that move
+//   has paid in the match (Risk, below; keys risk_prior, risk_temperature, risk_window,
+//   risk_look, risk_look_down, risk_decay, risk_ahead, and risk_moves: "0x105:-131,0xfc:-326,...",
+//   each move's action and its prior, HP a use).
+//
 // Keys of no module say where the file came from (version, source.*, exporter, exported,
 // dropped): the menus show the version, the log the rest. A file may also carry what a game
 // doesn't play and reads past: its training part (key train, keys and tensors train.*:
@@ -52,6 +67,8 @@
 #include <random>
 #include <string>
 #include <vector>
+
+#include "agent/mix.h"
 
 namespace efz {
 namespace agent {
@@ -107,6 +124,17 @@ struct Routes {
     int limit = 900;       // frames a copy is played for at most
     bool byVictim = false; // a library kept per victim: those landed on the opponent first
     bool replan = false;   // a plan again at each new move's hit
+    int ending = 0;        // the HP a knockdown at a combo's end is worth over any other
+                           // end (0: damage alone); with it the copies' victim recovers
+                           // in the air as soon as it can (redteam.Planner's ending)
+    // confirm (route_confirm; 0: the agent's delay): the steps after its hit at which a
+    // plan's route begins. Fewer than its delay is a combo confirmed before it has seen
+    // the hit: not a person's, and not for an agent that is to play as one. It is for
+    // the opponents an agent trains and is measured against, whose own play in the
+    // steps before a route begins does not carry people's combos (an exploiter's route
+    // was usable at a third of its hits with its 14 steps, round 21's plan), so that
+    // they combo as their characters' players do.
+    int confirm = 0;
     std::vector<int> victims; // the characters planned against (empty: all)
     std::string source;
     bool Empty() const { return list.empty(); }
@@ -118,6 +146,134 @@ struct Chooser {
     int perStart = 12;     // routes it chooses among
     float margin = 200;    // HP a route must promise beyond its own play's
     bool Empty() const { return net.Empty(); }
+};
+
+// Its own rising (format's rise:1; runs/human-ayu/rise.py's guard by sight). A rising on
+// which the agent sees the attacker on it (while it sees itself down: the attacker in a
+// move of its own, or in the air within `fly` pixels, or nearer than `near`: 0, off) is
+// guarded through with a probability read from the match: the share of the risings it
+// has seen at which the attacker was in a move of its own as the agent saw itself up,
+// over a prior (`meaty`, counting as `prior` risings); none at the rate `low`, all at
+// `high`, in a line between. A rising guarded through: while it sees itself down, a
+// standing guard while it sees the attacker in the air, else its own play's guard, else
+// a crouching one. The counts are kept from match to match, scaled by `decay` (the same
+// opponent next).
+struct Rise {
+    bool on = false;
+    float prior = 2, meaty = 0.56f, low = 0.3f, high = 0.6f;
+    float near = 0, fly = 200, decay = 0.7f;
+    int stand = -1, crouch = -1; // the actions of a standing and a crouching guard
+    // land: under an attacker it sees in the air, the standing guard only until its
+    // landing has passed, predicted from its height and fall as seen (StepsToLand); then
+    // the crouching one. An empty jump lands and a low follows 4 steps or more after
+    // (the user's, 19 November: "often hit by lower hit, especially when opponent
+    // approach in air but hit low"): seen `delay` steps late, the landing is past before
+    // the view shows it. sight: the steps late the guard's height is chosen from (0: the
+    // agent's delay; fewer: this one reaction faster, within a person's: the user, 19
+    // November, "the best competitive players' reaction times are 120-170ms").
+    bool land = false;
+    int sight = 0;
+    // recoil (steps; 0: off): the answer to a recoil guard. When it sees its opponent
+    // enter a recoil guard within recoilNear pixels while it sees itself in a move of
+    // its own, its inputs are the module's for at most that many steps: nothing held
+    // (`idle`) until recoilPress steps after the recoil guard (which it sees `delay`
+    // steps after it; at least one step), then the guard by sight: until it sees itself
+    // hit or down, the round over, or the opponent free on the ground for recoilGap
+    // steps; a guard of its own that it sees touched starts the count again (the guard
+    // goes on through the opponent's string; recoilLet: its own play's again from there). The timing is the game's (rise.py has the
+    // measurements): no counter lands before 23 steps after a recoil guard, a back
+    // press from neutral makes the guards of the next 9 steps recoil guards, and the
+    // player whose move was recoil-guarded can recoil-guard the counter from its
+    // move's recovery, where it has no plain guard.
+    // recoilClear: the answer's second step presses A (pressA; press2A where the move it
+    // saw recoil-guarded was 2A) when that move was a ground normal: the game keeps the
+    // last button pressed during a move and plays it as the freeze ends (a chain it
+    // pressed before it saw the recoil guard, which ends the recoil counter); a later
+    // press takes its place, and an A does not chain from a normal of its stance. Only
+    // when its last recoilSteady inputs all hold one direction (an A after 236 is 236A).
+    int recoil = 0, recoilGap = 8, recoilPress = 22, idle = -1;
+    bool recoilClear = true, recoilLet = false;
+    int recoilSteady = 12;
+    // Whether a recoil guard is answered, read from the match as the rising's guard is:
+    // the share of this opponent's recoil guards of its moves after which it saw the
+    // opponent in a move of its own (or itself hit) within recoilSoon steps, over a prior
+    // (recoilCounter, counting as recoilPrior of them); none answered at recoilLow, all
+    // at recoilHigh. An opponent whose recoil guards carry no threat is pressed on.
+    float recoilPrior = 2, recoilCounter = 0.6f, recoilLow = 0.3f, recoilHigh = 0.6f;
+    int recoilSoon = 34;
+    // punish: what follows its own recoil guard (rise_recoil_punish: control bytes, as
+    // actions here; empty: nothing). When it sees itself in a recoil guard on the ground
+    // with the opponent in a move of its own on the ground within punishNear pixels, the
+    // guard goes on and then these are played so that the last lands punishAt steps
+    // after its recoil guard: the first step the game takes a move out of the pose. For
+    // Ayu 623B: a normal pressed there is hit by the opponent's kept chain (rise.py).
+    std::vector<int> punish;
+    float punishNear = 48;
+    int punishAt = 22;
+    int pressA = -1, press2A = -1;
+    float recoilNear = 240;
+};
+
+// The steps until a player in the air lands, from its height and fall in a view
+// (opp_y, opp_vy) and its fall a step before (vyBefore): the game's arithmetic as fitted
+// on 1,888 flights of the user's (y a step: 2.478 vy + 2.037 g; g the fall's gain a
+// step, 0.09 where the two views do not give one). Within 2 steps of the landing in 94%
+// of the flights that do not change course afterwards, seen 11 steps before.
+int StepsToLand(float y, float vy, float vyBefore);
+
+// Its raw specials (format's risk:1; runs/human-ayu/risk.py). A step that is its own
+// play's and presses a button, the agent not seeing its opponent in a hit reaction: the
+// press is tried on the game as it is (Player::SetRisk's World), the opponent pressing
+// nothing: the press, then nothing, for `look` frames (lookDown while the agent is down:
+// a reversal's button is read while it rises). If that starts (an action it was not in)
+// one of `moves`, the move's account decides: its worth the mean HP swing (the
+// opponent's HP lost less its own over `window` steps after the press, as the agent sees
+// it) of the times it was let out in this match, over its prior (`worth`, counting as
+// `prior` uses); with the probability 1 / (1 + exp(worth / temperature)) the action's
+// button is left out. The accounts are kept from match to match, scaled by `decay`.
+// ahead: the inputs of its own play that a planner chooses ahead (for the frames between a
+// contact and its seeing it) are drawn for as they are played, as any step of its own
+// play is: whatever the contact was, which it has not seen (a plan made from an input
+// that is then left out finds the game elsewhere and is dropped).
+struct Risk {
+    bool on = false;
+    float prior = 4, temperature = 75, decay = 0.7f;
+    int window = 180, look = 10, lookDown = 50;
+    bool ahead = false; // its own play's inputs chosen ahead (a planner's lead-in) drawn for too
+    std::vector<int> moves;   // the moves with an account (their actions)
+    std::vector<float> worth; // ... and each's prior, HP a use
+    std::vector<int> plain;   // per action, the action of the same direction with no button
+    // jump (risk_jump: the account's starting worth, HP a jump; absent: no account): the
+    // jump at the opponent by how it has paid in the match, as a raw special is (risk.py:
+    // against the user a forward jump was worth +131 to +552 HP in the matches the agent
+    // won and -239 to +12 in those it lost, 19 to 35 a match). Its own play's action up
+    // and forward, itself free on the ground, the opponent within jumpNear pixels and not
+    // in a hit reaction it has seen: the HP swing over jumpWindow steps after one let out
+    // is its account's, over the prior (jumpWorth, counting as jumpPrior jumps); stopped
+    // with the probability 1 / (1 + exp(worth / jumpTemperature)), the action then the
+    // same buttons with forward alone (`ground`).
+    bool jump = false;
+    float jumpWorth = 0, jumpPrior = 6, jumpTemperature = 100, jumpNear = 400;
+    int jumpWindow = 130;
+    std::vector<int> ground;
+};
+
+// What its raw specials did: presses that would start a move with an account (drawn
+// for), those stopped and let out, and of the ones let out the moves it then saw.
+struct RiskStats {
+    int seen = 0, stopped = 0, let = 0, came = 0;
+    int jumps = 0, jumpsStopped = 0, jumpsLet = 0, jumpsCame = 0; // the same of its jumps (Risk::jump)
+};
+
+// What its risings did: the knockdowns it saw, those the attacker was on, of them the
+// ones guarded through, the steps it held a guard for and of them the standing ones.
+struct RiseStats {
+    int knockdowns = 0, met = 0, guarded = 0, steps = 0, stood = 0;
+    int landed = 0; // steps crouching under an attacker still seen in the air (Rise::land)
+    int recoils = 0, recoilSteps = 0; // its moves seen recoil-guarded, and the steps answered (Rise::recoil)
+    int recoilCleared = 0;            // ... and the presses that took a kept chain's place
+    int recoilAnswered = 0;           // the recoil guards it answered (recoils: all it saw)
+    int recoilPunished = 0;           // its own recoil guards followed by Rise::punish
 };
 
 class Policy {
@@ -151,6 +307,11 @@ public:
     std::vector<uint8_t> table; // per action, the control byte (forward/back relative)
     Routes routes;      // its combos' routes; empty: it plays its own
     Chooser chooser;    // its routes' chooser; empty: none
+    Mix mix;            // its planned okizeme's library (mix.h); empty: none
+    Press press;        // its planned pressure's (mix.h); empty: none
+    Catch air;          // its catch of an air recovery (mix.h); off: none
+    Rise rise;          // its own rising guarded by sight; off: none
+    Risk risk;          // its raw specials by their accounts; off: none
     int format = 0;
     std::string modules; // as "policy:1,routes:1"
     std::string version; // the version it was exported as (empty: none given)
@@ -169,8 +330,22 @@ struct RouteStats {
     int plans = 0, routes = 0, again = 0;
     int late = 0, elsewhere = 0, over = 0, own = 0, apart = 0;
     int chooser = 0;
+    int settled = 0; // plans not done when due, chosen from the options played by then
     double planMs = 0, planMsMost = 0, waitedMs = 0, waitedMsMost = 0;
     int dropped() const { return late + elsewhere + over + own + apart; }
+};
+
+// What an agent's planned okizeme did: plans asked for (a knockdown each), made, and of
+// those the ones that drew an option of the library or the wait (played) and not its own
+// play; plans dropped and why (late; the game elsewhere than planned from; nothing to
+// plan: the opponent up too soon; the fight over); what was drawn, by kind (the library's
+// kinds, then the wait and its own play); the time planning took and the game waited.
+struct OkiStats {
+    int asked = 0, plans = 0, played = 0;
+    int late = 0, elsewhere = 0, nothing = 0, apart = 0;
+    std::vector<int> drawn;
+    double planMs = 0, planMsMost = 0, waitedMs = 0, waitedMsMost = 0;
+    long frames = 0;
 };
 
 // An agent playing one side of a match: each frame, the view of its player and whether
@@ -199,6 +374,12 @@ public:
     uint8_t Step(const float* view, bool actionable, bool deterministic = false);
     // The action of the last decision (-1 before the first).
     int LastAction() const { return last_; }
+    // The controls its player read on the frame just run (relative to where it faces),
+    // when they were not the ones it gave: the game's CPU had the side (the CPU with
+    // combos, play.cpp). Its input history then holds those, as evaluate.py's agent
+    // observes the game's input, in place of what it chose. Nothing after a step it gave
+    // nothing on (not actionable, or a held decision).
+    void Played(uint8_t controls);
     const Policy* policy() const { return policy_; }
 
     // Its combos from the routes, planned by `planner` for player `side` (nullptr: its
@@ -206,14 +387,93 @@ public:
     // agent sees its hit (< 0: until it is done), before the agent plays on without it;
     // againMs: the same for a later plan of the combo.
     void SetPlanner(Planner* planner, int side, double patienceMs, double againMs = 8);
+    // A plan not done when it is due: chosen from the options played by then
+    // (Planner::Settle; the default), or dropped whole (false: as before 19 November).
+    void SetSettle(bool on) { settle_ = on; }
     const RouteStats& Stats() const { return stats_; }
     bool Planning() const { return planner_ != nullptr; }
+
+    // Its okizeme planned by `mix` for player `side` (nullptr: its own), as
+    // runs/human-ayu/okiplan.py's module plays it: at its opponent's knockdown it chooses
+    // its inputs for the `delay` frames until it sees the knockdown, the planner tries the
+    // library's okizeme from where those leave the fight, and once it sees the knockdown
+    // it plays the one drawn, until its inputs end, it sees itself hit, or a route takes
+    // over (a hit of the okizeme's: the routes plan from it, the rest of the okizeme one
+    // of their options). The answers' shares are its counts of this opponent (Counts),
+    // kept from match to match, older ones counting for less.
+    void SetMix(MixPlanner* mix, int side, double patienceMs);
+    const OkiStats& Oki() const { return oki_; }
+    // Its planned pressure's (the same counts: a guarded move each; played: a plan that
+    // drew something other than its own play). With a pressure library the same planner
+    // also plans from each move of the agent's that touches the opponent's guard
+    // (pressplan.py's live plan): its inputs for the `delay` frames until it sees the
+    // guard chosen at once, then a crouching guard until it is free, then the follow-up
+    // drawn.
+    const OkiStats& Pressure() const { return press_; }
+    // Its catches' (the module airthrow:1): asked, the opponent's air recoveries out of
+    // its combos planned from, on the frame they begin (its inputs for the `delay` frames
+    // until it sees one chosen at once); plans and played, those with an air throw that
+    // catches inside the recovery, played when it sees the recovery; nothing: no such
+    // throw (or the opponent out of reach); the rest as the okizeme's.
+    const OkiStats& Air() const { return air_; }
+    // Its risings' (the module rise:1), the probability the next one the attacker is on
+    // is guarded through, and its accounts (account 0 its own play, 1 the guard: the
+    // risings counted and their swings' sum).
+    const RiseStats& Rising() const { return rise_; }
+    double RiseChance() const;
+    double RiseSeen() const { return riseSeen_; } // the risings it saw; of them, the
+    double RiseOn() const { return riseOn_; }     // attacker in a move as it rose
+    double RecoilChance() const; // the probability the next recoil guard of its move is answered
+    // Its raw specials by their accounts (the module risk:1), tried on `world`'s game for
+    // player `side` (nullptr: off: nothing is stopped). RiskStarts: the move (an index
+    // into policy()->risk.moves, -1 none) that `action` starts on the game as it is, the
+    // game left as it was; `view`: that game's view. RiskChance: the probability that a
+    // press starting that move is stopped now.
+    void SetRisk(World* world, int side);
+    const RiskStats& Risks() const { return risks_; }
+    int RiskStarts(const float* view, int action);
+    double RiskChance(int move) const;
+    // The jump's account (Risk::jump): the probability the next jump at the opponent is
+    // stopped, the jumps counted in the match (older ones for less) and their mean swing.
+    double JumpChance() const;
+    double JumpCount() const { return jumpCount_; }
+    double JumpWorth() const;
+    bool Mixing() const { return mix_ != nullptr; }
+    // Another opponent: what it counted of the last one forgotten.
+    void Forget()
+    {
+        counts_.Clear();
+        counted_ = false;
+        riseSeen_ = riseOn_ = 0;
+        recoilSeen_ = recoilOn_ = 0;
+        risen_ = false;
+        std::fill(riskCount_.begin(), riskCount_.end(), 0.0);
+        std::fill(riskTotal_.begin(), riskTotal_.end(), 0.0);
+        jumpCount_ = jumpTotal_ = 0;
+        risked_ = false;
+    }
+    const Counts& Seen() const { return counts_; }
 
 private:
     void PushInput(uint8_t controls);
     int Sample(const float* in, bool deterministic);
     void Begin(const float* view, bool deterministic);
     void Result(const float* view);
+    void OkiBegin(const float* view, bool deterministic);
+    void OkiResult(const float* view);
+    void MixResults(const float* view);
+    void MixBegins(const float* view, bool deterministic);
+    void PressBegin(const float* view, bool deterministic);
+    void PressResult(const float* view);
+    void ThrowBegin(const float* view, bool deterministic);
+    void ThrowResult(const float* view);
+    void RiseWatch();
+    int RiseAct(int action);
+    bool RiseStands();
+    bool RiseSteady() const;
+    void RiskWatch();
+    int RiskAct(const float* view, int action);
+    void RiskSettle();
 
     const Policy* policy_;
     std::mt19937_64 rng_;
@@ -221,6 +481,9 @@ private:
     bool fresh_ = true;
     std::vector<float> inputs_; // history x 6, newest first
     uint8_t prev_ = 0;
+    std::vector<float> inputsBefore_; // (Played) the history and last control byte before
+    uint8_t prevBefore_ = 0;          // the last step's input was pushed,
+    bool pushed_ = false;             // and whether that step pushed one
     int held_ = 0;
     int last_ = -1;
     uint8_t bytes_ = 0;
@@ -230,7 +493,12 @@ private:
     Planner* planner_ = nullptr;
     int side_ = 0;
     double patienceMs_ = 50, againMs_ = 8, waitMs_ = 50;
+    bool settle_ = true;
     std::deque<int> queue_; // its inputs chosen at the hit, for the frames until it sees it
+    std::deque<bool> queueOwn_; // ... each its own play's (drawn from the network), or a plan's
+    // The inputs chosen ahead, queued: `planned` of them (the first) a plan's, the rest
+    // its own play's.
+    void Queue(const std::vector<int>& actions, size_t planned, size_t own);
     bool pending_ = false;  // a plan asked for
     bool pendingFirst_ = false; // (a combo's first)
     int pendingMove_ = 0, pendingOffset_ = 0;
@@ -245,6 +513,70 @@ private:
     int prevHits_ = 0;
     std::vector<float> values_;
     RouteStats stats_;
+
+    // The planned okizeme.
+    MixPlanner* mix_ = nullptr;
+    Counts counts_;
+    bool counted_ = false;   // a view counted since the last match's end
+    bool wasDown_ = false;   // the opponent was down on the frame before (as the game is)
+    bool okiWanted_ = false; // a knockdown not planned for yet
+    bool okiPending_ = false; // a plan asked for
+    std::vector<int> okiRoute_; // what it planned and is playing (an okizeme, or a
+    size_t okiAt_ = 0;          // guarded move's follow-up), from okiAt_
+    bool okiOn_ = false;
+    OkiStats oki_;
+    bool pressPending_ = false;  // a pressure plan asked for
+    std::vector<int> pressRest_; // what was left of the planned move it was playing then
+    int nowAct_ = -1, nowFrame_ = 0; // the opponent's action and its frame, as the game was
+    OkiStats press_;
+    bool throwWanted_ = false;  // the opponent recovering in the air, not planned from yet
+    bool throwPending_ = false; // a catch asked for
+    OkiStats air_;
+
+    // Its own rising (rise.py's Rise, the guard by sight), from what it sees.
+    double riseSeen_ = 0, riseOn_ = 0; // the risings it saw; the attacker in a move at them
+    bool risen_ = false;      // a view seen since the last match's end
+    bool riseDown_ = false;   // it saw itself down on the step before
+    bool riseMet_ = false;    // this rising: the attacker seen on it
+    bool riseDrawn_ = false;  // ... and its guard drawn for
+    bool riseVeto_ = false;   // ... guarded through
+    float riseOldVy_ = 0;     // the attacker's fall in the view one older than the oldest kept
+    bool riseRg_ = false;     // the opponent in a recoil guard in the view before
+    int riseAnswer_ = 0;      // steps left of its answer to a recoil guard
+    int riseFirst_ = 0;       // ... whose first steps (nothing held) are to come
+    int riseClear_ = -1;      // ... the press on the second of them (-1: none)
+    double recoilSeen_ = 0, recoilOn_ = 0; // the recoil guards of its moves it saw; a counter soon after
+    int recoilWatch_ = 0;     // steps left of looking for one
+    bool riseMine_ = false;   // itself in a recoil guard in the view before
+    bool punishOn_ = false;   // its own recoil guard's follow-up is on
+    int punishWait_ = 0;      // ... the steps of guard before its inputs
+    size_t punishStep_ = 0;   // ... and the next of them
+    int riseLet_ = 0;         // ... and the steps the opponent has been free on the ground
+    RiseStats rise_;
+
+    // Its raw specials (risk.py's Risk).
+    World* riskWorld_ = nullptr;
+    int riskSide_ = 0;
+    Snapshot riskSnap_;
+    std::vector<double> riskCount_, riskTotal_; // the accounts, a move each
+    bool risked_ = false;      // a view seen since the last match's end
+    int riskT_ = 0;            // steps
+    int riskDrawn_ = -1, riskDrawnAt_ = 0; // the press being tried: its move, the step,
+    bool riskStop_ = false;                // and whether it is stopped
+    int riskOpen_ = -1;        // the use being followed: its move (-1 none), its age,
+    int riskAge_ = 0;          // both HP at the press, whether the move was seen
+    float riskHp_ = 0, riskOppHp_ = 0;
+    bool riskCame_ = false;
+    double jumpCount_ = 0, jumpTotal_ = 0; // the jump's account
+    int jumpDrawnAt_ = -1000;  // the jump being tried: the step, and whether it is stopped
+    bool jumpStop_ = false;
+    bool jumpOpen_ = false;    // the jump being followed: its age, both HP at the press,
+    int jumpAge_ = 0;          // whether it saw itself in the air
+    float jumpHp_ = 0, jumpOppHp_ = 0;
+    bool jumpCame_ = false;
+    void JumpSettle();
+    int JumpAct(const float* view, int action);
+    RiskStats risks_;
 };
 
 } // namespace agent

@@ -100,6 +100,10 @@ jobs:
             build/run/efz.exe
             build/run/RelWithDebInfo/efz.exe
             build/run/efz.app
+            build/run/efz-convert
+            build/run/efz-convert.exe
+            build/run/RelWithDebInfo/efz-convert.exe
+            build/run/efz-convert.app
           if-no-files-found: ignore
 
   # The compatibility suite (docs/compat.md) in both the game and the headless runner,

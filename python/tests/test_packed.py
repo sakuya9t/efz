@@ -172,6 +172,15 @@ class Unpacked(unittest.TestCase):
             fourth = os.path.join(folder, 'fourth.efzagent')
             export_agent(got['model'], fourth, parts_from=out, keep=('routes',))
             self.assertEqual(read_agent(fourth)[1]['modules'], 'policy:1,routes:1')
+            # The planner's ending is a setting: the file's unless one is given.
+            self.assertEqual(int(read_agent(fourth)[1]['route_ending']),
+                             int(read_agent(out)[1]['route_ending']))
+            fifth = os.path.join(folder, 'fifth.efzagent')
+            export_agent(got['model'], fifth, parts_from=out, ending=400)
+            self.assertEqual(int(read_agent(fifth)[1]['route_ending']), 400)
+            sixth = os.path.join(folder, 'sixth.efzagent')
+            export_agent(got['model'], sixth, parts_from=fifth)
+            self.assertEqual(int(read_agent(sixth)[1]['route_ending']), 400)
 
     def test_the_tools_take_the_file(self):
         with tempfile.TemporaryDirectory() as folder:

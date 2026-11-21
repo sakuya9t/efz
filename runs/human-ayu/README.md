@@ -437,7 +437,8 @@ in free time that puts out an object; `charge`, Kano's charge moves in free time
 measures (`people.json`), the clone with a 14-frame reaction time (`bc-d14.zip`, as
 Ayu's), and the exploiter (`exploiter/`), trained against a frozen copy of the agent
 (`target.zip`: `agent-red` at 22.2M steps), a quarter of its matches against the CPU,
-with its focus and a KL pull toward its clone. The checkpoints are on Hugging Face.
+with its focus and a KL pull toward its clone. The checkpoints were on Hugging Face until
+20 November ("The models").
 
 | Character | People's sides (in sync) | Clone: held-out nll, press recall | People's free time used for | Clone vs the agent | Exploiter vs the agent |
 |---|---|---|---|---|---|
@@ -1332,7 +1333,7 @@ to write such a part and one host for each place an agent plays
 | `Module` | a part of an agent: every step it is shown each environment's step (`watch(i, ctx)`) and asked for its action (`act(i, ctx)`): an action, or None, "not mine". `ctx` is what the host knows: `ctx.view`, what the player sees, `delay` steps old (a module keeps the human limits by deciding from it); its input history; and for planning on copies of the game `ctx.save()` and `ctx.now` |
 | `Stack` | several modules in order: the first that wants the step has it, the agent's own play the last; a module that was playing sees in `ctx.last` that another took the step |
 | `ModularAgent` | an `Agent` with modules, for evaluations (a batch) and for a person's match (`play.py`) |
-| `ModularOpponent`, `efz_env.sb3.ModularLearner` | the same for an opponent and for the learner of `finetune.py`'s environment (a module's steps marked for the loss to leave out, as the routes' were) |
+| `ModularOpponent`, `efz_env.sb3.ModularLearner` | the same for an opponent and for the learner of `finetune.py`'s environment (a module's steps marked for the loss to leave out, as the routes' were): `finetune.py --assist` (the routes alone) and `--module KIND:key=value,...` (any of them, in training and in its evaluations) |
 | `agent.json` | what an agent is made of, beside its model (and in a pack): the model, the modules in the order they are asked, each one's files and options. `play.py` reads it (a pack without one is its model and, if it holds a library, the routes); `--module KIND:key=value,...` and `--no-module KIND` change it, `evaluate.py --p1-module` adds one |
 
 A kind of module is registered by the file that writes it (`agent_modules.py` imports
@@ -1571,20 +1572,24 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
 
 ## The models
 
-On Hugging Face, https://huggingface.co/sakuya9t/efz, under the same paths:
-`python runs/hub.py download human-ayu` (the clones, the team, the agent's checkpoints,
-the combo master). The repository keeps the clones and the team too; the agent's and
-the combo master's checkpoints are only there. Uploaded 8 November: every run's
-`best.zip` and last `model.zip` (not the `chunk*.zip` between) through round 8, and the
-exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their targets
-(`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent,
-`agent-league11-r7/best.zip` (round 11), went up on its own on 9 November with its
-`config.json`, to be played against. The rest of round 9 on (`agent-league9-jitter`,
-`agent-league10-kanna`, the other `agent-league11*`, `agent-league12*`, the reversal
-exploiters, the seventeen helpers' clones and exploiters, `kano/transfer7`,
-`mizukab/transfer7`, round 14's `agent-league11-avg`, `agent-league14*` and the
-`exploiter14`s, and round 15's `agent-league15*`, `combo-net14*` and `combo-chooser14`/`15`)
-is only on the Linux machine until the next upload.
+The released agents are on Hugging Face, https://huggingface.co/sakuya9t/efz, as agent
+files (`.efzagent`) only, since 20 November: rounds 16 (`agent-league16-calm-s2-round16`),
+17 (`agent-league17-s1-round17c`), 18 (`agent-league18-s2-round18k8`) and 20
+(`agent-league20-spar-s1-round20`), with a card that says what each one is and which game
+plays it (`runs/hub-card.md`). `python runs/hub.py download` fetches them into `agents/`;
+`unpack_agent.py`, or the tools themselves, turn one back into a model to train
+(docs/agents.md, "Working on from an agent file").
+
+The runs' checkpoints are on the Linux machine, and stay out of git. Until 20 November the
+Hub held some of them under the repository's paths: every run's `best.zip` and last
+`model.zip` through round 8 (uploaded 8 November; with the `chunk*.zip` of `agent/`,
+`agent-red/` and `agent-league/`), the exploiters of Kano (1-7), Mizuka (1-7), Misuzu
+(1-3) and Mishio (1-3) with their targets, the clones, the team, the combo master, and
+round 11's best (`agent-league11-r7/best.zip`) and round 12's `agent-league12-adv`. Those
+files (202, and the 6 of `curriculum/`, `pbt/` and `vs-cpu/`: 2.9 GB) are now in
+`~/data/efz-hub-old/runs/` and in the Hub's history (`hf download sakuya9t/efz
+--revision f0dbd7b7e0f5be8ab09fc991866260fe203cfa31 --include 'runs/human-ayu/*'
+--local-dir .`). Everything from round 9 on that wasn't among them was never uploaded.
 
 ## The scripts
 
@@ -1595,12 +1600,13 @@ is only on the Linux machine until the next upload.
 | `finetune.py` | PPO from the clone, every frame, KL to it; half the matches against the level-4 CPU with any character, half Ayu's mirror against a frozen copy, the clone, the curriculum agent and the `--team` of players' clones; any character (`--char`), opponents of other characters (`--vs`, shared by `--pfsp`, a character's fixed share of them by `--vs-char-share`), a focus (`--focus`), `--stop-win`; the loop of round 14: the learning rate decayed per chunk (`--lr-end`), a running mean of the chunks evaluated and kept (`--average`), `--seed`, `--n-steps`, evaluation in parallel (`--eval-workers`), PPO's numbers and the drift of its updates in `finetune.json` |
 | `average.py` | the mean of a run's chunk checkpoints as one model (`agent-league11-avg`, round 14's start) |
 | `scorecard.py` | checkpoints' 64-match comparisons side by side: the 39 by group, round 14's seven exploiters and all 46, each advantage profile's set, the level-4 CPU's tiers, Kanna, the human limits, the agent's okizeme and strings against a profile; `NAME=PREFIX@routes` for an agent played with the routes |
+| `bench.py` | the benchmark suite of an agent file: measures with room to move (a corner that holds, a combo's end, its own rising, its raw specials, what it makes of a lead, a handicap, one build against another), each from 64-match pairings against trained opponents with one scripted habit, through the game's own code; every number with its error (`evaluate.py --folds`, a jackknife over groups of matches), two builds compared in errors, a build's two seeds as the errors' check, a person's play-test (`record`) read the same way, beside the strongest replay player's numbers (`people.json`); the drills since 19 November: an empty jump into a low on its rising (`riselow`), recoil guards with a counter (`recoil`), every scripted habit at once (`sparring`), the level-4 CPU with the file's own combos (`cpu`); `jobs --p2-delay N` gives the opponents the agent's reaction (a build at 11 steps is flattered by opponents at their own 14); `script` measures read the scripted opponents' own counts |
 | `evaluate.py` | matches to the end, the share of each side's HP the other took a round (`opp_hp_taken`, where it never wins, as against Kanna; `self_hp_taken`, its own lost, where it nearly always wins: hard wins from easy ones, the user's), with how each side played (`Events`: presses, jumps, guards, recoil guards and counters, punishes after an RG, the 623 guesses, combos with their 90th percentile and most, Instant Charge, inputs while unable to move, damage taken, and `tactics.py`'s); `--chars ayu tiers` for the level-4 CPU's tiers; plays language models too (`runs/llm-ayu`) |
 | `combo_victims.py` | combos by the character they land on: conversion, hits, damage, and how they ended (knockdown, air recovery, neither), for people's Ayu or an agent against each CPU character |
 | `kanna_study.py` | where an agent's HP goes against the level-4 CPU's Kanna (her attacks out of her combos, by move, and the damage of the combos each started), its reversals and how they went, and her RF gauge (236C) |
 | `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up (the riser's choice, the attacker's okizeme and mix-up) and free time, both ways |
-| `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time |
-| `advantages.py` | a red team's advantages for any opponent: recoil guards, reversals after them, throws, damage, the wake-up bait, and a person's defence: guarding a string out, rising guarded or with a buffered reversal into a meaty, jump-ins on the rise (`finetune.py --vs-rg/--vs-reversal/--vs-throw/--vs-damage/--vs-patient/--vs-wake/--vs-jumpin`, `evaluate.py --p2-advantage`) |
+| `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time, reversals that hit, jump-ins that land (`air`: round 17's exploiters, docs/training-v2.md); `Calm`: a cost on the agent's presses while it is hit or guarding (`--press-cost`, round 16) |
+| `advantages.py` | a red team's advantages for any opponent: recoil guards, reversals after them, throws, damage, the wake-up bait, and a person's defence: guarding a string out, rising guarded or with a buffered reversal into a meaty, jump-ins on the rise, of them a share empty with the fastest low from the landing (`low`), recoveries in the air and escapes from a corner (`finetune.py --vs-rg/--vs-reversal/--vs-throw/--vs-damage/--vs-patient/--vs-wake/--vs-jumpin`, any of them as a whole profile with `--vs-profile2`, `evaluate.py --p2-advantage`) |
 | `motions.py` | the motion that starts each character's moves, tried from a saved state; which invincible ones come out of a recoil guard and win; with `--add wake jump meaty`, each character's rise, the reversals that beat a meaty 2A when buffered while rising, and the jump-ins that land on a rise (`motions.json`, made on each machine as `framedata.json` is: not in the repository) |
 | `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames, guard height (`framedata.json`) |
 | `people.py` | the same measures of people, overall, by opponent and by player |
@@ -1608,6 +1614,8 @@ is only on the Linux machine until the next upload.
 | `team_check.py` | whether players' clones predict their players better than the clone of everyone |
 | `combo_support.py` | the built-in routes: an agent's combos from people's library combos tried on copies of the game once it sees its hit, and again at each new move's hit (`FairAssist`; `evaluate.py --p1-assist [--assist-replan]`, `finetune.py --assist`), against a person in real time with the planner in a process of its own (`LiveRoutes`, `play.py --assist`) or with the chooser (`play.py --assist --chooser`); the module `routes` of `python/efz_env/modules.py` |
 | `agent_modules.py` | the kinds of module an agent here can be made of (an `agent.json`'s `"code"`): importing it registers them |
+| `okizeme.py` | the module `oki`: while the agent sees its opponent knocked down, another player (people's clone) plays in its place; people's mix, fewer wins (docs/training-v2.md, "The okizeme module, measured"), so no shipped agent has it |
+| `from_record.py` | the native game's fight records (a match against an agent in the game; docs/logging.md) played again in the headless game and written as play.py's recordings, checked frame by frame: what the measures here read |
 | `combo_net.py` | the routes without the copies: `collect` an agent's plans (and steps) with the routes, `train-chooser` a network that says from the agent's view what each library combo would deal (`evaluate.py --assist-chooser`, `play.py --chooser`); `train`, `train-clock`, `play`: the two step-by-step networks that didn't work |
 | `combo_starts.py` | where people's combos started, kept as a replay and a step |
 | `combo.py` | the combo master: trials from those starts, rewarded for the combo's damage |

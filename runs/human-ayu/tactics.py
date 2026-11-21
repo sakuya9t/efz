@@ -388,6 +388,574 @@ def strings(me, opp, live, controls):
     return out
 
 
+THROWN = list(range(0x64, 0x7a))  # the poses a throw puts its victim in
+AIR_RECOVERY = (0x9d, 0x9e)       # recovering in the air from a hit, forward and back
+LYING = (0x61, 0x62, 0x63)
+THROW = 0xdc                      # every character's throw; + 1: it caught
+AIR_THROW_F0 = ('ayu', 'mai', 'akane', 'akiko')  # their air throw is 0xf0, the others' 0xf8
+ENDINGS = ('knockdown', 'recovery', 'standing', 'ko')
+BIG = 1000                        # HP: a combo worth ending well
+AFTER_END = 150                   # steps after an air recovery in which who hits first is looked for
+
+
+def endings(att, dfn, live):
+    """How att's combos on dfn end, a record each: the HP it took and where it left dfn:
+    'knockdown' (lying, to rise into att's okizeme), 'recovery' (dfn recovered in the
+    air: untech time ran out before the ground, and dfn is free to act), 'standing' (a
+    ground hit's stun ran out), 'ko'. For a recovery also whether att was still in a move
+    of its own (busy) and who was hit first after it (next: 'caught', 'hit back',
+    'guarded', 'nothing')."""
+    T = len(dfn.act)
+    react = ((dfn.act >= 0x32) & (dfn.act < 0x60)) | np.isin(dfn.act, THROWN)
+    lying = np.isin(dfn.act, LYING)
+    starts = np.flatnonzero(react & ~_prev(react, False))
+    out, k = [], 0
+    while k < len(starts):
+        s = e = int(starts[k])
+        while True:
+            while e < T and react[e]:
+                e += 1
+            f = e
+            while f < T and lying[f]:
+                f += 1
+            if f > e and f < T and react[f]:  # hit again lying: the combo goes on
+                e = f
+                continue
+            break
+        while k < len(starts) and starts[k] < e:
+            k += 1
+        if e >= T or s == 0:
+            continue
+        a = int(dfn.act[e])
+        kind = ('ko' if not live[e] or dfn.hp[e] <= 0 else 'recovery' if a in AIR_RECOVERY else
+                'knockdown' if a in LYING or a == 0x60 or dfn.air[e] else 'standing')
+        rec = dict(damage=float(dfn.hp[s - 1] - dfn.hp[e]), kind=kind)
+        if kind == 'recovery':
+            ev = [(x, name) for x, name in ((_first(dfn.hit, e + 1, e + AFTER_END), 'caught'),
+                                            (_first(att.hit, e + 1, e + AFTER_END), 'hit back'),
+                                            (_first(dfn.contact, e + 1, e + AFTER_END), 'guarded'))
+                  if x is not None]
+            rec.update(busy=bool(att.act[e] >= FIRST_OWN), next=min(ev)[1] if ev else 'nothing')
+        out.append(rec)
+    return out
+
+
+def endings_report(recs):
+    big = [r for r in recs if r['damage'] >= BIG]
+    out = dict(n=len(recs), n_big=len(big))
+    for name, rs in (('all', recs), ('big', big)):
+        out[name] = {k: round(float(np.mean([r['kind'] == k for r in rs])), 3) for k in ENDINGS} if rs else None
+    rec = [r for r in recs if r['kind'] == 'recovery']
+    if rec:
+        out['after_recovery'] = dict(
+            n=len(rec), busy=round(float(np.mean([r['busy'] for r in rec])), 3),
+            **{k: round(float(np.mean([r['next'] == k for r in rec])), 3)
+               for k in ('caught', 'hit back', 'guarded', 'nothing')})
+        # (caught less hit back: what a recovery left to the opponent is worth, in shares)
+        out['after_recovery']['net'] = round(float(np.mean(
+            [(r['next'] == 'caught') - (r['next'] == 'hit back') for r in rec])), 3)
+    return out
+
+
+def grabs(me, opp, dx, live):
+    """One record a match: me's throws and air throws (tried: the move came out; landed),
+    the times it could have tried one (free within reach of an opponent on the ground
+    that is free or guarding; of one in the air that isn't being hit), and the air
+    exchanges (both in the air when one is hit: won, lost)."""
+    px = np.abs(dx) * 640
+    at = 0xf0 if names()[me.char] in AIR_THROW_F0 else 0xf8
+    ground = ~me.air & ~opp.air & (px < 45) & me.free & (opp.free | opp.guard) & live
+    air = me.air & opp.air & (px < 100) & me.free & ~opp.hitstun & live
+    return [dict(throw_tries=int((me.new & (me.act == THROW)).sum()),
+                 throws=int((me.new & (me.act == THROW + 1)).sum()),
+                 air_tries=int((me.new & (me.act == at)).sum()),
+                 air_throws=int((me.new & (me.act == at + 1)).sum()),
+                 throw_chances=len(_runs(ground)[0]), air_chances=len(_runs(air)[0]),
+                 air_won=int((opp.hit & me.air & opp.air).sum()),
+                 air_lost=int((me.hit & me.air & opp.air).sum()))]
+
+
+def grabs_report(recs, per_min):
+    tot = {k: sum(r[k] for r in recs) for k in recs[0]} if recs else {}
+    return {k + '_per_min': round(v * per_min, 2) for k, v in tot.items()}
+
+
+
+# The player's risky moves: per character the ones a guard or a miss leaves open, and
+# every invincible one of the frame data but the throws (a guess that loses to a guard).
+RISKY = {'ayu': {0xfa: '623A', 0xfc: '623B', 0xfb: '623C', 0x106: '236C', 0x105: '236B',
+                 0x104: '236A'}}
+RISK_HIT = 40      # steps after the move starts in which it hits or is guarded, at least;
+RISK_FLASH = 50    # ... or this many after its startup (a super's flash comes on top)
+RISK_AFTER = 40    # steps after the move is over in which the opponent's hit is its punishment
+RISK_LONGEST = 240  # steps a move and what it goes on into are followed for
+RISK_IC = (0xa7, 0xab)  # Instant Charge: the cancel that makes a guarded move safe
+RISK_WAKE = 10     # steps after me is up from a knockdown in which a raw move is a wake-up one
+
+
+@functools.lru_cache(maxsize=None)
+def startups():
+    """Per character number: {move: its startup in steps}, from framedata.json; {} without."""
+    path = os.path.join(HERE, 'framedata.json')
+    if not os.path.exists(path):
+        return {}
+    data = json.load(open(path))
+    return {c: {int(k, 16): m['startup'] for k, m in data[name].items() if m.get('startup')}
+            for c, name in enumerate(names()) if name in data}
+
+
+def risks(me, opp, live):
+    """me's risky moves (RISKY, and the frame data's invincible ones), a record each:
+    the move, whether it was a combo's piece (the opponent already in a hit reaction: no
+    risk taken), else its result ('hit', 'guarded', 'rg': recoil-guarded, 'whiff'), the
+    HP it dealt (a hit: until the opponent is out of its reactions) and, for one that did
+    not hit, whether the opponent hit me first (punished: from the guard, or the move's
+    start, until RISK_AFTER steps after me is out of its move) and the HP that cost,
+    whether me recoil-guarded the answer (back) and whether me cancelled the move with an
+    Instant Charge (ic); and whether a raw one was a wake-up one (wake: me was down or
+    rising less than RISK_WAKE steps before: a reversal, which an opponent that waits
+    for it guards). What a guess costs when it is wrong, the user's (17 November):
+    Ayu's 623 recoil-guarded leaves her open to a full air combo."""
+    T = len(me.act)
+    name = names()[me.char] if 0 <= me.char < len(names()) else ''
+    table = dict(RISKY.get(name, {}))
+    at = 0xf0 if name in AIR_THROW_F0 else 0xf8
+    for a in set(me.inv_moves) - {THROW, THROW + 1, at, at + 1}:  # but the throws
+        table.setdefault(a, f'{a:#x}')
+    if not table:
+        return []
+    startup = startups().get(me.char, {})
+    lying = np.isin(me.act, LYING), np.isin(opp.act, LYING)
+    down = np.isin(me.act, DOWN)
+    react = [((s.act >= 0x32) & (s.act < 0x60)) | np.isin(s.act, THROWN) for s in (me, opp)]
+    got = [r & ~_prev(r, False) for r in react]
+    moving = (me.act >= FIRST_OWN) | np.isin(me.act, RISK_IC)
+
+    def lost(s, k, at):  # the HP side s loses from the reaction starting at `at`
+        e = at
+        while e < T and live[e] and (react[k][e] or lying[k][e]):
+            e += 1
+        return float(s.hp[max(0, at - 1)] - s.hp[max(0, at - 1):max(e, at) + 1].min())
+    out = []
+    for t in np.flatnonzero(me.new & np.isin(me.act, list(table)) & live):
+        a = int(me.act[t])
+        rec = dict(move=table[a], combo=bool(react[1][t] or lying[1][t]))
+        out.append(rec)
+        if rec['combo']:
+            continue
+        rec['wake'] = bool(down[max(0, t - RISK_WAKE):t].any())
+        hi = t + max(RISK_HIT, startup.get(a, 0) + RISK_FLASH)
+        h, g = _first(got[1], t, hi), _first(opp.contact, t, hi)
+        if h is not None and (g is None or h <= g):
+            rec.update(result='hit', dealt=lost(opp, 1, h))
+            continue
+        if g is None:
+            rec['result'], g = 'whiff', t
+        else:
+            rec['result'] = 'rg' if np.isin(opp.act[g:g + 3], RG).any() else 'guarded'
+        e = t
+        while e < min(T, t + RISK_LONGEST) and moving[e]:
+            e += 1
+        p = _first(got[0], g, e + RISK_AFTER)
+        punished = p is not None and _first(got[1], g, p) is None
+        rec.update(punished=punished, lost=lost(me, 0, p) if punished else 0.0,
+                   back=_first(me.new & np.isin(me.act, RG), g, e + RISK_AFTER) is not None,
+                   ic=_first(me.new & np.isin(me.act, RISK_IC), t, e + 1) is not None)
+    return out
+
+
+def risks_report(recs, per_min):
+    """Per move: a minute, the share that were a combo's piece, and of the others (raw):
+    how many, the shares that hit, were guarded, recoil-guarded and whiffed, the HP a hit
+    dealt; of those that did not hit, the share punished, the HP a miss cost, the shares
+    answered with a recoil guard and cancelled; `net`, the HP a raw use is worth: (all
+    dealt - all lost) / raw uses; and the wake-up ones among the raw: their share (wake),
+    the share of them that hit (wake_hit) and their own net (wake_net)."""
+    out = {}
+    for move in sorted({r['move'] for r in recs}):
+        rs = [r for r in recs if r['move'] == move]
+        raw = [r for r in rs if not r['combo']]
+        miss = [r for r in raw if r['result'] != 'hit']
+        hit = [r for r in raw if r['result'] == 'hit']
+        d = dict(per_min=round(len(rs) * per_min, 2), in_combo=round(1 - len(raw) / len(rs), 3),
+                 n=len(raw))
+        if raw:
+            d.update({k: round(float(np.mean([r['result'] == k for r in raw])), 3)
+                      for k in ('hit', 'guarded', 'rg', 'whiff')})
+            d['dealt'] = round(float(np.mean([r['dealt'] for r in hit]))) if hit else None
+            if miss:
+                d.update(punished=round(float(np.mean([r['punished'] for r in miss])), 3),
+                         lost=round(float(np.mean([r['lost'] for r in miss]))),
+                         back=round(float(np.mean([r['back'] for r in miss])), 3),
+                         ic=round(float(np.mean([r['ic'] for r in miss])), 3))
+            d['net'] = round((sum(r['dealt'] for r in hit) - sum(r['lost'] for r in miss)) / len(raw))
+            wake = [r for r in raw if r['wake']]
+            d['wake'] = round(len(wake) / len(raw), 3)
+            if wake:
+                d['wake_hit'] = round(float(np.mean([r['result'] == 'hit' for r in wake])), 3)
+                d['wake_net'] = round(sum(r['dealt'] if r['result'] == 'hit' else -r['lost']
+                                          for r in wake) / len(wake))
+        out[move] = d
+    return out
+
+
+def raw_report(recs, per_min):
+    """All the risky moves that were not a combo's piece, as one account: a minute, the HP
+    a use is worth (`net`) and the HP a minute they are worth together (`hp_per_min`: what
+    a round is judged by); the share that did not hit (`missed`), of those the share
+    punished and the share cancelled with an Instant Charge. Of the opponent's
+    (faced_raw), `punished` is the player's doing: what it makes of a miss."""
+    raw = [r for r in recs if not r['combo']]
+    out = dict(per_min=round(len(raw) * per_min, 2), n=len(raw))
+    if raw:
+        miss = [r for r in raw if r['result'] != 'hit']
+        net = sum(r['dealt'] for r in raw if r['result'] == 'hit') - sum(r['lost'] for r in miss)
+        out.update(net=round(net / len(raw)), hp_per_min=round(net * per_min),
+                   missed=round(len(miss) / len(raw), 3))
+        if miss:
+            out.update(punished=round(float(np.mean([r['punished'] for r in miss])), 3),
+                       cancelled=round(float(np.mean([r['ic'] for r in miss])), 3),
+                       lost=round(float(np.mean([r['lost'] for r in miss]))))
+    return out
+
+
+FLIGHT_AFTER = 90  # steps after an air dash in which what came of it is looked for
+FLIGHT_NEXT = ('air move', 'landed move', 'throw', 'nothing')
+FLIGHT_CAME = ('hit', 'guarded', 'was hit', 'nothing')
+FLIGHT_WHERE = ('combo', 'okizeme', 'string', 'open')
+FLIGHT_STRING = 30  # steps after the opponent's guard in which a flight is out of a string
+
+
+def flights(me, opp, live):
+    """me's air dashes (AIRDASH: Ayu's flights), a record each: back or forward, what me
+    started next within FLIGHT_AFTER steps (a move in the air, a move once landed, a
+    throw or air throw, nothing) and what came first of it: the opponent hit or thrown,
+    its guard, me hit, nothing; and where it was flown from: inside a combo (the opponent
+    in a hit reaction), over an opponent that is down (okizeme), out of a string (the
+    opponent guarded less than FLIGHT_STRING steps before), or in the open. How an Ayu
+    comes in: people's fly 5.5 times a minute and
+    mix what follows, round 17's agent 2.2 (the user's, 17 November)."""
+    name = names()[me.char] if 0 <= me.char < len(names()) else ''
+    at = 0xf0 if name in AIR_THROW_F0 else 0xf8
+    thrown = np.isin(opp.act, THROWN)
+    took = opp.hit | (thrown & ~_prev(thrown, False))
+    hurt = ((opp.act >= 0x32) & (opp.act < 0x60)) | thrown
+    down = np.isin(opp.act, DOWN)
+    out = []
+    for t in np.flatnonzero(me.new & np.isin(me.act, AIRDASH) & live):
+        where = ('combo' if hurt[t] else 'okizeme' if down[t] else
+                 'string' if opp.guard[max(0, t - FLIGHT_STRING):t + 1].any() else 'open')
+        hi = t + FLIGHT_AFTER
+        u = _first(me.move, t + 1, hi)
+        nxt = ('nothing' if u is None else 'throw' if me.act[u] in (THROW, at) else
+               'air move' if me.air[u] else 'landed move')
+        ev = [(x, k) for x, k in ((_first(took, t + 1, hi), 'hit'), (_first(me.hit, t + 1, hi), 'was hit'),
+                                  (_first(opp.contact, t + 1, hi), 'guarded')) if x is not None]
+        out.append(dict(back=bool(me.act[t] == AIRDASH[1]), next=nxt, where=where,
+                        came=min(ev)[1] if ev else 'nothing'))
+    return out
+
+
+def flights_report(recs, per_min):
+    """A minute, the share flown back, the shares of what followed and of what came of
+    it, `mix`: the entropy in bits of what followed (0: always the same), and by where it
+    was flown from (FLIGHT_WHERE): a minute, and the shares that came to a hit and to
+    being hit."""
+    out = dict(per_min=round(len(recs) * per_min, 2), n=len(recs))
+    if recs:
+        nxt = np.array([np.mean([r['next'] == k for r in recs]) for k in FLIGHT_NEXT])
+        out.update(back=round(float(np.mean([r['back'] for r in recs])), 3),
+                   next={k: round(float(v), 3) for k, v in zip(FLIGHT_NEXT, nxt)},
+                   came={k: round(float(np.mean([r['came'] == k for r in recs])), 3)
+                         for k in FLIGHT_CAME},
+                   mix=round(float(-(nxt[nxt > 0] * np.log2(nxt[nxt > 0])).sum()), 2))
+        out['where'] = {}
+        for k in FLIGHT_WHERE:
+            rs = [r for r in recs if r['where'] == k]
+            if rs:
+                out['where'][k] = dict(
+                    per_min=round(len(rs) * per_min, 2),
+                    hit=round(float(np.mean([r['came'] == 'hit' for r in rs])), 3),
+                    was_hit=round(float(np.mean([r['came'] == 'was hit' for r in rs])), 3))
+    return out
+
+
+LOSS_GAP = 20      # steps free and unhit that end one loss of HP (a combo on the player)
+SEEN = 20          # steps a move or an object was out by which a player (14 late) saw it and could answer
+SEE_LATE = 14      # ... of them, the steps before it is seen at all
+BEGAN_BACK = 60    # steps before a hit in which what the player started is looked for
+LOSS_BEFORE = 40   # steps before a hit in which a guard, and what a jump came from, are looked for
+LOSS_WOKE = 30     # ... in which the player was down: it was rising
+
+
+def losses(me, opp, live):
+    """me's losses of HP, a record each: `hp`, `t` (the step it began on), and `kind`, what me was doing when the
+    loss began: 'in the air, attacking' (with `where`: 'open', 'okizeme' (the opponent
+    was down when me left the ground), 'pressure' (it had guarded just before), 'combo'
+    (it was in a hit reaction: a combo of me's that dropped); and `by`: what hit it, 'air'
+    (the opponent in the air too), 'reversal' (its invincible move), 'ground'), 'in the
+    air, not attacking', 'in a move, in neutral', 'in a move, after guarding' (a mash),
+    'in a move, rising', 'its invincible move beaten', 'its move guarded, then punished',
+    'dashing', 'rising, not acting', 'opened after guarding', 'free on the ground',
+    'thrown', 'chip'. Where the HP goes (the user, 18 November: a round that gains
+    against the league and changes nothing against a person): the ledger a round is
+    judged by, beside the strongest players'.
+
+    And for a loss that began with a hit, what hit and since when it was there to see
+    (the user, 19 November: "it behaves like it cannot predict what is going to happen
+    after 1s, given the case where the opponent is sending out a strike ... more severe
+    when handling objects"): `thing`, 'move' (the opponent in a move of its own at the
+    hit), 'object' (not in one, an object of its out: the object hit) or None; `out_for`,
+    the steps since that move began or that the objects had been out; `began`: it had
+    been out SEEN steps or more and me started something (a move, a jump, a dash) after
+    it could see it, inside the BEGAN_BACK steps before the hit: it walked into what was
+    on the screen."""
+    T = len(me.act)
+    drop = np.clip(np.concatenate([[0], me.hp[:-1] - me.hp[1:]]), 0, None)
+    drop[~live] = 0  # (a new round's HP is not a gain, and nothing is lost between rounds)
+    at = np.flatnonzero(drop > 0)
+    out = []
+    if not len(at):
+        return out
+    clean = me.free & ~me.hitstun
+    groups, cur = [], [int(at[0])]
+    for t in at[1:]:
+        t = int(t)
+        if t - cur[-1] <= LOSS_GAP or not clean[cur[-1] + 1:t].any():
+            cur.append(t)
+        else:
+            groups.append(cur)
+            cur = [t]
+    groups.append(cur)
+    thrown = np.isin(me.act, THROWN)
+    thrown_in = thrown & ~_prev(thrown, False)
+    down, odown = np.isin(me.act, DOWN), np.isin(opp.act, DOWN)
+    woke = lambda t: bool(down[max(0, t - LOSS_WOKE):t + 1].any())
+    guarded = lambda t: bool(me.guard[max(0, t - LOSS_BEFORE):t].any())
+    for g in groups:
+        t0, t1 = g[0], g[-1]
+        rec = dict(hp=float(drop[g].sum()), t=int(t0))
+        out.append(rec)
+        lo = max(0, t0 - LOSS_BEFORE)
+        th = np.flatnonzero(thrown_in[max(0, t0 - 240):t0 + 2])
+        if len(th) and thrown[max(0, t0 - 3):t1 + 1].any():
+            rec['kind'] = 'thrown'
+            continue
+        hits = np.flatnonzero(me.hit[lo:t1 + 1])
+        if not len(hits):
+            rec['kind'] = 'chip'
+            continue
+        near = [lo + int(h) for h in hits if lo + int(h) <= t0 + 1]
+        h = near[-1] if near else lo + int(hits[0])
+        p = max(0, h - 1)
+        a = int(me.act[p])
+        k = p
+        if opp.act[p] >= FIRST_OWN:
+            while k > 0 and not opp.new[k]:
+                k -= 1
+            rec.update(thing='move', out_for=int(h - k))
+        elif opp.objects[p] > 0:
+            while k > 0 and opp.objects[k - 1] > 0:
+                k -= 1
+            rec.update(thing='object', out_for=int(h - k))
+        else:
+            rec.update(thing=None, out_for=0)
+        mine = np.flatnonzero(me.acts[max(0, h - BEGAN_BACK):h])
+        rec['began'] = bool(rec['out_for'] >= SEEN and len(mine) and
+                            max(0, h - BEGAN_BACK) + int(mine[-1]) >= h - rec['out_for'] + SEE_LATE)
+        if me.air[p]:
+            if a < FIRST_OWN:
+                rec['kind'] = 'in the air, not attacking'
+                continue
+            rec['kind'] = 'in the air, attacking'
+            j = p
+            while j > 0 and me.air[j]:
+                j -= 1  # (where it left the ground)
+            before = slice(max(0, j - LOSS_BEFORE), h)
+            rec['where'] = ('okizeme' if odown[max(0, j - LOSS_WOKE):h + 1].any() else
+                            'pressure' if opp.guard[before].any() else
+                            'combo' if opp.hitstun[before].any() else 'open')
+            oa = int(opp.act[h])
+            rec['by'] = ('air' if opp.air[h] else 'reversal'
+                         if oa in opp.inv_moves or opp.inv_timer[max(0, h - 12):h + 1].any()
+                         else 'ground')
+        elif a >= FIRST_OWN:
+            m0 = int(np.flatnonzero(me.new[:p + 1])[-1])
+            if a in me.inv_moves or me.inv_timer[m0:m0 + 8].any():
+                rec['kind'] = 'its invincible move beaten'
+            elif opp.guard[m0:h].any():
+                rec['kind'] = 'its move guarded, then punished'
+            else:
+                rec['kind'] = 'in a move, ' + ('after guarding' if guarded(m0) else
+                                               'rising' if woke(m0) else 'in neutral')
+        elif a in (DASH, BACKDASH):
+            rec['kind'] = 'dashing'
+        elif woke(p) and not guarded(p):
+            rec['kind'] = 'rising, not acting'
+        elif guarded(p) or me.guard[p]:
+            rec['kind'] = 'opened after guarding'
+        else:
+            rec['kind'] = 'free on the ground'
+    return out
+
+
+def losses_report(recs, per_min):
+    """The ledger: HP lost a minute in all (`hp`) and how many times (`times`), and by
+    kind the HP a minute, the times a minute and the HP a time; the air-attacking line
+    also by where it was flown or jumped from and by what hit it (HP a minute)."""
+    out = dict(hp=round(sum(r['hp'] for r in recs) * per_min), times=round(len(recs) * per_min, 2),
+               kinds={})
+    for k in sorted({r['kind'] for r in recs}, key=lambda k: -sum(r['hp'] for r in recs if r['kind'] == k)):
+        rs = [r for r in recs if r['kind'] == k]
+        hp = sum(r['hp'] for r in rs)
+        out['kinds'][k] = dict(hp=round(hp * per_min), times=round(len(rs) * per_min, 2),
+                               each=round(hp / len(rs)))
+    air = [r for r in recs if r['kind'] == 'in the air, attacking']
+    for field in ('where', 'by'):
+        out['air_' + field] = {v: round(sum(r['hp'] for r in air if r[field] == v) * per_min)
+                               for v in sorted({r[field] for r in air})}
+    # What was on the screen (losses()): the hits by something out long enough to be seen
+    # (`seen`), of them those me started something into (`began`), and those of the
+    # latter that an object made (`object`): HP a minute, and times a minute.
+    seen = [r for r in recs if r.get('out_for', 0) >= SEEN]
+    began = [r for r in seen if r.get('began')]
+    thing = [r for r in began if r.get('thing') == 'object']
+    out['into'] = {k: dict(hp=round(sum(r['hp'] for r in rs) * per_min),
+                           times=round(len(rs) * per_min, 3))
+                   for k, rs in (('seen', seen), ('began', began), ('object', thing))}
+    return out
+
+
+SITUATIONS = ('my okizeme', 'its okizeme', 'my pressure', 'its pressure', 'I came by air',
+              'it came by air', 'both in the air', 'on the ground')
+EXCHANGE_DOWN = 70    # steps after a knockdown's end in which an exchange is that okizeme's
+EXCHANGE_GUARD = 45   # ... after a guard in which it is that pressure's
+EXCHANGE_AIR = 12     # ... before it in which a player in the air came by air
+
+
+def exchanges(me, opp, live, mine=None, theirs=None):
+    """Every loss of HP of either player (losses(): mine, theirs, made here if not given)
+    as (the situation it began in, the HP: + the opponent's, - me's). The situation, from
+    me's side, the first that holds: 'my okizeme' (the opponent was down within
+    EXCHANGE_DOWN steps before: my hit on its rising, or its reversal's on me), 'its
+    okizeme', 'my pressure' (it guarded within EXCHANGE_GUARD steps before: my opening
+    it, or its way out hitting me), 'its pressure', 'I came by air' (I was in the air
+    within EXCHANGE_AIR steps before and it was not), 'it came by air', 'both in the
+    air', 'on the ground'. What each kind of situation is worth on net: where a player
+    is ahead and where it is behind, whoever was hit."""
+    mine = losses(me, opp, live) if mine is None else mine
+    theirs = losses(opp, me, live) if theirs is None else theirs
+    mdown, odown = np.isin(me.act, DOWN), np.isin(opp.act, DOWN)
+    out = []
+    for sign, recs in ((-1, mine), (1, theirs)):
+        for r in recs:
+            t = r['t']
+            lo = max(0, t - EXCHANGE_GUARD)
+            if odown[max(0, t - EXCHANGE_DOWN):t + 1].any():
+                where = 'my okizeme'
+            elif mdown[max(0, t - EXCHANGE_DOWN):t + 1].any():
+                where = 'its okizeme'
+            elif opp.guard[lo:t + 1].any():
+                where = 'my pressure'
+            elif me.guard[lo:t + 1].any():
+                where = 'its pressure'
+            else:
+                a = me.air[max(0, t - EXCHANGE_AIR):t + 1].any()
+                b = opp.air[max(0, t - EXCHANGE_AIR):t + 1].any()
+                where = ('both in the air' if a and b else 'I came by air' if a else
+                         'it came by air' if b else 'on the ground')
+            out.append((where, sign * r['hp']))
+    return out
+
+
+def exchanges_report(recs, per_min):
+    """The net ledger: HP a minute on net in all, and by situation the net, what was
+    gained and what was lost."""
+    out = dict(net=round(sum(v for _, v in recs) * per_min))
+    for k in SITUATIONS:
+        v = [x for s, x in recs if s == k]
+        gained, lost = sum(x for x in v if x > 0), -sum(x for x in v if x < 0)
+        out[k] = dict(net=round((gained - lost) * per_min), gained=round(gained * per_min),
+                      lost=round(lost * per_min))
+    return out
+
+
+LEAD = 3000    # HP ahead (a bar is 9999) from which a round is the leader's to lose
+CLOSE = 2500   # the opponent's HP from which, the player ahead, the round is there to close
+ROUND_LEAST = 60  # steps: a round shorter than this is not one
+ROUND_AGAIN = 2000  # HP more than on the step before: a new round's
+ROUND_OVER = 1000   # HP at a round's last step at or under which it was fought to its end
+#   (a dataset's last step of a round is before the hit that ends it: the loser's HP then
+#   is under that hit's damage; a round the record cuts short has both above it)
+
+
+def rounds(me, opp, live):
+    """Each round the match's record holds to its end, by what the player made of its
+    leads: a dict a round: won; steps; lead: None, or (kept, HP lost after) from the
+    first step it was LEAD HP ahead: kept, it won the round; behind: None, or whether it
+    won from the first step it was LEAD behind; close: None, or (won, steps to the
+    round's end, its own HP lost in them) from the first step the opponent was at CLOSE
+    HP or less with the player ahead: a round that is there to be closed, how long that
+    took and what it cost. What is made of an advantage (the user's, 18 November: "it
+    doesn't fully use its advantage"; "its behavior becomes random at the end of the
+    round")."""
+    out, T, t = [], len(live), 0
+    d = me.hp - opp.hp
+    # A round also ends where the HP is full again on the next step (a replay dataset's
+    # matches hold the fight's steps only: its rounds follow one another).
+    again = np.zeros(T, bool)
+    again[1:] = (np.diff(me.hp) > ROUND_AGAIN) | (np.diff(opp.hp) > ROUND_AGAIN)
+    while t < T:
+        if not live[t]:
+            t += 1
+            continue
+        e = t + 1
+        while e < T and live[e] and not again[e]:
+            e += 1
+        end = e if e < T and not live[e] else e - 1  # (the step that shows how it ended)
+        # (a round the record does not hold to its end, cut short or timed out: none)
+        if e - t >= ROUND_LEAST and min(me.hp[end], opp.hp[end]) <= ROUND_OVER:
+            won = bool(opp.hp[end] < me.hp[end])
+            rec = dict(won=won, steps=e - t, lead=None, behind=None, close=None)
+            at = np.flatnonzero(d[t:e] >= LEAD)
+            if len(at):
+                rec['lead'] = (won, float(me.hp[t + at[0]] - me.hp[end]))
+            at = np.flatnonzero(d[t:e] <= -LEAD)
+            if len(at):
+                rec['behind'] = won
+            at = np.flatnonzero((opp.hp[t:e] <= CLOSE) & (d[t:e] > 0))
+            if len(at):
+                rec['close'] = (won, int(e - t - at[0]), float(me.hp[t + at[0]] - me.hp[end]))
+            out.append(rec)
+        t = e
+    return out
+
+
+def rounds_report(recs):
+    """Of the rounds: the share won; lead: the share of rounds it was LEAD ahead in, the
+    share of those it kept (won), the HP it lost after the lead; behind: the share it was
+    LEAD behind in, and of those the share it turned; close: the share there to be
+    closed, of those the share won, the seconds a won one took from there (mean, 90th
+    percentile) and the HP it lost in them."""
+    if not recs:
+        return None
+    n = len(recs)
+    lead = [r['lead'] for r in recs if r['lead'] is not None]
+    behind = [r['behind'] for r in recs if r['behind'] is not None]
+    close = [r['close'] for r in recs if r['close'] is not None]
+    secs = [c[1] / 60 for c in close if c[0]]
+    return dict(n=n, won=round(float(np.mean([r['won'] for r in recs])), 3),
+                lead=dict(n=len(lead), share=round(len(lead) / n, 3),
+                          kept=_mean([x[0] for x in lead]),
+                          lost=round(float(np.mean([x[1] for x in lead]))) if lead else None),
+                behind=dict(n=len(behind), share=round(len(behind) / n, 3), turned=_mean(behind)),
+                close=dict(n=len(close), share=round(len(close) / n, 3),
+                           won=_mean([c[0] for c in close]),
+                           seconds=round(float(np.mean(secs)), 2) if secs else None,
+                           seconds_p90=round(float(np.percentile(secs, 90)), 2) if secs else None,
+                           lost=round(float(np.mean([c[2] for c in close]))) if close else None))
+
+
 def measure(c, controls=None):
     """Both ways, for one player's match: c, its views' OBS columns (T, len(OBS));
     controls (T,), its inputs: with them also its strings (strings())."""
@@ -396,7 +964,14 @@ def measure(c, controls=None):
     live = (c[:, 16] == 0) & (c[:, 17] == 0)
     dx = c[:, 18]
     extra = dict(strings=strings(me, opp, live, controls)) if controls is not None else {}
-    return dict(**extra, press_off=pressure(me, opp, dx, live), press_def=pressure(opp, me, dx, live),
+    lost, dealt = losses(me, opp, live), losses(opp, me, live)
+    return dict(**extra, ends_off=endings(me, opp, live), ends_def=endings(opp, me, live),
+                risks=risks(me, opp, live), risks_def=risks(opp, me, live),
+                flights=flights(me, opp, live), rounds=rounds(me, opp, live),
+                losses=lost, losses_opp=dealt,
+                exchanges=exchanges(me, opp, live, lost, dealt),
+                grabs=grabs(me, opp, dx, live),
+                press_off=pressure(me, opp, dx, live), press_def=pressure(opp, me, dx, live),
                 oki_off=wakeup(opp, me, dx, live), oki_def=wakeup(me, opp, dx, live),
                 free_self=free_time(me, opp, dx, live), free_opp=free_time(opp, me, dx, live))
 
@@ -600,7 +1175,20 @@ def strings_report(recs, per_min, top=12):
 
 def report(n, per_min):
     """Events' lists (measure()'s, concatenated) -> its report's entries."""
-    return dict(strings=strings_report(n.get('strings', []), per_min), pressure=pressure_report(n['press_off'], per_min, moves=True),
+    return dict(strings=strings_report(n.get('strings', []), per_min),
+                combo_ends=endings_report(n.get('ends_off', [])),
+                taken_combo_ends=endings_report(n.get('ends_def', [])),
+                grabs=grabs_report(n.get('grabs', []), per_min),
+                risks=risks_report(n.get('risks', []), per_min),
+                faced_risks=risks_report(n.get('risks_def', []), per_min),
+                raw=raw_report(n.get('risks', []), per_min),
+                faced_raw=raw_report(n.get('risks_def', []), per_min),
+                flights=flights_report(n.get('flights', []), per_min),
+                ledger=losses_report(n.get('losses', []), per_min),
+                dealt_ledger=losses_report(n.get('losses_opp', []), per_min),
+                net_ledger=exchanges_report(n.get('exchanges', []), per_min),
+                rounds=rounds_report(n.get('rounds', [])),
+                pressure=pressure_report(n['press_off'], per_min, moves=True),
                 under_pressure=pressure_report(n['press_def'], per_min),
                 okizeme=wakeup_report(n['oki_off'], per_min),
                 wakeup=wakeup_report(n['oki_def'], per_min),

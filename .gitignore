@@ -15,6 +15,8 @@ efz-unpacked/
 uploads/
 # Packs made to carry models and data to another machine by hand (models, the combo library)
 /tmp/
+# Agent files fetched from Hugging Face (runs/hub.py download)
+/agents/
 
 # Generated analysis output
 inventory.json

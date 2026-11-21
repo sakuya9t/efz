@@ -51,6 +51,7 @@
 #include "agent/observe.h"
 #include "agent/policy.h"
 #include "agent/routes.h"
+#include "agent/mix.h"
 #include "platform.h"
 
 using namespace efz;
@@ -1193,6 +1194,25 @@ int efz_env_set_recoil_guard(EfzEnv* env, int32_t index, int32_t player, float c
     return 0;
 }
 
+int efz_env_set_cpu(EfzEnv* env, int32_t index, int32_t player, int32_t on)
+{
+    if (!env || index < 0 || index >= env->n || player < 0 || player > 1)
+        return -1;
+    Finish(env);
+    Slot& s = env->slots[index];
+    if (!s.started || s.broken || s.playing || s.recording)
+        return -1;
+    BindArena(s.arena);
+    int ok = -1;
+    if (SceneIndex() == 3) {
+        Fight()->m_players[player]->m_cpu = on ? 1 : 0;
+        WriteObs(env, s, ObsOf(env, env->obsOut, index));
+        ok = 0;
+    }
+    BindArena(nullptr);
+    return ok;
+}
+
 int efz_env_seed(EfzEnv* env, int32_t index, uint64_t seed)
 {
     if (!env || index < 0 || index >= env->n)
@@ -1353,6 +1373,16 @@ const char* efz_env_error(const EfzEnv* env)
 struct EfzAgent {
     agent::Policy policy;
     std::unique_ptr<agent::Player> player;
+    agent::Counts counts; // efz_env_agent_counts's
+    // efz_env_agent_attach's: the environment it plays in, and its planners there.
+    EfzEnv* env = nullptr;
+    std::unique_ptr<agent::World> world;
+    std::unique_ptr<agent::Planner> planner;
+    std::unique_ptr<agent::MixPlanner> mix;
+    // efz_env_agent_plan_budget's: the work a plan may take (0: no limit), what one of
+    // its own play's frames counts, and whether a plan not done is settled or dropped.
+    int32_t planBudget = 0, planOwn = 15;
+    bool planSettle = true;
 };
 
 namespace {
@@ -1386,7 +1416,17 @@ public:
         BindArena(s_.arena);
         G()->input[0] = input[0];
         G()->input[1] = input[1];
+        // A plan plays both players: a side the game's CPU plays would ignore its inputs
+        // here and show the plan the CPU's coming decisions (the copy's rand() is the
+        // game's). Only for the frame: a view of the copy says who plays as the game does.
+        int cpu[2];
+        for (int p = 0; p < 2; p++) {
+            cpu[p] = Fight()->m_players[p]->m_cpu;
+            Fight()->m_players[p]->m_cpu = 0;
+        }
         RunFrame();
+        for (int p = 0; p < 2 && SceneIndex() == 3; p++)
+            Fight()->m_players[p]->m_cpu = cpu[p];
         bool ok = SceneIndex() == 3 && !QuitRequested();
         BindArena(nullptr);
         return ok;
@@ -1480,6 +1520,15 @@ void efz_env_agent_info(const EfzAgent* a, EfzAgentInfo* info)
     snprintf(info->modules, sizeof(info->modules), "%s", a->policy.modules.c_str());
 }
 
+int32_t efz_env_agent_modules(const EfzAgent* a, char* out, size_t size)
+{
+    if (!a)
+        return 0;
+    if (out && size)
+        snprintf(out, size, "%s", a->policy.modules.c_str());
+    return (int32_t)a->policy.modules.size();
+}
+
 void efz_env_agent_log_probs(const EfzAgent* a, const float* views, int32_t n, float* out)
 {
     if (!a || !views || !out)
@@ -1495,7 +1544,19 @@ void efz_env_agent_reset(EfzAgent* a, uint64_t seed)
     if (!a)
         return;
     BindArena(nullptr);
+    if (a->env) { // attached: the same player and planners, a new match
+        a->player->Reset();
+        return;
+    }
     a->player.reset(new agent::Player(&a->policy, seed));
+}
+
+void efz_env_agent_next_match(EfzAgent* a)
+{
+    if (!a)
+        return;
+    BindArena(nullptr);
+    a->player->Reset();
 }
 
 uint8_t efz_env_agent_step(EfzAgent* a, const float* view, int32_t actionable, int32_t deterministic)
@@ -1503,7 +1564,141 @@ uint8_t efz_env_agent_step(EfzAgent* a, const float* view, int32_t actionable, i
     if (!a || !view)
         return 0;
     BindArena(nullptr);
+    if (a->env) { // its plans are made on copies of the environment, inside this step
+        Finish(a->env);
+        int stackMark;
+        SetStack(&stackMark);
+        // (the view as the game's agent has it, and as the copies': no frame count)
+        float own[kObsDim];
+        memcpy(own, view, sizeof(own));
+        own[0] = 0;
+        return a->player->Step(own, actionable != 0, deterministic != 0);
+    }
     return a->player->Step(view, actionable != 0, deterministic != 0);
+}
+
+int32_t efz_env_agent_attach(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side, uint64_t seed)
+{
+    if (!a)
+        return -1;
+    BindArena(nullptr);
+    a->player.reset(new agent::Player(&a->policy, seed));
+    a->planner.reset();
+    a->mix.reset();
+    a->world.reset();
+    a->env = nullptr;
+    if (!env)
+        return 0;
+    if (index < 0 || index >= env->n || side < 0 || side > 1) {
+        env->SetError("efz_env_agent_attach: no such environment or side");
+        return -1;
+    }
+    a->env = env;
+    a->world.reset(new EnvWorld(env->slots[index]));
+    if (!a->policy.routes.Empty()) {
+        a->planner.reset(new agent::Planner(&a->policy, a->world.get(), seed + 1));
+        a->planner->SetBudget(a->planBudget, a->planOwn);
+        a->player->SetPlanner(a->planner.get(), side, -1);
+        a->player->SetSettle(a->planSettle);
+    }
+    if (!a->policy.mix.Empty() || !a->policy.press.Empty() || a->policy.air.on) {
+        a->mix.reset(new agent::MixPlanner(&a->policy, a->world.get(), seed + 2));
+        a->player->SetMix(a->mix.get(), side, -1);
+    }
+    if (a->policy.risk.on)
+        a->player->SetRisk(a->world.get(), side);
+    return 0;
+}
+
+void efz_env_agent_stats(const EfzAgent* a, int32_t* stats)
+{
+    if (!a || !stats)
+        return;
+    memset(stats, 0, 24 * sizeof(int32_t));
+    const agent::RouteStats& r = a->player->Stats();
+    const agent::OkiStats& o = a->player->Oki();
+    const agent::OkiStats& q = a->player->Pressure();
+    int32_t v[] = {r.plans, r.routes, o.asked, o.plans, o.played, o.late, o.elsewhere, o.nothing,
+                   o.apart, (int32_t)o.frames, (int32_t)r.planMs, (int32_t)o.planMs,
+                   r.dropped(), q.asked, q.plans, q.played, q.late, q.elsewhere, q.nothing,
+                   q.apart, (int32_t)q.frames, (int32_t)q.planMs, r.late, r.settled};
+    memcpy(stats, v, sizeof(v));
+}
+
+int32_t efz_env_agent_plan_budget(EfzAgent* a, int32_t cost, int32_t settle, int32_t own)
+{
+    if (!a || a->policy.routes.Empty() || cost < 0)
+        return -1;
+    a->planBudget = cost;
+    a->planOwn = own;
+    a->planSettle = settle != 0;
+    if (a->planner)
+        a->planner->SetBudget(cost, own);
+    a->player->SetSettle(a->planSettle);
+    return 0;
+}
+
+void efz_env_agent_air_stats(const EfzAgent* a, int32_t* stats)
+{
+    if (!a || !stats)
+        return;
+    const agent::OkiStats& o = a->player->Air();
+    int32_t v[16] = {o.asked, o.plans, o.played, o.late, o.elsewhere, o.nothing, o.apart,
+                     (int32_t)o.frames, (int32_t)o.planMs};
+    memcpy(stats, v, sizeof(v));
+}
+
+void efz_env_agent_rise_stats(const EfzAgent* a, int32_t* stats)
+{
+    if (!a || !stats)
+        return;
+    const agent::RiseStats& r = a->player->Rising();
+    int32_t v[15] = {r.knockdowns, r.met, r.guarded, r.steps, r.stood,
+                      (int32_t)(a->player->RiseChance() * 1000 + 0.5),
+                      (int32_t)lround(a->player->RiseSeen() * 100),
+                      (int32_t)lround(a->player->RiseOn() * 100), r.landed, r.recoils,
+                      r.recoilSteps, r.recoilCleared, r.recoilAnswered,
+                      (int32_t)(a->player->RecoilChance() * 1000 + 0.5), r.recoilPunished};
+    memcpy(stats, v, sizeof(v));
+}
+
+void efz_env_agent_risk_stats(const EfzAgent* a, int32_t* stats)
+{
+    if (!a || !stats)
+        return;
+    const agent::RiskStats& r = a->player->Risks();
+    int32_t v[12] = {r.seen, r.stopped, r.let, r.came, r.jumps, r.jumpsStopped, r.jumpsLet,
+                     r.jumpsCame, (int32_t)lround(a->player->JumpCount() * 100),
+                     (int32_t)lround(a->player->JumpWorth()),
+                     (int32_t)(a->player->JumpChance() * 1000 + 0.5)};
+    memcpy(stats, v, sizeof(v));
+}
+
+int32_t efz_env_agent_risk_starts(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side,
+                                  int32_t action, double* chance)
+{
+    if (!a || !env || index < 0 || index >= env->n || side < 0 || side > 1 || !a->policy.risk.on ||
+        action < 0 || action >= a->policy.Actions())
+        return -1;
+    BindArena(nullptr);
+    Finish(env);
+    int stackMark;
+    SetStack(&stackMark);
+    BindArena(env->slots[index].arena);
+    bool fighting = SceneIndex() == 3 && Fight()->m_enter == 0;
+    BindArena(nullptr);
+    if (!fighting)
+        return -1;
+    EnvWorld world(env->slots[index]);
+    agent::Player player(&a->policy, 0);
+    player.SetRisk(&world, side);
+    float view[kObsDim];
+    world.View(side, view);
+    int move = player.RiskStarts(view, action);
+    if (chance)
+        *chance = a->player->RiskChance(move);
+    BindArena(nullptr);
+    return move < 0 ? -1 : a->policy.risk.moves[move];
 }
 
 int32_t efz_env_agent_last_action(const EfzAgent* a)
@@ -1551,8 +1746,12 @@ int32_t efz_env_agent_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side
     world.View(side, view);
     planner.Begin(side, starter, std::vector<int>(actions, actions + count), history, prev,
                   deterministic != 0, view, late, std::vector<int>(extra, extra + extraCount));
-    planner.Work(agent::Planner::Clock::time_point::max());
-    out->outcome = (int32_t)planner.outcome;
+    planner.SetBudget(a->planBudget, a->planOwn);
+    if (!planner.Work(agent::Planner::Clock::time_point::max()) && a->planSettle)
+        planner.Settle();
+    // (4: chosen from the options played inside efz_env_agent_plan_budget's cost; 0: not
+    // done inside it and dropped)
+    out->outcome = planner.partial ? 4 : (int32_t)planner.outcome;
     out->chosen = planner.chosen < 64 ? planner.chosen : -1;
     out->frames = (int32_t)planner.frames;
     out->options = (int32_t)std::min<size_t>(planner.tried.size(), 64);
@@ -1566,6 +1765,149 @@ int32_t efz_env_agent_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side
     memcpy(out->expected, planner.expected, sizeof(out->expected));
     out->ms = planner.ms;
     return 0;
+}
+
+int32_t efz_env_agent_oki_entries(const EfzAgent* a)
+{
+    return a ? (int32_t)a->policy.mix.entries.size() : 0;
+}
+
+namespace {
+
+// A plan of the okizeme's, the pressure's or the catch's (hold -1: the okizeme's; -2: the
+// catch's, `seed` then the most pixels apart; else the pressure's), for the tests.
+int32_t MixPlan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side, const int32_t* actions,
+                int32_t count, const float* history, uint8_t prev, int32_t deterministic,
+                uint64_t seed, const double* shares, const float* seen, int hold, EfzOkiPlan* out)
+{
+    if (!a || !env || !out || (!shares && hold != -2) || index < 0 || index >= env->n ||
+        side < 0 || side > 1 || count < 0 || (count && !actions) ||
+        (a->policy.history && !history))
+        return -1;
+    BindArena(nullptr);
+    memset(out, 0, sizeof(*out));
+    if (hold == -2 ? !a->policy.air.on : hold < 0 ? a->policy.mix.Empty()
+                                                   : a->policy.press.Empty()) {
+        env->SetError(hold == -2 ? "the agent has no air throw of a recovery"
+                      : hold < 0 ? "the agent has no planned okizeme"
+                                 : "the agent has no planned pressure");
+        return -1;
+    }
+    for (int32_t k = 0; k < count; k++) {
+        if (actions[k] < 0 || actions[k] >= a->policy.Actions()) {
+            env->SetError("an action out of range");
+            return -1;
+        }
+    }
+    Finish(env);
+    int stackMark;
+    SetStack(&stackMark);
+    Slot& s = env->slots[index];
+    BindArena(s.arena);
+    bool fighting = SceneIndex() == 3 && Fight()->m_enter == 0;
+    BindArena(nullptr);
+    if (!fighting) {
+        env->SetError("the environment isn't in a fight");
+        return -1;
+    }
+    EnvWorld world(s);
+    agent::MixPlanner planner(&a->policy, &world, seed);
+    std::vector<int> acts(actions, actions + count);
+    if (hold == -2)
+        planner.BeginThrow(side, acts, history, prev, deterministic != 0, (int)seed);
+    else if (hold < 0)
+        planner.Begin(side, acts, history, prev, deterministic != 0, shares, seen);
+    else
+        planner.BeginPress(side, acts, history, prev, deterministic != 0, shares, (uint8_t)hold);
+    planner.Work(agent::MixPlanner::Clock::time_point::max());
+    out->outcome = (int32_t)planner.outcome;
+    out->lead = planner.lead;
+    out->adv = planner.adv;
+    out->waited = planner.waited;
+    out->frames = (int32_t)planner.frames;
+    out->ms = planner.ms;
+    memcpy(out->view, planner.view, sizeof(out->view));
+    size_t n = std::min<size_t>(planner.kinds.size(), 32);
+    if (hold == -2) { // (the catch's: the frame it catches on, the throws looked at)
+        out->adv = planner.caught;
+        out->waited = planner.tried;
+    }
+    if (planner.outcome != agent::MixPlanner::kPlanned)
+        return 0;
+    out->options = (int32_t)n;
+    out->chosen = planner.chosen < (int)n ? planner.chosen : -1;
+    for (size_t j = 0; j < n; j++) {
+        out->kind[j] = planner.kinds[j];
+        out->entry[j] = j < planner.entries.size() ? planner.entries[j] : -1;
+        out->expected[j] = planner.expected[j];
+        out->mix[j] = planner.mix[j];
+        for (int r = 0; r < agent::kAnswers; r++) {
+            out->worth[j * 5 + r] = planner.worth[j * agent::kAnswers + r];
+            out->first[j * 5 + r] = planner.first[j * agent::kAnswers + r];
+        }
+    }
+    out->option_size = (int32_t)std::min<size_t>(planner.option.size(), 512);
+    for (int32_t k = 0; k < out->option_size; k++)
+        out->option[k] = planner.option[k];
+    return 0;
+}
+
+} // namespace
+
+int32_t efz_env_agent_oki_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side,
+                               const int32_t* actions, int32_t count, const float* history,
+                               uint8_t prev, int32_t deterministic, uint64_t seed,
+                               const double* shares, const float* seen, EfzOkiPlan* out)
+{
+    return MixPlan(a, env, index, side, actions, count, history, prev, deterministic, seed,
+                   shares, seen, -1, out);
+}
+
+int32_t efz_env_agent_press_entries(const EfzAgent* a)
+{
+    return a ? (int32_t)a->policy.press.entries.size() : 0;
+}
+
+int32_t efz_env_agent_press_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side,
+                                 const int32_t* actions, int32_t count, const float* history,
+                                 uint8_t prev, int32_t deterministic, uint64_t seed,
+                                 const double* shares, uint8_t hold, EfzOkiPlan* out)
+{
+    return MixPlan(a, env, index, side, actions, count, history, prev, deterministic, seed,
+                   shares, nullptr, hold, out);
+}
+
+int32_t efz_env_agent_throw_plan(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side,
+                                 const int32_t* actions, int32_t count, const float* history,
+                                 uint8_t prev, int32_t near, EfzOkiPlan* out)
+{
+    return MixPlan(a, env, index, side, actions, count, history, prev, 1, (uint64_t)near,
+                   nullptr, nullptr, -2, out);
+}
+
+void efz_env_agent_press_shares(const EfzAgent* a, double prior, double* shares)
+{
+    if (a && shares)
+        a->counts.PressBelief(prior, shares, a->policy.press.sight > 0);
+}
+
+void efz_env_agent_counts(EfzAgent* a, const float* view, int32_t mode, double prior,
+                          float* counts, double* shares)
+{
+    if (!a)
+        return;
+    BindArena(nullptr);
+    if (mode == 1)
+        a->counts.Clear();
+    else if (mode == 2)
+        a->counts.End(a->policy.mix.decay);
+    else if (view)
+        a->counts.Update(view, a->policy.mix.Empty() ? a->policy.press.invincible
+                                                      : a->policy.mix.invincible);
+    if (counts)
+        memcpy(counts, a->counts.c, sizeof(a->counts.c));
+    if (shares)
+        a->counts.Belief(prior, shares, a->policy.mix.sight > 0);
 }
 
 int32_t efz_env_agent_choose(const EfzAgent* a, const float* input, int32_t starter,

@@ -434,6 +434,66 @@ class StableBaselines3(unittest.TestCase):
             np.testing.assert_array_equal(view[1, :168], p2[max(0, t - 3)][1])
         venv.close()
 
+    def test_the_learner_with_modules(self):
+        # ModularLearner: a module is told its batch, finds the learner's delayed views
+        # where an Agent's are (host.agent.seen.buf), and the steps it plays are marked.
+        from efz_env import modules
+        from efz_env.sb3 import EfzSB3VecEnv, ModularLearner
+        test = self
+
+        class Every3(modules.Module):
+            name = 'every3'
+
+            def attach(self, host):
+                self.host, self.sizes, self.steps, self.views = host, [], 0, None
+
+            def batch(self, n):
+                self.sizes.append(n)
+                self.count = np.zeros(n, int)
+
+            def reset(self, mask=None):
+                if mask is not None:
+                    self.count[np.asarray(mask, bool)] = 0
+
+            def see(self, obs, step):
+                a = self.host.agent
+                self.views = a.seen.buf[:, a.delay].copy()
+                self.steps += 1
+
+            def watch(self, i, ctx):
+                np.testing.assert_array_equal(ctx.view, self.views[i])
+                test.assertEqual(len(ctx.seen), self.host.agent.delay + 1)
+                self.count[i] += 1
+
+            def act(self, i, ctx):
+                return 7 if self.count[i] % 3 == 0 else None
+
+        delay = 3
+        venv = EfzSB3VecEnv(DATA, 2, opponent=lambda o: np.zeros(len(o), np.int64),
+                            chars=('ayu', 'mai'), max_frames=400, num_threads=2, history=2,
+                            delay=delay)
+        m = Every3()
+        env = ModularLearner(venv, [m], policy=None, only=[True, False])
+        self.assertEqual(m.sizes, [2])
+        self.assertEqual(env.agent.delay, delay)
+        env.reset()
+        live, marked = [venv.env.obs[:, 0].copy()], []
+        for _ in range(9):
+            env.step_async(np.zeros(2, np.int64))
+            _, _, _, infos = env.step_wait()
+            marked.append([info['assisted'] for info in infos])
+            self.assertEqual([info.get('module') for info in infos],
+                             ['every3' if marked[-1][0] else None, None])
+            live.append(venv.env.obs[:, 0].copy())
+            np.testing.assert_array_equal(m.views, live[max(0, len(live) - 1 - delay)])
+        marked = np.array(marked)
+        # the first match: every third decision it watched is the module's
+        self.assertEqual(marked[:, 0].tolist(), [False, False, False, True, False, False, True,
+                                                 False, False])
+        self.assertFalse(marked[:, 1].any())  # (only: not the second match)
+        self.assertEqual(env.stack.stats()['played']['every3'], round(2 / env.stack.steps, 4))
+        venv.close()
+
     def test_history_and_prior(self):
         # Observations with the input history; EfzPolicy pulled toward a prior; an
         # opponent without history (the 168 features) among ones with.

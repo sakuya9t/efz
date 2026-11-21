@@ -1,5 +1,5 @@
-# The models live on Hugging Face (runs/hub.py); their settings, logs and evaluations
-# (llm.json, train.log, history.json) stay here.
+# The models stay out of git (and off the Hub, which takes agent files only); their
+# settings, logs and evaluations (llm.json, train.log, history.json) stay here.
 */body/
 */head.pt
 */state.pt

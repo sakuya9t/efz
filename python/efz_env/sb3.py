@@ -274,7 +274,7 @@ class EfzSB3VecEnv(VecEnv):
     def __init__(self, data_dir=None, num_envs=64, *, opponent='cpu', cpu_envs=None,
                  action_table=None, chars=(None, None), stage=None, char_pool=None,
                  stage_pool=None, history=0, delay=0, opponent_delay=None, delay_most=None,
-                 **config):
+                 extra=0, memory=None, sets=None, **config):
         if 'autoreset' in config and config['autoreset'] != 'same_step':
             raise ValueError("SB3 VecEnvs reset in the same step: leave autoreset alone")
         self.env = EfzVecEnv(data_dir, num_envs, autoreset='same_step', **config)
@@ -308,7 +308,37 @@ class EfzSB3VecEnv(VecEnv):
                 raise ValueError('opponent_delay: from 0 to delay')
             self.opponent_delay = d
         self._view = None  # what the players see now (delayed)
-        width = self.env.obs_dim + (self.history.size if self.history else 0)
+        # extra: so many more features after the history, each player's, 0 until someone
+        # writes them (self.extra, (num_envs, 2, extra)): what the players are told beyond
+        # the game's view (advantages.AdvantagedOpponent: its habits this match). on_end:
+        # called with the mask of the matches that ended (all, at a reset) before the next
+        # match's first view is put together: where what is told changes.
+        self.extra = np.zeros((num_envs, 2, extra), np.float32) if extra else None
+        self.on_end = []
+        # opponent_controls: hooks(bytes) called each step with player 2's control bytes
+        # after the opponent's actions became them: a player that makes its own bytes
+        # (an agent file run by the game's code, native_agent.NativeOpponent) writes
+        # its matches' there.
+        self.opponent_controls = []
+        # sets: the matches of an environment come in sets against the same opponent, of
+        # these lengths (one drawn a set; None: every match its own). new_set: where the
+        # match that begins starts one (read by on_end's hooks: an opponent's habits are
+        # a set's); set_match: the match's number in its set, from 1.
+        self.sets = tuple(sets) if sets else (1,)
+        self._set_rng = np.random.default_rng([config.get('seed') or 0, 0x5e75])
+        self._set_left = np.zeros(num_envs, int)
+        self.new_set = np.ones(num_envs, bool)
+        self.set_match = np.ones(num_envs, int)
+        # memory: efz_env.memory.Memory's arguments ({} for its defaults): each player's
+        # match memory, made from what it sees (the delayed view), its features after
+        # the extra ones; kept over a set's matches.
+        self.memory = None
+        if memory is not None:
+            from .memory import Memory, SIZE
+            self.memory = Memory(2 * num_envs, **memory)
+            self._remembered = np.zeros((num_envs, 2, SIZE), np.float32)
+            extra += SIZE
+        width = self.env.obs_dim + (self.history.size if self.history else 0) + extra
         obs_space = spaces.Box(-np.inf, np.inf, (width,), np.float32)
         super().__init__(self.k * num_envs, obs_space, spaces.Discrete(len(self.table)))
 
@@ -324,9 +354,35 @@ class EfzSB3VecEnv(VecEnv):
         return a.reshape((2 * self.n,) + a.shape[2:]) if self.selfplay else a[:, 0]
 
     def _with_history(self, obs):
-        if self.history is None:
-            return obs
-        return np.concatenate([obs, self.history.features()], axis=-1)
+        parts = [obs] + ([self.history.features()] if self.history is not None else []) + \
+            ([self.extra] if self.extra is not None else []) + \
+            ([self._remembered] if self.memory is not None else [])
+        return np.concatenate(parts, axis=-1) if len(parts) > 1 else obs
+
+    def _next_sets(self, ended, winner):
+        """The matches that ended (all, at a reset; winner: each one's, None at a reset):
+        which of the next ones start a set, and the memories kept or cleared."""
+        if winner is None:
+            self._set_left[:] = 0
+        else:
+            self._set_left[ended] -= 1
+        self.new_set = ended & (self._set_left <= 0)
+        fresh = np.flatnonzero(self.new_set)
+        self._set_left[fresh] = self._set_rng.choice(self.sets, len(fresh))
+        self.set_match[ended] += 1
+        self.set_match[self.new_set] = 1
+        if self.memory is not None:
+            won = np.zeros((self.n, 2), bool)
+            if winner is not None:
+                for p in (0, 1):
+                    won[:, p] = np.asarray(winner) == p
+            self.memory.end(np.repeat(ended, 2), won.reshape(-1), np.repeat(self.new_set, 2))
+
+    def _remember(self):
+        """The step's view into the memories."""
+        if self.memory is not None:
+            self.memory.update(self._view.reshape(2 * self.n, -1))
+            self._remembered = self.memory.features().reshape(self.n, 2, -1)
 
     def reset(self):
         seeds = [s for s in getattr(self, '_seeds', [])][::self.k] or None
@@ -340,6 +396,10 @@ class EfzSB3VecEnv(VecEnv):
             self.delay.clear()
             obs = self.delay.push(obs)
         self._view = obs
+        self._next_sets(np.ones(self.n, bool), None)
+        for hook in self.on_end:
+            hook(np.ones(self.n, bool))
+        self._remember()
         obs = self._with_history(obs)
         if hasattr(self, '_reset_seeds'):
             self._reset_seeds()
@@ -359,6 +419,10 @@ class EfzSB3VecEnv(VecEnv):
                     seen = self.delay.buf[np.arange(self.n), 1, self.opponent_delay]
                     view = np.concatenate([seen, view[:, seen.shape[1]:]], axis=1)
                 self._controls[:, 1] = self.table.to_bytes(self.opponent(view))
+                # (in their order: a hook with `order` 1 runs after those without, as the
+                # scripted inputs over an agent file's own, advantages.AdvantagedOpponent)
+                for hook in sorted(self.opponent_controls, key=lambda h: getattr(h, 'order', 0)):
+                    hook(self._controls[:, 1])
         self.env.step_async(self._controls)
 
     def step_wait(self):
@@ -381,14 +445,20 @@ class EfzSB3VecEnv(VecEnv):
                         'episode': {'r': float(info['episode_return'][m, p]),
                                     'l': int(self._length[m]), 't': elapsed},
                         'winner': int(info['winner'][m]),
+                        'set_match': int(self.set_match[m]),
                     }
                 self._length[m] = 0
         if self.history is not None and ended.any():
             self.history.clear(ended)  # the next match's first view: nothing input yet
+        if ended.any():
+            self._next_sets(ended, info['winner'])
+            for hook in self.on_end:
+                hook(ended)
         if self.delay is not None:
             self.delay.clear(ended)
             obs = self.delay.push(obs)
         self._view = obs
+        self._remember()
         dones = np.repeat(ended, self.k)
         obs = self._with_history(obs)
         return self._agents(obs).copy(), self._agents(reward).copy(), dones, infos
@@ -422,22 +492,43 @@ class ModularLearner(VecEnv):
     (infos[i]['module']) and its action (infos[i]['route_action']), for the policy's loss
     to leave out or learn from. only (a mask of the environments, default all): where the
     modules play. policy: its own play on a module's copies of the game (frozen(model),
-    this chunk's); value: its critic's."""
+    this chunk's); value: its critic's. A module finds the learner's views where an
+    Agent's are (host.agent.seen.buf, host.agent.delay)."""
+
+    class _Views:
+        """What a module reads of an efz_env Agent, for the learner: its delayed views."""
+
+        def __init__(self, venv):
+            self._venv, self.delay = venv, venv.delay.steps
+            self.seen = self
+
+        @property
+        def buf(self):
+            return self._venv.delay.buf[:, 0]
 
     def __init__(self, venv, modules, policy, value=None, only=None):
         from .modules import Stack
         self.venv, self.policy, self.value = venv, policy, value
-        self.env, self.side, self.agent = venv.env, 0, None
+        self.env, self.side, self.agent = venv.env, 0, self._Views(venv)
         self.only = np.ones(venv.num_envs, bool) if only is None else np.asarray(only, bool)
         self.delay = venv.delay.steps
         self.stack = modules if isinstance(modules, Stack) else Stack(modules)
+        self.stack.owner.clear()
         for m in self.stack:
             m.attach(self)
+            m.batch(venv.num_envs)
         self.contexts = [None] * venv.num_envs  # each environment's step, as last watched
         self.assisted = np.zeros(venv.num_envs, bool)
         self.route = np.zeros(venv.num_envs, int)
         self.by = [None] * venv.num_envs
         super().__init__(venv.num_envs, venv.observation_space, venv.action_space)
+
+    def __getattr__(self, name):
+        # What it doesn't have itself is the environment's (its input history, its
+        # matches: for the wrappers around it). Its own `delay` is the steps.
+        if name.startswith('__') or name == 'venv':
+            raise AttributeError(name)
+        return getattr(self.venv, name)
 
     def reset(self):
         self.stack.reset()

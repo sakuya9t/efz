@@ -25,7 +25,10 @@ entropy - (coef / ent_coef) * KL, whose ent_coef-weighted loss is the entropy bo
 plus coef * KL. ent_coef must not be 0. The prior isn't saved with the policy. With a
 `combo` policy too, the pull is toward it instead while the policy's own combo runs (its
 combo counter, self_combo_hits, above 0 in what it sees): a teacher of combos (a combo
-master trained on combo trials), people's play elsewhere.
+master trained on combo trials), people's play elsewhere. With `where` (an observation
+column, values, a factor), the pull is that many times as strong where the column has
+one of the values in what the policy sees: a part of the game kept closer to people's
+(the opponent knocked down: their okizeme).
 """
 
 import numpy as np
@@ -84,6 +87,48 @@ class EfzFeatures(BaseFeaturesExtractor):
         return th.cat(parts, dim=1)
 
 
+def widen(source, width, gain=1.0):
+    """A copy of the policy `source` for observations `width` wide (more features after
+    its own, all continuous): its weights, and zeros for the new features' in the first
+    layers, so it plays as the source does until training gives them a use. gain: what
+    the new features are scaled by on the way in (EfzFeatures' scale): their weights
+    start at zero and Adam moves each weight about as far a step whatever its input's
+    size, so features of 0-1 beside inputs scaled to a unit spread are learned slowly
+    (the "told habits" runs: 0.1 against 1.06 after 6M steps); a gain of g is g times
+    the learning rate for them."""
+    old = source.observation_space.shape[0]
+    if width < old:
+        raise ValueError(f'widen: from {old} features to {width}')
+    kwargs = source._get_constructor_parameters()
+    if hasattr(source, 'share_features_extractor'):
+        kwargs['share_features_extractor'] = source.share_features_extractor
+    kwargs['observation_space'] = spaces.Box(-np.inf, np.inf, (width,), np.float32)
+    policy = type(source)(**kwargs).to(source.device)
+    # The features: the continuous columns first, then the embeddings (EfzFeatures).
+    was, now = len(continuous_columns(old)), len(continuous_columns(width))
+    state = policy.state_dict()
+    for name, v in source.state_dict().items():
+        new = state[name]
+        if new.shape == v.shape:
+            state[name] = v.clone()
+        elif v.dim() == 1 and new.shape[0] - v.shape[0] == now - was:  # mean, scale
+            new = new.clone()
+            new[:was] = v
+            if name.endswith('scale'):
+                new[was:] = gain
+            state[name] = new
+        elif v.dim() == 2 and new.shape[1] - v.shape[1] == now - was:  # a first layer
+            new = th.zeros_like(new)
+            new[:, :was] = v[:, :was]
+            new[:, now:] = v[:, was:]
+            state[name] = new
+        else:
+            raise RuntimeError(f"widen: {name} is {tuple(v.shape)}, the wider policy's "
+                               f'{tuple(new.shape)}')
+    policy.load_state_dict(state)
+    return policy
+
+
 def policy_kwargs(width=512, depth=2):
     return dict(features_extractor_class=EfzFeatures, share_features_extractor=False,
                 net_arch=dict(pi=[width] * depth, vf=[width] * depth),
@@ -95,10 +140,11 @@ class EfzPolicy(ActorCriticPolicy):
         for extractor in (self.pi_features_extractor, self.vf_features_extractor):
             extractor.set_scale(mean, std)
 
-    def set_prior(self, prior, coef, ent_coef, combo=None):
+    def set_prior(self, prior, coef, ent_coef, combo=None, where=None):
         """Pulls training toward `prior` (a policy over the same observations, frozen
         here) by coef * KL(self || prior); ent_coef is PPO's. `combo`: the policy to pull
-        toward instead during the policy's own combos."""
+        toward instead during the policy's own combos. where: (column, values, factor):
+        the pull times factor where the observation's column is one of the values."""
         if ent_coef <= 0:
             raise ValueError('the KL goes in through the entropy term: ent_coef > 0')
         for policy in (prior, combo):
@@ -110,12 +156,19 @@ class EfzPolicy(ActorCriticPolicy):
         self.__dict__['prior'] = prior
         self.__dict__['combo_prior'] = combo
         self.__dict__['prior_scale'] = coef / ent_coef
+        self.__dict__['prior_where'] = where
         self.__dict__['prior_kl'] = float('nan')
 
     @property
     def prior_kl(self):
         """The mean KL to the prior over the last batch trained on."""
         return self.__dict__.get('prior_kl', float('nan'))
+
+    @property
+    def prior_where_seen(self):
+        """set_prior's `where` over the last batch trained on: the share of it there, the
+        mean KL there (None without a `where`)."""
+        return self.__dict__.get('prior_where_seen')
 
     def logits(self, obs):
         """The actor's log-probabilities of every action, (batch, actions)."""
@@ -149,4 +202,13 @@ class EfzPolicy(ActorCriticPolicy):
                     prior_logp = th.where(in_combo[:, None], combo.logits(obs), prior_logp)
         kl = (logp.exp() * (logp - prior_logp)).sum(-1)
         self.__dict__['prior_kl'] = float(kl.mean().detach())
+        where = self.__dict__.get('prior_where')
+        if where is not None:
+            column, those, factor = where
+            there = th.isin(obs[:, column].round().long(), th.as_tensor(those, device=obs.device))
+            # (the share of the batch it holds for, the KL there: prior_where_seen)
+            self.__dict__['prior_where_seen'] = (
+                float(there.float().mean()),
+                float(kl[there].mean().detach()) if there.any() else float('nan'))
+            kl = kl * th.where(there, float(factor), 1.0)
         return values, log_prob, entropy - self.__dict__['prior_scale'] * kl

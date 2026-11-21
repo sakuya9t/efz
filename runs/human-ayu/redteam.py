@@ -38,11 +38,18 @@ sys.path.insert(0, HERE)
 import numpy as np
 
 from efz_env import ActionTable, EfzVecEnv
-from efz_env.actions import BACK
+from efz_env.actions import BACK, encode
 from efz_env.history import FEATURES, InputHistory
 
 TABLE = ActionTable()
 COMBO_HITS, ACTION = 30, 18
+OPP_ACTION = 50
+# How a combo leaves its victim (src/efz.h): lying, to rise into an okizeme; or recovered
+# in the air (a button and a direction once the untech time is out: nothing hits it from
+# then on), free to act.
+LYING, AIR_RECOVERY = (0x60, 0x61, 0x62, 0x63), (0x9d, 0x9e)
+ENDING_TAIL = 12  # steps after a combo's last hit counts in which its ending is looked for
+BACK_PRESS = BACK | encode(5, 'A')  # the victim's button: its air recovery at the first chance
 OPP_CHARACTER = 66  # opp_character, the efz_env.vec.character_names() index
 REWARD_PER_HP = 1 / 9999  # the match's reward (efz_env's): damage per full bar
 
@@ -76,10 +83,16 @@ class Planner:
     """Tries a hit's options on copies of the game and says which made the most."""
 
     def __init__(self, data_dir, library, model, per_start=12, limit=900, history=16,
-                 score='damage', gamma=0.999, victims=None, replan=False):
+                 score='damage', gamma=0.999, victims=None, replan=False, ending=0.0):
         if score not in ('damage', 'value'):
             raise ValueError("score: 'damage' or 'value'")
         self.library, self.per_start, self.limit = library, per_start, limit
+        # ending: the HP a knockdown at a combo's end is worth over any other end (0:
+        # damage alone, the copies' victim only holding back). With it the victim on the
+        # copies recovers in the air as soon as the game lets it, as a person does, so an
+        # option that leaves it free in the air is told from one that puts it down.
+        self.ending = float(ending)
+        self.endings = dict(plans=0, knockdown=0, recovery=0, changed=0)  # of the options chosen
         self.score, self.gamma = score, gamma
         self.value = critic(model) if score == 'value' else None
         self.changed = 0  # plans whose value choice differs from the most damaging
@@ -156,6 +169,8 @@ class Planner:
         controls = np.zeros((sim.num_envs, 2), np.uint8)
         dealt = np.zeros(n)
         done = np.zeros(n, bool)
+        over = np.full(n, -1)  # the step each option's combo ended on
+        down, recovered = np.zeros(n, bool), np.zeros(n, bool)
         longest = min(self.limit, max([len(m) for m in cands] + [0]) + 60)
         longest = max(longest, 240)  # its own play's combo, at least this long
         track = self.score == 'value'
@@ -182,7 +197,7 @@ class Planner:
             else:
                 own = int(self.model.predict(view, deterministic=False)[0][0])
             controls[n - 1, side] = TABLE.table[own]
-            controls[:n, 1 - side] = BACK
+            controls[:n, 1 - side] = BACK_PRESS if self.ending and t % 2 else BACK
             obs, _, term, trunc, info = sim.step(controls)
             own_hist.push(info['input'][n - 1:n, side])
             if track:
@@ -194,17 +209,33 @@ class Planner:
                 dealt[j] = max(dealt[j], hp0[j] - float(info['hp'][j, 1 - side]))
                 if round(float(obs[j, side, COMBO_HITS]) * 30) == 0 or term[j] or trunc[j]:
                     done[j] = True
+                    over[j] = t
                 if track and (done[j] or t == longest - 1):
                     ends[j] = np.concatenate([views[j, -1], feats[j]])[:self.width]
                     steps[j] = t + 1
-            if done.all():
+            if self.ending:  # how each option leaves the victim, to a little after its end
+                act = np.round(obs[:n, side, OPP_ACTION]).astype(int)
+                watch = ~done | (t - over <= ENDING_TAIL)
+                recovered |= watch & np.isin(act, AIR_RECOVERY)
+                down |= watch & np.isin(act, LYING)
+                if done.all() and (t - over >= ENDING_TAIL).all():
+                    break
+            elif done.all():
                 break
         if track:  # (an option still going at the last step is valued there)
             worth = (dealt * REWARD_PER_HP +
                      self.gamma ** steps * (value or self.value)(ends))
         else:
             worth = dealt
+        if self.ending:
+            worth = worth + (self.ending * (REWARD_PER_HP if track else 1)) * (down & ~recovered)
         best = int(np.argmax(worth))
+        if self.ending:
+            e = self.endings
+            e['plans'] += 1
+            e['knockdown'] += int(down[best] and not recovered[best])
+            e['recovery'] += int(recovered[best])
+            e['changed'] += int(best != int(np.argmax(dealt)))
         chosen = cands[best] if best < len(cands) and worth[best] > worth[-1] else None
         # (the plan as tried, for combo_net.py: the combos, what each and its own play dealt)
         self.last = dict(picked=picked, dealt=np.append(dealt[:len(picked)], dealt[n - 1]),

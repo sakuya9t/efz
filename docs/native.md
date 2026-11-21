@@ -43,7 +43,9 @@ cmake --build build/native --config RelWithDebInfo
 ctest --test-dir build/native -C RelWithDebInfo
 ```
 
-CMake downloads SDL3 3.4.18, pinned by SHA-256, and links it statically.
+CMake downloads SDL3 3.4.18, libopus 1.5.2 and minih264's encoder header, pinned by
+SHA-256, and links them statically ([third-party.md](third-party.md)). It builds two
+programs: the game, `efz`, and the replay tool, `efz-convert` ([logging.md](logging.md)).
 `-DEFZ_SYSTEM_SDL3=ON` uses an installed SDL3 instead. On Linux, SDL3's build needs the
 development files of the desktop's libraries (X11, Wayland, ALSA, PulseAudio; see
 `.github/workflows/native.yml`); it loads the libraries themselves at run time, so the
@@ -56,7 +58,10 @@ macOS (arm64, x64).
   matched regardless of case, so a copy from a Windows disk works on Linux.
 - **What it writes.** `key.ini`, the per-character records, replays and screenshots go
   to `--save DIR`: by default the data folder, or the user's preferences folder
-  (`SDL_GetPrefPath`) if that can't be written. Files there are read first.
+  (`SDL_GetPrefPath`) if that can't be written. Files there are read first. The native
+  game's own settings go there too, in files of their own (`options.ini`,
+  `netplay.ini`): `key.ini` is the original's, which config.exe and EfzRevival also
+  read and write.
 - **The window.** 640×480, resizable; the game's 320×240 or 640×480 picture is scaled
   to fit with its aspect kept, pixels sharp. Alt+Enter or F11 toggles full screen.
 - **Controls.** `key.ini`'s bindings, as before: keys by position (DirectInput codes,
@@ -66,8 +71,9 @@ macOS (arm64, x64).
   points exactly, where the original checked once per frame.
 
 - **Logs.** Each run keeps a folder in `logs/` under the save folder: `efz.log`, a
-  report when the game crashes or hangs, and a record of each fight, which
-  `--replay-fight` replays tick for tick ([logging.md](logging.md)).
+  report when the game crashes or hangs, and a record of each fight, which the REPLAY
+  menu's RECORDS page (after EXIT) and `--replay-fight` replay tick for tick
+  ([logging.md](logging.md)).
 
 For tests the game runs without a display (`SDL_VIDEO_DRIVER=offscreen
 SDL_AUDIO_DRIVER=dummy`) and takes `--frames N`, `--fast`, `--keys SCRIPT` and
@@ -193,6 +199,10 @@ lists what a platform provides).
 | `sound.cpp` | `CSound`: the 150 sound slots, a mixer on SDL's audio thread, `.wav` parsing, the music's loop points |
 | `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second; `MessageBox`, `PostMessage`, `timeGetTime` |
 | `log.cpp`, `crash.cpp`, `record.cpp` | The log and its session folder, crash and hang reports, and the fight records, checks and replays ([logging.md](logging.md)) |
+| `options.cpp` | `options.ini`, and the OPTIONS page's CPU COMBO row, made from the page's own pictures ([agents.md](agents.md), "The CPU's combos") |
+| `records.cpp` | The REPLAY menu's RECORDS page: the logs folder's fight records, each played as a replay or saved as one in a replay slot ([logging.md](logging.md)) |
+| `tool.cpp`, `toolmain.cpp` | The replay tool, `efz-convert`: the game in a window of its own that converts records and replays and makes videos ([logging.md](logging.md)) |
+| `mp4.cpp`, `minih264.c` | Videos of fights: H.264 (minih264's encoder) and Opus (libopus) in an MP4 ([third-party.md](third-party.md)) |
 
 ## The compatibility test
 
