@@ -3934,3 +3934,193 @@ minute), every habit at once 87.5 ±1.9%, `recoil` 87.8 ±1.9%, the CPU with its
 error; the gain against the CPU does not (a seed's 44% and a seed's 34% around the
 mark's 31%: nothing can be said of it on 64 matches a build). The first seed stays the
 file.
+
+## Round 21: combos for the league (20 November, evening; the plan and the first parts)
+
+The user, after round 20: "we need to build standard big planner combos for all the
+league we used to train. Only our agent has combo while the opponent not creates an
+advantage." And: "build combos for all 22 characters."
+
+The asymmetry in numbers: the agent's combos are planned from people's routes, 1,750 HP
+each with a 90th percentile of 4,070; its trained opponents play their models alone, 560
+to 780 HP a combo (860 for Kano's). A hit costs the agent a third of what it costs them,
+in every training match and every benchmark since round 15, and the level-4 CPU with the
+agent's own combos (the one opponent whose hits cost as much) still wins more than half.
+
+**The plan.**
+
+1. A combo library for each of the 22 characters of the league, from the community's
+   replays of that character (`combo_library.py` on its dataset: the 300 most damaging
+   and 40 landed on each victim, with their join points), as the agent's own was made.
+2. Each trained opponent as an agent file: its model with its character's library
+   through the game's route planner (`league_combos.py files`), played by the game's own
+   code as the agent's file is. The eleven `exploiter18`s first (the benchmark's), then
+   all 90 of the league.
+3. A drill of the suite against them (`combos`), and the round 20 file measured there:
+   what the agent is worth once a hit costs it what its own costs.
+4. A training round whose `--vs` opponents are those files (`finetune.py --vs
+   FILE.efzagent --vs-native`), with the sparring profile and the 11 steps of round 20:
+   first a trial for its speed and memory (every opponent's plans are made in the
+   training loop), then the round.
+5. Judged by the suite with the `combos` drill beside the league's.
+
+**The libraries** (`league_combos.py libraries`, 15 seconds a character): 878 to 949
+combos each from 17,000 to 32,000 combos of 2,080 to 2,960 matches; the median combo of a
+character's players 965 (Shiori, Akane) to 1,670 HP (Nayuki awake), the 90th percentile
+2,160 to 4,020.
+
+**A route an opponent can use** (`route_confirm`, `export_agent.py --confirm`). The
+first file, Kano's `exploiter18` with her library as the agent has its own (the route
+from where it sees its hit, 14 steps after it): 1,084 HP a combo for 860, a route chosen
+at a third of its plans. Not for want of meter (a library of her combos without an
+Instant Charge or a super: 1,019 HP, a route at 27%). The 14 steps: until its route
+begins it plays its own inputs, as the agent does, and an opponent trained without
+routes does not press what people's combos go on from. With the route begun sooner (16
+matches each against the round 20 file):
+
+| the route begins | a route chosen | HP a combo | 90th percentile |
+|---|---|---|---|
+| no routes | | 860 | 1,618 |
+| 14 steps after its hit (its delay) | 34% of its plans | 1,084 | 1,976 |
+| 8 | 46% | 1,220 | 2,398 |
+| 4 | 61% | 1,319 | 2,714 |
+| 1 | 64% | 1,413 | 3,308 |
+
+So the opponents' files begin a route on the step after the hit. It is a combo confirmed
+before the hit is seen, which the agent may not do and an opponent may: what it stands
+for is a person's string pressed ahead, and what it is for is the price of a hit. The
+option says so where it is set (policy.h's `Routes::confirm`), and the agent's own file
+has none. Their models see the game 11 steps late, as round 20's opponents did.
+
+**The opponents' files, and what they cost the agent** (`league_combos.py files`: all 90
+of the league, `combos.efzagent` beside each model; the suite's `combos` drill: the
+eleven `exploiter18`s as their files; the round 20 file, 64 matches a pairing):
+
+| against the eleven | as they were | with their combos |
+|---|---|---|
+| wins | 95.3 ±0.7% | 55.8 ±1.8% |
+| own HP lost a round | 50% | 75% |
+| HP ahead a minute | +4,679 | +534 ±139 |
+| HP a combo of theirs | 869 | 1,718 (90th percentile 3,597) |
+| HP a combo of its own | 1,563 | 1,641 |
+| by opponent, wins (Sayuri, Mio, Mayu, Nanase, Kaori, Mishio, Ikumi, Nayuki, Kano, Mizuka, Makoto) | 98 98 100 97 98 97 92 83 84 100 100 | 33 69 56 81 58 34 62 23 58 61 78 |
+
+A route is chosen at 53 to 84% of their plans (their models at 11 steps carry more of a
+combo than Kano's did at 14). Once a hit costs it what its own costs, the league the
+agent wins nineteen matches in twenty of is an even one. That is the user's point in a
+number, and the measure of how much of every result so far was the price of a hit.
+
+**Round 21 is training** (`agent-league21-combos-s1`, started 20 November 20:00; scratch
+`league21.sh`, `round21-arm.sh`, the code frozen as `snap21`): round 20's sparring arm
+with the 90 `--vs` opponents as their files through the game's code (`--vs-native`),
+from round 20's agent. Three things had to be made for it: the scripted habits' inputs
+written over a file's own bytes last (an `opponent_controls` hook with `order` 1:
+advantages.AdvantagedOpponent; before, a file's bytes overwrote the script's), the
+wrapper attaching and releasing the file's players, and the route option above. A
+rollout of 131,072 steps takes 110 seconds (1,190 steps a second, about half of round
+20's speed: the opponents' plans are made in the loop) and the trainer 4.6 GB.
+
+## The games of 20 November: the round 20 file in the game
+
+The user played `agent-league20-spar-s1-round20` 11 matches (session
+`20261120-191846-8b04`, the game at `2825fd8`: the first session with the day's modules
+in the game: the settled plans, the landing rule, the recoil guard's answer and its
+punish), all 11 playing again exactly. **The agent took 7 of 11**: Doppel Nanase 3-0,
+Nagamori 2-0, Sayuri 2-1, Mishio 0-2, Kano 0-1. The user: "Very strong ... Overall
+strong, and overcomed quite a lot of issues we had before", and three observations:
+
+1. "It relys heavily on 'be the first to hit when both are hitting', both in air and
+   ground. When air-to-air can't win, it gets pressured. This can be observed in Mishio
+   and Kano game."
+2. "It sometimes make unnecessary gambling and get punished."
+3. "When it can't get advantage during air-to-air, it doesn't adjust the strategy to
+   gain more damage from more tense pressure and okizeme. So, no in-game adjustment."
+
+| against the user | `round18k4` (24) | round 20 (11) | ... the 8 it won 7 of | ... Mishio, Kano (3) | strongest player |
+|---|---|---|---|---|---|
+| matches won | 50% | 64 ±15% | 88% | 0% | |
+| HP ahead a minute | −363 ±487 | +594 ±1,100 | +2,190 | −2,920 | +2,431 |
+| both in the air | +222 | +432 | +773 | −321 | +114 |
+| where it came by air | +283 | +585 | +762 | +194 | −77 |
+| where the user came by air | −163 | +877 | +973 | +664 | +556 |
+| under the user's pressure | −61 | −472 ±240 | −302 | −847 | +86 |
+| on its own rising | −872 | −219 | +516 | −1,842 | +219 |
+| out of its own okizeme | +611 | −208 | −100 | −446 | +1,165 |
+| out of its own pressure | −398 | −122 | −252 | +164 | +492 |
+| raw specials, HP a minute | +278 | −281 ±320 | −335 | −161 | +235 |
+| jumps a minute | 18.1 | 18.4 | 17.3 | 20.8 | |
+
+**What moved**: the first session with the HP ahead (+594 a minute; the error is as
+large), the user's jump-ins from −163 to +877, its own rising from −872 to −219.
+
+**1, the air and what is behind it: confirmed.** Half of all the HP that moves in these
+games moves in the air (it gains 1,474 a minute there and loses 1,043). Where the air
+pays (+773 a minute) it wins 7 of 8; against Mishio and Kano the air is lost (−321) and
+nothing takes its place: under the user's pressure it gains 84 HP a minute and loses
+932, on its own rising it gains 64 and loses 1,906. And it jumps more there, not less
+(20.8 a minute for 17.3).
+
+**2, the gamble: one move.** The raw 236C: 32 times in 11 matches, 1.1 a minute (the
+community's players 0.5, the strongest 0.6); it hits 44% and is guarded 38% (theirs: 55
+to 57% and 20 to 22%), and two guarded or missed in three are punished: −251 HP a use
+where it is +310 to +330 for people and was +266 in `round18k4`'s games. The accounts
+that stop a raw special start each move at the league's worth (+333 for this one) and
+need a few punished uses to turn; three uses a match do not turn them in time. The
+supers the same in small (0x133 three times, −1,085 each). The new 623B after its own
+recoil guard is not in it: 18 uses, +289 each.
+
+**3, no adjustment: confirmed, and its okizeme is worth less than before.** Out of its
+own okizeme −208 HP a minute (`round18k4` +611, the strongest player +1,165): −112 HP a
+knockdown. The policy of round 20 was trained against opponents that rise with a
+reversal eight times in ten (the sparring profile) and the planner is the same; what the
+policy does around the plan changed. Nothing in the agent reads "the air is not paying"
+and shifts weight: the accounts it keeps are of raw specials, risings and recoil guards.
+
+**The gamble's price, from the same drill** (`risk.py`'s `PRIORS`, the agent file's
+`risk_moves`). The accounts that stop a raw special started each move at the strongest
+replay player's HP a use. Against opponents with combos the agent's own uses are worth
+(704 matches, the moves used 50 times or more): 236C +53 (the player's +333; in the
+league as it was +243), 236A −649 (−130), 236B −1,012 (−131), 623C −460 (+580), 641236A
++83 (+195), 641236B +669 (+290), 236236A −1,577 (−232), 236236B −106 (+90). Those are now
+what the accounts start at: 236C is stopped one time in three before anything is known of
+the opponent and 95 in 100 after one that cost a combo (1 in 100, and a half, before);
+236A, 236B, 623C and the level-one super nearly every time until they have hit. Build
+`round20b` (the round 20 file with them), on the `combos`, `sparring` and league drills
+as this is written.
+
+### The jump at the opponent, by how it has paid in the match (`risk_jump`; 20 November, night)
+
+The user's first and third points say one thing in two ways: its game is the air, and
+when the air does not pay it has no other game and does not look for one. The games say
+when the air pays (a forward jump within 400 pixels, the HP swing over the two seconds
+after it):
+
+| match | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| against | Mio | Mio | Mio | Nagamori | Nagamori | Sayuri | Sayuri | Sayuri | Mishio | Mishio | Kano |
+| the agent | won | won | won | won | won | won | won | lost | lost | lost | lost |
+| forward jumps | 19 | 21 | 33 | 31 | 19 | 21 | 24 | 33 | 35 | 23 | 78 |
+| HP a jump | +552 | +502 | +217 | +275 | +332 | +171 | +131 | −56 | +12 | −239 | −115 |
+
+Every match it won, a jump was worth 130 HP or more; every match it lost, 12 or less;
+and against Kano it jumped twice as often (19.9 a minute for 10 to 14), at −115 each. A
+match has 19 to 35 of them: enough to read inside the match, which a raw special's three
+uses are not. Against the opponents with their combos (12 traced matches each): Nanase's
++157 a jump, Nayuki's +33, Mishio's +8, Kano's +2; 1,326 jumps at +55, their spread 614.
+
+So the jump has an account as a raw special has (`Risk::jump`, risk.py's `jump`;
+`JumpAct`, `jumping`): its own play's action up and forward while it is free on the
+ground with the opponent within 400 pixels (not in a combo it sees); a jump let out and
+seen is followed for 130 steps and its HP swing goes to the account; its worth the mean
+over a prior counting as 6 jumps; stopped with the probability 1 / (1 + exp(worth /
+100)), the action then the same buttons with forward alone, so that what it does
+instead is from the ground: its own play's and the planners' (okizeme, pressure). The
+account is kept to the next match of the same opponent, older for less, as the others
+are. The game's and risk.py's, tested (tests.test_risk, tests.test_agents.RiskAsRiskPy).
+
+Where the account starts is a choice the benchmark is asked: at +250 a jump (optimistic:
+8% of the forward jumps stopped before anything is known, more than half only once two
+dozen jumps have lost) or at the +55 measured against opponents with combos (38% stopped
+from the start, which is a different agent). Both builds (`r20c`, `r20d`: the round 20
+policy with the day's modules and the new starting worths of the raw specials) are on
+the `combos` drill against the six opponents that punish the air most.
