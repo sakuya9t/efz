@@ -557,6 +557,66 @@ class PlansAsRedteam(unittest.TestCase):
             native.close()
         env.close()
 
+    def test_a_plan_out_of_time_settles(self):
+        """efz_env_agent_plan_budget: a plan that may not take the work it needs is chosen
+        from the options played by then (its own play first: what it goes on with), each
+        worth what the whole plan found it worth; dropped whole if so asked, or if not
+        even that one was played; and with no limit again it is the whole plan."""
+        from efz_env import EfzVecEnv
+        from efz_env.history import InputHistory
+        from efz_env import ActionTable
+        table = ActionTable().table
+        env = EfzVecEnv(DATA, 1, num_threads=1, frame_skip=1, skip_noninteractive=False,
+                        autoreset='disabled', max_frames=0)
+        env.set_matches(chars=('ayu', 'mai'), stage=0, cpu=(False, False))
+        hits = self.hits(env)
+        rng = np.random.default_rng(9)
+        library = random_routes(rng, sorted({h['starter'] for h in hits}), per=12,
+                                delay=self.DELAY)
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            out = os.path.join(folder, 'agent.efzagent')
+            export_agent(path, out, check=False, library=library)
+            native = NativeAgent(out, deterministic=True)
+            settled = 0
+            for h in hits[:8]:
+                env.load_state(0, h['state'])
+                actions = rng.integers(0, 45, self.DELAY)
+                hist = InputHistory((1,), self.HISTORY)
+                hist.buf[0], hist.prev[0] = h['hist'], h['prev']
+                for a in actions:
+                    hist.push(table[np.array([a])])
+                args = (env, 0, 0, h['starter'], actions, hist.buf[0], int(hist.prev[0]))
+                native.plan_budget(0)
+                whole = native.plan(*args)
+                self.assertEqual(whole['outcome'], 'planned')
+                if len(whole['tried']) < 3:
+                    continue
+                own = float(whole['dealt'][-1])
+                native.plan_budget(whole['frames'] // 2, settle=True, own=1)
+                part = native.plan(*args)
+                self.assertEqual(env.save_state(0), h['state'])
+                self.assertEqual(part['outcome'], 'settled')
+                self.assertEqual(part['tried'], whole['tried'])
+                self.assertLess(part['frames'], whole['frames'])
+                if part['chosen'] is not None:  # a route played to its end, worth more than its own play
+                    j = part['chosen']
+                    self.assertEqual(float(part['dealt'][j]), float(whole['dealt'][j]))
+                    self.assertGreater(float(part['dealt'][j]), own)
+                self.assertEqual(float(part['dealt'][-1]), own)  # its own play was played first
+                settled += 1
+                native.plan_budget(whole['frames'] // 2, settle=False, own=1)
+                self.assertEqual(native.plan(*args)['outcome'], 'none')
+                native.plan_budget(self.DELAY + 1, settle=True, own=1)
+                self.assertEqual(native.plan(*args)['outcome'], 'none')
+                native.plan_budget(0)
+                again = native.plan(*args)
+                self.assertEqual((again['outcome'], again['chosen']), ('planned', whole['chosen']))
+                np.testing.assert_array_equal(again['dealt'], whole['dealt'])
+            self.assertGreater(settled, 1)
+            native.close()
+        env.close()
+
     def test_same_replans(self):
         """Round 15b's planner, planning again at each new move's hit: the routes joined
         where that move hit in them (their marks), the rest of the route it is on one more
@@ -1383,6 +1443,200 @@ class RiseAsRisePy(unittest.TestCase):
             native.close()
             base.close()
 
+    def test_the_guard_under_a_landing(self):
+        """land: under an attacker seen in the air the standing guard only until its
+        landing, predicted from the view, has passed; sight: chosen from a view fewer
+        steps old. The game's and rise.py's, step by step."""
+        rise = self.rise
+        d = self.DELAY
+        # Lying with the attacker near; it jumps at step 10 and lands at step 10 + n, by
+        # the arithmetic steps_to_land takes; the agent lies on to the end.
+        ys, y, vy, g = [], -1.0, -4.0, 0.3
+        while y < 0:
+            ys.append((y / 240, vy / 20))
+            y, vy = y + 2.478 * vy + 2.037 * g, vy + g
+        n = len(ys)
+        self.assertGreater(n, 2 * d)
+        views = self.views([(10 + n + 3 * d, self.LYING, 100, False, 0, 0)])
+        for k, (y, vy) in enumerate(ys):
+            views[10 + k][rise.OPP_AIR], views[10 + k][rise.OPP_Y], views[10 + k][rise.OPP_VY] = 1, y, vy
+        for sight in (0, 3):
+            lag = sight or d
+            with tempfile.TemporaryDirectory() as folder:
+                path, _ = make_model(folder, history=self.HISTORY, delay=d, seed=3)
+                out = os.path.join(folder, 'rise.efzagent')
+                export_agent(path, out, check=False,
+                             rise=dict(low=-1.0, high=0.0, near=130, land=1, sight=sight))
+                native = NativeAgent(out, deterministic=True)
+                got = self.played(native, views)
+                stats = native.stats()
+                native.close()
+            # The game: a standing guard from when it sees the jump to the landing's step,
+            # a crouching one from the step after, though it sees the attacker in the air
+            # for `lag` steps more.
+            for t in range(10 + lag, 10 + n + lag):
+                self.assertEqual(got[t], 0x02 if t <= 10 + n else 0x06, (sight, t))
+            self.assertEqual(stats['rise_landed'], lag - 1)
+            # rise.py's, from the same views.
+            m = self.modules.REGISTRY['rise'](None, 'batch', {}, dict(
+                guard=True, plain=True, carry=True, low=-1.0, high=0.0, near=130, land=True,
+                sight=sight), None)
+            m.batch(1)
+            theirs = []
+            for t in range(len(views)):
+                seen = [views[max(0, t - k)] for k in range(d + 1)]
+                ctx = self.modules.Context(seen[d], seen[0], seen=seen,
+                                           hist=np.zeros((self.HISTORY, 6), np.float32))
+                m.watch(0, ctx)
+                theirs.append(m.act(0, ctx))
+            byte = {rise.STAND_GUARD: 0x02, rise.CROUCH_GUARD: 0x06}
+            for t in range(10 + lag, 10 + n + lag):
+                self.assertEqual(byte[theirs[t]], got[t], (sight, t))
+            self.assertEqual(m.stats()['landed'], lag - 1)
+
+    def test_a_move_recoil_guarded(self):
+        """recoil: from where it sees its move recoil-guarded, nothing held until
+        recoil_press steps after the recoil guard (but for the press in a kept chain's
+        place, where its inputs were steady) and then the guard by sight, through the
+        opponent's string, until it sees the opponent free for the gap or the steps run
+        out. The game's and rise.py's, step by step."""
+        from efz_env.history import InputHistory
+        rise = self.rise
+        d = self.DELAY
+        MOVE, RG, COUNTER, GUARD = 0xcc, 0xa8, 0xfa, 0x97
+        lead = [(8, 0, 100, False, 0, 0), (6, MOVE, 60, False, 0, 0), (10, MOVE, 60, False, RG, 0)]
+        at, idle = 14, 3  # the recoil guard's step (seen d later); the press recoil_press = d + idle after it
+        byte = {rise.IDLE: 0x00, rise.STAND_GUARD: 0x02, rise.CROUCH_GUARD: 0x06,
+                rise.PRESS_A: 0x10, rise.PRESS_2A: 0x14}
+
+        def both(script, **options):
+            """(the game's bytes, its own play's, its counts, rise.py's actions, its counts)."""
+            views = self.views(script)
+            # (every recoil guard answered, unless a case says otherwise)
+            options = dict(dict(recoil=60, recoil_press=d + idle, recoil_low=-1.0, recoil_high=0.0), **options)
+            with tempfile.TemporaryDirectory() as folder:
+                path, _ = make_model(folder, history=self.HISTORY, delay=d, seed=3)
+                plain, out = os.path.join(folder, 'plain.efzagent'), os.path.join(folder, 'rise.efzagent')
+                export_agent(path, plain, check=False)
+                export_agent(path, out, check=False, rise=dict(low=2.0, high=3.0, **options))  # (no rising guarded)
+                native, base = NativeAgent(out, deterministic=True), NativeAgent(plain, deterministic=True)
+                got, own = self.played(native, views), self.played(base, views)
+                stats = native.stats()
+                native.close()
+                base.close()
+            m = self.modules.REGISTRY['rise'](None, 'batch', {}, dict(
+                guard=True, plain=True, carry=True, low=2.0, high=3.0, **options), None)
+            m.batch(1)
+            hist, theirs = InputHistory((1,), frames=self.HISTORY), []
+            for t in range(len(views)):  # (its inputs as the game's agent played them)
+                seen = [views[max(0, t - k)] for k in range(d + 1)]
+                ctx = self.modules.Context(seen[d], seen[0], seen=seen, hist=hist.buf[0].copy())
+                m.watch(0, ctx)
+                theirs.append(m.act(0, ctx))
+                hist.push(np.array([got[t]], np.uint8))
+            counts = dict(m.stats(), chance=m.recoil_chance(0))
+            return got, own, stats, theirs, counts
+
+        def steady(got):
+            """Its last HISTORY inputs before it sees the recoil guard hold one direction."""
+            return len({b & 0x0f for b in got[at + d - self.HISTORY:at + d]}) == 1
+
+        cases = dict(
+            # the counter touches its guard at step 40 for 4 steps, then the opponent is
+            # free: the guard goes on until the gap's 8th such step, 51
+            guarded=(lead + [(10, 0, 60, False, RG, 0), (6, 0, 60, False, COUNTER, 0),
+                             (4, GUARD, 60, False, COUNTER, 0), (30, 0, 60, False, 0, 0)], 51, {}),
+            # ... its own play's again from the guard it sees touched
+            let=(lead + [(10, 0, 60, False, RG, 0), (6, 0, 60, False, COUNTER, 0),
+                         (4, GUARD, 60, False, COUNTER, 0), (30, 0, 60, False, 0, 0)], 40, dict(recoil_let=1)),
+            # the opponent lets the chance go: free from step 34, the gap's 8th at 41
+            quiet=(lead + [(10, 0, 60, False, RG, 0), (40, 0, 60, False, 0, 0)], 41, {}),
+            # the steps run out
+            capped=(lead + [(10, 0, 60, False, RG, 0), (40, 0, 60, False, COUNTER, 0)], 14 + 12,
+                    dict(recoil=12)),
+            # a jump after the recoil guard: the standing guard under it
+            jump=(lead + [(10, 0, 60, False, RG, 0), (12, 0, 60, True, 0, 0),
+                          (4, GUARD, 60, False, COUNTER, 0), (30, 0, 60, False, 0, 0)], 57, {}),
+        )
+        pressed = set()
+        for name, (script, end, more) in cases.items():
+            for clear in (dict(recoil_steady=0), {}):  # the press whatever its inputs were; only if steady
+                got, own, stats, theirs, counts = both(script, **dict(more, **clear))
+                press = 0x14 if clear or steady(got) else 0x00  # (2A after a 2A)
+                pressed.add(press)
+                self.assertEqual(got[:at + d], own[:at + d], name)  # its own play until it sees it
+                self.assertEqual(got[at + d:at + d + idle], [0x00, press, 0x00], name)
+                for t in range(at + d + idle, end + d):
+                    air = name == 'jump' and 34 + d <= t < 46 + d
+                    self.assertEqual(got[t], 0x02 if air else 0x06, (name, t))
+                steps = end - at
+                self.assertEqual((stats['rise_recoils'], stats['rise_recoil_steps'],
+                                  stats['rise_recoil_cleared']), (1, steps, int(press != 0)), name)
+                for t in range(len(got)):
+                    if at + d <= t < end + d:
+                        self.assertEqual(byte[theirs[t]], got[t], (name, t))
+                    else:
+                        self.assertIsNone(theirs[t], (name, t))
+                self.assertEqual((counts['recoils'], counts['recoil_steps'], counts['recoil_cleared']),
+                                 (1, steps, int(press != 0)), name)
+        self.assertIn(0x14, pressed)
+        # A special recoil-guarded, or the option off: no press. A 5B: an A, standing.
+        for move, clear, press in ((0xfa, 1, 0x00), (MOVE, 0, 0x00), (0xc9, 1, 0x10)):
+            script = [(8, 0, 100, False, 0, 0), (6, move, 60, False, 0, 0),
+                      (10, move, 60, False, RG, 0), (40, 0, 60, False, RG, 0)]
+            got, own, stats, theirs, counts = both(script, recoil_clear=clear, recoil_steady=0)
+            self.assertEqual(got[at + d:at + d + 4], [0x00, press, 0x00, 0x06], hex(move))
+            self.assertEqual([byte[x] for x in theirs[at + d:at + d + 4]], got[at + d:at + d + 4], hex(move))
+        # A recoil guard far away (its projectile's), or without a move of its own seen: nothing.
+        for script in ([(8, 0, 400, False, 0, 0), (6, MOVE, 400, False, 0, 0), (10, MOVE, 400, False, RG, 0),
+                        (30, 0, 400, False, 0, 0)],
+                       [(14, 0, 60, False, 0, 0), (10, 0, 60, False, RG, 0), (30, 0, 60, False, 0, 0)]):
+            got, own, stats, theirs, counts = both(script)
+            self.assertEqual(got, own)
+            self.assertEqual((stats['rise_recoils'], counts['recoils']), (0, 0))
+            self.assertTrue(all(x is None for x in theirs))
+        # An opponent read as one whose recoil guards carry no threat: its own play.
+        got, own, stats, theirs, counts = both(cases['quiet'][0], recoil_low=2.0, recoil_high=3.0)
+        self.assertEqual(got, own)
+        self.assertEqual((stats['rise_recoils'], stats['rise_recoil_answered'], counts['recoils'],
+                          counts['recoil_answered']), (1, 0, 1, 0))
+        # The read: a recoil guard followed by a move of the opponent's within recoil_soon
+        # steps, and one that is not; over the prior (0.6, as 2): (1.2 + 1) / 4 = 0.55,
+        # which answers (0.55 - 0.3) / 0.3 of the next.
+        script = (lead + [(10, 0, 60, False, RG, 0), (6, 0, 60, False, COUNTER, 0), (60, 0, 300, False, 0, 0),
+                          (6, MOVE, 60, False, 0, 0), (10, MOVE, 60, False, RG, 0), (60, 0, 60, False, 0, 0)])
+        got, own, stats, theirs, counts = both(script, recoil_low=0.3, recoil_high=0.6)
+        self.assertEqual((stats['rise_recoils'], counts['recoils']), (2, 2))
+        self.assertAlmostEqual(counts['chance'], (0.55 - 0.3) / 0.3, places=6)
+        self.assertEqual(stats['rise_recoil_chance'], round(1000 * counts['chance']))
+        # What follows its own recoil guard: the guard on, then the punish's inputs, the
+        # last of them recoil_punish_at steps after the recoil guard it sees d late.
+        punish = dict(recoil_punish='0x1,0x4,0x5,0x25', recoil_punish_at=d + 6)  # (623B; 3 steps of guard)
+        mine = [(8, 0, 40, False, 0, 0), (10, 0xa9, 40, False, COUNTER, 0), (40, 0, 40, False, 0, 0)]
+        got, own, stats, theirs, counts = both(mine, **punish)
+        self.assertEqual(got[:8 + d], own[:8 + d])
+        self.assertEqual(got[8 + d:8 + d + 7], [0x06, 0x06, 0x06, 0x01, 0x04, 0x05, 0x25])
+        table = [int(b) for b in rise.TABLE.table]
+        self.assertEqual([table[x] for x in theirs[8 + d:8 + d + 7]], got[8 + d:8 + d + 7])
+        self.assertTrue(all(x is None for x in theirs[:8 + d] + theirs[8 + d + 7:]))
+        self.assertEqual((stats['rise_recoil_punished'], counts['recoil_punished']), (1, 1))
+        # ... not at a distance, under an opponent in the air, against one in no move, or without the option.
+        for script, more in (([(8, 0, 60, False, 0, 0), (10, 0xa9, 60, False, COUNTER, 0), (40, 0, 60, False, 0, 0)], punish),
+                             ([(8, 0, 40, False, 0, 0), (10, 0xa9, 40, True, COUNTER, 0), (40, 0, 40, False, 0, 0)], punish),
+                             ([(8, 0, 40, False, 0, 0), (10, 0xa9, 40, False, 0, 0), (40, 0, 40, False, 0, 0)], punish),
+                             (mine, {})):
+            got, own, stats, theirs, counts = both(script, **more)
+            self.assertEqual(got, own)
+            self.assertEqual((stats['rise_recoil_punished'], counts['recoil_punished']), (0, 0))
+        with tempfile.TemporaryDirectory() as folder:  # the file's defaults
+            path, _ = make_model(folder, history=self.HISTORY, delay=d, seed=3)
+            out = os.path.join(folder, 'rise.efzagent')
+            export_agent(path, out, check=False, rise=dict(recoil=60))
+            keys = read_header(out)[1]
+            self.assertEqual((keys['rise_recoil_press'], keys['rise_recoil_steady'], keys['rise_recoil_let'],
+                              keys['rise_recoil_soon'], keys['rise_recoil_low'], keys['rise_recoil_high']),
+                             ('22', '12', '0', '34', '0.3', '0.6'))
+
     def test_the_same_read_of_the_attacker(self):
         # A rising the attacker leaves alone (no move of its own as the agent sees itself
         # up), and one it is in a move at.
@@ -1506,6 +1760,44 @@ class RiskAsRiskPy(unittest.TestCase):
             native.close()
             twin.close()
             env.close()
+
+
+@unittest.skipIf(not DATA or not os.path.isdir(DATA or ''), 'no game data: set EFZ_DATA')
+class HandOver(unittest.TestCase):
+    """EfzVecEnv.set_cpu: a side handed between the game's CPU and the step's actions in
+    the middle of a match (an opponent that is the CPU but for its combos:
+    runs/human-ayu/evaluate.py --p2-cpu-combos)."""
+
+    def test_a_side_changes_hands(self):
+        from efz_env import EfzVecEnv
+        from efz_env.actions import UP
+        env = EfzVecEnv(DATA, 1, num_threads=1, frame_skip=1, autoreset='disabled',
+                        max_frames=0, cpu_level=4)
+        env.set_matches(chars=('ayu', 'mai'), stage=0, cpu=(False, True))
+        names = env.observation_names
+        cpu, air = names.index('opp_cpu'), names.index('opp_airborne')
+        obs = env.reset(seed=5)
+        controls = np.zeros((1, 2), np.uint8)
+        controls[0, 1] = UP
+        self.assertEqual(obs[0, 0, cpu], 1)
+        for _ in range(30):
+            obs, _, _, _, info = env.step(controls)
+        # The program's now: its view says so at once, and what the step gives is played.
+        self.assertTrue(env.set_cpu(0, 1, False))
+        self.assertEqual(obs[0, 0, cpu], 0)
+        airborne = 0
+        for _ in range(40):
+            obs, _, _, _, info = env.step(controls)
+            self.assertEqual(int(info['input'][0, 1]) & UP, UP)
+            airborne += obs[0, 0, air] > 0
+        self.assertGreater(airborne, 10)
+        # And the CPU's again; the next match begins as the matches were set.
+        self.assertTrue(env.set_cpu(0, 1, True))
+        self.assertEqual(obs[0, 0, cpu], 1)
+        env.set_cpu(0, 1, False)
+        obs = env.reset()
+        self.assertEqual(obs[0, 0, cpu], 1)
+        env.close()
 
 
 if __name__ == '__main__':

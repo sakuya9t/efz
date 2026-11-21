@@ -418,12 +418,19 @@ void LogRising(const char* who, const Side& s)
     if (!s.player || !s.policy || !s.policy->rise.on)
         return;
     const agent::RiseStats& r = s.player->Rising();
+    if (r.recoils)
+        LogInfo("agent", "%s's moves seen recoil-guarded: %d, %d answered with a guard for %d steps "
+                         "(%d with a press in a kept chain's place); the next one answered with "
+                         "probability %.2f; %d of its own recoil guards followed by its punish",
+                who, r.recoils, r.recoilAnswered, r.recoilSteps, r.recoilCleared,
+                s.player->RecoilChance(), r.recoilPunished);
     if (!r.knockdowns)
         return;
     LogInfo("agent", "%s's risings: %d knockdowns, the attacker on it in %d, %d of those "
-                     "guarded through (%d steps, %d standing); the next one guarded with "
-                     "probability %.2f",
-            who, r.knockdowns, r.met, r.guarded, r.steps, r.stood, s.player->RiseChance());
+                     "guarded through (%d steps, %d standing, %d crouching under a flight "
+                     "taken to have landed); the next one guarded with probability %.2f",
+            who, r.knockdowns, r.met, r.guarded, r.steps, r.stood, r.landed,
+            s.player->RiseChance());
 }
 
 // What an agent's raw specials by their accounts did, for the log.
@@ -479,13 +486,14 @@ void LogRoutes(const char* who, const Side& s)
     if (!asked)
         return;
     LogInfo("agent", "%s's routes: %d plans asked (%d at a later move's hit of a combo): %d "
-                     "made, a route chosen in %d; %d dropped (late %d, of them %d a combo's "
-                     "first played by the chooser's route; the game elsewhere %d, the combo "
-                     "over %d, not this opponent %d, the fight over %d); planning %.1f ms a "
-                     "plan (at most %.1f), the game waited %.2f ms a plan (at most %.1f)",
-            who, asked, r.again, r.plans, r.routes, r.dropped(), r.late, r.chooser, r.elsewhere,
-            r.over, r.own, r.apart, r.planMs / std::max(1, asked - r.late - r.own), r.planMsMost,
-            r.waitedMs / asked, r.waitedMsMost);
+                     "made (%d of them not done when due and chosen from the options played "
+                     "by then), a route chosen in %d; %d dropped (late %d, of them %d a "
+                     "combo's first played by the chooser's route; the game elsewhere %d, the "
+                     "combo over %d, not this opponent %d, the fight over %d); planning %.1f "
+                     "ms a plan (at most %.1f), the game waited %.2f ms a plan (at most %.1f)",
+            who, asked, r.again, r.plans, r.settled, r.routes, r.dropped(), r.late, r.chooser,
+            r.elsewhere, r.over, r.own, r.apart, r.planMs / std::max(1, asked - r.late - r.own),
+            r.planMsMost, r.waitedMs / asked, r.waitedMsMost);
 }
 
 // Has the side played by the agent at `path` (empty: a person); false with *error.

@@ -779,6 +779,12 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
                 rise.stand = (int)a;
             if (table[a] == 0x06 && rise.crouch < 0)
                 rise.crouch = (int)a;
+            if (table[a] == 0x00 && rise.idle < 0)
+                rise.idle = (int)a;
+            if (table[a] == 0x10 && rise.pressA < 0)
+                rise.pressA = (int)a;
+            if (table[a] == 0x14 && rise.press2A < 0)
+                rise.press2A = (int)a;
         }
         if (rise.stand < 0 || rise.crouch < 0) {
             *error = "the agent's guard on rising needs actions that hold back and down-back";
@@ -792,6 +798,40 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         rise.near = std::max(0.0f, ToFloat(keys, "rise_near", 0));
         rise.fly = std::max(0.0f, ToFloat(keys, "rise_fly", 200));
         rise.decay = std::min(1.0f, std::max(0.0f, ToFloat(keys, "rise_decay", 0.7f)));
+        rise.land = ToFloat(keys, "rise_land", 0) != 0;
+        rise.sight = std::min(delay, std::max(0, ToInt(keys, "rise_sight", 0)));
+        rise.recoil = rise.idle < 0 ? 0 : std::max(0, ToInt(keys, "rise_recoil", 0));
+        rise.recoilNear = std::max(0.0f, ToFloat(keys, "rise_recoil_near", 240));
+        rise.recoilGap = std::max(1, ToInt(keys, "rise_recoil_gap", 8));
+        rise.recoilPress = std::max(0, ToInt(keys, "rise_recoil_press", 22));
+        rise.recoilClear = ToFloat(keys, "rise_recoil_clear", 1) != 0 && rise.pressA >= 0 &&
+                           rise.press2A >= 0;
+        rise.recoilSteady = std::max(0, ToInt(keys, "rise_recoil_steady", 12));
+        rise.recoilLet = ToFloat(keys, "rise_recoil_let", 0) != 0;
+        rise.recoilPrior = std::max(0.01f, ToFloat(keys, "rise_recoil_prior", 2));
+        rise.recoilCounter = ToFloat(keys, "rise_recoil_counter", 0.6f);
+        rise.recoilLow = ToFloat(keys, "rise_recoil_low", 0.3f);
+        rise.recoilHigh = std::max(rise.recoilLow + 1e-6f, ToFloat(keys, "rise_recoil_high", 0.6f));
+        rise.recoilSoon = std::max(0, ToInt(keys, "rise_recoil_soon", 34));
+        rise.punishNear = std::max(0.0f, ToFloat(keys, "rise_recoil_punish_near", 48));
+        rise.punishAt = std::max(0, ToInt(keys, "rise_recoil_punish_at", 22));
+        // rise_recoil_punish: "byte,byte,..." (control bytes, hex or decimal)
+        const std::string& bytes = keys["rise_recoil_punish"];
+        for (size_t at = 0; at < bytes.size();) {
+            size_t end = bytes.find(',', at);
+            if (end == std::string::npos)
+                end = bytes.size();
+            int byte = (int)strtol(bytes.substr(at, end - at).c_str(), nullptr, 0), found = -1;
+            for (size_t a = 0; a < table.size() && found < 0; a++)
+                if (table[a] == byte)
+                    found = (int)a;
+            if (found < 0) {
+                *error = "the agent's rise_recoil_punish names an input it has no action for";
+                return false;
+            }
+            rise.punish.push_back(found);
+            at = end + 1;
+        }
     }
 
     // risk:1 (Risk)
@@ -845,16 +885,38 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
     return true;
 }
 
+namespace {
+
+// A row of a layer times its input. Sixteen sums side by side, in single precision, added
+// up in double at the end: a loop the compiler turns into vector instructions, where one
+// running double sum is a chain it must keep in order (the network is two thirds of what
+// a decision costs, and its own play on a plan's copy decides every frame: 45% of a
+// plan's time before, measured 19 November). The sums are of a few hundred terms each,
+// as the model's own arithmetic is (PyTorch's, single precision).
+inline float Dot(const float* w, const float* x, int n)
+{
+    enum { kLanes = 16 };
+    float lanes[kLanes] = {0};
+    int i = 0;
+    for (; i + kLanes <= n; i += kLanes) {
+        for (int k = 0; k < kLanes; k++)
+            lanes[k] += w[i + k] * x[i + k];
+    }
+    double sum = 0;
+    for (int k = 0; k < kLanes; k++)
+        sum += lanes[k];
+    for (; i < n; i++)
+        sum += (double)w[i] * x[i];
+    return (float)sum;
+}
+
+} // namespace
+
 void Net::Forward(const float* view, float* outputs) const
 {
     auto apply = [](const Dense& d, const float* x, float* y) {
-        for (int o = 0; o < d.out; o++) {
-            const float* w = &d.weight[(size_t)o * d.in];
-            double sum = 0;
-            for (int i = 0; i < d.in; i++)
-                sum += (double)w[i] * x[i];
-            y[o] = (float)(sum + d.bias[o]);
-        }
+        for (int o = 0; o < d.out; o++)
+            y[o] = Dot(&d.weight[(size_t)o * d.in], x, d.in) + d.bias[o];
     };
     std::vector<float> x, y;
     if (efzFeatures) {
@@ -991,9 +1053,16 @@ void Player::Reset()
     }
     // (rise.py's reset with carry: the counts older)
     riseDown_ = riseMet_ = riseDrawn_ = riseVeto_ = false;
+    riseRg_ = false;
+    riseAnswer_ = riseLet_ = riseFirst_ = 0;
+    riseClear_ = -1;
+    recoilWatch_ = 0;
+    riseMine_ = punishOn_ = false;
     if (risen_) { // (once a match: a fight's end and the next one's start both come here)
         riseSeen_ *= policy_->rise.decay;
         riseOn_ *= policy_->rise.decay;
+        recoilSeen_ *= policy_->rise.decay;
+        recoilOn_ *= policy_->rise.decay;
         risen_ = false;
     }
     rise_ = RiseStats();
@@ -1012,6 +1081,7 @@ void Player::Reset()
 namespace {
 
 const int kRoundOver = 3, kDx = 4, kSelfHp = 8, kOppHp = 40, kSelfAct = 18, kOppAir = 71;
+const int kOppY = 46, kOppVy = 48;
 const int kOppHitstun = 52;
 const int kRiskAgain = 12; // steps in which the same move tried again is the same press
 const int kRiskCame = 24;  // steps after the agent could see the move in which it must
@@ -1035,6 +1105,14 @@ void Player::Queue(const std::vector<int>& actions, size_t planned, size_t own)
     queueOwn_.assign(actions.size(), false);
     for (size_t k = planned; k < own && k < actions.size(); k++)
         queueOwn_[k] = true;
+}
+
+// rise.py's Rise.recoil_chance.
+double Player::RecoilChance() const
+{
+    const Rise& r = policy_->rise;
+    double rate = ((double)r.recoilPrior * r.recoilCounter + recoilOn_) / (r.recoilPrior + recoilSeen_);
+    return std::min(1.0, std::max(0.0, (rate - r.recoilLow) / ((double)r.recoilHigh - r.recoilLow)));
 }
 
 // rise.py's Rise.guard_chance.
@@ -1183,6 +1261,63 @@ void Player::RiseWatch()
             (v[kOppAir] > 0 && d <= r.fly))
             riseMet_ = true;
     }
+    if (r.recoil > 0) { // its move recoil-guarded, as it sees it
+        int theirs = (int)nearbyintf(v[kOppAction]);
+        bool rg = theirs >= 0xa8 && theirs <= 0xaa;
+        if (recoilWatch_ > 0) { // its recoil guard followed by a move of its own, soon
+            if (theirs >= kFirstOwnMove || v[kSelfHitstun] > 0 || (a >= 0x32 && a < 0x60)) {
+                recoilOn_ += 1;
+                recoilWatch_ = 0;
+            } else {
+                recoilWatch_--;
+            }
+        }
+        if (riseAnswer_ > 0) {
+            bool free = (theirs <= 9 || theirs == 0xe || theirs == 0xf || theirs == 0x10) &&
+                        !(v[kOppAir] > 0);
+            riseLet_ = free ? riseLet_ + 1 : 0;
+            bool guards = (a >= 0x96 && a <= 0x9c) || (a >= 0xa8 && a <= 0xaa);
+            if (guards && !r.recoilLet) { // its guard touched: on, through the string
+                riseAnswer_ = r.recoil;
+                riseFirst_ = 0;
+            }
+            if (down || v[kRoundOver] != 0 || v[kSelfHitstun] > 0 || (a >= 0x32 && a < 0x60) ||
+                (guards && r.recoilLet) || riseLet_ >= r.recoilGap)
+                riseAnswer_ = 0;
+        }
+        bool mine = a == 0xa8 || a == 0xa9; // its own recoil guard, on the ground
+        if (punishOn_ && (down || v[kRoundOver] != 0 || v[kSelfHitstun] > 0 || (a >= 0x32 && a < 0x60)))
+            punishOn_ = false;
+        if (mine && !riseMine_ && !r.punish.empty() && !punishOn_ && v[kRoundOver] == 0 &&
+            !(v[kOppAir] > 0) && theirs >= kFirstOwnMove && fabsf(v[kDx]) * kPixels <= r.punishNear) {
+            int wait = r.punishAt - (int)r.punish.size() + 1 - policy_->delay; // the guard's steps before them
+            if (wait >= 0) {
+                punishOn_ = true;
+                punishWait_ = wait;
+                punishStep_ = 0;
+                riseAnswer_ = 0;
+                rise_.recoilPunished++;
+            }
+        }
+        riseMine_ = mine;
+        if (rg && !riseRg_ && a >= kFirstOwnMove && v[kRoundOver] == 0 &&
+            fabsf(v[kDx]) * kPixels <= r.recoilNear) {
+            rise_.recoils++;
+            // (answered by the ones before this one)
+            bool answer = std::uniform_real_distribution<double>(0.0, 1.0)(rng_) < RecoilChance();
+            recoilSeen_ += 1;
+            recoilWatch_ = r.recoilSoon;
+            if (answer) {
+                riseAnswer_ = r.recoil;
+                riseFirst_ = std::max(1, r.recoilPress - policy_->delay);
+                riseClear_ = r.recoilClear && a >= 0xc8 && a <= 0xce && riseFirst_ >= 2 && RiseSteady()
+                                 ? (a == 0xcc ? r.press2A : r.pressA) : -1;
+                riseLet_ = 0;
+                rise_.recoilAnswered++;
+            }
+        }
+        riseRg_ = rg;
+    }
     if (riseDown_ && !down) {
         riseVeto_ = false;
         if (v[kRoundOver] == 0) {
@@ -1199,6 +1334,29 @@ void Player::RiseWatch()
 int Player::RiseAct(int action)
 {
     const Rise& r = policy_->rise;
+    if (punishOn_ && !riseDown_) { // what follows its own recoil guard
+        if (punishWait_ > 0) {
+            punishWait_--;
+            return RiseStands() ? r.stand : r.crouch;
+        }
+        int act = r.punish[punishStep_++];
+        if (punishStep_ >= r.punish.size())
+            punishOn_ = false;
+        return act;
+    }
+    if (riseAnswer_ > 0 && !riseDown_) { // its answer to a recoil guard
+        riseAnswer_--;
+        rise_.recoilSteps++;
+        if (riseFirst_ > 0) {
+            riseFirst_--;
+            if (riseClear_ >= 0 && riseAnswer_ == r.recoil - 2) { // the second step, once
+                rise_.recoilCleared++;
+                return riseClear_;
+            }
+            return r.idle;
+        }
+        return RiseStands() ? r.stand : r.crouch;
+    }
     if (!riseDown_ || !riseMet_)
         return action;
     if (!riseDrawn_) {
@@ -1212,11 +1370,60 @@ int Player::RiseAct(int action)
     if (!riseVeto_)
         return action;
     rise_.steps++;
-    if (in_[kOppAir] > 0) {
+    if (RiseStands()) {
         rise_.stood++;
         return r.stand;
     }
+    const int delay = policy_->delay;
+    const float* v = seen_.data() + (size_t)(r.sight > 0 ? std::min(r.sight, delay) : delay) * kObsDim;
+    if (v[kOppAir] > 0) // (under a flight taken to have landed: the crouching guard)
+        return r.crouch;
     return action == r.stand || action == r.crouch ? action : r.crouch;
+}
+
+// rise.py's Rise.steady: its last recoilSteady inputs all hold one direction.
+bool Player::RiseSteady() const
+{
+    size_t rows = std::min((size_t)policy_->rise.recoilSteady, inputs_.size() / kInputFeatures);
+    for (size_t k = 1; k < rows; k++)
+        if (inputs_[k * kInputFeatures] != inputs_[0] || inputs_[k * kInputFeatures + 1] != inputs_[1])
+            return false;
+    return true;
+}
+
+// rise.py's Rise.stands: the guard's height under the attacker as the guard sees it,
+// `sight` steps late (the agent's delay unless the file says fewer): true, a standing
+// guard (it is in the air and, with land, not down yet as it fell).
+bool Player::RiseStands()
+{
+    const Rise& r = policy_->rise;
+    const int delay = policy_->delay;
+    const int s = r.sight > 0 ? std::min(r.sight, delay) : delay;
+    const float* v = seen_.data() + (size_t)s * kObsDim;
+    if (!(v[kOppAir] > 0))
+        return false;
+    if (r.land) {
+        float before = s < delay ? v[kObsDim + kOppVy] : riseOldVy_;
+        if (StepsToLand(v[kOppY], v[kOppVy], before) < s) { // down by now, as it fell
+            rise_.landed++;
+            return false;
+        }
+    }
+    return true;
+}
+
+int StepsToLand(float y, float vy, float vyBefore)
+{
+    double py = (double)y * 240, pv = (double)vy * 20, g = pv - (double)vyBefore * 20;
+    if (!(g > 0.02 && g < 0.5))
+        g = 0.09;
+    int n = 0;
+    while (py < 0 && n < 200) {
+        py += 2.478 * pv + 2.037 * g;
+        pv += g;
+        n++;
+    }
+    return n;
 }
 
 void Player::SetMix(MixPlanner* mix, int side, double patienceMs)
@@ -1643,6 +1850,10 @@ void Player::Result(const float* view)
         routeOn_ = true;
     }
     kept_.clear();
+    if (!done && settle_ && planner_->Settle()) {
+        stats_.settled++;
+        done = true;
+    }
     if (!done) {
         planner_->Cancel();
         stats_.late++;
@@ -1708,8 +1919,10 @@ uint8_t Player::Step(const float* view, bool actionable, bool deterministic)
     if (fresh_) {
         for (int k = 0; k <= delay; k++)
             std::copy(view, view + kObsDim, seen_.begin() + (size_t)k * kObsDim);
+        riseOldVy_ = view[kOppVy];
         fresh_ = false;
     } else {
+        riseOldVy_ = seen_[(size_t)delay * kObsDim + kOppVy];
         std::copy_backward(seen_.begin(), seen_.end() - kObsDim, seen_.end());
         std::copy(view, view + kObsDim, seen_.begin());
     }

@@ -155,7 +155,63 @@ struct Rise {
     float prior = 2, meaty = 0.56f, low = 0.3f, high = 0.6f;
     float near = 0, fly = 200, decay = 0.7f;
     int stand = -1, crouch = -1; // the actions of a standing and a crouching guard
+    // land: under an attacker it sees in the air, the standing guard only until its
+    // landing has passed, predicted from its height and fall as seen (StepsToLand); then
+    // the crouching one. An empty jump lands and a low follows 4 steps or more after
+    // (the user's, 19 November: "often hit by lower hit, especially when opponent
+    // approach in air but hit low"): seen `delay` steps late, the landing is past before
+    // the view shows it. sight: the steps late the guard's height is chosen from (0: the
+    // agent's delay; fewer: this one reaction faster, within a person's: the user, 19
+    // November, "the best competitive players' reaction times are 120-170ms").
+    bool land = false;
+    int sight = 0;
+    // recoil (steps; 0: off): the answer to a recoil guard. When it sees its opponent
+    // enter a recoil guard within recoilNear pixels while it sees itself in a move of
+    // its own, its inputs are the module's for at most that many steps: nothing held
+    // (`idle`) until recoilPress steps after the recoil guard (which it sees `delay`
+    // steps after it; at least one step), then the guard by sight: until it sees itself
+    // hit or down, the round over, or the opponent free on the ground for recoilGap
+    // steps; a guard of its own that it sees touched starts the count again (the guard
+    // goes on through the opponent's string; recoilLet: its own play's again from there). The timing is the game's (rise.py has the
+    // measurements): no counter lands before 23 steps after a recoil guard, a back
+    // press from neutral makes the guards of the next 9 steps recoil guards, and the
+    // player whose move was recoil-guarded can recoil-guard the counter from its
+    // move's recovery, where it has no plain guard.
+    // recoilClear: the answer's second step presses A (pressA; press2A where the move it
+    // saw recoil-guarded was 2A) when that move was a ground normal: the game keeps the
+    // last button pressed during a move and plays it as the freeze ends (a chain it
+    // pressed before it saw the recoil guard, which ends the recoil counter); a later
+    // press takes its place, and an A does not chain from a normal of its stance. Only
+    // when its last recoilSteady inputs all hold one direction (an A after 236 is 236A).
+    int recoil = 0, recoilGap = 8, recoilPress = 22, idle = -1;
+    bool recoilClear = true, recoilLet = false;
+    int recoilSteady = 12;
+    // Whether a recoil guard is answered, read from the match as the rising's guard is:
+    // the share of this opponent's recoil guards of its moves after which it saw the
+    // opponent in a move of its own (or itself hit) within recoilSoon steps, over a prior
+    // (recoilCounter, counting as recoilPrior of them); none answered at recoilLow, all
+    // at recoilHigh. An opponent whose recoil guards carry no threat is pressed on.
+    float recoilPrior = 2, recoilCounter = 0.6f, recoilLow = 0.3f, recoilHigh = 0.6f;
+    int recoilSoon = 34;
+    // punish: what follows its own recoil guard (rise_recoil_punish: control bytes, as
+    // actions here; empty: nothing). When it sees itself in a recoil guard on the ground
+    // with the opponent in a move of its own on the ground within punishNear pixels, the
+    // guard goes on and then these are played so that the last lands punishAt steps
+    // after its recoil guard: the first step the game takes a move out of the pose. For
+    // Ayu 623B: a normal pressed there is hit by the opponent's kept chain (rise.py).
+    std::vector<int> punish;
+    float punishNear = 48;
+    int punishAt = 22;
+    int pressA = -1, press2A = -1;
+    float recoilNear = 240;
 };
+
+// The steps until a player in the air lands, from its height and fall in a view
+// (opp_y, opp_vy) and its fall a step before (vyBefore): the game's arithmetic as fitted
+// on 1,888 flights of the user's (y a step: 2.478 vy + 2.037 g; g the fall's gain a
+// step, 0.09 where the two views do not give one). Within 2 steps of the landing in 94%
+// of the flights that do not change course afterwards, seen 11 steps before.
+int StepsToLand(float y, float vy, float vyBefore);
 
 // Its raw specials (format's risk:1; runs/human-ayu/risk.py). A step that is its own
 // play's and presses a button, the agent not seeing its opponent in a hit reaction: the
@@ -191,6 +247,11 @@ struct RiskStats {
 // ones guarded through, the steps it held a guard for and of them the standing ones.
 struct RiseStats {
     int knockdowns = 0, met = 0, guarded = 0, steps = 0, stood = 0;
+    int landed = 0; // steps crouching under an attacker still seen in the air (Rise::land)
+    int recoils = 0, recoilSteps = 0; // its moves seen recoil-guarded, and the steps answered (Rise::recoil)
+    int recoilCleared = 0;            // ... and the presses that took a kept chain's place
+    int recoilAnswered = 0;           // the recoil guards it answered (recoils: all it saw)
+    int recoilPunished = 0;           // its own recoil guards followed by Rise::punish
 };
 
 class Policy {
@@ -247,6 +308,7 @@ struct RouteStats {
     int plans = 0, routes = 0, again = 0;
     int late = 0, elsewhere = 0, over = 0, own = 0, apart = 0;
     int chooser = 0;
+    int settled = 0; // plans not done when due, chosen from the options played by then
     double planMs = 0, planMsMost = 0, waitedMs = 0, waitedMsMost = 0;
     int dropped() const { return late + elsewhere + over + own + apart; }
 };
@@ -297,6 +359,9 @@ public:
     // agent sees its hit (< 0: until it is done), before the agent plays on without it;
     // againMs: the same for a later plan of the combo.
     void SetPlanner(Planner* planner, int side, double patienceMs, double againMs = 8);
+    // A plan not done when it is due: chosen from the options played by then
+    // (Planner::Settle; the default), or dropped whole (false: as before 19 November).
+    void SetSettle(bool on) { settle_ = on; }
     const RouteStats& Stats() const { return stats_; }
     bool Planning() const { return planner_ != nullptr; }
 
@@ -330,6 +395,7 @@ public:
     double RiseChance() const;
     double RiseSeen() const { return riseSeen_; } // the risings it saw; of them, the
     double RiseOn() const { return riseOn_; }     // attacker in a move as it rose
+    double RecoilChance() const; // the probability the next recoil guard of its move is answered
     // Its raw specials by their accounts (the module risk:1), tried on `world`'s game for
     // player `side` (nullptr: off: nothing is stopped). RiskStarts: the move (an index
     // into policy()->risk.moves, -1 none) that `action` starts on the game as it is, the
@@ -346,6 +412,7 @@ public:
         counts_.Clear();
         counted_ = false;
         riseSeen_ = riseOn_ = 0;
+        recoilSeen_ = recoilOn_ = 0;
         risen_ = false;
         std::fill(riskCount_.begin(), riskCount_.end(), 0.0);
         std::fill(riskTotal_.begin(), riskTotal_.end(), 0.0);
@@ -368,6 +435,8 @@ private:
     void ThrowResult(const float* view);
     void RiseWatch();
     int RiseAct(int action);
+    bool RiseStands();
+    bool RiseSteady() const;
     void RiskWatch();
     int RiskAct(const float* view, int action);
     void RiskSettle();
@@ -387,6 +456,7 @@ private:
     Planner* planner_ = nullptr;
     int side_ = 0;
     double patienceMs_ = 50, againMs_ = 8, waitMs_ = 50;
+    bool settle_ = true;
     std::deque<int> queue_; // its inputs chosen at the hit, for the frames until it sees it
     std::deque<bool> queueOwn_; // ... each its own play's (drawn from the network), or a plan's
     // The inputs chosen ahead, queued: `planned` of them (the first) a plan's, the rest
@@ -433,6 +503,18 @@ private:
     bool riseMet_ = false;    // this rising: the attacker seen on it
     bool riseDrawn_ = false;  // ... and its guard drawn for
     bool riseVeto_ = false;   // ... guarded through
+    float riseOldVy_ = 0;     // the attacker's fall in the view one older than the oldest kept
+    bool riseRg_ = false;     // the opponent in a recoil guard in the view before
+    int riseAnswer_ = 0;      // steps left of its answer to a recoil guard
+    int riseFirst_ = 0;       // ... whose first steps (nothing held) are to come
+    int riseClear_ = -1;      // ... the press on the second of them (-1: none)
+    double recoilSeen_ = 0, recoilOn_ = 0; // the recoil guards of its moves it saw; a counter soon after
+    int recoilWatch_ = 0;     // steps left of looking for one
+    bool riseMine_ = false;   // itself in a recoil guard in the view before
+    bool punishOn_ = false;   // its own recoil guard's follow-up is on
+    int punishWait_ = 0;      // ... the steps of guard before its inputs
+    size_t punishStep_ = 0;   // ... and the next of them
+    int riseLet_ = 0;         // ... and the steps the opponent has been free on the ground
     RiseStats rise_;
 
     // Its raw specials (risk.py's Risk).

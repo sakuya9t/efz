@@ -253,6 +253,9 @@ def _bind(lib):
                                                     ctypes.c_float]),
         'efz_env_set_recoil_guard': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32,
                                                     ctypes.c_float]),
+        'efz_env_set_cpu': (ctypes.c_int, [P, ctypes.c_int32, ctypes.c_int32, ctypes.c_int32]),
+        'efz_env_agent_plan_budget': (ctypes.c_int32, [P, ctypes.c_int32, ctypes.c_int32,
+                                                       ctypes.c_int32]),
     }
     for name, (restype, argtypes) in optional.items():
         f = getattr(lib, name, None)

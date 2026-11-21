@@ -109,6 +109,25 @@ public:
     bool Busy() const { return phase_ == kPrelude || phase_ == kOptions; }
     bool Done() const { return phase_ == kDone; }
     void Cancel();
+    // The plan is due and not done: the best of the options played to their end so far,
+    // if what the agent goes on with otherwise is among them (the rest of the route it
+    // is on, else its own play: played first for this), and that one unless another
+    // dealt more; true: done, with `partial` set and `played` saying how many. False:
+    // nothing to choose from yet (the plan is to be dropped). The game gives a plan
+    // the idle time of the frames until the agent sees its hit; a quarter of the plans
+    // at a later hit of a combo were not done by then (the user's sessions, 16-19
+    // November) and were dropped whole.
+    bool Settle();
+    // The work a plan may take, in frames on copies (one of its own play's counts
+    // `own`: the network's decision, 14 frames' worth of time as measured), 0 for no
+    // limit: once spent, Work does nothing more and says the plan is not done. For an
+    // evaluation, which otherwise works every plan to its end, to play as the game does
+    // on a machine with that much time.
+    void SetBudget(long cost, int own = 15)
+    {
+        budget_ = cost;
+        ownCost_ = own > 0 ? own : 15;
+    }
 
     // A plan done:
     enum { kOwnPlay = -1, kExtra = -2 };
@@ -125,6 +144,9 @@ public:
     float expected[kObsDim];  // the agent's view when it sees its hit, on the copy
     double ms = 0;            // time worked on it
     long frames = 0;          // frames run on copies
+    long cost = 0;            // the work it took (SetBudget's unit)
+    int played = 0;           // the options played to their end
+    bool partial = false;     // chosen from some of them only (Settle)
 
 private:
     enum Phase { kIdle, kPrelude, kOptions, kDone };
@@ -144,7 +166,7 @@ private:
     bool Prelude();
     // Plays an option on, frame by frame; true once its combo is over.
     bool Play(Option& o, Clock::time_point deadline);
-    void Choose();
+    void Choose(size_t done);
     void View(int side, float* out);
     void Finish(Outcome why);
 
@@ -160,7 +182,10 @@ private:
     Snapshot start_, afterDelay_, real_;
     std::vector<float> seen_; // (delay + 1) views, newest first, as the agent will see them
     std::vector<Option> options_;
-    size_t current_ = 0;
+    std::vector<size_t> work_; // the options in the order they are played
+    size_t current_ = 0;       // (into work_)
+    long budget_ = 0;
+    int ownCost_ = 15;
     int longest_ = 0;
     int hp0_ = 0;
     std::vector<float> in_, probs_;

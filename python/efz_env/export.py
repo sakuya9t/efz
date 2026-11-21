@@ -254,8 +254,26 @@ AIR_OPTIONS = dict(near=320)
 # `near`: 0, off)
 # is guarded through by how often this match's attacker has been in a move as the agent
 # rose (meaty: the prior, weighing `prior` risings; none guarded at the rate `low`, all
-# at `high`; decay: what the counts keep into the next match).
-RISE_OPTIONS = dict(prior=2.0, meaty=0.56, low=0.3, high=0.6, near=0.0, fly=200.0, decay=0.7)
+# at `high`; decay: what the counts keep into the next match). land (1): under an attacker
+# in the air the standing guard only until its landing, predicted from the view, has
+# passed, then the crouching one; sight: the steps late the guard's height is chosen
+# from (0: the agent's delay). recoil (steps; 0: off): from where it sees its move
+# recoil-guarded within recoil_near pixels, nothing held until recoil_press steps after
+# the recoil guard and then the guard by sight, for at most that many steps (until it
+# sees the opponent free for recoil_gap steps, a guard of its own touched starting the
+# count again; recoil_let 1: until its guard is touched); recoil_clear (1): its second
+# step presses A, which takes the place of a chain pressed before it saw, where its last
+# recoil_steady inputs hold one direction. Answered by the match's record: the share of
+# this opponent's recoil guards followed by a move of its own within recoil_soon steps,
+# over a prior (recoil_counter, weighing recoil_prior of them); none at recoil_low, all
+# at recoil_high. recoil_punish ('0x1,0x4,0x5,0x25': control bytes; '': none): what it
+# plays after its own recoil guard on the ground with the opponent in a move within
+# recoil_punish_near pixels, the last input recoil_punish_at steps after that guard.
+RISE_OPTIONS = dict(prior=2.0, meaty=0.56, low=0.3, high=0.6, near=0.0, fly=200.0, decay=0.7,
+                    land=0, sight=0, recoil=0, recoil_near=240.0, recoil_gap=8, recoil_press=22,
+                    recoil_clear=1, recoil_steady=12, recoil_let=0, recoil_prior=2.0,
+                    recoil_counter=0.6, recoil_low=0.3, recoil_high=0.6, recoil_soon=34,
+                    recoil_punish='', recoil_punish_near=48.0, recoil_punish_at=22)
 
 
 # Its raw specials by their accounts, as the game plays them (port/agent/policy.h's Risk;
@@ -1600,6 +1618,18 @@ class NativeAgent:
             raise ValueError(f'efz_env_agent_attach: {self._lib.efz_env_error(env._h).decode()}')
         self._attached = env  # (kept alive)
 
+    def plan_budget(self, cost, settle=True, own=15):
+        """An attached agent's routes' plans as a machine with less time makes them: a
+        plan may take `cost` frames on copies (one of its own play's counts `own`; 0: no
+        limit), and one not done by then is chosen from the options played so far (settle)
+        or dropped whole. stats()'s route_late and route_settled count them. The user's
+        machine, 16-19 November: about 7,700 at own 27 (26% of the plans late)."""
+        f = getattr(self._lib, 'efz_env_agent_plan_budget', None)
+        if f is None:
+            raise RuntimeError('efz_env: this library has no plan budget: rebuild it')
+        if f(self._h, int(cost), 1 if settle else 0, int(own)) != 0:
+            raise ValueError('efz_env: no plan budget for an agent without routes')
+
     def stats(self):
         """An attached agent's plans this match: the routes' (plans, routes chosen) and the
         okizeme's (asked, plans, played, late, elsewhere, nothing, apart, frames)."""
@@ -1608,7 +1638,8 @@ class NativeAgent:
         names = ('route_plans', 'routes', 'oki_asked', 'oki_plans', 'oki_played', 'oki_late',
                  'oki_elsewhere', 'oki_nothing', 'oki_apart', 'oki_frames', 'route_ms', 'oki_ms',
                  'route_dropped', 'press_asked', 'press_plans', 'press_played', 'press_late',
-                 'press_elsewhere', 'press_nothing', 'press_apart', 'press_frames', 'press_ms')
+                 'press_elsewhere', 'press_nothing', 'press_apart', 'press_frames', 'press_ms',
+                 'route_late', 'route_settled')
         out = dict(zip(names, [int(x) for x in v]))
         if hasattr(self._lib, 'efz_env_agent_air_stats'):  # its catches (airthrow:1)
             v = (ctypes.c_int32 * 16)()
@@ -1620,7 +1651,9 @@ class NativeAgent:
             v = (ctypes.c_int32 * 16)()  # its risings (rise:1)
             self._lib.efz_env_agent_rise_stats(self._h, v)
             names = ('rise_knockdowns', 'rise_met', 'rise_guarded', 'rise_steps', 'rise_stood',
-                     'rise_chance', 'rise_seen', 'rise_on')
+                     'rise_chance', 'rise_seen', 'rise_on', 'rise_landed', 'rise_recoils',
+                     'rise_recoil_steps', 'rise_recoil_cleared', 'rise_recoil_answered',
+                     'rise_recoil_chance', 'rise_recoil_punished')
             out.update(zip(names, [int(x) for x in v]))
         if hasattr(self._lib, 'efz_env_agent_risk_stats') and getattr(self, 'risk', False):
             v = (ctypes.c_int32 * 8)()  # its raw specials (risk:1)
@@ -1705,7 +1738,7 @@ class NativeAgent:
         n = out.options
         names = {-1: 'own', -2: 'extra'}
         tried = [(names.get(r, int(r)), int(a)) for r, a in zip(out.route[:n], out.at[:n])]
-        return dict(outcome={1: 'planned', 2: 'own', 3: 'apart'}.get(out.outcome, 'none'),
+        return dict(outcome={1: 'planned', 2: 'own', 3: 'apart', 4: 'settled'}.get(out.outcome, 'none'),
                     chosen=None if out.chosen < 0 else int(out.chosen), tried=tried,
                     dealt=np.array(out.dealt[:n], np.float32),
                     expected=np.array(out.expected, np.float32), frames=out.frames, ms=out.ms)

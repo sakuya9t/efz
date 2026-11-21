@@ -222,6 +222,16 @@ EFZ_ENV_API int efz_env_set_damage_scale(EfzEnv* env, int32_t index, int32_t pla
  * efz_env_set_damage_scale. Returns -1 for a bad argument. */
 EFZ_ENV_API int efz_env_set_recoil_guard(EfzEnv* env, int32_t index, int32_t player,
                                          float chance);
+/* Who plays player `player` (0 or 1) of environment `index`'s match from its next step
+ * on: the game's CPU (on: 1, at cpu_level) or the step's actions (0), until the match ends
+ * (the next begins as efz_env_set_matches says) or it is set again. For an opponent that
+ * is the CPU in part: its neutral and its guard the CPU's, its combos an agent's. The
+ * observation is written again (it says who plays). On the copies an attached agent plans
+ * on (efz_env_agent_attach) neither side is the CPU's: a plan plays both players' inputs
+ * and would otherwise read the CPU's coming decisions off the copy. Not while a replay is
+ * played back or recorded. An addition to version 5, as efz_env_set_damage_scale. Returns
+ * -1 if the environment has no fight. */
+EFZ_ENV_API int efz_env_set_cpu(EfzEnv* env, int32_t index, int32_t player, int32_t on);
 /* Where the game writes files (replays): `dir`, or the data folder for NULL. For the
  * process, as the data folder is. */
 EFZ_ENV_API int efz_env_set_save_dir(EfzEnv* env, const char* dir);
@@ -324,7 +334,9 @@ EFZ_ENV_API int32_t efz_env_agent_last_action(const EfzAgent* agent);
  * runs/human-ayu/redteam.py's. 0, or -1 (efz_env_error: no routes, not in a fight). */
 typedef struct EfzPlan {
     int32_t outcome;       /* 1 planned, 2 not (the opponent isn't a victim), 3 the copies
-                              couldn't be played */
+                              couldn't be played; with efz_env_agent_plan_budget: 4 chosen
+                              from the options played inside the cost (the first played is
+                              the extra if there is one, else its own play), 0 dropped */
     int32_t chosen;        /* the option chosen (an index into route[]), -1 its own play */
     int32_t options;       /* the options tried: route[], at[], dealt[] */
     int32_t frames;        /* frames played on copies */
@@ -424,11 +436,16 @@ EFZ_ENV_API int32_t efz_env_agent_risk_starts(EfzAgent* agent, EfzEnv* env, int3
  * from match to match kept (its counts of the opponent, its risings' counts, older),
  * where efz_env_agent_reset on a detached agent starts it afresh. */
 EFZ_ENV_API void efz_env_agent_next_match(EfzAgent* agent);
-/* An agent's risings (8; the module rise:1): the knockdowns it saw, those the attacker
+/* An agent's risings (15; the module rise:1): the knockdowns it saw, those the attacker
  * was on, of them the ones guarded through, the steps it held a guard for, of them
  * standing, the probability the next such rising is guarded through, in thousandths; and
  * what that is read from, in hundredths: the risings it saw, and of them those at which
- * the attacker was in a move of its own. */
+ * the attacker was in a move of its own; then the steps it crouched under an attacker
+ * it still saw in the air, whose landing as predicted had passed (rise_land); its moves
+ * it saw recoil-guarded, the steps it answered them with a guard (rise_recoil), and the
+ * presses that took a kept chain's place (rise_recoil_clear); of the recoil guards
+ * seen those it answered, and the probability the next is, in thousandths; its own
+ * recoil guards followed by its punish (rise_recoil_punish). */
 EFZ_ENV_API void efz_env_agent_rise_stats(const EfzAgent* agent, int32_t* stats);
 /* The agent plays player `side` of environment `index` as it plays in the game: its
  * combos' routes and its okizeme planned on copies of that environment (what the file
@@ -446,6 +463,18 @@ EFZ_ENV_API void efz_env_agent_rise_stats(const EfzAgent* agent, int32_t* stats)
 EFZ_ENV_API int32_t efz_env_agent_attach(EfzAgent* agent, EfzEnv* env, int32_t index,
                                          int32_t side, uint64_t seed);
 EFZ_ENV_API void efz_env_agent_stats(const EfzAgent* agent, int32_t* stats);
+/* An attached agent's routes' plans as a machine with less time makes them: `cost`, the
+ * work a plan may take before the agent sees its hit, in frames on copies (one of its own
+ * play's counts `own`: the network's decision, 15 as measured, 27 before 19 November's
+ * faster network; own <= 0: 15. cost 0: no limit, every plan worked to its end as
+ * efz_env_agent_attach says); a plan not done by then is chosen from the options played
+ * so far (settle 1: the game's way) or dropped whole (0: the game's way before 19
+ * November). The user's machine in the sessions of 16-19 November: about 7,700 (26% of
+ * the plans late at own 27). efz_env_agent_stats's last two (of 24) count them: the
+ * plans dropped as late, and those settled. For an agent with routes, attached or not
+ * (efz_env_agent_plan's one plan takes it too). -1 without routes. */
+EFZ_ENV_API int32_t efz_env_agent_plan_budget(EfzAgent* agent, int32_t cost, int32_t settle,
+                                              int32_t own);
 /* The agent's counts of its opponent (port/agent/mix.h's Counts, efz_env.memory's): mode 0
  * takes a view (the agent's), 1 forgets everything (another opponent), 2 ends a match
  * against the same one (view NULL for 1 and 2). counts (12, or NULL): wake-ups, of them a

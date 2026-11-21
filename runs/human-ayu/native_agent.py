@@ -24,8 +24,10 @@ class NativePlayers:
     """evaluate.py's P1 from an agent file: batch(n), attach(env, side), controls(obs,
     step), observe(inputs), reset(mask), stats()."""
 
-    def __init__(self, path, deterministic=False, seed=0):
-        self.path, self.deterministic, self.seed = path, deterministic, seed
+    def __init__(self, path, deterministic=False, seed=0, budget=None):
+        # budget: (cost, settle, own) for NativeAgent.plan_budget, the routes' plans as a
+        # machine with that much time makes them; None: every plan worked to its end.
+        self.path, self.deterministic, self.seed, self.budget = path, deterministic, seed, budget
         self.agents, self.total = [], {}
         self.env = self.side = None
 
@@ -38,6 +40,8 @@ class NativePlayers:
         self.env, self.side = env, side
         for i, a in enumerate(self.agents):
             a.attach(env, i, side, seed=self.seed + i)
+            if self.budget:
+                a.plan_budget(*self.budget)
 
     def _take(self, a):
         for k, v in a.stats().items():
