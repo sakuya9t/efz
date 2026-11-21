@@ -126,9 +126,10 @@ python python/examples/unpack_agent.py FILE.efzagent  # back to a model, to trai
 ```
 
 With **CPU COMBO** on in OPTIONS, the game's own CPU in ARCADE and VS CPU plays its combos
-from such files too, one for each character in `agents/cpu` (`python
-runs/human-ayu/league_combos.py cpu --out DIR` gathers them from the league's trained
-opponents). The CPU keeps its own neutral and guard and hands its side to the file while
+from such files too, one for each character in `agents/cpu`. They are on the Hub
+(`hf download sakuya9t/efz --include "cpu/*" --local-dir agents`, or `python runs/hub.py
+download cpu`); `python runs/human-ayu/league_combos.py cpu --out DIR` gathers them again
+from the league's trained opponents. The CPU keeps its own neutral and guard and hands its side to the file while
 its opponent is in a hit reaction. Its level sets the combos' damage: level 4 the most
 damaging the planner finds at the hit, level 1 a quarter of that.
 

@@ -393,14 +393,24 @@ fight as an agent's are. This is the training's level-4 CPU with combos
 
 **The files.** One for each character, in the `cpu` folder of an agents folder
 (`agents/cpu/` in the save folder or the game's; the first by name of each character is
-the one played). `league_combos.py cpu` gathers them from the league's trained
-opponents, each the newest exploiter's model with its character's combo library
-(`league_combos.py files`):
+the one played). The Hub has the 22 of 20 November in its `cpu` folder, and its card
+says how to set them up:
+
+```sh
+hf download sakuya9t/efz --include "cpu/*" --local-dir agents   # into agents/cpu/
+python runs/hub.py download cpu                                  # the same
+```
+
+`league_combos.py cpu` gathers them from the league's trained opponents, each the newest
+exploiter's model with its character's combo library (`league_combos.py files`), and
+`hub.py upload --into cpu` sends them up:
 
 ```sh
 python runs/human-ayu/league_combos.py cpu --out ~/dev/efz/tmp/cpu-combos
 #   kano: kano/exploiter18/combos.efzagent -> .../cpu-combos/kano.efzagent (5.2 MB)
 #   ...  (22 characters on 20 November: all but Kanna, Mizuka and Nayuki's other form)
+python runs/hub.py upload --into cpu ~/dev/efz/tmp/cpu-combos/*.efzagent \
+    --names ~/data/efz-replays/player_names.csv   # (edit runs/hub-card.md's list with it)
 ```
 
 A character with no file there keeps the CPU's own combos; the log says so at the fight.

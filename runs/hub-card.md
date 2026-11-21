@@ -13,6 +13,8 @@ agent file (`.efzagent`): the policy network the game runs, its combos (routes p
 from people's replays), the modules the game plays beside them, and a training part (the
 critic and the training settings) to train it further. Nothing in a file is run: the game
 and the Python tools read only its numbers and text, so a file from anyone is safe to load.
+The `cpu` folder holds one more file for each character, which gives the game's own CPU
+its combos ([below](#the-games-cpu-with-combos-cpu)).
 
 They learnt from the community's replays (a clone of people's play, reacting as late as a
 person does), then from a league of trained opponents. How each round was trained and
@@ -56,6 +58,54 @@ save folder), then:
 - **Over the network**: NET PLAY's **PLAYED BY** row (or `--agent FILE`): the agent plays
   this computer's side through the same one byte of input a frame a player's controls
   send, so the other side can be EfzRevival 1.02h as usual.
+
+## The game's CPU with combos (`cpu/`)
+
+With these files the game's own CPU, in ARCADE and VS CPU, plays combos the way the agents
+plan theirs, from people's routes for its character. The rest of its play (moving,
+guarding, recoil guards, okizeme) is still the game's own.
+
+1. Build the game from the repository's `release/next` branch, df8208d or later (the
+   CPU COMBO option).
+2. Put the files in `agents/cpu/` in the game's folder (or in its save folder):
+
+   ```sh
+   hf download sakuya9t/efz --include "cpu/*" --local-dir agents
+   # or, in a checkout of the repository:
+   python runs/hub.py download cpu                                  # into agents/cpu/
+   ```
+
+3. In OPTIONS, set **CPUコンボ** (the row after CPU難易度) to **あり**. The setting is saved in
+   `options.ini` in the save folder. `--cpu-combos on` or `--cpu-combos off` on the command
+   line sets it for one run only.
+
+**The CPU's level sets the damage.** At level 4 the CPU plays the most damaging combo the
+planner finds at each hit. At levels 3, 2 and 1 it plays the combo nearest 75%, 50% and 25%
+of that. In ARCADE with score, the stage's level counts. In test fights (Akane's file
+against an opponent standing still, the planner given unlimited time), a combo dealt 400,
+489, 688 and 1,244 HP on average at levels 1 to 4.
+
+**How it plays.** When the CPU lands a hit, it hands its side to its character's file
+until the opponent leaves the hit reaction, is knocked down, or the round ends. The file's
+route starts 8 frames after the hit. The planner works in the time between frames, and a
+frame waits for it at most 8 ms, so the game never stutters. On a slow machine, a plan that
+isn't finished in time is picked from the routes tried so far, and a level-4 combo may deal
+less. A fight record keeps each hand-off and the inputs pressed, so it replays without the
+files. Network matches have no CPU and aren't affected.
+
+**What the files are.** Each is a trained opponent from the agents' training league,
+packed with that character's combo library from the community's replays
+(`runs/human-ayu/league_combos.py`). They have no training part. The CPU uses a file only
+while it plays a combo, and the F5/F6 agent list doesn't show them. Each comes from that
+character's newest exploiter (an opponent trained to beat the Ayu agent):
+
+- `exploiter18`: exnanase, ikumi, kano, kaori, makoto, mayu, mishio, mizukab, nanase,
+  nayukib, sayuri
+- `exploiter`: akane, akiko, mai, minagi, mio, misaki, nayuki, shiori
+- `exploiter14`: nagamori; `exploiter3`: misuzu
+- Ayu has no exploiter; its file is the `reversal` opponent's.
+
+There are no files yet for kanna, mizuka and nayuki2. Their CPU keeps its own combos.
 
 ## Downloading, and training further
 
