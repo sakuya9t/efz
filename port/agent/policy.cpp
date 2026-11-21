@@ -902,6 +902,7 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
             risk.jumpTemperature = std::max(1.0f, ToFloat(keys, "risk_jump_temperature", 100));
             risk.jumpWindow = std::max(1, ToInt(keys, "risk_jump_window", 130));
             risk.jumpNear = std::max(0.0f, ToFloat(keys, "risk_jump_near", 400));
+            risk.jumpHold = std::max(0, ToInt(keys, "risk_jump_hold", 0));
         }
     }
     return true;
@@ -1092,7 +1093,7 @@ void Player::Reset()
     // (risk.py's reset with carry)
     riskDrawn_ = riskOpen_ = -1;
     jumpOpen_ = false;
-    jumpDrawnAt_ = -1000;
+    jumpDrawnAt_ = jumpStoppedAt_ = -1000;
     if (risked_) {
         for (size_t k = 0; k < riskCount_.size(); k++) {
             riskCount_[k] *= policy_->risk.decay;
@@ -1256,11 +1257,14 @@ int Player::JumpAct(const float* view, int action)
     if (view[kSelfAir] > 0 || !free || fabsf(v[kDx]) * kPixels > r.jumpNear ||
         (v[kOppHitstun] > 0 && !IsGuard((int)nearbyintf(v[kOppAction]))))
         return action;
-    bool again = riskT_ - jumpDrawnAt_ <= kRiskAgain;
+    bool again = riskT_ - jumpDrawnAt_ <= kRiskAgain ||
+                 (jumpStop_ && riskT_ - jumpStoppedAt_ <= r.jumpHold); // (a stop that lasts)
     if (!again) {
         jumpStop_ = std::uniform_real_distribution<double>(0.0, 1.0)(rng_) < JumpChance();
         risks_.jumps++;
         (jumpStop_ ? risks_.jumpsStopped : risks_.jumpsLet)++;
+        if (jumpStop_)
+            jumpStoppedAt_ = riskT_;
     }
     jumpDrawnAt_ = riskT_;
     if (jumpStop_)

@@ -251,10 +251,13 @@ struct Risk {
     // in a hit reaction it has seen: the HP swing over jumpWindow steps after one let out
     // is its account's, over the prior (jumpWorth, counting as jumpPrior jumps); stopped
     // with the probability 1 / (1 + exp(worth / jumpTemperature)), the action then the
-    // same buttons with forward alone (`ground`).
+    // same buttons with forward alone (`ground`). jumpHold: the steps a stop lasts (every
+    // jump at the opponent in them is stopped without a new draw; 0: the same press only,
+    // and a jump asked for again 13 steps later is drawn anew, which stopped half of the
+    // draws and took one jump in twenty out of the match).
     bool jump = false;
     float jumpWorth = 0, jumpPrior = 6, jumpTemperature = 100, jumpNear = 400;
-    int jumpWindow = 130;
+    int jumpWindow = 130, jumpHold = 0;
     std::vector<int> ground;
 };
 
@@ -569,6 +572,7 @@ private:
     bool riskCame_ = false;
     double jumpCount_ = 0, jumpTotal_ = 0; // the jump's account
     int jumpDrawnAt_ = -1000;  // the jump being tried: the step, and whether it is stopped
+    int jumpStoppedAt_ = -1000; // the step of the last draw that stopped one (Risk::jumpHold)
     bool jumpStop_ = false;
     bool jumpOpen_ = false;    // the jump being followed: its age, both HP at the press,
     int jumpAge_ = 0;          // whether it saw itself in the air

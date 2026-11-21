@@ -1876,6 +1876,28 @@ class RiskAsRiskPy(unittest.TestCase):
             self.assertEqual((stats['never']['risk_jumps_stopped'], stats['never']['risk_jump_chance']), (0, 0))
             for a in agents.values():
                 a.close()
+            # risk_jump_hold: a stop lasts. The opponent near for two steps in every 22 (a
+            # jump asked for again after longer than the same press), an even account:
+            # without the hold each is drawn anew, with it the first stop is the last draw.
+            bursts = [view(dx=100 if t % 22 < 2 else 500) for t in range(22 * 24)]
+            near = [t for t in range(len(bursts)) if (t - self.DELAY) % 22 < 2]  # (as it sees them)
+            got, stats = {}, {}
+            for name, hold in (('anew', 0), ('held', 10000)):
+                files[name] = os.path.join(folder, name + '.efzagent')
+                export_agent(path, files[name], check=False, risk=dict(moves=moves, jump=0.0, jump_hold=hold))
+                agent = NativeAgent(files[name], deterministic=True)
+                got[name], stats[name] = [agent.step(v) for v in bursts], agent.stats()
+                agent.close()
+            self.assertEqual(int(read_header(files['held'])[1]['risk_jump_hold']), 10000)
+            self.assertNotIn('risk_jump_hold', read_header(files['plain'])[1])
+            self.assertGreater(stats['anew']['risk_jumps'], 20)
+            self.assertGreater(stats['anew']['risk_jumps_stopped'], 1)
+            self.assertGreater(stats['anew']['risk_jumps_let'], 1)
+            self.assertEqual(stats['held']['risk_jumps_stopped'], 1)
+            self.assertEqual(stats['held']['risk_jumps'], stats['held']['risk_jumps_let'] + 1)
+            out = [t for t in near if got['held'][t] & 0x0f == 0x09]  # (the jumps that got out)
+            self.assertLessEqual(len(out), 2 * stats['held']['risk_jumps_let'])
+            self.assertLess(max(out, default=-1), near[-8])  # (none after the stop: 2 ** -20 that there is none)
             # One jump let out, seen in the air, 900 HP lost inside its window: the account.
             agent = NativeAgent(files['never'], deterministic=True)
             for _ in range(400):

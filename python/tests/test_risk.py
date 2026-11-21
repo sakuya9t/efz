@@ -171,6 +171,30 @@ class Risk(unittest.TestCase):
             self.jump_step(m, idle, lost=10)
         self.assertEqual(m.stats()['jump']['n'], n)
 
+    def test_a_stopped_jump_stays_stopped_for_its_hold(self):
+        up, forward, idle = risk.INDEX[(9, '')], risk.INDEX[(6, '')], risk.INDEX[(5, '')]
+        for hold, later in ((0, up), (40, forward)):
+            m = self.module(jump=250.0, jump_hold=hold)
+            m.rng = Sure(True)
+            self.assertEqual(self.jump_step(m, up), forward)
+            m.rng = Sure(False)  # (the next draw would let it out)
+            for _ in range(20):  # (longer than the same press)
+                self.jump_step(m, idle)
+            # Asked for again 21 steps after the stop: a new draw without a hold, the stop with one.
+            self.assertEqual(self.jump_step(m, up), later, hold)
+            self.assertEqual(m.stats()['jump']['seen'], 2 if hold == 0 else 1)
+            for _ in range(20):
+                self.jump_step(m, idle)
+            self.assertEqual(self.jump_step(m, up), up, hold)  # 42 steps after it: drawn anew
+        # A jump let out is not held: the next one is its own draw.
+        m = self.module(jump=250.0, jump_hold=40)
+        m.rng = Sure(False)
+        self.assertEqual(self.jump_step(m, up), up)
+        m.rng = Sure(True)
+        for _ in range(20):
+            self.jump_step(m, idle)
+        self.assertEqual(self.jump_step(m, up), forward)
+
     def test_a_press_that_starts_nothing_risky_is_its_own(self):
         m = self.module()
         plain, press = risk.INDEX[(5, '')], risk.INDEX[(2, 'A')]

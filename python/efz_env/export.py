@@ -285,10 +285,10 @@ RISE_OPTIONS = dict(prior=2.0, meaty=0.56, low=0.3, high=0.6, near=0.0, fly=200.
 # is; 0: they are played as chosen); and `moves`: {a move's action: its prior, HP a use}.
 # `jump` (HP; not given: no account): the jump at the opponent by how it has paid in the
 # match, its account starting there and counting as jump_prior jumps; jump_window (steps a
-# jump is followed for), jump_temperature, jump_near (pixels).
+# jump is followed for), jump_temperature, jump_near (pixels), jump_hold (steps a stop lasts).
 RISK_OPTIONS = dict(prior=4.0, temperature=75.0, window=180, look=10, look_down=50, decay=0.7,
                     ahead=0, jump_prior=6.0, jump_temperature=100.0, jump_window=130,
-                    jump_near=400.0)
+                    jump_near=400.0, jump_hold=0)
 
 
 def load_press(path):

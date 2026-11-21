@@ -53,6 +53,9 @@ as `jump_prior` jumps); stopped with the probability 1 / (1 + exp(worth /
 `jump_temperature`)), the action then the same without up (it walks or dashes in, and
 what it does from the ground is its own play's and the planners'). A match in which the
 air pays jumps as before; one in which it does not is played from the ground.
+`jump_hold`: the steps a stop lasts, every jump at the opponent in them stopped without a
+new draw (0: the same press only). Without it the account stopped half of the draws and
+the match had as many jumps (20.4 a minute to 19.3): a jump stopped is asked for again.
 
 The first build looked one frame ahead and missed most of them: against Kano's
 `exploiter18` it stopped 31 of 31 presses that would start 623B at once and the match's
@@ -110,7 +113,7 @@ class Risk(modules.Module):
     def __init__(self, data_dir, width, delay, priors=None, prior=4.0, temperature=75.0,
                  window=180, carry=False, decay=0.7, seed=0, sim=None, look=10, look_down=50,
                  jump=None, jump_prior=6.0, jump_temperature=100.0, jump_window=130,
-                 jump_near=400.0):
+                 jump_near=400.0, jump_hold=0):
         self.width, self.delay = width, int(delay)
         self.priors = dict(PRIORS, **(priors or {}))
         self.names = {MOVES[k]: k for k in self.priors}
@@ -122,6 +125,7 @@ class Risk(modules.Module):
         self.jump = None if jump is None else float(jump)
         self.jump_prior, self.jump_temperature = float(jump_prior), float(jump_temperature)
         self.jump_window, self.jump_near = int(float(jump_window)), float(jump_near)
+        self.jump_hold = int(float(jump_hold))  # the steps a stop lasts (0: the same press only)
         self.jumps = dict(seen=0, stopped=0, let=0, came=0)
         self.jumps_all = [0, 0.0]
         # (a frame a step; a copy is played one frame)
@@ -142,7 +146,7 @@ class Risk(modules.Module):
         self.drawn = [None] * n   # the press being tried: (move, step, stopped)
         self.open = [None] * n    # the use being followed: [move, age, own HP, its HP, came]
         self.jcount, self.jtotal = np.zeros(n), np.zeros(n)  # the jump's account
-        self.jdrawn = [None] * n  # the jump being tried: (step, stopped)
+        self.jdrawn = [None] * n  # the jump being tried: (step, stopped, the step of the stop's draw)
         self.jopen = [None] * n   # the jump being followed: [age, own HP, its HP, came]
 
     def reset(self, mask=None):
@@ -284,14 +288,15 @@ class Risk(modules.Module):
                 or (v[OPP_HITSTUN] > 0 and int(round(float(v[OPP_ACT]))) not in GUARDS)):
             return own
         was = self.jdrawn[i]
-        again = was is not None and self.t[i] - was[0] <= AGAIN
+        again = was is not None and (self.t[i] - was[0] <= AGAIN or
+                                     (was[1] and self.t[i] - was[2] <= self.jump_hold))
         if again:
-            stop = was[1]
+            stop, at = was[1], was[2]
         else:
-            stop = bool(self.rng.random() < self.jump_chance(i))
+            stop, at = bool(self.rng.random() < self.jump_chance(i)), int(self.t[i])
             self.jumps['seen'] += 1
             self.jumps['stopped' if stop else 'let'] += 1
-        self.jdrawn[i] = (int(self.t[i]), stop)
+        self.jdrawn[i] = (int(self.t[i]), stop, at)
         if stop:
             return INDEX[(6, TABLE.actions[own][1])]
         if not again:
@@ -322,7 +327,7 @@ def risk(agent, where, files, options, data):
         raise ValueError('risk: with copies of the game (evaluate.py, play.py)')
     priors = {k: float(o.pop(k)) for k in list(o) if k in MOVES}
     keys = ('prior', 'temperature', 'window', 'carry', 'decay', 'seed', 'look', 'look_down',
-            'jump', 'jump_prior', 'jump_temperature', 'jump_window', 'jump_near')
+            'jump', 'jump_prior', 'jump_temperature', 'jump_window', 'jump_near', 'jump_hold')
     unknown = sorted(set(o) - set(keys))
     if unknown:
         raise ValueError(f"risk: no option {', '.join(unknown)}")
