@@ -4420,3 +4420,29 @@ none makes a string).
    too little, it gets a style token trained with a reward for that area's play, and a
    selector chooses the style from the scorecard. Not before: an input alone was not used
    (the told-habits experiment).
+
+### Step 2, built (21 November)
+
+- `league_combos.py libraries --kind oki|press`: people's okizeme and follow-ups to a guard
+  for the eleven league characters (`~/data/efz-replays/oki/CHAR.npz`,
+  `~/data/efz-replays/press/CHAR.npz`, with their answers). They hold 7,397 (Nanase) to
+  18,873 (Kano) okizeme that touched the riser within 20 steps, and 11,065 to 36,037
+  follow-ups.
+- `league_combos.py files --oki --press` puts them into each opponent's file as its planned
+  okizeme and pressure. The settings are the agent's own (`OKI`, `PRESS`), with
+  `--oki-skip`/`--press-skip` the share of chances it leaves to its model. These are the
+  `planners.efzagent` files beside the `exploiter18`s: routes, `okiplan:2`, `pressplan:1`,
+  19.4 MB for Kano's.
+- In a two-match look through the game's own code, Kano's file planned 15 okizeme (played
+  14) and its pressure 9 times (played 8).
+- bench.py's drill `planners`: the eleven as those files.
+- `advantages.py`'s `weak`: the share of matches (of sets, with sets) in which one area of
+  the scripted profile (okizeme: `jumpin`, `bait`; okizeme defence: `wake`, `blind`;
+  anti-pressure: `reversal`, `patient`, `throw`) keeps `WEAK` (a quarter) of its values.
+  That gives an opponent strong everywhere but in one area, drawn afresh. The area is drawn
+  among those the profile has; the sparring profile has no okizeme defence (`wake` 0).
+
+Queued behind round 22's benchmarks: the `planners` drill for round 21's file, five at a
+time. With its results beside the `combos` drill's (the same opponents without planners),
+the league of both kinds is judged by the rule above: half the community's spread in its
+okizeme (290 HP a minute) and its pressure (340).
