@@ -1,0 +1,8 @@
+# No model goes in git: a released agent goes to Hugging Face as an agent file
+# (runs/hub.py), a run's checkpoints stay on the machine that made it. The 13 that were in
+# git until 21 November 2026 (curriculum/, pbt/, vs-cpu/, human-ayu's clones bc.zip and
+# bc-d14.zip, team/, macros/selector.pt, round 14's avg.zip) are on the Linux machine in
+# ~/data/efz-git-old under the same paths, and in git's history (docs/progress.md,
+# "Checkpoints").
+*.zip
+*.pt

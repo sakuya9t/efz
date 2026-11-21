@@ -34,7 +34,9 @@ files (`.efzagent`, [docs/agents.md](../docs/agents.md)) and nothing else:
 them (`hf download sakuya9t/efz --revision
 f0dbd7b7e0f5be8ab09fc991866260fe203cfa31 --include 'runs/human-ayu/agent/*' --local-dir .`),
 and so does the Linux machine (`~/data/efz-hub-old`, the same paths). The models of
-`curriculum/`, `pbt/` and `vs-cpu/` are in git too.
+`curriculum/`, `pbt/` and `vs-cpu/` were in git until 21 November 2026: they are in
+git's history (`git restore --source 2a57da7 -- runs/curriculum runs/pbt runs/vs-cpu`
+puts them back) and in `~/data/efz-git-old` on the Linux machine.
 
 ```sh
 # Play the best yourself (you are player 2: arrows, Z X C V = A B C D, or a gamepad):

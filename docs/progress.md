@@ -66,8 +66,12 @@ Those of rounds 1-12 that were on the Hub before (`runs/human-ayu/`'s `agent/`,
 `mishio/`, with their `config.json`) are in `~/data/efz-hub-old` under the repository's
 paths and in the Hub's history (`hf download sakuya9t/efz --revision
 f0dbd7b7e0f5be8ab09fc991866260fe203cfa31 --include 'runs/human-ayu/*' --local-dir .`).
-The `.zip` files of those folders are ignored by git; the clones `bc.zip`, `bc-d14.zip`
-and `team/` are also in git.
+No model is in git (`runs/.gitignore`). The 13 that were until 21 November 2026 (the
+clones `bc.zip` and `bc-d14.zip`, `team/`'s six, `macros/selector.pt`, round 14's
+`agent-league14-person-pull01-s1/avg.zip`, and the first runs' `curriculum/model.zip`,
+`pbt/best.zip`, `vs-cpu/model.zip`) are in `~/data/efz-git-old` under the repository's
+paths, and in git's history: `git restore --source 2a57da7 -- runs/curriculum/model.zip`
+puts one back (the commands' defaults use `bc.zip`, `bc-d14.zip` and `pbt/best.zip`).
 
 **Data outside the repository** (on the laptop under `D:/tasogare/efz-replays`, on the
 Linux machine `~/data/efz-replays`; keep the layout, the scripts find `players.csv`
