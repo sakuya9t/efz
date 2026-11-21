@@ -451,6 +451,9 @@ def endings_report(recs):
             n=len(rec), busy=round(float(np.mean([r['busy'] for r in rec])), 3),
             **{k: round(float(np.mean([r['next'] == k for r in rec])), 3)
                for k in ('caught', 'hit back', 'guarded', 'nothing')})
+        # (caught less hit back: what a recovery left to the opponent is worth, in shares)
+        out['after_recovery']['net'] = round(float(np.mean(
+            [(r['next'] == 'caught') - (r['next'] == 'hit back') for r in rec])), 3)
     return out
 
 
@@ -596,6 +599,26 @@ def risks_report(recs, per_min):
     return out
 
 
+def raw_report(recs, per_min):
+    """All the risky moves that were not a combo's piece, as one account: a minute, the HP
+    a use is worth (`net`) and the HP a minute they are worth together (`hp_per_min`: what
+    a round is judged by); the share that did not hit (`missed`), of those the share
+    punished and the share cancelled with an Instant Charge. Of the opponent's
+    (faced_raw), `punished` is the player's doing: what it makes of a miss."""
+    raw = [r for r in recs if not r['combo']]
+    out = dict(per_min=round(len(raw) * per_min, 2), n=len(raw))
+    if raw:
+        miss = [r for r in raw if r['result'] != 'hit']
+        net = sum(r['dealt'] for r in raw if r['result'] == 'hit') - sum(r['lost'] for r in miss)
+        out.update(net=round(net / len(raw)), hp_per_min=round(net * per_min),
+                   missed=round(len(miss) / len(raw), 3))
+        if miss:
+            out.update(punished=round(float(np.mean([r['punished'] for r in miss])), 3),
+                       cancelled=round(float(np.mean([r['ic'] for r in miss])), 3),
+                       lost=round(float(np.mean([r['lost'] for r in miss]))))
+    return out
+
+
 FLIGHT_AFTER = 90  # steps after an air dash in which what came of it is looked for
 FLIGHT_NEXT = ('air move', 'landed move', 'throw', 'nothing')
 FLIGHT_CAME = ('hit', 'guarded', 'was hit', 'nothing')
@@ -658,6 +681,9 @@ def flights_report(recs, per_min):
 
 
 LOSS_GAP = 20      # steps free and unhit that end one loss of HP (a combo on the player)
+SEEN = 20          # steps a move or an object was out by which a player (14 late) saw it and could answer
+SEE_LATE = 14      # ... of them, the steps before it is seen at all
+BEGAN_BACK = 60    # steps before a hit in which what the player started is looked for
 LOSS_BEFORE = 40   # steps before a hit in which a guard, and what a jump came from, are looked for
 LOSS_WOKE = 30     # ... in which the player was down: it was rising
 
@@ -673,7 +699,17 @@ def losses(me, opp, live):
     'dashing', 'rising, not acting', 'opened after guarding', 'free on the ground',
     'thrown', 'chip'. Where the HP goes (the user, 18 November: a round that gains
     against the league and changes nothing against a person): the ledger a round is
-    judged by, beside the strongest players'."""
+    judged by, beside the strongest players'.
+
+    And for a loss that began with a hit, what hit and since when it was there to see
+    (the user, 19 November: "it behaves like it cannot predict what is going to happen
+    after 1s, given the case where the opponent is sending out a strike ... more severe
+    when handling objects"): `thing`, 'move' (the opponent in a move of its own at the
+    hit), 'object' (not in one, an object of its out: the object hit) or None; `out_for`,
+    the steps since that move began or that the objects had been out; `began`: it had
+    been out SEEN steps or more and me started something (a move, a jump, a dash) after
+    it could see it, inside the BEGAN_BACK steps before the hit: it walked into what was
+    on the screen."""
     T = len(me.act)
     drop = np.clip(np.concatenate([[0], me.hp[:-1] - me.hp[1:]]), 0, None)
     drop[~live] = 0  # (a new round's HP is not a gain, and nothing is lost between rounds)
@@ -713,6 +749,20 @@ def losses(me, opp, live):
         h = near[-1] if near else lo + int(hits[0])
         p = max(0, h - 1)
         a = int(me.act[p])
+        k = p
+        if opp.act[p] >= FIRST_OWN:
+            while k > 0 and not opp.new[k]:
+                k -= 1
+            rec.update(thing='move', out_for=int(h - k))
+        elif opp.objects[p] > 0:
+            while k > 0 and opp.objects[k - 1] > 0:
+                k -= 1
+            rec.update(thing='object', out_for=int(h - k))
+        else:
+            rec.update(thing=None, out_for=0)
+        mine = np.flatnonzero(me.acts[max(0, h - BEGAN_BACK):h])
+        rec['began'] = bool(rec['out_for'] >= SEEN and len(mine) and
+                            max(0, h - BEGAN_BACK) + int(mine[-1]) >= h - rec['out_for'] + SEE_LATE)
         if me.air[p]:
             if a < FIRST_OWN:
                 rec['kind'] = 'in the air, not attacking'
@@ -764,6 +814,15 @@ def losses_report(recs, per_min):
     for field in ('where', 'by'):
         out['air_' + field] = {v: round(sum(r['hp'] for r in air if r[field] == v) * per_min)
                                for v in sorted({r[field] for r in air})}
+    # What was on the screen (losses()): the hits by something out long enough to be seen
+    # (`seen`), of them those me started something into (`began`), and those of the
+    # latter that an object made (`object`): HP a minute, and times a minute.
+    seen = [r for r in recs if r.get('out_for', 0) >= SEEN]
+    began = [r for r in seen if r.get('began')]
+    thing = [r for r in began if r.get('thing') == 'object']
+    out['into'] = {k: dict(hp=round(sum(r['hp'] for r in rs) * per_min),
+                           times=round(len(rs) * per_min, 3))
+                   for k, rs in (('seen', seen), ('began', began), ('object', thing))}
     return out
 
 
@@ -821,6 +880,82 @@ def exchanges_report(recs, per_min):
     return out
 
 
+LEAD = 3000    # HP ahead (a bar is 9999) from which a round is the leader's to lose
+CLOSE = 2500   # the opponent's HP from which, the player ahead, the round is there to close
+ROUND_LEAST = 60  # steps: a round shorter than this is not one
+ROUND_AGAIN = 2000  # HP more than on the step before: a new round's
+ROUND_OVER = 1000   # HP at a round's last step at or under which it was fought to its end
+#   (a dataset's last step of a round is before the hit that ends it: the loser's HP then
+#   is under that hit's damage; a round the record cuts short has both above it)
+
+
+def rounds(me, opp, live):
+    """Each round the match's record holds to its end, by what the player made of its
+    leads: a dict a round: won; steps; lead: None, or (kept, HP lost after) from the
+    first step it was LEAD HP ahead: kept, it won the round; behind: None, or whether it
+    won from the first step it was LEAD behind; close: None, or (won, steps to the
+    round's end, its own HP lost in them) from the first step the opponent was at CLOSE
+    HP or less with the player ahead: a round that is there to be closed, how long that
+    took and what it cost. What is made of an advantage (the user's, 18 November: "it
+    doesn't fully use its advantage"; "its behavior becomes random at the end of the
+    round")."""
+    out, T, t = [], len(live), 0
+    d = me.hp - opp.hp
+    # A round also ends where the HP is full again on the next step (a replay dataset's
+    # matches hold the fight's steps only: its rounds follow one another).
+    again = np.zeros(T, bool)
+    again[1:] = (np.diff(me.hp) > ROUND_AGAIN) | (np.diff(opp.hp) > ROUND_AGAIN)
+    while t < T:
+        if not live[t]:
+            t += 1
+            continue
+        e = t + 1
+        while e < T and live[e] and not again[e]:
+            e += 1
+        end = e if e < T and not live[e] else e - 1  # (the step that shows how it ended)
+        # (a round the record does not hold to its end, cut short or timed out: none)
+        if e - t >= ROUND_LEAST and min(me.hp[end], opp.hp[end]) <= ROUND_OVER:
+            won = bool(opp.hp[end] < me.hp[end])
+            rec = dict(won=won, steps=e - t, lead=None, behind=None, close=None)
+            at = np.flatnonzero(d[t:e] >= LEAD)
+            if len(at):
+                rec['lead'] = (won, float(me.hp[t + at[0]] - me.hp[end]))
+            at = np.flatnonzero(d[t:e] <= -LEAD)
+            if len(at):
+                rec['behind'] = won
+            at = np.flatnonzero((opp.hp[t:e] <= CLOSE) & (d[t:e] > 0))
+            if len(at):
+                rec['close'] = (won, int(e - t - at[0]), float(me.hp[t + at[0]] - me.hp[end]))
+            out.append(rec)
+        t = e
+    return out
+
+
+def rounds_report(recs):
+    """Of the rounds: the share won; lead: the share of rounds it was LEAD ahead in, the
+    share of those it kept (won), the HP it lost after the lead; behind: the share it was
+    LEAD behind in, and of those the share it turned; close: the share there to be
+    closed, of those the share won, the seconds a won one took from there (mean, 90th
+    percentile) and the HP it lost in them."""
+    if not recs:
+        return None
+    n = len(recs)
+    lead = [r['lead'] for r in recs if r['lead'] is not None]
+    behind = [r['behind'] for r in recs if r['behind'] is not None]
+    close = [r['close'] for r in recs if r['close'] is not None]
+    secs = [c[1] / 60 for c in close if c[0]]
+    return dict(n=n, won=round(float(np.mean([r['won'] for r in recs])), 3),
+                lead=dict(n=len(lead), share=round(len(lead) / n, 3),
+                          kept=_mean([x[0] for x in lead]),
+                          lost=round(float(np.mean([x[1] for x in lead]))) if lead else None),
+                behind=dict(n=len(behind), share=round(len(behind) / n, 3), turned=_mean(behind)),
+                close=dict(n=len(close), share=round(len(close) / n, 3),
+                           won=_mean([c[0] for c in close]),
+                           seconds=round(float(np.mean(secs)), 2) if secs else None,
+                           seconds_p90=round(float(np.percentile(secs, 90)), 2) if secs else None,
+                           lost=round(float(np.mean([c[2] for c in close]))) if close else None))
+
+
 def measure(c, controls=None):
     """Both ways, for one player's match: c, its views' OBS columns (T, len(OBS));
     controls (T,), its inputs: with them also its strings (strings())."""
@@ -832,7 +967,7 @@ def measure(c, controls=None):
     lost, dealt = losses(me, opp, live), losses(opp, me, live)
     return dict(**extra, ends_off=endings(me, opp, live), ends_def=endings(opp, me, live),
                 risks=risks(me, opp, live), risks_def=risks(opp, me, live),
-                flights=flights(me, opp, live),
+                flights=flights(me, opp, live), rounds=rounds(me, opp, live),
                 losses=lost, losses_opp=dealt,
                 exchanges=exchanges(me, opp, live, lost, dealt),
                 grabs=grabs(me, opp, dx, live),
@@ -1046,10 +1181,13 @@ def report(n, per_min):
                 grabs=grabs_report(n.get('grabs', []), per_min),
                 risks=risks_report(n.get('risks', []), per_min),
                 faced_risks=risks_report(n.get('risks_def', []), per_min),
+                raw=raw_report(n.get('risks', []), per_min),
+                faced_raw=raw_report(n.get('risks_def', []), per_min),
                 flights=flights_report(n.get('flights', []), per_min),
                 ledger=losses_report(n.get('losses', []), per_min),
                 dealt_ledger=losses_report(n.get('losses_opp', []), per_min),
                 net_ledger=exchanges_report(n.get('exchanges', []), per_min),
+                rounds=rounds_report(n.get('rounds', [])),
                 pressure=pressure_report(n['press_off'], per_min, moves=True),
                 under_pressure=pressure_report(n['press_def'], per_min),
                 okizeme=wakeup_report(n['oki_off'], per_min),

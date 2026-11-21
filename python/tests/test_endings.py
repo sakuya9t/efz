@@ -275,6 +275,29 @@ class Ledger(unittest.TestCase):
         m = tactics.measure(c)
         self.assertEqual((len(m['losses']), len(m['losses_opp'])), (5, 1))
 
+    def test_what_was_on_the_screen_when_it_was_hit(self):
+        c = match(900)
+        first = len(tactics.OBS) - 8                         # the opponent's objects' columns
+        c[30:62, OPP_ACT] = 0x100                            # a move out for 30 steps,
+        c[50:60, ME_ACT] = 0xca                              # one of its own started into it
+        self.hit(c, 60)
+        c[230:262, OPP_ACT] = 0x100                          # one out as long,
+        self.hit(c, 260)                                     # met standing still
+        c[455:462, OPP_ACT] = 0x100                          # a fast one: nothing to see
+        c[450:460, ME_ACT] = 0xca
+        self.hit(c, 460)
+        c[600:662, first] = 1                                # an object, its owner free again,
+        c[640:660, ME_AIR] = 1                               # and a jump into it
+        self.hit(c, 660)
+        me, opp = tactics.Side(c, 0), tactics.Side(c, 1)
+        got = tactics.losses(me, opp, np.ones(len(c), bool))
+        self.assertEqual([(r['thing'], r['out_for'], r['began']) for r in got],
+                         [('move', 30, True), ('move', 30, False), ('move', 5, False),
+                          ('object', 60, True)])
+        into = tactics.losses_report(got, 1.0)['into']
+        self.assertEqual(into, dict(seen=dict(hp=3000, times=3.0), began=dict(hp=2000, times=2.0),
+                                    object=dict(hp=1000, times=1.0)))
+
     def test_the_net_by_the_situation_an_exchange_began_in(self):
         c = match(1200)
         c[20:60, OPP_ACT] = 0x62                             # the opponent is down, rises,
@@ -302,6 +325,59 @@ class Ledger(unittest.TestCase):
         self.assertEqual(rep['my okizeme'], dict(net=2000, gained=2000, lost=0))
         self.assertEqual(rep['my pressure'], dict(net=-1000, gained=0, lost=1000))
         self.assertEqual(rep['both in the air'], dict(net=0, gained=0, lost=0))
+
+
+@unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class Rounds(unittest.TestCase):
+    """tactics.rounds: what is made of a lead, and a round that is there to close."""
+
+    def sides(self, c):
+        return tactics.Side(c, 0), tactics.Side(c, 1), (c[:, 16] == 0) & (c[:, 17] == 0)
+
+    def two(self, gap):
+        c = match(420)
+        c[50:200, OPP_HP] = 0.2                # led from step 50, the opponent at a fifth
+        c[150:200, OPP_HP] = 0.0               # and the round won
+        if gap:                                # (a record with the steps between rounds)
+            c[200:220, 17] = 1.0
+            c[200:220, OPP_HP] = 0.0
+        c[250:, ME_HP] = 0.5                   # the second: behind,
+        c[300:, ME_HP] = 0.05                  # and lost at the record's end
+        return c
+
+    def test_a_round_led_and_closed_and_one_lost_from_behind(self):
+        for gap in (True, False):              # an evaluation's record, a replay dataset's
+            got = tactics.rounds(*self.sides(self.two(gap)))
+            self.assertEqual([r['won'] for r in got], [True, False])
+            first, second = got
+            self.assertEqual(first['lead'], (True, 0.0))
+            self.assertEqual(first['close'][0], True)
+            self.assertEqual(first['close'][1], 150)   # steps from the fifth to the end
+            self.assertIsNone(first['behind'])
+            self.assertEqual(second['behind'], False)
+            self.assertIsNone(second['lead'])
+            self.assertIsNone(second['close'])
+        rep = tactics.rounds_report(got)
+        self.assertEqual((rep['n'], rep['won']), (2, 0.5))
+        self.assertEqual(rep['lead']['kept'], 1.0)
+        self.assertEqual(rep['behind']['turned'], 0.0)
+        self.assertEqual(rep['close']['seconds'], 2.5)
+
+    def test_a_round_the_record_cuts_short_is_none(self):
+        c = match(300)
+        c[100:, OPP_HP] = 0.5                  # ahead, and the record ends
+        self.assertEqual(tactics.rounds(*self.sides(c)), [])
+        self.assertIsNone(tactics.rounds_report([]))
+
+    def test_the_raw_moves_as_one_account(self):
+        rec = lambda **kw: dict(dict(move='623B', combo=False, result='hit', dealt=0, lost=0,
+                                     punished=False, back=False, ic=False, wake=False), **kw)
+        recs = [rec(dealt=1000), rec(result='guarded', lost=600, punished=True),
+                rec(result='whiff', ic=True), rec(combo=True, dealt=2000)]
+        got = tactics.raw_report(recs, 0.5)
+        self.assertEqual((got['n'], got['per_min']), (3, 1.5))        # the combo's piece is not one
+        self.assertEqual((got['net'], got['hp_per_min']), (133, 200))  # (1000 - 600) / 3; a minute
+        self.assertEqual((got['missed'], got['punished'], got['cancelled']), (0.667, 0.5, 0.5))
 
 
 class Game:
@@ -463,6 +539,31 @@ class Tech(unittest.TestCase):
         logic2 = advantages.Advantages('mai', 1, escape=1.0)
         logic2.clear(0)
         self.assertIsNone(logic2.step(0, mid))
+
+    def test_an_empty_jump_and_a_low_as_it_lands(self):
+        """low: the jump-in on the agent's rising with nothing in the air, and the
+        character's fastest low normal from its landing."""
+        self.assertEqual(advantages.parse('jumpin=0.9,low=0.6')['low'], 0.6)
+        self.assertEqual(advantages.low_normal('kano'), 'B')     # (her 2A is no low)
+        self.assertEqual(advantages.low_normal('sayuri'), 'A')
+        for low, last in ((1.0, (2, 'B')), (0.0, (5, 'A'))):
+            logic = advantages.Advantages('kano', 1, jumpin=1.0, low=low, learner='ayu')
+            plan = max(logic.plans, key=lambda p: p['contact'])
+            seq = []
+            for t in range(160):                                 # the agent knocked down, lying
+                v = np.zeros(168, np.float32)
+                v[advantages.OPP_ACT] = 0x62
+                v[advantages.DX] = plan['distance'] / 640
+                seq.append(logic.step(0, v))
+            start = seq.index((9, ''))                           # (it waits at its distance; the same jump)
+            played = [a for a in seq[start:] if a is not None]
+            pressed = [a for a in played if a[1]]
+            self.assertEqual(pressed[0], last)
+            self.assertEqual(logic.counts['lowins'], int(low))
+            if low:  # nothing pressed in the air; the low thrice from the landing
+                air = logic.jump['prejump'] + logic.jump['air']
+                self.assertFalse(any(a[1] for a in played[:air]))
+                self.assertEqual(played[air:air + 6], [(2, 'B'), (2, '')] * 3)
 
     def test_none_of_it_at_zero(self):
         logic = advantages.Advantages('mai', 1)

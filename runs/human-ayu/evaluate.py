@@ -17,6 +17,12 @@ guard in the air against what can't be guarded there, anti-airs among them) and 
 taken, on the ground and in the air, and how often it recoil-guards, recoil-counters,
 punishes after an RG (with a long or RF move or not) and guesses 623A/B right (Events
 has the definitions). People's Ayu by the same measure: people.py over the dataset.
+
+    python runs/human-ayu/evaluate.py --p1 A.efzagent --p1-native --p2 A.efzagent --p2-cpu-combos 4 --chars ayu ayu
+
+--p2-cpu-combos LEVEL: P2 is the game's CPU at that level except for its combos, which
+--p2 plays (the side handed over while P1 is in a hit reaction): the CPU's guard, recoil
+guards and counters with combos worth an agent's.
 """
 
 import argparse
@@ -99,6 +105,10 @@ RC_WINDOW = 90      # steps after the opponent's RG in which its counterattack i
 PUNISH_WINDOW = 40  # steps after one's own RG in which a move of one's own is looked for
 HIT_WINDOW = 40     # steps after a move starts in which it can hit
 MAX_HP = 9999       # every character's, at each round's start
+# The observation's: no fight yet / a KO; the viewer's action and whether it is in a hit
+# reaction (lying on the ground and rising count as one: LAID).
+INTRO, ROUND_OVER, SELF_ACTION, SELF_HITSTUN = 2, 3, 18, 20
+LAID = (0x60, 0x63)
 
 
 def invincible_moves(char):
@@ -236,6 +246,14 @@ class Events:
         strongest players' (people-ledger.json; docs/training-v2.md);
     flights (tactics.flights): its air dashes a minute (Ayu's flights), the share back,
         what it did next and what came of it, and how mixed what it did next was;
+    raw (tactics.raw_report): the raw risky moves as one account: a minute, the HP a use
+        is worth and the HP a minute; faced_raw: the opponent's, with the share of its
+        misses the player punished;
+    rounds (tactics.rounds): what it makes of an advantage: of the rounds it was 3,000 HP
+        ahead in, the share it won and the HP it lost after; of those it was that far
+        behind in, the share it turned; of those there to be closed (the opponent at a
+        quarter of its HP, the player ahead), the share won, the seconds that took and
+        the HP it cost;
     presses_where: its presses a second, and the share of the time, in each of WHERE;
     corner: the opponent held in a corner (corner(): within CORNER_IN of a wall, the
         player on the open side and near): stays a minute, their length in seconds (mean,
@@ -252,6 +270,7 @@ class Events:
     """
 
     def __init__(self, char='ayu'):
+        self.char = char
         self.moves = MOVES.get(char, dict(long=[], special=[], guess={}))
         keys = ['frames', 'jumps', 'throws', 'thrown', 'guard_ground', 'guard_air', 'rg_ground', 'rg_air',
                 'hit_ground', 'hit_air', 'rc', 'rc_guard', 'rc_hit', 'rg', 'rg_move',
@@ -275,7 +294,7 @@ class Events:
         self.n['taken_list'] = []  # each of the opponent's combos on one: (damage, its group)
         for k in ('press_off', 'press_def', 'oki_off', 'oki_def', 'free_self', 'free_opp',
                   'strings', 'ends_off', 'ends_def', 'grabs', 'risks', 'risks_def',
-                  'flights', 'losses', 'losses_opp', 'exchanges'):
+                  'flights', 'losses', 'losses_opp', 'exchanges', 'rounds'):
             self.n[k] = []  # tactics.measure()'s
 
     def add_match(self, cols, controls):
@@ -515,7 +534,9 @@ class Events:
                 dealt=round(float(np.mean([x[1] for x in cl]))) if len(cl) else None,
                 lost=round(float(np.mean([x[2] for x in cl]))) if len(cl) else None,
                 ended={k: share(int((ends == j).sum()), len(cl)) for j, k in
-                       enumerate(('round', 'out by air', 'out on the ground', 'hit away'))})
+                       enumerate(('round', 'out by air', 'out on the ground', 'hit away'))},
+                # (the stays the opponent left on its own, by air or on the ground)
+                left=share(int(((ends == 1) | (ends == 2)).sum()), len(cl)))
         ji = n['jumpin']
         if ji.sum():  # met a minute; from the front and crossing: how many, and how they ended
             out['jumpins'] = dict(per_min=round(float(ji[:, :3].sum() * per_min), 2), **{
@@ -546,6 +567,40 @@ class Events:
         return out
 
 
+def spread(full, without):
+    """The standard error of every number of `full` (a tree of dicts: a pairing's result)
+    by the jackknife over groups of matches: without[k] is the same tree counted without
+    group k. A number missing or not a number in any of them has none (a rate with
+    nothing under it in one of the counts). The same tree's shape, numbers only: a
+    measure made of many events of a match (a rate, a mean of HP, a share) has an error
+    here without anything known of how it is made."""
+    K = len(without)
+
+    def number(x):
+        return isinstance(x, (int, float)) and not isinstance(x, bool) and np.isfinite(x)
+
+    def walk(f, ws):
+        if isinstance(f, dict):
+            out = {}
+            for key, v in f.items():
+                sub = [w.get(key) if isinstance(w, dict) else None for w in ws]
+                got = walk(v, sub)
+                if got is not None and got != {}:
+                    out[key] = got
+            return out
+        if isinstance(f, list) and f and all(isinstance(x, dict) for x in f):
+            out = [walk(v, [w[j] if isinstance(w, list) and len(w) > j else None for w in ws])
+                   for j, v in enumerate(f)]
+            return out
+        if number(f) and all(number(w) for w in ws):
+            a = np.array(ws, float)
+            se = float(np.sqrt((K - 1) / K * ((a - a.mean()) ** 2).sum()))
+            return float(f'{se:.3g}')
+        return None
+
+    return walk(full, without)
+
+
 def play(args, p1, p2, matches, level=4, seed=7):
     """The matches played to the end. seed: the game's, and the agents' draws of their
     actions (torch's generator, seeded here and given back as it was: the caller's,
@@ -574,15 +629,21 @@ def _play(args, p1, p2, matches, level, seed):
     # matches one after another; match leg * n + i is environment i's match number leg.
     legs = max(1, int(getattr(args, 'sets', 1) or 1))
     total, matches = (matches // legs) * legs, matches // legs
+    # --p2-cpu-combos LEVEL: P2 the game's CPU at that level, but for its combos: while P1
+    # is in a hit reaction (not yet lying on the ground) --p2 plays, handed the side on
+    # the step after the hit lands, and the CPU has it back when the combo is over: the
+    # CPU's own neutral, guard, recoil guards and okizeme.
+    hybrid = int(getattr(args, 'p2_cpu_combos', 0) or 0) if p2 != 'cpu' else 0
     env = EfzVecEnv(args.data, matches, frame_skip=1, max_frames=int(args.minutes * 3840),
-                    cpu_level=level, autoreset='disabled', seed=seed,
+                    cpu_level=hybrid or level, autoreset='disabled', seed=seed,
                     reward_round=0.0, reward_match=1.0)
     chars = [None if c in ('random', 'tiers') else c for c in args.chars]
     if args.chars[1] == 'tiers':
         env.set_matches(chars=[(chars[0], c) for c in tier_opponents(matches, seed)],
-                        cpu=(False, p2 == 'cpu'))
+                        cpu=(False, p2 == 'cpu' or hybrid > 0))
     else:
-        env.set_matches(chars=tuple(chars), cpu=(False, p2 == 'cpu'))
+        env.set_matches(chars=tuple(chars), cpu=(False, p2 == 'cpu' or hybrid > 0))
+    handed = dict(steps=0, agent=0, times=0)  # P2's steps, those --p2 played, its turns
     agents = [p1] + ([] if p2 == 'cpu' else [p2])
     for side, a in enumerate(agents):
         a.batch(matches)
@@ -619,7 +680,18 @@ def _play(args, p1, p2, matches, level, seed):
       done = np.zeros(matches, bool)
       cur_round = np.zeros(matches, int)
       last_hp = np.full((matches, 2), MAX_HP)
+      cpu_plays = np.ones(matches, bool)  # --p2-cpu-combos: who has P2 (a match starts the CPU's)
       while not done.all():
+          if hybrid:
+              fight = (obs[:, 0, INTRO] == 0) & (obs[:, 0, ROUND_OVER] == 0)
+              want = ~((obs[:, 0, SELF_HITSTUN] > 0) & fight &
+                       ~np.isin(obs[:, 0, SELF_ACTION].astype(int), LAID))
+              for i in np.flatnonzero((want != cpu_plays) & ~done):
+                  if env.set_cpu(i, 1, bool(want[i])):
+                      cpu_plays[i] = want[i]
+                      handed['times'] += not want[i]
+              handed['steps'] += int((~done).sum())
+              handed['agent'] += int((~cpu_plays & ~done).sum())
           controls = np.zeros((matches, 2), np.uint8)
           for side, a in enumerate(agents):
               controls[:, side] = a.controls(obs[:, side], step)
@@ -652,11 +724,23 @@ def _play(args, p1, p2, matches, level, seed):
     matches = total
     events, detail = [], [dict(result=int(result[i]), set_match=1 + i // (total // legs))
                           for i in range(matches)]
+    # --folds K: the matches in K groups (a set's matches in one), each side's events
+    # kept by group, for every number's standard error (spread()).
+    per_leg = total // legs
+    folds = max(0, min(int(getattr(args, 'folds', 0) or 0), per_leg))
+    fold = (np.arange(matches) % per_leg) % folds if folds > 1 else None
+    parts = []
     for s in range(2):
-        e = Events(args.chars[s] if args.chars[s] not in ('random', 'tiers') else '')
+        char = args.chars[s] if args.chars[s] not in ('random', 'tiers') else ''
+        e = Events(char)
+        parts.append([Events(char) for _ in range(folds)] if fold is not None else None)
         for i, match in enumerate(seen[s]):
             before = {k: len(e.n[k]) for k in ('oki_off', 'oki_def', 'press_off')}
-            e.add_match(np.array([c for c, _ in match]), np.array([u for _, u in match]))
+            one = Events(char)
+            one.add_match(np.array([c for c, _ in match]), np.array([u for _, u in match]))
+            e.merge(one)
+            if fold is not None:
+                parts[s][fold[i]].merge(one)
             if s == 0 and habits is not None:  # P1's match, for its play by P2's habits
                 detail[i].update(habits=[round(float(x), 3) for x in habits[i]],
                                  lost=float(np.mean(lost[i])), taken=float(np.mean(taken[i])),  # a round
@@ -664,10 +748,40 @@ def _play(args, p1, p2, matches, level, seed):
                                         for r in e.n[k][n:]] for k, n in before.items()})
         events.append(e)
     hp = HpTaken(taken, rounds_won, lost)
+
+    def top(which):
+        r = result[which]
+        return dict(win=float((r == 1).mean()), loss=float((r == -1).mean()),
+                    cut=float((r == 0).mean()), **hp.of(which))
+
+    sides = [e.report() for e in events]
+    more = {}
+    if fold is not None:
+        # Each number without one group of the matches (the events of the others merged).
+        without = []
+        for k in range(folds):
+            w = top(fold != k)
+            w['sides'] = []
+            for s in range(2):
+                rest = Events(events[s].char)
+                for j in range(folds):
+                    if j != k:
+                        rest.merge(parts[s][j])
+                w['sides'].append(rest.report())
+            without.append(w)
+        more['se'] = dict(folds=folds, **spread(dict(top(slice(None)), sides=sides), without))
+    # Each match, for a count of its own outside (a bootstrap, a paired comparison).
+    more['per_match'] = [dict(result=int(result[i]), rounds_won=int(rounds_won[i]),
+                              taken=[round(float(x), 4) for x in taken[i]],
+                              lost=[round(float(x), 4) for x in lost[i]],
+                              steps=len(seen[0][i])) for i in range(matches)]
     return dict(**(dict(detail=detail) if habits is not None and
                    getattr(args, 'detail', False) else {}), win=float((result == 1).mean()), loss=float((result == -1).mean()),
                 cut=float((result == 0).mean()), matches=matches, **hp.of(slice(None)),
-                sides=[e.report() for e in events],
+                sides=sides, **more,
+                **(dict(cpu_combos=dict(level=hybrid, agent_steps=round(handed['agent'] / max(1, handed['steps']), 4),
+                                        turns_a_match=round(handed['times'] / matches, 2)))
+                   if hybrid else {}),
                 by_tier=_by_tier(result, chars_played, hp) if p2 == 'cpu' and level == 4 else {},
                 by_opponent=_by_opponent(result, chars_played),
                 hp_by_opponent=_hp_by_opponent(chars_played, hp),
@@ -766,7 +880,10 @@ def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--data', default=os.environ.get('EFZ_DATA') or os.environ.get('EFZ_DIR'))
     p.add_argument('--p1', required=True)
-    p.add_argument('--p2', default='cpu', help="'cpu' or a model.zip")
+    p.add_argument('--p2', default='cpu',
+                   help="'cpu', a model.zip, or an agent file (.efzagent: played by the game's "
+                        "own code with its modules, as --p1-native plays P1's: one build "
+                        "against another)")
     p.add_argument('--chars', nargs=2, default=('ayu', 'random'),
                    help="P1's and P2's: names, 'random', or for P2 'tiers' (TIERS)")
     p.add_argument('--level', type=int, nargs='+', default=[4])
@@ -777,6 +894,9 @@ def main():
                    help="the matches' seed (finetune.py's evaluations play seed 7)")
     p.add_argument('--p1-delay', type=int,
                    help="P1 sees the game this many steps late, instead of its config's")
+    p.add_argument('--p2-delay', type=int,
+                   help="P2 (a model.zip) sees the game this many steps late, instead of its "
+                        "config's: an opponent with the agent's reaction")
     p.add_argument('--json', help='write the results here')
     p.add_argument('--p2-advantage', help="a red team's advantages for P2 (advantages.py), e.g. "
                                           "rg=0.5,reversal=0.8,throw=0.3,damage=2,bait=0.5")
@@ -828,6 +948,23 @@ def main():
                    help="a module of P1 (python/efz_env/modules.py; the kinds: "
                         "agent_modules.py), asked after --p1-assist's routes and those "
                         "named before it; a value that is a file's path is one of its files")
+    p.add_argument('--folds', type=int, default=16, metavar='K',
+                   help="every number's standard error, by the jackknife over K groups of the "
+                        "matches (the result's `se`: the same tree, an error where the number "
+                        "is; 0: none). A difference between two results is real past two or "
+                        "three of them, not before")
+    p.add_argument('--p2-cpu-combos', type=int, default=0, metavar='LEVEL',
+                   help="P2 is the game's CPU at this level (1-4) except while P1 is in a hit "
+                        "reaction, when --p2 (an agent) plays: the CPU's neutral, guard and "
+                        "recoil guards with an agent's combos")
+    p.add_argument('--p1-plan-budget', metavar='COST[,OWN]',
+                   help="with --p1-native: the work a combo's plan may take before it is due, "
+                        "in frames on copies (one of its own play's counts OWN, 15), where an "
+                        "evaluation otherwise works every plan to its end: the game on a "
+                        "machine with that much time (the user's, 16-19 November: 7700,27)")
+    p.add_argument('--p1-plan-drop', action='store_true',
+                   help="with --p1-plan-budget: a plan not done when due is dropped whole "
+                        "(the game before 19 November), not chosen from the options played")
     p.add_argument('--p1-native', action='store_true',
                    help="--p1 is an agent file, played by the game's own code (port/agent: "
                         "its routes and planned okizeme as the file has them): native_agent.py")
@@ -837,7 +974,11 @@ def main():
             p.error("--p1-native plays the file's own modules: none of --p1-combo, "
                     "--p1-lookahead, --p1-assist, --p1-module")
         import native_agent
-        p1 = native_agent.NativePlayers(args.p1, args.deterministic)
+        budget = None
+        if args.p1_plan_budget:  # COST[,OWN]: the routes' plans as a machine with that much time
+            parts = [int(x) for x in args.p1_plan_budget.split(',')]
+            budget = (parts[0], not args.p1_plan_drop, parts[1] if len(parts) > 1 else 15)
+        p1 = native_agent.NativePlayers(args.p1, args.deterministic, budget=budget)
     else:
         p1 = make_agent(args.p1, args.deterministic, args.p1_delay)
     if sum(bool(x) for x in (args.p1_combo, args.p1_lookahead, args.p1_assist)) > 1:
@@ -877,7 +1018,11 @@ def main():
             p1.stack = modules.Stack(p1.modules + more)
         else:
             p1 = modules.ModularAgent(p1, more)
-    p2 = 'cpu' if args.p2 == 'cpu' else make_agent(args.p2, args.deterministic)
+    if args.p2.endswith('.efzagent'):  # an agent file: the game's own code plays it
+        import native_agent
+        p2 = native_agent.NativePlayers(args.p2, args.deterministic, seed=1)
+    else:
+        p2 = 'cpu' if args.p2 == 'cpu' else make_agent(args.p2, args.deterministic, args.p2_delay)
     if args.p2_advantage:
         import advantages
         if p2 == 'cpu' or args.chars[1] in ('random', 'tiers'):
@@ -891,7 +1036,7 @@ def main():
         out[key] = r
         print(key, json.dumps({k: v for k, v in r.items()
                                if k not in ('by_opponent', 'hp_by_opponent', 'sides', 'by_tier',
-                                            'detail')}),
+                                            'detail', 'se', 'per_match')}),
               flush=True)
         if r['by_tier']:
             print('  by tier:', ', '.join(f"{t} {v['win']:.0%} of {v['matches']} (HP taken a round "
@@ -915,6 +1060,9 @@ def main():
         out['native'] = p1.stats()
         print('native', json.dumps(out['native']), flush=True)
         p1.close()
+    if args.p2.endswith('.efzagent'):
+        out['native_p2'] = getattr(p2, 'agent', p2).stats()
+        getattr(p2, 'agent', p2).close()
     if args.json:
         with open(args.json, 'w') as f:
             json.dump(out, f, indent=1)

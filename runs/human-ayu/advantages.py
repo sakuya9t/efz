@@ -50,6 +50,13 @@ which no exploiter played):
   contact steps left plus JUMP_LATE, and presses the attack on the probe's step. The
   user's jump-ins hit the rising agent 76% of the times, the exploiters' 52%.
 
+- low: of those jump-ins, the share that are empty: the same walk and the same jump
+  with no button in the air, and as it lands its fastest crouching normal that has to be
+  guarded low (framedata.json; none for the character: a jump-in as before). The user's
+  games of 19 November: against a riser that stands under a jump, lows after a jump hit
+  7 times in 10 ("often hit by lower hit, especially when opponent approach in air but
+  hit low").
+
 Habits (docs/training-v2.md, "Adapting during a match": an opponent a read pays against):
 
 - blind: of its wake-up reversals (wake), the share that come out whether or not the
@@ -145,7 +152,8 @@ THROW_UP = 12     # steps after its own rising in which a person profile's throw
                   # (it fails there: its forward + C comes out as an attack, punished)
 KEYS = ('rg', 'reversal', 'throw', 'damage', 'bait', 'patient', 'wake', 'jumpin', 'blind',
         'crouch', 'habits', 'adapt', 'wide', 'tech', 'techway', 'techsafe', 'techhit',
-        'escape')
+        'escape', 'low')
+LOW_PRESSES = 3   # an empty jump's low: the button this many times, every other step, from its landing
 SELF_X, OPP_X = 13, 45
 ESCAPE_X, ESCAPE_NEAR = 0.8, 220   # a corner (of +-0.95), and the agent this close
 ESCAPE_AGAIN, ESCAPE_STEPS = 14, 44  # the second jump's step, and the script's length
@@ -171,7 +179,7 @@ def parse(spec):
     """'rg=0.5,reversal=0.8,throw=0.3,damage=2' -> dict (left out: none)."""
     out = dict(rg=0.0, reversal=0.0, throw=0.0, damage=1.0, bait=0.0, patient=0.0, wake=0.0,
                jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0, adapt=0.0, wide=1.0, tech=0.0,
-               techway=0.0, techsafe=0.0, techhit=0.0, escape=0.0)
+               techway=0.0, techsafe=0.0, techhit=0.0, escape=0.0, low=0.0)
     for part in filter(None, (spec or '').split(',')):
         k, v = part.split('=')
         if k not in out:
@@ -204,6 +212,16 @@ def move_lengths(char):
     """The character's moves' lengths in steps (framedata.json): {pattern: steps}."""
     data = json.load(open(os.path.join(HERE, 'framedata.json'))).get(char, {})
     return {int(k, 16): m['steps'] for k, m in data.items() if m.get('steps') and int(k, 16) < 0x190}
+
+
+def low_normal(char):
+    """The button of the character's fastest crouching normal that has to be guarded low
+    (2A, 2B, 2C: the actions 0xcc, 0xcd, 0xce of every character; framedata.json's
+    startup and guard), or None."""
+    fd = json.load(open(os.path.join(HERE, 'framedata.json'))).get(char, {})
+    lows = [(fd[a]['startup'], b) for a, b in (('0xcc', 'A'), ('0xcd', 'B'), ('0xce', 'C'))
+            if fd.get(a, {}).get('guard') == 'low' and fd[a].get('startup')]
+    return min(lows)[1] if lows else None
 
 
 def knockdown_left(char):
@@ -267,8 +285,10 @@ class Advantages:
     def __init__(self, char, n, reversal=0.0, throw=0.0, seed=0, bait=0.0, learner='ayu',
                  patient=0.0, wake=0.0, jumpin=0.0, blind=0.0, crouch=CROUCH, habits=0.0,
                  adapt=0.0, wide=1.0, tech=0.0, techway=0.0, techsafe=0.0, techhit=0.0,
-                 escape=0.0):
+                 escape=0.0, low=0.0):
         self.wide, self.tech, self.escape = wide, tech, escape
+        self.low = low
+        self.low_button = low_normal(char) if low > 0 else None
         self.techway, self.techsafe, self.techhit = techway, techsafe, techhit
         self.base = dict(wake=wake, blind=blind, patient=patient, crouch=crouch, throw=throw,
                          reversal=reversal, jumpin=jumpin, bait=bait)
@@ -317,7 +337,7 @@ class Advantages:
                            bait_punished=0, guards_ended=0, patient_holds=0, rises=0,
                            rise_reversals=0, rise_reversals_blind=0, rise_reversals_held=0, rise_reversals_started=0, rise_reversal_hit=0,
                            rise_reversal_hit_back=0, rise_patient=0, knockdowns=0,
-                           jumpins_armed=0, jumpins=0, jumpin_hit=0, jumpin_guarded=0,
+                           jumpins_armed=0, jumpins=0, lowins=0, jumpin_hit=0, jumpin_guarded=0,
                            jumpin_hit_back=0, jumpin_late=0, adapted=0)
 
     def resize(self, n):
@@ -681,10 +701,18 @@ class Advantages:
                 p = max(go, key=lambda p: p['contact'])
                 self.jumping[i] = False
                 pre, press = self.jump['prejump'], p['press']
-                seq = ([(p.get('way', 9), '')] * pre + [(5, '')] * (press - pre) + [(5, p['button'])]
-                       + [(5, '')] * max(0, pre + self.jump['air'] - press))
+                if self.low_button and self.rng.random() < self.low:
+                    # the same jump, empty, and a low as it lands
+                    seq = ([(p.get('way', 9), '')] * pre + [(5, '')] * self.jump['air']
+                           + [(2, self.low_button), (2, '')] * LOW_PRESSES)
+                    self.counts['lowins'] += 1
+                    self.jump_watch[i] = pre + self.jump['air'] + 24
+                else:
+                    seq = ([(p.get('way', 9), '')] * pre + [(5, '')] * (press - pre)
+                           + [(5, p['button'])]
+                           + [(5, '')] * max(0, pre + self.jump['air'] - press))
+                    self.jump_watch[i] = p['contact'] + 12
                 self.counts['jumpins'] += 1
-                self.jump_watch[i] = p['contact'] + 12
                 self.queue[i] = seq[1:]
                 return seq[0]
             if rem < self.soonest - 1:  # too late for every plan
@@ -792,7 +820,8 @@ class AdvantagedOpponent:
                                            a.get('habits', 0.0), a.get('adapt', 0.0),
                                            a.get('wide', 1.0), a.get('tech', 0.0),
                                 a.get('techway', 0.0), a.get('techsafe', 0.0),
-                                a.get('techhit', 0.0), a.get('escape', 0.0))
+                                a.get('techhit', 0.0), a.get('escape', 0.0),
+                                a.get('low', 0.0))
         self.logic = logic(adv, seed)
         self.alt = logic(alt, seed + 7919) if alt is not None else None
         self.venv = None
@@ -868,7 +897,8 @@ class AdvantagedAgent:
                                 adv.get('habits', 0.0), adv.get('adapt', 0.0),
                                 adv.get('wide', 1.0), adv.get('tech', 0.0),
                                 adv.get('techway', 0.0), adv.get('techsafe', 0.0),
-                                adv.get('techhit', 0.0), adv.get('escape', 0.0))
+                                adv.get('techhit', 0.0), adv.get('escape', 0.0),
+                                adv.get('low', 0.0))
         self.env = self.side = None
 
     def __getattr__(self, name):  # the rest is the agent's
