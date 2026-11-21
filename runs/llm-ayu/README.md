@@ -77,9 +77,6 @@ python runs/llm-ayu/train.py --dataset ... --out runs/llm-ayu/qwen15-lora --base
 # playing it
 python runs/human-ayu/evaluate.py --p1 runs/llm-ayu/smollm135 --p2 cpu --level 4 --chars ayu tiers --matches 48
 python runs/human-ayu/evaluate.py --p1 runs/llm-ayu/smollm135 --p2 runs/human-ayu/bc-d14.zip --chars ayu ayu
-
-# the model to the Hub (runs/hub.py: body/, head.pt, llm.json)
-python runs/hub.py upload llm-ayu
 ```
 
 `setup-linux.sh` also writes `runs/human-ayu/framedata.json` from the game's data

@@ -1,4 +1,6 @@
-# Checkpoints live on Hugging Face (runs/hub.py): the agent's and the combo master's
+# Checkpoints stay out of git (a released agent goes to Hugging Face as an agent file:
+# runs/hub.py; the checkpoints of rounds 1-12 that were there are in ~/data/efz-hub-old):
+# the agent's and the combo master's
 agent/*.zip
 combo/*.zip
 combo-red/*.zip
@@ -34,8 +36,9 @@ minagi/**/*.zip
 nayuki/**/*.zip
 agent-league*/*.zip
 
-# Since round 14 a run's files are not kept in the repository: its models are on Hugging
-# Face (runs/hub.py), what it found is in docs/training-v2.md, and what a run, an
+# Since round 14 a run's files are not kept in the repository: its models stay on the
+# machine (a released one goes to Hugging Face as an agent file, runs/hub.py), what it
+# found is in docs/training-v2.md, and what a run, an
 # evaluation or a benchmark writes is made again from those. (The runs added before stay.)
 agent-league1[4-9]*/
 agent-league[2-9][0-9]*/

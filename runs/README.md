@@ -27,9 +27,14 @@ another machine: [docs/progress.md](../docs/progress.md).
 
 ## Using them
 
-The models are on Hugging Face (https://huggingface.co/sakuya9t/efz), under the same paths:
-`python runs/hub.py download` fetches them into runs/ (`human-ayu`'s checkpoints are only
-there).
+The released agents are on Hugging Face (https://huggingface.co/sakuya9t/efz), as agent
+files (`.efzagent`, [docs/agents.md](../docs/agents.md)) and nothing else:
+`python runs/hub.py download` fetches them into `agents/`. The runs' checkpoints
+(`human-ayu`'s, rounds 1-12) were there until 20 November 2026; the Hub's history keeps
+them (`hf download sakuya9t/efz --revision
+f0dbd7b7e0f5be8ab09fc991866260fe203cfa31 --include 'runs/human-ayu/agent/*' --local-dir .`),
+and so does the Linux machine (`~/data/efz-hub-old`, the same paths). The models of
+`curriculum/`, `pbt/` and `vs-cpu/` are in git too.
 
 ```sh
 # Play the best yourself (you are player 2: arrows, Z X C V = A B C D, or a gamepad):

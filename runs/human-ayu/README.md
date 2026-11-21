@@ -437,7 +437,8 @@ in free time that puts out an object; `charge`, Kano's charge moves in free time
 measures (`people.json`), the clone with a 14-frame reaction time (`bc-d14.zip`, as
 Ayu's), and the exploiter (`exploiter/`), trained against a frozen copy of the agent
 (`target.zip`: `agent-red` at 22.2M steps), a quarter of its matches against the CPU,
-with its focus and a KL pull toward its clone. The checkpoints are on Hugging Face.
+with its focus and a KL pull toward its clone. The checkpoints were on Hugging Face until
+20 November ("The models").
 
 | Character | People's sides (in sync) | Clone: held-out nll, press recall | People's free time used for | Clone vs the agent | Exploiter vs the agent |
 |---|---|---|---|---|---|
@@ -1571,20 +1572,24 @@ The best agent (`agent-league7`, 157.2M) under changed conditions, 63-64 matches
 
 ## The models
 
-On Hugging Face, https://huggingface.co/sakuya9t/efz, under the same paths:
-`python runs/hub.py download human-ayu` (the clones, the team, the agent's checkpoints,
-the combo master). The repository keeps the clones and the team too; the agent's and
-the combo master's checkpoints are only there. Uploaded 8 November: every run's
-`best.zip` and last `model.zip` (not the `chunk*.zip` between) through round 8, and the
-exploiters of Kano (1-7), Mizuka (1-7), Misuzu (1-3) and Mishio (1-3) with their targets
-(`python runs/hub.py upload human-ayu --exclude '*chunk*.zip'`). The best agent,
-`agent-league11-r7/best.zip` (round 11), went up on its own on 9 November with its
-`config.json`, to be played against. The rest of round 9 on (`agent-league9-jitter`,
-`agent-league10-kanna`, the other `agent-league11*`, `agent-league12*`, the reversal
-exploiters, the seventeen helpers' clones and exploiters, `kano/transfer7`,
-`mizukab/transfer7`, round 14's `agent-league11-avg`, `agent-league14*` and the
-`exploiter14`s, and round 15's `agent-league15*`, `combo-net14*` and `combo-chooser14`/`15`)
-is only on the Linux machine until the next upload.
+The released agents are on Hugging Face, https://huggingface.co/sakuya9t/efz, as agent
+files (`.efzagent`) only, since 20 November: rounds 16 (`agent-league16-calm-s2-round16`),
+17 (`agent-league17-s1-round17c`), 18 (`agent-league18-s2-round18k8`) and 20
+(`agent-league20-spar-s1-round20`), with a card that says what each one is and which game
+plays it (`runs/hub-card.md`). `python runs/hub.py download` fetches them into `agents/`;
+`unpack_agent.py`, or the tools themselves, turn one back into a model to train
+(docs/agents.md, "Working on from an agent file").
+
+The runs' checkpoints are on the Linux machine, and stay out of git. Until 20 November the
+Hub held some of them under the repository's paths: every run's `best.zip` and last
+`model.zip` through round 8 (uploaded 8 November; with the `chunk*.zip` of `agent/`,
+`agent-red/` and `agent-league/`), the exploiters of Kano (1-7), Mizuka (1-7), Misuzu
+(1-3) and Mishio (1-3) with their targets, the clones, the team, the combo master, and
+round 11's best (`agent-league11-r7/best.zip`) and round 12's `agent-league12-adv`. Those
+files (202, and the 6 of `curriculum/`, `pbt/` and `vs-cpu/`: 2.9 GB) are now in
+`~/data/efz-hub-old/runs/` and in the Hub's history (`hf download sakuya9t/efz
+--revision f0dbd7b7e0f5be8ab09fc991866260fe203cfa31 --include 'runs/human-ayu/*'
+--local-dir .`). Everything from round 9 on that wasn't among them was never uploaded.
 
 ## The scripts
 

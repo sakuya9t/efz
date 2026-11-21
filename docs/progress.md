@@ -54,14 +54,20 @@ rebuilt with the views kept). `index.csv`'s paths are Windows', split on `\` by
 `efz-unpacked/tasogare/EFZ`. `runs/llm-ayu/setup-linux.sh` worked with cmake from pip
 (the host has none), after a fix: the headless library failed to load after torch
 ("cannot allocate memory in static TLS block"; port/guest.h now gives the static TLS
-model to the arena's two pointers only). The checkpoints through round 8 are on the Hub
-since 8 November (`best.zip` and `model.zip` of each run; the `chunk*.zip` only here).
+model to the arena's two pointers only).
 
-**Checkpoints.** Hugging Face, https://huggingface.co/sakuya9t/efz, under the repository's
-paths: `python runs/hub.py download human-ayu` puts them back into `runs/human-ayu/`
-(`agent/`, `agent-red/`, `agent-league/`, `combo*/`, `team/`, `mizukab/`, `kano/`, the
-clones). The `.zip` files of those folders are ignored by git; the clones `bc.zip`,
-`bc-d14.zip` and `team/` are also in git.
+**Checkpoints.** The released agents are on Hugging Face, https://huggingface.co/sakuya9t/efz,
+as agent files only (`.efzagent`; since 20 November 2026): `python runs/hub.py download`
+puts them into `agents/`, `python runs/hub.py upload FILE.efzagent --names
+~/data/efz-replays/player_names.csv` adds one (and the card, `runs/hub-card.md`, whose
+table of files is edited by hand). The runs' own checkpoints stay on the Linux machine.
+Those of rounds 1-12 that were on the Hub before (`runs/human-ayu/`'s `agent/`,
+`agent-red/`, `agent-league*/`, `combo*/`, `team/`, `mizukab/`, `kano/`, `misuzu/`,
+`mishio/`, with their `config.json`) are in `~/data/efz-hub-old` under the repository's
+paths and in the Hub's history (`hf download sakuya9t/efz --revision
+f0dbd7b7e0f5be8ab09fc991866260fe203cfa31 --include 'runs/human-ayu/*' --local-dir .`).
+The `.zip` files of those folders are ignored by git; the clones `bc.zip`, `bc-d14.zip`
+and `team/` are also in git.
 
 **Data outside the repository** (on the laptop under `D:/tasogare/efz-replays`, on the
 Linux machine `~/data/efz-replays`; keep the layout, the scripts find `players.csv`
@@ -90,8 +96,8 @@ git clone https://github.com/sakuya9t/efz.git && cd efz && git checkout asm-sess
 runs/llm-ayu/setup-linux.sh --efz /data/EFZ --dataset /data/efz-replays/datasets/ayu
 source .venv-llm/bin/activate
 export EFZ_ENV_LIBRARY=$PWD/build/headless/libefz_env.so EFZ_DIR=/data/EFZ
-hf auth login                         # for runs/hub.py: the checkpoints
-python runs/hub.py download human-ayu
+hf auth login                         # for runs/hub.py: the released agents
+python runs/hub.py download           # the agent files, into agents/
 ```
 
 `setup-linux.sh` builds the headless library (CI builds it on Linux; it hasn't been run
