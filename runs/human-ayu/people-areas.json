@@ -1,0 +1,4344 @@
+{
+ "groups": {
+  "all": {
+   "matches": 1908,
+   "minutes": 4500.8,
+   "net": -499,
+   "my okizeme": {
+    "rate": 78.1,
+    "share": 0.1245,
+    "net": 584,
+    "entered": 3.31,
+    "won": 0.291,
+    "lost": 0.207
+   },
+   "its okizeme": {
+    "rate": -36.6,
+    "share": 0.1487,
+    "net": -326,
+    "entered": 4.11,
+    "won": 0.188,
+    "lost": 0.26
+   },
+   "my pressure": {
+    "rate": 19.1,
+    "share": 0.1157,
+    "net": 133,
+    "entered": 4.55,
+    "won": 0.325,
+    "lost": 0.18
+   },
+   "its pressure": {
+    "rate": -79.9,
+    "share": 0.107,
+    "net": -513,
+    "entered": 4.68,
+    "won": 0.13,
+    "lost": 0.38
+   },
+   "I came by air": {
+    "rate": -43.9,
+    "share": 0.1373,
+    "net": -361,
+    "entered": 10.48,
+    "won": 0.074,
+    "lost": 0.101
+   },
+   "it came by air": {
+    "rate": 77.1,
+    "share": 0.0659,
+    "net": 305,
+    "entered": 7.46,
+    "won": 0.067,
+    "lost": 0.052
+   },
+   "both in the air": {
+    "rate": -11.5,
+    "share": 0.1978,
+    "net": -137,
+    "entered": 10.43,
+    "won": 0.048,
+    "lost": 0.07
+   },
+   "on the ground": {
+    "rate": -29.6,
+    "share": 0.1031,
+    "net": -183,
+    "entered": 8.87,
+    "won": 0.056,
+    "lost": 0.08
+   },
+   "ayu_won": 0.44
+  },
+  "char/misaki": {
+   "matches": 39,
+   "minutes": 90.0,
+   "net": 468,
+   "my okizeme": {
+    "rate": -1.0,
+    "share": 0.1234,
+    "net": -7,
+    "entered": 3.23,
+    "won": 0.213,
+    "lost": 0.23
+   },
+   "its okizeme": {
+    "rate": -18.2,
+    "share": 0.1541,
+    "net": -168,
+    "entered": 4.24,
+    "won": 0.17,
+    "lost": 0.293
+   },
+   "my pressure": {
+    "rate": 120.8,
+    "share": 0.1148,
+    "net": 832,
+    "entered": 4.28,
+    "won": 0.343,
+    "lost": 0.125
+   },
+   "its pressure": {
+    "rate": -92.4,
+    "share": 0.0997,
+    "net": -553,
+    "entered": 4.29,
+    "won": 0.104,
+    "lost": 0.321
+   },
+   "I came by air": {
+    "rate": -0.2,
+    "share": 0.1319,
+    "net": -2,
+    "entered": 10.21,
+    "won": 0.07,
+    "lost": 0.083
+   },
+   "it came by air": {
+    "rate": 87.6,
+    "share": 0.072,
+    "net": 378,
+    "entered": 6.79,
+    "won": 0.067,
+    "lost": 0.031
+   },
+   "both in the air": {
+    "rate": -1.1,
+    "share": 0.2081,
+    "net": -13,
+    "entered": 9.58,
+    "won": 0.027,
+    "lost": 0.043
+   },
+   "on the ground": {
+    "rate": 0.2,
+    "share": 0.096,
+    "net": 1,
+    "entered": 8.54,
+    "won": 0.062,
+    "lost": 0.088
+   },
+   "ayu_won": 0.462
+  },
+  "char/ayu": {
+   "matches": 62,
+   "minutes": 156.0,
+   "net": 0,
+   "my okizeme": {
+    "rate": 64.5,
+    "share": 0.1394,
+    "net": 540,
+    "entered": 3.78,
+    "won": 0.293,
+    "lost": 0.22
+   },
+   "its okizeme": {
+    "rate": -69.1,
+    "share": 0.1303,
+    "net": -540,
+    "entered": 3.78,
+    "won": 0.194,
+    "lost": 0.297
+   },
+   "my pressure": {
+    "rate": 19.9,
+    "share": 0.0889,
+    "net": 106,
+    "entered": 4.0,
+    "won": 0.346,
+    "lost": 0.176
+   },
+   "its pressure": {
+    "rate": -21.6,
+    "share": 0.0819,
+    "net": -106,
+    "entered": 3.94,
+    "won": 0.145,
+    "lost": 0.34
+   },
+   "I came by air": {
+    "rate": -93.7,
+    "share": 0.1072,
+    "net": -603,
+    "entered": 9.89,
+    "won": 0.058,
+    "lost": 0.109
+   },
+   "it came by air": {
+    "rate": 93.7,
+    "share": 0.1072,
+    "net": 603,
+    "entered": 9.89,
+    "won": 0.095,
+    "lost": 0.072
+   },
+   "both in the air": {
+    "rate": 0.0,
+    "share": 0.2147,
+    "net": 0,
+    "entered": 10.64,
+    "won": 0.063,
+    "lost": 0.069
+   },
+   "on the ground": {
+    "rate": 0.0,
+    "share": 0.1304,
+    "net": 0,
+    "entered": 9.96,
+    "won": 0.069,
+    "lost": 0.08
+   },
+   "ayu_won": 0.5
+  },
+  "opponent/1": {
+   "matches": 80,
+   "minutes": 162.3,
+   "net": 4742,
+   "my okizeme": {
+    "rate": 163.3,
+    "share": 0.1878,
+    "net": 1840,
+    "entered": 5.1,
+    "won": 0.345,
+    "lost": 0.152
+   },
+   "its okizeme": {
+    "rate": 81.8,
+    "share": 0.0971,
+    "net": 477,
+    "entered": 2.81,
+    "won": 0.294,
+    "lost": 0.204
+   },
+   "my pressure": {
+    "rate": 88.4,
+    "share": 0.1228,
+    "net": 652,
+    "entered": 4.96,
+    "won": 0.348,
+    "lost": 0.178
+   },
+   "its pressure": {
+    "rate": 72.8,
+    "share": 0.0948,
+    "net": 414,
+    "entered": 4.19,
+    "won": 0.209,
+    "lost": 0.359
+   },
+   "I came by air": {
+    "rate": 16.0,
+    "share": 0.0887,
+    "net": 85,
+    "entered": 8.81,
+    "won": 0.094,
+    "lost": 0.096
+   },
+   "it came by air": {
+    "rate": 116.7,
+    "share": 0.0934,
+    "net": 654,
+    "entered": 10.42,
+    "won": 0.075,
+    "lost": 0.038
+   },
+   "both in the air": {
+    "rate": 47.9,
+    "share": 0.2118,
+    "net": 608,
+    "entered": 10.86,
+    "won": 0.084,
+    "lost": 0.051
+   },
+   "on the ground": {
+    "rate": 1.8,
+    "share": 0.1035,
+    "net": 11,
+    "entered": 9.34,
+    "won": 0.064,
+    "lost": 0.069
+   },
+   "ayu_won": 0.825
+  },
+  "char/mio": {
+   "matches": 97,
+   "minutes": 267.1,
+   "net": 95,
+   "my okizeme": {
+    "rate": 60.7,
+    "share": 0.1254,
+    "net": 457,
+    "entered": 3.21,
+    "won": 0.267,
+    "lost": 0.238
+   },
+   "its okizeme": {
+    "rate": 2.1,
+    "share": 0.1183,
+    "net": 15,
+    "entered": 3.37,
+    "won": 0.155,
+    "lost": 0.226
+   },
+   "my pressure": {
+    "rate": 0.4,
+    "share": 0.1136,
+    "net": 3,
+    "entered": 4.29,
+    "won": 0.31,
+    "lost": 0.209
+   },
+   "its pressure": {
+    "rate": -73.1,
+    "share": 0.1168,
+    "net": -512,
+    "entered": 4.67,
+    "won": 0.112,
+    "lost": 0.435
+   },
+   "I came by air": {
+    "rate": -25.2,
+    "share": 0.1365,
+    "net": -207,
+    "entered": 9.5,
+    "won": 0.059,
+    "lost": 0.111
+   },
+   "it came by air": {
+    "rate": 121.5,
+    "share": 0.062,
+    "net": 452,
+    "entered": 7.19,
+    "won": 0.065,
+    "lost": 0.042
+   },
+   "both in the air": {
+    "rate": 1.2,
+    "share": 0.218,
+    "net": 15,
+    "entered": 10.41,
+    "won": 0.041,
+    "lost": 0.065
+   },
+   "on the ground": {
+    "rate": -19.5,
+    "share": 0.1093,
+    "net": -128,
+    "entered": 8.05,
+    "won": 0.055,
+    "lost": 0.093
+   },
+   "ayu_won": 0.505
+  },
+  "char/mayu": {
+   "matches": 164,
+   "minutes": 391.2,
+   "net": -2284,
+   "my okizeme": {
+    "rate": 40.7,
+    "share": 0.1222,
+    "net": 298,
+    "entered": 3.03,
+    "won": 0.235,
+    "lost": 0.21
+   },
+   "its okizeme": {
+    "rate": -79.7,
+    "share": 0.163,
+    "net": -779,
+    "entered": 4.15,
+    "won": 0.175,
+    "lost": 0.266
+   },
+   "my pressure": {
+    "rate": -49.1,
+    "share": 0.1239,
+    "net": -365,
+    "entered": 4.7,
+    "won": 0.309,
+    "lost": 0.166
+   },
+   "its pressure": {
+    "rate": -141.6,
+    "share": 0.092,
+    "net": -782,
+    "entered": 3.94,
+    "won": 0.12,
+    "lost": 0.39
+   },
+   "I came by air": {
+    "rate": -32.5,
+    "share": 0.0942,
+    "net": -184,
+    "entered": 10.66,
+    "won": 0.053,
+    "lost": 0.045
+   },
+   "it came by air": {
+    "rate": 71.5,
+    "share": 0.0748,
+    "net": 321,
+    "entered": 8.48,
+    "won": 0.079,
+    "lost": 0.068
+   },
+   "both in the air": {
+    "rate": -13.5,
+    "share": 0.2488,
+    "net": -202,
+    "entered": 13.34,
+    "won": 0.05,
+    "lost": 0.07
+   },
+   "on the ground": {
+    "rate": -121.4,
+    "share": 0.0811,
+    "net": -591,
+    "entered": 8.28,
+    "won": 0.044,
+    "lost": 0.085
+   },
+   "ayu_won": 0.262
+  },
+  "char/minagi": {
+   "matches": 37,
+   "minutes": 88.5,
+   "net": 486,
+   "my okizeme": {
+    "rate": 77.8,
+    "share": 0.1241,
+    "net": 579,
+    "entered": 3.41,
+    "won": 0.285,
+    "lost": 0.212
+   },
+   "its okizeme": {
+    "rate": -58.6,
+    "share": 0.1351,
+    "net": -475,
+    "entered": 3.79,
+    "won": 0.206,
+    "lost": 0.352
+   },
+   "my pressure": {
+    "rate": 60.7,
+    "share": 0.127,
+    "net": 462,
+    "entered": 4.96,
+    "won": 0.351,
+    "lost": 0.166
+   },
+   "its pressure": {
+    "rate": -92.7,
+    "share": 0.1159,
+    "net": -645,
+    "entered": 4.85,
+    "won": 0.121,
+    "lost": 0.41
+   },
+   "I came by air": {
+    "rate": -43.1,
+    "share": 0.1278,
+    "net": -330,
+    "entered": 10.15,
+    "won": 0.08,
+    "lost": 0.081
+   },
+   "it came by air": {
+    "rate": 62.9,
+    "share": 0.0755,
+    "net": 285,
+    "entered": 8.32,
+    "won": 0.052,
+    "lost": 0.045
+   },
+   "both in the air": {
+    "rate": 36.5,
+    "share": 0.2112,
+    "net": 462,
+    "entered": 10.96,
+    "won": 0.059,
+    "lost": 0.046
+   },
+   "on the ground": {
+    "rate": 29.5,
+    "share": 0.0833,
+    "net": 147,
+    "entered": 8.33,
+    "won": 0.057,
+    "lost": 0.072
+   },
+   "ayu_won": 0.541
+  },
+  "player/1": {
+   "matches": 109,
+   "minutes": 234.7,
+   "net": -3885,
+   "my okizeme": {
+    "rate": 0.7,
+    "share": 0.0985,
+    "net": 4,
+    "entered": 2.59,
+    "won": 0.261,
+    "lost": 0.238
+   },
+   "its okizeme": {
+    "rate": -93.1,
+    "share": 0.1752,
+    "net": -979,
+    "entered": 4.85,
+    "won": 0.14,
+    "lost": 0.319
+   },
+   "my pressure": {
+    "rate": -59.9,
+    "share": 0.0907,
+    "net": -326,
+    "entered": 3.83,
+    "won": 0.319,
+    "lost": 0.209
+   },
+   "its pressure": {
+    "rate": -142.0,
+    "share": 0.1219,
+    "net": -1038,
+    "entered": 5.21,
+    "won": 0.125,
+    "lost": 0.41
+   },
+   "I came by air": {
+    "rate": -65.8,
+    "share": 0.1512,
+    "net": -597,
+    "entered": 11.17,
+    "won": 0.06,
+    "lost": 0.094
+   },
+   "it came by air": {
+    "rate": 4.4,
+    "share": 0.0627,
+    "net": 17,
+    "entered": 7.3,
+    "won": 0.061,
+    "lost": 0.077
+   },
+   "both in the air": {
+    "rate": -28.3,
+    "share": 0.1788,
+    "net": -304,
+    "entered": 10.24,
+    "won": 0.057,
+    "lost": 0.084
+   },
+   "on the ground": {
+    "rate": -91.2,
+    "share": 0.1209,
+    "net": -662,
+    "entered": 9.49,
+    "won": 0.055,
+    "lost": 0.106
+   },
+   "ayu_won": 0.147
+  },
+  "char/kaori": {
+   "matches": 120,
+   "minutes": 288.7,
+   "net": 2415,
+   "my okizeme": {
+    "rate": 111.8,
+    "share": 0.1389,
+    "net": 932,
+    "entered": 3.72,
+    "won": 0.299,
+    "lost": 0.149
+   },
+   "its okizeme": {
+    "rate": 17.6,
+    "share": 0.1073,
+    "net": 113,
+    "entered": 3.1,
+    "won": 0.203,
+    "lost": 0.188
+   },
+   "my pressure": {
+    "rate": 104.5,
+    "share": 0.1581,
+    "net": 991,
+    "entered": 5.87,
+    "won": 0.349,
+    "lost": 0.129
+   },
+   "its pressure": {
+    "rate": -43.8,
+    "share": 0.071,
+    "net": -187,
+    "entered": 3.73,
+    "won": 0.15,
+    "lost": 0.239
+   },
+   "I came by air": {
+    "rate": 37.5,
+    "share": 0.1677,
+    "net": 377,
+    "entered": 9.38,
+    "won": 0.133,
+    "lost": 0.104
+   },
+   "it came by air": {
+    "rate": 97.1,
+    "share": 0.0575,
+    "net": 335,
+    "entered": 6.77,
+    "won": 0.058,
+    "lost": 0.021
+   },
+   "both in the air": {
+    "rate": 12.1,
+    "share": 0.1483,
+    "net": 108,
+    "entered": 7.62,
+    "won": 0.043,
+    "lost": 0.034
+   },
+   "on the ground": {
+    "rate": -28.1,
+    "share": 0.1511,
+    "net": -255,
+    "entered": 9.44,
+    "won": 0.072,
+    "lost": 0.081
+   },
+   "ayu_won": 0.75
+  },
+  "char/akane": {
+   "matches": 61,
+   "minutes": 171.2,
+   "net": -1300,
+   "my okizeme": {
+    "rate": 88.3,
+    "share": 0.0979,
+    "net": 518,
+    "entered": 2.65,
+    "won": 0.309,
+    "lost": 0.163
+   },
+   "its okizeme": {
+    "rate": -49.2,
+    "share": 0.1789,
+    "net": -528,
+    "entered": 4.85,
+    "won": 0.161,
+    "lost": 0.283
+   },
+   "my pressure": {
+    "rate": -15.4,
+    "share": 0.1285,
+    "net": -118,
+    "entered": 5.2,
+    "won": 0.293,
+    "lost": 0.196
+   },
+   "its pressure": {
+    "rate": -99.6,
+    "share": 0.1362,
+    "net": -814,
+    "entered": 5.53,
+    "won": 0.108,
+    "lost": 0.419
+   },
+   "I came by air": {
+    "rate": -18.2,
+    "share": 0.1306,
+    "net": -143,
+    "entered": 12.34,
+    "won": 0.049,
+    "lost": 0.07
+   },
+   "it came by air": {
+    "rate": 67.3,
+    "share": 0.0574,
+    "net": 232,
+    "entered": 6.24,
+    "won": 0.066,
+    "lost": 0.05
+   },
+   "both in the air": {
+    "rate": -9.2,
+    "share": 0.1792,
+    "net": -99,
+    "entered": 10.62,
+    "won": 0.05,
+    "lost": 0.066
+   },
+   "on the ground": {
+    "rate": -63.5,
+    "share": 0.0914,
+    "net": -348,
+    "entered": 8.5,
+    "won": 0.05,
+    "lost": 0.092
+   },
+   "ayu_won": 0.295
+  },
+  "char/nayukib": {
+   "matches": 100,
+   "minutes": 215.4,
+   "net": -539,
+   "my okizeme": {
+    "rate": 83.1,
+    "share": 0.1281,
+    "net": 639,
+    "entered": 3.26,
+    "won": 0.275,
+    "lost": 0.195
+   },
+   "its okizeme": {
+    "rate": -32.8,
+    "share": 0.149,
+    "net": -293,
+    "entered": 4.09,
+    "won": 0.176,
+    "lost": 0.247
+   },
+   "my pressure": {
+    "rate": 34.5,
+    "share": 0.1254,
+    "net": 260,
+    "entered": 4.77,
+    "won": 0.376,
+    "lost": 0.15
+   },
+   "its pressure": {
+    "rate": -129.9,
+    "share": 0.0987,
+    "net": -769,
+    "entered": 4.09,
+    "won": 0.136,
+    "lost": 0.523
+   },
+   "I came by air": {
+    "rate": -6.7,
+    "share": 0.1151,
+    "net": -47,
+    "entered": 10.75,
+    "won": 0.068,
+    "lost": 0.057
+   },
+   "it came by air": {
+    "rate": 37.5,
+    "share": 0.0708,
+    "net": 159,
+    "entered": 7.83,
+    "won": 0.063,
+    "lost": 0.041
+   },
+   "both in the air": {
+    "rate": -29.2,
+    "share": 0.2164,
+    "net": -379,
+    "entered": 10.48,
+    "won": 0.059,
+    "lost": 0.092
+   },
+   "on the ground": {
+    "rate": -18.7,
+    "share": 0.0965,
+    "net": -108,
+    "entered": 9.28,
+    "won": 0.054,
+    "lost": 0.064
+   },
+   "ayu_won": 0.42
+  },
+  "opponent/5": {
+   "matches": 23,
+   "minutes": 43.5,
+   "net": -5898,
+   "my okizeme": {
+    "rate": 16.7,
+    "share": 0.0679,
+    "net": 68,
+    "entered": 1.79,
+    "won": 0.205,
+    "lost": 0.179
+   },
+   "its okizeme": {
+    "rate": -130.8,
+    "share": 0.2033,
+    "net": -1596,
+    "entered": 5.06,
+    "won": 0.127,
+    "lost": 0.345
+   },
+   "my pressure": {
+    "rate": -271.2,
+    "share": 0.0896,
+    "net": -1458,
+    "entered": 3.86,
+    "won": 0.202,
+    "lost": 0.25
+   },
+   "its pressure": {
+    "rate": -201.6,
+    "share": 0.1196,
+    "net": -1447,
+    "entered": 5.29,
+    "won": 0.091,
+    "lost": 0.374
+   },
+   "I came by air": {
+    "rate": -108.9,
+    "share": 0.0919,
+    "net": -601,
+    "entered": 10.69,
+    "won": 0.034,
+    "lost": 0.06
+   },
+   "it came by air": {
+    "rate": -113.3,
+    "share": 0.0487,
+    "net": -331,
+    "entered": 7.03,
+    "won": 0.052,
+    "lost": 0.065
+   },
+   "both in the air": {
+    "rate": -23.0,
+    "share": 0.3208,
+    "net": -442,
+    "entered": 14.39,
+    "won": 0.03,
+    "lost": 0.056
+   },
+   "on the ground": {
+    "rate": -26.0,
+    "share": 0.0581,
+    "net": -91,
+    "entered": 6.71,
+    "won": 0.048,
+    "lost": 0.082
+   },
+   "ayu_won": 0.043
+  },
+  "char/ikumi": {
+   "matches": 113,
+   "minutes": 304.7,
+   "net": 229,
+   "my okizeme": {
+    "rate": 167.0,
+    "share": 0.1052,
+    "net": 1054,
+    "entered": 2.81,
+    "won": 0.339,
+    "lost": 0.137
+   },
+   "its okizeme": {
+    "rate": -69.6,
+    "share": 0.1433,
+    "net": -599,
+    "entered": 3.79,
+    "won": 0.175,
+    "lost": 0.319
+   },
+   "my pressure": {
+    "rate": 22.8,
+    "share": 0.1264,
+    "net": 173,
+    "entered": 4.43,
+    "won": 0.265,
+    "lost": 0.135
+   },
+   "its pressure": {
+    "rate": -56.1,
+    "share": 0.1007,
+    "net": -339,
+    "entered": 4.3,
+    "won": 0.126,
+    "lost": 0.358
+   },
+   "I came by air": {
+    "rate": -9.4,
+    "share": 0.1413,
+    "net": -80,
+    "entered": 10.84,
+    "won": 0.07,
+    "lost": 0.089
+   },
+   "it came by air": {
+    "rate": 141.8,
+    "share": 0.0456,
+    "net": 388,
+    "entered": 5.64,
+    "won": 0.068,
+    "lost": 0.022
+   },
+   "both in the air": {
+    "rate": -38.0,
+    "share": 0.2043,
+    "net": -466,
+    "entered": 9.65,
+    "won": 0.031,
+    "lost": 0.071
+   },
+   "on the ground": {
+    "rate": 12.2,
+    "share": 0.1332,
+    "net": 98,
+    "entered": 8.29,
+    "won": 0.083,
+    "lost": 0.082
+   },
+   "ayu_won": 0.46
+  },
+  "char/nayuki": {
+   "matches": 23,
+   "minutes": 46.5,
+   "net": 362,
+   "my okizeme": {
+    "rate": 141.0,
+    "share": 0.1342,
+    "net": 1135,
+    "entered": 3.66,
+    "won": 0.329,
+    "lost": 0.224
+   },
+   "its okizeme": {
+    "rate": -135.1,
+    "share": 0.1122,
+    "net": -910,
+    "entered": 3.19,
+    "won": 0.142,
+    "lost": 0.284
+   },
+   "my pressure": {
+    "rate": 35.8,
+    "share": 0.1147,
+    "net": 246,
+    "entered": 4.26,
+    "won": 0.369,
+    "lost": 0.136
+   },
+   "its pressure": {
+    "rate": -67.6,
+    "share": 0.0929,
+    "net": -377,
+    "entered": 3.68,
+    "won": 0.222,
+    "lost": 0.345
+   },
+   "I came by air": {
+    "rate": -36.7,
+    "share": 0.1004,
+    "net": -221,
+    "entered": 8.74,
+    "won": 0.089,
+    "lost": 0.126
+   },
+   "it came by air": {
+    "rate": 116.6,
+    "share": 0.0891,
+    "net": 624,
+    "entered": 10.16,
+    "won": 0.064,
+    "lost": 0.042
+   },
+   "both in the air": {
+    "rate": 21.1,
+    "share": 0.234,
+    "net": 296,
+    "entered": 11.54,
+    "won": 0.052,
+    "lost": 0.067
+   },
+   "on the ground": {
+    "rate": -58.8,
+    "share": 0.1224,
+    "net": -432,
+    "entered": 10.29,
+    "won": 0.052,
+    "lost": 0.067
+   },
+   "ayu_won": 0.478
+  },
+  "player/143": {
+   "matches": 48,
+   "minutes": 104.2,
+   "net": 1633,
+   "my okizeme": {
+    "rate": 97.3,
+    "share": 0.1455,
+    "net": 849,
+    "entered": 3.94,
+    "won": 0.309,
+    "lost": 0.226
+   },
+   "its okizeme": {
+    "rate": -29.6,
+    "share": 0.1305,
+    "net": -232,
+    "entered": 3.79,
+    "won": 0.187,
+    "lost": 0.299
+   },
+   "my pressure": {
+    "rate": 86.5,
+    "share": 0.1034,
+    "net": 537,
+    "entered": 4.0,
+    "won": 0.384,
+    "lost": 0.185
+   },
+   "its pressure": {
+    "rate": 6.4,
+    "share": 0.1031,
+    "net": 39,
+    "entered": 5.18,
+    "won": 0.148,
+    "lost": 0.293
+   },
+   "I came by air": {
+    "rate": -8.4,
+    "share": 0.1089,
+    "net": -55,
+    "entered": 10.0,
+    "won": 0.077,
+    "lost": 0.069
+   },
+   "it came by air": {
+    "rate": 53.2,
+    "share": 0.0817,
+    "net": 261,
+    "entered": 7.79,
+    "won": 0.053,
+    "lost": 0.037
+   },
+   "both in the air": {
+    "rate": 12.0,
+    "share": 0.2636,
+    "net": 190,
+    "entered": 12.18,
+    "won": 0.05,
+    "lost": 0.072
+   },
+   "on the ground": {
+    "rate": 11.6,
+    "share": 0.0632,
+    "net": 44,
+    "entered": 7.05,
+    "won": 0.061,
+    "lost": 0.084
+   },
+   "ayu_won": 0.688
+  },
+  "opponent/187": {
+   "matches": 21,
+   "minutes": 41.5,
+   "net": 4066,
+   "my okizeme": {
+    "rate": 192.3,
+    "share": 0.1969,
+    "net": 2273,
+    "entered": 5.33,
+    "won": 0.376,
+    "lost": 0.181
+   },
+   "its okizeme": {
+    "rate": 70.3,
+    "share": 0.1015,
+    "net": 428,
+    "entered": 2.85,
+    "won": 0.246,
+    "lost": 0.288
+   },
+   "my pressure": {
+    "rate": 69.2,
+    "share": 0.08,
+    "net": 332,
+    "entered": 3.52,
+    "won": 0.418,
+    "lost": 0.205
+   },
+   "its pressure": {
+    "rate": 155.9,
+    "share": 0.0918,
+    "net": 859,
+    "entered": 4.56,
+    "won": 0.212,
+    "lost": 0.265
+   },
+   "I came by air": {
+    "rate": -11.0,
+    "share": 0.1064,
+    "net": -70,
+    "entered": 9.41,
+    "won": 0.113,
+    "lost": 0.108
+   },
+   "it came by air": {
+    "rate": -35.1,
+    "share": 0.0934,
+    "net": -197,
+    "entered": 9.99,
+    "won": 0.031,
+    "lost": 0.041
+   },
+   "both in the air": {
+    "rate": 22.1,
+    "share": 0.2565,
+    "net": 340,
+    "entered": 12.16,
+    "won": 0.06,
+    "lost": 0.075
+   },
+   "on the ground": {
+    "rate": 22.9,
+    "share": 0.0736,
+    "net": 101,
+    "entered": 8.66,
+    "won": 0.045,
+    "lost": 0.058
+   },
+   "ayu_won": 0.905
+  },
+  "char/mizukab": {
+   "matches": 71,
+   "minutes": 171.0,
+   "net": -622,
+   "my okizeme": {
+    "rate": 71.4,
+    "share": 0.1232,
+    "net": 528,
+    "entered": 3.31,
+    "won": 0.293,
+    "lost": 0.249
+   },
+   "its okizeme": {
+    "rate": -29.6,
+    "share": 0.1748,
+    "net": -310,
+    "entered": 4.66,
+    "won": 0.157,
+    "lost": 0.282
+   },
+   "my pressure": {
+    "rate": 31.5,
+    "share": 0.084,
+    "net": 159,
+    "entered": 3.28,
+    "won": 0.336,
+    "lost": 0.173
+   },
+   "its pressure": {
+    "rate": -52.2,
+    "share": 0.1261,
+    "net": -395,
+    "entered": 5.66,
+    "won": 0.142,
+    "lost": 0.407
+   },
+   "I came by air": {
+    "rate": -94.0,
+    "share": 0.102,
+    "net": -576,
+    "entered": 10.16,
+    "won": 0.074,
+    "lost": 0.116
+   },
+   "it came by air": {
+    "rate": 17.2,
+    "share": 0.086,
+    "net": 89,
+    "entered": 8.82,
+    "won": 0.05,
+    "lost": 0.067
+   },
+   "both in the air": {
+    "rate": 6.9,
+    "share": 0.2224,
+    "net": 92,
+    "entered": 12.05,
+    "won": 0.057,
+    "lost": 0.062
+   },
+   "on the ground": {
+    "rate": -42.7,
+    "share": 0.0815,
+    "net": -209,
+    "entered": 9.09,
+    "won": 0.042,
+    "lost": 0.089
+   },
+   "ayu_won": 0.437
+  },
+  "char/misuzu": {
+   "matches": 82,
+   "minutes": 207.5,
+   "net": 202,
+   "my okizeme": {
+    "rate": 113.9,
+    "share": 0.1188,
+    "net": 812,
+    "entered": 3.25,
+    "won": 0.289,
+    "lost": 0.184
+   },
+   "its okizeme": {
+    "rate": -45.5,
+    "share": 0.1363,
+    "net": -372,
+    "entered": 3.74,
+    "won": 0.165,
+    "lost": 0.226
+   },
+   "my pressure": {
+    "rate": 38.8,
+    "share": 0.1083,
+    "net": 252,
+    "entered": 4.2,
+    "won": 0.349,
+    "lost": 0.171
+   },
+   "its pressure": {
+    "rate": -50.0,
+    "share": 0.1217,
+    "net": -365,
+    "entered": 5.42,
+    "won": 0.119,
+    "lost": 0.346
+   },
+   "I came by air": {
+    "rate": -21.2,
+    "share": 0.1395,
+    "net": -178,
+    "entered": 10.17,
+    "won": 0.065,
+    "lost": 0.087
+   },
+   "it came by air": {
+    "rate": 30.5,
+    "share": 0.0784,
+    "net": 143,
+    "entered": 8.26,
+    "won": 0.068,
+    "lost": 0.069
+   },
+   "both in the air": {
+    "rate": -6.0,
+    "share": 0.1813,
+    "net": -66,
+    "entered": 9.87,
+    "won": 0.047,
+    "lost": 0.067
+   },
+   "on the ground": {
+    "rate": -3.6,
+    "share": 0.1156,
+    "net": -25,
+    "entered": 9.56,
+    "won": 0.046,
+    "lost": 0.067
+   },
+   "ayu_won": 0.549
+  },
+  "opponent/160": {
+   "matches": 63,
+   "minutes": 164.9,
+   "net": -1523,
+   "my okizeme": {
+    "rate": 38.5,
+    "share": 0.0934,
+    "net": 216,
+    "entered": 2.5,
+    "won": 0.264,
+    "lost": 0.191
+   },
+   "its okizeme": {
+    "rate": -83.3,
+    "share": 0.1475,
+    "net": -737,
+    "entered": 3.98,
+    "won": 0.126,
+    "lost": 0.306
+   },
+   "my pressure": {
+    "rate": 24.6,
+    "share": 0.1358,
+    "net": 200,
+    "entered": 4.63,
+    "won": 0.314,
+    "lost": 0.145
+   },
+   "its pressure": {
+    "rate": -72.1,
+    "share": 0.1146,
+    "net": -496,
+    "entered": 5.11,
+    "won": 0.113,
+    "lost": 0.408
+   },
+   "I came by air": {
+    "rate": -4.3,
+    "share": 0.1245,
+    "net": -32,
+    "entered": 10.77,
+    "won": 0.065,
+    "lost": 0.083
+   },
+   "it came by air": {
+    "rate": -14.6,
+    "share": 0.0587,
+    "net": -51,
+    "entered": 6.06,
+    "won": 0.045,
+    "lost": 0.051
+   },
+   "both in the air": {
+    "rate": -27.3,
+    "share": 0.204,
+    "net": -335,
+    "entered": 10.12,
+    "won": 0.046,
+    "lost": 0.071
+   },
+   "on the ground": {
+    "rate": -39.4,
+    "share": 0.1215,
+    "net": -287,
+    "entered": 8.72,
+    "won": 0.056,
+    "lost": 0.069
+   },
+   "ayu_won": 0.397
+  },
+  "char/makoto": {
+   "matches": 56,
+   "minutes": 121.8,
+   "net": -588,
+   "my okizeme": {
+    "rate": 28.5,
+    "share": 0.1172,
+    "net": 201,
+    "entered": 3.25,
+    "won": 0.26,
+    "lost": 0.285
+   },
+   "its okizeme": {
+    "rate": -54.7,
+    "share": 0.1554,
+    "net": -510,
+    "entered": 4.33,
+    "won": 0.201,
+    "lost": 0.286
+   },
+   "my pressure": {
+    "rate": 103.3,
+    "share": 0.1198,
+    "net": 742,
+    "entered": 4.31,
+    "won": 0.36,
+    "lost": 0.2
+   },
+   "its pressure": {
+    "rate": -100.7,
+    "share": 0.1287,
+    "net": -778,
+    "entered": 5.61,
+    "won": 0.127,
+    "lost": 0.408
+   },
+   "I came by air": {
+    "rate": -16.0,
+    "share": 0.1199,
+    "net": -115,
+    "entered": 11.78,
+    "won": 0.069,
+    "lost": 0.086
+   },
+   "it came by air": {
+    "rate": 24.5,
+    "share": 0.0646,
+    "net": 95,
+    "entered": 7.15,
+    "won": 0.045,
+    "lost": 0.069
+   },
+   "both in the air": {
+    "rate": -22.5,
+    "share": 0.2128,
+    "net": -287,
+    "entered": 11.78,
+    "won": 0.04,
+    "lost": 0.066
+   },
+   "on the ground": {
+    "rate": 13.2,
+    "share": 0.0815,
+    "net": 65,
+    "entered": 8.95,
+    "won": 0.055,
+    "lost": 0.09
+   },
+   "ayu_won": 0.5
+  },
+  "opponent/186": {
+   "matches": 24,
+   "minutes": 55.9,
+   "net": 165,
+   "my okizeme": {
+    "rate": 32.0,
+    "share": 0.1289,
+    "net": 248,
+    "entered": 3.47,
+    "won": 0.268,
+    "lost": 0.253
+   },
+   "its okizeme": {
+    "rate": -72.8,
+    "share": 0.1482,
+    "net": -648,
+    "entered": 4.36,
+    "won": 0.172,
+    "lost": 0.32
+   },
+   "my pressure": {
+    "rate": 68.3,
+    "share": 0.0985,
+    "net": 404,
+    "entered": 3.99,
+    "won": 0.359,
+    "lost": 0.197
+   },
+   "its pressure": {
+    "rate": -50.5,
+    "share": 0.122,
+    "net": -369,
+    "entered": 5.65,
+    "won": 0.127,
+    "lost": 0.329
+   },
+   "I came by air": {
+    "rate": -41.7,
+    "share": 0.1212,
+    "net": -303,
+    "entered": 10.32,
+    "won": 0.071,
+    "lost": 0.083
+   },
+   "it came by air": {
+    "rate": 126.7,
+    "share": 0.0717,
+    "net": 545,
+    "entered": 6.65,
+    "won": 0.067,
+    "lost": 0.022
+   },
+   "both in the air": {
+    "rate": -3.9,
+    "share": 0.2457,
+    "net": -58,
+    "entered": 11.29,
+    "won": 0.038,
+    "lost": 0.07
+   },
+   "on the ground": {
+    "rate": 90.8,
+    "share": 0.0637,
+    "net": 347,
+    "entered": 6.67,
+    "won": 0.075,
+    "lost": 0.094
+   },
+   "ayu_won": 0.5
+  },
+  "char/shiori": {
+   "matches": 44,
+   "minutes": 104.2,
+   "net": 274,
+   "my okizeme": {
+    "rate": 46.6,
+    "share": 0.128,
+    "net": 358,
+    "entered": 3.43,
+    "won": 0.238,
+    "lost": 0.221
+   },
+   "its okizeme": {
+    "rate": 2.1,
+    "share": 0.1478,
+    "net": 19,
+    "entered": 4.05,
+    "won": 0.192,
+    "lost": 0.284
+   },
+   "my pressure": {
+    "rate": 107.7,
+    "share": 0.1134,
+    "net": 733,
+    "entered": 4.34,
+    "won": 0.316,
+    "lost": 0.219
+   },
+   "its pressure": {
+    "rate": -35.8,
+    "share": 0.1114,
+    "net": -239,
+    "entered": 5.26,
+    "won": 0.1,
+    "lost": 0.414
+   },
+   "I came by air": {
+    "rate": -88.0,
+    "share": 0.111,
+    "net": -586,
+    "entered": 10.88,
+    "won": 0.061,
+    "lost": 0.123
+   },
+   "it came by air": {
+    "rate": 93.3,
+    "share": 0.0774,
+    "net": 433,
+    "entered": 7.79,
+    "won": 0.053,
+    "lost": 0.038
+   },
+   "both in the air": {
+    "rate": -34.5,
+    "share": 0.2389,
+    "net": -494,
+    "entered": 12.67,
+    "won": 0.038,
+    "lost": 0.087
+   },
+   "on the ground": {
+    "rate": 11.8,
+    "share": 0.0721,
+    "net": 51,
+    "entered": 8.33,
+    "won": 0.044,
+    "lost": 0.071
+   },
+   "ayu_won": 0.5
+  },
+  "char/sayuri": {
+   "matches": 199,
+   "minutes": 421.4,
+   "net": -3961,
+   "my okizeme": {
+    "rate": -0.0,
+    "share": 0.1,
+    "net": 0,
+    "entered": 2.65,
+    "won": 0.238,
+    "lost": 0.233
+   },
+   "its okizeme": {
+    "rate": -54.0,
+    "share": 0.2048,
+    "net": -664,
+    "entered": 5.61,
+    "won": 0.185,
+    "lost": 0.276
+   },
+   "my pressure": {
+    "rate": -74.4,
+    "share": 0.0992,
+    "net": -443,
+    "entered": 4.19,
+    "won": 0.263,
+    "lost": 0.26
+   },
+   "its pressure": {
+    "rate": -139.0,
+    "share": 0.1305,
+    "net": -1089,
+    "entered": 5.56,
+    "won": 0.095,
+    "lost": 0.463
+   },
+   "I came by air": {
+    "rate": -127.4,
+    "share": 0.1644,
+    "net": -1256,
+    "entered": 11.76,
+    "won": 0.054,
+    "lost": 0.145
+   },
+   "it came by air": {
+    "rate": 39.3,
+    "share": 0.0444,
+    "net": 105,
+    "entered": 5.63,
+    "won": 0.058,
+    "lost": 0.068
+   },
+   "both in the air": {
+    "rate": -39.9,
+    "share": 0.1731,
+    "net": -414,
+    "entered": 10.66,
+    "won": 0.04,
+    "lost": 0.079
+   },
+   "on the ground": {
+    "rate": -40.1,
+    "share": 0.0834,
+    "net": -201,
+    "entered": 8.44,
+    "won": 0.041,
+    "lost": 0.065
+   },
+   "ayu_won": 0.151
+  },
+  "char/mishio": {
+   "matches": 117,
+   "minutes": 261.2,
+   "net": 1156,
+   "my okizeme": {
+    "rate": 89.8,
+    "share": 0.1642,
+    "net": 885,
+    "entered": 4.36,
+    "won": 0.352,
+    "lost": 0.228
+   },
+   "its okizeme": {
+    "rate": -7.4,
+    "share": 0.1496,
+    "net": -66,
+    "entered": 4.32,
+    "won": 0.23,
+    "lost": 0.235
+   },
+   "my pressure": {
+    "rate": 41.0,
+    "share": 0.1103,
+    "net": 271,
+    "entered": 4.84,
+    "won": 0.367,
+    "lost": 0.202
+   },
+   "its pressure": {
+    "rate": -11.0,
+    "share": 0.1143,
+    "net": -75,
+    "entered": 5.42,
+    "won": 0.179,
+    "lost": 0.334
+   },
+   "I came by air": {
+    "rate": -14.8,
+    "share": 0.1007,
+    "net": -89,
+    "entered": 9.76,
+    "won": 0.088,
+    "lost": 0.091
+   },
+   "it came by air": {
+    "rate": 88.2,
+    "share": 0.0728,
+    "net": 385,
+    "entered": 8.77,
+    "won": 0.078,
+    "lost": 0.05
+   },
+   "both in the air": {
+    "rate": -6.4,
+    "share": 0.205,
+    "net": -79,
+    "entered": 11.17,
+    "won": 0.061,
+    "lost": 0.085
+   },
+   "on the ground": {
+    "rate": -15.1,
+    "share": 0.0832,
+    "net": -75,
+    "entered": 8.59,
+    "won": 0.059,
+    "lost": 0.096
+   },
+   "ayu_won": 0.556
+  },
+  "opponent/197": {
+   "matches": 23,
+   "minutes": 55.8,
+   "net": 992,
+   "my okizeme": {
+    "rate": 17.4,
+    "share": 0.1154,
+    "net": 120,
+    "entered": 3.26,
+    "won": 0.275,
+    "lost": 0.313
+   },
+   "its okizeme": {
+    "rate": -31.2,
+    "share": 0.1839,
+    "net": -345,
+    "entered": 4.89,
+    "won": 0.198,
+    "lost": 0.267
+   },
+   "my pressure": {
+    "rate": 148.5,
+    "share": 0.0669,
+    "net": 596,
+    "entered": 2.99,
+    "won": 0.317,
+    "lost": 0.216
+   },
+   "its pressure": {
+    "rate": -50.7,
+    "share": 0.1248,
+    "net": -380,
+    "entered": 5.79,
+    "won": 0.139,
+    "lost": 0.372
+   },
+   "I came by air": {
+    "rate": 16.1,
+    "share": 0.1078,
+    "net": 104,
+    "entered": 10.44,
+    "won": 0.067,
+    "lost": 0.101
+   },
+   "it came by air": {
+    "rate": 195.6,
+    "share": 0.0661,
+    "net": 775,
+    "entered": 8.04,
+    "won": 0.089,
+    "lost": 0.049
+   },
+   "both in the air": {
+    "rate": -10.2,
+    "share": 0.2517,
+    "net": -154,
+    "entered": 11.11,
+    "won": 0.042,
+    "lost": 0.077
+   },
+   "on the ground": {
+    "rate": 54.8,
+    "share": 0.0833,
+    "net": 274,
+    "entered": 8.6,
+    "won": 0.06,
+    "lost": 0.096
+   },
+   "ayu_won": 0.826
+  },
+  "char/nagamori": {
+   "matches": 49,
+   "minutes": 114.4,
+   "net": -819,
+   "my okizeme": {
+    "rate": 8.0,
+    "share": 0.1031,
+    "net": 50,
+    "entered": 2.88,
+    "won": 0.27,
+    "lost": 0.321
+   },
+   "its okizeme": {
+    "rate": -60.2,
+    "share": 0.1852,
+    "net": -669,
+    "entered": 4.88,
+    "won": 0.202,
+    "lost": 0.286
+   },
+   "my pressure": {
+    "rate": 59.7,
+    "share": 0.0784,
+    "net": 281,
+    "entered": 3.5,
+    "won": 0.302,
+    "lost": 0.208
+   },
+   "its pressure": {
+    "rate": -115.7,
+    "share": 0.1185,
+    "net": -823,
+    "entered": 5.47,
+    "won": 0.117,
+    "lost": 0.361
+   },
+   "I came by air": {
+    "rate": -55.9,
+    "share": 0.1149,
+    "net": -385,
+    "entered": 11.46,
+    "won": 0.063,
+    "lost": 0.098
+   },
+   "it came by air": {
+    "rate": 170.2,
+    "share": 0.0652,
+    "net": 666,
+    "entered": 7.87,
+    "won": 0.077,
+    "lost": 0.042
+   },
+   "both in the air": {
+    "rate": -7.4,
+    "share": 0.2561,
+    "net": -114,
+    "entered": 12.66,
+    "won": 0.048,
+    "lost": 0.057
+   },
+   "on the ground": {
+    "rate": 37.1,
+    "share": 0.0786,
+    "net": 175,
+    "entered": 8.32,
+    "won": 0.061,
+    "lost": 0.102
+   },
+   "ayu_won": 0.551
+  },
+  "char/nanase": {
+   "matches": 130,
+   "minutes": 280.6,
+   "net": 141,
+   "my okizeme": {
+    "rate": 83.3,
+    "share": 0.1529,
+    "net": 765,
+    "entered": 4.18,
+    "won": 0.334,
+    "lost": 0.231
+   },
+   "its okizeme": {
+    "rate": 49.4,
+    "share": 0.1123,
+    "net": 333,
+    "entered": 3.35,
+    "won": 0.251,
+    "lost": 0.222
+   },
+   "my pressure": {
+    "rate": 38.2,
+    "share": 0.1043,
+    "net": 239,
+    "entered": 4.3,
+    "won": 0.315,
+    "lost": 0.187
+   },
+   "its pressure": {
+    "rate": -25.2,
+    "share": 0.0951,
+    "net": -144,
+    "entered": 4.34,
+    "won": 0.179,
+    "lost": 0.321
+   },
+   "I came by air": {
+    "rate": -87.5,
+    "share": 0.1765,
+    "net": -926,
+    "entered": 9.73,
+    "won": 0.126,
+    "lost": 0.144
+   },
+   "it came by air": {
+    "rate": 95.2,
+    "share": 0.068,
+    "net": 388,
+    "entered": 8.18,
+    "won": 0.076,
+    "lost": 0.051
+   },
+   "both in the air": {
+    "rate": -27.1,
+    "share": 0.1858,
+    "net": -302,
+    "entered": 9.17,
+    "won": 0.049,
+    "lost": 0.091
+   },
+   "on the ground": {
+    "rate": -33.5,
+    "share": 0.1051,
+    "net": -211,
+    "entered": 9.18,
+    "won": 0.075,
+    "lost": 0.07
+   },
+   "ayu_won": 0.492
+  },
+  "char/exnanase": {
+   "matches": 186,
+   "minutes": 391.5,
+   "net": 519,
+   "my okizeme": {
+    "rate": 148.7,
+    "share": 0.1426,
+    "net": 1272,
+    "entered": 3.9,
+    "won": 0.339,
+    "lost": 0.14
+   },
+   "its okizeme": {
+    "rate": -30.2,
+    "share": 0.1348,
+    "net": -244,
+    "entered": 3.88,
+    "won": 0.198,
+    "lost": 0.213
+   },
+   "my pressure": {
+    "rate": -13.4,
+    "share": 0.1398,
+    "net": -113,
+    "entered": 5.62,
+    "won": 0.311,
+    "lost": 0.18
+   },
+   "its pressure": {
+    "rate": -12.8,
+    "share": 0.0902,
+    "net": -69,
+    "entered": 3.96,
+    "won": 0.187,
+    "lost": 0.256
+   },
+   "I came by air": {
+    "rate": -33.9,
+    "share": 0.1872,
+    "net": -381,
+    "entered": 9.3,
+    "won": 0.099,
+    "lost": 0.113
+   },
+   "it came by air": {
+    "rate": 110.7,
+    "share": 0.0512,
+    "net": 340,
+    "entered": 6.77,
+    "won": 0.071,
+    "lost": 0.03
+   },
+   "both in the air": {
+    "rate": 33.7,
+    "share": 0.1359,
+    "net": 275,
+    "entered": 6.93,
+    "won": 0.067,
+    "lost": 0.057
+   },
+   "on the ground": {
+    "rate": -79.1,
+    "share": 0.1182,
+    "net": -561,
+    "entered": 9.27,
+    "won": 0.058,
+    "lost": 0.093
+   },
+   "ayu_won": 0.565
+  },
+  "char/mai": {
+   "matches": 51,
+   "minutes": 114.5,
+   "net": -2382,
+   "my okizeme": {
+    "rate": 12.2,
+    "share": 0.1023,
+    "net": 75,
+    "entered": 2.72,
+    "won": 0.257,
+    "lost": 0.225
+   },
+   "its okizeme": {
+    "rate": -49.4,
+    "share": 0.1482,
+    "net": -439,
+    "entered": 4.13,
+    "won": 0.148,
+    "lost": 0.323
+   },
+   "my pressure": {
+    "rate": 60.2,
+    "share": 0.1021,
+    "net": 369,
+    "entered": 3.91,
+    "won": 0.359,
+    "lost": 0.17
+   },
+   "its pressure": {
+    "rate": -177.6,
+    "share": 0.1468,
+    "net": -1564,
+    "entered": 5.75,
+    "won": 0.086,
+    "lost": 0.461
+   },
+   "I came by air": {
+    "rate": -82.3,
+    "share": 0.1306,
+    "net": -644,
+    "entered": 12.75,
+    "won": 0.051,
+    "lost": 0.096
+   },
+   "it came by air": {
+    "rate": 21.4,
+    "share": 0.0682,
+    "net": 88,
+    "entered": 8.33,
+    "won": 0.057,
+    "lost": 0.057
+   },
+   "both in the air": {
+    "rate": -16.1,
+    "share": 0.2053,
+    "net": -198,
+    "entered": 13.47,
+    "won": 0.028,
+    "lost": 0.045
+   },
+   "on the ground": {
+    "rate": -11.5,
+    "share": 0.0965,
+    "net": -67,
+    "entered": 8.94,
+    "won": 0.042,
+    "lost": 0.074
+   },
+   "ayu_won": 0.235
+  },
+  "player/282": {
+   "matches": 57,
+   "minutes": 144.8,
+   "net": 345,
+   "my okizeme": {
+    "rate": 19.7,
+    "share": 0.1099,
+    "net": 130,
+    "entered": 3.0,
+    "won": 0.237,
+    "lost": 0.228
+   },
+   "its okizeme": {
+    "rate": -37.6,
+    "share": 0.1419,
+    "net": -320,
+    "entered": 3.83,
+    "won": 0.181,
+    "lost": 0.309
+   },
+   "my pressure": {
+    "rate": 84.2,
+    "share": 0.1106,
+    "net": 559,
+    "entered": 4.24,
+    "won": 0.314,
+    "lost": 0.181
+   },
+   "its pressure": {
+    "rate": -29.6,
+    "share": 0.1252,
+    "net": -222,
+    "entered": 5.64,
+    "won": 0.123,
+    "lost": 0.37
+   },
+   "I came by air": {
+    "rate": -17.9,
+    "share": 0.1149,
+    "net": -124,
+    "entered": 9.45,
+    "won": 0.079,
+    "lost": 0.108
+   },
+   "it came by air": {
+    "rate": 75.5,
+    "share": 0.0625,
+    "net": 283,
+    "entered": 7.87,
+    "won": 0.045,
+    "lost": 0.045
+   },
+   "both in the air": {
+    "rate": -3.5,
+    "share": 0.2274,
+    "net": -48,
+    "entered": 10.36,
+    "won": 0.044,
+    "lost": 0.058
+   },
+   "on the ground": {
+    "rate": 13.5,
+    "share": 0.1075,
+    "net": 87,
+    "entered": 8.97,
+    "won": 0.056,
+    "lost": 0.063
+   },
+   "ayu_won": 0.596
+  },
+  "char/akiko": {
+   "matches": 80,
+   "minutes": 219.1,
+   "net": -1799,
+   "my okizeme": {
+    "rate": 18.1,
+    "share": 0.105,
+    "net": 114,
+    "entered": 2.74,
+    "won": 0.245,
+    "lost": 0.285
+   },
+   "its okizeme": {
+    "rate": -20.4,
+    "share": 0.1651,
+    "net": -202,
+    "entered": 4.5,
+    "won": 0.235,
+    "lost": 0.232
+   },
+   "my pressure": {
+    "rate": -40.9,
+    "share": 0.0881,
+    "net": -216,
+    "entered": 3.86,
+    "won": 0.385,
+    "lost": 0.169
+   },
+   "its pressure": {
+    "rate": -120.9,
+    "share": 0.0922,
+    "net": -668,
+    "entered": 4.06,
+    "won": 0.094,
+    "lost": 0.413
+   },
+   "I came by air": {
+    "rate": -63.6,
+    "share": 0.1332,
+    "net": -508,
+    "entered": 11.03,
+    "won": 0.074,
+    "lost": 0.127
+   },
+   "it came by air": {
+    "rate": 39.6,
+    "share": 0.0783,
+    "net": 186,
+    "entered": 8.08,
+    "won": 0.062,
+    "lost": 0.098
+   },
+   "both in the air": {
+    "rate": -26.6,
+    "share": 0.2158,
+    "net": -344,
+    "entered": 11.57,
+    "won": 0.052,
+    "lost": 0.08
+   },
+   "on the ground": {
+    "rate": -21.9,
+    "share": 0.1225,
+    "net": -161,
+    "entered": 10.11,
+    "won": 0.035,
+    "lost": 0.056
+   },
+   "ayu_won": 0.237
+  },
+  "player/379": {
+   "matches": 60,
+   "minutes": 136.4,
+   "net": -3729,
+   "my okizeme": {
+    "rate": 58.9,
+    "share": 0.078,
+    "net": 276,
+    "entered": 2.07,
+    "won": 0.255,
+    "lost": 0.195
+   },
+   "its okizeme": {
+    "rate": -99.4,
+    "share": 0.1879,
+    "net": -1120,
+    "entered": 4.9,
+    "won": 0.166,
+    "lost": 0.332
+   },
+   "my pressure": {
+    "rate": -105.4,
+    "share": 0.0976,
+    "net": -617,
+    "entered": 4.11,
+    "won": 0.248,
+    "lost": 0.171
+   },
+   "its pressure": {
+    "rate": -173.4,
+    "share": 0.1094,
+    "net": -1138,
+    "entered": 5.07,
+    "won": 0.097,
+    "lost": 0.386
+   },
+   "I came by air": {
+    "rate": -48.8,
+    "share": 0.1472,
+    "net": -431,
+    "entered": 12.1,
+    "won": 0.048,
+    "lost": 0.077
+   },
+   "it came by air": {
+    "rate": 28.1,
+    "share": 0.0444,
+    "net": 75,
+    "entered": 5.97,
+    "won": 0.055,
+    "lost": 0.037
+   },
+   "both in the air": {
+    "rate": -29.8,
+    "share": 0.245,
+    "net": -438,
+    "entered": 11.96,
+    "won": 0.023,
+    "lost": 0.058
+   },
+   "on the ground": {
+    "rate": -61.6,
+    "share": 0.0905,
+    "net": -335,
+    "entered": 7.66,
+    "won": 0.039,
+    "lost": 0.075
+   },
+   "ayu_won": 0.133
+  },
+  "char/kano": {
+   "matches": 26,
+   "minutes": 72.2,
+   "net": 1384,
+   "my okizeme": {
+    "rate": 149.6,
+    "share": 0.1244,
+    "net": 1116,
+    "entered": 3.12,
+    "won": 0.293,
+    "lost": 0.169
+   },
+   "its okizeme": {
+    "rate": -35.0,
+    "share": 0.1201,
+    "net": -253,
+    "entered": 3.52,
+    "won": 0.091,
+    "lost": 0.291
+   },
+   "my pressure": {
+    "rate": 68.8,
+    "share": 0.1362,
+    "net": 563,
+    "entered": 4.46,
+    "won": 0.37,
+    "lost": 0.177
+   },
+   "its pressure": {
+    "rate": -44.3,
+    "share": 0.1441,
+    "net": -383,
+    "entered": 5.94,
+    "won": 0.089,
+    "lost": 0.399
+   },
+   "I came by air": {
+    "rate": -14.0,
+    "share": 0.1795,
+    "net": -151,
+    "entered": 10.43,
+    "won": 0.074,
+    "lost": 0.112
+   },
+   "it came by air": {
+    "rate": 144.3,
+    "share": 0.0641,
+    "net": 555,
+    "entered": 5.28,
+    "won": 0.076,
+    "lost": 0.021
+   },
+   "both in the air": {
+    "rate": -20.1,
+    "share": 0.1594,
+    "net": -192,
+    "entered": 8.05,
+    "won": 0.026,
+    "lost": 0.102
+   },
+   "on the ground": {
+    "rate": 29.6,
+    "share": 0.0723,
+    "net": 128,
+    "entered": 7.87,
+    "won": 0.055,
+    "lost": 0.07
+   },
+   "ayu_won": 0.654
+  },
+  "opponent/23": {
+   "matches": 41,
+   "minutes": 115.2,
+   "net": 780,
+   "my okizeme": {
+    "rate": 170.0,
+    "share": 0.0984,
+    "net": 1003,
+    "entered": 2.65,
+    "won": 0.285,
+    "lost": 0.151
+   },
+   "its okizeme": {
+    "rate": -96.1,
+    "share": 0.1041,
+    "net": -600,
+    "entered": 2.93,
+    "won": 0.098,
+    "lost": 0.26
+   },
+   "my pressure": {
+    "rate": 40.0,
+    "share": 0.1227,
+    "net": 295,
+    "entered": 4.18,
+    "won": 0.27,
+    "lost": 0.131
+   },
+   "its pressure": {
+    "rate": -51.8,
+    "share": 0.1382,
+    "net": -429,
+    "entered": 5.22,
+    "won": 0.103,
+    "lost": 0.334
+   },
+   "I came by air": {
+    "rate": -13.7,
+    "share": 0.1397,
+    "net": -115,
+    "entered": 9.57,
+    "won": 0.054,
+    "lost": 0.046
+   },
+   "it came by air": {
+    "rate": 37.0,
+    "share": 0.0645,
+    "net": 143,
+    "entered": 7.01,
+    "won": 0.052,
+    "lost": 0.037
+   },
+   "both in the air": {
+    "rate": 17.1,
+    "share": 0.2217,
+    "net": 228,
+    "entered": 10.51,
+    "won": 0.044,
+    "lost": 0.05
+   },
+   "on the ground": {
+    "rate": 38.5,
+    "share": 0.1107,
+    "net": 256,
+    "entered": 8.5,
+    "won": 0.039,
+    "lost": 0.055
+   },
+   "ayu_won": 0.585
+  },
+  "player/402": {
+   "matches": 41,
+   "minutes": 114.7,
+   "net": 1287,
+   "my okizeme": {
+    "rate": 192.9,
+    "share": 0.1118,
+    "net": 1294,
+    "entered": 2.9,
+    "won": 0.303,
+    "lost": 0.12
+   },
+   "its okizeme": {
+    "rate": -108.5,
+    "share": 0.1072,
+    "net": -698,
+    "entered": 3.1,
+    "won": 0.059,
+    "lost": 0.303
+   },
+   "my pressure": {
+    "rate": 68.6,
+    "share": 0.1426,
+    "net": 587,
+    "entered": 4.69,
+    "won": 0.316,
+    "lost": 0.136
+   },
+   "its pressure": {
+    "rate": -46.9,
+    "share": 0.1341,
+    "net": -377,
+    "entered": 5.5,
+    "won": 0.094,
+    "lost": 0.309
+   },
+   "I came by air": {
+    "rate": -18.6,
+    "share": 0.1507,
+    "net": -168,
+    "entered": 9.65,
+    "won": 0.054,
+    "lost": 0.071
+   },
+   "it came by air": {
+    "rate": 134.7,
+    "share": 0.0607,
+    "net": 491,
+    "entered": 6.2,
+    "won": 0.07,
+    "lost": 0.023
+   },
+   "both in the air": {
+    "rate": 6.0,
+    "share": 0.2053,
+    "net": 73,
+    "entered": 9.77,
+    "won": 0.04,
+    "lost": 0.063
+   },
+   "on the ground": {
+    "rate": 16.2,
+    "share": 0.0877,
+    "net": 85,
+    "entered": 7.94,
+    "won": 0.043,
+    "lost": 0.059
+   },
+   "ayu_won": 0.707
+  },
+  "player/435": {
+   "matches": 46,
+   "minutes": 118.7,
+   "net": -2337,
+   "my okizeme": {
+    "rate": 138.4,
+    "share": 0.0782,
+    "net": 649,
+    "entered": 2.11,
+    "won": 0.232,
+    "lost": 0.164
+   },
+   "its okizeme": {
+    "rate": -62.3,
+    "share": 0.1733,
+    "net": -647,
+    "entered": 4.62,
+    "won": 0.155,
+    "lost": 0.317
+   },
+   "my pressure": {
+    "rate": -16.4,
+    "share": 0.083,
+    "net": -81,
+    "entered": 3.13,
+    "won": 0.202,
+    "lost": 0.126
+   },
+   "its pressure": {
+    "rate": -136.3,
+    "share": 0.1323,
+    "net": -1082,
+    "entered": 5.01,
+    "won": 0.077,
+    "lost": 0.397
+   },
+   "I came by air": {
+    "rate": -64.6,
+    "share": 0.1808,
+    "net": -701,
+    "entered": 12.0,
+    "won": 0.042,
+    "lost": 0.086
+   },
+   "it came by air": {
+    "rate": 74.5,
+    "share": 0.0469,
+    "net": 210,
+    "entered": 5.94,
+    "won": 0.058,
+    "lost": 0.054
+   },
+   "both in the air": {
+    "rate": -36.1,
+    "share": 0.2226,
+    "net": -482,
+    "entered": 10.94,
+    "won": 0.018,
+    "lost": 0.079
+   },
+   "on the ground": {
+    "rate": -40.6,
+    "share": 0.0828,
+    "net": -202,
+    "entered": 7.81,
+    "won": 0.053,
+    "lost": 0.077
+   },
+   "ayu_won": 0.109
+  },
+  "opponent/438": {
+   "matches": 48,
+   "minutes": 116.0,
+   "net": -3749,
+   "my okizeme": {
+    "rate": 68.1,
+    "share": 0.0843,
+    "net": 345,
+    "entered": 2.24,
+    "won": 0.269,
+    "lost": 0.227
+   },
+   "its okizeme": {
+    "rate": -81.3,
+    "share": 0.1495,
+    "net": -729,
+    "entered": 4.11,
+    "won": 0.126,
+    "lost": 0.312
+   },
+   "my pressure": {
+    "rate": -83.0,
+    "share": 0.0809,
+    "net": -403,
+    "entered": 3.32,
+    "won": 0.203,
+    "lost": 0.174
+   },
+   "its pressure": {
+    "rate": -201.9,
+    "share": 0.1502,
+    "net": -1819,
+    "entered": 5.72,
+    "won": 0.063,
+    "lost": 0.491
+   },
+   "I came by air": {
+    "rate": -58.4,
+    "share": 0.1606,
+    "net": -563,
+    "entered": 12.92,
+    "won": 0.05,
+    "lost": 0.101
+   },
+   "it came by air": {
+    "rate": 24.3,
+    "share": 0.0516,
+    "net": 75,
+    "entered": 6.45,
+    "won": 0.033,
+    "lost": 0.044
+   },
+   "both in the air": {
+    "rate": -37.4,
+    "share": 0.2404,
+    "net": -539,
+    "entered": 12.85,
+    "won": 0.033,
+    "lost": 0.064
+   },
+   "on the ground": {
+    "rate": -23.3,
+    "share": 0.0825,
+    "net": -115,
+    "entered": 8.31,
+    "won": 0.033,
+    "lost": 0.084
+   },
+   "ayu_won": 0.167
+  },
+  "player/461": {
+   "matches": 41,
+   "minutes": 103.3,
+   "net": -2486,
+   "my okizeme": {
+    "rate": 180.7,
+    "share": 0.0872,
+    "net": 945,
+    "entered": 2.31,
+    "won": 0.293,
+    "lost": 0.176
+   },
+   "its okizeme": {
+    "rate": -8.2,
+    "share": 0.1351,
+    "net": -67,
+    "entered": 3.72,
+    "won": 0.146,
+    "lost": 0.24
+   },
+   "my pressure": {
+    "rate": -84.6,
+    "share": 0.077,
+    "net": -391,
+    "entered": 3.28,
+    "won": 0.254,
+    "lost": 0.142
+   },
+   "its pressure": {
+    "rate": -194.1,
+    "share": 0.142,
+    "net": -1654,
+    "entered": 5.46,
+    "won": 0.073,
+    "lost": 0.408
+   },
+   "I came by air": {
+    "rate": -66.2,
+    "share": 0.1695,
+    "net": -674,
+    "entered": 11.91,
+    "won": 0.044,
+    "lost": 0.095
+   },
+   "it came by air": {
+    "rate": 74.0,
+    "share": 0.0604,
+    "net": 268,
+    "entered": 6.74,
+    "won": 0.04,
+    "lost": 0.037
+   },
+   "both in the air": {
+    "rate": -37.5,
+    "share": 0.2425,
+    "net": -545,
+    "entered": 12.61,
+    "won": 0.029,
+    "lost": 0.066
+   },
+   "on the ground": {
+    "rate": -71.1,
+    "share": 0.0864,
+    "net": -369,
+    "entered": 7.82,
+    "won": 0.035,
+    "lost": 0.095
+   },
+   "ayu_won": 0.244
+  },
+  "player/208": {
+   "matches": 120,
+   "minutes": 315.4,
+   "net": 1160,
+   "my okizeme": {
+    "rate": 105.0,
+    "share": 0.1545,
+    "net": 973,
+    "entered": 4.05,
+    "won": 0.281,
+    "lost": 0.19
+   },
+   "its okizeme": {
+    "rate": -34.3,
+    "share": 0.1233,
+    "net": -253,
+    "entered": 3.32,
+    "won": 0.184,
+    "lost": 0.25
+   },
+   "my pressure": {
+    "rate": 54.7,
+    "share": 0.1192,
+    "net": 391,
+    "entered": 4.4,
+    "won": 0.335,
+    "lost": 0.205
+   },
+   "its pressure": {
+    "rate": -107.7,
+    "share": 0.0938,
+    "net": -606,
+    "entered": 3.95,
+    "won": 0.108,
+    "lost": 0.427
+   },
+   "I came by air": {
+    "rate": -15.3,
+    "share": 0.105,
+    "net": -97,
+    "entered": 9.14,
+    "won": 0.072,
+    "lost": 0.09
+   },
+   "it came by air": {
+    "rate": 123.0,
+    "share": 0.0923,
+    "net": 681,
+    "entered": 8.72,
+    "won": 0.074,
+    "lost": 0.073
+   },
+   "both in the air": {
+    "rate": 12.5,
+    "share": 0.2131,
+    "net": 159,
+    "entered": 10.72,
+    "won": 0.048,
+    "lost": 0.052
+   },
+   "on the ground": {
+    "rate": -15.0,
+    "share": 0.0989,
+    "net": -89,
+    "entered": 8.57,
+    "won": 0.043,
+    "lost": 0.055
+   },
+   "ayu_won": 0.65
+  },
+  "player/473": {
+   "matches": 487,
+   "minutes": 1111.7,
+   "net": 2431,
+   "my okizeme": {
+    "rate": 113.7,
+    "share": 0.1708,
+    "net": 1165,
+    "entered": 4.59,
+    "won": 0.344,
+    "lost": 0.196
+   },
+   "its okizeme": {
+    "rate": 30.5,
+    "share": 0.1196,
+    "net": 219,
+    "entered": 3.46,
+    "won": 0.232,
+    "lost": 0.197
+   },
+   "my pressure": {
+    "rate": 62.7,
+    "share": 0.1306,
+    "net": 492,
+    "entered": 5.26,
+    "won": 0.349,
+    "lost": 0.18
+   },
+   "its pressure": {
+    "rate": 16.8,
+    "share": 0.0851,
+    "net": 86,
+    "entered": 4.14,
+    "won": 0.184,
+    "lost": 0.318
+   },
+   "I came by air": {
+    "rate": -9.7,
+    "share": 0.1326,
+    "net": -77,
+    "entered": 9.3,
+    "won": 0.111,
+    "lost": 0.109
+   },
+   "it came by air": {
+    "rate": 128.1,
+    "share": 0.0723,
+    "net": 556,
+    "entered": 8.63,
+    "won": 0.081,
+    "lost": 0.045
+   },
+   "both in the air": {
+    "rate": 10.6,
+    "share": 0.1782,
+    "net": 114,
+    "entered": 9.4,
+    "won": 0.065,
+    "lost": 0.073
+   },
+   "on the ground": {
+    "rate": -18.5,
+    "share": 0.1109,
+    "net": -123,
+    "entered": 9.31,
+    "won": 0.063,
+    "lost": 0.075
+   },
+   "ayu_won": 0.725
+  },
+  "opponent/495": {
+   "matches": 26,
+   "minutes": 59.5,
+   "net": 2591,
+   "my okizeme": {
+    "rate": 8.3,
+    "share": 0.2034,
+    "net": 101,
+    "entered": 5.51,
+    "won": 0.348,
+    "lost": 0.36
+   },
+   "its okizeme": {
+    "rate": 122.3,
+    "share": 0.1077,
+    "net": 791,
+    "entered": 3.36,
+    "won": 0.36,
+    "lost": 0.15
+   },
+   "my pressure": {
+    "rate": 28.6,
+    "share": 0.1266,
+    "net": 217,
+    "entered": 5.01,
+    "won": 0.295,
+    "lost": 0.295
+   },
+   "its pressure": {
+    "rate": -30.1,
+    "share": 0.0888,
+    "net": -160,
+    "entered": 4.4,
+    "won": 0.183,
+    "lost": 0.328
+   },
+   "I came by air": {
+    "rate": 116.3,
+    "share": 0.1396,
+    "net": 975,
+    "entered": 9.65,
+    "won": 0.171,
+    "lost": 0.094
+   },
+   "it came by air": {
+    "rate": 264.3,
+    "share": 0.0533,
+    "net": 846,
+    "entered": 8.0,
+    "won": 0.088,
+    "lost": 0.017
+   },
+   "both in the air": {
+    "rate": 14.0,
+    "share": 0.1632,
+    "net": 137,
+    "entered": 8.37,
+    "won": 0.092,
+    "lost": 0.096
+   },
+   "on the ground": {
+    "rate": -44.9,
+    "share": 0.1173,
+    "net": -316,
+    "entered": 10.26,
+    "won": 0.066,
+    "lost": 0.066
+   },
+   "ayu_won": 0.769
+  },
+  "opponent/473": {
+   "matches": 534,
+   "minutes": 1162.1,
+   "net": -3830,
+   "my okizeme": {
+    "rate": -1.6,
+    "share": 0.1059,
+    "net": -10,
+    "entered": 2.76,
+    "won": 0.252,
+    "lost": 0.26
+   },
+   "its okizeme": {
+    "rate": -65.1,
+    "share": 0.2028,
+    "net": -793,
+    "entered": 5.46,
+    "won": 0.206,
+    "lost": 0.28
+   },
+   "my pressure": {
+    "rate": -74.1,
+    "share": 0.1023,
+    "net": -455,
+    "entered": 4.5,
+    "won": 0.331,
+    "lost": 0.214
+   },
+   "its pressure": {
+    "rate": -160.7,
+    "share": 0.1093,
+    "net": -1054,
+    "entered": 4.74,
+    "won": 0.123,
+    "lost": 0.45
+   },
+   "I came by air": {
+    "rate": -99.9,
+    "share": 0.1402,
+    "net": -840,
+    "entered": 11.55,
+    "won": 0.067,
+    "lost": 0.113
+   },
+   "it came by air": {
+    "rate": 13.3,
+    "share": 0.0591,
+    "net": 47,
+    "entered": 6.8,
+    "won": 0.068,
+    "lost": 0.077
+   },
+   "both in the air": {
+    "rate": -27.2,
+    "share": 0.1764,
+    "net": -288,
+    "entered": 10.7,
+    "won": 0.056,
+    "lost": 0.083
+   },
+   "on the ground": {
+    "rate": -70.2,
+    "share": 0.104,
+    "net": -438,
+    "entered": 9.41,
+    "won": 0.058,
+    "lost": 0.092
+   },
+   "ayu_won": 0.127
+  },
+  "opponent/449": {
+   "matches": 34,
+   "minutes": 93.2,
+   "net": -2125,
+   "my okizeme": {
+    "rate": 150.4,
+    "share": 0.0782,
+    "net": 706,
+    "entered": 2.09,
+    "won": 0.241,
+    "lost": 0.144
+   },
+   "its okizeme": {
+    "rate": -76.5,
+    "share": 0.1759,
+    "net": -807,
+    "entered": 4.62,
+    "won": 0.153,
+    "lost": 0.337
+   },
+   "my pressure": {
+    "rate": -9.8,
+    "share": 0.0754,
+    "net": -44,
+    "entered": 2.78,
+    "won": 0.181,
+    "lost": 0.104
+   },
+   "its pressure": {
+    "rate": -126.2,
+    "share": 0.1306,
+    "net": -988,
+    "entered": 4.85,
+    "won": 0.08,
+    "lost": 0.392
+   },
+   "I came by air": {
+    "rate": -51.0,
+    "share": 0.1778,
+    "net": -544,
+    "entered": 12.59,
+    "won": 0.042,
+    "lost": 0.083
+   },
+   "it came by air": {
+    "rate": 64.2,
+    "share": 0.0465,
+    "net": 179,
+    "entered": 5.85,
+    "won": 0.061,
+    "lost": 0.051
+   },
+   "both in the air": {
+    "rate": -38.4,
+    "share": 0.2322,
+    "net": -535,
+    "entered": 11.48,
+    "won": 0.017,
+    "lost": 0.074
+   },
+   "on the ground": {
+    "rate": -18.1,
+    "share": 0.0834,
+    "net": -91,
+    "entered": 7.7,
+    "won": 0.063,
+    "lost": 0.084
+   },
+   "ayu_won": 0.118
+  },
+  "opponent/87": {
+   "matches": 53,
+   "minutes": 111.0,
+   "net": -130,
+   "my okizeme": {
+    "rate": 94.1,
+    "share": 0.1707,
+    "net": 964,
+    "entered": 4.68,
+    "won": 0.319,
+    "lost": 0.183
+   },
+   "its okizeme": {
+    "rate": 20.2,
+    "share": 0.1079,
+    "net": 131,
+    "entered": 3.19,
+    "won": 0.223,
+    "lost": 0.209
+   },
+   "my pressure": {
+    "rate": 61.2,
+    "share": 0.1306,
+    "net": 480,
+    "entered": 5.21,
+    "won": 0.314,
+    "lost": 0.152
+   },
+   "its pressure": {
+    "rate": -3.2,
+    "share": 0.082,
+    "net": -16,
+    "entered": 4.1,
+    "won": 0.182,
+    "lost": 0.292
+   },
+   "I came by air": {
+    "rate": -145.6,
+    "share": 0.1938,
+    "net": -1694,
+    "entered": 9.29,
+    "won": 0.121,
+    "lost": 0.152
+   },
+   "it came by air": {
+    "rate": 159.5,
+    "share": 0.0609,
+    "net": 583,
+    "entered": 7.95,
+    "won": 0.099,
+    "lost": 0.055
+   },
+   "both in the air": {
+    "rate": -38.5,
+    "share": 0.1613,
+    "net": -373,
+    "entered": 8.54,
+    "won": 0.041,
+    "lost": 0.089
+   },
+   "on the ground": {
+    "rate": -36.9,
+    "share": 0.0928,
+    "net": -205,
+    "entered": 8.56,
+    "won": 0.062,
+    "lost": 0.056
+   },
+   "ayu_won": 0.415
+  },
+  "opponent/478": {
+   "matches": 21,
+   "minutes": 53.6,
+   "net": 1769,
+   "my okizeme": {
+    "rate": 38.8,
+    "share": 0.1486,
+    "net": 346,
+    "entered": 4.01,
+    "won": 0.219,
+    "lost": 0.265
+   },
+   "its okizeme": {
+    "rate": 32.1,
+    "share": 0.1193,
+    "net": 230,
+    "entered": 3.36,
+    "won": 0.222,
+    "lost": 0.244
+   },
+   "my pressure": {
+    "rate": 68.3,
+    "share": 0.13,
+    "net": 533,
+    "entered": 4.78,
+    "won": 0.34,
+    "lost": 0.273
+   },
+   "its pressure": {
+    "rate": -46.3,
+    "share": 0.1301,
+    "net": -362,
+    "entered": 5.43,
+    "won": 0.131,
+    "lost": 0.44
+   },
+   "I came by air": {
+    "rate": 38.4,
+    "share": 0.1069,
+    "net": 246,
+    "entered": 8.9,
+    "won": 0.088,
+    "lost": 0.096
+   },
+   "it came by air": {
+    "rate": 169.9,
+    "share": 0.079,
+    "net": 806,
+    "entered": 8.32,
+    "won": 0.081,
+    "lost": 0.063
+   },
+   "both in the air": {
+    "rate": 10.3,
+    "share": 0.1928,
+    "net": 119,
+    "entered": 10.39,
+    "won": 0.034,
+    "lost": 0.054
+   },
+   "on the ground": {
+    "rate": -26.5,
+    "share": 0.0933,
+    "net": -148,
+    "entered": 8.75,
+    "won": 0.032,
+    "lost": 0.094
+   },
+   "ayu_won": 0.762
+  },
+  "opponent/477": {
+   "matches": 91,
+   "minutes": 244.3,
+   "net": 2552,
+   "my okizeme": {
+    "rate": 145.7,
+    "share": 0.1487,
+    "net": 1300,
+    "entered": 4.06,
+    "won": 0.333,
+    "lost": 0.13
+   },
+   "its okizeme": {
+    "rate": 49.0,
+    "share": 0.1109,
+    "net": 326,
+    "entered": 3.28,
+    "won": 0.222,
+    "lost": 0.12
+   },
+   "my pressure": {
+    "rate": 24.1,
+    "share": 0.1688,
+    "net": 244,
+    "entered": 6.46,
+    "won": 0.321,
+    "lost": 0.169
+   },
+   "its pressure": {
+    "rate": 67.7,
+    "share": 0.0685,
+    "net": 279,
+    "entered": 3.5,
+    "won": 0.206,
+    "lost": 0.166
+   },
+   "I came by air": {
+    "rate": 2.6,
+    "share": 0.1959,
+    "net": 31,
+    "entered": 9.57,
+    "won": 0.144,
+    "lost": 0.127
+   },
+   "it came by air": {
+    "rate": 146.4,
+    "share": 0.0438,
+    "net": 385,
+    "entered": 6.41,
+    "won": 0.063,
+    "lost": 0.012
+   },
+   "both in the air": {
+    "rate": 39.0,
+    "share": 0.1291,
+    "net": 302,
+    "entered": 6.46,
+    "won": 0.061,
+    "lost": 0.033
+   },
+   "on the ground": {
+    "rate": -39.0,
+    "share": 0.1342,
+    "net": -314,
+    "entered": 9.23,
+    "won": 0.067,
+    "lost": 0.08
+   },
+   "ayu_won": 0.89
+  },
+  "opponent/208": {
+   "matches": 50,
+   "minutes": 135.1,
+   "net": -2252,
+   "my okizeme": {
+    "rate": 29.0,
+    "share": 0.1085,
+    "net": 189,
+    "entered": 2.88,
+    "won": 0.288,
+    "lost": 0.26
+   },
+   "its okizeme": {
+    "rate": -29.8,
+    "share": 0.1814,
+    "net": -324,
+    "entered": 4.97,
+    "won": 0.2,
+    "lost": 0.259
+   },
+   "my pressure": {
+    "rate": -43.6,
+    "share": 0.0915,
+    "net": -240,
+    "entered": 4.03,
+    "won": 0.312,
+    "lost": 0.188
+   },
+   "its pressure": {
+    "rate": -120.6,
+    "share": 0.1117,
+    "net": -808,
+    "entered": 4.94,
+    "won": 0.141,
+    "lost": 0.409
+   },
+   "I came by air": {
+    "rate": -76.2,
+    "share": 0.1226,
+    "net": -560,
+    "entered": 10.54,
+    "won": 0.065,
+    "lost": 0.105
+   },
+   "it came by air": {
+    "rate": 44.4,
+    "share": 0.0717,
+    "net": 191,
+    "entered": 7.44,
+    "won": 0.067,
+    "lost": 0.076
+   },
+   "both in the air": {
+    "rate": -34.5,
+    "share": 0.2001,
+    "net": -414,
+    "entered": 10.15,
+    "won": 0.045,
+    "lost": 0.085
+   },
+   "on the ground": {
+    "rate": -42.1,
+    "share": 0.1126,
+    "net": -285,
+    "entered": 8.93,
+    "won": 0.051,
+    "lost": 0.087
+   },
+   "ayu_won": 0.14
+  },
+  "opponent/520": {
+   "matches": 34,
+   "minutes": 60.0,
+   "net": 6539,
+   "my okizeme": {
+    "rate": 257.0,
+    "share": 0.2161,
+    "net": 3333,
+    "entered": 5.77,
+    "won": 0.471,
+    "lost": 0.121
+   },
+   "its okizeme": {
+    "rate": 84.9,
+    "share": 0.1079,
+    "net": 549,
+    "entered": 3.42,
+    "won": 0.283,
+    "lost": 0.229
+   },
+   "my pressure": {
+    "rate": 118.2,
+    "share": 0.1108,
+    "net": 786,
+    "entered": 4.72,
+    "won": 0.396,
+    "lost": 0.187
+   },
+   "its pressure": {
+    "rate": 163.3,
+    "share": 0.0787,
+    "net": 771,
+    "entered": 4.27,
+    "won": 0.266,
+    "lost": 0.34
+   },
+   "I came by air": {
+    "rate": 31.3,
+    "share": 0.0684,
+    "net": 128,
+    "entered": 7.55,
+    "won": 0.099,
+    "lost": 0.095
+   },
+   "it came by air": {
+    "rate": 127.8,
+    "share": 0.0849,
+    "net": 651,
+    "entered": 11.15,
+    "won": 0.079,
+    "lost": 0.048
+   },
+   "both in the air": {
+    "rate": 33.0,
+    "share": 0.2418,
+    "net": 478,
+    "entered": 12.12,
+    "won": 0.067,
+    "lost": 0.066
+   },
+   "on the ground": {
+    "rate": -28.7,
+    "share": 0.0914,
+    "net": -157,
+    "entered": 8.79,
+    "won": 0.059,
+    "lost": 0.087
+   },
+   "ayu_won": 1.0
+  },
+  "opponent/571": {
+   "matches": 22,
+   "minutes": 39.6,
+   "net": 7210,
+   "my okizeme": {
+    "rate": 124.3,
+    "share": 0.231,
+    "net": 1724,
+    "entered": 6.17,
+    "won": 0.426,
+    "lost": 0.18
+   },
+   "its okizeme": {
+    "rate": 46.5,
+    "share": 0.0749,
+    "net": 209,
+    "entered": 2.22,
+    "won": 0.261,
+    "lost": 0.159
+   },
+   "my pressure": {
+    "rate": 291.5,
+    "share": 0.144,
+    "net": 2518,
+    "entered": 6.65,
+    "won": 0.468,
+    "lost": 0.08
+   },
+   "its pressure": {
+    "rate": 54.3,
+    "share": 0.0715,
+    "net": 233,
+    "entered": 3.49,
+    "won": 0.174,
+    "lost": 0.399
+   },
+   "I came by air": {
+    "rate": 182.6,
+    "share": 0.1185,
+    "net": 1298,
+    "entered": 8.52,
+    "won": 0.234,
+    "lost": 0.089
+   },
+   "it came by air": {
+    "rate": 156.5,
+    "share": 0.0573,
+    "net": 538,
+    "entered": 9.0,
+    "won": 0.059,
+    "lost": 0.02
+   },
+   "both in the air": {
+    "rate": 19.2,
+    "share": 0.1858,
+    "net": 214,
+    "entered": 9.18,
+    "won": 0.058,
+    "lost": 0.044
+   },
+   "on the ground": {
+    "rate": 67.7,
+    "share": 0.1171,
+    "net": 475,
+    "entered": 9.83,
+    "won": 0.111,
+    "lost": 0.051
+   },
+   "ayu_won": 1.0
+  },
+  "player/596": {
+   "matches": 173,
+   "minutes": 404.4,
+   "net": -3961,
+   "my okizeme": {
+    "rate": -25.1,
+    "share": 0.1003,
+    "net": -151,
+    "entered": 2.58,
+    "won": 0.26,
+    "lost": 0.283
+   },
+   "its okizeme": {
+    "rate": -52.6,
+    "share": 0.2178,
+    "net": -687,
+    "entered": 5.81,
+    "won": 0.234,
+    "lost": 0.246
+   },
+   "my pressure": {
+    "rate": -79.7,
+    "share": 0.1038,
+    "net": -496,
+    "entered": 5.11,
+    "won": 0.342,
+    "lost": 0.176
+   },
+   "its pressure": {
+    "rate": -159.7,
+    "share": 0.1076,
+    "net": -1031,
+    "entered": 4.78,
+    "won": 0.124,
+    "lost": 0.402
+   },
+   "I came by air": {
+    "rate": -74.6,
+    "share": 0.14,
+    "net": -626,
+    "entered": 12.59,
+    "won": 0.082,
+    "lost": 0.103
+   },
+   "it came by air": {
+    "rate": -25.0,
+    "share": 0.055,
+    "net": -83,
+    "entered": 6.6,
+    "won": 0.07,
+    "lost": 0.07
+   },
+   "both in the air": {
+    "rate": -26.7,
+    "share": 0.1701,
+    "net": -273,
+    "entered": 11.38,
+    "won": 0.063,
+    "lost": 0.085
+   },
+   "on the ground": {
+    "rate": -97.0,
+    "share": 0.1054,
+    "net": -614,
+    "entered": 9.73,
+    "won": 0.064,
+    "lost": 0.115
+   },
+   "ayu_won": 0.029
+  },
+  "opponent/650": {
+   "matches": 28,
+   "minutes": 79.0,
+   "net": 128,
+   "my okizeme": {
+    "rate": 86.4,
+    "share": 0.1549,
+    "net": 803,
+    "entered": 3.93,
+    "won": 0.257,
+    "lost": 0.164
+   },
+   "its okizeme": {
+    "rate": -25.8,
+    "share": 0.1301,
+    "net": -201,
+    "entered": 3.42,
+    "won": 0.207,
+    "lost": 0.211
+   },
+   "my pressure": {
+    "rate": 9.8,
+    "share": 0.1201,
+    "net": 71,
+    "entered": 4.35,
+    "won": 0.311,
+    "lost": 0.189
+   },
+   "its pressure": {
+    "rate": -166.3,
+    "share": 0.0872,
+    "net": -870,
+    "entered": 3.59,
+    "won": 0.102,
+    "lost": 0.444
+   },
+   "I came by air": {
+    "rate": 14.0,
+    "share": 0.101,
+    "net": 85,
+    "entered": 9.45,
+    "won": 0.079,
+    "lost": 0.084
+   },
+   "it came by air": {
+    "rate": 147.8,
+    "share": 0.0878,
+    "net": 779,
+    "entered": 9.07,
+    "won": 0.091,
+    "lost": 0.074
+   },
+   "both in the air": {
+    "rate": -10.5,
+    "share": 0.237,
+    "net": -149,
+    "entered": 11.7,
+    "won": 0.042,
+    "lost": 0.051
+   },
+   "on the ground": {
+    "rate": -79.0,
+    "share": 0.0819,
+    "net": -388,
+    "entered": 8.29,
+    "won": 0.043,
+    "lost": 0.067
+   },
+   "ayu_won": 0.536
+  },
+  "player/479": {
+   "matches": 41,
+   "minutes": 75.0,
+   "net": -6197,
+   "my okizeme": {
+    "rate": -84.0,
+    "share": 0.0815,
+    "net": -411,
+    "entered": 2.19,
+    "won": 0.189,
+    "lost": 0.287
+   },
+   "its okizeme": {
+    "rate": -72.7,
+    "share": 0.2287,
+    "net": -998,
+    "entered": 6.16,
+    "won": 0.208,
+    "lost": 0.338
+   },
+   "my pressure": {
+    "rate": -194.1,
+    "share": 0.0989,
+    "net": -1152,
+    "entered": 4.45,
+    "won": 0.249,
+    "lost": 0.335
+   },
+   "its pressure": {
+    "rate": -164.8,
+    "share": 0.1311,
+    "net": -1296,
+    "entered": 5.43,
+    "won": 0.074,
+    "lost": 0.565
+   },
+   "I came by air": {
+    "rate": -130.8,
+    "share": 0.179,
+    "net": -1405,
+    "entered": 11.91,
+    "won": 0.064,
+    "lost": 0.17
+   },
+   "it came by air": {
+    "rate": -121.2,
+    "share": 0.0295,
+    "net": -214,
+    "entered": 4.68,
+    "won": 0.037,
+    "lost": 0.057
+   },
+   "both in the air": {
+    "rate": -13.7,
+    "share": 0.1368,
+    "net": -113,
+    "entered": 8.64,
+    "won": 0.046,
+    "lost": 0.049
+   },
+   "on the ground": {
+    "rate": -88.5,
+    "share": 0.1144,
+    "net": -608,
+    "entered": 10.36,
+    "won": 0.045,
+    "lost": 0.079
+   },
+   "ayu_won": 0.0
+  },
+  "player/639": {
+   "matches": 66,
+   "minutes": 115.7,
+   "net": -7172,
+   "my okizeme": {
+    "rate": -78.4,
+    "share": 0.0973,
+    "net": -458,
+    "entered": 2.53,
+    "won": 0.16,
+    "lost": 0.283
+   },
+   "its okizeme": {
+    "rate": -82.2,
+    "share": 0.2559,
+    "net": -1263,
+    "entered": 6.88,
+    "won": 0.17,
+    "lost": 0.289
+   },
+   "my pressure": {
+    "rate": -118.8,
+    "share": 0.1021,
+    "net": -728,
+    "entered": 4.44,
+    "won": 0.286,
+    "lost": 0.233
+   },
+   "its pressure": {
+    "rate": -235.4,
+    "share": 0.1273,
+    "net": -1797,
+    "entered": 5.74,
+    "won": 0.152,
+    "lost": 0.551
+   },
+   "I came by air": {
+    "rate": -180.6,
+    "share": 0.1418,
+    "net": -1537,
+    "entered": 11.74,
+    "won": 0.031,
+    "lost": 0.115
+   },
+   "it came by air": {
+    "rate": -124.7,
+    "share": 0.0373,
+    "net": -279,
+    "entered": 5.02,
+    "won": 0.045,
+    "lost": 0.09
+   },
+   "both in the air": {
+    "rate": -76.7,
+    "share": 0.1642,
+    "net": -756,
+    "entered": 10.09,
+    "won": 0.045,
+    "lost": 0.115
+   },
+   "on the ground": {
+    "rate": -79.8,
+    "share": 0.074,
+    "net": -354,
+    "entered": 8.47,
+    "won": 0.043,
+    "lost": 0.07
+   },
+   "ayu_won": 0.0
+  }
+ },
+ "opponent": {
+  "my okizeme": {
+   "rate": {
+    "groups": 18,
+    "spread": 65.8,
+    "noise": 210.0,
+    "matches": 40.7
+   },
+   "won": {
+    "groups": 18,
+    "spread": 0.0644,
+    "noise": 0.168,
+    "matches": 27.3
+   },
+   "lost": {
+    "groups": 18,
+    "spread": 0.0599,
+    "noise": 0.163,
+    "matches": 29.6
+   },
+   "net": {
+    "groups": 18,
+    "spread": 867.0,
+    "noise": 1720.0,
+    "matches": 15.7
+   }
+  },
+  "its okizeme": {
+   "rate": {
+    "groups": 18,
+    "spread": 69.5,
+    "noise": 164.0,
+    "matches": 22.3
+   },
+   "won": {
+    "groups": 18,
+    "spread": 0.0628,
+    "noise": 0.144,
+    "matches": 21.0
+   },
+   "lost": {
+    "groups": 18,
+    "spread": 0.0595,
+    "noise": 0.156,
+    "matches": 27.6
+   },
+   "net": {
+    "groups": 18,
+    "spread": 580.0,
+    "noise": 1430.0,
+    "matches": 24.2
+   }
+  },
+  "my pressure": {
+   "rate": {
+    "groups": 18,
+    "spread": 107.0,
+    "noise": 223.0,
+    "matches": 17.4
+   },
+   "won": {
+    "groups": 18,
+    "spread": 0.0676,
+    "noise": 0.153,
+    "matches": 20.6
+   },
+   "lost": {
+    "groups": 18,
+    "spread": 0.0492,
+    "noise": 0.131,
+    "matches": 28.2
+   },
+   "net": {
+    "groups": 18,
+    "spread": 731.0,
+    "noise": 1410.0,
+    "matches": 14.9
+   }
+  },
+  "its pressure": {
+   "rate": {
+    "groups": 18,
+    "spread": 104.0,
+    "noise": 238.0,
+    "matches": 21.0
+   },
+   "won": {
+    "groups": 18,
+    "spread": 0.0501,
+    "noise": 0.12,
+    "matches": 22.9
+   },
+   "lost": {
+    "groups": 18,
+    "spread": 0.072,
+    "noise": 0.16,
+    "matches": 19.7
+   },
+   "net": {
+    "groups": 18,
+    "spread": 680.0,
+    "noise": 1460.0,
+    "matches": 18.3
+   }
+  },
+  "I came by air": {
+   "rate": {
+    "groups": 18,
+    "spread": 71.7,
+    "noise": 178.0,
+    "matches": 24.7
+   },
+   "won": {
+    "groups": 18,
+    "spread": 0.0489,
+    "noise": 0.0654,
+    "matches": 7.2
+   },
+   "lost": {
+    "groups": 18,
+    "spread": 0.02,
+    "noise": 0.0683,
+    "matches": 46.5
+   },
+   "net": {
+    "groups": 18,
+    "spread": 620.0,
+    "noise": 1330.0,
+    "matches": 18.5
+   }
+  },
+  "it came by air": {
+   "rate": {
+    "groups": 18,
+    "spread": 83.5,
+    "noise": 255.0,
+    "matches": 37.2
+   },
+   "won": {
+    "groups": 18,
+    "spread": 0.0166,
+    "noise": 0.0584,
+    "matches": 49.7
+   },
+   "lost": {
+    "groups": 18,
+    "spread": 0.0178,
+    "noise": 0.0566,
+    "matches": 40.3
+   },
+   "net": {
+    "groups": 18,
+    "spread": 329.0,
+    "noise": 968.0,
+    "matches": 34.6
+   }
+  },
+  "both in the air": {
+   "rate": {
+    "groups": 18,
+    "spread": 25.7,
+    "noise": 78.9,
+    "matches": 37.6
+   },
+   "won": {
+    "groups": 18,
+    "spread": 0.0173,
+    "noise": 0.0457,
+    "matches": 27.9
+   },
+   "lost": {
+    "groups": 18,
+    "spread": 0.0145,
+    "noise": 0.0531,
+    "matches": 53.9
+   },
+   "net": {
+    "groups": 18,
+    "spread": 320.0,
+    "noise": 1000.0,
+    "matches": 39.5
+   }
+  },
+  "on the ground": {
+   "rate": {
+    "groups": 18,
+    "spread": 31.5,
+    "noise": 195.0,
+    "matches": 152.8
+   },
+   "won": {
+    "groups": 18,
+    "spread": 0.0151,
+    "noise": 0.0562,
+    "matches": 55.1
+   },
+   "lost": {
+    "groups": 18,
+    "spread": 0.00949,
+    "noise": 0.0664,
+    "matches": 195.9
+   },
+   "net": {
+    "groups": 18,
+    "spread": 205.0,
+    "noise": 1000.0,
+    "matches": 95.4
+   }
+  }
+ },
+ "char": {
+  "my okizeme": {
+   "rate": {
+    "groups": 22,
+    "spread": 44.3,
+    "noise": 201.0,
+    "matches": 82.3
+   },
+   "won": {
+    "groups": 22,
+    "spread": 0.0318,
+    "noise": 0.174,
+    "matches": 119.5
+   },
+   "lost": {
+    "groups": 22,
+    "spread": 0.0421,
+    "noise": 0.165,
+    "matches": 61.4
+   },
+   "net": {
+    "groups": 22,
+    "spread": 346.0,
+    "noise": 1560.0,
+    "matches": 81.4
+   }
+  },
+  "its okizeme": {
+   "rate": {
+    "groups": 22,
+    "spread": 31.8,
+    "noise": 164.0,
+    "matches": 106.2
+   },
+   "won": {
+    "groups": 22,
+    "spread": 0.0304,
+    "noise": 0.138,
+    "matches": 82.8
+   },
+   "lost": {
+    "groups": 22,
+    "spread": 0.0347,
+    "noise": 0.16,
+    "matches": 85.1
+   },
+   "net": {
+    "groups": 22,
+    "spread": 245.0,
+    "noise": 1470.0,
+    "matches": 144.8
+   }
+  },
+  "my pressure": {
+   "rate": {
+    "groups": 22,
+    "spread": 42.3,
+    "noise": 226.0,
+    "matches": 114.5
+   },
+   "won": {
+    "groups": 22,
+    "spread": 0.0276,
+    "noise": 0.159,
+    "matches": 132.3
+   },
+   "lost": {
+    "groups": 22,
+    "spread": 0.0279,
+    "noise": 0.129,
+    "matches": 85.4
+   },
+   "net": {
+    "groups": 22,
+    "spread": 315.0,
+    "noise": 1540.0,
+    "matches": 95.3
+   }
+  },
+  "its pressure": {
+   "rate": {
+    "groups": 22,
+    "spread": 36.9,
+    "noise": 228.0,
+    "matches": 152.4
+   },
+   "won": {
+    "groups": 22,
+    "spread": 0.0324,
+    "noise": 0.111,
+    "matches": 47.4
+   },
+   "lost": {
+    "groups": 22,
+    "spread": 0.0631,
+    "noise": 0.168,
+    "matches": 28.4
+   },
+   "net": {
+    "groups": 22,
+    "spread": 314.0,
+    "noise": 1490.0,
+    "matches": 89.7
+   }
+  },
+  "I came by air": {
+   "rate": {
+    "groups": 22,
+    "spread": 32.2,
+    "noise": 179.0,
+    "matches": 124.7
+   },
+   "won": {
+    "groups": 22,
+    "spread": 0.0209,
+    "noise": 0.0593,
+    "matches": 32.1
+   },
+   "lost": {
+    "groups": 22,
+    "spread": 0.024,
+    "noise": 0.066,
+    "matches": 30.2
+   },
+   "net": {
+    "groups": 22,
+    "spread": 301.0,
+    "noise": 1390.0,
+    "matches": 85.2
+   }
+  },
+  "it came by air": {
+   "rate": {
+    "groups": 22,
+    "spread": 31.9,
+    "noise": 240.0,
+    "matches": 226.7
+   },
+   "won": {
+    "groups": 22,
+    "spread": 0.00868,
+    "noise": 0.0614,
+    "matches": 200.3
+   },
+   "lost": {
+    "groups": 22,
+    "spread": 0.0184,
+    "noise": 0.0574,
+    "matches": 38.7
+   },
+   "net": {
+    "groups": 22,
+    "spread": 124.0,
+    "noise": 997.0,
+    "matches": 260.3
+   }
+  },
+  "both in the air": {
+   "rate": {
+    "groups": 22,
+    "spread": 18.8,
+    "noise": 83.3,
+    "matches": 78.5
+   },
+   "won": {
+    "groups": 22,
+    "spread": 0.0105,
+    "noise": 0.0474,
+    "matches": 81.9
+   },
+   "lost": {
+    "groups": 22,
+    "spread": 0.0158,
+    "noise": 0.054,
+    "matches": 46.8
+   },
+   "net": {
+    "groups": 22,
+    "spread": 219.0,
+    "noise": 1020.0,
+    "matches": 86.4
+   }
+  },
+  "on the ground": {
+   "rate": {
+    "groups": 22,
+    "spread": 29.7,
+    "noise": 187.0,
+    "matches": 157.9
+   },
+   "won": {
+    "groups": 22,
+    "spread": 0.00991,
+    "noise": 0.0548,
+    "matches": 122.3
+   },
+   "lost": {
+    "groups": 22,
+    "spread": 0.00891,
+    "noise": 0.0687,
+    "matches": 237.9
+   },
+   "net": {
+    "groups": 22,
+    "spread": 169.0,
+    "noise": 1070.0,
+    "matches": 162.1
+   }
+  }
+ },
+ "player": {
+  "my okizeme": {
+   "rate": {
+    "groups": 12,
+    "spread": 89.7,
+    "noise": 209.0,
+    "matches": 21.8
+   },
+   "won": {
+    "groups": 12,
+    "spread": 0.0459,
+    "noise": 0.181,
+    "matches": 62.0
+   },
+   "lost": {
+    "groups": 12,
+    "spread": 0.0472,
+    "noise": 0.175,
+    "matches": 54.9
+   },
+   "net": {
+    "groups": 12,
+    "spread": 592.0,
+    "noise": 1430.0,
+    "matches": 23.2
+   }
+  },
+  "its okizeme": {
+   "rate": {
+    "groups": 12,
+    "spread": 35.3,
+    "noise": 160.0,
+    "matches": 81.7
+   },
+   "won": {
+    "groups": 12,
+    "spread": 0.0442,
+    "noise": 0.126,
+    "matches": 32.3
+   },
+   "lost": {
+    "groups": 12,
+    "spread": 0.039,
+    "noise": 0.154,
+    "matches": 62.0
+   },
+   "net": {
+    "groups": 12,
+    "spread": 415.0,
+    "noise": 1580.0,
+    "matches": 57.9
+   }
+  },
+  "my pressure": {
+   "rate": {
+    "groups": 12,
+    "spread": 89.9,
+    "noise": 234.0,
+    "matches": 27.2
+   },
+   "won": {
+    "groups": 12,
+    "spread": 0.0492,
+    "noise": 0.151,
+    "matches": 38.0
+   },
+   "lost": {
+    "groups": 12,
+    "spread": 0.0528,
+    "noise": 0.133,
+    "matches": 25.3
+   },
+   "net": {
+    "groups": 12,
+    "spread": 572.0,
+    "noise": 1440.0,
+    "matches": 25.5
+   }
+  },
+  "its pressure": {
+   "rate": {
+    "groups": 12,
+    "spread": 77.3,
+    "noise": 219.0,
+    "matches": 32.2
+   },
+   "won": {
+    "groups": 12,
+    "spread": 0.033,
+    "noise": 0.0955,
+    "matches": 33.5
+   },
+   "lost": {
+    "groups": 12,
+    "spread": 0.0823,
+    "noise": 0.16,
+    "matches": 15.1
+   },
+   "net": {
+    "groups": 12,
+    "spread": 591.0,
+    "noise": 1560.0,
+    "matches": 27.7
+   }
+  },
+  "I came by air": {
+   "rate": {
+    "groups": 12,
+    "spread": 48.0,
+    "noise": 174.0,
+    "matches": 52.2
+   },
+   "won": {
+    "groups": 12,
+    "spread": 0.0212,
+    "noise": 0.0529,
+    "matches": 24.9
+   },
+   "lost": {
+    "groups": 12,
+    "spread": 0.0258,
+    "noise": 0.065,
+    "matches": 25.4
+   },
+   "net": {
+    "groups": 12,
+    "spread": 466.0,
+    "noise": 1440.0,
+    "matches": 38.4
+   }
+  },
+  "it came by air": {
+   "rate": {
+    "groups": 12,
+    "spread": 79.7,
+    "noise": 285.0,
+    "matches": 51.1
+   },
+   "won": {
+    "groups": 12,
+    "spread": 0.0123,
+    "noise": 0.0591,
+    "matches": 92.3
+   },
+   "lost": {
+    "groups": 12,
+    "spread": 0.0184,
+    "noise": 0.0661,
+    "matches": 51.7
+   },
+   "net": {
+    "groups": 12,
+    "spread": 277.0,
+    "noise": 914.0,
+    "matches": 43.5
+   }
+  },
+  "both in the air": {
+   "rate": {
+    "groups": 12,
+    "spread": 24.5,
+    "noise": 85.0,
+    "matches": 48.3
+   },
+   "won": {
+    "groups": 12,
+    "spread": 0.0137,
+    "noise": 0.0448,
+    "matches": 42.6
+   },
+   "lost": {
+    "groups": 12,
+    "spread": 0.0167,
+    "noise": 0.0571,
+    "matches": 46.9
+   },
+   "net": {
+    "groups": 12,
+    "spread": 280.0,
+    "noise": 1030.0,
+    "matches": 53.9
+   }
+  },
+  "on the ground": {
+   "rate": {
+    "groups": 12,
+    "spread": 34.7,
+    "noise": 198.0,
+    "matches": 130.4
+   },
+   "won": {
+    "groups": 12,
+    "spread": 0.00762,
+    "noise": 0.0528,
+    "matches": 192.4
+   },
+   "lost": {
+    "groups": 12,
+    "spread": 0.0159,
+    "noise": 0.0702,
+    "matches": 77.6
+   },
+   "net": {
+    "groups": 12,
+    "spread": 235.0,
+    "noise": 1080.0,
+    "matches": 84.6
+   }
+  }
+ }
+}

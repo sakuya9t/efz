@@ -4267,3 +4267,156 @@ Round 22, started 05:28: the same league from round 21's average (its ten chunks
 as `avg10.zip`), two seeds (`agent-league22-combos-s1`, `-s2`; 20.9M steps each): the
 score was still rising when round 21 ended, and two seeds from one start say what a
 seed is worth here.
+
+## Playing to the opponent's weak areas (21 November): the plan, and the first measures
+
+The user's idea (21 November): "The agent can score opponent on different dimensions
+such as: anti-pressure, pressure, air-to-air, combo damage, defending on okizeme,
+okizeme, etc. Based on the advantage/disadvantages of the opponent, it focus on the area
+where the other side is bad at, and not try to beat its strength. This might be helpful
+to resolve its too much dependency on air-to-air. Our training league should have
+diversity too. There are very good players mostly everything is 10/10, but at least they
+have relative weakness like 8/10."
+
+One condition comes from the earlier tries: choosing an area pays only if the agent can
+play there. The told-habits experiment, round 18's `-adapt` arm and the jump account
+(above) all came to the same end: an input or an account can steer a policy away from
+what loses, but not toward a skill it lacks. Against Mishio and Kano on 20 November it had
+nowhere to go: −472 HP a minute under the user's pressure, −1,842 on its own rising, its
+own okizeme −208 a minute where the strongest Ayu player of the replays makes +1,165.
+
+### The scorecard
+
+The areas are `tactics.exchanges`' eight situations. Each is read from the viewer's side
+(the agent's, or the community's Ayu player's), and each is the other side of one of the
+opponent's skills:
+
+| Situation (the viewer's side) | The opponent's skill it measures | Entered by |
+|---|---|---|
+| my okizeme | okizeme defence | the viewer (how its combos end) |
+| its okizeme | okizeme | the opponent |
+| my pressure | anti-pressure | the viewer |
+| its pressure | pressure | the opponent |
+| I came by air | anti-air | the viewer |
+| it came by air | air approach | the opponent |
+| both in the air | air-to-air | both |
+| on the ground | ground neutral | both |
+
+Combo damage is `opening`: the HP of a hit, either way. Only three areas are the agent's to
+enter (its pressure, its jumps, its okizeme through how its combos end): those are what a
+choice can move. The opponent's three can only be answered by defence.
+
+Built (21 November): `tactics.situations` (each step's situation, by `exchanges`' own
+rule; `exchanges` now uses it and gives the same records as before on 150 replay matches,
+5,054 exchanges), `situation_time` (the steps in each) and `episodes` (each time a
+situation is entered: who hit first in it, and its HP), reported by `evaluate.py` as
+`areas`. For each situation the report gives:
+
+- `share` of the match;
+- `rate`, the HP a second ahead while in it (per second in the situation, so that how
+  often it comes up does not enter: what one more second spent there is worth);
+- `entered` a minute, and the shares of episodes `won` and `lost_first`;
+- `each`, the HP of an episode.
+
+`runs/human-ayu/areas.py` tabulates it. `areas.py people` runs it over the community's
+matches into `people-areas.json`: by Ayu player, by the opponent's player number and by
+the opponent's character, with the read-out below. `areas.py bench TAG` does it by
+opponent from a benchmark's results, beside the community's spread. Results older than
+the scorecard have the per-minute `net_ledger` only, which it shows instead.
+
+### The community's opponents: strong ones have relative weaknesses
+
+All 1,908 in-sync Ayu matches (2.4 minutes each). The average rate, HP a second for the
+Ayu player: my okizeme +78, its okizeme −37, my pressure +19, its pressure −80, I came by
+air −44, it came by air +77, both in the air −12, on the ground −30. Each opponent's rate
+less that average (−: the opponent is strong there):
+
+| Opponent | Ayu won | My oki | Its oki | My pressure | Its pressure | I came by air | It came by air | Both air | Ground |
+|---|---|---|---|---|---|---|---|---|---|
+| 473 (534 matches) | 13% | −80 | −28 | −93 | −81 | −56 | −64 | −16 | −41 |
+| 438 | 17% | −10 | −45 | −102 | −122 | −14 | −53 | −26 | +6 |
+| 449 | 12% | **+72** | −40 | −29 | −46 | −7 | −13 | −27 | +12 |
+| 208 | 14% | −49 | +7 | −63 | −41 | −32 | −33 | −23 | −12 |
+| 87 | 41% | +16 | +57 | +42 | +77 | **−102** | +82 | −27 | −7 |
+| 160 | 40% | −40 | −47 | +6 | +8 | +40 | **−92** | −16 | −10 |
+
+As the user said:
+- 473 is strong everywhere, least so in air-to-air.
+- 449 is strong but weak on its own rising.
+- 438 is strongest on both sides of pressure and about average against a jump.
+- 87 is a wall against jump-ins and weak at everything else.
+
+The strongest Ayu player (player 473) is above the average in all eight areas, most under
+pressure (+97) and on its own rising (+67).
+
+### How many matches it takes to read an opponent's area
+
+Over the 18 opponents with 20 or more matches, per area: the spread of their true values
+(their values' variance less what their own noise explains), a match's noise on one
+opponent's value, and the matches it takes for that noise to come down to half the
+spread. The rate, then the share of episodes won (the per-attempt read):
+
+| | My oki | Its oki | My pressure | Its pressure | I came by air | It came by air | Both air | Ground |
+|---|---|---|---|---|---|---|---|---|
+| spread of the rate, HP a second | 66 | 70 | 107 | 104 | 72 | 84 | 26 | 32 |
+| a match's noise | 210 | 164 | 223 | 238 | 178 | 255 | 79 | 195 |
+| matches (rate) | 41 | 22 | 17 | 21 | 25 | 37 | 38 | 153 |
+| matches (share won) | 27 | 21 | 21 | 23 | **7** | 50 | 28 | 55 |
+
+A match holds 2-13 episodes a minute of each, and opponents differ by 2-7 points in the
+shares, so the per-attempt read is no faster except for the agent's own jumps. **An 8/10
+against a 10/10 (about one spread) takes some 20 matches to see, a whole evening against
+one person; it cannot be read within a match or a set.** A hole is another matter: the
+matches needed fall with the square of its size, so a hole three spreads deep shows in
+2-5 matches. Against an opponent it hasn't read, the agent's best guide is a prior: what
+pays against opponents in general. The character explains little of it (by character the
+spread is 19-44 HP a second, by player 26-107): who plays matters more than whom they play.
+
+### How diverse the league is
+
+The spread of the agent's per-minute net (round 21's file) across the eleven opponents
+with combos (the `combos` drill), beside the spread across the community's opponents,
+HP a minute (`areas.py bench r21`):
+
+| | My oki | Its oki | My pressure | Its pressure | I came by air | It came by air | Both air | Ground |
+|---|---|---|---|---|---|---|---|---|
+| the league with combos | 422 | **177** | 825 | **202** | 860 | 1,359 | 443 | 556 |
+| the community | 867 | 580 | 731 | 680 | 620 | 329 | 320 | 205 |
+
+The league varies more than people do in the air (Nayuki's jump-ins: −3,691 a minute) and
+on the ground. It varies a third as much in the opponent's okizeme and pressure, and half
+as much in its okizeme defence: the three areas where people differ most. The league's
+exploiters leave the agent's rising alone (18 November, above), and its opponents'
+pressure is the trained policies' own (the scripted knobs throw, jump in and reverse, but
+none makes a string).
+
+### The plan, as the measures leave it
+
+1. **The scorecard everywhere** (done for evaluations, play-tests through `bench.py
+   record`, the community). From round 22's file on, a benchmark's results carry `areas`,
+   and the agent's own row sits beside the strongest player's.
+2. **A league that differs where people differ (round 23).** Planners are given to the
+   league's opponents as combos were in round 21: its files with the okizeme and pressure
+   planners (`okiplan`, `pressplan`) at a strength drawn per opponent. And spiky scripted
+   profiles: the sparring profile with the knobs of one area lowered, drawn per set
+   (okizeme on the agent: `jumpin`, `low`, `bait`; okizeme defence: `wake`, `blind`,
+   `patient`, `crouch`; anti-pressure: `rg`, `reversal`, `escape`, `throw`). Rule, fixed
+   before: the new league is taken if, with the current file against it, its spread in
+   its okizeme and its pressure reaches half the community's or more. Then round 23 is
+   judged as round 21 was: the drills with their errors, plus the agent's areas beside
+   the strongest player's.
+3. **The agent's own choices steered by the scorecard, for holes only.** The levers that
+   exist:
+   - knockdown endings (`route_ending`), against an opponent whose rising is weak (lost
+     twice as a global setting);
+   - the jump account (`risk_jump`), only where the air loses and the ground holds;
+   - the raw specials' priors, per opponent.
+
+   A lever is moved when the area's read is two errors or more below the prior (a hole),
+   with the read carried across a session, not a match. It is judged on drills whose
+   opponent has a known hole (a spiky profile) and kept if it gains two errors there and
+   loses under one on the plain league.
+4. **A style input only after 2 and 3**: if the agent has the areas but shifts between them
+   too little, it gets a style token trained with a reward for that area's play, and a
+   selector chooses the style from the scorecard. Not before: an input alone was not used
+   (the told-habits experiment).
