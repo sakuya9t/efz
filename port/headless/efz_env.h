@@ -423,8 +423,11 @@ EFZ_ENV_API int32_t efz_env_agent_throw_plan(EfzAgent* agent, EfzEnv* env, int32
 /* An attached agent's catches (16): asked, with a throw found, played, late, elsewhere,
  * none found, apart, frames on copies, milliseconds. */
 EFZ_ENV_API void efz_env_agent_air_stats(const EfzAgent* agent, int32_t* stats);
-/* An attached agent's raw specials (8; the module risk:1): presses that would start a
- * move with an account, those stopped, let out, and of the ones let out the moves seen. */
+/* An attached agent's raw specials (12; the module risk:1): presses that would start a
+ * move with an account, those stopped, let out, and of the ones let out the moves seen;
+ * the same four of its jumps at the opponent (risk_jump), and the jump's account: the
+ * jumps counted, in hundredths, their worth in HP, and the probability the next is
+ * stopped, in thousandths. */
 EFZ_ENV_API void efz_env_agent_risk_stats(const EfzAgent* agent, int32_t* stats);
 /* The move with an account (its action; -1 none) that `action` of the agent's would start
  * for player `side` of environment `index` as it is (the press, then nothing, the other

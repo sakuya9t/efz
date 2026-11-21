@@ -283,8 +283,12 @@ RISE_OPTIONS = dict(prior=2.0, meaty=0.56, low=0.3, high=0.6, near=0.0, fly=200.
 # keep into the next match), ahead (1: its own play's inputs that a planner chooses ahead,
 # for the frames until it sees a contact, are drawn for as any other step of its own play
 # is; 0: they are played as chosen); and `moves`: {a move's action: its prior, HP a use}.
+# `jump` (HP; not given: no account): the jump at the opponent by how it has paid in the
+# match, its account starting there and counting as jump_prior jumps; jump_window (steps a
+# jump is followed for), jump_temperature, jump_near (pixels).
 RISK_OPTIONS = dict(prior=4.0, temperature=75.0, window=180, look=10, look_down=50, decay=0.7,
-                    ahead=0)
+                    ahead=0, jump_prior=6.0, jump_temperature=100.0, jump_window=130,
+                    jump_near=400.0)
 
 
 def load_press(path):
@@ -763,7 +767,7 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
                  optimizer=False, parts_from=None,
                  keep=('routes', 'chooser', 'okiplan', 'pressplan', 'airthrow', 'rise', 'risk'),
                  ending=None, okiplan=None, pressplan=None, airthrow=None, rise=None,
-                 risk=None):
+                 risk=None, confirm=None):
     """Writes model_path (a model.zip, with its config.json) as an agent file at out_path.
     name: what the game shows (default: the model's folder for avg.zip / model.zip, else
     its file name). character: the one it plays (a name or 0-24; default the first of
@@ -922,6 +926,7 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
             raise ValueError('risk: an agent deciding every frame (frame_skip 1), with a delay')
         risk = dict(risk)
         moves = risk.pop('moves', None)
+        jump = risk.pop('jump', None)  # (the jump's account: its starting worth; None: none)
         unknown = sorted(set(risk) - set(RISK_OPTIONS))
         if unknown:
             raise ValueError(f"risk: no option {', '.join(unknown)} ({', '.join(RISK_OPTIONS)})")
@@ -930,6 +935,11 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         keys.update({f'risk_{k}': type(RISK_OPTIONS[k])(v)
                      for k, v in dict(RISK_OPTIONS, **risk).items()})
         keys['risk_moves'] = ','.join(f'{int(a):#x}:{float(w):g}' for a, w in sorted(moves.items()))
+        if jump is not None:
+            keys['risk_jump'] = float(jump)
+        else:
+            for k in [k for k in keys if k.startswith('risk_jump_')]:
+                del keys[k]
     if carried[0]:
         if 'routes' in carried[0] and (keys['frame_skip'] != 1 or keys['delay'] <= 0 or
                                        keys['history'] <= 0):
@@ -941,6 +951,14 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
         route_tensors = carried[2]
         keys['parts_from'] = _one_line(os.path.basename(os.fspath(parts_from)))
     train_tensors = []
+    if confirm:
+        # route_confirm: its routes begin this many steps after its hit, before it has
+        # seen it (policy.h's Routes::confirm): an opponent's file, not a person's play
+        if 'routes' not in keys:
+            raise ValueError('confirm: a file with routes')
+        if not 0 < int(confirm) <= keys['delay']:
+            raise ValueError(f"confirm: 1 to the agent's delay ({keys['delay']})")
+        keys['route_confirm'] = int(confirm)
     if train:
         train_keys, train_tensors = _train_parts(model, cfg, optimizer)
         keys.update(train_keys)
@@ -1656,9 +1674,11 @@ class NativeAgent:
                      'rise_recoil_chance', 'rise_recoil_punished')
             out.update(zip(names, [int(x) for x in v]))
         if hasattr(self._lib, 'efz_env_agent_risk_stats') and getattr(self, 'risk', False):
-            v = (ctypes.c_int32 * 8)()  # its raw specials (risk:1)
+            v = (ctypes.c_int32 * 16)()  # its raw specials (risk:1), and its jumps' account
             self._lib.efz_env_agent_risk_stats(self._h, v)
-            out.update(zip(('risk_seen', 'risk_stopped', 'risk_let', 'risk_came'),
+            out.update(zip(('risk_seen', 'risk_stopped', 'risk_let', 'risk_came', 'risk_jumps',
+                            'risk_jumps_stopped', 'risk_jumps_let', 'risk_jumps_came',
+                            'risk_jump_count', 'risk_jump_worth', 'risk_jump_chance'),
                            [int(x) for x in v]))
         return out
 

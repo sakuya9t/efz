@@ -168,6 +168,40 @@ class Risks(unittest.TestCase):
 
 
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class OverAnAgentFile(unittest.TestCase):
+    """The advantages' inputs over an opponent that is an agent file: its own control
+    bytes come through the environment's opponent_controls after the opponents' actions
+    (native_agent.NativeOpponent), and the scripted input is written over them last."""
+
+    def test_the_script_has_the_last_word(self):
+        import advantages
+        from types import SimpleNamespace
+        from efz_env.actions import ActionTable
+        table = ActionTable()
+        venv = SimpleNamespace(env=SimpleNamespace(num_envs=3, obs=np.zeros((3, 2, 168), np.float32)),
+                               _length=np.ones(3, int), opponent_controls=[], extra=None)
+        opp = advantages.AdvantagedOpponent(lambda obs: np.zeros(len(obs), np.int64), 'kano',
+                                            advantages.parse('reversal=1'))
+        opp.attach(venv)
+        venv.opponent_controls.insert(0, lambda out: out.__setitem__(slice(None), 0x55))  # the file's own
+        venv.opponent_controls.append(lambda out: out.__setitem__(2, 0x66))  # (one registered later)
+        script = {0: (4, ''), 1: None, 2: None}
+        opp.logic.step = lambda i, o: script[i]
+        actions = opp.post(np.zeros(3, np.int64), [0, 1, 2])
+        out = table.to_bytes(actions).copy()
+        for hook in sorted(venv.opponent_controls, key=lambda h: getattr(h, 'order', 0)):  # (efz_env.sb3's)
+            hook(out)
+        back = int(table.table[{a: k for k, a in enumerate(table.actions)}[(4, '')]])
+        self.assertEqual(out.tolist(), [back, 0x55, 0x66])
+        script[0] = None  # the script lets go: the file's own again
+        opp.post(np.zeros(3, np.int64), [0, 1, 2])
+        out[:] = 0
+        for hook in sorted(venv.opponent_controls, key=lambda h: getattr(h, 'order', 0)):
+            hook(out)
+        self.assertEqual(out.tolist(), [0x55, 0x55, 0x66])
+
+
+@unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
 class Flights(unittest.TestCase):
     """An air dash, what followed it and what came of it (tactics.flights)."""
 

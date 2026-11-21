@@ -127,6 +127,14 @@ struct Routes {
     int ending = 0;        // the HP a knockdown at a combo's end is worth over any other
                            // end (0: damage alone); with it the copies' victim recovers
                            // in the air as soon as it can (redteam.Planner's ending)
+    // confirm (route_confirm; 0: the agent's delay): the steps after its hit at which a
+    // plan's route begins. Fewer than its delay is a combo confirmed before it has seen
+    // the hit: not a person's, and not for an agent that is to play as one. It is for
+    // the opponents an agent trains and is measured against, whose own play in the
+    // steps before a route begins does not carry people's combos (an exploiter's route
+    // was usable at a third of its hits with its 14 steps, round 21's plan), so that
+    // they combo as their characters' players do.
+    int confirm = 0;
     std::vector<int> victims; // the characters planned against (empty: all)
     std::string source;
     bool Empty() const { return list.empty(); }
@@ -235,12 +243,26 @@ struct Risk {
     std::vector<int> moves;   // the moves with an account (their actions)
     std::vector<float> worth; // ... and each's prior, HP a use
     std::vector<int> plain;   // per action, the action of the same direction with no button
+    // jump (risk_jump: the account's starting worth, HP a jump; absent: no account): the
+    // jump at the opponent by how it has paid in the match, as a raw special is (risk.py:
+    // against the user a forward jump was worth +131 to +552 HP in the matches the agent
+    // won and -239 to +12 in those it lost, 19 to 35 a match). Its own play's action up
+    // and forward, itself free on the ground, the opponent within jumpNear pixels and not
+    // in a hit reaction it has seen: the HP swing over jumpWindow steps after one let out
+    // is its account's, over the prior (jumpWorth, counting as jumpPrior jumps); stopped
+    // with the probability 1 / (1 + exp(worth / jumpTemperature)), the action then the
+    // same buttons with forward alone (`ground`).
+    bool jump = false;
+    float jumpWorth = 0, jumpPrior = 6, jumpTemperature = 100, jumpNear = 400;
+    int jumpWindow = 130;
+    std::vector<int> ground;
 };
 
 // What its raw specials did: presses that would start a move with an account (drawn
 // for), those stopped and let out, and of the ones let out the moves it then saw.
 struct RiskStats {
     int seen = 0, stopped = 0, let = 0, came = 0;
+    int jumps = 0, jumpsStopped = 0, jumpsLet = 0, jumpsCame = 0; // the same of its jumps (Risk::jump)
 };
 
 // What its risings did: the knockdowns it saw, those the attacker was on, of them the
@@ -405,6 +427,11 @@ public:
     const RiskStats& Risks() const { return risks_; }
     int RiskStarts(const float* view, int action);
     double RiskChance(int move) const;
+    // The jump's account (Risk::jump): the probability the next jump at the opponent is
+    // stopped, the jumps counted in the match (older ones for less) and their mean swing.
+    double JumpChance() const;
+    double JumpCount() const { return jumpCount_; }
+    double JumpWorth() const;
     bool Mixing() const { return mix_ != nullptr; }
     // Another opponent: what it counted of the last one forgotten.
     void Forget()
@@ -416,6 +443,7 @@ public:
         risen_ = false;
         std::fill(riskCount_.begin(), riskCount_.end(), 0.0);
         std::fill(riskTotal_.begin(), riskTotal_.end(), 0.0);
+        jumpCount_ = jumpTotal_ = 0;
         risked_ = false;
     }
     const Counts& Seen() const { return counts_; }
@@ -530,6 +558,15 @@ private:
     int riskAge_ = 0;          // both HP at the press, whether the move was seen
     float riskHp_ = 0, riskOppHp_ = 0;
     bool riskCame_ = false;
+    double jumpCount_ = 0, jumpTotal_ = 0; // the jump's account
+    int jumpDrawnAt_ = -1000;  // the jump being tried: the step, and whether it is stopped
+    bool jumpStop_ = false;
+    bool jumpOpen_ = false;    // the jump being followed: its age, both HP at the press,
+    int jumpAge_ = 0;          // whether it saw itself in the air
+    float jumpHp_ = 0, jumpOppHp_ = 0;
+    bool jumpCame_ = false;
+    void JumpSettle();
+    int JumpAct(const float* view, int action);
     RiskStats risks_;
 };
 

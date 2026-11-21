@@ -543,6 +543,7 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         routes.byVictim = ToInt(keys, "route_by_victim", 0) != 0;
         routes.replan = ToInt(keys, "route_replan", 0) != 0;
         routes.ending = std::max(0, ToInt(keys, "route_ending", 0));
+        routes.confirm = std::max(0, ToInt(keys, "route_confirm", 0));
         const std::string& victims = keys["route_victims"];
         for (size_t at = 0; at < victims.size();) {
             size_t end = victims.find(',', at);
@@ -881,6 +882,27 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         risk.look = std::min(120, std::max(1, ToInt(keys, "risk_look", 10)));
         risk.lookDown = std::min(240, std::max(1, ToInt(keys, "risk_look_down", 50)));
         risk.decay = std::min(1.0f, std::max(0.0f, ToFloat(keys, "risk_decay", 0.7f)));
+        // risk_jump: the jump's account (absent: none)
+        float jump = ToFloat(keys, "risk_jump", NAN);
+        if (!std::isnan(jump)) {
+            risk.ground.assign(table.size(), -1);
+            for (size_t a = 0; a < table.size(); a++) {
+                for (size_t b = 0; b < table.size(); b++) {
+                    if (table[b] == ((table[a] & 0xf0) | 0x01))
+                        risk.ground[a] = (int)b;
+                }
+                if (risk.ground[a] < 0) {
+                    *error = "the agent's jump account needs forward with every button";
+                    return false;
+                }
+            }
+            risk.jump = true;
+            risk.jumpWorth = jump;
+            risk.jumpPrior = std::max(0.01f, ToFloat(keys, "risk_jump_prior", 6));
+            risk.jumpTemperature = std::max(1.0f, ToFloat(keys, "risk_jump_temperature", 100));
+            risk.jumpWindow = std::max(1, ToInt(keys, "risk_jump_window", 130));
+            risk.jumpNear = std::max(0.0f, ToFloat(keys, "risk_jump_near", 400));
+        }
     }
     return true;
 }
@@ -1068,11 +1090,15 @@ void Player::Reset()
     rise_ = RiseStats();
     // (risk.py's reset with carry)
     riskDrawn_ = riskOpen_ = -1;
+    jumpOpen_ = false;
+    jumpDrawnAt_ = -1000;
     if (risked_) {
         for (size_t k = 0; k < riskCount_.size(); k++) {
             riskCount_[k] *= policy_->risk.decay;
             riskTotal_[k] *= policy_->risk.decay;
         }
+        jumpCount_ *= policy_->risk.decay;
+        jumpTotal_ *= policy_->risk.decay;
         risked_ = false;
     }
     risks_ = RiskStats();
@@ -1081,6 +1107,7 @@ void Player::Reset()
 namespace {
 
 const int kRoundOver = 3, kDx = 4, kSelfHp = 8, kOppHp = 40, kSelfAct = 18, kOppAir = 71;
+const int kSelfAir = 39;
 const int kOppY = 46, kOppVy = 48;
 const int kOppHitstun = 52;
 const int kRiskAgain = 12; // steps in which the same move tried again is the same press
@@ -1188,6 +1215,66 @@ void Player::RiskSettle()
     riskTotal_[move] += theirs - mine;
 }
 
+// risk.py's Risk.jump_worth, jump_chance.
+double Player::JumpWorth() const
+{
+    const Risk& r = policy_->risk;
+    return ((double)r.jumpPrior * r.jumpWorth + jumpTotal_) / (r.jumpPrior + jumpCount_);
+}
+
+double Player::JumpChance() const
+{
+    const Risk& r = policy_->risk;
+    if (!r.jump)
+        return 0;
+    return 1.0 / (1.0 + exp(std::min(50.0, std::max(-50.0, JumpWorth() / r.jumpTemperature))));
+}
+
+// risk.py's Risk.jump_settle.
+void Player::JumpSettle()
+{
+    bool open = jumpOpen_;
+    jumpOpen_ = false;
+    if (!open || !jumpCame_)
+        return;
+    const float* v = in_.data();
+    double mine = std::max(0.0f, jumpHp_ - v[kSelfHp] * kHp);
+    double theirs = std::max(0.0f, jumpOppHp_ - v[kOppHp] * kHp);
+    jumpCount_ += 1;
+    jumpTotal_ += theirs - mine;
+}
+
+// risk.py's Risk.jumping: its own play's jump at the opponent, or stopped by the jump's
+// account the same buttons with forward alone. view: the game as it is.
+int Player::JumpAct(const float* view, int action)
+{
+    const Risk& r = policy_->risk;
+    const float* v = in_.data();
+    int self = (int)nearbyintf(view[kSelfAct]);
+    bool free = self <= 9 || self == 0xe || self == 0xf || self == 0x10;
+    if (view[kSelfAir] > 0 || !free || fabsf(v[kDx]) * kPixels > r.jumpNear ||
+        (v[kOppHitstun] > 0 && !IsGuard((int)nearbyintf(v[kOppAction]))))
+        return action;
+    bool again = riskT_ - jumpDrawnAt_ <= kRiskAgain;
+    if (!again) {
+        jumpStop_ = std::uniform_real_distribution<double>(0.0, 1.0)(rng_) < JumpChance();
+        risks_.jumps++;
+        (jumpStop_ ? risks_.jumpsStopped : risks_.jumpsLet)++;
+    }
+    jumpDrawnAt_ = riskT_;
+    if (jumpStop_)
+        return r.ground[action];
+    if (!again) {
+        JumpSettle();
+        jumpOpen_ = true;
+        jumpAge_ = 0;
+        jumpCame_ = false;
+        jumpHp_ = v[kSelfHp] * kHp;
+        jumpOppHp_ = v[kOppHp] * kHp;
+    }
+    return action;
+}
+
 // risk.py's Risk.watch.
 void Player::RiskWatch()
 {
@@ -1195,6 +1282,17 @@ void Player::RiskWatch()
     const float* v = in_.data();
     riskT_++;
     risked_ = true;
+    if (jumpOpen_) {
+        jumpAge_++;
+        if (!jumpCame_ && v[kSelfAir] > 0) {
+            jumpCame_ = true;
+            risks_.jumpsCame++;
+        }
+        if (!jumpCame_ && jumpAge_ > policy_->delay + kRiskCame)
+            jumpOpen_ = false; // (the press started no jump it saw)
+        else if (v[kRoundOver] != 0 || jumpAge_ >= r.jumpWindow)
+            JumpSettle();
+    }
     if (riskOpen_ < 0)
         return;
     riskAge_++;
@@ -1214,6 +1312,8 @@ int Player::RiskAct(const float* view, int action)
 {
     const Risk& r = policy_->risk;
     const float* v = in_.data();
+    if (r.jump && (policy_->table[action] & 0x0f) == 0x09 && v[kRoundOver] == 0)
+        action = JumpAct(view, action); // (up and forward: its jump at the opponent)
     if (!riskWorld_ || (policy_->table[action] & 0xf0) == 0 || v[kRoundOver] != 0)
         return action;
     if (v[kOppHitstun] > 0 && !IsGuard((int)nearbyintf(v[kOppAction])))
@@ -1782,6 +1882,8 @@ int Player::Sample(const float* in, bool deterministic)
 void Player::Begin(const float* view, bool deterministic)
 {
     const int delay = policy_->delay;
+    // (the route begins `lead` steps after the hit: its delay, or the file's route_confirm)
+    const int lead = policy_->routes.confirm > 0 ? std::min(policy_->routes.confirm, delay) : delay;
     std::vector<int> rest;
     if (routeOn_) {
         rest.assign(route_.begin() + routeAt_, route_.end());
@@ -1792,7 +1894,7 @@ void Player::Begin(const float* view, bool deterministic)
     std::vector<float> hist = inputs_, in(in_.size());
     uint8_t prev = prev_;
     std::vector<int> actions;
-    for (int k = 0; k < delay; k++) {
+    for (int k = 0; k < lead; k++) {
         int a;
         if (k < (int)rest.size()) {
             a = rest[k];
@@ -1808,14 +1910,14 @@ void Player::Begin(const float* view, bool deterministic)
     stats_.again += planned_;
     pendingFirst_ = !planned_;
     waitMs_ = planned_ ? againMs_ : patienceMs_;
-    keptOn_ = (int)rest.size() > delay;
+    keptOn_ = (int)rest.size() > lead;
     std::vector<int> extra;
     if (keptOn_)
-        extra.assign(rest.begin() + delay, rest.end());
+        extra.assign(rest.begin() + lead, rest.end());
     kept_ = keptOn_ ? rest : std::vector<int>();
     planner_->Begin(side_, hitMove_, actions, hist.data(), prev, deterministic, view, hitAge_, extra);
     pendingMove_ = hitMove_;
-    pendingOffset_ = delay + hitAge_;
+    pendingOffset_ = lead + hitAge_;
     Queue(actions, rest.size(), actions.size());
     pending_ = true;
     routeOn_ = false;

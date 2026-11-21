@@ -617,6 +617,78 @@ class PlansAsRedteam(unittest.TestCase):
             native.close()
         env.close()
 
+    def test_a_route_from_the_step_after_the_hit(self):
+        """route_confirm: a file's routes begin that many steps after its hit instead of
+        its delay (an opponent's setting: export_agent's confirm). Played from a hit, the
+        plan it makes is the one efz_env_agent_plan makes from the inputs it played until
+        then, and the route's first input is played on the step the plan is for; with
+        confirm the agent's delay it is the file without the setting."""
+        from efz_env import ActionTable, EfzVecEnv
+        from efz_env.actions import BACK
+        from efz_env.history import InputHistory
+        table = ActionTable().table
+        env = EfzVecEnv(DATA, 1, num_threads=1, frame_skip=1, skip_noninteractive=False,
+                        autoreset='disabled', max_frames=0)
+        env.set_matches(chars=('ayu', 'mai'), stage=0, cpu=(False, False))
+        hits = self.hits(env)
+        rng = np.random.default_rng(9)
+        library = random_routes(rng, sorted({h['starter'] for h in hits}), per=12, delay=self.DELAY)
+        steps = self.DELAY + 6
+
+        def played(path, h):
+            """The agent's actions and control bytes from the hit, the opponent holding back."""
+            native = NativeAgent(path, deterministic=True)
+            env.load_state(0, h['state'])
+            native.attach(env, 0, 0, seed=0)
+            actions, controls = [], np.zeros((1, 2), np.uint8)
+            for _ in range(steps):
+                controls[0] = native.step(env.obs[0, 0].copy(), True), BACK
+                actions.append(native.last_action)
+                env.step(controls)
+            stats = native.stats()
+            native.attach(None)
+            native.close()
+            return actions, stats
+
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            files = {}
+            for name, confirm in (('plain', None), ('whole', self.DELAY), ('one', 1), ('three', 3)):
+                files[name] = os.path.join(folder, name + '.efzagent')
+                export_agent(path, files[name], check=False, library=library, confirm=confirm)
+            self.assertNotIn('route_confirm', read_header(files['plain'])[1])
+            self.assertEqual(read_header(files['one'])[1]['route_confirm'], '1')
+            with self.assertRaises(ValueError):
+                export_agent(path, files['plain'] + '.bad', check=False, library=library,
+                             confirm=self.DELAY + 1)
+            with self.assertRaises(ValueError):  # (a file without routes)
+                export_agent(path, files['plain'] + '.bad', check=False, confirm=1)
+            routed = dict(plain=0, one=0, three=0)
+            for h in hits[:10]:
+                acts = {name: played(files[name], h) for name in files}
+                self.assertEqual(acts['whole'][0], acts['plain'][0])
+                for name, lead in (('plain', self.DELAY), ('one', 1), ('three', 3)):
+                    mine, stats = acts[name]
+                    self.assertGreaterEqual(stats['route_plans'], 1, name)
+                    # The plan from the inputs it played until its route was to begin.
+                    hist = InputHistory((1,), self.HISTORY)
+                    for a in mine[:lead]:
+                        hist.push(table[np.array([a])])
+                    env.load_state(0, h['state'])
+                    ref = NativeAgent(files[name], deterministic=True)
+                    plan = ref.plan(env, 0, 0, h['starter'], np.array(mine[:lead]), hist.buf[0],
+                                    int(hist.prev[0]))
+                    ref.close()
+                    self.assertEqual(plan['outcome'], 'planned')
+                    if plan['chosen'] is None:
+                        continue
+                    k, at = plan['tried'][plan['chosen']]
+                    self.assertEqual(mine[lead], int(library[k]['actions'][at + lead]), (name, h['frame']))
+                    routed[name] += 1
+            for name, n in routed.items():
+                self.assertGreater(n, 0, name)
+        env.close()
+
     def test_same_replans(self):
         """Round 15b's planner, planning again at each new move's hit: the routes joined
         where that move hit in them (their marks), the rest of the route it is on one more
@@ -1760,6 +1832,63 @@ class RiskAsRiskPy(unittest.TestCase):
             native.close()
             twin.close()
             env.close()
+
+    def test_the_jump_at_the_opponent(self):
+        """risk_jump: its own play's jump at the opponent (up and forward, itself free on
+        the ground, the opponent near) is let out or stopped by the jump's account, a
+        stopped one the same buttons with forward alone; a jump let out and seen is
+        followed and counted (risk.py's jumping, jump_settle, jump_worth)."""
+        risk = self.risk
+        rng = np.random.default_rng(5)
+
+        def view(dx=100, air=False, hp=1.0):
+            v = rng.random(OBS_DIM).astype(np.float32)  # (noise: its policy presses many things)
+            v[[2, 3, risk.SELF_ACT, risk.OPP_ACT, risk.OPP_HITSTUN, 20, 52, 71]] = 0
+            v[risk.SELF_AIR], v[risk.DX] = float(air), dx / risk.PIXELS
+            v[risk.SELF_HP], v[risk.OPP_HP] = hp, 1.0
+            return v
+
+        views = [view() for _ in range(400)]
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            moves = {risk.MOVES[k]: w for k, w in risk.PRIORS.items()}
+            files = {}
+            for name, jump in (('plain', None), ('never', 1e5), ('always', -1e5)):
+                files[name] = os.path.join(folder, name + '.efzagent')
+                export_agent(path, files[name], check=False,
+                             risk=dict(moves=moves) if jump is None else dict(moves=moves, jump=jump))
+            self.assertNotIn('risk_jump', read_header(files['plain'])[1])
+            self.assertNotIn('risk_jump_prior', read_header(files['plain'])[1])
+            self.assertEqual(float(read_header(files['always'])[1]['risk_jump']), -1e5)
+            agents = {n: NativeAgent(p, deterministic=True) for n, p in files.items()}
+            got = {n: [a.step(v) for v in views] for n, a in agents.items()}
+            jumps = [t for t, b in enumerate(got['plain']) if b & 0x0f == 0x09]
+            self.assertTrue(jumps)  # (its own play does jump forward here)
+            self.assertEqual(got['never'], got['plain'])  # an account that never stops: its own play
+            first = jumps[0]
+            self.assertEqual(got['always'][:first], got['plain'][:first])
+            self.assertEqual(got['always'][first], (got['plain'][first] & 0xf0) | 0x01)
+            self.assertFalse([b for b in got['always'] if b & 0x0f == 0x09])  # none got out
+            stats = {n: a.stats() for n, a in agents.items()}
+            self.assertEqual(stats['plain']['risk_jumps'], 0)
+            self.assertEqual((stats['always']['risk_jumps_let'], stats['always']['risk_jump_chance']), (0, 1000))
+            self.assertGreater(stats['always']['risk_jumps_stopped'], 0)
+            self.assertEqual((stats['never']['risk_jumps_stopped'], stats['never']['risk_jump_chance']), (0, 0))
+            for a in agents.values():
+                a.close()
+            # One jump let out, seen in the air, 900 HP lost inside its window: the account.
+            agent = NativeAgent(files['never'], deterministic=True)
+            for _ in range(400):
+                agent.step(view())
+                if agent.stats()['risk_jumps_let']:
+                    break
+            self.assertEqual(agent.stats()['risk_jumps_let'], 1)
+            for k in range(160 + self.DELAY):  # (far from here on: no other jump is its account's)
+                agent.step(view(dx=500, air=k < 30, hp=1.0 - 900 / risk.HP))
+            stats = agent.stats()
+            self.assertEqual((stats['risk_jumps_came'], stats['risk_jump_count']), (1, 100))
+            self.assertEqual(stats['risk_jump_worth'], round((6 * 1e5 - 900) / 7))
+            agent.close()
 
 
 @unittest.skipIf(not DATA or not os.path.isdir(DATA or ''), 'no game data: set EFZ_DATA')

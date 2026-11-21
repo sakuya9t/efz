@@ -1667,7 +1667,10 @@ void efz_env_agent_risk_stats(const EfzAgent* a, int32_t* stats)
     if (!a || !stats)
         return;
     const agent::RiskStats& r = a->player->Risks();
-    int32_t v[8] = {r.seen, r.stopped, r.let, r.came};
+    int32_t v[12] = {r.seen, r.stopped, r.let, r.came, r.jumps, r.jumpsStopped, r.jumpsLet,
+                     r.jumpsCame, (int32_t)lround(a->player->JumpCount() * 100),
+                     (int32_t)lround(a->player->JumpWorth()),
+                     (int32_t)(a->player->JumpChance() * 1000 + 0.5)};
     memcpy(stats, v, sizeof(v));
 }
 

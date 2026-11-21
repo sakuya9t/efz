@@ -419,7 +419,9 @@ class EfzSB3VecEnv(VecEnv):
                     seen = self.delay.buf[np.arange(self.n), 1, self.opponent_delay]
                     view = np.concatenate([seen, view[:, seen.shape[1]:]], axis=1)
                 self._controls[:, 1] = self.table.to_bytes(self.opponent(view))
-                for hook in self.opponent_controls:
+                # (in their order: a hook with `order` 1 runs after those without, as the
+                # scripted inputs over an agent file's own, advantages.AdvantagedOpponent)
+                for hook in sorted(self.opponent_controls, key=lambda h: getattr(h, 'order', 0)):
                     hook(self._controls[:, 1])
         self.env.step_async(self._controls)
 

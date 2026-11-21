@@ -32,10 +32,27 @@ press, as the agent sees it) of the times it let the move out in this match, ove
 direction, nothing pressed), once drawn for as long as the same press is being tried
 (AGAIN steps).
 
-At the priors: 623B is stopped 99 times in 100, the level-one super 96, 623A 92, 236B and
-236A 85, 236C 1, 623C and the 641236 supers almost never. A move that has been hitting in
-this match comes back, one that has been punished goes: 236C after one that cost a combo
-(1,300 HP) is stopped half the time, after two 94 times in 100.
+At the priors (since 20 November the agent's own worths against opponents with combos,
+below): 236B, 236A, 623C and the level-one super are stopped nearly every time, 623B 99
+times in 100, 623A 92, 236236B 81, 236C one time in three, 641236A one in four, 641236B
+almost never. A move that has been hitting in this match comes back, one that has been
+punished goes: 236C after one that cost a combo (1,300 HP) is stopped 96 times in 100.
+(With the strongest player's worths, until then: 236C was stopped 1 time in 100, half the
+time after one that cost a combo, 94 in 100 after two.)
+
+The jump at the opponent (`jump`: its starting worth in HP; none: no account). The user's
+games of 20 November: "When it can't get advantage during air-to-air, it doesn't adjust
+the strategy ... no in-game adjustment." A forward jump within 400 pixels was worth, over
+the two seconds after it, +131 to +552 HP in each of the seven matches the agent won and
+-239 to +12 in the four it lost, 19 to 35 of them a match, and against Kano it jumped
+twice as often (78, at -115 each). So the jump has an account as a raw special has: its
+own play's action up and forward, itself free on the ground, the opponent within
+`jump_near` pixels and not in a hit reaction it has seen; the HP swing over `jump_window`
+steps after one let out (as it sees it); its worth the mean over a prior (`jump`, counting
+as `jump_prior` jumps); stopped with the probability 1 / (1 + exp(worth /
+`jump_temperature`)), the action then the same without up (it walks or dashes in, and
+what it does from the ground is its own play's and the planners'). A match in which the
+air pays jumps as before; one in which it does not is played from the ground.
 
 The first build looked one frame ahead and missed most of them: against Kano's
 `exploiter18` it stopped 31 of 31 presses that would start 623B at once and the match's
@@ -64,14 +81,23 @@ SELF_HP, OPP_HP, SELF_ACT, OPP_ACT, OPP_HITSTUN = 8, 40, 18, 50, 52
 DOWN = frozenset((0x60, 0x61, 0x62, 0x63))  # rising, the two knockdowns, lying
 HP = 9999.0
 GUARDS = frozenset(list(range(0x96, 0x9d)) + [0xa8, 0xa9, 0xaa])  # tactics.GUARDS
-# Ayu's moves with an account, and the strongest Ayu player's HP a raw use of each
-# (community replays, 487 matches; docs/training-v2.md).
+FREE = frozenset((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xe, 0xf, 0x10))  # free to do anything (tactics.FREE)
+SELF_AIR, DX, PIXELS = 39, 4, 640.0
+# Ayu's moves with an account, and what a raw use of each starts at. Until 20 November
+# the strongest Ayu player's HP a use (community replays, 487 matches: 236C +333, 623C
+# +580, 236A -130, 236B -131, 641236A +195, 641236B +290, 236236A -232, 236236B +90). Now,
+# for the moves used 50 times or more there, the agent's own HP a use against the league's
+# opponents with their characters' combos (bench.py's `combos` drill, round 20's file, 704
+# matches): a miss costs a combo there as it does against a person, which the league as
+# it was (and the player's opponents, to that player) did not charge. The user's games of
+# 20 November: the raw 236C 32 times, guarded 38%, -251 HP a use, its account starting at
+# +333 and three uses a match too few to turn it.
 MOVES = {'236A': 0x104, '236B': 0x105, '236C': 0x106, '623A': 0xfa, '623B': 0xfc, '623C': 0xfb,
          '641236A': 0x132, '641236B': 0x133, '641236C': 0x134,
          '236236A': 0x13b, '236236B': 0x13c, '236236C': 0x13d}
-PRIORS = {'236A': -130, '236B': -131, '236C': 333, '623A': -180, '623B': -326, '623C': 580,
-          '641236A': 195, '641236B': 290, '641236C': 987,
-          '236236A': -232, '236236B': 90, '236236C': 1216}
+PRIORS = {'236A': -650, '236B': -1010, '236C': 50, '623A': -180, '623B': -326, '623C': -460,
+          '641236A': 80, '641236B': 670, '641236C': 987,
+          '236236A': -1500, '236236B': -110, '236236C': 1216}
 AGAIN = 12   # steps in which the same move tried again is the same press
 CAME = 24    # steps after the agent could see the move in which it must (else: not followed)
 
@@ -82,7 +108,9 @@ class Risk(modules.Module):
     name = 'risk'
 
     def __init__(self, data_dir, width, delay, priors=None, prior=4.0, temperature=75.0,
-                 window=180, carry=False, decay=0.7, seed=0, sim=None, look=10, look_down=50):
+                 window=180, carry=False, decay=0.7, seed=0, sim=None, look=10, look_down=50,
+                 jump=None, jump_prior=6.0, jump_temperature=100.0, jump_window=130,
+                 jump_near=400.0):
         self.width, self.delay = width, int(delay)
         self.priors = dict(PRIORS, **(priors or {}))
         self.names = {MOVES[k]: k for k in self.priors}
@@ -90,6 +118,12 @@ class Risk(modules.Module):
         self.carry, self.decay = bool(carry), float(decay)
         self.look, self.look_down = max(1, int(look)), max(1, int(look_down))
         self.rng = np.random.default_rng(seed)
+        # the jump at the opponent: its account's starting worth (None: no account)
+        self.jump = None if jump is None else float(jump)
+        self.jump_prior, self.jump_temperature = float(jump_prior), float(jump_temperature)
+        self.jump_window, self.jump_near = int(float(jump_window)), float(jump_near)
+        self.jumps = dict(seen=0, stopped=0, let=0, came=0)
+        self.jumps_all = [0, 0.0]
         # (a frame a step; a copy is played one frame)
         self.sim = sim if sim is not None else EfzVecEnv(
             data_dir, 1, frame_skip=1, rounds_to_win=2, max_frames=0, autoreset='disabled',
@@ -107,12 +141,18 @@ class Risk(modules.Module):
         self.t = np.zeros(n, int)
         self.drawn = [None] * n   # the press being tried: (move, step, stopped)
         self.open = [None] * n    # the use being followed: [move, age, own HP, its HP, came]
+        self.jcount, self.jtotal = np.zeros(n), np.zeros(n)  # the jump's account
+        self.jdrawn = [None] * n  # the jump being tried: (step, stopped)
+        self.jopen = [None] * n   # the jump being followed: [age, own HP, its HP, came]
 
     def reset(self, mask=None):
         mask = np.ones(self.n, bool) if mask is None else np.asarray(mask, bool)
         scale = self.decay if self.carry else 0.0
         for i in np.flatnonzero(mask):
             self.open[i] = self.drawn[i] = None
+            self.jopen[i] = self.jdrawn[i] = None
+            self.jcount[i] *= scale
+            self.jtotal[i] *= scale
             for k in self.priors:
                 self.count[i][k] *= scale
                 self.total[i][k] *= scale
@@ -124,6 +164,25 @@ class Risk(modules.Module):
     def chance(self, i, move):
         """The probability that a press that would start `move` is stopped."""
         return 1.0 / (1.0 + np.exp(np.clip(self.worth(i, move) / self.temperature, -50, 50)))
+
+    def jump_worth(self, i):
+        return (self.jump_prior * self.jump + self.jtotal[i]) / (self.jump_prior + self.jcount[i])
+
+    def jump_chance(self, i):
+        """The probability that a jump at the opponent is stopped."""
+        return float(1.0 / (1.0 + np.exp(np.clip(self.jump_worth(i) / self.jump_temperature, -50, 50))))
+
+    def jump_settle(self, i, view):
+        """The followed jump's swing into the jump's account (if it saw itself in the air)."""
+        rec, self.jopen[i] = self.jopen[i], None
+        if rec is None or view is None or not rec[3]:
+            return
+        mine = max(0.0, rec[1] - float(view[SELF_HP]) * HP)
+        theirs = max(0.0, rec[2] - float(view[OPP_HP]) * HP)
+        self.jcount[i] += 1
+        self.jtotal[i] += theirs - mine
+        self.jumps_all[0] += 1
+        self.jumps_all[1] += theirs - mine
 
     def settle(self, i, view):
         """The followed use's swing into its move's account (if the move was seen)."""
@@ -139,10 +198,20 @@ class Risk(modules.Module):
 
     def watch(self, i, ctx):
         self.t[i] += 1
+        v = ctx.view
+        jump = self.jopen[i]
+        if jump is not None:
+            jump[0] += 1
+            if not jump[3] and v[SELF_AIR] > 0:
+                jump[3] = True
+                self.jumps['came'] += 1
+            if not jump[3] and jump[0] > self.delay + CAME:
+                self.jopen[i] = None  # (the press started no jump it saw)
+            elif v[ROUND_OVER] != 0 or jump[0] >= self.jump_window:
+                self.jump_settle(i, v)
         rec = self.open[i]
         if rec is None:
             return
-        v = ctx.view
         rec[1] += 1
         if not rec[4] and int(round(float(v[SELF_ACT]))) == MOVES[rec[0]]:
             rec[4] = True
@@ -179,6 +248,9 @@ class Risk(modules.Module):
                             np.asarray(ctx.hist, np.float32).reshape(-1)])
         own = int(np.asarray(ctx.policy(x[None, :self.width or len(x)])).reshape(-1)[0])
         direction, buttons = TABLE.actions[own]
+        if self.jump is not None and direction == 9 and v[ROUND_OVER] == 0:
+            own = self.jumping(i, ctx, own)
+            direction, buttons = TABLE.actions[own]
         if not buttons or v[ROUND_OVER] != 0:
             return own
         if v[OPP_HITSTUN] > 0 and int(round(float(v[OPP_ACT]))) not in GUARDS:
@@ -202,12 +274,40 @@ class Risk(modules.Module):
             self.open[i] = [move, 0, float(v[SELF_HP]) * HP, float(v[OPP_HP]) * HP, False]
         return own
 
+    def jumping(self, i, ctx, own):
+        """Its own play's jump at the opponent (up and forward): the action, or stopped by
+        the jump's account the same without up."""
+        v = ctx.view
+        now = ctx.now if ctx.now is not None else v
+        if (now[SELF_AIR] > 0 or int(round(float(now[SELF_ACT]))) not in FREE
+                or abs(float(v[DX])) * PIXELS > self.jump_near
+                or (v[OPP_HITSTUN] > 0 and int(round(float(v[OPP_ACT]))) not in GUARDS)):
+            return own
+        was = self.jdrawn[i]
+        again = was is not None and self.t[i] - was[0] <= AGAIN
+        if again:
+            stop = was[1]
+        else:
+            stop = bool(self.rng.random() < self.jump_chance(i))
+            self.jumps['seen'] += 1
+            self.jumps['stopped' if stop else 'let'] += 1
+        self.jdrawn[i] = (int(self.t[i]), stop)
+        if stop:
+            return INDEX[(6, TABLE.actions[own][1])]
+        if not again:
+            self.jump_settle(i, v)
+            self.jopen[i] = [0, float(v[SELF_HP]) * HP, float(v[OPP_HP]) * HP, False]
+        return own
+
     def stats(self):
         out = {}
         for k in self.priors:
             n, total = self.all[k]
             if self.n_[k]['seen'] or n:
                 out[k] = dict(self.n_[k], n=int(n), swing=round(total / n) if n else None)
+        if self.jump is not None:
+            n, total = self.jumps_all
+            out['jump'] = dict(self.jumps, n=int(n), swing=round(total / n) if n else None)
         return out
 
     def close(self):
@@ -221,7 +321,8 @@ def risk(agent, where, files, options, data):
     if where != 'batch':
         raise ValueError('risk: with copies of the game (evaluate.py, play.py)')
     priors = {k: float(o.pop(k)) for k in list(o) if k in MOVES}
-    keys = ('prior', 'temperature', 'window', 'carry', 'decay', 'seed', 'look', 'look_down')
+    keys = ('prior', 'temperature', 'window', 'carry', 'decay', 'seed', 'look', 'look_down',
+            'jump', 'jump_prior', 'jump_temperature', 'jump_window', 'jump_near')
     unknown = sorted(set(o) - set(keys))
     if unknown:
         raise ValueError(f"risk: no option {', '.join(unknown)}")

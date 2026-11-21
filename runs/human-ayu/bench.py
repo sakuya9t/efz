@@ -77,6 +77,11 @@ DRILLS = {
     'recoil': (FIVE, 'rg=0.3,reversal=0.8',
                "one that recoil-guards three guards in ten and counters with an invincible "
                "move when the agent presses on (the level-4 CPU's defence)"),
+    'combos': (ELEVEN, 'file=exploiter18/combos.efzagent',
+               "the trained opponents with their characters' combos: each as an agent file "
+               "(league_combos.py: people's routes for its character through the game's "
+               "planner, a route from the step after its hit, its model 11 steps late), so "
+               "that a hit costs the agent what its own costs them"),
 }
 
 # (name, drill, path, better: +1 more is better or -1, what). The path is into the
@@ -137,6 +142,11 @@ MEASURES = [
     ('recoil: pressure net', 'recoil', ('side', 'net_ledger', 'my pressure', 'net'), +1,
      'HP a minute net out of its pressure there'),
     ('recoil: wins', 'recoil', ('win',), +1, 'matches won there'),
+    ('combos: wins', 'combos', ('win',), +1, "matches won against the opponents with their characters' combos"),
+    ('combos: own HP lost', 'combos', ('self_hp_taken',), -1, 'the share of its HP lost a round there'),
+    ('combos: net', 'combos', ('side', 'net_ledger', 'net'), +1, 'HP ahead a minute there'),
+    ('combos: their combo HP', 'combos', ('other', 'combo_damage'), -1, "HP a combo of the opponents'"),
+    ('combos: its combo HP', 'combos', ('side', 'combo_damage'), +1, 'HP a combo of its own there'),
     ('okizeme net', 'reversal', ('side', 'net_ledger', 'my okizeme', 'net'), +1, 'HP a minute net on its okizeme against reversals'),
     ('punishes', 'reversal', ('side', 'faced_raw', 'punished'), +1, "the opponent's missed risky moves it punished"),
 ]
@@ -163,8 +173,8 @@ def cell(tag, drill, opponent, path, root=None):
         p = n / of
         return p, math.sqrt(p * (1 - p) / of)
     r = _load(f)
-    where = lambda t: t['sides'][0] if path[0] == 'side' else t
-    rest = path[1:] if path[0] == 'side' else path
+    where = lambda t: t['sides'][0] if path[0] == 'side' else t['sides'][1] if path[0] == 'other' else t
+    rest = path[1:] if path[0] in ('side', 'other') else path
     v = get(where(r), rest)
     if v is None:
         return None
@@ -263,6 +273,8 @@ def jobs(args):
                 adv = DRILLS[drill][1]
                 if adv and adv.startswith('cpu-combos='):  # the CPU, the file's own combos
                     rest = f'--p2 {args.file} --p2-cpu-combos {adv.split("=")[1]} --chars ayu {o}'
+                elif adv and adv.startswith('file='):  # the opponent as an agent file of its own
+                    rest = f'--p2 {HERE}/{o}/{adv.split("=")[1]} --chars ayu {o}'
                 else:
                     rest = (f'--p2 {HERE}/{o}/{EXPLOITER} --chars ayu {o}' +
                             (f' --p2-advantage {adv}' if adv else '') +

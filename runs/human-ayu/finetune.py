@@ -722,6 +722,7 @@ def release(*players):
     for p in players:
         if isinstance(p, (list, tuple)):
             p = p[0]
+        p = getattr(p, 'inner', p)  # (inside its advantages: advantages.AdvantagedOpponent)
         if type(p).__name__ in ('NativePlayers', 'NativeOpponent'):
             p.close()
             closed = True

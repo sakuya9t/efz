@@ -439,6 +439,12 @@ void LogRisks(const char* who, const Side& s)
     if (!s.player || !s.policy || !s.policy->risk.on)
         return;
     const agent::RiskStats& r = s.player->Risks();
+    if (r.jumps)
+        LogInfo("agent", "%s's jumps at the opponent: %d drawn for, %d stopped, %d let out (%d seen "
+                         "to start); the account now: %.1f jumps worth %.0f HP each, the next "
+                         "stopped with probability %.2f",
+                who, r.jumps, r.jumpsStopped, r.jumpsLet, r.jumpsCame, s.player->JumpCount(),
+                s.player->JumpWorth(), s.player->JumpChance());
     if (!r.seen)
         return;
     LogInfo("agent", "%s's raw specials: %d presses that would start a move with an account: "

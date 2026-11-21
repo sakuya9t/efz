@@ -87,6 +87,12 @@ def main():
                    help="what a knockdown at a combo's end is worth to the planner over any "
                         "other end (default: damage alone, or the pack's, or the "
                         "--parts-from file's)")
+    p.add_argument('--confirm', type=int, metavar='STEPS',
+                   help="its routes begin this many steps after its hit instead of its delay: "
+                        "a combo confirmed before it has seen the hit. For the opponents an "
+                        "agent trains and is measured against (their own play before a route "
+                        "begins does not carry people's combos); never for an agent that is "
+                        "to play within a person's limits")
     p.add_argument('--no-train', dest='train', action='store_false',
                    help="without the training part (the critic, config.json, PPO's settings): "
                         "a file to play, not to train further")
@@ -189,6 +195,8 @@ def main():
                 k, _, v = kv.partition('=')
                 if k in risk_module.MOVES:
                     priors[k] = float(v)
+                elif k == 'jump':  # (the jump's account: its starting worth, HP a jump)
+                    risk[k] = float(v)
                 elif k in RISK_OPTIONS:
                     risk[k] = type(RISK_OPTIONS[k])(v)
                 else:
@@ -224,6 +232,7 @@ def main():
                                  version=args.version, train=args.train,
                                  optimizer=args.optimizer, parts_from=args.parts_from,
                                  keep=tuple(args.keep), ending=args.ending,
+                                 confirm=args.confirm,
                                  okiplan=okiplan, pressplan=pressplan,
                                  airthrow={} if args.air_throw else None, rise=rise,
                                  risk=risk)

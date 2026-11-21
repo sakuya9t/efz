@@ -825,6 +825,7 @@ class AdvantagedOpponent:
         self.logic = logic(adv, seed)
         self.alt = logic(alt, seed + 7919) if alt is not None else None
         self.venv = None
+        self.forced = {}    # this step's advantages' inputs, by environment (their bytes)
         self.only = None    # the environments that play with the advantages (None: all)
         self.second = None  # and those of them that play with alt's
         self.mine = None    # the environments it plays in at all (None: all)
@@ -836,6 +837,20 @@ class AdvantagedOpponent:
             self.alt.resize(venv.env.num_envs)
         if hasattr(venv, 'on_end'):
             venv.on_end.append(self.new_match)
+        # An inner opponent that is an agent file (native_agent.NativeOpponent) writes its
+        # control bytes through the environment's opponent_controls, after these actions:
+        # the advantages' inputs are written over them again, last.
+        self.forced = {}
+        if hasattr(venv, 'opponent_controls'):
+            venv.opponent_controls.append(_Last(self.controls))
+        if hasattr(self.inner, 'attach'):  # (the file's players, in this opponent's matches)
+            if hasattr(self.inner, 'mine'):
+                self.inner.mine = self.mine
+            self.inner.attach(venv)
+
+    def controls(self, out):
+        for i, byte in self.forced.items():
+            out[i] = byte
 
     def of(self, i):
         """The advantages environment i plays with (None: without)."""
@@ -864,7 +879,8 @@ class AdvantagedOpponent:
                 v.extra[i, 0] = logic.told(i) if logic is not None else 0.0
 
     def __call__(self, obs, idx):
-        return self.post(np.asarray(self.inner(obs)).copy(), idx)
+        inner = self.inner(obs, idx) if getattr(self.inner, 'takes_index', False) else self.inner(obs)
+        return self.post(np.asarray(inner).copy(), idx)
 
     def post(self, actions, idx):
         """The inner policy's actions for matches idx, with the advantages' inputs over
@@ -878,9 +894,22 @@ class AdvantagedOpponent:
             if v._length[i] == 0:  # a new match
                 logic.clear(i)
             o = logic.step(i, v.env.obs[i, 1])
+            self.forced.pop(i, None)
             if o is not None:
                 actions[k] = self.index[o]
+                self.forced[i] = int(self.table.table[self.index[o]])
         return actions
+
+
+class _Last:
+    """An opponent_controls hook that runs after the others (efz_env.sb3: `order`)."""
+    order = 1
+
+    def __init__(self, hook):
+        self.hook = hook
+
+    def __call__(self, out):
+        self.hook(out)
 
 
 class AdvantagedAgent:

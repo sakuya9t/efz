@@ -1,6 +1,7 @@
 """runs/human-ayu/risk.py, the module 'risk': a raw special of the agent's own play let out
 or stopped at its input by how that move has paid in the match."""
 
+import math
 import os
 import sys
 import unittest
@@ -40,11 +41,27 @@ class Copy:
 
 
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
+class Sure:
+    """A draw that stops (True) or lets (False) whatever the chance."""
+
+    def __init__(self, stop):
+        self.stop = stop
+
+    def random(self):
+        return 0.0 if self.stop else 1.0
+
+
 class Risk(unittest.TestCase):
     DELAY = 3
 
-    def module(self, **options):
+    # (worths the cases below are written for: a move worth its risk, 623C; one that
+    # loses, 623B; one that loses a little, 236B; the module's own are measurements)
+    PRIORS = {'236B': -131, '236C': 333, '623B': -326, '623C': 580}
+
+    def module(self, own=False, **options):
         self.copy = Copy()
+        if not own:
+            options.setdefault('priors', self.PRIORS)
         m = risk.Risk(None, None, self.DELAY, sim=self.copy, **options)
         m.batch(1)
         self.hp = [1.0, 1.0]
@@ -78,10 +95,81 @@ class Risk(unittest.TestCase):
                       lost=lost if k == 20 else 0, dealt=dealt if k == 20 else 0)
 
     def test_the_priors(self):
-        m = self.module()
-        for name, want in (('623B', 0.987), ('236236A', 0.957), ('623A', 0.917), ('236B', 0.852),
-                           ('236C', 0.012), ('623C', 0.0004)):
+        m = self.module(own=True)
+        # (a move stopped with the chance 1 / (1 + exp(its worth / 75)): its prior, unused)
+        for name in ('623B', '236236A', '623A', '236B', '236C', '623C'):
+            want = 1 / (1 + math.exp(risk.PRIORS[name] / 75))
             self.assertAlmostEqual(m.chance(0, name), want, delta=0.003, msg=name)
+        self.assertGreater(m.chance(0, '236B'), 0.99)   # what loses against a combo: nearly never
+        self.assertAlmostEqual(m.chance(0, '236C'), 0.34, delta=0.01)  # the gamble: one in three stopped
+
+    def jump_step(self, m, action, air=False, lost=0, dealt=0, dx=100, now_air=False, opp_hit=False):
+        """A step for the jump's account: its own play's action; what it sees (itself in
+        the air or not, the distance, both HP) and the game as it is (in the air or not)."""
+        self.hp[0] -= lost / risk.HP
+        self.hp[1] -= dealt / risk.HP
+        v = np.zeros(168, np.float32)
+        v[risk.SELF_AIR], v[risk.DX] = float(air), dx / risk.PIXELS
+        v[risk.SELF_HP], v[risk.OPP_HP] = self.hp
+        v[risk.OPP_HITSTUN], v[risk.OPP_ACT] = float(opp_hit), HIT if opp_hit else 0
+        now = np.zeros(168, np.float32)
+        now[risk.SELF_AIR] = float(now_air)
+        now[risk.SELF_ACT] = getattr(self, 'now', 0)
+        ctx = modules.Context(v, now, hist=np.zeros((4, 6), np.float32), save=lambda: b'state',
+                              policy=lambda x: np.array([action]))
+        m.watch(0, ctx)
+        return m.act(0, ctx)
+
+    def jump(self, m, lost=0, dealt=0):
+        """A jump at the opponent let out (the account's own draw aside), seen, and followed
+        to its window's end."""
+        up = risk.INDEX[(9, '')]
+        m.jdrawn[0] = None
+        m.rng = Sure(False)
+        self.assertEqual(self.jump_step(m, up), up)
+        for k in range(m.jump_window):
+            self.jump_step(m, risk.INDEX[(5, '')], air=2 < k < 40, lost=lost if k == 50 else 0,
+                           dealt=dealt if k == 50 else 0, now_air=2 < k < 40)
+
+    def test_the_jump_at_the_opponent_by_how_it_has_paid(self):
+        up, forward, idle = risk.INDEX[(9, '')], risk.INDEX[(6, '')], risk.INDEX[(5, '')]
+        m = self.module()  # (no account of the jump: its own)
+        self.assertEqual(self.jump_step(m, up), up)
+        self.assertNotIn('jump', m.stats())
+        m = self.module(jump=250.0)
+        self.assertAlmostEqual(m.jump_chance(0), 1 / (1 + math.exp(250 / 100)), places=6)
+        # Jumps that lose: the account turns, and a stopped jump is the same without up.
+        for _ in range(8):
+            self.jump(m, lost=900)
+        self.assertEqual(m.stats()['jump']['n'], 8)
+        self.assertEqual(m.stats()['jump']['swing'], -900)
+        worth = (250 * 6 - 900 * 8) / 14  # (its prior counts as 6 jumps)
+        self.assertAlmostEqual(m.jump_chance(0), 1 / (1 + math.exp(worth / 100)), places=6)
+        self.assertGreater(m.jump_chance(0), 0.98)
+        m.rng, m.jdrawn[0] = Sure(True), None
+        self.assertEqual(self.jump_step(m, up), forward)
+        self.assertEqual(self.jump_step(m, risk.INDEX[(9, 'A')]), risk.INDEX[(6, 'A')])  # (the same press)
+        # Not its jump at the opponent: far away, in the air already, not free, a combo it sees; another direction.
+        for kw in (dict(dx=500), dict(now_air=True), dict(opp_hit=True)):
+            self.assertEqual(self.jump_step(m, up, **kw), up, kw)
+        self.now = 0xcc
+        self.assertEqual(self.jump_step(m, up), up)
+        del self.now
+        for other in (risk.INDEX[(8, '')], risk.INDEX[(7, '')], idle):
+            self.assertEqual(self.jump_step(m, other), other)
+        # Jumps that pay bring it back; another opponent: the prior again.
+        for _ in range(30):
+            self.jump(m, dealt=1200)
+        self.assertLess(m.jump_chance(0), 0.01)
+        m.reset()
+        self.assertAlmostEqual(m.jump_chance(0), 1 / (1 + math.exp(250 / 100)), places=6)
+        # A press that started no jump it saw is not counted.
+        n = m.stats()['jump']['n']
+        m.rng, m.jdrawn[0] = Sure(False), None
+        self.jump_step(m, up)
+        for _ in range(m.jump_window):
+            self.jump_step(m, idle, lost=10)
+        self.assertEqual(m.stats()['jump']['n'], n)
 
     def test_a_press_that_starts_nothing_risky_is_its_own(self):
         m = self.module()
@@ -130,7 +218,8 @@ class Risk(unittest.TestCase):
         before = m.chance(0, '236C')
         self.use(m, '236C', lost=1300)
         self.assertEqual(m.stats()['236C'], dict(seen=0, stopped=0, let=0, came=1, n=1, swing=-1300))
-        self.assertAlmostEqual(m.chance(0, '236C'), 0.48, delta=0.02)   # (333 x 4 - 1300) / 5: 6 HP
+        worth = (self.PRIORS['236C'] * 4 - 1300) / 5  # (its prior counts as 4 uses)
+        self.assertAlmostEqual(m.chance(0, '236C'), 1 / (1 + math.exp(worth / 75)), delta=0.02)
         self.use(m, '236C', lost=1300)
         self.assertGreater(m.chance(0, '236C'), 0.9)
         self.assertGreater(m.chance(0, '236C'), before)
@@ -160,7 +249,8 @@ class Risk(unittest.TestCase):
         m = self.module()
         self.use(m, '236C', lost=1300)
         m.reset()
-        self.assertAlmostEqual(m.chance(0, '236C'), 0.012, delta=0.003)  # another opponent
+        self.assertAlmostEqual(m.chance(0, '236C'), 1 / (1 + math.exp(self.PRIORS['236C'] / 75)),
+                               delta=0.003)  # another opponent
 
 
 if __name__ == '__main__':
