@@ -118,6 +118,17 @@ answers), the hole-punching server and NAT traversal, custom palettes over the n
 log. Sync records, which Revival asks for only with `Debug = 1`, are always asked for and
 compared: a desync is logged with both records and shown on screen.
 
+One difference in the sync records, which change nothing else: a fight left on a frame
+run before the other side's input for it came (Esc is part of the input sent, so a held
+Esc is predicted, and the fight can end on a predicted frame) leaves the frames from the
+last confirmed one to the end without a record, since no rollback runs a frame of a
+scene gone. Revival makes records in order only, so it makes none after such a frame,
+for the rest of the session, and its comparison stops there. This game goes on from the
+next frame (`Session::RunFrame`), the frames left behind holes, never compared and never
+sent (`Protocol::AddSync`), so its comparison, and the desync warning, go on past an
+Esc; a Revival on the other side still stops at the first hole it meets, as it would at
+a frame never sent.
+
 ### The session
 
 `Session` is `OnlineSession` ([revival.md](revival.md), "Rollback"), line for line where

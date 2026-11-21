@@ -59,6 +59,8 @@ struct SyncBlock {
 
     bool Same(const SyncBlock& o) const;
     std::string ToString() const;
+    // A frame left without a record (Session::RunFrame): frame -1.
+    bool Hole() const { return frame < 0; }
 };
 static_assert(sizeof(SyncBlock) == 0x40, "Revival's SyncBlock is 0x40 bytes");
 
@@ -209,8 +211,13 @@ private:
     bool chosen_ = false;
     int ack_ = 0;               // Play's: the first local frame the opponent lacks
     std::deque<int> pings_;
+    // Each side's, by frame; frames without one are holes (SyncBlock::Hole).
     std::vector<SyncBlock> localSyncs_;
     std::vector<SyncBlock> remoteSyncs_;
+    int localHoles_ = 0;
+    // Adds `block` at its frame, after holes for the frames before it that have none;
+    // false when that frame has one already.
+    static bool AddSync(std::vector<SyncBlock>* syncs, const SyncBlock& block, int* holes);
     Timer pingTimer_, timeoutTimer_, resendTimer_;
     // Settings::lagMs: datagrams waiting to go, in the order they were sent.
     struct Delayed {

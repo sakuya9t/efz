@@ -199,6 +199,7 @@ bool Protocol::Start(const Settings& settings, std::string* error)
     delayed_.clear();
     localSyncs_.clear();
     remoteSyncs_.clear();
+    localHoles_ = 0;
     inputs[0].clear();
     inputs[1].clear();
     ping = PingStats();
@@ -293,9 +294,10 @@ void Protocol::End(const std::string& why)
     message = why;
     LogInfo("net", "the session ends: %s", why.c_str());
     if (phase == kPlaying)
-        LogInfo("net", "sync records: %d made here, %d from %s, compared to frame %d, %s",
-                (int)localSyncs_.size(), (int)remoteSyncs_.size(), target_.ToString().c_str(),
-                checkedFrame,
+        LogInfo("net", "sync records: %d made here (%d frames without), %d from %s, compared to "
+                "frame %d, %s",
+                (int)localSyncs_.size() - localHoles_, localHoles_, (int)remoteSyncs_.size(),
+                target_.ToString().c_str(), checkedFrame,
                 desyncFrame < 0 ? "all the same"
                                 : ("different from frame " + std::to_string(desyncFrame)).c_str());
     FlushDelayed(true);
@@ -485,10 +487,11 @@ void Protocol::Handle(const unsigned char* packet, size_t size, const net::Endpo
                 SyncBlock block;
                 memset(&block, 0, sizeof(block));
                 memcpy(&block, b.data(), std::min(b.size(), sizeof(block)));
-                if (block.frame == (int)remoteSyncs_.size()) {
-                    remoteSyncs_.push_back(block);
+                // In order from Revival; after a hole from this game (Session::RunFrame),
+                // which leaves out a fight's last frames, never many.
+                if (block.frame >= 0 && block.frame <= (int)remoteSyncs_.size() + 600 &&
+                    AddSync(&remoteSyncs_, block, nullptr))
                     CheckSync(block.frame);
-                }
             }
         } else if (Flagged(from, 1)) {
             SendSync((int)m.U32(2), 0, (int)m.U32(3), from);
@@ -702,8 +705,10 @@ bool Protocol::CheckSync(int frame)
         return false;
     const SyncBlock& a = localSyncs_[frame];
     const SyncBlock& b = remoteSyncs_[frame];
-    bool same = a.Same(b);
     checkedFrame = frame;
+    if (a.Hole() || b.Hole())
+        return true; // one side has no record of the frame: nothing to compare
+    bool same = a.Same(b);
     if (same && frame > 0 && frame % 1024 == 0)
         LogInfo("net", "frames 0-%d: both sides' sync records agree", frame);
     if (!same) {
@@ -717,12 +722,26 @@ bool Protocol::CheckSync(int frame)
     return same;
 }
 
+bool Protocol::AddSync(std::vector<SyncBlock>* syncs, const SyncBlock& block, int* holes)
+{
+    if (block.frame < (int)syncs->size())
+        return false;
+    SyncBlock hole;
+    memset(&hole, 0, sizeof(hole));
+    hole.frame = -1;
+    while ((int)syncs->size() < block.frame) {
+        syncs->push_back(hole);
+        if (holes)
+            (*holes)++;
+    }
+    syncs->push_back(block);
+    return true;
+}
+
 void Protocol::AddLocalSync(const SyncBlock& block)
 {
-    if (block.frame == (int)localSyncs_.size()) {
-        localSyncs_.push_back(block);
+    if (AddSync(&localSyncs_, block, &localHoles_))
         CheckSync(block.frame);
-    }
 }
 
 void Protocol::SendInputs()
@@ -914,9 +933,17 @@ void Protocol::SendSync(int frame, int before, int after, const net::Endpoint& t
         return;
     net::Writer m;
     m.Varint(1, 0);
-    for (int i = first; i <= last; i++)
-        m.Bytes(4, &localSyncs_[i], sizeof(SyncBlock));
-    Send(net::kSync, m, to);
+    int sent = 0;
+    // Not the holes: EfzRevival takes records in order only, and so stops at a hole
+    // as it would at a frame never sent; this game takes the ones after it.
+    for (int i = first; i <= last; i++) {
+        if (!localSyncs_[i].Hole()) {
+            m.Bytes(4, &localSyncs_[i], sizeof(SyncBlock));
+            sent++;
+        }
+    }
+    if (sent > 0)
+        Send(net::kSync, m, to);
 }
 
 void Protocol::SendSyncRequest(int count, const net::Endpoint& to)

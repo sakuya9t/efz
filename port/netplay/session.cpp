@@ -355,6 +355,14 @@ void Session::RunFrames(int count)
 // One frame of the game, its sync record made the first time it is final.
 void Session::RunFrame()
 {
+    // Out of a fight, frames still without a record were left behind: the fight ended
+    // on a frame run before the other side's input for it came (Esc, predicted), and
+    // no rollback runs them again. EfzRevival.dll's runFrame makes no record after
+    // such a frame for the rest of the session; this one goes on from the frame after,
+    // so that the comparison, and the warning of a desync, go on (Protocol: those
+    // frames are holes, never compared and never sent).
+    if (syncedFrame_ < frame_ && Scene() != 3)
+        syncedFrame_ = frame_;
     if (frame_ == syncedFrame_ && Remote().size() > (unsigned)frame_ &&
         Local().size() > (unsigned)frame_) {
         SendSync(protocol_->inputs[0][frame_], protocol_->inputs[1][frame_]);
