@@ -22,6 +22,7 @@
 #include "keys.h"
 #include "../platform.h"
 #include "../log.h"
+#include "../options.h"
 
 namespace efz {
 namespace revival {
@@ -110,6 +111,9 @@ class Session {
 public:
     virtual ~Session() {}
     virtual void Start() {}
+    // Whether OPTIONS has it on (the practice and replay tools); off, the game's frames
+    // are the game's own.
+    virtual bool Enabled() { return true; }
     // Each real frame, the keys first: one call a key pressed.
     virtual void KeyPressed(int key) { (void)key; }
     // Whether this frame of the game is held back (a fight paused).

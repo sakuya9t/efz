@@ -78,6 +78,13 @@ struct Config {
 // character select, for the players' names).
 const Config& GetConfig();
 void ReloadConfig();
+// A setting written to EfzRevival.ini (the save folder's: the game's folder's copied there
+// first, the file made if there is none), its other lines, comments and encoding kept,
+// and the settings read again. SetIniValue is the text's change: the key's value
+// replaced where it is, else the key added at its section's end, else the section added.
+bool SetConfigValue(const char* section, const char* key, const std::string& value);
+std::string SetIniValue(const std::string& text, const char* section, const char* key,
+                        const std::string& value);
 // For tests: the settings as the text of an ini file would give them, and a file's bytes
 // as that text (UTF-16 with or without its mark, or UTF-8).
 Config ParseConfig(const std::string& text);

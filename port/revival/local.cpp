@@ -46,6 +46,14 @@ bool RecordsBusy()
     return RecordTasksRunning() || ViewingRecord() != nullptr;
 }
 
+// Whether the session runs the game's frames now: not in a network match, nor a record's,
+// and only as OPTIONS has it (the tournament, asked for, whatever it says).
+bool Active()
+{
+    return g.on && !RecordsBusy() && !g_netplay.active && g.session &&
+           (g.tournament || (RevivalFeatures() && g.session->Enabled()));
+}
+
 // switchSession: on leaving the title, REPLAY's menu brings the replay session, VS PLAYER's
 // or PRACTICE's character select the practice session; the tournament keeps its own.
 void SwitchSession()
@@ -90,6 +98,8 @@ bool WillRunFrame()
     if (!g.on || RecordsBusy() || g_netplay.active)
         return true;
     SwitchSession();
+    if (!Active())
+        return true;
     int keys[64];
     int n = PressedKeys(keys, 64);
     for (int i = 0; i < n; i++)
@@ -99,7 +109,7 @@ bool WillRunFrame()
 
 void RunFrame(void (*run)(void* scene), void* scene)
 {
-    if (!g.on || RecordsBusy() || g_netplay.active) {
+    if (!Active()) {
         run(scene);
         return;
     }
@@ -112,18 +122,18 @@ void RunFrame(void (*run)(void* scene), void* scene)
 
 double FramesPerSecond()
 {
-    return g.on && !g_netplay.active ? g.fps : kDefaultFps;
+    return Active() ? g.fps : kDefaultFps;
 }
 
 void Input(int player, unsigned char* input)
 {
-    if (g.on && !RecordsBusy() && !g_netplay.active && g.session && player >= 0 && player < 2)
+    if (Active() && player >= 0 && player < 2)
         g.session->Input(input, player);
 }
 
 void FightKeys(unsigned char* keys, size_t size)
 {
-    if (!g.on || RecordsBusy() || g_netplay.active || !g.session || size < 0x100 || SceneId() != 3)
+    if (!Active() || size < 0x100 || SceneId() != 3)
         return;
     // The fight reads the keyboard more than once a frame (CScene3::HandleKeys first, then
     // CInput::GetInput's reads): the session decides once a frame, as Revival's
@@ -604,7 +614,7 @@ void DrawText(SDL_Renderer* r, const Text& t)
 
 void DrawLocal(SDL_Renderer* renderer)
 {
-    if (!g.on || g_netplay.active || RecordsBusy())
+    if (!Active())
         return;
     if (SceneId() == 3 && !g.boxes.empty()) {
         std::vector<Rect> rects;

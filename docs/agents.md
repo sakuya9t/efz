@@ -445,12 +445,9 @@ match has no CPU, and a record being watched or converted runs none of this.
 
 **The setting** is in `options.ini` in the save folder (`cpu_combos=1`), not in
 `key.ini`: that file is the original's, which config.exe and EfzRevival also read and
-write. `--cpu-combos on` or `off` sets it for one run. On the OPTIONS page the row is
-CPUコンボ, なし / あり, after CPU難易度; the rows are 16 pixels apart instead of 18 to make
-room for it (src/scene6.cpp). Its letters are the page's own (CPU from CPU難易度, コンボ
-from the character record page's 最大コンボ数) and, for なし and あり, which no picture of
-the game has, glyphs drawn in the page's colours (port/options.cpp). With pictures other
-than 4.02's (a translation patch), the row's text is written over it in SDL's font.
+write. `--cpu-combos on` or `off` sets it for one run. In OPTIONS it is CPU COMBO on the
+third page, NATIVE (Tab or C turns the pages: the game's own first, then EfzRevival's,
+then the native game's; [native.md](native.md), "OPTIONS").
 
 Measured on 20 November (this Linux machine; VS CPU, Akane's file against an idle
 Nagamori): with no time limit on the plans (`--fast`), the combos' damage rose with the

@@ -70,6 +70,7 @@ bool IsControlling()
 
 class ReplaySession : public Session {
 public:
+    bool Enabled() override { return ReplayTools(); }
     void Start() override
     {
         frame_ = 0;
@@ -439,8 +440,10 @@ private:
         AddText(std::string("Player:        ") + (controlled_ == 0 ? "P1" : "P2"), x, 96);
         AddText(std::string("State:         ") + (control_ ? "Control" : "Replay"), x, 110);
         size_t n = std::min((size_t)std::max(frame_, 0), p1Inputs_.size());
-        DrawInputs(std::vector<char>(p1Inputs_.begin(), p1Inputs_.begin() + n), 200, 10, 1);
-        DrawInputs(std::vector<char>(p2Inputs_.begin(), p2Inputs_.begin() + n), 200, 550, 1);
+        if (InputDisplay()) {
+            DrawInputs(std::vector<char>(p1Inputs_.begin(), p1Inputs_.begin() + n), 200, 10, 1);
+            DrawInputs(std::vector<char>(p2Inputs_.begin(), p2Inputs_.begin() + n), 200, 550, 1);
+        }
     }
 
     int frame_ = 0;

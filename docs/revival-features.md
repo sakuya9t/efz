@@ -17,7 +17,10 @@ it, or UTF-8; `[Section]` and `Key = value` lines, `;` comments. Keys are Direct
 names (`DIK_SPACE`, `DIK_NUMPAD0`; the list is in Revival's own ini) or a button of the
 controller P1's A is on (`BUTTON_1` to `BUTTON_32`), `None` for none. A key the file
 doesn't name has the value Revival ships, so the game without the file behaves as
-Revival as installed. A Revival player's file can be copied over as it is.
+Revival as installed. A Revival player's file can be copied over as it is. OPTIONS' second
+page sets the most used of these in the game, and has switches of the native game's own
+for EfzRevival's features offline, each tool, and the input display ([native.md](native.md),
+"OPTIONS").
 
 | Section | Keys | Used for |
 |---|---|---|

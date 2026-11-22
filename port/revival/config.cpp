@@ -342,21 +342,129 @@ std::string DecodeIni(const unsigned char* data, size_t size)
     return std::string((const char*)data, size);
 }
 
+namespace {
+
+bool ReadFileBytes(std::vector<unsigned char>* data)
+{
+    FILE* f = OpenGameFile("EfzRevival.ini", "rb");
+    if (!f)
+        return false;
+    unsigned char buf[4096];
+    size_t got;
+    while ((got = fread(buf, 1, sizeof(buf), f)) > 0)
+        data->insert(data->end(), buf, buf + got);
+    fclose(f);
+    return true;
+}
+
+// UTF-8 to UTF-16LE.
+std::string ToUtf16(const std::string& s)
+{
+    std::string out;
+    for (size_t i = 0; i < s.size();) {
+        unsigned char c = (unsigned char)s[i];
+        uint32_t cp;
+        int more = c < 0x80 ? 0 : c < 0xe0 ? 1 : c < 0xf0 ? 2 : 3;
+        cp = more == 0 ? c : more == 1 ? c & 0x1f : more == 2 ? c & 0x0f : c & 0x07;
+        for (int k = 0; k < more && i + 1 + k < s.size(); k++)
+            cp = cp << 6 | ((unsigned char)s[i + 1 + k] & 0x3f);
+        i += 1 + more;
+        auto unit = [&](uint32_t u) {
+            out.push_back((char)(u & 0xff));
+            out.push_back((char)(u >> 8));
+        };
+        if (cp >= 0x10000) {
+            cp -= 0x10000;
+            unit(0xd800 + (cp >> 10));
+            unit(0xdc00 + (cp & 0x3ff));
+        } else {
+            unit(cp);
+        }
+    }
+    return out;
+}
+
+} // namespace
+
+std::string SetIniValue(const std::string& text, const char* section, const char* key,
+                        const std::string& value)
+{
+    std::string want = Lower(section), name = Lower(key);
+    std::string eol = text.find("\r\n") != std::string::npos || text.empty() ? "\r\n" : "\n";
+    std::string current;
+    size_t pos = 0, sectionEnd = std::string::npos;
+    bool inSection = false;
+    while (pos < text.size()) {
+        size_t end = text.find('\n', pos);
+        size_t next = end == std::string::npos ? text.size() : end + 1;
+        std::string line = Trim(text.substr(pos, next - pos));
+        if (!line.empty() && line[0] == '[') {
+            size_t close = line.find(']');
+            current = Lower(Trim(line.substr(1, close == std::string::npos ? std::string::npos : close - 1)));
+            if (inSection)
+                break; // the section ended without the key
+            inSection = current == want;
+        } else if (inSection && !line.empty() && line[0] != ';') {
+            size_t eq = line.find('=');
+            if (eq != std::string::npos && Lower(Trim(line.substr(0, eq))) == name) {
+                // The key's line: its name and alignment kept, the value after "= ".
+                size_t at = text.find('=', pos);
+                size_t lineEnd = end == std::string::npos ? text.size() : end;
+                if (lineEnd > pos && text[lineEnd - 1] == '\r')
+                    lineEnd--;
+                return text.substr(0, at + 1) + " " + value + text.substr(lineEnd);
+            }
+            sectionEnd = next; // after the section's last setting
+        }
+        if (inSection && sectionEnd == std::string::npos)
+            sectionEnd = next;
+        pos = next;
+    }
+    std::string line = std::string(key) + " = " + value + eol;
+    if (inSection || sectionEnd != std::string::npos) {
+        size_t at = sectionEnd == std::string::npos ? text.size() : sectionEnd;
+        std::string before = text.substr(0, at);
+        if (!before.empty() && before.back() != '\n')
+            before += eol;
+        return before + line + text.substr(at);
+    }
+    std::string out = text;
+    if (!out.empty() && out.back() != '\n')
+        out += eol;
+    return out + (out.empty() ? "" : eol) + "[" + section + "]" + eol + line;
+}
+
+bool SetConfigValue(const char* section, const char* key, const std::string& value)
+{
+    std::vector<unsigned char> data;
+    bool found = ReadFileBytes(&data);
+    bool utf16 = !found || (data.size() >= 2 && ((data[0] == 0xff && data[1] == 0xfe) ||
+                                                 (data[1] == 0 && data[0] != 0)));
+    bool bom8 = data.size() >= 3 && data[0] == 0xef && data[1] == 0xbb && data[2] == 0xbf;
+    std::string text = SetIniValue(DecodeIni(data.data(), data.size()), section, key, value);
+    // As it was: UTF-16 (as Revival ships it, and as a new file is made, which Revival
+    // reads too) or UTF-8.
+    std::string bytes = utf16 ? "\xff\xfe" + ToUtf16(text) : (bom8 ? "\xef\xbb\xbf" : "") + text;
+    FILE* f = OpenGameFile("EfzRevival.ini", "wb");
+    if (!f) {
+        LogWarn("revival", "can't write EfzRevival.ini");
+        return false;
+    }
+    bool ok = fwrite(bytes.data(), 1, bytes.size(), f) == bytes.size();
+    ok &= fclose(f) == 0;
+    LogInfo("revival", "EfzRevival.ini: [%s] %s = %s", section, key, value.c_str());
+    ReloadConfig();
+    return ok;
+}
+
 void ReloadConfig()
 {
     g_read = true;
     std::string text;
-    FILE* f = OpenGameFile("EfzRevival.ini", "rb");
-    bool found = f != nullptr;
-    if (f) {
-        std::vector<unsigned char> data;
-        unsigned char buf[4096];
-        size_t got;
-        while ((got = fread(buf, 1, sizeof(buf), f)) > 0)
-            data.insert(data.end(), buf, buf + got);
-        fclose(f);
+    std::vector<unsigned char> data;
+    bool found = ReadFileBytes(&data);
+    if (found)
         text = DecodeIni(data.data(), data.size());
-    }
     g_config = ParseConfig(text);
     g_config.path = found ? "EfzRevival.ini" : "";
     if (found)

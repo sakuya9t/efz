@@ -5,43 +5,72 @@
 #include <math.h>
 #include "efz.h"
 
-#ifdef EFZ_NATIVE
-// The native game's page has a row more, CPU COMBO, after CPU LEVEL, when it has the CPU's
-// combos (efz::OptionsHooks, port/options.cpp): drawn in the page's own letters, and the
-// rows 16 pixels apart instead of 18, so that the nine take the eight's room.
-static int OptionRows()
-{
-    return efz::g_options.drawCpuCombo ? 9 : 8;
-}
-
-// CPU COMBO is item 8 (m_cursor keeps the original's item numbers) and the fifth row,
-// after CPU LEVEL: the row an item is on, and the item on a row.
-static const int kCpuComboItem = 8;
-static const int kCpuComboRow = 4;
-
-static int OptionRow(int item)
-{
-    if (OptionRows() == 8)
-        return item;
-    return item == kCpuComboItem ? kCpuComboRow : item < kCpuComboRow ? item : item + 1;
-}
-
-static int OptionItem(int row)
-{
-    if (OptionRows() == 8)
-        return row;
-    return row == kCpuComboRow ? kCpuComboItem : row < kCpuComboRow ? row : row - 1;
-}
-
 // The top of an item's row on the page (before it slides: m_pageY).
 static int OptionY(int item)
 {
-    return 95 + (OptionRows() == 8 ? 18 : 16) * OptionRow(item);
-}
-#else
-static int OptionY(int item)
-{
     return 95 + 18 * item;
+}
+
+#ifdef EFZ_NATIVE
+// The native game's OPTIONS has pages (efz::OptionsHooks, port/options.cpp): this one,
+// the game's own, first; then EfzRevival's settings and the native game's, whose rows the
+// hooks write over the page's background. Tab, or either side's C (D back), turns the
+// page; the page is the game's own again each time OPTIONS opens.
+static int s_page;
+static bool s_tab;     // Tab went down on this frame (HandleKeys)
+static bool s_tabDown;
+
+static int OptionPages()
+{
+    return efz::g_options.pages ? efz::g_options.pages() : 1;
+}
+
+// A frame of the main page's state on the native pages: turning the page, and the pages
+// after the game's own. True when the frame was theirs (the game's page doesn't run).
+static bool NativePage(CScene6* scene)
+{
+    int pages = OptionPages();
+    if (pages < 2)
+        return false;
+    CGame* game = scene->m_game;
+    int turn = s_tab ? 1 : 0;
+    for (int side = 0; side < 2; side++) {
+        if (game->m_pressC[side] == 1)
+            turn = 1;
+        if (game->m_pressD[side] == 1)
+            turn = -1;
+    }
+    if (turn != 0) {
+        s_page = (s_page + turn + pages) % pages;
+        game->PlaySE(8);
+        return true;
+    }
+    if (s_page == 0)
+        return false;
+    for (int side = 0; side < 2; side++) {
+        int dx = 0, dy = 0;
+        if (scene->m_held[side] == 0) {
+            dy = game->m_inputY[side];
+            dx = dy == 0 ? game->m_inputX[side] : 0;
+        }
+        if (game->m_inputX[side] == 0 && game->m_inputY[side] == 0)
+            scene->m_held[side] = 0;
+        else
+            scene->m_held[side] = 1;
+        switch (efz::g_options.update(s_page, side, dx, dy, game->m_pressA[side] == 1,
+                                      game->m_pressB[side] == 1)) {
+        case efz::kOptionsMoved:
+        case efz::kOptionsChanged:
+            game->PlaySE(8);
+            break;
+        case efz::kOptionsBack:
+            scene->m_leave = 1;
+            break;
+        default:
+            break;
+        }
+    }
+    return true;
 }
 #endif
 
@@ -134,6 +163,9 @@ BYTE CScene6::Update()
 
     HandleKeys();
     if (m_enter == 1) {
+#ifdef EFZ_NATIVE
+        s_page = 0;
+#endif
         m_cursor = 0;
         m_recordChar = 0;
         unk44a = 0;
@@ -162,18 +194,12 @@ BYTE CScene6::Update()
     if ((char)m_held[2] == 0) {
         m_game->UpdateInput();
         menuSide = 0;
+#ifdef EFZ_NATIVE
+        if (NativePage(this))
+            menuSide = 2; // the native pages' frame: not the game's page's
+#endif
         for (; menuSide < 2; menuSide++) {
             if (m_game->m_inputY[menuSide] != 0 && m_held[menuSide] == 0) {
-#ifdef EFZ_NATIVE
-                int row = OptionRow(m_cursor) + m_game->m_inputY[menuSide];
-                if (row > OptionRows() - 1) {
-                    row = 0;
-                }
-                if (row < 0) {
-                    row = OptionRows() - 1;
-                }
-                m_cursor = (char)OptionItem(row);
-#else
                 m_cursor += m_game->m_inputY[menuSide];
                 if (m_cursor > 7) {
                     m_cursor = 0;
@@ -181,7 +207,6 @@ BYTE CScene6::Update()
                 if (m_cursor < 0) {
                     m_cursor = 7;
                 }
-#endif
                 m_game->PlaySE(8);
                 m_held[menuSide] = 1;
             }
@@ -280,15 +305,6 @@ BYTE CScene6::Update()
                     SlidePage(1);
                 }
                 break;
-#ifdef EFZ_NATIVE
-            case kCpuComboItem:
-                if (m_game->m_inputX[menuSide] != 0 && m_held[menuSide] == 0) {
-                    efz::g_options.setCpuCombo(!efz::g_options.cpuCombo());
-                    m_game->PlaySE(8);
-                    m_held[menuSide] = 1;
-                }
-                break;
-#endif
             case 7:
                 if (m_game->m_pressA[menuSide] == 1) {
                     m_leave = 1;
@@ -402,13 +418,13 @@ void CScene6::Draw()
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_bgSurface), src, 255, 0);
         m_graphics->Blit(MakeRect(0, 0 - m_pageY, 320, 40), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 320, 40), m_colorKey, 0);
 #ifdef EFZ_NATIVE
-        if (OptionRows() == 9) {
-            // A row at a time, 16 pixels apart, CPU COMBO among them.
-            m_graphics->Blit(MakeRect(0, m_pageY + 40, 320, 55), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 40, 320, 55), m_colorKey, 0);
-            for (int item = 0; item < 8; item++)
-                m_graphics->Blit(MakeRect(0, m_pageY + OptionY(item), 320, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 95 + 18 * item, 320, 14), m_colorKey, 0);
-            efz::g_options.drawCpuCombo(m_graphics, TOPTR(IDirectDrawSurface*, m_menuSurface), TOPTR(IDirectDrawSurface*, m_scoreSurface), (BYTE)m_colorKey, m_pageY + OptionY(kCpuComboItem), m_cursor == kCpuComboItem, efz::g_options.cpuCombo());
-        } else
+        // The native pages: the background and the title; the hooks write the rest.
+        if (efz::g_options.shown)
+            efz::g_options.shown(s_page);
+        if (s_page != 0) {
+            m_graphics->Flip();
+            return;
+        }
 #endif
         m_graphics->Blit(MakeRect(0, m_pageY + 40, 320, 200), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 40, 320, 200), m_colorKey, 0);
         switch (m_cursor) {
@@ -525,6 +541,11 @@ void CScene6::HandleKeys()
     if ((keys[1] & 0x80) != 0) {
         m_leave = 1;
     }
+#ifdef EFZ_NATIVE
+    bool tab = (keys[0x0f] & 0x80) != 0;
+    s_tab = tab && !s_tabDown;
+    s_tabDown = tab;
+#endif
 }
 
 void CScene6::LoadRecord()

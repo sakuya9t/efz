@@ -110,6 +110,25 @@ int main()
     const unsigned char bare[] = {'[', 0, 'N', 0};
     CHECK(revival::DecodeIni(bare, sizeof(bare)) == "[N");
 
+    // OPTIONS' writing: the value replaced where it is, the name's alignment kept...
+    std::string edited = revival::SetIniValue(kIni, "network", "maxrollback", "9");
+    CHECK(edited.find("MaxRollback          = 9\r\n") != std::string::npos);
+    CHECK(edited.size() == strlen(kIni));
+    CHECK(revival::ParseConfig(edited).maxRollback == 9);
+    // ... a key the section lacks after its last setting, the file's line ends kept ...
+    edited = revival::SetIniValue(kIni, "Network", "SaveBattleLog", "0");
+    CHECK(edited.find("SavePreviousReplay   = BUTTON_13\r\nSaveBattleLog = 0\r\n[Practice]") !=
+          std::string::npos);
+    CHECK(!revival::ParseConfig(edited).saveBattleLog);
+    // ... a commented-out key isn't the key ...
+    edited = revival::SetIniValue(kIni, "Practice", "Pause", "DIK_P");
+    CHECK(edited.find("; Pause = DIK_P\r\n") != std::string::npos);
+    CHECK(revival::ParseConfig(edited).pause == 0x19);
+    // ... a section the file lacks at its end, and a file that isn't there made.
+    edited = revival::SetIniValue("[Global]\nMuteBGM = 0\n", "Network", "HolePunchingServer", "None");
+    CHECK(edited == "[Global]\nMuteBGM = 0\n\n[Network]\nHolePunchingServer = None\n");
+    CHECK(revival::SetIniValue("", "Global", "MuteBGM", "1") == "[Global]\r\nMuteBGM = 1\r\n");
+
     // The launcher's endpoints: a 32-bit Windows boost::asio endpoint's bytes.
     net::Endpoint e;
     std::string error;
