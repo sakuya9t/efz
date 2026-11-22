@@ -4413,7 +4413,8 @@ none makes a string).
    - the raw specials' priors, per opponent.
 
    A lever is moved when the area's read is two errors or more below the prior (a hole),
-   with the read carried across a session, not a match. It is judged on drills whose
+   with the read carried across a session, not a match. The read is of episode counts (who
+   hit first, per situation), not HP: "What a read should count", below. It is judged on drills whose
    opponent has a known hole (a spiky profile) and kept if it gains two errors there and
    loses under one on the plain league.
 4. **A style input only after 2 and 3**: if the agent has the areas but shifts between them
@@ -4493,6 +4494,32 @@ Two readings:
   the agent guard on the ground) and staying on it, neither of which a follow-up planner
   supplies. At 3% of a match an opponent's pressure cannot be read at all: the errors on
   the per-second rate are 38-171 HP against a community spread of 104.
+
+### What a read should count (for step 3)
+
+The two kinds of file are the same opponent with a strong okizeme and without one: a
+known difference of about the size people differ by (333 HP a minute; the community's
+spread is 580). How many matches each figure needs to tell them apart, by its noise a
+match (the error over 64 matches times 8) and the mean shift over the eleven
+(4·noise²/shift², two errors):
+
+| Figure | combos only | with planners | noise a match | matches |
+|---|---|---|---|---|
+| The agent's net under its okizeme, HP a minute | +164 | −168 | 1,588 | 91 |
+| HP lost under it, a minute | 804 | 1,281 | 1,133 | 23 |
+| Its okizeme hits first | 18% | 28% | 17 points | 11 |
+| Its okizeme is meaty | 38% | 49% | 19 points | 11 |
+| Its okizeme makes contact | 39% | 54% | 21 points | 8 |
+| The agent's wins | 63% | 56% | 45 points | 185 |
+
+HP is the slowest read by far: one combo more or less in a match swamps it. What happened
+in each episode (who hit first, whether the okizeme was on time, whether it touched)
+reads in 8-11 matches what HP reads in 91. So step 3's read is of episode counts, with
+HP kept for judging afterwards, and even so a difference of this size takes a session,
+not a match. The scripted habits are no deeper: the sparring profile's okizeme (`jumpin`,
+`low`, `throw`, `bait`) costs the agent about 290 HP a minute under it against the plain
+opponents (five opponents, `bench/r21`), so `weak`, which leaves a quarter of it, makes a
+difference of about 220.
 
 So step 2 stays open for pressure. The scripted profile has no knob that starts
 pressure (it throws, jumps in on a knockdown and reverses), so the candidates are all new
