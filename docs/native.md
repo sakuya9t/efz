@@ -75,6 +75,30 @@ macOS (arm64, x64).
   menu's records (Tab) and `--replay-fight` replay tick for tick
   ([logging.md](logging.md)).
 
+### OPTIONS
+
+The title's CONFIG has three pages; Tab, or either side's C, turns to the next, D to the
+one before, and the tabs at the top right say which is shown. The first is the game's own,
+as the original has it (its settings in `key.ini`). The other two are written over the
+page's background in SDL's font, a row a setting, with a line on the one chosen: up and
+down choose, left, right or A change, B (or BACK, or Esc) leaves.
+
+| Page | Row | Saved in |
+|---|---|---|
+| 2 REVIVAL | REVIVAL FEATURES: EfzRevival's tools and music offline; off, the game offline is the original's (netplay is Revival's either way; the tournament, asked for, still runs) | `options.ini` |
+| | PRACTICE TOOLS, REPLAY TOOLS, INPUT DISPLAY: each of those ([revival-features.md](revival-features.md)) | `options.ini` |
+| | MUSIC (`MuteBGM`), HOLE PUNCHING (`HolePunchingServer`: off writes `None`, on the server it had, else Revival's), MAX ROLLBACK, PRACTICE KEYS ONLINE (`AllowPracticeKeys`), WINS ONLINE (`DisplayScore`), SAVE EVERY REPLAY (`SaveAllReplays`), BATTLE LOG (`SaveBattleLog`) | `EfzRevival.ini` |
+| 3 NATIVE | CPU COMBO: the CPU's combos ([agents.md](agents.md)) | `options.ini` |
+| | LANGUAGE, RESOLUTION, HD MODE: to come (shown, not changed) | |
+
+`EfzRevival.ini` is changed a line at a time (`port/revival/config.cpp`'s
+`SetConfigValue`): the setting's value where it is, else a line at its section's end,
+else the section at the file's end; its other lines, comments and encoding (UTF-16, as
+Revival ships it) stay, so EfzRevival reads it as ever. The game writes it to the save
+folder (the game's folder's copy first, when only that has one), the folder it reads
+first: when the two are one folder, as by default, an EfzRevival installed there shares
+these settings.
+
 For tests the game runs without a display (`SDL_VIDEO_DRIVER=offscreen
 SDL_AUDIO_DRIVER=dummy`) and takes `--frames N`, `--fast`, `--keys SCRIPT` and
 `--dump DIR` (see `port/main.cpp`).
@@ -199,7 +223,7 @@ lists what a platform provides).
 | `sound.cpp` | `CSound`: the 150 sound slots, a mixer on SDL's audio thread, `.wav` parsing, the music's loop points |
 | `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second; `MessageBox`, `PostMessage`, `timeGetTime` |
 | `log.cpp`, `crash.cpp`, `record.cpp` | The log and its session folder, crash and hang reports, and the fight records, checks and replays ([logging.md](logging.md)) |
-| `options.cpp` | `options.ini`, and the OPTIONS page's CPU COMBO row, made from the page's own pictures ([agents.md](agents.md), "The CPU's combos") |
+| `options.cpp` | `options.ini`, and OPTIONS' pages after the game's own: EfzRevival's settings and the native game's (below, "OPTIONS") |
 | `records.cpp` | The REPLAY menu's records, Tab from the game's replays: the logs folder's fight records (not the title's demos), each played as a replay or saved as one in a replay slot ([logging.md](logging.md)) |
 | `tool.cpp`, `toolmain.cpp` | The replay tool, `efz-convert`: the game in a window of its own that converts records and replays and makes videos ([logging.md](logging.md)) |
 | `mp4.cpp`, `minih264.c` | Videos of fights: H.264 (minih264's encoder) and Opus (libopus) in an MP4 ([third-party.md](third-party.md)) |

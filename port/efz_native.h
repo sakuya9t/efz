@@ -241,16 +241,25 @@ enum RecordsAction {
 extern RecordsHooks g_records;
 const int kRecordsPage = 10; // CScene8::m_page while the menu shows the records
 
-// --- The OPTIONS page's CPU COMBO row (port/options.cpp, docs/agents.md): after CPU
-// LEVEL, whether the game's CPU plays its combos from its character's agent file. Empty
-// in a build without it (the headless library): the page then has its eight rows.
+// --- OPTIONS' pages (port/options.cpp, docs/native.md): the game's own page first, as the
+// original has it, then EfzRevival's settings and the native game's own, written over the
+// page's background by these hooks. Tab, or C (D back), turns the page. Empty in a build
+// without them (the headless library): OPTIONS is then the original's one page.
 struct OptionsHooks {
-    // The row at (0, y), drawn from the page's pictures (its own, and the character record
-    // page's, both loaded with the colours from 161), selected or not, on or off.
-    void (*drawCpuCombo)(CGraphics* graphics, IDirectDrawSurface* menu, IDirectDrawSurface* score,
-                         BYTE colorKey, int y, bool selected, bool on);
-    bool (*cpuCombo)();
-    void (*setCpuCombo)(bool on);
+    // How many pages there are (the game's own counted).
+    int (*pages)();
+    // A page shown (CScene6::Draw, each frame, before Flip): 0 the game's own.
+    void (*shown)(int page);
+    // A frame on page `page` (1 on), per side: the directions pressed on this frame (-1,
+    // 0, 1, each once until let go, as the game's page takes them), A and B pressed.
+    // What the page does: an OptionsAction.
+    int (*update)(int page, int side, int dx, int dy, bool a, bool b);
+};
+enum OptionsAction {
+    kOptionsNothing,
+    kOptionsMoved,   // the choice moved (the page's move sound)
+    kOptionsChanged, // a setting changed (the same)
+    kOptionsBack,    // BACK, or B: leave OPTIONS
 };
 extern OptionsHooks g_options;
 

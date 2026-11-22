@@ -1,24 +1,24 @@
-// OPTIONS' CPU COMBO row (src/scene6.cpp, efz::OptionsHooks) and the native game's own
-// settings file, options.ini in the save folder: what key.ini doesn't hold. key.ini is
-// the original's (157 bytes: four presets of key bindings with the page's settings in
-// the first, and the preset chosen), which config.exe and EfzRevival read and write too.
+// OPTIONS' pages (src/scene6.cpp, efz::OptionsHooks) and the native game's own settings
+// file, options.ini in the save folder.
 //
-// CPU COMBO: whether the game's CPU plays its combos from its character's agent file
-// (port/agent/play.cpp, docs/agents.md), aimed at its level's share of the most damaging
-// combo found at each hit. Off by default.
+//   1 GAME     the game's own page, as the original has it (key.ini's settings)
+//   2 REVIVAL  EfzRevival's settings (docs/revival-features.md): its features offline on
+//              or off, and each of them; the music; the hole-punching server, the
+//              rollback and the rest of its netplay settings
+//   3 NATIVE   the native game's: the CPU's combos (docs/agents.md); the language, the
+//              resolution and HD output, to come
 //
-// The row is made from the page's own pictures, as NET PLAY's title row is
-// (port/netplay/titleitem.cpp): CPU from CPU LEVEL's label (ＣＰＵ難易度), コンボ from the
-// character record page's 最大コンボ数 (system\score.dat, which the page loads too, with
-// the same 32 colours), its bar from the page's. Its values, なし (off) and あり (on), are
-// in no picture of the game: they are the glyphs below, drawn with the colours the
-// page's letters use, white and grey. If the pictures aren't 4.02's (a translation
-// patch), the row is the page's bar with its text written over it in SDL's font.
+// Tab, or either side's C (D back), turns the page. Pages 2 and 3 are written over the
+// page's background in SDL's font (the game's pictures have no letters for them). What
+// Revival has a key for is written to EfzRevival.ini (port/revival/config.h: the file's
+// other lines and its encoding kept, so Revival reads it as ever); what it hasn't, to
+// options.ini.
 #include <SDL3/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <map>
+#include <algorithm>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -27,279 +27,24 @@
 #include "log.h"
 #include "options.h"
 #include "platform.h"
+#include "revival/config.h"
+#include "revival/music.h"
 
 namespace efz {
 
 namespace {
 
-const int kWidth = 320, kRow = 14;
-const int kBase = 161; // the page's pictures' first colour (CScene6 loads them there)
-const int kGreyTop = 95, kWhiteTop = 261, kPitch = 18; // config_ob's rows, plain and highlighted
-const int kCpuLevelItem = 3, kBarItem = 5;             // CPU LEVEL's row; a row with a short label
-const int kCpuX0 = 16, kCpuX1 = 57;                    // its ＣＰＵ: three cells of 14 pixels
-const int kScoreComboTop = 215;                        // score.dat's 最大コンボ数 row
-const int kComboX0 = 43, kComboX1 = 86;                // its コンボ: three cells (ボ's mark to 85)
-const int kOffX = 128, kOnX = 173;                     // the values: two cells each, where
-const int kOffSprite = 112, kOnSprite = 160, kSprite = 48; // EFFECT's are, and their sprites
+const char kDefaultServer[] = "128.199.38.97:10800"; // EfzRevival.ini as Revival ships it
 
-// The values' glyphs: なし and あり, 14 x 14 cells of coverage (hex digits, '.' none) on the
-// row's line, rendered from Droid Sans Fallback at 12 pixels (Apache License 2.0,
-// docs/third-party.md).
-const char* const kGlyphs[4][kRow] = {
-    { // な
-        "..............",
-        "..............",
-        "....14........",
-        "....5b..1.....",
-        "..59cdb77e6...",
-        "..47f742.3cb..",
-        "...4d...46.4..",
-        "...98...7a....",
-        "...f2...6a....",
-        "..6c.4879b....",
-        "..c43e78cfb3..",
-        "....3e55c99e1.",
-        ".....6bc8.....",
-        "..............",
-    },
-    { // し
-        "..............",
-        "..............",
-        "....41........",
-        "....e3........",
-        "....e3........",
-        "....f2........",
-        "....f1........",
-        "....f1.....1..",
-        "....f.....6b..",
-        "....f.....c6..",
-        "....e3...8e...",
-        "....5e99cd2...",
-        ".....2664.....",
-        "..............",
-    },
-    { // あ
-        "..............",
-        "..............",
-        ".....22.......",
-        ".....97..11...",
-        "..4ffffffeb...",
-        ".....c4.4.....",
-        "....1dddf7....",
-        "...5ef6aaad1..",
-        "..3e2c3e1.a8..",
-        "..96.ba9..7b..",
-        "..a5.bd...c7..",
-        "..4ecc158ea...",
-        "...23..982....",
-        "..............",
-    },
-    { // り
-        "..............",
-        "..............",
-        "..............",
-        "...47..6fd1...",
-        "...7a..b2b6...",
-        "...98....89...",
-        "...a7....7a...",
-        "...a7....89...",
-        "...97....a7...",
-        "...86....e4...",
-        "........8d....",
-        ".....27dd2....",
-        ".....2a6......",
-        "..............",
-    },
+// options.ini's settings.
+struct Settings {
+    bool revival = true;
+    bool practice = true;
+    bool replay = true;
+    bool inputs = true;
+    std::string server; // the hole-punching server last on, while it is off
 };
-
-IDirectDrawSurface* g_row; // kWidth x 2 rows: the row plain, then highlighted (bar and letters)
-bool g_tried = false;
-bool g_letters = false;    // the letters made from the pictures (else written over: Fallback)
-
-// The row as drawn last when its letters couldn't be made: what DrawOptions writes.
-struct Fallback {
-    Uint64 at = 0; // SDL_GetTicks when drawn
-    int y = 0;
-    bool selected = false, on = false;
-} g_fallback;
-
-BYTE At(IDirectDrawSurface* s, int x, int y)
-{
-    return ((BYTE*)s->pixels)[y * s->pitch + x];
-}
-
-BYTE& Out(int x, int y)
-{
-    return ((BYTE*)g_row->pixels)[y * g_row->pitch + x];
-}
-
-// Runs of columns in [x0, x1) of rows [y0, y0 + kRow) with a pixel neither `key` nor `bar`.
-std::vector<std::pair<int, int>> Letters(IDirectDrawSurface* s, int x0, int x1, int y0, BYTE key,
-                                         BYTE bar)
-{
-    std::vector<std::pair<int, int>> out;
-    int start = -1;
-    for (int x = x0; x <= x1; x++) {
-        bool ink = false;
-        for (int y = y0; x < x1 && y < y0 + kRow && !ink; y++) {
-            BYTE v = At(s, x, y);
-            ink = v != key && v != bar;
-        }
-        if (ink && start < 0)
-            start = x;
-        if (!ink && start >= 0) {
-            out.push_back({start, x});
-            start = -1;
-        }
-    }
-    return out;
-}
-
-bool Build(CGraphics* graphics, IDirectDrawSurface* menu, IDirectDrawSurface* score, BYTE key)
-{
-    if (!menu || menu->width < kWidth || menu->height < kWhiteTop + 8 * kPitch)
-        return false;
-    g_row = new IDirectDrawSurface(kWidth, 2 * kRow);
-    // The bar: a row's, its letters taken out (the bar's colour where they were).
-    const int plain = kGreyTop + kBarItem * kPitch, high = kWhiteTop + kBarItem * kPitch;
-    const BYTE bar = At(menu, kWidth - 1, high + kRow / 2);
-    for (int y = 0; y < kRow; y++) {
-        for (int x = 0; x < kWidth; x++) {
-            BYTE a = At(menu, x, plain + y), b = At(menu, x, high + y);
-            Out(x, y) = a == key ? key : bar;
-            Out(x, kRow + y) = b == key ? key : bar;
-        }
-    }
-    if (!score || score->width < kWidth || score->height < kScoreComboTop + kRow)
-        return true;
-    // The pictures are 4.02's: CPU LEVEL's label is ＣＰＵ and three cells on, 難易度; the
-    // record page's row is 最大コンボ数, コ and ン apart, ボ and 数 run together.
-    std::vector<std::pair<int, int>> cpu =
-        Letters(menu, 0, 112, kWhiteTop + kCpuLevelItem * kPitch, key, bar);
-    std::vector<std::pair<int, int>> combo = Letters(score, 0, 120, kScoreComboTop, key, bar);
-    bool expected = cpu.size() == 4 && cpu[0].first >= kCpuX0 && cpu[2].second <= kCpuX1 &&
-                    cpu[3].first >= kCpuX1 - 1 && combo.size() == 5 &&
-                    combo[2].first >= kComboX0 && combo[2].first <= kComboX0 + 4 &&
-                    combo[3].first >= kComboX0 + 14 && combo[3].first <= kComboX0 + 18 &&
-                    combo[4].first >= kComboX0 + 28 && combo[4].first <= kComboX0 + 32;
-    if (!expected) {
-        LogWarn("options", "the OPTIONS page's pictures aren't 4.02's (CPU LEVEL's label in %d "
-                           "pieces, the record page's 最大コンボ数 in %d): CPU COMBO is written "
-                           "over its row",
-                (int)cpu.size(), (int)combo.size());
-        return true;
-    }
-    // The page's two ramps: each colour of the highlighted letters, and the one the plain
-    // letters have in its place.
-    std::map<BYTE, std::map<BYTE, int>> pairs;
-    for (int item = 0; item < 8; item++) {
-        for (int y = 0; y < kRow; y++) {
-            for (int x = 0; x < 112; x++) {
-                BYTE w = At(menu, x, kWhiteTop + item * kPitch + y);
-                BYTE g = At(menu, x, kGreyTop + item * kPitch + y);
-                if (w != key && w != bar)
-                    pairs[w][g]++;
-            }
-        }
-    }
-    PALETTEENTRY palette[256];
-    memset(palette, 0, sizeof(palette));
-    graphics->LoadPaletteDat(palette, "system\\config_ob.dat", 0, kBase, 32);
-    auto bright = [&](BYTE c) {
-        return (palette[c].peRed + palette[c].peGreen + palette[c].peBlue) / 3;
-    };
-    std::map<BYTE, BYTE> grey; // highlighted colour -> plain
-    for (const auto& p : pairs) {
-        int most = 0;
-        for (const auto& g : p.second) {
-            if (g.second > most) {
-                most = g.second;
-                grey[p.first] = g.first;
-            }
-        }
-    }
-    auto toGrey = [&](BYTE w) {
-        if (w == key || w == bar)
-            return w;
-        auto it = grey.find(w);
-        if (it != grey.end())
-            return it->second;
-        BYTE nearest = bar; // a colour the letters don't have: the nearest that they do
-        for (const auto& g : grey) {
-            if (nearest == bar || abs(bright(g.first) - bright(w)) < abs(bright(nearest) - bright(w)))
-                nearest = g.first;
-        }
-        return nearest == bar ? w : grey[nearest];
-    };
-    BYTE level[16]; // a glyph's coverage -> the highlighted colour of that brightness
-    for (int l = 0; l < 16; l++) {
-        BYTE best = bar;
-        for (const auto& g : grey) {
-            if (best == bar || abs(bright(g.first) - l * 17) < abs(bright(best) - l * 17))
-                best = g.first;
-        }
-        level[l] = best;
-    }
-    for (int y = 0; y < kRow; y++) {
-        const int row = kWhiteTop + kCpuLevelItem * kPitch + y;
-        for (int x = kCpuX0; x < kCpuX1; x++) {
-            BYTE w = At(menu, x, row);
-            if (w != key && w != bar) {
-                Out(x, kRow + y) = w;
-                Out(x, y) = At(menu, x, kGreyTop + kCpuLevelItem * kPitch + y);
-            }
-        }
-        for (int x = kComboX0; x < kComboX1; x++) {
-            BYTE w = At(score, x, kScoreComboTop + y);
-            if (w != key && w != bar) {
-                Out(x - kComboX0 + kCpuX1, kRow + y) = w;
-                Out(x - kComboX0 + kCpuX1, y) = toGrey(w);
-            }
-        }
-        for (int g = 0; g < 4; g++) {
-            int at = (g < 2 ? kOffX : kOnX) + (g % 2) * kRow;
-            for (int x = 0; x < kRow; x++) {
-                char c = kGlyphs[g][y][x];
-                int l = c >= '0' && c <= '9' ? c - '0' : c >= 'a' && c <= 'f' ? c - 'a' + 10 : 0;
-                if (l > 0) {
-                    Out(at + x, kRow + y) = level[l];
-                    Out(at + x, y) = toGrey(level[l]);
-                }
-            }
-        }
-    }
-    g_letters = true;
-    return true;
-}
-
-void DrawRow(CGraphics* graphics, IDirectDrawSurface* menu, IDirectDrawSurface* score, BYTE key,
-             int y, bool selected, bool on)
-{
-    if (!g_tried) {
-        g_tried = true;
-        if (!Build(graphics, menu, score, key)) {
-            LogWarn("options", "the OPTIONS page's pictures have no row to make CPU COMBO's from");
-            g_row = nullptr;
-        }
-    }
-    if (g_row) {
-        graphics->Blit(MakeRect(0, y, kWidth, kRow), g_row, MakeRect(0, 0, kWidth, kRow), key, 0);
-        if (selected && g_letters)
-            graphics->Blit(MakeRect(0, y, 112, kRow), g_row, MakeRect(0, kRow, 112, kRow), key, 0);
-        int sprite = on ? kOnSprite : kOffSprite;
-        if (g_letters)
-            graphics->Blit(MakeRect(sprite, y, kSprite, kRow), g_row,
-                           MakeRect(sprite, kRow, kSprite, kRow), key, 0);
-    }
-    if (!g_letters) {
-        g_fallback.at = SDL_GetTicks();
-        g_fallback.y = y;
-        g_fallback.selected = selected;
-        g_fallback.on = on;
-    }
-}
-
-// --- options.ini
+Settings g_set;
 
 void Save()
 {
@@ -308,7 +53,10 @@ void Save()
         LogWarn("options", "cannot write options.ini");
         return;
     }
-    fprintf(f, "cpu_combos=%d\n", CpuCombos() ? 1 : 0);
+    fprintf(f, "cpu_combos=%d\nrevival=%d\npractice_tools=%d\nreplay_tools=%d\ninput_display=%d\n"
+               "hole_punching_server=%s\n",
+            CpuCombos() ? 1 : 0, g_set.revival, g_set.practice, g_set.replay, g_set.inputs,
+            g_set.server.c_str());
     fclose(f);
 }
 
@@ -317,7 +65,7 @@ void Load()
     FILE* f = OpenGameFile("options.ini", "rb");
     if (!f)
         return;
-    char line[256];
+    char line[512];
     while (fgets(line, sizeof(line), f)) {
         std::string s = line;
         while (!s.empty() && (s.back() == '\n' || s.back() == '\r'))
@@ -326,22 +74,325 @@ void Load()
         if (eq == std::string::npos)
             continue;
         std::string key = s.substr(0, eq), value = s.substr(eq + 1);
+        bool on = value == "1";
         if (key == "cpu_combos")
-            SetCpuCombos(value == "1");
+            SetCpuCombos(on);
+        else if (key == "revival")
+            g_set.revival = on;
+        else if (key == "practice_tools")
+            g_set.practice = on;
+        else if (key == "replay_tools")
+            g_set.replay = on;
+        else if (key == "input_display")
+            g_set.inputs = on;
+        else if (key == "hole_punching_server")
+            g_set.server = value;
     }
     fclose(f);
 }
 
-void Set(bool on)
+// --- The pages after the game's own
+
+struct Row {
+    std::string label;
+    std::function<std::string()> value; // null: an action (BACK)
+    std::function<void(int)> change;    // by a step left (-1) or right, or A (+1)
+    std::function<bool()> enabled;      // null: always
+    std::string help;
+    bool coming = false;                // not built yet: shown, not changed
+};
+
+struct Page {
+    std::string tab, title;
+    std::vector<Row> rows;
+    int cursor = 0;
+};
+
+std::vector<Page> g_pages; // pages 2 on
+int g_shown = -1;          // the page shown last, and when (SDL_GetTicks)
+Uint64 g_shownAt = 0;
+
+std::string OnOff(bool on)
 {
-    SetCpuCombos(on);
-    Save();
-    LogInfo("options", "CPU COMBO %s", on ? "on" : "off");
+    return on ? "ON" : "OFF";
 }
 
-bool Get()
+const revival::Config& Ini()
 {
-    return CpuCombos();
+    return revival::GetConfig();
+}
+
+void SetIni(const char* section, const char* key, const std::string& value)
+{
+    revival::SetConfigValue(section, key, value);
+}
+
+void Toggle(bool* flag, const char* what)
+{
+    *flag = !*flag;
+    Save();
+    LogInfo("options", "%s %s", what, *flag ? "on" : "off");
+}
+
+Row Back()
+{
+    Row r;
+    r.label = "BACK";
+    r.help = "Leave OPTIONS (B or Esc too).";
+    return r;
+}
+
+void BuildPages()
+{
+    auto features = [] { return g_set.revival; };
+    Page revivalPage;
+    revivalPage.tab = "REVIVAL";
+    revivalPage.title = "EFZREVIVAL";
+    revivalPage.rows = {
+        {"REVIVAL FEATURES", [] { return OnOff(g_set.revival); },
+         [](int) {
+             Toggle(&g_set.revival, "EfzRevival's features offline");
+             revival::ApplyMusicSettings();
+         },
+         nullptr,
+         "EfzRevival's tools and music offline. OFF: the game offline is the original's "
+         "(netplay is Revival's either way). options.ini."},
+        {"PRACTICE TOOLS", [] { return OnOff(g_set.practice); },
+         [](int) { Toggle(&g_set.practice, "the practice tools"); }, features,
+         "VS PLAYER and PRACTICE: pause, frame step, save and load, boxes, the dummy's "
+         "recording and replay, game speed (the keys of EfzRevival.ini). options.ini."},
+        {"REPLAY TOOLS", [] { return OnOff(g_set.replay); },
+         [](int) { Toggle(&g_set.replay, "the replay tools"); }, features,
+         "REPLAY: pause, step, seek, speed, boxes; Revival's replays played from their own "
+         "inputs, a character taken over. options.ini."},
+        {"INPUT DISPLAY", [] { return OnOff(g_set.inputs); },
+         [](int) { Toggle(&g_set.inputs, "the input display"); }, features,
+         "The last inputs on screen with the practice and replay tools. options.ini."},
+        {"MUSIC", [] { return OnOff(!Ini().muteBGM); },
+         [](int) {
+             SetIni("Global", "MuteBGM", Ini().muteBGM ? "0" : "1");
+             revival::ApplyMusicSettings();
+         },
+         features,
+         "The music (EfzRevival.ini's MuteBGM; ToggleBGM, F12, switches it anywhere). Its "
+         "BGMFolder plays in place of the game's."},
+        {"HOLE PUNCHING", [] { return OnOff(!Ini().holePunchingServer.empty()); },
+         [](int) {
+             std::string server = Ini().holePunchingServer;
+             if (!server.empty()) {
+                 g_set.server = server;
+                 Save();
+                 SetIni("Network", "HolePunchingServer", "None");
+             } else {
+                 SetIni("Network", "HolePunchingServer",
+                        g_set.server.empty() ? std::string(kDefaultServer) : g_set.server);
+             }
+         },
+         nullptr, ""},
+        {"MAX ROLLBACK", [] { return std::to_string(std::min(abs(Ini().maxRollback), 9)); },
+         [](int d) {
+             int n = std::min(abs(Ini().maxRollback), 9) + d;
+             n = n < 0 ? 9 : n > 9 ? 0 : n;
+             SetIni("Network", "MaxRollback", std::to_string(n));
+         },
+         nullptr,
+         "Netplay: the most frames run again when the other side's input comes late "
+         "(Revival's 4). More: less input delay, more visible rollback. EfzRevival.ini."},
+        {"PRACTICE KEYS ONLINE", [] { return OnOff(Ini().allowPracticeKeys); },
+         [](int) { SetIni("Network", "AllowPracticeKeys", Ini().allowPracticeKeys ? "0" : "1"); },
+         nullptr,
+         "Netplay: F4 and F5 in a fight, when both sides allow them. EfzRevival.ini."},
+        {"WINS ONLINE", [] { return OnOff(Ini().displayScore); },
+         [](int) { SetIni("Network", "DisplayScore", Ini().displayScore ? "0" : "1"); },
+         nullptr, "Netplay: both players' wins at the top of the screen. EfzRevival.ini."},
+        {"SAVE EVERY REPLAY", [] { return OnOff(Ini().saveAllReplays); },
+         [](int) { SetIni("Network", "SaveAllReplays", Ini().saveAllReplays ? "0" : "1"); },
+         nullptr,
+         "Netplay: every match's replay saved. OFF: only when S is pressed on character "
+         "select or the results. EfzRevival.ini."},
+        {"BATTLE LOG", [] { return OnOff(Ini().saveBattleLog); },
+         [](int) { SetIni("Network", "SaveBattleLog", Ini().saveBattleLog ? "0" : "1"); },
+         nullptr, "Netplay: each game's result in BattleLog.txt. EfzRevival.ini."},
+        Back(),
+    };
+    Page nativePage;
+    nativePage.tab = "NATIVE";
+    nativePage.title = "NATIVE GAME";
+    nativePage.rows = {
+        {"CPU COMBO", [] { return OnOff(CpuCombos()); },
+         [](int) {
+             SetCpuCombos(!CpuCombos());
+             Save();
+             LogInfo("options", "CPU COMBO %s", CpuCombos() ? "on" : "off");
+         },
+         nullptr,
+         "ARCADE and VS CPU: the CPU plays its combos from its character's file in "
+         "agents/cpu, at its level's share of the best. options.ini."},
+        {"LANGUAGE", [] { return std::string("JAPANESE"); }, nullptr, nullptr,
+         "The game's text in another language: to come.", true},
+        {"RESOLUTION", [] { return std::string("640 X 480"); }, nullptr, nullptr,
+         "The picture's size: to come (the window scales it now; Alt+Enter, F11: full "
+         "screen).",
+         true},
+        {"HD MODE", [] { return std::string("OFF"); }, nullptr, nullptr,
+         "Higher-resolution pictures: to come.", true},
+        Back(),
+    };
+    g_pages = {revivalPage, nativePage};
+}
+
+int Pages()
+{
+    return 1 + (int)g_pages.size();
+}
+
+void Shown(int page)
+{
+    g_shown = page;
+    g_shownAt = SDL_GetTicks();
+}
+
+bool Usable(const Row& r)
+{
+    return r.change && !r.coming && (!r.enabled || r.enabled());
+}
+
+int Update(int page, int, int dx, int dy, bool a, bool b)
+{
+    if (page < 1 || page > (int)g_pages.size())
+        return kOptionsNothing;
+    Page& p = g_pages[page - 1];
+    if (b)
+        return kOptionsBack;
+    int n = (int)p.rows.size();
+    if (dy != 0) {
+        p.cursor = (p.cursor + dy + n) % n;
+        return kOptionsMoved;
+    }
+    const Row& r = p.rows[p.cursor];
+    if (!r.value && a)
+        return kOptionsBack;
+    if ((dx != 0 || a) && Usable(r)) {
+        r.change(dx != 0 ? dx : 1);
+        return kOptionsChanged;
+    }
+    return kOptionsNothing;
+}
+
+// --- Drawing (SDL's 8x8 font, over the 640x480 screen)
+
+struct Color {
+    Uint8 r, g, b, a;
+};
+const Color kWhite = {255, 255, 255, 255};
+const Color kGrey = {150, 150, 150, 255};
+const Color kDim = {95, 95, 95, 255};
+const Color kTeal = {80, 210, 190, 255};
+
+void Text(SDL_Renderer* r, float x, float y, const std::string& s, float scale, Color c)
+{
+    SDL_SetRenderScale(r, scale, scale);
+    SDL_SetRenderDrawColor(r, 0, 0, 0, (Uint8)(c.a * 3 / 4));
+    SDL_RenderDebugText(r, x / scale + 1, y / scale + 1, s.c_str());
+    SDL_SetRenderDrawColor(r, c.r, c.g, c.b, c.a);
+    SDL_RenderDebugText(r, x / scale, y / scale, s.c_str());
+    SDL_SetRenderScale(r, 1, 1);
+}
+
+float Width(const std::string& s, float scale)
+{
+    return (float)s.size() * SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE * scale;
+}
+
+void Box(SDL_Renderer* r, float x, float y, float w, float h, Color c)
+{
+    SDL_FRect rect = {x, y, w, h};
+    SDL_SetRenderDrawColor(r, c.r, c.g, c.b, c.a);
+    SDL_RenderFillRect(r, &rect);
+}
+
+std::vector<std::string> Wrap(const std::string& text, size_t per)
+{
+    std::vector<std::string> lines;
+    std::string rest = text;
+    while (rest.size() > per) {
+        size_t cut = rest.rfind(' ', per);
+        if (cut == std::string::npos || cut == 0)
+            cut = per;
+        lines.push_back(rest.substr(0, cut));
+        rest = rest.substr(cut + (rest[cut] == ' ' ? 1 : 0));
+    }
+    lines.push_back(rest);
+    return lines;
+}
+
+// The page tabs, at the top right: which page this is, and how to turn it.
+void DrawTabs(SDL_Renderer* r, int page)
+{
+    std::vector<std::string> tabs = {"GAME"};
+    for (const Page& p : g_pages)
+        tabs.push_back(p.tab);
+    float x = 632;
+    for (int i = (int)tabs.size() - 1; i >= 0; i--) {
+        std::string t = std::to_string(i + 1) + " " + tabs[i];
+        x -= Width(t, 1) + 14;
+        if (i == page)
+            Box(r, x - 4, 6, Width(t, 1) + 8, 14, Color{40, 120, 110, 200});
+        Text(r, x, 9, t, 1, i == page ? kWhite : kGrey);
+    }
+    // (on the left: the page's title is in the middle)
+    Text(r, 8, 9, "TAB, C: NEXT PAGE", 1, kGrey);
+    Text(r, 8, 22, "D: PAGE BEFORE", 1, kGrey);
+}
+
+void DrawPage(SDL_Renderer* r, const Page& p)
+{
+    const float x0 = 24, y0 = 84, w = 592, h = 388;
+    Box(r, x0, y0, w, h, Color{8, 20, 32, 225});
+    Box(r, x0, y0, w, 2, kTeal);
+    Box(r, x0, y0 + h - 2, w, 2, kTeal);
+    Text(r, 320 - Width(p.title, 2) / 2, y0 + 12, p.title, 2, kWhite);
+    float y = y0 + 44;
+    for (int i = 0; i < (int)p.rows.size(); i++) {
+        const Row& row = p.rows[i];
+        bool at = i == p.cursor;
+        bool usable = !row.value || Usable(row);
+        if (at)
+            Box(r, x0 + 10, y - 4, w - 20, 22, Color{40, 120, 110, 150});
+        Color c = !usable ? kDim : at ? kWhite : kGrey;
+        if (!row.value) {
+            Text(r, 320 - Width(row.label, 2) / 2, y, row.label, 2, at ? kTeal : c);
+        } else {
+            Text(r, x0 + 20, y, row.label, 2, c);
+            std::string v = row.value();
+            if (row.coming) {
+                Text(r, x0 + 20 + Width(row.label, 2) + 10, y + 5, "(TO COME)", 1, kDim);
+                Text(r, 400, y, "  " + v, 2, kDim);
+            } else {
+                Text(r, 400, y, at && usable ? "< " + v + " >" : "  " + v, 2, c);
+            }
+        }
+        y += 24;
+    }
+    const Row& sel = p.rows[p.cursor];
+    std::string help = sel.help;
+    if (sel.label == "HOLE PUNCHING") {
+        std::string server = Ini().holePunchingServer;
+        help = "Netplay: a host behind a router, no port forwarded, joined through a "
+               "hole-punching server: " +
+               (server.empty() ? std::string("none (EfzRevival.ini: HolePunchingServer = None)")
+                               : server + " (EfzRevival.ini), which hosting and joining then contact") +
+               ".";
+    }
+    if (sel.enabled && !sel.enabled())
+        help = "(REVIVAL FEATURES is off.) " + help;
+    float hy = y + 4;
+    for (const std::string& line : Wrap(help, 70)) {
+        Text(r, x0 + 20, hy, line, 1, kGrey);
+        hy += 11;
+    }
+    std::string footer = "Up/Down  Left/Right, A: change  B: leave";
+    Text(r, 320 - Width(footer, 1) / 2, y0 + h - 16, footer, 1, kGrey);
 }
 
 } // namespace
@@ -349,26 +400,46 @@ bool Get()
 void InitOptions()
 {
     Load();
-    g_options.drawCpuCombo = DrawRow;
-    g_options.cpuCombo = Get;
-    g_options.setCpuCombo = Set;
-    LogInfo("options", "options.ini: CPU COMBO %s", CpuCombos() ? "on" : "off");
+    BuildPages();
+    g_options.pages = Pages;
+    g_options.shown = Shown;
+    g_options.update = Update;
+    LogInfo("options", "options.ini: CPU COMBO %s, EfzRevival's features %s (practice %s, "
+                       "replay %s, input display %s)",
+            CpuCombos() ? "on" : "off", g_set.revival ? "on" : "off",
+            g_set.practice ? "on" : "off", g_set.replay ? "on" : "off",
+            g_set.inputs ? "on" : "off");
 }
 
 void DrawOptions(SDL_Renderer* r)
 {
-    if (g_letters || SDL_GetTicks() - g_fallback.at > 100 || *Objects().scene != 6)
+    // While the page is drawn (not its fades, nor the record and gallery pages).
+    if (g_shown < 0 || SDL_GetTicks() - g_shownAt > 100 || *Objects().scene != 6)
         return;
-    // The row's text in SDL's font over the 640 x 480 screen (the page is 320 x 240).
-    auto text = [&](float x, const char* s, bool bright) {
-        SDL_SetRenderDrawColor(r, bright ? 255 : 150, bright ? 255 : 150, bright ? 255 : 150, 255);
-        SDL_SetRenderScale(r, 2, 2);
-        SDL_RenderDebugText(r, x / 2, (float)(g_fallback.y * 2 + 6) / 2, s);
-        SDL_SetRenderScale(r, 1, 1);
-    };
-    text(32, "CPU COMBO", g_fallback.selected);
-    text(2 * kOffX, "OFF", !g_fallback.on);
-    text(2 * kOnX, "ON", g_fallback.on);
+    SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
+    DrawTabs(r, g_shown);
+    if (g_shown >= 1 && g_shown <= (int)g_pages.size())
+        DrawPage(r, g_pages[g_shown - 1]);
+}
+
+bool RevivalFeatures()
+{
+    return g_set.revival;
+}
+
+bool PracticeTools()
+{
+    return g_set.revival && g_set.practice;
+}
+
+bool ReplayTools()
+{
+    return g_set.revival && g_set.replay;
+}
+
+bool InputDisplay()
+{
+    return g_set.inputs;
 }
 
 } // namespace efz

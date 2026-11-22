@@ -1,24 +1,17 @@
 # Code of others in the native game
 
 The native game and its replay tool (`efz`, `efz-convert`; [native.md](native.md)) are
-built with three libraries that CMake downloads, pinned by SHA-256, and links into the
-programs, and carry four glyphs drawn from a font. Anyone handing the programs on hands
-this file on with them.
+built with six libraries that CMake downloads, pinned by SHA-256, and links into the
+programs. Anyone handing the programs on hands this file on with them.
 
 | Library | What for | Licence |
 |---|---|---|
 | [SDL3](https://libsdl.org) 3.4.18 | The window, input, sound, file dialogs | zlib |
 | [libopus](https://opus-codec.org) 1.5.2 | The sound of the videos of fights (`port/mp4.cpp`) | BSD (below) |
 | [minih264](https://github.com/lieff/minih264) (`minih264e.h`, commit b0baea7) | The pictures of the videos of fights (`port/minih264.c`) | CC0 1.0: public domain |
-| [Droid Sans Fallback](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/data/fonts/) | Four glyphs (なし, あり) drawn from it at 12 pixels, as coverage tables in `port/options.cpp`: the OPTIONS page's CPU COMBO values, which no picture of the game has | Apache 2.0 |
-
-## Droid Sans Fallback
-
-The glyphs of なし and あり in `port/options.cpp` were drawn from Droid Sans Fallback
-(`DroidSansFallbackFull.ttf`), Copyright (C) 2008 The Android Open Source Project,
-licensed under the Apache License, Version 2.0
-(https://www.apache.org/licenses/LICENSE-2.0): rendered at 12 pixels and kept as tables
-of coverage, from which the game draws them in the OPTIONS page's colours.
+| [dr_mp3](https://github.com/mackron/dr_libs) 0.7.4 (`dr_mp3.h`, commit aec2dd2) | EfzRevival's custom music, MP3 (`port/revival/music.cpp`) | Public domain (Unlicense) or MIT-0 |
+| [dr_flac](https://github.com/mackron/dr_libs) 0.13.4 (`dr_flac.h`, commit 806ee9a) | The same, FLAC | Public domain (Unlicense) or MIT-0 |
+| [stb_vorbis](https://github.com/nothings/stb) 1.25 (`stb_vorbis.c`, commit 033efa1) | The same, Ogg Vorbis | Public domain or MIT |
 
 ## libopus
 

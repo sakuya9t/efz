@@ -16,6 +16,8 @@ void InitMusic(bool tournament);
 // Each real frame, before the game's: a new file on match setup, the file again once it
 // has played to its end in a fight, ToggleBGM.
 void MusicFrame();
+// OPTIONS changed MuteBGM or EfzRevival's features: the music on or off as they now say.
+void ApplyMusicSettings();
 // sound.cpp: the game playing, changing the volume of, or stopping sound `id`. True when
 // this did it instead (or chose that it isn't heard).
 bool MusicPlay(unsigned short id, int loop);

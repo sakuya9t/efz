@@ -383,6 +383,7 @@ private:
 
 class PracticeSession : public Session {
 public:
+    bool Enabled() override { return PracticeTools(); }
     void Start() override
     {
         dummy_ = 1;
@@ -617,7 +618,8 @@ private:
         add("Frame Step:    " + std::to_string(stepCount_));
         if (fps_ != kDefaultFps)
             add("Speed:         " + std::to_string((int)fps_) + " FPS");
-        DrawInputs(recorders_[Other()].history, 200, 10, 3);
+        if (InputDisplay())
+            DrawInputs(recorders_[Other()].history, 200, 10, 3);
     }
 
     // The delay applies to the human player's inputs.

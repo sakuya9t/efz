@@ -15,6 +15,7 @@
 #include "keys.h"
 #include "../platform.h"
 #include "../log.h"
+#include "../options.h"
 
 #include "dr_mp3.h"
 #include "dr_flac.h"
@@ -229,6 +230,7 @@ struct Music {
     std::string current; // the file loaded
     std::map<std::string, bool> failed;
     int lastScene = -1;
+    bool applied = false; // the music silenced, as ApplyMusicSettings last left it
 };
 Music g_music;
 
@@ -359,6 +361,13 @@ bool PlayFile(const std::string& file)
     return true;
 }
 
+// EfzRevival's music in play: the tournament's (asked for), or with its features on in
+// OPTIONS.
+bool Active()
+{
+    return g_music.on && (g_music.tournament || RevivalFeatures());
+}
+
 bool IsMusic(unsigned short id)
 {
     CGame* game = Objects().game;
@@ -406,13 +415,34 @@ void InitMusic(bool tournament)
     g_music.on = true;
     g_music.tournament = tournament;
     g_music.muted = ini.muteBGM;
+    g_music.applied = Active() && g_music.muted;
     if (!tournament)
         Load(ini.bgmFolder);
 }
 
-void MusicFrame()
+void ApplyMusicSettings()
 {
     if (!g_music.on)
+        return;
+    bool muted = GetConfig().muteBGM;
+    bool silent = Active() && muted;
+    bool wasSilent = g_music.applied;
+    g_music.muted = muted;
+    g_music.applied = silent;
+    if (silent == wasSilent)
+        return;
+    GameObjects o = Objects();
+    if (!o.game || !o.sound)
+        return;
+    if (silent)
+        o.sound->Stop((WORD)o.game->m_music);
+    else
+        o.sound->Play((WORD)o.game->m_music, 1);
+}
+
+void MusicFrame()
+{
+    if (!Active())
         return;
     int scene = Scene();
     if (scene != g_music.lastScene) {
@@ -430,6 +460,7 @@ void MusicFrame()
     }
     if (Pressed(GetConfig().toggleBGM)) {
         g_music.muted = !g_music.muted;
+        g_music.applied = g_music.muted;
         LogInfo("music", "music %s (ToggleBGM)", g_music.muted ? "off" : "on");
         GameObjects o = Objects();
         if (o.game && o.sound) {
@@ -443,7 +474,7 @@ void MusicFrame()
 
 bool MusicPlay(unsigned short id, int)
 {
-    if (!g_music.on || !IsMusic(id))
+    if (!Active() || !IsMusic(id))
         return false;
     int scene = Scene();
     if (!g_music.tournament && !g_music.files.empty() && (scene == 2 || scene == 3)) {
@@ -455,7 +486,7 @@ bool MusicPlay(unsigned short id, int)
 
 bool MusicSetVolume(unsigned short id, int volume)
 {
-    if (!g_music.on || g_music.files.empty() || !IsMusic(id) || !IsPlaying())
+    if (!Active() || g_music.files.empty() || !IsMusic(id) || !IsPlaying())
         return false;
     SetGain(volume);
     return true;
@@ -463,7 +494,7 @@ bool MusicSetVolume(unsigned short id, int volume)
 
 bool MusicStop(unsigned short id)
 {
-    if (!g_music.on || g_music.files.empty() || !IsMusic(id) || !IsPlaying())
+    if (!Active() || g_music.files.empty() || !IsMusic(id) || !IsPlaying())
         return false;
     StopMusic();
     return true;
