@@ -15,7 +15,9 @@ action, x, HP and RF gauge) and at its end (the winner, the rounds): a fight tha
 differs anywhere is said and not written. For the two to agree the headless match needs
 the record's start: rand()'s state (the hits' effects and some moves draw from it), found
 by inverting the environment's seeding; and the RF gauge at 0, where the headless
-match begins with an intro's worth of it.
+match begins with an intro's worth of it. A button pressed in a round's intro is left
+out until it is let go: the game starts no move from one (a person may walk and jump
+there), where the headless match would.
 
 Only matches between two players at the controls that ended with a winner are taken
 (mode "vs human": an agent in the game plays through a player's controls); the others
@@ -39,6 +41,7 @@ from efz_env.vec import EfzVecEnv  # noqa: E402
 M = (1 << 64) - 1
 GAMMA = 0x9e3779b97f4a7c15
 C1, C2 = 0xbf58476d1ce4e5b9, 0x94d049bb133111eb
+DIRECTIONS = 0x0f  # of an input byte: the rest are its buttons
 
 
 def mix(z):
@@ -130,10 +133,16 @@ def main():
         for s in (0, 1):
             env.set_gauges(0, s, rf=0.0)
         obs, controls, rewards, differs, ended = [], [], [], None, False
+        held = [0, 0]
         for f in sorted(frames):
             ticks = frames[f]
             o = env.obs[0]
-            ctl = np.array([[to_relative(ticks[0]['in'][s], o[s, ix['self_facing']])
+            pressed = []
+            for s in (0, 1):  # the game takes no button in a round's intro, nor one held out of it
+                bits = ticks[0]['in'][s]
+                held[s] = bits & ~DIRECTIONS if ticks[0]['g'][1] else held[s] & bits
+                pressed.append(bits & ~held[s])
+            ctl = np.array([[to_relative(pressed[s], o[s, ix['self_facing']])
                              for s in (0, 1)]], np.uint8)
             obs.append(o.copy())
             controls.append(ctl[0].copy())
