@@ -173,6 +173,13 @@ struct Rise {
     // November, "the best competitive players' reaction times are 120-170ms").
     bool land = false;
     int sight = 0;
+    // hold (steps; 0: off): a rising guarded through goes on guarding by sight after it
+    // sees itself up, for at most that many steps, while the attacker goes on (in a move
+    // of its own, or in the air within `fly`): until it has seen `gap` steps without
+    // that, itself hit or down, or the round over. Without it the guard ends as it sees
+    // itself up, `delay` steps after it is: the user's games of 21 November, half of
+    // what it lost on its rising 12 to 32 steps after it was up (rise.py's hold).
+    int hold = 0, gap = 8;
     // recoil (steps; 0: off): the answer to a recoil guard. When it sees its opponent
     // enter a recoil guard within recoilNear pixels while it sees itself in a move of
     // its own, its inputs are the module's for at most that many steps: nothing held
@@ -212,6 +219,21 @@ struct Rise {
     int punishAt = 22;
     int pressA = -1, press2A = -1;
     float recoilNear = 240;
+    // press (steps; 0: off): the guard under pressure (rise.py has the measurements: the
+    // league's opponents do not hold the agent in a guard, a person does, and three
+    // quarters of what it lost under the user's pressure it lost out of its guard). A
+    // string (a guard of its own on the ground that it sees touched, none seen in the
+    // `press` steps before) is drawn for once: one that is held is guarded on by sight
+    // from the first view of the guard until `press` steps after the last it sees: until
+    // it sees itself hit or down, the opponent hit or down, the round over, or the
+    // opponent further than pressNear pixels for pressGap steps. Whether a string is
+    // held is read from the match: the share of its exits (a move of its own, or itself
+    // in the air, seen within pressExit steps of a guard in a string not held) after
+    // which it saw itself hit within pressSoon steps (caught), less those after which it
+    // saw the opponent hit first (won), an exit, over a prior (pressLost, counting as
+    // pressPrior exits); none held at pressLow, all at pressHigh.
+    int press = 0, pressGap = 8, pressExit = 30, pressSoon = 50;
+    float pressNear = 200, pressPrior = 4, pressLost = 0.1f, pressLow = -0.05f, pressHigh = 0.15f;
 };
 
 // The steps until a player in the air lands, from its height and fall in a view
@@ -273,10 +295,14 @@ struct RiskStats {
 struct RiseStats {
     int knockdowns = 0, met = 0, guarded = 0, steps = 0, stood = 0;
     int landed = 0; // steps crouching under an attacker still seen in the air (Rise::land)
+    int held = 0;   // steps guarded on after it saw itself up (Rise::hold)
     int recoils = 0, recoilSteps = 0; // its moves seen recoil-guarded, and the steps answered (Rise::recoil)
     int recoilCleared = 0;            // ... and the presses that took a kept chain's place
     int recoilAnswered = 0;           // the recoil guards it answered (recoils: all it saw)
     int recoilPunished = 0;           // its own recoil guards followed by Rise::punish
+    // Rise::press: the strings it saw, those held, the steps guarded on, the exits it
+    // saw (out of strings not held) and of them the ones caught and the ones that won
+    int strings = 0, stringsHeld = 0, pressSteps = 0, exits = 0, exitsCaught = 0, exitsWon = 0;
 };
 
 class Policy {
@@ -427,6 +453,7 @@ public:
     double RiseSeen() const { return riseSeen_; } // the risings it saw; of them, the
     double RiseOn() const { return riseOn_; }     // attacker in a move as it rose
     double RecoilChance() const; // the probability the next recoil guard of its move is answered
+    double PressChance() const;  // the probability the next string is held (Rise::press)
     // Its raw specials by their accounts (the module risk:1), tried on `world`'s game for
     // player `side` (nullptr: off: nothing is stopped). RiskStarts: the move (an index
     // into policy()->risk.moves, -1 none) that `action` starts on the game as it is, the
@@ -449,6 +476,7 @@ public:
         counted_ = false;
         riseSeen_ = riseOn_ = 0;
         recoilSeen_ = recoilOn_ = 0;
+        pressSeen_ = pressOn_ = 0;
         risen_ = false;
         std::fill(riskCount_.begin(), riskCount_.end(), 0.0);
         std::fill(riskTotal_.begin(), riskTotal_.end(), 0.0);
@@ -471,6 +499,7 @@ private:
     void ThrowBegin(const float* view, bool deterministic);
     void ThrowResult(const float* view);
     void RiseWatch();
+    void PressWatch(const float* v, int a, bool down);
     int RiseAct(int action);
     bool RiseStands();
     bool RiseSteady() const;
@@ -543,6 +572,8 @@ private:
     bool riseMet_ = false;    // this rising: the attacker seen on it
     bool riseDrawn_ = false;  // ... and its guard drawn for
     bool riseVeto_ = false;   // ... guarded through
+    int riseHolding_ = 0;     // steps its guard may go on for, now that it is up (Rise::hold)
+    int riseQuiet_ = 0;       // ... and the steps the attacker has not gone on
     float riseOldVy_ = 0;     // the attacker's fall in the view one older than the oldest kept
     bool riseRg_ = false;     // the opponent in a recoil guard in the view before
     int riseAnswer_ = 0;      // steps left of its answer to a recoil guard
@@ -555,6 +586,13 @@ private:
     int punishWait_ = 0;      // ... the steps of guard before its inputs
     size_t punishStep_ = 0;   // ... and the next of them
     int riseLet_ = 0;         // ... and the steps the opponent has been free on the ground
+    int pressLeft_ = 0;       // steps left of a held string's guard (Rise::press)
+    int pressFar_ = 0;        // ... and the steps the opponent has been out of reach
+    bool pressHeld_ = false;  // this string is held
+    int pressSince_ = 10000;  // steps since it saw itself in a guard on the ground
+    bool pressExit_ = false;  // this string's exit was counted
+    double pressSeen_ = 0, pressOn_ = 0; // the exits it saw; of them, the ones caught less the ones that won
+    int pressWatch_ = 0;      // steps left of looking for what came of one
     RiseStats rise_;
 
     // Its raw specials (risk.py's Risk).

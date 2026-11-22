@@ -439,7 +439,7 @@ EFZ_ENV_API int32_t efz_env_agent_risk_starts(EfzAgent* agent, EfzEnv* env, int3
  * from match to match kept (its counts of the opponent, its risings' counts, older),
  * where efz_env_agent_reset on a detached agent starts it afresh. */
 EFZ_ENV_API void efz_env_agent_next_match(EfzAgent* agent);
-/* An agent's risings (15; the module rise:1): the knockdowns it saw, those the attacker
+/* An agent's risings (16; the module rise:1): the knockdowns it saw, those the attacker
  * was on, of them the ones guarded through, the steps it held a guard for, of them
  * standing, the probability the next such rising is guarded through, in thousandths; and
  * what that is read from, in hundredths: the risings it saw, and of them those at which
@@ -448,8 +448,14 @@ EFZ_ENV_API void efz_env_agent_next_match(EfzAgent* agent);
  * it saw recoil-guarded, the steps it answered them with a guard (rise_recoil), and the
  * presses that took a kept chain's place (rise_recoil_clear); of the recoil guards
  * seen those it answered, and the probability the next is, in thousandths; its own
- * recoil guards followed by its punish (rise_recoil_punish). */
+ * recoil guards followed by its punish (rise_recoil_punish); the steps guarded on
+ * after it saw itself up (rise_hold). */
 EFZ_ENV_API void efz_env_agent_rise_stats(const EfzAgent* agent, int32_t* stats);
+/* Its guard under pressure (rise_press), 7 numbers: the strings it saw (a guard of its
+ * own touched), those held (guarded on), the steps guarded on, the exits it saw out of
+ * strings not held, of them the ones caught, the probability the next string is held,
+ * in thousandths, and the exits that won (the opponent hit first). */
+EFZ_ENV_API void efz_env_agent_press_stats(const EfzAgent* agent, int32_t* stats);
 /* The agent plays player `side` of environment `index` as it plays in the game: its
  * combos' routes and its okizeme planned on copies of that environment (what the file
  * has of them), every plan worked to its end on the step that needs it (the game's

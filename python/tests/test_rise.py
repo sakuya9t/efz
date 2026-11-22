@@ -223,6 +223,75 @@ class Rise(unittest.TestCase):
         self.assertEqual(self.run_steps(m, [(LYING, 0)] * 4), [None] * 4)
         self.assertEqual(m.stats()['guarded'], 0)
 
+    def press_steps(self, m, steps):
+        """steps: (its own action as it sees it, the opponent's, the pixels apart)."""
+        out = []
+        for a, theirs, dx in steps:
+            self.opp_act, self.dx = theirs, dx
+            out += self.run_steps(m, [(a, 0)])
+        return out
+
+    def test_a_held_string_is_guarded_on_until_the_opponent_is_away(self):
+        m = self.module(press=20, press_lost=1.0)   # (every string held)
+        self.assertEqual(m.press_chance(0), 1.0)
+        GUARD = 0x97
+        out = self.press_steps(m, [(0, 0, 60)] * 3 + [(GUARD, 0xc8, 60)] * 6 + [(0, 0, 60)] * 25)
+        self.assertEqual(out[:3], [None] * 3)
+        self.assertEqual(out[3:9 + 19], [rise.CROUCH_GUARD] * 25)  # from the guard's first view, 20 after its last
+        self.assertEqual(out[9 + 19:], [None] * 6)
+        self.assertEqual((m.stats()['strings'], m.stats()['strings_held'], m.stats()['exits']), (1, 1, 0))
+        # the opponent out of reach for press_gap steps: its own play again
+        out = self.press_steps(m, [(0, 0, 60)] * 30 + [(GUARD, 0xc8, 60)] * 4 + [(0, 0, 300)] * 12)
+        self.assertEqual(out[30:34 + 7], [rise.CROUCH_GUARD] * 11)
+        self.assertEqual(out[34 + 7:], [None] * 5)
+        # the opponent hit (its own combo begins): its own play at once
+        out = self.press_steps(m, [(0, 0, 60)] * 30 + [(GUARD, 0xc8, 60)] * 4 + [(0, 0x3b, 60)] * 5)
+        self.assertEqual(out[34:], [None] * 5)
+        # a guard touched again inside the string: no new draw, the count starts again
+        out = self.press_steps(m, [(0, 0, 60)] * 30 + [(GUARD, 0xc8, 60)] * 4 + [(0, 0, 60)] * 10
+                               + [(GUARD, 0xc8, 60)] * 4 + [(0, 0, 60)] * 19)
+        self.assertEqual(out[30:], [rise.CROUCH_GUARD] * 37)
+        self.assertEqual(m.stats()['strings'], 4)
+
+    def test_a_string_is_held_as_often_as_leaving_the_guard_was_caught(self):
+        m = self.module(press=20)
+        self.assertAlmostEqual(m.press_chance(0), 0.75, delta=0.01)
+        m.rng = type('R', (), dict(random=lambda self: 1.0))()  # (no string held: the exits are seen)
+        GUARD, MOVE, HIT = 0x97, 0xcc, 0x3b
+        quiet = [(0, 0, 60)] * 30
+        got_away = quiet + [(GUARD, 0xc8, 60)] * 4 + [(MOVE, 0, 60)] * 5 + [(0, 0x3b, 60)] * 5
+        caught = quiet + [(GUARD, 0xc8, 60)] * 4 + [(0, 0, 60)] * 3 + [(MOVE, 0, 60)] * 5 + [(HIT, 0xc8, 60)] * 5
+        jumped = quiet + [(GUARD, 0xc8, 60)] * 4 + [(0, 0, 60)] * 3
+        for _ in range(6):
+            self.assertEqual(self.press_steps(m, got_away), [None] * len(got_away))
+        self.assertEqual((m.stats()['exits'], m.stats()['exits_caught'], m.stats()['exits_won']), (6, 0, 6))
+        self.assertEqual(m.press_chance(0), 0.0)        # six that hit first: none held
+        for _ in range(6):
+            self.press_steps(m, caught)
+        self.assertEqual((m.stats()['exits'], m.stats()['exits_caught']), (12, 6))
+        blocked = quiet + [(GUARD, 0xc8, 60)] * 4 + [(MOVE, 0, 60)] * 5 + [(0, 0x97, 60)] * 5
+        self.press_steps(m, blocked)                    # its move guarded: an exit, neither
+        self.assertEqual((m.stats()['exits'], m.stats()['exits_caught'], m.stats()['exits_won']), (13, 6, 6))
+        m.pseen[0] -= 1
+        self.assertAlmostEqual(m.press_chance(0), 0.375, delta=0.001)  # (0.4 + 6 - 6) / 16 = 0.025
+        for _ in range(4):
+            self.press_steps(m, caught)
+        self.assertEqual(m.press_chance(0), 1.0)        # (0.4 + 10 - 6) / 20 = 0.22
+        # a jump out is an exit too; a move long after the guard is not
+        n = m.stats()['exits']
+        for a, theirs, dx in jumped:
+            self.opp_act, self.dx = theirs, dx
+            self.run_steps(m, [(a, 0)])
+        v = np.zeros(168, np.float32)
+        v[rise.SELF_ACT], v[rise.SELF_AIR], v[rise.DX] = 4, 1.0, 60 / rise.PIXELS
+        m.watch(0, modules.Context(v, v, hist=np.zeros((16, 6), np.float32), policy=None))
+        self.assertEqual(m.stats()['exits'], n + 1)
+        self.press_steps(m, quiet + [(GUARD, 0xc8, 60)] * 4 + [(0, 0, 60)] * 40 + [(MOVE, 0, 60)] * 5)
+        self.assertEqual(m.stats()['exits'], n + 1)
+        # a new match keeps nothing without carry
+        m.reset()
+        self.assertAlmostEqual(m.press_chance(0), 0.75, delta=0.01)
+
     def test_not_drawn_without_cause_and_a_new_match(self):
         m = self.module(moves=True)
         m.count[0, rise.MOVE], m.total[0, rise.MOVE] = 3, 5000    # (its moves pay)

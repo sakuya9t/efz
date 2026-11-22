@@ -171,6 +171,29 @@ counters of 172, one of them with a recoil guard, and was hit as often in the mo
 was recoil-guarded (46 times for 14): the press had run out. With the press at 23: 107
 counters of 184 guarded, 66 with a recoil guard, hit after 28%.
 
+`press` (steps, 0: off): the guard under pressure. The league's opponents do not hold the
+agent in a guard and a person does (the user's games of 21 November, "sucks under
+pressure"): against them it guards 4 to 7 times a minute, a move pressed after a guard
+gets away a third of the time and is hit 14 to 19%, a jump out is hit 16 to 18%; against
+the user it guards 13 to 18 times a minute, the move is hit 42% and the jump 27% (2% get
+away), and three quarters of the 1,890 HP a minute it lost under the user's pressure it
+lost out of its guard (in the air 860, in a move 605; opened in its guard 300), 26 to 60
+steps after the last guard. So a string (a guard of its own on the ground that it sees
+touched, none seen in the `press` steps before) is drawn for once: one that is held is
+guarded on by sight, from the first view of the guard until `press` steps (36) after the
+last one it sees: until it sees itself hit or down, the opponent hit or down, the round
+over, or the opponent further than `press_near` pixels (200) for `press_gap` steps (8).
+Whether a string is held is read from the match, as the rising's guard is: of its exits
+(a move of its own, or itself in the air, seen within `press_exit` steps, 30, of a guard
+in a string not held), those caught (it saw itself hit within `press_soon` steps, 50)
+less those that won (it saw the opponent hit first), an exit, over a prior (`press_lost`,
+0.1, counting as `press_prior` exits, 4); none are held at `press_low` (-0.05), all at
+`press_high` (0.15), in a line between. By evaluate.py's count of the same (a move or a
+jump after a guard: hit, or hit first) the league's opponents with combos stand at -0.06
+(a move wins 32% and is caught 19%, a jump 9% and 16%) and the user's three sessions at
++0.15 to +0.21: three strings in four are held at a match's start, none against the
+league's after a dozen exits, all against the user.
+
 `plain` (false): the guard alone. The module then never draws its own play's action (no
 super seen coming, no class's draw): a rising it does not guard through is the next
 module's or its own play's, as the game's rise:1 is; with the module risk after it the
@@ -181,6 +204,8 @@ recoil_press (22), recoil_clear (true), recoil_steady (12), recoil_let (false), 
 recoil_counter (0.6), recoil_low (0.3), recoil_high (0.6), recoil_soon (34), recoil_punish (none),
 recoil_punish_near (48), recoil_punish_at (22), prior (4), move (150), still (-165), super (-400),
 meaty (0.56), low (0.3), high (0.6), met_prior (2), near (0), fly (200), hold (0), gap (8),
+press (0), press_near (200), press_gap (8), press_exit (30), press_soon (50), press_prior (4),
+press_lost (0.1), press_low (-0.05), press_high (0.15),
 temperature (75),
 window (240),
 carry (false: a new match is another opponent; true: the same, the accounts kept and
@@ -202,12 +227,20 @@ TABLE = ActionTable()
 INDEX = {a: k for k, a in enumerate(TABLE.actions)}
 ROUND_OVER = 3
 SELF_HP, OPP_HP, SELF_ACT, OPP_ACT, OPP_AIR, DX, SELF_HITSTUN = 8, 40, 18, 50, 71, 4, 20
+SELF_AIR = 39
 OPP_Y, OPP_VY = 46, 48                      # the attacker's height (/ 240, up negative), fall (/ 20)
 PIXELS = 640.0                              # dx's scale
 DOWN = frozenset((0x60, 0x61, 0x62, 0x63))  # rising, the two knockdowns, lying
 RG = frozenset((0xa8, 0xa9, 0xaa))          # a recoil guard: standing, crouching, in the air
 GUARDS = frozenset(range(0x96, 0x9d)) | RG  # a guard touched (tactics.GUARDS)
 FREE = frozenset((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xe, 0xf, 0x10))  # free to do anything (tactics.FREE)
+
+
+def reacting(a):
+    """An action that is a hit reaction, a knockdown or a throw's pose."""
+    return 0x32 <= a < 0x7a
+
+
 FIRST_OWN = 0xc8                            # the character's own moves from here
 REVERSAL = 10                               # steps after rising in which a move is a wake-up one
 HP = 9999.0
@@ -266,7 +299,9 @@ class Rise(modules.Module):
                  recoil_near=240.0, recoil_gap=8, recoil_press=22, delay=None,
                  recoil_clear=True, recoil_steady=12, recoil_let=False, recoil_prior=2.0,
                  recoil_counter=0.6, recoil_low=0.3, recoil_high=0.6, recoil_soon=34,
-                 recoil_punish='', recoil_punish_near=48.0, recoil_punish_at=22):
+                 recoil_punish='', recoil_punish_near=48.0, recoil_punish_at=22, press=0,
+                 press_near=200.0, press_gap=8, press_exit=30, press_soon=50, press_prior=4.0,
+                 press_lost=0.1, press_low=-0.05, press_high=0.15):
         # moves: also guard a rising through by the class account (any wake-up move's);
         # measured without a gain, and it takes the wake-up moves that pay with it
         self.moves = moves in (True, 1, 'true', 'True', '1')
@@ -304,6 +339,14 @@ class Rise(modules.Module):
         table = [int(b) for b in TABLE.table]
         self.punish = [table.index(int(b)) for b in recoil_punish]
         self.punish_near, self.punish_at = float(recoil_punish_near), int(float(recoil_punish_at))
+        # press: the steps after a guard it sees touched for which a held string is guarded on
+        self.press, self.press_near = int(float(press)), float(press_near)
+        self.press_gap, self.press_exit = int(float(press_gap)), int(float(press_exit))
+        self.press_soon = int(float(press_soon))
+        # the string's read: what leaving the guard has come to (caught less won, an exit)
+        self.press_prior, self.press_lost = float(press_prior), float(press_lost)
+        self.press_low = float(press_low)
+        self.press_high = max(float(press_high), self.press_low + 1e-6)
         self.prior = float(prior)
         self.priors = (float(move), float(still), float(super))
         # the guard's read: how often an attacker is in a move as the agent rises (the
@@ -317,7 +360,8 @@ class Rise(modules.Module):
         self.n_ = dict(knockdowns=0, guarded=0, supers=0, stopped=0, steps=0, kept=0, met=0,
                        met_guarded=0, stood=0, held=0, risings=0, attacked=0, landed=0,
                        recoils=0, recoil_steps=0, recoil_cleared=0, recoil_answered=0,
-                       recoil_punished=0)
+                       recoil_punished=0, strings=0, strings_held=0, press_steps=0, exits=0,
+                       exits_caught=0, exits_won=0)
         self.all = np.zeros((len(ACCOUNTS), 2))  # every match's: [account] -> (wake-ups, swing's sum)
         self.batch(0)
 
@@ -345,6 +389,14 @@ class Rise(modules.Module):
         self.pwait = np.zeros(n, int)      # ... the steps of guard before its inputs
         self.pstep = np.zeros(n, int)      # ... and the next of them
         self.let = np.zeros(n, int)       # ... and the steps the opponent has been free on the ground
+        self.pressing = np.zeros(n, int)  # steps left of a held string's guard
+        self.pfar = np.zeros(n, int)      # ... and the steps the opponent has been out of reach
+        self.pheld = np.zeros(n, bool)    # this string is held
+        self.psince = np.full(n, 10000)   # steps since it saw itself in a guard on the ground
+        self.pexit = np.zeros(n, bool)    # this string's exit was counted
+        self.pseen = np.zeros(n)          # this match's exits it saw
+        self.pon = np.zeros(n)            # ... and of them, the ones caught less the ones that won
+        self.pwatch = np.zeros(n, int)    # steps left of looking for what came of one
         self.veto = np.zeros(n, bool)   # this rising is guarded through
         self.asked = np.zeros(n, bool)  # this rising's super was drawn for already
         self.dirs = [[] for _ in range(n)]  # its inputs' directions since the knockdown: (step, direction)
@@ -372,6 +424,11 @@ class Rise(modules.Module):
         self.ron[mask] *= scale
         self.rwatch[mask] = 0
         self.was_mine[mask] = self.punishing[mask] = False
+        self.pressing[mask] = self.pfar[mask] = self.pwatch[mask] = 0
+        self.pheld[mask] = self.pexit[mask] = False
+        self.psince[mask] = 10000
+        self.pseen[mask] *= scale
+        self.pon[mask] *= scale
         self.vy[mask] = np.nan
 
     def worth(self, i):
@@ -403,6 +460,56 @@ class Rise(modules.Module):
         rate = ((self.recoil_prior * self.recoil_counter + self.ron[i]) /
                 (self.recoil_prior + self.rseen[i]))
         return float(np.clip((rate - self.recoil_low) / (self.recoil_high - self.recoil_low), 0.0, 1.0))
+
+    def press_chance(self, i):
+        """The probability that a string is held (guarded on): by what leaving its guard
+        has come to in this match (caught less won, an exit), over the prior."""
+        rate = ((self.press_prior * self.press_lost + self.pon[i]) /
+                (self.press_prior + self.pseen[i]))
+        return float(np.clip((rate - self.press_low) / (self.press_high - self.press_low), 0.0, 1.0))
+
+    def pressed(self, i, v, a, down):
+        """watch()'s part for the guard under pressure: the strings, the held one's
+        steps, and what came of the exits."""
+        theirs = int(round(float(v[OPP_ACT])))
+        hit, over = reacting(a), bool(down or v[ROUND_OVER] != 0)
+        guard = a in GUARDS and not v[SELF_AIR] > 0
+        if self.pwatch[i] > 0:  # an exit: caught, or not
+            if hit:
+                self.pon[i] += 1
+                self.n_['exits_caught'] += 1
+                self.pwatch[i] = 0
+            elif reacting(theirs) and not over:
+                self.pon[i] -= 1
+                self.n_['exits_won'] += 1
+                self.pwatch[i] = 0
+            elif guard or over:
+                self.pwatch[i] = 0
+            else:
+                self.pwatch[i] -= 1
+        if guard and not over:
+            if self.psince[i] > self.press:  # a new string: held or not, by the exits before
+                self.pheld[i] = self.rng.random() < self.press_chance(i)
+                self.pexit[i] = False
+                self.n_['strings'] += 1
+                self.n_['strings_held'] += int(self.pheld[i])
+            self.psince[i] = 0
+            if self.pheld[i]:
+                self.pressing[i], self.pfar[i] = self.press, 0
+            return
+        self.psince[i] = min(self.psince[i] + 1, 10000)
+        if self.pressing[i] > 0:
+            self.pressing[i] -= 1
+            far = abs(float(v[DX])) * PIXELS > self.press_near
+            self.pfar[i] = self.pfar[i] + 1 if far else 0
+            if over or hit or reacting(theirs) or self.pfar[i] >= self.press_gap:
+                self.pressing[i] = 0
+        elif (self.psince[i] <= self.press_exit and not self.pexit[i] and not over and not hit
+              and (a >= FIRST_OWN or v[SELF_AIR] > 0)):
+            self.pexit[i] = True  # it left its guard: a move, or a jump
+            self.pseen[i] += 1
+            self.pwatch[i] = self.press_soon
+            self.n_['exits'] += 1
 
     def on_it(self, v):
         """The attacker as the agent sees it: in a move of its own, or near, or in the
@@ -535,6 +642,8 @@ class Rise(modules.Module):
                                      and self.steady(ctx.hist) else -1)
                     self.n_['recoil_answered'] += 1
             self.was_rg[i] = rg
+        if self.press > 0:
+            self.pressed(i, v, a, down)
         if self.was_down[i] and not down:
             if v[ROUND_OVER] == 0:  # the guard's read: was the attacker in a move as it rose
                 self.seen[i] += 1
@@ -575,6 +684,9 @@ class Rise(modules.Module):
         if not self.was_down[i]:
             if self.holding[i] > 0:  # (its guard going on, by sight)
                 self.n_['held'] += 1
+                return STAND_GUARD if self.stands(i, ctx) else CROUCH_GUARD
+            if self.pressing[i] > 0:  # (a held string's guard, by sight)
+                self.n_['press_steps'] += 1
                 return STAND_GUARD if self.stands(i, ctx) else CROUCH_GUARD
             return None
         own = None
@@ -656,7 +768,8 @@ def rise(agent, where, files, options, data):
             'moves', 'guard', 'meaty', 'low', 'high', 'met_prior', 'near', 'fly', 'hold', 'gap',
             'plain', 'land', 'sight', 'recoil', 'recoil_near', 'recoil_gap', 'recoil_press', 'delay', 'recoil_clear', 'recoil_steady', 'recoil_let', 'recoil_prior',
             'recoil_counter', 'recoil_low', 'recoil_high', 'recoil_soon', 'recoil_punish',
-            'recoil_punish_near', 'recoil_punish_at')
+            'recoil_punish_near', 'recoil_punish_at', 'press', 'press_near', 'press_gap',
+            'press_exit', 'press_soon', 'press_prior', 'press_lost', 'press_low', 'press_high')
     unknown = sorted(set(o) - set(keys))
     if unknown:
         raise ValueError(f"rise: no option {', '.join(unknown)}")
