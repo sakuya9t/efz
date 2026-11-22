@@ -442,12 +442,19 @@ void LogRising(const char* who, const Side& s)
                          "probability %.2f; %d of its own recoil guards followed by its punish",
                 who, r.recoils, r.recoilAnswered, r.recoilSteps, r.recoilCleared,
                 s.player->RecoilChance(), r.recoilPunished);
+    if (r.strings)
+        LogInfo("agent", "%s's guard under pressure: %d strings, %d held (%d steps guarded on); "
+                         "%d exits out of the others, %d caught and %d that hit first; the next "
+                         "string held with probability %.2f",
+                who, r.strings, r.stringsHeld, r.pressSteps, r.exits, r.exitsCaught, r.exitsWon,
+                s.player->PressChance());
     if (!r.knockdowns)
         return;
     LogInfo("agent", "%s's risings: %d knockdowns, the attacker on it in %d, %d of those "
                      "guarded through (%d steps, %d standing, %d crouching under a flight "
-                     "taken to have landed); the next one guarded with probability %.2f",
-            who, r.knockdowns, r.met, r.guarded, r.steps, r.stood, r.landed,
+                     "taken to have landed; %d more once up); the next one guarded with "
+                     "probability %.2f",
+            who, r.knockdowns, r.met, r.guarded, r.steps, r.stood, r.landed, r.held,
             s.player->RiseChance());
 }
 

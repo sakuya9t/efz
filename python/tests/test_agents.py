@@ -1709,6 +1709,165 @@ class RiseAsRisePy(unittest.TestCase):
                               keys['rise_recoil_soon'], keys['rise_recoil_low'], keys['rise_recoil_high']),
                              ('22', '12', '0', '34', '0.3', '0.6'))
 
+    def test_the_guard_goes_on_once_it_is_up(self):
+        """hold: a rising guarded through goes on guarding by sight after it sees itself
+        up, while the attacker goes on, until `gap` steps without that. The game's and
+        rise.py's, step by step."""
+        rise = self.rise
+        d = self.DELAY
+        ATTACK = 0xd8
+        byte = {rise.STAND_GUARD: 0x02, rise.CROUCH_GUARD: 0x06}
+        # Lying with the attacker near and in a move; up at step 20; the attacker's move
+        # goes on to step 40, then it stands.
+        script = [(8, 0, 60, False, 0, 0), (12, self.LYING, 60, False, ATTACK, 0),
+                  (20, 0, 60, False, ATTACK, 0), (30, 0, 60, False, 0, 0)]
+        views = self.views(script)
+        for hold, until in ((0, 20), (30, 40 + 7), (12, 20 + 12)):  # (the eighth quiet step is its own)
+            with tempfile.TemporaryDirectory() as folder:
+                path, _ = make_model(folder, history=self.HISTORY, delay=d, seed=3)
+                plain, out = os.path.join(folder, 'plain.efzagent'), os.path.join(folder, 'rise.efzagent')
+                export_agent(path, plain, check=False)
+                export_agent(path, out, check=False, rise=dict(low=-1.0, high=0.0, hold=hold))
+                native, base = NativeAgent(out, deterministic=True), NativeAgent(plain, deterministic=True)
+                got, own = self.played(native, views), self.played(base, views)
+                stats = native.stats()
+                native.close()
+                base.close()
+            m = self.modules.REGISTRY['rise'](None, 'batch', {}, dict(
+                guard=True, plain=True, carry=True, low=-1.0, high=0.0, hold=hold), None)
+            m.batch(1)
+            theirs = []
+            for t in range(len(views)):
+                seen = [views[max(0, t - k)] for k in range(d + 1)]
+                ctx = self.modules.Context(seen[d], seen[0], seen=seen,
+                                           hist=np.zeros((self.HISTORY, 6), np.float32))
+                m.watch(0, ctx)
+                theirs.append(m.act(0, ctx))
+            # guarded from where it sees itself down to where it sees the hold's end
+            for t in range(8 + d, len(views)):
+                if t < until + d:
+                    self.assertEqual(got[t], 0x06, (hold, t))
+                    self.assertEqual(byte[theirs[t]], 0x06, (hold, t))
+                else:
+                    self.assertEqual(got[t], own[t], (hold, t))
+                    self.assertIsNone(theirs[t], (hold, t))
+            self.assertEqual(stats['rise_held'], until - 20)
+            self.assertEqual(m.stats()['held'], until - 20)
+
+    def test_a_string_guarded_on(self):
+        """press: a string that is held is guarded on by sight from the first view of its
+        guard until press steps after the last (or the opponent away, or hit); the exits
+        out of the strings not held are counted, and the next string held as often as
+        they were caught. The game's and rise.py's, step by step."""
+        rise = self.rise
+        d = self.DELAY
+        GUARD, ATTACK, MOVE, HIT = 0x97, 0xc8, 0xcc, 0x3b
+        byte = {rise.STAND_GUARD: 0x02, rise.CROUCH_GUARD: 0x06}
+
+        def both(script, air=(), **options):
+            """(the game's bytes, its own play's, its counts, rise.py's actions, its counts);
+            air: the steps on which it is in the air itself."""
+            views = self.views(script)
+            for t in air:
+                views[t][rise.SELF_AIR] = 1.0
+            options = dict(dict(press=20), **options)
+            with tempfile.TemporaryDirectory() as folder:
+                path, _ = make_model(folder, history=self.HISTORY, delay=d, seed=3)
+                plain, out = os.path.join(folder, 'plain.efzagent'), os.path.join(folder, 'rise.efzagent')
+                export_agent(path, plain, check=False)
+                export_agent(path, out, check=False, rise=dict(low=2.0, high=3.0, **options))  # (no rising guarded)
+                native, base = NativeAgent(out, deterministic=True), NativeAgent(plain, deterministic=True)
+                got, own = self.played(native, views), self.played(base, views)
+                stats = native.stats()
+                native.close()
+                base.close()
+            m = self.modules.REGISTRY['rise'](None, 'batch', {}, dict(
+                guard=True, plain=True, carry=True, low=2.0, high=3.0, **options), None)
+            m.batch(1)
+            theirs = []
+            for t in range(len(views)):
+                seen = [views[max(0, t - k)] for k in range(d + 1)]
+                ctx = self.modules.Context(seen[d], seen[0], seen=seen,
+                                           hist=np.zeros((self.HISTORY, 6), np.float32))
+                m.watch(0, ctx)
+                theirs.append(m.act(0, ctx))
+            return got, own, stats, theirs, dict(m.stats(), chance=m.press_chance(0))
+
+        held = dict(press_low=-1.0, press_high=0.0)   # every string held
+        let = dict(press_low=2.0, press_high=3.0)     # none
+        lead = [(8, 0, 60, False, 0, 0), (6, GUARD, 60, False, ATTACK, 0)]
+        cases = dict(
+            # (the script, the steps guarded on as it sees them: from, to)
+            through=(lead + [(40, 0, 60, False, 0, 0)], 8, 14 + 20),
+            again=(lead + [(10, 0, 60, False, 0, 0), (4, GUARD, 60, False, ATTACK, 0), (40, 0, 60, False, 0, 0)],
+                   8, 28 + 20),
+            away=(lead + [(40, 0, 300, False, 0, 0)], 8, 14 + 8),
+            hit=(lead + [(6, 0, 60, False, 0, 0), (30, 0, 60, False, HIT, 0)], 8, 20 + 1),
+            opened=(lead + [(6, 0, 60, False, 0, 0), (6, HIT, 60, False, ATTACK, 800), (30, 0, 60, False, 0, 0)],
+                    8, 20 + 1),
+            flight=(lead + [(10, 0, 60, True, 0, 0), (30, 0, 60, False, 0, 0)], 8, 14 + 20),
+        )
+        for name, (script, a, b) in cases.items():
+            got, own, stats, theirs, counts = both(script, **held)
+            for t in range(len(got)):
+                if a + d <= t < b + d - 1:
+                    stand = name == 'flight' and 14 + d <= t < 24 + d
+                    self.assertEqual(got[t], 0x02 if stand else 0x06, (name, t))
+                    self.assertEqual(byte[theirs[t]], got[t], (name, t))
+                elif t >= b + d:
+                    self.assertEqual(got[t], own[t], (name, t))
+                    self.assertIsNone(theirs[t], (name, t))
+            self.assertEqual((stats['rise_strings'], stats['rise_strings_held'], stats['rise_exits']),
+                             (1, 1, 0), name)
+            self.assertEqual((counts['strings'], counts['strings_held'], counts['exits']), (1, 1, 0), name)
+            self.assertEqual(stats['rise_press_steps'], counts['press_steps'], name)
+            self.assertEqual(stats['rise_press_steps'], sum(x is not None for x in theirs), name)
+        # Strings not held: its own play, and the exits read. A move after the guard that
+        # is caught, one that gets away, a jump out that is caught, a move long after.
+        caught = lead + [(4, 0, 60, False, 0, 0), (6, MOVE, 60, False, 0, 0), (6, HIT, 60, False, ATTACK, 700)]
+        away = lead + [(4, 0, 60, False, 0, 0), (6, MOVE, 60, False, 0, 0), (6, MOVE, 60, False, HIT, 0)]
+        late = lead + [(40, 0, 60, False, 0, 0), (6, MOVE, 60, False, 0, 0), (6, HIT, 60, False, ATTACK, 700)]
+        quiet = [(40, 0, 300, False, 0, 0)]
+        for script, air, exits, on, won in ((caught, (), 1, 1, 0), (away, (), 1, 0, 1), (late, (), 0, 0, 0),
+                                            (lead + [(10, 0, 60, False, 0, 0), (6, HIT, 60, False, ATTACK, 700)],
+                                             range(18, 24), 1, 1, 0),
+                                            (caught + quiet + away + quiet + caught, (), 3, 2, 1)):
+            got, own, stats, theirs, counts = both(script, air=air, **let)
+            self.assertEqual(got, own)
+            self.assertTrue(all(x is None for x in theirs))
+            self.assertEqual((stats['rise_exits'], stats['rise_exits_caught'], stats['rise_exits_won']),
+                             (exits, on, won))
+            self.assertEqual((counts['exits'], counts['exits_caught'], counts['exits_won']), (exits, on, won))
+            self.assertEqual(stats['rise_strings_held'], 0)
+        # The read: over the prior (0.3 an exit, as 4 exits) one caught is (1.2 + 1) / 5 =
+        # 0.44, which holds (0.44 - 0.3) / 0.5 of the next strings (none before it: no
+        # draw's luck); two caught and one that won, (1.2 + 1) / 7.
+        got, own, stats, theirs, counts = both(caught, press_low=0.3, press_high=0.8, press_lost=0.3,
+                                               press_prior=4)
+        self.assertEqual((stats['rise_exits_caught'], counts['exits_caught']), (1, 1))
+        self.assertAlmostEqual(counts['chance'], (2.2 / 5 - 0.3) / 0.5, places=6)
+        self.assertEqual(stats['rise_press_chance'], round(1000 * counts['chance']))
+        # Three caught and one that won, over a prior of -0.2: 0.04, -0.13, 0.03, then
+        # (-0.8 + 3 - 1) / 8 = 0.15 (no string held on the way: none above press_low).
+        got, own, stats, theirs, counts = both(caught + quiet + away + quiet + caught + quiet + caught,
+                                               press_lost=-0.2, press_low=0.1, press_high=0.8, press_prior=4)
+        self.assertEqual((stats['rise_exits'], stats['rise_exits_caught'], stats['rise_exits_won']), (4, 3, 1))
+        self.assertEqual((counts['exits'], counts['exits_caught'], counts['exits_won']), (4, 3, 1))
+        self.assertAlmostEqual(counts['chance'], (1.2 / 8 - 0.1) / 0.7, places=6)
+        self.assertEqual(stats['rise_press_chance'], round(1000 * counts['chance']))
+        with tempfile.TemporaryDirectory() as folder:  # the file's defaults
+            path, _ = make_model(folder, history=self.HISTORY, delay=d, seed=3)
+            out = os.path.join(folder, 'rise.efzagent')
+            export_agent(path, out, check=False, rise=dict(press=36))
+            keys = read_header(out)[1]
+            self.assertEqual((keys['rise_press'], keys['rise_press_near'], keys['rise_press_gap'],
+                              keys['rise_press_exit'], keys['rise_press_soon'], keys['rise_press_prior'],
+                              keys['rise_press_lost'], keys['rise_press_low'], keys['rise_press_high']),
+                             ('36', '200.0', '8', '30', '50', '4.0', '0.1', '-0.05', '0.15'))
+            native = NativeAgent(out, deterministic=True)
+            self.assertEqual(native.stats()['rise_press_chance'], 750)
+            native.close()
+
     def test_the_same_read_of_the_attacker(self):
         # A rising the attacker leaves alone (no move of its own as the agent sees itself
         # up), and one it is in a move at.

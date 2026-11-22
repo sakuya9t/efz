@@ -801,6 +801,8 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         rise.decay = std::min(1.0f, std::max(0.0f, ToFloat(keys, "rise_decay", 0.7f)));
         rise.land = ToFloat(keys, "rise_land", 0) != 0;
         rise.sight = std::min(delay, std::max(0, ToInt(keys, "rise_sight", 0)));
+        rise.hold = std::max(0, ToInt(keys, "rise_hold", 0));
+        rise.gap = std::max(1, ToInt(keys, "rise_gap", 8));
         rise.recoil = rise.idle < 0 ? 0 : std::max(0, ToInt(keys, "rise_recoil", 0));
         rise.recoilNear = std::max(0.0f, ToFloat(keys, "rise_recoil_near", 240));
         rise.recoilGap = std::max(1, ToInt(keys, "rise_recoil_gap", 8));
@@ -814,6 +816,15 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         rise.recoilLow = ToFloat(keys, "rise_recoil_low", 0.3f);
         rise.recoilHigh = std::max(rise.recoilLow + 1e-6f, ToFloat(keys, "rise_recoil_high", 0.6f));
         rise.recoilSoon = std::max(0, ToInt(keys, "rise_recoil_soon", 34));
+        rise.press = std::max(0, ToInt(keys, "rise_press", 0));
+        rise.pressNear = std::max(0.0f, ToFloat(keys, "rise_press_near", 200));
+        rise.pressGap = std::max(1, ToInt(keys, "rise_press_gap", 8));
+        rise.pressExit = std::max(0, ToInt(keys, "rise_press_exit", 30));
+        rise.pressSoon = std::max(0, ToInt(keys, "rise_press_soon", 50));
+        rise.pressPrior = std::max(0.01f, ToFloat(keys, "rise_press_prior", 4));
+        rise.pressLost = ToFloat(keys, "rise_press_lost", 0.1f);
+        rise.pressLow = ToFloat(keys, "rise_press_low", -0.05f);
+        rise.pressHigh = std::max(rise.pressLow + 1e-6f, ToFloat(keys, "rise_press_high", 0.15f));
         rise.punishNear = std::max(0.0f, ToFloat(keys, "rise_recoil_punish_near", 48));
         rise.punishAt = std::max(0, ToInt(keys, "rise_recoil_punish_at", 22));
         // rise_recoil_punish: "byte,byte,..." (control bytes, hex or decimal)
@@ -1077,16 +1088,22 @@ void Player::Reset()
     }
     // (rise.py's reset with carry: the counts older)
     riseDown_ = riseMet_ = riseDrawn_ = riseVeto_ = false;
+    riseHolding_ = riseQuiet_ = 0;
     riseRg_ = false;
     riseAnswer_ = riseLet_ = riseFirst_ = 0;
     riseClear_ = -1;
     recoilWatch_ = 0;
     riseMine_ = punishOn_ = false;
+    pressLeft_ = pressFar_ = pressWatch_ = 0;
+    pressHeld_ = pressExit_ = false;
+    pressSince_ = 10000;
     if (risen_) { // (once a match: a fight's end and the next one's start both come here)
         riseSeen_ *= policy_->rise.decay;
         riseOn_ *= policy_->rise.decay;
         recoilSeen_ *= policy_->rise.decay;
         recoilOn_ *= policy_->rise.decay;
+        pressSeen_ *= policy_->rise.decay;
+        pressOn_ *= policy_->rise.decay;
         risen_ = false;
     }
     rise_ = RiseStats();
@@ -1142,6 +1159,67 @@ double Player::RecoilChance() const
     const Rise& r = policy_->rise;
     double rate = ((double)r.recoilPrior * r.recoilCounter + recoilOn_) / (r.recoilPrior + recoilSeen_);
     return std::min(1.0, std::max(0.0, (rate - r.recoilLow) / ((double)r.recoilHigh - r.recoilLow)));
+}
+
+// rise.py's Rise.press_chance.
+double Player::PressChance() const
+{
+    const Rise& r = policy_->rise;
+    double rate = ((double)r.pressPrior * r.pressLost + pressOn_) / (r.pressPrior + pressSeen_);
+    return std::min(1.0, std::max(0.0, (rate - r.pressLow) / ((double)r.pressHigh - r.pressLow)));
+}
+
+// rise.py's Rise.pressed: the strings, the held one's steps, and what came of the exits.
+void Player::PressWatch(const float* v, int a, bool down)
+{
+    const Rise& r = policy_->rise;
+    auto reacting = [](int x) { return x >= 0x32 && x < 0x7a; }; // hit, down, or thrown
+    int theirs = (int)nearbyintf(v[kOppAction]);
+    bool hit = reacting(a), over = down || v[kRoundOver] != 0;
+    bool guard = ((a >= 0x96 && a <= 0x9c) || (a >= 0xa8 && a <= 0xaa)) && !(v[kSelfAir] > 0);
+    if (pressWatch_ > 0) { // an exit: caught, or not
+        if (hit) {
+            pressOn_ += 1;
+            rise_.exitsCaught++;
+            pressWatch_ = 0;
+        } else if (reacting(theirs) && !over) {
+            pressOn_ -= 1;
+            rise_.exitsWon++;
+            pressWatch_ = 0;
+        } else if (guard || over) {
+            pressWatch_ = 0;
+        } else {
+            pressWatch_--;
+        }
+    }
+    if (guard && !over) {
+        if (pressSince_ > r.press) { // a new string: held or not, by the exits before
+            pressHeld_ = std::uniform_real_distribution<double>(0.0, 1.0)(rng_) < PressChance();
+            pressExit_ = false;
+            rise_.strings++;
+            rise_.stringsHeld += pressHeld_;
+        }
+        pressSince_ = 0;
+        if (pressHeld_) {
+            pressLeft_ = r.press;
+            pressFar_ = 0;
+        }
+        return;
+    }
+    pressSince_ = std::min(pressSince_ + 1, 10000);
+    if (pressLeft_ > 0) {
+        pressLeft_--;
+        bool far = fabsf(v[kDx]) * kPixels > r.pressNear;
+        pressFar_ = far ? pressFar_ + 1 : 0;
+        if (over || hit || reacting(theirs) || pressFar_ >= r.pressGap)
+            pressLeft_ = 0;
+    } else if (pressSince_ <= r.pressExit && !pressExit_ && !over && !hit &&
+               (a >= kFirstOwnMove || v[kSelfAir] > 0)) {
+        pressExit_ = true; // it left its guard: a move, or a jump
+        pressSeen_ += 1;
+        pressWatch_ = r.pressSoon;
+        rise_.exits++;
+    }
 }
 
 // rise.py's Rise.guard_chance.
@@ -1366,6 +1444,15 @@ void Player::RiseWatch()
             (v[kOppAir] > 0 && d <= r.fly))
             riseMet_ = true;
     }
+    if (riseHolding_ > 0) { // up and guarding on: until the attacker has let up
+        riseHolding_--;
+        bool going = (int)nearbyintf(v[kOppAction]) >= kFirstOwnMove ||
+                     (v[kOppAir] > 0 && fabsf(v[kDx]) * kPixels <= r.fly);
+        riseQuiet_ = going ? 0 : riseQuiet_ + 1;
+        if (down || v[kRoundOver] != 0 || v[kSelfHitstun] > 0 || (a >= 0x32 && a < 0x60) ||
+            riseQuiet_ >= r.gap)
+            riseHolding_ = 0;
+    }
     if (r.recoil > 0) { // its move recoil-guarded, as it sees it
         int theirs = (int)nearbyintf(v[kOppAction]);
         bool rg = theirs >= 0xa8 && theirs <= 0xaa;
@@ -1423,7 +1510,13 @@ void Player::RiseWatch()
         }
         riseRg_ = rg;
     }
+    if (r.press > 0)
+        PressWatch(v, a, down);
     if (riseDown_ && !down) {
+        if (riseVeto_ && riseMet_ && r.hold > 0 && v[kRoundOver] == 0 && (a < 0x32 || a >= 0x96)) {
+            riseHolding_ = r.hold; // (guarded through, and up unhit: on, while the attacker goes on)
+            riseQuiet_ = 0;
+        }
         riseVeto_ = false;
         if (v[kRoundOver] == 0) {
             riseSeen_ += 1;
@@ -1460,6 +1553,14 @@ int Player::RiseAct(int action)
             }
             return r.idle;
         }
+        return RiseStands() ? r.stand : r.crouch;
+    }
+    if (riseHolding_ > 0 && !riseDown_) { // its rising's guard going on, by sight
+        rise_.held++;
+        return RiseStands() ? r.stand : r.crouch;
+    }
+    if (pressLeft_ > 0 && !riseDown_) { // a held string's guard, by sight
+        rise_.pressSteps++;
         return RiseStands() ? r.stand : r.crouch;
     }
     if (!riseDown_ || !riseMet_)

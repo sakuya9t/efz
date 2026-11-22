@@ -1653,12 +1653,22 @@ void efz_env_agent_rise_stats(const EfzAgent* a, int32_t* stats)
     if (!a || !stats)
         return;
     const agent::RiseStats& r = a->player->Rising();
-    int32_t v[15] = {r.knockdowns, r.met, r.guarded, r.steps, r.stood,
+    int32_t v[16] = {r.knockdowns, r.met, r.guarded, r.steps, r.stood,
                       (int32_t)(a->player->RiseChance() * 1000 + 0.5),
                       (int32_t)lround(a->player->RiseSeen() * 100),
                       (int32_t)lround(a->player->RiseOn() * 100), r.landed, r.recoils,
                       r.recoilSteps, r.recoilCleared, r.recoilAnswered,
-                      (int32_t)(a->player->RecoilChance() * 1000 + 0.5), r.recoilPunished};
+                      (int32_t)(a->player->RecoilChance() * 1000 + 0.5), r.recoilPunished, r.held};
+    memcpy(stats, v, sizeof(v));
+}
+
+void efz_env_agent_press_stats(const EfzAgent* a, int32_t* stats)
+{
+    if (!a || !stats)
+        return;
+    const agent::RiseStats& r = a->player->Rising();
+    int32_t v[7] = {r.strings, r.stringsHeld, r.pressSteps, r.exits, r.exitsCaught,
+                    (int32_t)(a->player->PressChance() * 1000 + 0.5), r.exitsWon};
     memcpy(stats, v, sizeof(v));
 }
 

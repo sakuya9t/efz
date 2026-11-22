@@ -257,7 +257,10 @@ AIR_OPTIONS = dict(near=320)
 # at `high`; decay: what the counts keep into the next match). land (1): under an attacker
 # in the air the standing guard only until its landing, predicted from the view, has
 # passed, then the crouching one; sight: the steps late the guard's height is chosen
-# from (0: the agent's delay). recoil (steps; 0: off): from where it sees its move
+# from (0: the agent's delay). hold (steps; 0: off): a rising guarded through goes on
+# guarding by sight after it sees itself up, for at most that many steps, while the
+# attacker goes on (in a move of its own or in the air within fly), until gap steps
+# without that. recoil (steps; 0: off): from where it sees its move
 # recoil-guarded within recoil_near pixels, nothing held until recoil_press steps after
 # the recoil guard and then the guard by sight, for at most that many steps (until it
 # sees the opponent free for recoil_gap steps, a guard of its own touched starting the
@@ -269,11 +272,20 @@ AIR_OPTIONS = dict(near=320)
 # at recoil_high. recoil_punish ('0x1,0x4,0x5,0x25': control bytes; '': none): what it
 # plays after its own recoil guard on the ground with the opponent in a move within
 # recoil_punish_near pixels, the last input recoil_punish_at steps after that guard.
+# press (steps; 0: off): the guard under pressure. A string (a guard of its own on the
+# ground it sees touched) that is held is guarded on by sight until press steps after
+# the last guard it sees (or the opponent hit, or further than press_near pixels for
+# press_gap steps); held by the match's record: of its exits (a move or a jump seen
+# within press_exit steps of a guard) those after which it saw itself hit within
+# press_soon steps less those after which it saw the opponent hit first, an exit, over
+# a prior (press_lost, weighing press_prior exits); none at press_low, all at press_high.
 RISE_OPTIONS = dict(prior=2.0, meaty=0.56, low=0.3, high=0.6, near=0.0, fly=200.0, decay=0.7,
-                    land=0, sight=0, recoil=0, recoil_near=240.0, recoil_gap=8, recoil_press=22,
+                    land=0, sight=0, hold=0, gap=8, recoil=0, recoil_near=240.0, recoil_gap=8, recoil_press=22,
                     recoil_clear=1, recoil_steady=12, recoil_let=0, recoil_prior=2.0,
                     recoil_counter=0.6, recoil_low=0.3, recoil_high=0.6, recoil_soon=34,
-                    recoil_punish='', recoil_punish_near=48.0, recoil_punish_at=22)
+                    recoil_punish='', recoil_punish_near=48.0, recoil_punish_at=22,
+                    press=0, press_near=200.0, press_gap=8, press_exit=30, press_soon=50,
+                    press_prior=4.0, press_lost=0.1, press_low=-0.05, press_high=0.15)
 
 
 # Its raw specials by their accounts, as the game plays them (port/agent/policy.h's Risk;
@@ -1671,8 +1683,14 @@ class NativeAgent:
             names = ('rise_knockdowns', 'rise_met', 'rise_guarded', 'rise_steps', 'rise_stood',
                      'rise_chance', 'rise_seen', 'rise_on', 'rise_landed', 'rise_recoils',
                      'rise_recoil_steps', 'rise_recoil_cleared', 'rise_recoil_answered',
-                     'rise_recoil_chance', 'rise_recoil_punished')
+                     'rise_recoil_chance', 'rise_recoil_punished', 'rise_held')
             out.update(zip(names, [int(x) for x in v]))
+            if hasattr(self._lib, 'efz_env_agent_press_stats'):  # its guard under pressure (rise_press)
+                v = (ctypes.c_int32 * 8)()
+                self._lib.efz_env_agent_press_stats(self._h, v)
+                out.update(zip(('rise_strings', 'rise_strings_held', 'rise_press_steps', 'rise_exits',
+                                'rise_exits_caught', 'rise_press_chance', 'rise_exits_won'),
+                               [int(x) for x in v]))
         if hasattr(self._lib, 'efz_env_agent_risk_stats') and getattr(self, 'risk', False):
             v = (ctypes.c_int32 * 16)()  # its raw specials (risk:1), and its jumps' account
             self._lib.efz_env_agent_risk_stats(self._h, v)
