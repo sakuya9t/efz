@@ -6,12 +6,11 @@
 #include "efz.h"
 
 #ifdef EFZ_NATIVE
-// The native game's last page: RECORDS after EXIT when it has fight records
-// (efz::RecordsHooks), else EXIT.
-static int LastPage()
-{
-    return efz::g_records.update ? efz::kRecordsPage : 9;
-}
+// The native game's REPLAY menu has two modes (efz::RecordsHooks): the game's replays,
+// its pages, as it opens, and the fight records (m_page efz::kRecordsPage); Tab goes
+// from one to the other, back to the page it left.
+static int s_gamePage; // the game's page, while the records are shown
+static bool s_tabDown; // Tab down on the last frame
 #endif
 
 CScene8::CScene8(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2Ref, CGame* game, CGraphics* graphics, CInput* input, CSound* sound)
@@ -132,9 +131,9 @@ BYTE CScene8::Update()
         case 0:
 #ifdef EFZ_NATIVE
             if (m_page == efz::kRecordsPage) {
-                // The records: the page takes the controls (up and down choose a record,
-                // A plays it, C saves it as a replay); left, right and B as on the other
-                // pages, unless the page has a use for them.
+                // The records take the controls (up and down choose a record, left and
+                // right a screen of them, A plays it, C saves it as a replay); B leaves
+                // the menu, as on the game's pages.
                 switch (efz::g_records.update(side, m_game->m_inputX[side], m_game->m_inputY[side],
                                              m_game->m_pressA[side] != 0,
                                              m_game->m_pressB[side] != 0,
@@ -144,13 +143,6 @@ BYTE CScene8::Update()
                     break;
                 case efz::kRecordsChosen:
                     m_game->PlaySE(6);
-                    break;
-                case efz::kRecordsTurn:
-                    m_game->PlaySE(8);
-                    m_page += m_game->m_inputX[side];
-                    if (m_page > LastPage()) {
-                        m_page = 0;
-                    }
                     break;
                 case efz::kRecordsStart:
                     m_game->PlaySE(6);
@@ -176,19 +168,11 @@ BYTE CScene8::Update()
             if (m_held[side] == 0 && m_game->m_inputX[side] != 0) {
                 m_game->PlaySE(8);
                 m_page += m_game->m_inputX[side];
-#ifdef EFZ_NATIVE
-                if (m_page > LastPage()) {
-                    m_page = 0;
-                } else if (m_page < 0) {
-                    m_page = LastPage();
-                }
-#else
                 if (m_page > 9) {
                     m_page = 0;
                 } else if (m_page < 0) {
                     m_page = 9;
                 }
-#endif
             }
             if (m_game->m_pressA[side] != 0) {
                 if (m_page == 9) {
@@ -298,17 +282,17 @@ void CScene8::Draw()
     src = MakeRect(0, 0, 320, 240);
     dst = MakeRect(0, 0, 320, 240);
     m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_bgSurface), src, 0, 0);
-    src = MakeRect(0, 25, 320, 16);
-    dst = MakeRect(0, 4, 320, 16);
-    m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
 #ifdef EFZ_NATIVE
-    // RECORDS isn't in the menu's picture: the page draws its label and its list over
-    // the frame (port/records.cpp), where the slots would be.
+    // The records aren't in the menu's picture: they draw their title and their list
+    // over the frame (port/records.cpp), where the pages and the slots would be.
     if (m_page == efz::kRecordsPage) {
         m_graphics->Flip();
         return;
     }
 #endif
+    src = MakeRect(0, 25, 320, 16);
+    dst = MakeRect(0, 4, 320, 16);
+    m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
     if (m_page == 9) {
         src = MakeRect((m_page << 4) + 80, 6, 40, 15);
         dst = MakeRect((m_page << 4) + 80, 4, 40, 15);
@@ -392,6 +376,22 @@ void CScene8::HandleKeys()
     if ((keys[1] & 0x80) != 0) {
         m_leave = 1;
     }
+#ifdef EFZ_NATIVE
+    // Tab (DIK_TAB): the records, or the game's replays again, on the menu's first state
+    // (not in a slot's PLAY/RECORD/BACK) and not while it fades in or out.
+    bool tab = (keys[0x0f] & 0x80) != 0;
+    if (tab && !s_tabDown && efz::g_records.update && m_state == 0 && m_leave == 0) {
+        m_game->PlaySE(8);
+        if (m_page == efz::kRecordsPage) {
+            efz::g_records.leave();
+            m_page = s_gamePage;
+        } else {
+            s_gamePage = m_page;
+            m_page = efz::kRecordsPage;
+        }
+    }
+    s_tabDown = tab;
+#endif
 }
 
 void CScene8::Enter()
@@ -448,6 +448,11 @@ void CScene8::Enter()
 #ifdef EFZ_NATIVE
     if (efz::g_records.enter) {
         efz::g_records.enter();
+    }
+    // The menu opens on the game's replays; back from a record played or saved
+    // (m_enter 2), on the records.
+    if (m_enter != 2 && m_page == efz::kRecordsPage) {
+        m_page = s_gamePage;
     }
 #endif
     if (m_enter == 2) {

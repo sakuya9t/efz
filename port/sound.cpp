@@ -12,6 +12,7 @@
 #include "platform.h"
 #include "netplay.h"
 #include "agents.h"
+#include "revival/music.h"
 
 namespace {
 
@@ -97,6 +98,7 @@ void MixInto(float* out, int frames, int rate)
                 b->pos -= (double)b->loopLength / b->Frame();
         }
     }
+    efz::revival::MixMusic(out, frames, rate); // EfzRevival's BGMFolder
     for (int i = 0; i < frames * 2; i++)
         out[i] = out[i] > 1.0f ? 1.0f : out[i] < -1.0f ? -1.0f : out[i];
 }
@@ -234,6 +236,8 @@ void CSound::Stop(WORD id)
 {
     if (efz::AgentPlanning()) // a frame of an agent's plan, on a copy of the fight
         return;
+    if (efz::revival::MusicStop(id)) // EfzRevival's music file, playing in its place
+        return;
     if (id < 0x96 && m_buffers[id]) {
         AudioLock lock;
         m_buffers[id]->playing = false;
@@ -245,6 +249,16 @@ namespace efz {
 void MuteSounds(bool muted)
 {
     g_muted = muted;
+}
+
+void LockAudio(bool lock)
+{
+    if (!g_stream)
+        return;
+    if (lock)
+        SDL_LockAudioStream(g_stream);
+    else
+        SDL_UnlockAudioStream(g_stream);
 }
 
 void PauseSoundDevice(bool paused)
@@ -272,6 +286,10 @@ void CSound::Play(WORD id, BOOL loop)
     // A frame of an agent's plan, on a copy of the fight: nothing is heard, and netplay
     // doesn't count it.
     if (efz::AgentPlanning())
+        return;
+    // The music: EfzRevival's BGMFolder plays in its place, or MuteBGM and ToggleBGM keep
+    // it silent (EfzRevival's sessions' playSound).
+    if (efz::revival::MusicPlay(id, loop))
         return;
     // A network match's rollback runs frames again: netplay plays each sound once
     // (EfzRevival's hook of CSound::Play, efz.exe 0x40de80).
@@ -392,6 +410,8 @@ void CSound::UpdateLoop(WORD id)
 
 void CSound::SetVolume(WORD id, int volume)
 {
+    if (efz::revival::MusicSetVolume(id, volume))
+        return;
     if (id >= 0x96 || !m_buffers[id])
         return;
     AudioLock lock;

@@ -32,13 +32,19 @@ On the title, NET PLAY (after VS HUMAN) opens netplay's screen over the title:
 | ADDRESS | To join: the host's address, `192.168.1.5`, `example.org:10800`, `[2001:db8::1]:10800` (Ctrl+V pastes) |
 | PORT | The UDP port: the host's to listen on, or the joiner's default for an address without one. 10800, as Revival's |
 | NAME | What the other player sees, up to 20 characters |
-| YOUR SIDE | The host's: P1, P2 or at random. The joiner gets the other |
 | PLAYED BY | YOU, or an agent file of the `agents` folder, which then plays this computer's side: it picks its character, you pick the stage, it plays the fights ([agents.md](agents.md)) |
 | START | Host or join |
 
 The arrow keys move and change, typing edits, Enter starts, Esc goes back; P1's controls
 work too (A to start, B to go back). The settings are kept in `netplay.ini` in the save
-folder.
+folder; the rest of Revival's netplay settings are its `EfzRevival.ini`'s, which the game
+reads from the save folder or the game's ([revival-features.md](revival-features.md)):
+the rollback, the practice keys, the replays, the battle log, the hole-punching server,
+the keys.
+
+Neither player picks a side: the host draws P1 or P2 at random for each match (a new
+draw each START) and tells the joiner, which takes the other, so the two can't both be
+P1. The connect screen says which one each got.
 
 Hosting lists this computer's addresses, each with the network adapter it is on ("Wi-Fi",
 "Radmin VPN", "eth0"), and reads them again every second while it waits, so a VPN
@@ -46,10 +52,13 @@ connected after START shows up. The one to give the other player is the address 
 network both computers are on: the same router's, or a VPN's that joins the two
 (Radmin VPN, Hamachi, ZeroTier, Tailscale). Over the internet without such a VPN it is
 the router's public address, which no adapter of this computer has (the router's status
-page shows it), and the host needs the UDP port forwarded to it on the router (Revival's
-hole-punching server isn't used). A VPN service that forwards a port to its users is the
-same: its exit address, and PORT set to the port it forwards. Windows asks, the first
-time, whether to let the game through its firewall. Once the two are connected, both games measure the round trip for about four
+page shows it), and the host needs the UDP port forwarded to it on the router, or a
+hole-punching server: `EfzRevival.ini`'s `HolePunchingServer`, Revival's own by default,
+introduces a joiner to a host behind a router as Revival's launcher does
+([revival-features.md](revival-features.md), "Netplay"); `None` turns it off. A VPN
+service that forwards a port to its users is the same: its exit address, and PORT set to
+the port it forwards. Windows asks, the first time, whether to let the game through its
+firewall. Once the two are connected, both games measure the round trip for about four
 seconds and suggest an input delay, which each player confirms with Enter (or changes
 with left and right). Then both games start from the title, as Revival starts `efz.exe`:
 P1's first inputs pick VS HUMAN, and the two players are at character select.
@@ -59,14 +68,21 @@ In a match:
 - **Each player plays with P1's controls**, whichever side they are on.
 - **Esc** in a fight goes back to character select, for both. Esc anywhere else, or in a
   fight when the other side has stopped answering for three seconds, leaves the match.
-- **The input delay** changes in a fight with the keypad's + and - (Revival's keys), or
-  F10 and F9.
-- **The screen** shows both names and wins at the top, the delay and the ping at the
-  bottom, "Waiting for ..." when the other side's inputs are late, and a warning if the
-  two games ever disagree (below).
+- **The input delay** changes in a fight with the keypad's + and - (Revival's keys,
+  `IncreaseInputDelay` and `DecreaseInputDelay`), or F10 and F9.
+- **Palettes**: a player's EDIT COLOR palette goes to the other side, which shows it;
+  Space (`ToggleRemotePalettes`) in a fight shows the colour's own instead, or back.
+- **The screen** shows both names and wins at the top (the wins with `DisplayScore = 1`),
+  the delay and the ping at the bottom, "Waiting for ..." when the other side's inputs are
+  late, and a warning if the two games ever disagree (below).
 - **Replays** of every match are saved, as Revival saves them, to `replay/netplay/` in the
-  save folder: `<date-time> <P1> (<character>) vs <P2> (<character>).rep`, Revival's
-  extended format (the game's words, then the random state and both players' inputs).
+  save folder (`ReplayFolder`): `<date-time> <P1> (<character>) vs <P2> (<character>).rep`,
+  Revival's extended format (the game's words, then the random state and both players'
+  inputs). With `SaveAllReplays = 0` only when S (`SavePreviousReplay`) is pressed on
+  character select or the results. The REPLAY menu plays them as Revival does, from their
+  inputs ([revival-features.md](revival-features.md), "Replays").
+- **The battle log**, `BattleLog.txt` in the save folder: the session, then a line a game
+  with its characters, rounds, length and score, in Revival's columns.
 - **Rounds, damage, effects**: two rounds, 100% damage, normal effects and every frame
   drawn, whatever either side's `key.ini` says (Revival's `setSpectating`).
 - When the match ends, for whatever reason, the game starts over at the title and the
@@ -110,10 +126,19 @@ ms after a fade, and the menus' input delay, which follows the worst ping, rose 
 frames. With it they measure 0-1 ms.
 
 Left out: spectating (a spectator is answered as a host with `AllowSpectating = false`
-answers), the hole-punching server and NAT traversal, custom palettes over the network
-(received ones are ignored, none are sent), Revival's custom BGM folder and its battle
-log. Sync records, which Revival asks for only with `Debug = 1`, are always asked for and
+answers). Sync records, which Revival asks for only with `Debug = 1`, are always asked for and
 compared: a desync is logged with both records and shown on screen.
+
+One difference in the sync records, which change nothing else: a fight left on a frame
+run before the other side's input for it came (Esc is part of the input sent, so a held
+Esc is predicted, and the fight can end on a predicted frame) leaves the frames from the
+last confirmed one to the end without a record, since no rollback runs a frame of a
+scene gone. Revival makes records in order only, so it makes none after such a frame,
+for the rest of the session, and its comparison stops there. This game goes on from the
+next frame (`Session::RunFrame`), the frames left behind holes, never compared and never
+sent (`Protocol::AddSync`), so its comparison, and the desync warning, go on past an
+Esc; a Revival on the other side still stops at the first hole it meets, as it would at
+a frame never sent.
 
 ### The session
 
@@ -197,6 +222,19 @@ match's replay stands in for them.
   `EFZ_NET_LAG=MS[:JITTER]` delays every datagram one side sends (a slow link on one
   machine, for the rollback), and `EFZ_DUMP_WINDOW=DIR` saves the window as shown,
   screens included, every `EFZ_DUMP_WINDOW_EVERY` frames.
+- `tools/nettest.py native` does that and checks it ([compat.md](compat.md), "The
+  network layer"): two games at the game's speed, as they are and with 60 ± 20 ms of
+  lag, random presses of P1's controls through character select into a fight, Esc on the
+  host's end out of it and a second fight; both ends' sync records must agree and their
+  replays be the same. CI runs it, on the compatibility pack.
+- `tools/nettest.py revival`: the same against `efz.exe` 4.02 with EfzRevival 1.02h
+  under wine (below).
+- `tools/nettest.py internet --remote USER@HOST`: over the internet with another machine
+  reached by ssh (a server with a public address): it hosts and this one joins; this one
+  hosts behind its router, nothing forwarded, and the other joins through the
+  hole-punching server `tools/punchserver.py` run there; and the same without the server,
+  which must not connect. Passed on 21 November 2026, a home connection to a server in
+  Miami, 78 ms: all three as they must be, the sync records and replays the same.
 
 What was run (Windows, MSVC, November 2026), each a match from the title through
 character select into a fight with both players' input random:
@@ -213,9 +251,16 @@ side stopped first.
 ## Against EfzRevival 1.02h
 
 The protocol and the rules are Revival 1.02h's as recovered, so a native game and an
-`efz.exe` with EfzRevival 1.02h are meant to play each other. That hasn't been tried:
-the machine this was written on has EfzRevival 1.02a, whose protocol differs. It is the
-network layer of [compat.md](compat.md), which can now be run. What to expect there:
+`efz.exe` with EfzRevival 1.02h are meant to play each other. **Observed** (21 November
+2026, `tools/nettest.py revival`, the network layer of [compat.md](compat.md)): they do,
+the native game hosting or joining, on one Linux machine with Revival and the original
+`efz.exe` 4.02 under wine: connected, the delay agreed, character select, fights with
+rollback, Esc back to character select and another fight, with and without lag; the
+sync records the same on every frame both ends compared, Revival's own comparison
+(`logNet.txt`) without an error, and each fight's replay the same, byte for byte, on
+both ends. Revival 1.02h hosting is always P1 (its `Config` sets `player = 1` whatever
+`Player` says); this game hosting draws the sides, and Revival joining takes the one it
+is given. What could still part them, none of which these matches showed:
 
 - **The x87.** Revival's `sin`, `cos` and `atan2` are the CPU's, the native game's are
   correctly rounded ([compat.md](compat.md), "Answered"); a velocity set from an angle can
@@ -223,11 +268,13 @@ network layer of [compat.md](compat.md), which can now be run. What to expect th
 - **Uninitialised memory.** `efz.exe`'s heap holds garbage where the native game's holds
   zeros, which decides a few first hits (`m_hitsLeft`, [compat.md](compat.md)).
 - **The FPU control word** in the sync records is sent as `0x9001f` (53-bit precision,
-  rounding to nearest, every exception masked), what `_controlfp_s` should give in
-  `efz.exe` under Revival; it is assumed, not read from a running game. The records are
-  compared only on request, which Revival makes only with `Debug = 1`.
-- **Palettes.** A custom (EDIT COLOR) palette isn't sent, so the other side shows that
-  player's colour as the character's own. Colours don't change the game.
+  rounding to nearest, every exception masked), what `_controlfp_s` gives in `efz.exe`
+  under Revival: **observed** in those matches, in every record Revival logged
+  (`logEfz.txt`, under wine) and in its comparison. Revival compares the records only
+  with `Debug = 1`.
+- **Palettes.** A custom (EDIT COLOR) palette is sent as Revival sends it (MessagePalette:
+  the player, then the palette's id and 40 colours, `EfzPalettes.cpp`'s layout); between
+  two native games it was checked to come and show. Colours don't change the game.
 
 Two native games have none of these differences: they compute the same game on every
 machine the compatibility suite passes on.

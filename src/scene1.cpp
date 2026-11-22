@@ -415,9 +415,9 @@ BYTE CScene1::Update()
         }
         if (m_state[0] == 0 && m_game->m_pressB[0] != 0 && m_game->m_isCpu[0] == 0 || m_state[1] == 0 && m_game->m_pressB[1] != 0 && m_game->m_isCpu[1] == 0) {
 #ifdef EFZ_NATIVE
-            // In a network match B doesn't go back to the title: EfzRevival stores 0 here
-            // instead (efz.exe 0x754c1a).
-            m_leave = !efz::g_netplay.active;
+            // In a network match (and EfzRevival's tournament) B doesn't go back to the
+            // title: EfzRevival stores 0 here instead (efz.exe 0x754c1a).
+            m_leave = !efz::g_netplay.active && !efz::g_revival.tournament;
 #else
             m_leave = 1;
 #endif
@@ -939,9 +939,9 @@ void CScene1::Enter()
     m_randomTime[0] = 0;
     m_randomTime[1] = 0;
 #ifdef EFZ_NATIVE
-    // In a network match each player's colour stays from one character select to the
-    // next: EfzRevival skips these two stores (efz.exe 0x7599ed).
-    if (!efz::g_netplay.active) {
+    // In a network match (and EfzRevival's tournament) each player's colour stays from one
+    // character select to the next: EfzRevival skips these two stores (efz.exe 0x7599ed).
+    if (!efz::g_netplay.active && !efz::g_revival.tournament) {
         m_paletteIndex[0] = 0;
         m_paletteIndex[1] = 0;
     }

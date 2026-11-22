@@ -199,6 +199,7 @@ bool Protocol::Start(const Settings& settings, std::string* error)
     delayed_.clear();
     localSyncs_.clear();
     remoteSyncs_.clear();
+    localHoles_ = 0;
     inputs[0].clear();
     inputs[1].clear();
     ping = PingStats();
@@ -209,15 +210,32 @@ bool Protocol::Start(const Settings& settings, std::string* error)
     chosen_ = false;
     ack_ = 0;
     connected_ = false;
+    redirects_ = 0;
+    server_ = net::Endpoint();
+    localPalettes_.clear();
+    remotePalettes.clear();
     seed = Now();
     rollback = std::min(abs(settings.maxRollback), 9);
     practiceKeys = settings.practiceKeys;
     delay = 0;
-    // setPlayer: 0 or 1, else a side at random.
-    localPlayer = settings.side == 0 || settings.side == 1 ? settings.side : rand() % 2;
+    // setPlayer: the host's side at random, a new draw for each match, so that neither
+    // player chooses (both would take P1); the joiner learns its side from the host's
+    // answer (ReceiveConnectConfirm). SDL_rand seeds itself from the clock; the C
+    // library's rand(), never seeded here, drew the same side every time.
+    localPlayer = settings.host ? (int)SDL_rand(2) : 0;
     remotePlayer = (localPlayer + 1) % 2;
     names[0] = "Player1";
     names[1] = "Player2";
+    // The hole-punching server (ProtocolContext's constructor: peer flag 4). Not found
+    // is no reason not to play: a host whose port is reachable doesn't need it.
+    if (!settings.holePunchingServer.empty()) {
+        std::string why;
+        if (net::Resolve(settings.holePunchingServer, kDefaultPort, &server_, &why))
+            LogInfo("net", "hole-punching server %s", server_.ToString().c_str());
+        else
+            LogWarn("net", "the hole-punching server %s: %s; not used",
+                    settings.holePunchingServer.c_str(), why.c_str());
+    }
     if (settings.host) {
         if (!socket_.Open(0, settings.port, error))
             return false;
@@ -227,6 +245,11 @@ bool Protocol::Start(const Settings& settings, std::string* error)
         LogInfo("net", "hosting on UDP port %u, as P%d", socket_.LocalPort(), localPlayer + 1);
         message = "Waiting for a player on UDP port " + std::to_string(socket_.LocalPort());
         SwitchTo(kHosting);
+        // HostConnect's enter: one ping, from which the server knows where the host is.
+        if (server_.Valid()) {
+            AddPeer(server_, 4);
+            SendPing(server_);
+        }
     } else {
         if (!net::Resolve(settings.address, settings.port, &target_, error))
             return false;
@@ -239,6 +262,11 @@ bool Protocol::Start(const Settings& settings, std::string* error)
                 socket_.LocalPort());
         message = "Connecting to " + target_.ToString();
         AddPeer(target_, 2);
+        // (the host itself as the server: nothing to punch)
+        if (server_.Valid() && !server_.SameAddress(target_))
+            AddPeer(server_, 4);
+        else
+            server_ = net::Endpoint();
         SwitchTo(kJoining);
     }
     return true;
@@ -290,9 +318,10 @@ void Protocol::End(const std::string& why)
     message = why;
     LogInfo("net", "the session ends: %s", why.c_str());
     if (phase == kPlaying)
-        LogInfo("net", "sync records: %d made here, %d from %s, compared to frame %d, %s",
-                (int)localSyncs_.size(), (int)remoteSyncs_.size(), target_.ToString().c_str(),
-                checkedFrame,
+        LogInfo("net", "sync records: %d made here (%d frames without), %d from %s, compared to "
+                "frame %d, %s",
+                (int)localSyncs_.size() - localHoles_, localHoles_, (int)remoteSyncs_.size(),
+                target_.ToString().c_str(), checkedFrame,
                 desyncFrame < 0 ? "all the same"
                                 : ("different from frame " + std::to_string(desyncFrame)).c_str());
     FlushDelayed(true);
@@ -352,7 +381,11 @@ void Protocol::Poll()
     }
     if (resendTimer_.Due(now)) {
         if (phase == kJoining) {
+            // ClientConnect's handleResendTimer: the request, and until the host answers
+            // the server asked to make way for it.
             SendConnectRequest(1, target_);
+            if (!connected_ && server_.Valid())
+                SendPunch(target_, server_);
         } else if (phase == kWaiting) {
             SendDoneToPlayers();
         } else if (phase == kPlaying) {
@@ -364,8 +397,10 @@ void Protocol::Poll()
     }
     if (timeoutTimer_.Due(now)) {
         std::vector<net::Endpoint> silent;
+        // (not the hole-punching server, which answers nothing: in the launcher its
+        // silence ends a join that took 8 seconds, here only the host's does)
         for (const Peer& p : peers_)
-            if (now - p.lastSeen > 8000)
+            if (now - p.lastSeen > 8000 && p.flags != 4)
                 silent.push_back(p.endpoint);
         for (const net::Endpoint& e : silent) {
             ReceiveTimeout(e);
@@ -482,10 +517,11 @@ void Protocol::Handle(const unsigned char* packet, size_t size, const net::Endpo
                 SyncBlock block;
                 memset(&block, 0, sizeof(block));
                 memcpy(&block, b.data(), std::min(b.size(), sizeof(block)));
-                if (block.frame == (int)remoteSyncs_.size()) {
-                    remoteSyncs_.push_back(block);
+                // In order from Revival; after a hole from this game (Session::RunFrame),
+                // which leaves out a fight's last frames, never many.
+                if (block.frame >= 0 && block.frame <= (int)remoteSyncs_.size() + 600 &&
+                    AddSync(&remoteSyncs_, block, nullptr))
                     CheckSync(block.frame);
-                }
             }
         } else if (Flagged(from, 1)) {
             SendSync((int)m.U32(2), 0, (int)m.U32(3), from);
@@ -514,9 +550,26 @@ void Protocol::Handle(const unsigned char* packet, size_t size, const net::Endpo
         }
         break;
     case net::kPalette:
-    case net::kRedirect:
-    case net::kPunch:
+        // Play's receivePalette: the opponent's, kept for the session.
+        if (Flagged(from, 2) && phase == kPlaying && (int)m.U32(1) != localPlayer) {
+            std::string b = m.Bytes(2);
+            if (b.size() >= sizeof(ColorPalette)) {
+                ColorPalette palette;
+                memcpy(palette.data, b.data(), sizeof(palette.data));
+                if (remotePalettes.size() < 64)
+                    remotePalettes.push_back(palette);
+            }
+        }
         break;
+    case net::kPunch: {
+        net::Endpoint target;
+        if ((Flagged(from, 2) || Flagged(from, 4)) && net::FromRevivalEndpoint(m.Bytes(1), &target))
+            ReceivePunch(target);
+        break;
+    }
+    case net::kRedirect:
+        break; // to a spectator, which this isn't
+
     default:
         break;
     }
@@ -647,6 +700,20 @@ void Protocol::ReceiveInput(int ack, int frame, const std::vector<FrameInput>& g
     }
 }
 
+// The server's word of where the other side is: the next of the ten ports there, a ping
+// (the host's, and the joiner's once answered) or the request (the joiner's).
+void Protocol::ReceivePunch(const net::Endpoint& target)
+{
+    net::Endpoint to = target;
+    to.SetPort((uint16_t)(target.Port() + redirects_));
+    redirects_ = (redirects_ + 1) % 10;
+    LogInfo("net", "the hole-punching server points to %s", to.ToString().c_str());
+    if (phase == kJoining && !connected_)
+        SendConnectRequest(1, to);
+    else if (phase != kIdle && phase != kEnded)
+        SendPing(to);
+}
+
 // TestDelay's: after 20 replies, the 90th percentile of the round trips is the ping, the
 // average that of the ones below it, and the delay is suggested from them.
 void Protocol::ReceivePong(const net::Endpoint& from)
@@ -699,8 +766,10 @@ bool Protocol::CheckSync(int frame)
         return false;
     const SyncBlock& a = localSyncs_[frame];
     const SyncBlock& b = remoteSyncs_[frame];
-    bool same = a.Same(b);
     checkedFrame = frame;
+    if (a.Hole() || b.Hole())
+        return true; // one side has no record of the frame: nothing to compare
+    bool same = a.Same(b);
     if (same && frame > 0 && frame % 1024 == 0)
         LogInfo("net", "frames 0-%d: both sides' sync records agree", frame);
     if (!same) {
@@ -714,12 +783,26 @@ bool Protocol::CheckSync(int frame)
     return same;
 }
 
+bool Protocol::AddSync(std::vector<SyncBlock>* syncs, const SyncBlock& block, int* holes)
+{
+    if (block.frame < (int)syncs->size())
+        return false;
+    SyncBlock hole;
+    memset(&hole, 0, sizeof(hole));
+    hole.frame = -1;
+    while ((int)syncs->size() < block.frame) {
+        syncs->push_back(hole);
+        if (holes)
+            (*holes)++;
+    }
+    syncs->push_back(block);
+    return true;
+}
+
 void Protocol::AddLocalSync(const SyncBlock& block)
 {
-    if (block.frame == (int)localSyncs_.size()) {
-        localSyncs_.push_back(block);
+    if (AddSync(&localSyncs_, block, &localHoles_))
         CheckSync(block.frame);
-    }
 }
 
 void Protocol::SendInputs()
@@ -728,6 +811,20 @@ void Protocol::SendInputs()
         return;
     for (const net::Endpoint& e : GetRole(3))
         SendInputPlayer(ack_, 30, e);
+    for (const ColorPalette& palette : localPalettes_) {
+        net::Writer m;
+        m.Varint(1, (uint32_t)localPlayer);
+        m.Bytes(2, palette.data, sizeof(palette.data));
+        for (const net::Endpoint& e : GetRole(3))
+            Send(net::kPalette, m, e);
+    }
+    localPalettes_.clear();
+}
+
+void Protocol::SendPalette(const ColorPalette& palette)
+{
+    if (localPalettes_.size() < 10) // the PaletteP1/P2 queue's 10
+        localPalettes_.push_back(palette);
 }
 
 // --- Sending
@@ -911,9 +1008,26 @@ void Protocol::SendSync(int frame, int before, int after, const net::Endpoint& t
         return;
     net::Writer m;
     m.Varint(1, 0);
-    for (int i = first; i <= last; i++)
-        m.Bytes(4, &localSyncs_[i], sizeof(SyncBlock));
-    Send(net::kSync, m, to);
+    int sent = 0;
+    // Not the holes: EfzRevival takes records in order only, and so stops at a hole
+    // as it would at a frame never sent; this game takes the ones after it.
+    for (int i = first; i <= last; i++) {
+        if (!localSyncs_[i].Hole()) {
+            m.Bytes(4, &localSyncs_[i], sizeof(SyncBlock));
+            sent++;
+        }
+    }
+    if (sent > 0)
+        Send(net::kSync, m, to);
+}
+
+// Asks the hole-punching server to tell target about this side.
+void Protocol::SendPunch(const net::Endpoint& target, const net::Endpoint& server)
+{
+    net::Writer m;
+    std::string bytes = net::RevivalEndpoint(target);
+    m.Bytes(1, bytes.data(), bytes.size());
+    Send(net::kPunch, m, server);
 }
 
 void Protocol::SendSyncRequest(int count, const net::Endpoint& to)

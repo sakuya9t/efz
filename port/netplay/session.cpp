@@ -11,6 +11,8 @@
 #include "../platform.h"
 #include "../log.h"
 #include "../agents.h"
+#include "../revival/config.h"
+#include "../revival/keys.h"
 
 // src/scene3.cpp: whether an F-key was down on the last frame (efz.exe's word that
 // Revival's save states keep).
@@ -67,7 +69,11 @@ const uint32_t kFpuControl = 0x9001f;
 const double kMsPerFrame = 1000.0 / 64;
 // DIK_ codes.
 const int kDikEscape = 0x01, kDikF4 = 0x3e, kDikF9 = 0x43, kDikF10 = 0x44;
-const int kDikSubtract = 0x4a, kDikAdd = 0x4e;
+
+const revival::Config& Ini()
+{
+    return revival::GetConfig();
+}
 
 GameObjects G()
 {
@@ -89,6 +95,97 @@ CPlayer* Player(int i)
     return ref ? (CPlayer*)*ref : nullptr;
 }
 
+
+// Game::character, paletteNumber, hasPalette, canChoosePalette.
+int CharacterOf(int player)
+{
+    GameObjects o = G();
+    int scene = *o.scene;
+    if (scene == 2 || scene == 3) {
+        CScene* s = o.scenes[scene];
+        PTR32(CPlayer)* ref = player == 0 ? (PTR32(CPlayer)*)s->m_player1Ref
+                                          : (PTR32(CPlayer)*)s->m_player2Ref;
+        CPlayer* p = ref ? (CPlayer*)*ref : nullptr;
+        return p ? p->m_charId : -1;
+    }
+    if (scene == 1)
+        return ((CScene1*)o.scenes[1])->m_charId[player];
+    return -1;
+}
+
+int PaletteNumber(int player)
+{
+    GameObjects o = G();
+    switch (*o.scene) {
+    case 1:
+    case 2:
+        return ((CScene1*)o.scenes[1])->m_paletteIndex[player];
+    case 3:
+        if (CPlayer* p = Player(player))
+            return p->m_paletteIndex;
+        return 0;
+    }
+    return 0;
+}
+
+bool HasPalette(int player)
+{
+    GameObjects o = G();
+    int scene = *o.scene;
+    return scene >= 1 && scene <= 3 && (o.game->m_editColor[player] & 0xff) != 0;
+}
+
+bool CanChoosePalette(int player)
+{
+    GameObjects o = G();
+    switch (*o.scene) {
+    case 1:
+        return ((CScene1*)o.scenes[1])->m_state[player] == 6;
+    case 2:
+    case 3:
+        return true;
+    }
+    return false;
+}
+
+// std::put_time's, local time.
+std::string TimeText(time_t t, const char* format)
+{
+    tm local;
+#ifdef _WIN32
+    localtime_s(&local, &t);
+#else
+    localtime_r(&t, &local);
+#endif
+    char text[64];
+    strftime(text, sizeof(text), format, &local);
+    return text;
+}
+
+// A field padded as an iostream's width pads it: to `width` characters (UTF-16 units: a
+// wide stream's, as Revival's lines are made) or bytes (the narrow file stream's), on the
+// right (left-aligned) or the left.
+size_t Units(const std::string& utf8, bool bytes)
+{
+    if (bytes)
+        return utf8.size();
+    size_t n = 0;
+    for (size_t i = 0; i < utf8.size(); i++) {
+        unsigned char c = (unsigned char)utf8[i];
+        if ((c & 0xc0) != 0x80)
+            n += c >= 0xf0 ? 2 : 1;
+    }
+    return n;
+}
+
+std::string Pad(const std::string& s, size_t width, bool left, bool bytes = false, char fill = ' ')
+{
+    size_t n = Units(s, bytes);
+    if (n >= width)
+        return s;
+    std::string padding(width - n, fill);
+    return left ? s + padding : padding + s;
+}
 
 // The names Revival gives the characters in replay file names (Game::characterName).
 const char* CharacterName(int c)
@@ -156,7 +253,7 @@ void SaveState::Load()
 {
     if (!saved_)
         return;
-    SetRevivalRandState(rng_);
+    SetRandState(rng_);
     for (const Region& r : regions_)
         memcpy(r.at, data_.data() + r.offset, r.size);
 }
@@ -202,9 +299,18 @@ void Session::Start(Protocol* protocol)
     stalled = 0;
     rollbacks_ = rerun_ = deepest_ = 0;
     ping_ = PingStats();
-    memset(keysDown_, 0, sizeof(keysDown_));
     writeReplay_ = true;
     replayOpen_ = false;
+    pending_ = false;
+    pendingWords_.clear();
+    pendingInputs_.clear();
+    replayFlushed_ = replaySaved_ = false;
+    hideRemotePalettes_ = palettesToggled_ = false;
+    rounds_[0] = rounds_[1] = 0;
+    palettes_[0].Clear();
+    palettes_[1].Clear();
+    palettes_[local_].LoadCustom();
+    OpenBattleLog();
     // P1's inputs through the title to VS HUMAN: down, down, A; P2's are nothing.
     static const char start[22] = {0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0,
                                    4, 0, 0, 0, 0, 0x10, 0, 0, 0, 0, 0};
@@ -228,6 +334,9 @@ void Session::Stop()
         return;
     if (replayOpen_)
         ReplayClose();
+    pending_ = false;
+    pendingWords_.clear();
+    pendingInputs_.clear();
     LogInfo("net", "the match ran %d frames; %d rollbacks ran %d frames again, at most %d at once",
             frame_, rollbacks_, rerun_, deepest_);
     g_skipDrawing = false;
@@ -250,6 +359,16 @@ void Session::Update()
     if (newScene_ != scene_)
         SceneChanged();
     ping_ = protocol_->sessionPing;
+    // receivePalettes: the opponent's, as they came.
+    for (const ColorPalette& palette : protocol_->remotePalettes) {
+        int key;
+        memcpy(&key, palette.data, 4);
+        if (!palettes_[remote_].Has(key))
+            LogInfo("net", "%s's custom palette %d of %s came", protocol_->names[remote_].c_str(),
+                    (key & 0xff) + 1, PaletteFolder(key >> 24 & 0xff));
+        palettes_[remote_].Add(palette);
+    }
+    protocol_->remotePalettes.clear();
     if (frame_ > lastFrame_)
         lastFrame_ = frame_;
     KeyPressed();
@@ -287,6 +406,10 @@ void Session::Update()
 // one with the drawing off, and the last one with it on.
 void Session::RunFightFrames(int count)
 {
+    for (int i = 0; i < 2; i++) {
+        if (CPlayer* p = Player(i))
+            rounds_[i] = p->m_roundsWon;
+    }
     g_skipDrawing = true;
     for (int i = 0; i < count; i++) {
         if (i == count - 1)
@@ -328,6 +451,10 @@ void Session::RunQuitFrames(int count)
 
 void Session::RunMenuFrames(int count)
 {
+    // The local player's custom palette goes to the other side every 30 frames, from the
+    // colour's choice on.
+    if (frame_ % 30 == 0)
+        SendLocalPalette();
     for (int i = 0; i < count; i++) {
         if ((unsigned)frame_ >= Local().size() - 1)
             AddInput(ReadInput());
@@ -355,6 +482,14 @@ void Session::RunFrames(int count)
 // One frame of the game, its sync record made the first time it is final.
 void Session::RunFrame()
 {
+    // Out of a fight, frames still without a record were left behind: the fight ended
+    // on a frame run before the other side's input for it came (Esc, predicted), and
+    // no rollback runs them again. EfzRevival.dll's runFrame makes no record after
+    // such a frame for the rest of the session; this one goes on from the frame after,
+    // so that the comparison, and the warning of a desync, go on (Protocol: those
+    // frames are holes, never compared and never sent).
+    if (syncedFrame_ < frame_ && Scene() != 3)
+        syncedFrame_ = frame_;
     if (frame_ == syncedFrame_ && Remote().size() > (unsigned)frame_ &&
         Local().size() > (unsigned)frame_) {
         SendSync(protocol_->inputs[0][frame_], protocol_->inputs[1][frame_]);
@@ -415,8 +550,10 @@ void Session::SceneChanged()
         SetInputDelay(matchDelay_);
         fightStart_ = frame_;
         confirmedFrame_ = frame_;
-        ApplyPalettes();
+        ApplyPalette(local_, HasPalette(local_));
+        ApplyPalette(remote_, HasPalette(remote_) && !hideRemotePalettes_);
         states_[frame_ % states_.size()].Save();
+        fightTime_ = time(nullptr);
         // Game::setRandomSeed(newRandomSeed()): the replay's random state.
         replaySeed_ = RandState();
         for (int i = 0; i < 2; i++) {
@@ -431,10 +568,13 @@ void Session::SceneChanged()
         replayName_ = ReplayName();
         SetNetplay(true);
         writeReplay_ = true;
+        replayFlushed_ = replaySaved_ = false;
         break;
     case 5:
         if (game->m_winner == 0 || game->m_winner == 1)
             wins_[(int)game->m_winner]++;
+        LogGame();
+        rounds_[0] = rounds_[1] = 0;
         break;
     default:
         break;
@@ -455,6 +595,13 @@ void Session::SaveFrameState()
     if (Scene() != 3)
         return;
     if (CanSave(frame_)) {
+        // ToggleRemotePalettes takes effect on a confirmed frame, so that a rollback
+        // doesn't undo it.
+        if (palettesToggled_) {
+            ApplyPalette(remote_, HasPalette(remote_) && !hideRemotePalettes_);
+            RefreshPalette(remote_);
+            palettesToggled_ = false;
+        }
         SaveState& s = states_[frame_ % states_.size()];
         s.Save();
         s.AddInt(&frame_);
@@ -626,26 +773,30 @@ float Session::PingFrames(int ping)
     return (float)(ping / (kMsPerFrame * 2));
 }
 
-// The input delay keys (Revival's IncreaseInputDelay, DecreaseInputDelay: the keypad's +
-// and -; F10 and F9 too, for keyboards without one), in a fight.
+// OnlineSession::keyPressed: SavePreviousReplay on character select and the results;
+// in a fight IncreaseInputDelay and DecreaseInputDelay (the keypad's + and - as Revival
+// ships; F10 and F9 too, for keyboards without a keypad) and ToggleRemotePalettes.
 void Session::KeyPressed()
 {
-    const unsigned char* keyboard = KeyboardState();
-    auto pressed = [&](int dik) {
-        bool down = (keyboard[dik] & 0x80) != 0;
-        bool edge = down && !keysDown_[dik];
-        keysDown_[dik] = down;
-        return edge;
-    };
-    bool more = pressed(kDikAdd) | pressed(kDikF10);
-    bool less = pressed(kDikSubtract) | pressed(kDikF9);
-    if (Scene() != 3)
+    const revival::Config& ini = Ini();
+    int scene = Scene();
+    if ((scene == 1 || scene == 5) && revival::Pressed(ini.savePreviousReplay)) {
+        replayFlushed_ = true;
+        replaySaved_ |= FlushReplay();
+    }
+    if (scene != 3)
         return;
-    if (more)
+    if (revival::Pressed(ini.increaseInputDelay) || revival::Pressed(kDikF10))
         SetInputDelay(inputDelay_ + 1);
-    if (less) {
+    if (revival::Pressed(ini.decreaseInputDelay) || revival::Pressed(kDikF9)) {
         int minimum = (int)ceil(PingFrames(ping_.maximum)) - maxRollback_;
         SetInputDelay(std::max(inputDelay_ - 1, minimum));
+    }
+    if (revival::Pressed(ini.toggleRemotePalettes)) {
+        hideRemotePalettes_ = !hideRemotePalettes_;
+        if (HasPalette(remote_))
+            palettesToggled_ = true;
+        LogInfo("net", "the opponent's palette %s", hideRemotePalettes_ ? "hidden" : "shown");
     }
 }
 
@@ -693,52 +844,60 @@ void Session::SetNetplay(bool on)
     game->m_replayMode = on ? 2 : 0;
 }
 
-// A player's 40 colours from a palette file (blue, green, red after one byte), from colour
-// irst on (EfzPalettes.cpp's readColors).
-static bool ReadColors(const std::string& name, int first, PALETTEENTRY* colors)
+// applyPalette, as a fight starts: the player's custom palette when EDIT COLOR picked one
+// (this side's from its file, the other's as it sent it), else the colour's own from the
+// character's .dat.
+void Session::ApplyPalette(int player, bool custom)
 {
-    FILE* f = OpenGameFile(name.c_str(), "rb");
-    if (!f)
-        return false;
-    unsigned char rgb[120];
-    bool ok = fseek(f, first * 3 + 1, SEEK_SET) == 0 && fread(rgb, 1, sizeof(rgb), f) == sizeof(rgb);
-    fclose(f);
-    if (!ok)
-        return false;
-    for (int i = 0; i < 40; i++) {
-        colors[i].peRed = rgb[i * 3 + 2];
-        colors[i].peGreen = rgb[i * 3 + 1];
-        colors[i].peBlue = rgb[i * 3];
-        colors[i].peFlags = 0;
-    }
-    return true;
+    ColorPalette palette;
+    memset(palette.data, 0xff, 4); // no palette found
+    palettes_[player].Find(CharacterOf(player), custom, PaletteNumber(player), &palette);
+    int key;
+    memcpy(&key, palette.data, 4);
+    if (key == -1)
+        return;
+    bool customFound = (key >> 16 & 0xf) != 0;
+    LogInfo("net", "P%d's palette: %s, number %d of %s", player + 1,
+            !customFound        ? "the colour's own"
+            : player == local_ ? "custom, this computer's"
+                               : "custom, the one the other side sent",
+            (key & 0xff) + 1, PaletteFolder(key >> 24 & 0xff));
+    CGame* game = G().game;
+    memcpy(&game->m_palette[95 + player * 40], palette.data + 4, 40 * sizeof(PALETTEENTRY));
+    G().graphics->BuildBlendTables(game->m_palette);
 }
 
-// applyPalette for both players as a fight starts: the local player's own palette file
-// when EDIT COLOR picked one (Revival sends it to the other side; this doesn't, so that
-// side shows the colour's own palette), else the character's colour from its .dat. The
-// game loads an EDIT COLOR palette without looking at whether the file is there, and in a
-// game made anew the colours it leaves are black.
-void Session::ApplyPalettes()
+// The palette applied to the screen's at once (Game::refreshPalette).
+void Session::RefreshPalette(int player)
 {
-    CGame* game = G().game;
-    for (int i = 0; i < 2; i++) {
-        CPlayer* p = Player(i);
-        if (!p)
-            continue;
-        std::string name = p->m_name;
-        int number = p->m_paletteIndex;
-        if (number < 0 || number > 5)
-            number = 0;
-        PALETTEENTRY colors[40];
-        bool custom = game->m_editColor[i] != 0 && i == local_;
-        bool ok = custom && ReadColors(name + "\\" + name + std::to_string(number + 1) + ".pal", 0, colors);
-        if (!ok)
-            ok = ReadColors(name + "\\" + name + ".dat", number * 40, colors);
-        if (ok)
-            memcpy(&game->m_palette[95 + i * 40], colors, sizeof(colors));
+    GameObjects o = G();
+    if (PALETTEENTRY* screen = ScreenPalette(o.graphics)) {
+        int start = 95 + player * 40;
+        memcpy(&screen[start], &o.game->m_palette[start], 40 * sizeof(PALETTEENTRY));
     }
-    G().graphics->BuildBlendTables(game->m_palette);
+}
+
+void Session::SendLocalPalette()
+{
+    if (!CanChoosePalette(local_) || !HasPalette(local_))
+        return;
+    ColorPalette palette;
+    if (palettes_[local_].Find(CharacterOf(local_), true, PaletteNumber(local_), &palette))
+        protocol_->SendPalette(palette);
+}
+
+bool Session::DisplayScore() const
+{
+    return Ini().displayScore;
+}
+
+std::string Session::ReplayMessage() const
+{
+    if (!replayFlushed_)
+        return "";
+    if (Ini().saveAllReplays)
+        return "All replays get autosaved";
+    return replaySaved_ ? "Saved replay to disk" : "Failed to save replay";
 }
 
 bool Session::ShowInfo() const
@@ -759,15 +918,7 @@ void Session::MatchLeft()
 
 std::string Session::ReplayName()
 {
-    char stamp[32];
-    time_t now = time(nullptr);
-    tm local;
-#ifdef _WIN32
-    localtime_s(&local, &now);
-#else
-    localtime_r(&now, &local);
-#endif
-    strftime(stamp, sizeof(stamp), "%Y%m%d-%H%M%S", &local);
+    std::string stamp = TimeText(time(nullptr), "%Y%m%d-%H%M%S");
     int c[2];
     for (int i = 0; i < 2; i++) {
         CPlayer* p = nullptr;
@@ -778,13 +929,22 @@ std::string Session::ReplayName()
         }
         c[i] = p ? p->m_charId : -1;
     }
-    return std::string("replay/netplay/") + stamp + " " + FileSafe(protocol_->names[0]) + " (" +
-           CharacterName(c[0]) + ") vs " + FileSafe(protocol_->names[1]) + " (" +
-           CharacterName(c[1]) + ").rep";
+    // <ReplayFolder>\<time> <P1> (<character>) vs <P2> (<character>).rep
+    std::string folder = Ini().replayFolder;
+    if (!folder.empty() && folder.back() != '/' && folder.back() != '\\')
+        folder += "/";
+    return folder + stamp + " " + FileSafe(protocol_->names[0]) + " (" + CharacterName(c[0]) +
+           ") vs " + FileSafe(protocol_->names[1]) + " (" + CharacterName(c[1]) + ").rep";
 }
 
 void Session::ReplayOpen()
 {
+    // openReplayWrite: the last match's replay, never saved, is let go.
+    if (pending_)
+        LogInfo("net", "the previous match's replay is let go (not saved)");
+    pending_ = false;
+    pendingWords_.clear();
+    pendingInputs_.clear();
     replayWords_.clear();
     replayInputs_.clear();
     replayOpen_ = true;
@@ -796,34 +956,127 @@ void Session::ReplayWrite(short value)
         replayWords_.push_back(value);
 }
 
+// The replay as Revival writes it (writeExtendedReplay).
+void Session::WriteReplay(FILE* f, const std::vector<short>& words, uint32_t seed,
+                          const std::vector<FrameInput>& inputs)
+{
+    fwrite(words.data(), 2, words.size(), f);
+    int32_t end[4] = {9999 << 16, 0, 0, 0};
+    for (int i = 0; i < 30; i++)
+        fwrite(end, sizeof(end), 1, f);
+    int32_t offset = (int32_t)ftell(f);
+    int32_t seed32 = (int32_t)seed;
+    int32_t count = (int32_t)inputs.size();
+    int32_t marker = -1;
+    fwrite(&seed32, 4, 1, f);
+    fwrite(&count, 4, 1, f);
+    fwrite(inputs.data(), 2, inputs.size(), f);
+    fwrite(&offset, 4, 1, f);
+    fwrite(&marker, 4, 1, f);
+}
+
 void Session::ReplayClose()
 {
     if (!replayOpen_)
         return;
     replayOpen_ = false;
     std::string name = replayName_.empty() ? "replay/netplay/match.rep" : replayName_;
+    if (!Ini().saveAllReplays) {
+        // closeReplay: kept for SavePreviousReplay.
+        pending_ = true;
+        pendingWords_.swap(replayWords_);
+        pendingInputs_.swap(replayInputs_);
+        pendingSeed_ = replaySeed_;
+        pendingName_ = name;
+        LogInfo("net", "the match's replay is kept until saved (SaveAllReplays = 0)");
+        return;
+    }
     FILE* f = OpenGameFile(name.c_str(), "wb");
     if (!f) {
         LogWarn("net", "can't write the replay %s", name.c_str());
         return;
     }
-    fwrite(replayWords_.data(), 2, replayWords_.size(), f);
-    int32_t end[4] = {9999 << 16, 0, 0, 0};
-    for (int i = 0; i < 30; i++)
-        fwrite(end, sizeof(end), 1, f);
-    int32_t offset = (int32_t)ftell(f);
-    int32_t seed = (int32_t)replaySeed_;
-    int32_t count = (int32_t)replayInputs_.size();
-    int32_t marker = -1;
-    fwrite(&seed, 4, 1, f);
-    fwrite(&count, 4, 1, f);
-    fwrite(replayInputs_.data(), 2, replayInputs_.size(), f);
-    fwrite(&offset, 4, 1, f);
-    fwrite(&marker, 4, 1, f);
+    WriteReplay(f, replayWords_, replaySeed_, replayInputs_);
     fclose(f);
     savedReplay = name;
     LogInfo("net", "replay saved: %s (%u frames)", name.c_str(),
             (unsigned)replayInputs_.size() / 2);
+}
+
+// Game::flushReplay: the replay kept back, saved now.
+bool Session::FlushReplay()
+{
+    if (!pending_ || Ini().saveAllReplays)
+        return false;
+    FILE* f = OpenGameFile(pendingName_.c_str(), "wb");
+    if (!f) {
+        LogWarn("net", "can't write the replay %s", pendingName_.c_str());
+        return false;
+    }
+    WriteReplay(f, pendingWords_, pendingSeed_, pendingInputs_);
+    fclose(f);
+    savedReplay = pendingName_;
+    LogInfo("net", "replay saved: %s (%u frames)", pendingName_.c_str(),
+            (unsigned)pendingInputs_.size() / 2);
+    pending_ = false;
+    pendingWords_.clear();
+    pendingInputs_.clear();
+    return true;
+}
+
+// --- The battle log (OnlineSession::start and sceneChanged's scene 5): a line for the
+// session, then one a game, in Revival's columns.
+
+void Session::OpenBattleLog()
+{
+    battleLog_.clear();
+    const revival::Config& ini = Ini();
+    if (!ini.saveBattleLog || ini.battleLogFile.empty())
+        return;
+    battleLog_ = ini.battleLogFile;
+    FILE* existing = OpenGameFile(battleLog_.c_str(), "rb");
+    bool there = existing != nullptr;
+    if (existing)
+        fclose(existing);
+    FILE* f = OpenGameFile(battleLog_.c_str(), "ab");
+    if (!f) {
+        LogWarn("net", "can't write the battle log %s", battleLog_.c_str());
+        battleLog_.clear();
+        return;
+    }
+    std::string names = Pad(protocol_->names[0], 21, false) + " VS " +
+                        Pad(protocol_->names[1], 21, true);
+    std::string line = (there ? "\n" : "") +
+                       Pad(TimeText(time(nullptr), "%Y/%m/%d %H:%M:%S"), 19, true, true) +
+                       Pad(names, 46, true, true) + "\n";
+    fwrite(line.data(), 1, line.size(), f);
+    fclose(f);
+}
+
+void Session::LogGame()
+{
+    if (battleLog_.empty())
+        return;
+    FILE* f = OpenGameFile(battleLog_.c_str(), "ab");
+    if (!f)
+        return;
+    long elapsed = (long)difftime(time(nullptr), fightTime_);
+    if (elapsed < 0)
+        elapsed = 0;
+    char seconds[8];
+    snprintf(seconds, sizeof(seconds), "%02ld", elapsed % 60);
+    std::string duration = Pad(std::to_string(elapsed / 60), 3, false) + ":" + seconds;
+    std::string characters = Pad(CharacterName(characters_[0]), 21, false) + " VS " +
+                             Pad(CharacterName(characters_[1]), 21, true);
+    std::string line =
+        Pad(TimeText(fightTime_, "%Y/%m/%d %H:%M:%S"), 19, true) + Pad(characters, 46, true) +
+        Pad("Rounds: " + std::to_string(rounds_[0]) + " " + std::to_string(rounds_[1]), 15, true) +
+        Pad("Duration: " + duration, 20, true) +
+        Pad("Score: " + Pad(std::to_string(wins_[0]), 3, false) + " " + std::to_string(wins_[1]),
+            15, true) +
+        "\n";
+    fwrite(line.data(), 1, line.size(), f);
+    fclose(f);
 }
 
 } // namespace netplay

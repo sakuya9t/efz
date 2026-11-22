@@ -3,7 +3,8 @@
 # emulation of the original's floating point gives the same bits there
 # (tests/x87_test.cpp); builds the headless library and tools and runs their tests that
 # need no game data. The compat job runs the compatibility test (tools/compat.py), in
-# the game and headless, on the compatibility pack the repository holds encrypted.
+# the game and headless, and the network test of two native games (tools/nettest.py),
+# on the compatibility pack the repository holds encrypted.
 name: native
 
 on:
@@ -175,3 +176,12 @@ jobs:
         run: |
           EFZ_DIR="$RUNNER_TEMP/efz" EFZ_COMPAT="$RUNNER_TEMP/compat" \
             python tools/compat.py -j 4 check --native build/compat/efz ${{ vars.EFZ_COMPAT_ARGS }}
+      # The network layer's first half (docs/compat.md): two of the build's games in a
+      # netplay match over the loopback, as they are and with lag, their sync records and
+      # replays compared. (The other half, against EfzRevival 1.02h under wine, needs
+      # Revival's files and docker: tools/nettest.py revival, run by hand.)
+      - name: Network test, two native games
+        if: steps.key.outputs.run == 'true'
+        run: |
+          EFZ_DIR="$RUNNER_TEMP/efz" EFZ_COMPAT="$RUNNER_TEMP/compat" \
+            python tools/nettest.py native --native build/compat/efz

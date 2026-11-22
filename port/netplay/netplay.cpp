@@ -4,7 +4,8 @@
 //
 // The screens, drawn over the title with SDL's own small font:
 //   setup    host or join, the address to join, the UDP port, the name, who plays this
-//            side (you, or an agent: agents.h); START
+//            computer's side (you, or an agent: agents.h); START. The sides aren't
+//            chosen: the host draws them at random for each match (Protocol::Start)
 //   connect  waiting for a player, or for the host; then measuring the connection
 //   delay    the input delay to start with (the recommended one chosen)
 //   match    the game runs the match; the screen shows the names, wins, ping and delay
@@ -26,6 +27,7 @@
 #include "../agents.h"
 #include "protocol.h"
 #include "session.h"
+#include "../revival/config.h"
 
 namespace efz {
 namespace netplay {
@@ -46,7 +48,6 @@ enum Row {
     kRowAddress,
     kRowPort,
     kRowName,
-    kRowSide,
     kRowAgent,
     kRowStart,
     kRowBack,
@@ -60,7 +61,6 @@ struct Menu {
     std::string address;
     std::string port = "10800";
     std::string name = "Player";
-    int side = 0; // 0 P1, 1 P2, 2 random
     int agent = -1;        // who plays this side: -1 you, else an agent (agents.h)
     std::string agentFile; // that agent's file name, as netplay.ini keeps it
     std::string error;
@@ -88,10 +88,17 @@ Menu g_menu;
 Protocol g_protocol;
 Session g_session;
 
-// --- Settings, kept in netplay.ini in the save folder between runs.
+// --- Settings, kept in netplay.ini in the save folder between runs. The name and port
+// are EfzRevival.ini's until the screen has set its own; the rest of Revival's netplay
+// settings are EfzRevival.ini's (port/revival/config.h).
 
 void LoadSettings()
 {
+    const revival::Config& ini = revival::GetConfig();
+    if (ini.Has("Network", "Name") && !ini.name.empty())
+        g_menu.name = ini.name;
+    if (ini.Has("Network", "Port") && ini.port > 0 && ini.port <= 65535)
+        g_menu.port = std::to_string(ini.port);
     FILE* f = OpenGameFile("netplay.ini", "rb");
     if (!f)
         return;
@@ -112,8 +119,6 @@ void LoadSettings()
             g_menu.port = value;
         else if (key == "name" && !value.empty())
             g_menu.name = value;
-        else if (key == "side")
-            g_menu.side = std::max(0, std::min(atoi(value.c_str()), 2));
         else if (key == "agent")
             g_menu.agentFile = value;
     }
@@ -125,9 +130,9 @@ void SaveSettings()
     FILE* f = OpenGameFile("netplay.ini", "wb");
     if (!f)
         return;
-    fprintf(f, "mode=%s\naddress=%s\nport=%s\nname=%s\nside=%d\nagent=%s\n",
+    fprintf(f, "mode=%s\naddress=%s\nport=%s\nname=%s\nagent=%s\n",
             g_menu.host ? "host" : "join", g_menu.address.c_str(), g_menu.port.c_str(),
-            g_menu.name.c_str(), g_menu.side, g_menu.agentFile.c_str());
+            g_menu.name.c_str(), g_menu.agentFile.c_str());
     fclose(f);
 }
 
@@ -224,9 +229,12 @@ void Begin()
     s.address = g_menu.address;
     s.port = (uint16_t)port;
     s.name = g_menu.name.empty() ? "Player" : g_menu.name;
-    s.side = g_menu.side;
     s.lagMs = g_menu.lagMs;
     s.jitterMs = g_menu.jitterMs;
+    const revival::Config& ini = revival::GetConfig();
+    s.maxRollback = ini.maxRollback;
+    s.practiceKeys = ini.allowPracticeKeys;
+    s.holePunchingServer = ini.holePunchingServer;
     if (!g_menu.automatic)
         SaveSettings();
     std::string error;
@@ -271,8 +279,6 @@ bool RowShown(int row)
 {
     if (row == kRowAddress)
         return !g_menu.host;
-    if (row == kRowSide)
-        return g_menu.host;
     return true;
 }
 
@@ -301,8 +307,6 @@ void Act(Action a)
             while (!RowShown(g_menu.row));
         } else if ((a == kLeft || a == kRight) && g_menu.row == kRowMode) {
             g_menu.host = !g_menu.host;
-        } else if ((a == kLeft || a == kRight) && g_menu.row == kRowSide) {
-            g_menu.side = (g_menu.side + (a == kLeft ? 2 : 1)) % 3;
         } else if ((a == kLeft || a == kRight) && g_menu.row == kRowAgent) {
             // You, then each agent found.
             int n = AgentCount() + 1;
@@ -499,8 +503,8 @@ void Footer(SDL_Renderer* r, const std::string& text)
 void DrawSetup(SDL_Renderer* r)
 {
     Panel(r, "NET PLAY");
-    static const char* const labels[kRowCount] = {"MODE", "ADDRESS", "PORT", "NAME",
-                                                  "YOUR SIDE", "PLAYED BY", "START", "BACK"};
+    static const char* const labels[kRowCount] = {"MODE",      "ADDRESS", "PORT", "NAME",
+                                                  "PLAYED BY", "START",   "BACK"};
     float y = kPanelY + 64;
     bool blink = (SDL_GetTicks() / 400) % 2 == 0;
     for (int row = 0; row < kRowCount; row++) {
@@ -520,9 +524,6 @@ void DrawSetup(SDL_Renderer* r)
         switch (row) {
         case kRowMode:
             value = g_menu.host ? "< HOST >" : "< JOIN >";
-            break;
-        case kRowSide:
-            value = g_menu.side == 0 ? "< P1 >" : g_menu.side == 1 ? "< P2 >" : "< RANDOM >";
             break;
         case kRowAgent:
             value = g_menu.agent >= 0 ? std::string("< ") + AgentLabel(g_menu.agent) + " >"
@@ -565,7 +566,8 @@ void DrawConnect(SDL_Renderer* r)
             "Give the other player the address on a network you share:",
             "the same router, or a VPN such as Radmin VPN, ZeroTier or",
             "Tailscale. Over the internet without one: your public address",
-            "(the router's), with this UDP port forwarded to this computer.",
+            "(the router's), with this UDP port forwarded to this computer,",
+            "or without forwarding through EfzRevival's hole-punching server.",
         };
         for (const char* line : kHint) {
             Text(r, kPanelX + 24, y, line, 1, kGrey);
@@ -597,6 +599,13 @@ void DrawConnect(SDL_Renderer* r)
             Text(r, kPanelX + 24, y, "Ping " + std::to_string(g_protocol.ping.last) + " ms", 2,
                  kGrey);
     }
+    if (g_protocol.phase == Protocol::kHosting || g_protocol.phase == Protocol::kJoining) {
+        const std::string& server = revival::GetConfig().holePunchingServer;
+        Text(r, kPanelX + 24, kPanelY + kPanelH - 40,
+             server.empty() ? "Hole punching: off (EfzRevival.ini)"
+                            : "Hole punching: " + server + " (EfzRevival.ini)",
+             1, kGrey);
+    }
     Footer(r, "Esc: cancel");
 }
 
@@ -619,6 +628,11 @@ void DrawDelay(SDL_Renderer* r)
     y += 40;
     snprintf(line, sizeof(line), "frames; %d recommended. It can be changed in a fight",
              g_protocol.recommendedDelay);
+    Text(r, 320 - Width(g_protocol.practiceKeys ? "Practice keys F4, F5: on"
+                                                : "Practice keys F4, F5: off", 1) / 2,
+         kPanelY + kPanelH - 40,
+         g_protocol.practiceKeys ? "Practice keys F4, F5: on" : "Practice keys F4, F5: off", 1,
+         kGrey);
     Text(r, 320 - Width(line, 1) / 2, y, line, 1, kGrey);
     y += 12;
     Text(r, 320 - Width("with the keypad's + and - (or F10 and F9).", 1) / 2, y,
@@ -649,12 +663,15 @@ void DrawEnded(SDL_Renderer* r)
 void DrawMatch(SDL_Renderer* r)
 {
     if (g_session.ShowInfo()) {
+        bool score = g_session.DisplayScore();
         for (int p = 0; p < 2; p++) {
             std::string name = g_protocol.names[p];
             if (p == g_protocol.localPlayer && NetplayAgentName())
                 name += std::string(" [agent ") + NetplayAgentName() + "]";
-            std::string text = p == 0 ? "Wins: " + std::to_string(g_session.Wins(0)) + "  " + name
-                                      : name + "  Wins: " + std::to_string(g_session.Wins(1));
+            std::string wins = "Wins: " + std::to_string(g_session.Wins(p));
+            std::string text = !score  ? name
+                               : p == 0 ? wins + "  " + name
+                                        : name + "  " + wins;
             float x = p == 0 ? 10 : 630 - Width(text, 1);
             Text(r, x, 3, text, 1, p == g_protocol.localPlayer ? kTeal : kWhite);
         }
@@ -663,6 +680,9 @@ void DrawMatch(SDL_Renderer* r)
                  g_protocol.sessionPing.last);
         Text(r, 630 - Width(line, 1), 468, line, 1, kWhite);
     }
+    std::string note = g_session.ReplayMessage();
+    if (!note.empty() && g_session.ShowInfo())
+        Text(r, 10, 20, note, 1, kYellow);
     if (g_protocol.desyncFrame >= 0) {
         std::string text = "Out of sync since frame " + std::to_string(g_protocol.desyncFrame);
         Text(r, 320 - Width(text, 1) / 2, 16, text, 1, kRed);
@@ -726,7 +746,6 @@ void InitNetplay(const NetplayOptions& options)
             g_menu.port = std::to_string(options.port);
         if (options.name)
             g_menu.name = options.name;
-        g_menu.side = 0;
         RescanAgents();
         g_menu.agent = -1;
         if (options.agent && (g_menu.agent = FindAgent(options.agent)) < 0) {

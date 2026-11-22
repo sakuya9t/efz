@@ -53,6 +53,12 @@ struct Endpoint {
     std::string ToString() const;
 };
 
+// An endpoint as the launcher puts one in a message (MessagePunch, MessageRedirect): the
+// bytes of a 32-bit Windows boost::asio::ip::udp::endpoint, a sockaddr_in or a
+// sockaddr_in6 (AF_INET 2, AF_INET6 23), 28 bytes.
+std::string RevivalEndpoint(const Endpoint& e);
+bool FromRevivalEndpoint(const std::string& bytes, Endpoint* out);
+
 // "host", "host:port", "1.2.3.4:port", "[v6]:port" or a bare IPv6 address, resolved
 // (getaddrinfo: this can wait on DNS). The port is defaultPort when not given.
 bool Resolve(const std::string& text, uint16_t defaultPort, Endpoint* out, std::string* error);

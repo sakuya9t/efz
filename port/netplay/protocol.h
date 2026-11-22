@@ -11,10 +11,14 @@
 // game's thread for half a second, and the input delay that follows from them would be
 // that much longer.
 //
+// The hole-punching server (EfzRevival.ini's HolePunchingServer) is used as the launcher
+// uses it: the host pings it once, so that it learns the host's address as the internet
+// sees it; a joiner not answered yet asks it (MessagePunch) to tell the host about it, and
+// each side then sends to the address the server gives it, on that port and the nine
+// after it, which opens both sides' NAT to the other.
+//
 // What the launcher does that this doesn't: spectating (a spectator is told that the
-// host doesn't allow it, as Revival's AllowSpectating = false does), the hole-punching
-// server and NAT traversal (the host's port must be reachable), and custom palettes
-// (received ones are ignored, none are sent).
+// host doesn't allow it, as Revival's AllowSpectating = false does).
 #ifndef EFZ_NETPLAY_PROTOCOL_H
 #define EFZ_NETPLAY_PROTOCOL_H
 
@@ -59,8 +63,17 @@ struct SyncBlock {
 
     bool Same(const SyncBlock& o) const;
     std::string ToString() const;
+    // A frame left without a record (Session::RunFrame): frame -1.
+    bool Hole() const { return frame < 0; }
 };
 static_assert(sizeof(SyncBlock) == 0x40, "Revival's SyncBlock is 0x40 bytes");
+
+// A player's palette as MessagePalette carries it (SharedData.h's ColorPalette): which
+// palette (bits 0-7 its number, 16-19 1 for a custom one, 24-31 the character), then its
+// 40 colours (PALETTEENTRY's red, green, blue, flags).
+struct ColorPalette {
+    unsigned char data[0xa4];
+};
 
 // Round trips in milliseconds (SharedData.h's PingStats).
 struct PingStats {
@@ -75,9 +88,9 @@ struct Settings {
     std::string address;    // to join: host[:port]
     uint16_t port = kDefaultPort;
     std::string name = "Player";
-    int side = 0;           // the host's: 0 P1, 1 P2, anything else at random
     int maxRollback = 4;    // MaxRollback, at most 9
     bool practiceKeys = false;
+    std::string holePunchingServer; // "host:port", "" none
     // For tests: every datagram this side sends waits this long first, plus up to
     // `jitterMs` more at random, as on a slow link (so that the rollback runs on one
     // machine too).
@@ -134,8 +147,13 @@ public:
     PingStats sessionPing;
 
     // Play's handleQueueEvent, after each of the session's updates: the local inputs the
-    // opponent hasn't acknowledged, and the session's sync records checked.
+    // opponent hasn't acknowledged, the palette the session gave, and the session's sync
+    // records checked.
     void SendInputs();
+    // The Palette queues: the local player's to send (the session's, every 30 frames of
+    // the menus), and the opponent's as they came, for the session to take.
+    void SendPalette(const ColorPalette& palette);
+    std::vector<ColorPalette> remotePalettes;
     // The session's sync record of a frame, in order (the Sync queue).
     void AddLocalSync(const SyncBlock& block);
     // The first frame on which the two sides' records differed, or -1.
@@ -188,6 +206,7 @@ private:
     void SendQuitAll();
     void SendSync(int frame, int before, int after, const net::Endpoint& to);
     void SendSyncRequest(int count, const net::Endpoint& to);
+    void SendPunch(const net::Endpoint& target, const net::Endpoint& server);
 
     void ReceiveConnectRequest(int game, int version, int role, const std::string& name,
                                bool practiceKeys, const net::Endpoint& from);
@@ -198,6 +217,7 @@ private:
     void ReceiveInput(int ack, int frame, const std::vector<FrameInput>& inputs,
                       const net::Endpoint& from);
     void ReceivePong(const net::Endpoint& from);
+    void ReceivePunch(const net::Endpoint& target);
     void ReceiveTimeout(const net::Endpoint& peer);
 
     Settings settings_;
@@ -206,12 +226,20 @@ private:
     std::vector<Peer> peers_;
     bool hosting_ = false;
     bool connected_ = false;    // ClientConnect's
+    net::Endpoint server_;      // the hole-punching server (peer flag 4), if any
+    int redirects_ = 0;         // receivePunch's: the next of the ten ports to try
+    std::vector<ColorPalette> localPalettes_;
     int pongs_ = 0;             // TestDelay's
     bool chosen_ = false;
     int ack_ = 0;               // Play's: the first local frame the opponent lacks
     std::deque<int> pings_;
+    // Each side's, by frame; frames without one are holes (SyncBlock::Hole).
     std::vector<SyncBlock> localSyncs_;
     std::vector<SyncBlock> remoteSyncs_;
+    int localHoles_ = 0;
+    // Adds `block` at its frame, after holes for the frames before it that have none;
+    // false when that frame has one already.
+    static bool AddSync(std::vector<SyncBlock>* syncs, const SyncBlock& block, int* holes);
     Timer pingTimer_, timeoutTimer_, resendTimer_;
     // Settings::lagMs: datagrams waiting to go, in the order they were sent.
     struct Delayed {

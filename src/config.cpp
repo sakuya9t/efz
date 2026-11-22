@@ -140,8 +140,12 @@ void CReplayFile::OpenWrite(const char* name)
     // A network match's replay: kept by the session, which writes only the frames both
     // players' inputs are known for and saves it under its own name, as EfzRevival's
     // replacement of these methods does; the player's replay slots are left alone.
-    if (efz::g_netplay.active) {
-        efz::g_netplay.replayOpen();
+    if (efz::g_netplay.active || efz::g_revival.tournament) {
+        // (EfzRevival's tournament keeps its replays the same way, in its own folder)
+        if (efz::g_netplay.active)
+            efz::g_netplay.replayOpen();
+        else
+            efz::g_revival.replayOpen();
         m_handle = efz::kNetplayReplay;
         m_eof = FALSE;
         return;
@@ -158,8 +162,10 @@ void CReplayFile::Close()
 {
 #ifdef EFZ_NATIVE
     if (m_handle == efz::kNetplayReplay) {
-        if (efz::g_netplay.replayClose)
+        if (efz::g_netplay.active && efz::g_netplay.replayClose)
             efz::g_netplay.replayClose();
+        else if (efz::g_revival.tournament && efz::g_revival.replayClose)
+            efz::g_revival.replayClose();
         m_handle = NULL;
         return;
     }
@@ -188,6 +194,14 @@ short CReplayFile::Read()
         m_eof = TRUE;
         return 0;
     }
+#ifdef EFZ_NATIVE
+    // EfzRevival's replay, played from its own copy of the inputs, or paused: the word
+    // isn't read (Revival's ReplayFile::read, which counts it read all the same).
+    if (efz::g_revival.replayRead && !efz::g_revival.replayRead()) {
+        m_remaining -= 2;
+        return 0;
+    }
+#endif
     if (!ReadFile(m_handle, &value, 2, &m_read, NULL)) {
         MessageBox(NULL, "リプレイファイルの読み込みに失敗しました。", "確認", MB_OK);
         return 0;
@@ -203,8 +217,10 @@ void CReplayFile::Write(short value)
 
 #ifdef EFZ_NATIVE
     if (m_handle == efz::kNetplayReplay) {
-        if (efz::g_netplay.replayWrite)
+        if (efz::g_netplay.active && efz::g_netplay.replayWrite)
             efz::g_netplay.replayWrite(value);
+        else if (efz::g_revival.tournament && efz::g_revival.replayWrite)
+            efz::g_revival.replayWrite(value);
         return;
     }
 #endif

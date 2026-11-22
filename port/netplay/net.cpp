@@ -155,6 +155,58 @@ std::string Endpoint::ToString() const
     return "[" + std::string(host) + "]:" + std::to_string(Port());
 }
 
+std::string RevivalEndpoint(const Endpoint& e)
+{
+    unsigned char b[28];
+    memset(b, 0, sizeof(b));
+    uint32_t v4;
+    uint16_t port = htons(e.Port());
+    if (AsV4(e, &v4)) {
+        b[0] = 2; // AF_INET, little-endian
+        memcpy(b + 2, &port, 2);
+        memcpy(b + 4, &v4, 4);
+    } else if (e.IsV6()) {
+        const sockaddr_in6* sa = (const sockaddr_in6*)e.sa;
+        b[0] = 23; // Windows' AF_INET6
+        memcpy(b + 2, &port, 2);
+        memcpy(b + 4, &sa->sin6_flowinfo, 4);
+        memcpy(b + 8, &sa->sin6_addr, 16);
+        uint32_t scope = sa->sin6_scope_id;
+        memcpy(b + 24, &scope, 4);
+    }
+    return std::string((const char*)b, sizeof(b));
+}
+
+bool FromRevivalEndpoint(const std::string& bytes, Endpoint* out)
+{
+    if (bytes.size() < 16)
+        return false;
+    const unsigned char* b = (const unsigned char*)bytes.data();
+    int family = b[0] | b[1] << 8;
+    memset(out, 0, sizeof(*out));
+    if (family == 2) {
+        sockaddr_in* sa = (sockaddr_in*)out->sa;
+        sa->sin_family = AF_INET;
+        memcpy(&sa->sin_port, b + 2, 2);
+        memcpy(&sa->sin_addr, b + 4, 4);
+        out->len = sizeof(sockaddr_in);
+        return true;
+    }
+    if (family == 23 && bytes.size() >= 28) {
+        sockaddr_in6* sa = (sockaddr_in6*)out->sa;
+        sa->sin6_family = AF_INET6;
+        memcpy(&sa->sin6_port, b + 2, 2);
+        memcpy(&sa->sin6_flowinfo, b + 4, 4);
+        memcpy(&sa->sin6_addr, b + 8, 16);
+        uint32_t scope;
+        memcpy(&scope, b + 24, 4);
+        sa->sin6_scope_id = scope;
+        out->len = sizeof(sockaddr_in6);
+        return true;
+    }
+    return false;
+}
+
 bool Resolve(const std::string& textIn, uint16_t defaultPort, Endpoint* out, std::string* error)
 {
     if (!StartSockets(error))
