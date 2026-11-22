@@ -27,6 +27,7 @@
 #include "../agents.h"
 #include "protocol.h"
 #include "session.h"
+#include "../revival/config.h"
 
 namespace efz {
 namespace netplay {
@@ -87,10 +88,17 @@ Menu g_menu;
 Protocol g_protocol;
 Session g_session;
 
-// --- Settings, kept in netplay.ini in the save folder between runs.
+// --- Settings, kept in netplay.ini in the save folder between runs. The name and port
+// are EfzRevival.ini's until the screen has set its own; the rest of Revival's netplay
+// settings are EfzRevival.ini's (port/revival/config.h).
 
 void LoadSettings()
 {
+    const revival::Config& ini = revival::GetConfig();
+    if (ini.Has("Network", "Name") && !ini.name.empty())
+        g_menu.name = ini.name;
+    if (ini.Has("Network", "Port") && ini.port > 0 && ini.port <= 65535)
+        g_menu.port = std::to_string(ini.port);
     FILE* f = OpenGameFile("netplay.ini", "rb");
     if (!f)
         return;
@@ -223,6 +231,10 @@ void Begin()
     s.name = g_menu.name.empty() ? "Player" : g_menu.name;
     s.lagMs = g_menu.lagMs;
     s.jitterMs = g_menu.jitterMs;
+    const revival::Config& ini = revival::GetConfig();
+    s.maxRollback = ini.maxRollback;
+    s.practiceKeys = ini.allowPracticeKeys;
+    s.holePunchingServer = ini.holePunchingServer;
     if (!g_menu.automatic)
         SaveSettings();
     std::string error;
@@ -554,7 +566,8 @@ void DrawConnect(SDL_Renderer* r)
             "Give the other player the address on a network you share:",
             "the same router, or a VPN such as Radmin VPN, ZeroTier or",
             "Tailscale. Over the internet without one: your public address",
-            "(the router's), with this UDP port forwarded to this computer.",
+            "(the router's), with this UDP port forwarded to this computer,",
+            "or without forwarding through EfzRevival's hole-punching server.",
         };
         for (const char* line : kHint) {
             Text(r, kPanelX + 24, y, line, 1, kGrey);
@@ -586,6 +599,13 @@ void DrawConnect(SDL_Renderer* r)
             Text(r, kPanelX + 24, y, "Ping " + std::to_string(g_protocol.ping.last) + " ms", 2,
                  kGrey);
     }
+    if (g_protocol.phase == Protocol::kHosting || g_protocol.phase == Protocol::kJoining) {
+        const std::string& server = revival::GetConfig().holePunchingServer;
+        Text(r, kPanelX + 24, kPanelY + kPanelH - 40,
+             server.empty() ? "Hole punching: off (EfzRevival.ini)"
+                            : "Hole punching: " + server + " (EfzRevival.ini)",
+             1, kGrey);
+    }
     Footer(r, "Esc: cancel");
 }
 
@@ -608,6 +628,11 @@ void DrawDelay(SDL_Renderer* r)
     y += 40;
     snprintf(line, sizeof(line), "frames; %d recommended. It can be changed in a fight",
              g_protocol.recommendedDelay);
+    Text(r, 320 - Width(g_protocol.practiceKeys ? "Practice keys F4, F5: on"
+                                                : "Practice keys F4, F5: off", 1) / 2,
+         kPanelY + kPanelH - 40,
+         g_protocol.practiceKeys ? "Practice keys F4, F5: on" : "Practice keys F4, F5: off", 1,
+         kGrey);
     Text(r, 320 - Width(line, 1) / 2, y, line, 1, kGrey);
     y += 12;
     Text(r, 320 - Width("with the keypad's + and - (or F10 and F9).", 1) / 2, y,
@@ -638,12 +663,15 @@ void DrawEnded(SDL_Renderer* r)
 void DrawMatch(SDL_Renderer* r)
 {
     if (g_session.ShowInfo()) {
+        bool score = g_session.DisplayScore();
         for (int p = 0; p < 2; p++) {
             std::string name = g_protocol.names[p];
             if (p == g_protocol.localPlayer && NetplayAgentName())
                 name += std::string(" [agent ") + NetplayAgentName() + "]";
-            std::string text = p == 0 ? "Wins: " + std::to_string(g_session.Wins(0)) + "  " + name
-                                      : name + "  Wins: " + std::to_string(g_session.Wins(1));
+            std::string wins = "Wins: " + std::to_string(g_session.Wins(p));
+            std::string text = !score  ? name
+                               : p == 0 ? wins + "  " + name
+                                        : name + "  " + wins;
             float x = p == 0 ? 10 : 630 - Width(text, 1);
             Text(r, x, 3, text, 1, p == g_protocol.localPlayer ? kTeal : kWhite);
         }
@@ -652,6 +680,9 @@ void DrawMatch(SDL_Renderer* r)
                  g_protocol.sessionPing.last);
         Text(r, 630 - Width(line, 1), 468, line, 1, kWhite);
     }
+    std::string note = g_session.ReplayMessage();
+    if (!note.empty() && g_session.ShowInfo())
+        Text(r, 10, 20, note, 1, kYellow);
     if (g_protocol.desyncFrame >= 0) {
         std::string text = "Out of sync since frame " + std::to_string(g_protocol.desyncFrame);
         Text(r, 320 - Width(text, 1) / 2, 16, text, 1, kRed);

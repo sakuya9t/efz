@@ -320,7 +320,16 @@ checks the same old version's game without its programs.
 EFZ_DIR=... tools/nettest.py native                 # two native games (CI runs this)
 EFZ_DIR=... tools/nettest.py revival                # against efz.exe 4.02 + EfzRevival 1.02h
 EFZ_DIR=... tools/nettest.py revival --lag 60:20    # the same with lag
+EFZ_DIR=... tools/nettest.py internet --remote root@HOST --ssh-key KEY   # over the internet
 ```
+
+`internet` plays the build against a copy of itself on another machine (a server with a
+public address, reached by ssh, which lets UDP from this one in): that one hosting, then
+this one hosting behind its router with nothing forwarded and the other joining through
+`tools/punchserver.py` run there, then the same without the server, which must not
+connect ([netplay.md](netplay.md), "Checking it"). In `revival`, the native end also has
+EDIT COLOR palettes that only it has: when its random keys pick one, Revival's log
+(`logEfz.txt`, `Debug = 1`) must show it found the one sent.
 
 `native` plays two of the build's games against each other over the loopback, once as
 they are and once with 60 ± 20 ms on every datagram (`EFZ_NET_LAG`): end (b) is the
@@ -343,10 +352,11 @@ What was built otherwise than planned above:
   gets `Debug = 1`, no hole-punching server, and another `Port` when it joins (its
   joiner binds its `Port` too, which the host on the same machine has).
 - **Input.** Random presses of P1's controls on both ends (a `key.ini` written for the
-  test: the arrows, X, V, Z; not C, B, which backs out of character select and so out of
-  the match). **The match never ends by itself:** random presses don't KO, and the round
-  never times out in a netplay match (one ran 36,500 frames, nine minutes of game, in
-  one round). So instead: Esc after a while in the first fight (on Revival's end; on the
+  test: the arrows, X, V, Z; not C, B: in a network match it doesn't leave character
+  select, Revival's patch at `0x754c1a`, but it takes a choice back, which keeps character
+  select going past the test's second fight). **The match never ends by itself:** random
+  presses don't KO, and the round never times out in a netplay match (one ran 36,500
+  frames, nine minutes of game, in one round). So instead: Esc after a while in the first fight (on Revival's end; on the
   host's for `native`), both games back to character select, a second fight, and the
   test stops in it. The rounds' and the match's end are not reached.
 - **Latency** only on the native end's datagrams (`EFZ_NET_LAG`): adding it both ways

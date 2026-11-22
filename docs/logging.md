@@ -211,9 +211,13 @@ the gauges in practice, F6 restarts a replay's recording or changes the dummy's 
 F7 its guard, F8 pauses); `pad` for the controls read outside a tick (the demo's "press
 a button"); `cpu` for the CPU's side handed to its combo file and back (`t` the tick it
 happened at, `p` the player, `v` the CPU's again or not: `CPlayer::m_cpu`), which a
-replay of the record does at the same ticks; `anomaly` for the checks. **The end**: why (`match_end`, `escape`,
-`replay_end`, `left`, `exit` when the game quit, `crash`), the winner, rounds won, HP and
-the anomalies' counts.
+replay of the record does at the same ticks; `anomaly` for the checks. **The end**: why
+(`match_end`, `escape`, `replay_end`, `left`, `exit` when the game quit, `crash`, or
+`practice: ...` or `replay: ...` when EfzRevival's tools changed the fight from outside
+the game, a state loaded, the players mirrored, a Revival replay played from its own
+inputs, which a replay of the record couldn't follow: the record stops there,
+[revival-features.md](revival-features.md)), the winner,
+rounds won, HP and the anomalies' counts.
 
 **The state file** (`fight-NNN.state`) has the game's state at the first tick, before any
 input is read: the blocks the hashes are of, pointers zeroed, each as the harness's

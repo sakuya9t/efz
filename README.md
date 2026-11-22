@@ -21,7 +21,15 @@ whole game state with the original's after every tick.
   ([docs/logging.md](docs/logging.md)).
 - **Netplay** ([docs/netplay.md](docs/netplay.md)). NET PLAY on the title hosts or joins
   a match over the network, with rollback. It is EfzRevival 1.02h's own protocol and
-  rules, recovered from its binaries and made native: no launcher, no injected DLL.
+  rules, recovered from its binaries and made native: no launcher, no injected DLL. It
+  plays `efz.exe` with EfzRevival, and through Revival's hole-punching server a host
+  needs no port forwarded.
+- **EfzRevival's practice and more** ([docs/revival-features.md](docs/revival-features.md)).
+  VS PLAYER's training tools (pause, frame step, save states, hit and hurt boxes, the
+  dummy's recording and replay, input display, game speed), the REPLAY menu's controls
+  (pause, step, seek, taking a character over in Revival's replays), the tournament mode,
+  custom music, custom palettes over the network, the battle log: Revival's, read from
+  its own `EfzRevival.ini`.
 - **Agents in the game** ([docs/agents.md](docs/agents.md)). A trained agent, one
   `.efzagent` file, plays a side of VS HUMAN or this computer's side of a network match.
   The game runs it on its own, no Python needed: its network, and its combos, okizeme and
@@ -63,7 +71,8 @@ later (its Build Tools are enough, and bring CMake) or MinGW-w64; on macOS, the 
 command line tools and CMake; on Linux, also the development files of X11 and of ALSA
 or PulseAudio, which SDL3 builds its back ends from. A Linux machine without them builds
 in docker instead, if it has docker. The script says what is missing and how to install
-it. The first build downloads SDL3 and takes a few minutes; `--build-only` only builds.
+it. The first build downloads SDL3 (and libopus, and the music decoders) and takes a few
+minutes; `--build-only` only builds.
 
 The game reads its data from `--data` (a folder with an EFZ 4.02 install, or
 `EFZ_DIR`) and writes `key.ini`, records, replays and screenshots to `--save` (default:
@@ -107,9 +116,23 @@ efz --data DIR --host                       # or from the command line: host on 
 efz --data DIR --join 192.168.1.5          # join it
 ```
 
-Two native games are checked against each other frame by frame. Against `efz.exe` with
-EfzRevival 1.02h, which it is built to play, it hasn't been tried yet
-([docs/netplay.md](docs/netplay.md), "Against EfzRevival 1.02h").
+Two native games are checked against each other frame by frame, against `efz.exe`
+with EfzRevival 1.02h, which it is built to play, under wine, and over the internet,
+through a hole-punching server (`tools/nettest.py`; [docs/netplay.md](docs/netplay.md),
+"Checking it").
+
+### EfzRevival's practice tools, replays and tournament
+
+The game reads EfzRevival's own `EfzRevival.ini` (from the save folder or the game's; a
+Revival player's file works as it is) and has its keys: in VS PLAYER, Space pauses, P
+steps a frame, G and B save and load, Page Up, Page Down and Home show the boxes, H and N
+record and replay the dummy; in the REPLAY menu much the same; F12 turns the music off.
+
+```sh
+efz --data DIR --tournament                 # Revival's offline tournament
+```
+
+All of it, and what each setting does: [docs/revival-features.md](docs/revival-features.md).
 
 ### Playing against an agent
 
@@ -202,6 +225,7 @@ that need no game data, and runs the suite from the encrypted compatibility pack
 | `src/` | The game, recovered: `CPlayer` and the 24 character classes, effects, the scenes, the loaders; Win32 and DirectX in four files of its own ([docs/decomp.md](docs/decomp.md) has a table of them) |
 | `port/` | The native game's platform layer on SDL3, in place of those four files: 32-bit handles for the game's pointers, the original's floating point, the log, crash reports and fight records |
 | `port/netplay/` | Netplay: EfzRevival 1.02h's launcher protocol and online session (rollback) in the game's process, its UDP messages, the NET PLAY screens |
+| `port/revival/` | EfzRevival 1.02h's other features: `EfzRevival.ini`, the practice, replay and tournament sessions, the music |
 | `port/agent/` | Agents in the game: their view of a fight (shared with `efz_env`), their network read from an agent file, their combos, okizeme and pressure planned on copies of the fight |
 | `port/headless/` | The headless platform and the training library `efz_env` (`efz_env.h`), `efz-headless`, `efz-bench` |
 | `python/` | The Python package over `efz_env`: `EfzVecEnv`, action tables, the framework adapters, agent files; examples to train, play, export and unpack |
@@ -220,6 +244,7 @@ that need no game data, and runs the suite from the encrypted compatibility pack
 | [compat.md](docs/compat.md) | The compatibility suite: what it compares, the reference, the rules a change follows, the recorded and network layers |
 | [logging.md](docs/logging.md) | Logs, crash reports and fight records: what is written, the formats, the tools |
 | [netplay.md](docs/netplay.md) | Netplay: playing, the protocol and the session, Revival's rules, how it was checked |
+| [revival-features.md](docs/revival-features.md) | EfzRevival's other features: `EfzRevival.ini`, the practice and replay tools, the tournament, the music |
 | [agents.md](docs/agents.md) | Agents in the game: the agent file, how the game plays it, its planners, over the network |
 | [headless.md](docs/headless.md) | `efz_env`: observations, actions, rewards, save states, speed, the GPU, the API |
 | [training.md](docs/training.md) | Research before training: the frameworks, Hisoutensoku's AIs, EFZ's CPU, human-like agents |
@@ -237,11 +262,11 @@ that need no game data, and runs the suite from the encrypted compatibility pack
    bytes (`compat-reference`).
 2. **The native game** on Windows, macOS and Linux, 64-bit, on SDL3. *Done*, checked
    against the original by the suite in CI.
-3. **Revival's features, native.** *Begun:* rollback netplay is built in; native against
-   native is checked frame by frame. Still to do: a match against `efz.exe` with
-   EfzRevival 1.02h over the network (the network layer of
-   [docs/compat.md](docs/compat.md)), spectating, and the training tools (frame step,
-   save states, hit and hurt boxes).
+3. **Revival's features, native.** *Done* but for spectating: rollback netplay, checked
+   native against native, against `efz.exe` with EfzRevival 1.02h (the network layer of
+   [docs/compat.md](docs/compat.md)) and over the internet with hole punching; palettes,
+   replays and the battle log over the network; the training tools, the replay tools,
+   the tournament, the music ([docs/revival-features.md](docs/revival-features.md)).
 4. **Agents.** *Done:* the headless library, and agents that play in the game, offline
    and over the network. *Under way:* an Ayu that beats the best players within a
    person's limits; then other characters.

@@ -103,6 +103,8 @@ BYTE CScene3::Update()
         // the game goes on to character select (EfzRevival's hook at efz.exe 0x763e50).
         if (efz::g_netplay.active)
             efz::g_netplay.matchLeft();
+        else if (efz::g_revival.tournament)
+            efz::g_revival.matchLeft(); // EfzRevival's tournament, the same
 #endif
         m_leave = 0;
         m_enter = 1;
@@ -128,6 +130,8 @@ BYTE CScene3::Update()
             // The match is over; as above (efz.exe 0x763f04): on to the results.
             if (efz::g_netplay.active)
                 efz::g_netplay.matchLeft();
+            else if (efz::g_revival.tournament)
+                efz::g_revival.matchLeft();
 #endif
             m_leave = 0;
             m_enter = 1;

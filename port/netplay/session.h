@@ -12,7 +12,9 @@
 // more with whatever has arrived. Out of a fight there is no rollback: the menus wait
 // for the remote inputs.
 //
-// Left out, as in protocol.h: custom palettes, the custom BGM folder, the battle log.
+// EfzRevival.ini (port/revival/config.h) decides as it decides Revival's: the input delay
+// keys, ToggleRemotePalettes, DisplayScore, the replays (SaveAllReplays, ReplayFolder,
+// SavePreviousReplay) and the battle log (SaveBattleLog, BattleLogFile).
 #ifndef EFZ_NETPLAY_SESSION_H
 #define EFZ_NETPLAY_SESSION_H
 
@@ -22,6 +24,7 @@
 #include <vector>
 
 #include "protocol.h"
+#include "palettes.h"
 
 namespace efz {
 namespace netplay {
@@ -71,6 +74,9 @@ public:
     bool ShowInfo() const;
     int InputDelay() const { return inputDelay_; }
     int Wins(int player) const { return wins_[player]; }
+    bool DisplayScore() const;
+    // The replay message's line (drawInfo's, at the top left): "" none.
+    std::string ReplayMessage() const;
     int Scene() const;
     // Frames of the game run so far, and real frames since the last one ran.
     int Frame() const { return frame_; }
@@ -102,8 +108,15 @@ private:
     void SendSync(const FrameInput& p1, const FrameInput& p2);
     bool IsMatchOver();
     void SetNetplay(bool on);
-    void ApplyPalettes();
+    void ApplyPalette(int player, bool custom);
+    void SendLocalPalette();
+    void RefreshPalette(int player);
     void KeyPressed();
+    bool FlushReplay();
+    void WriteReplay(FILE* f, const std::vector<short>& words, uint32_t seed,
+                     const std::vector<FrameInput>& inputs);
+    void OpenBattleLog();
+    void LogGame();
     std::map<int, int>& Played(int frame);
     std::map<int, int>& Confirmed(int frame);
     std::string ReplayName();
@@ -135,7 +148,14 @@ private:
     std::map<int, int> soundCounts_;            // to skip when run again
     std::vector<SaveState> states_;             // per frame (60)
     PingStats ping_;
-    bool keysDown_[0x100] = {};
+    // Palettes (OnlineSession's palettes_, hideRemotePalettes_, palettesToggled_)
+    Palettes palettes_[2];
+    bool hideRemotePalettes_ = false;
+    bool palettesToggled_ = false;
+    // The battle log: the file (empty: none), each game's start and the rounds won.
+    std::string battleLog_;
+    time_t fightTime_ = 0;
+    int rounds_[2] = {0, 0};
     // The replay (EfzGame.cpp's): the game's words of the confirmed frames, then both
     // players' inputs for the extended part.
     bool writeReplay_ = true;
@@ -144,6 +164,15 @@ private:
     uint32_t replaySeed_ = 0;
     std::vector<short> replayWords_;
     std::vector<FrameInput> replayInputs_;
+    // SaveAllReplays = 0: the last match's replay, kept until SavePreviousReplay saves it
+    // (Game::closeReplay's pendingReplay_, flushReplay).
+    bool pending_ = false;
+    std::vector<short> pendingWords_;
+    std::vector<FrameInput> pendingInputs_;
+    uint32_t pendingSeed_ = 0;
+    std::string pendingName_;
+    bool replayFlushed_ = false; // SavePreviousReplay pressed since match setup
+    bool replaySaved_ = false;   // and it saved one
 };
 
 } // namespace netplay

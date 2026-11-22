@@ -79,12 +79,17 @@ void MuteSounds(bool muted);
 // MixSounds mixes instead, `frames` stereo samples at `rate` a frame shown.
 void PauseSoundDevice(bool paused);
 void MixSounds(float* out, int frames, int rate);
+// The mixer's lock, for what it plays besides the sound slots (port/revival/music.cpp).
+void LockAudio(bool lock);
 // The keyboard as it is, by DIK_ code (0x80: down), whatever the game is shown of it.
 const unsigned char* KeyboardState();
 // What P1's controls give (CInput::GetInput's bits, left and right together as left),
 // read from the keyboard and controllers whatever the game is shown: the local player's
 // input in a network match, which is played with P1's controls on either side.
 unsigned char LocalControls();
+// The buttons (DIJOYSTATE's 32, 0x80 down) of the controller EfzRevival's keys read: the
+// one P1's A is bound to, else P2's; false when that is the keyboard or not plugged in.
+bool RevivalPadButtons(unsigned char buttons[32]);
 
 // --- Every build's.
 

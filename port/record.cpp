@@ -167,6 +167,8 @@ struct Recorder {
     int fights = 0;
     // The fight scene's visit.
     bool inScene3 = false;
+    // The fight was changed from outside the game (InterruptRecord): no record of it.
+    bool interrupted = false;
     long fightFrame = 0;
     bool started = false;
     long tick = 0;
@@ -1481,6 +1483,7 @@ void EnterFightScene()
     g.pad[0] = g.pad[1] = 0;
     g.paused = 0;
     g.started = false;
+    g.interrupted = false;
     g.tick = 0;
 }
 
@@ -1489,7 +1492,7 @@ void OnTickStart(CScene3* scene)
     if (!g.inScene3)
         EnterFightScene();
     g.fight = scene;
-    if (!g.started) {
+    if (!g.started && !g.interrupted) {
         if (r.active && Replays() && !r.loaded && !r.done) {
             r.loaded = ReplayLoad(scene);
             if (!r.loaded) {
@@ -2387,6 +2390,17 @@ bool RecorderFrameEnd(unsigned char* sceneRef)
     if (left)
         FinishTask(sceneRef);
     return g_tasks.over;
+}
+
+void InterruptRecord(const char* why)
+{
+    if (r.active || !g.inScene3 || g.interrupted)
+        return;
+    g.interrupted = true;
+    if (g.started) {
+        LogInfo("record", "the fight's record ends: %s", why);
+        EndFight(why);
+    }
 }
 
 void SuspendRecorder(bool suspend)

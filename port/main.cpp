@@ -53,8 +53,14 @@
 //   --agent FILE      this computer's side is played by the agent file FILE (NET PLAY's
 //                     PLAYED BY)
 //
-// The REPLAY menu has a page after EXIT, RECORDS: the fight records in the logs folder,
-// each played as the game plays a replay (Esc: back to the menu, F8: pause).
+// The REPLAY menu's Tab shows the fight records in the logs folder, each played as the
+// game plays a replay (Esc: back to the menu, F8: pause).
+//
+// EfzRevival 1.02h's features (docs/revival-features.md), with the settings of its
+// EfzRevival.ini (in the save folder or the game's): the practice tools in VS PLAYER and
+// PRACTICE, the REPLAY menu's controls, the music of its BGMFolder, and
+//   --tournament      its offline tournament: VS PLAYER between [Tournament]'s two
+//                     players, their score, the matches' replays and results
 //
 // Agents (docs/agents.md): an agent file (.efzagent) in the agents folder of the game's
 // folder or of the save folder plays a side of VS HUMAN, chosen on character select (F5
@@ -88,6 +94,10 @@
 #include "agents.h"
 #include "tool.h"
 #include "options.h"
+#include "revival/keys.h"
+#include "revival/music.h"
+#include "revival/local.h"
+#include "revival/config.h"
 
 namespace {
 
@@ -346,7 +356,7 @@ static void Usage(const char* name)
             "[--tool [FILE...]] [--seed N] [--crash-test KIND] [--frames N] [--fast] "
             "[--keys SCRIPT] [--dump DIR] [--dump-every N] "
             "[--host | --join ADDRESS] [--port N] [--name NAME] [--delay N] [--agent FILE] "
-            "[--agent-p1 FILE] [--agent-p2 FILE] [--cpu-combos on|off]\n",
+            "[--agent-p1 FILE] [--agent-p2 FILE] [--cpu-combos on|off] [--tournament]\n",
             name);
 }
 
@@ -361,7 +371,7 @@ int EfzMain(int argc, char** argv)
     bool tool = false;
     int videoScale = 2;
     std::vector<std::string> toolFiles;
-    bool fullscreen = false, fast = false, verbose = false, seeded = false;
+    bool fullscreen = false, fast = false, verbose = false, seeded = false, tournament = false;
     long frames = -1, dumpEvery = 60;
     int record = -1, keep = 20;
     long maxMb = 2048;
@@ -446,6 +456,8 @@ int EfzMain(int argc, char** argv)
             agentOptions.p1 = argv[++i];
         else if (a == "--agent-p2" && more)
             agentOptions.p2 = argv[++i];
+        else if (a == "--tournament")
+            tournament = true;
         else if (a == "--cpu-combos" && more && (std::string(argv[i + 1]) == "on" ||
                                                  std::string(argv[i + 1]) == "off"))
             agentOptions.cpuCombos = std::string(argv[++i]) == "on";
@@ -553,7 +565,19 @@ int EfzMain(int argc, char** argv)
     efz::SetSessionString("video", video ? video : "none");
     efz::SetSessionString("audio", audio ? audio : "none");
     SDL_SetHint(SDL_HINT_RENDER_VSYNC, "0");
-    g_window = SDL_CreateWindow("ETENAL FIGHTER ZERO", 640, 480,
+    // EfzRevival.ini's window (WindowX, WindowY, WindowWidth, WindowHeight) and
+    // SoftwareRendering, out of the compatibility harness and the conversions. Its
+    // BackBufferWidth and BackBufferHeight are its Direct3D renderer's: SDL scales here.
+    bool harnessed = getenv("EFZ_TRACE") != nullptr || converting || !replay.empty();
+    const efz::revival::Config* ini = harnessed ? nullptr : &efz::revival::GetConfig();
+    int windowW = 640, windowH = 480;
+    if (ini && ini->Has("Global", "WindowWidth") && ini->windowWidth >= 160)
+        windowW = ini->windowWidth;
+    if (ini && ini->Has("Global", "WindowHeight") && ini->windowHeight >= 120)
+        windowH = ini->windowHeight;
+    if (ini && ini->softwareRendering)
+        SDL_SetHint(SDL_HINT_RENDER_DRIVER, "software");
+    g_window = SDL_CreateWindow("ETENAL FIGHTER ZERO", windowW, windowH,
                                 SDL_WINDOW_RESIZABLE | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0) |
                                     (converting ? SDL_WINDOW_HIDDEN : 0));
     if (!g_window) {
@@ -561,6 +585,8 @@ int EfzMain(int argc, char** argv)
         efz::EndLog(1);
         return 1;
     }
+    if (ini && ini->Has("Global", "WindowX") && ini->Has("Global", "WindowY") && !fullscreen)
+        SDL_SetWindowPosition(g_window, ini->windowX, ini->windowY);
     SDL_HideCursor();
 
     // rand() seeded from the clock, as the original did, unless --seed says.
@@ -623,12 +649,15 @@ int EfzMain(int argc, char** argv)
         efz::InitAgents(agentOptions);
         efz::InitNetplay(netOptions);
         efz::InitRecords(); // the REPLAY menu's RECORDS page
+        efz::revival::InitMusic(tournament); // EfzRevival.ini's BGMFolder, MuteBGM, ToggleBGM
+        efz::revival::InitLocal(tournament); // its practice, replay and tournament sessions
     }
     efz::StartWatchdog(15);
 
     // 64 frames a second, which the original's timer thread approached by adjusting its
-    // sleep; here each frame starts 1/64 s after the last.
-    const Uint64 frame = SDL_NS_PER_SECOND / 64;
+    // sleep; here each frame starts 1/64 s after the last (or as EfzRevival's IncreaseFPS
+    // and DecreaseFPS have it).
+    Uint64 frame = SDL_NS_PER_SECOND / 64;
     Uint64 next = SDL_GetTicksNS();
     // The scene's visit, for the log: frames, and the time Update took.
     long visitFrames = 0, slowFrames = 0;
@@ -636,6 +665,7 @@ int EfzMain(int argc, char** argv)
     const char* why = nullptr;
     long n = 0;
     for (; !g_quit && n != frames; n++) {
+        frame = (Uint64)(SDL_NS_PER_SECOND / efz::revival::FramesPerSecond());
         for (const ScriptedKey& k : keys) {
             if (k.frame == n)
                 efz::KeyEvent(k.key, k.down);
@@ -643,6 +673,8 @@ int EfzMain(int argc, char** argv)
         efz::PumpEvents();
         if (g_quit)
             break;
+        efz::revival::UpdateKeys(); // EfzRevival.ini's keys, pressed on this frame
+        efz::revival::MusicFrame(); // its BGMFolder, ToggleBGM
         if (TraceQuit(g_scene)) {
             why = "the harness's fight ended";
             break;
@@ -683,6 +715,9 @@ int EfzMain(int argc, char** argv)
         // A record played from the REPLAY menu and paused (F8): its frame shown again, the
         // game not run.
         bool paused = efz::RecordPaused(g_scene);
+        // EfzRevival's practice and replay pause: the frame shown again, not run.
+        if (!paused && !efz::revival::WillRunFrame())
+            paused = true;
         if (!paused) {
             efz::RecorderFrameStart(n, g_scene);
             efz::AgentsFrame();
@@ -701,7 +736,8 @@ int EfzMain(int argc, char** argv)
             if (paused)
                 efz::PresentAgain();
             else
-                g_scene = g_scenes[g_scene]->Update();
+                efz::revival::RunFrame([](void*) { g_scene = g_scenes[g_scene]->Update(); },
+                                       nullptr);
             efz::g_skipDrawing = false;
         }
         static Uint64 shown = 0;

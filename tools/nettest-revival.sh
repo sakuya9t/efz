@@ -109,8 +109,9 @@ log "efz.exe runs (pid $pid): \"$(xdotool getwindowname "$game")\""
 sleep 1
 focus "$game"
 
-# Random presses of P1's controls (key.ini: the arrows, X, V, Z; not C, B, which backs
-# out of character select), and the match's course from the native game's log.
+# Random presses of P1's controls (key.ini: the arrows, X, V, Z; not C, B, which takes a
+# choice on character select back and so keeps it going), and the match's course from the
+# native game's log.
 keys=(Up Down Left Right x v z)
 stage=0
 start=$SECONDS

@@ -11,6 +11,7 @@
 #include "record.h"
 #include "tool.h"
 #include "options.h"
+#include "revival/local.h"
 
 namespace {
 
@@ -103,6 +104,7 @@ void PresentAgain()
     DrawNetplay(g_renderer); // its screens and a match's information, over the frame
     DrawAgents(g_renderer);  // who plays each side of VS HUMAN
     DrawRecords(g_renderer); // the REPLAY menu's records, and the one playing
+    revival::DrawLocal(g_renderer); // EfzRevival's practice and replay overlay, boxes
     DrawOptions(g_renderer); // OPTIONS' CPU COMBO, when written over its row
     DrawTool(g_renderer);    // the replay tool's window
     // For tests: EFZ_DUMP_WINDOW=DIR writes the window as shown, overlays included, every

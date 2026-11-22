@@ -194,6 +194,28 @@ extern NetplayHooks g_netplay;
 // CReplayFile's handle while the session keeps the replay.
 const HANDLE kNetplayReplay = 0xef2e0001u;
 
+// --- EfzRevival's local play (port/revival/, docs/revival-features.md): what the game
+// code asks where EfzRevival 1.02h patches efz.exe for its tournament and its replays.
+// Empty in a build without it (the headless library), and out of those, so that the game
+// is the original's then.
+struct RevivalHooks {
+    // The tournament (--tournament): as in a network match, B on character select doesn't
+    // go back to the title and each side's colour stays from one character select to the
+    // next (Revival's patches at efz.exe 0x754c1a and 0x7599ed); the fight's replay goes to
+    // the hooks below (the tournament's folder) and leaving the fight makes the game VS
+    // HUMAN again (matchLeft, Revival's hooks at 0x763e50 and 0x763f04).
+    bool tournament;
+    void (*matchLeft)();
+    void (*replayOpen)();
+    void (*replayWrite)(short value);
+    void (*replayClose)();
+    // CReplayFile::Read: false while a replay's inputs aren't read from its file (Revival's
+    // readReplay_: an extended replay played from its own copy of the inputs, or paused);
+    // the word is then 0 and the file is left where it is.
+    bool (*replayRead)();
+};
+extern RevivalHooks g_revival;
+
 // --- The REPLAY menu's records (port/records.cpp, docs/logging.md): the menu has two
 // modes, Tab going from one to the other: the game's replays, its pages and slots, as it
 // opens; and the fight records of the logs folder, each played as the game plays a

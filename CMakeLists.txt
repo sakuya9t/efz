@@ -84,6 +84,48 @@ endif()
 # sin, cos and atan2 from this CPU's x87 instead of their emulation (port/x87.cpp): the
 # original's results on this machine exactly, but no longer the same on every machine.
 # For the replay test on x86; GCC or Clang.
+# The custom music's decoders (port/revival/music.cpp, EfzRevival's BGMFolder): dr_mp3,
+# dr_flac and stb_vorbis, each one file.
+set(EFZ_DRLIBS_MP3_COMMIT aec2dd20667f54acfdb66031217df6d240f56c52)  # dr_mp3 0.7.4
+set(EFZ_DRMP3_SHA256 f5c8020eeebb79877184432efdd2651f24869f5bb8f379d45450fd0aed1ee915)
+set(EFZ_DRMP3_HEADER
+    "https://raw.githubusercontent.com/mackron/dr_libs/${EFZ_DRLIBS_MP3_COMMIT}/dr_mp3.h"
+    CACHE STRING "dr_mp3.h (URL or path)")
+set(EFZ_DRLIBS_FLAC_COMMIT 806ee9ada8ca9827b22f76827f739c290f37ba48) # dr_flac 0.13.4
+set(EFZ_DRFLAC_SHA256 b8078eeb5d523502eb7964508cd7ec8450bc79d383bec90aa17fd9e2fefd9c24)
+set(EFZ_DRFLAC_HEADER
+    "https://raw.githubusercontent.com/mackron/dr_libs/${EFZ_DRLIBS_FLAC_COMMIT}/dr_flac.h"
+    CACHE STRING "dr_flac.h (URL or path)")
+set(EFZ_STB_COMMIT 033efa1bcb750136ac98e997d53833b758e0089b)         # stb_vorbis 1.25
+set(EFZ_STBVORBIS_SHA256 97a8febc738e6a29fafc8d8bc557c7f17ad3db7ba6544485f59395cc6008b764)
+set(EFZ_STBVORBIS_SOURCE
+    "https://raw.githubusercontent.com/nothings/stb/${EFZ_STB_COMMIT}/stb_vorbis.c"
+    CACHE STRING "stb_vorbis.c (URL or path)")
+if(EFZ_GAME)
+  include(FetchContent)
+  foreach(dec drmp3 drflac stbvorbis)
+    if(dec STREQUAL "drmp3")
+      set(url ${EFZ_DRMP3_HEADER})
+      set(hash ${EFZ_DRMP3_SHA256})
+      set(name dr_mp3.h)
+    elseif(dec STREQUAL "drflac")
+      set(url ${EFZ_DRFLAC_HEADER})
+      set(hash ${EFZ_DRFLAC_SHA256})
+      set(name dr_flac.h)
+    else()
+      set(url ${EFZ_STBVORBIS_SOURCE})
+      set(hash ${EFZ_STBVORBIS_SHA256})
+      set(name stb_vorbis.c)
+    endif()
+    FetchContent_Declare(${dec} URL "${url}" URL_HASH SHA256=${hash} DOWNLOAD_NO_EXTRACT TRUE)
+    FetchContent_MakeAvailable(${dec})
+    file(GLOB file ${${dec}_SOURCE_DIR}/*)
+    configure_file(${file} ${CMAKE_BINARY_DIR}/decoders/${name} COPYONLY)
+  endforeach()
+  add_library(efz_decoders STATIC ${CMAKE_SOURCE_DIR}/port/revival/decoders.c)
+  target_include_directories(efz_decoders PUBLIC ${CMAKE_BINARY_DIR}/decoders)
+endif()
+
 option(EFZ_HOST_X87 "Take sin, cos and atan2 from this CPU's x87" OFF)
 
 # Line coverage (gcov) of the game, for `tools/compat.py coverage`: what the
@@ -112,8 +154,11 @@ foreach(f main input sound video log crash record records mp4 tool options)
   list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
 endforeach()
 # Netplay: EfzRevival 1.02h's, built in (port/netplay/, docs/netplay.md).
-foreach(f net protocol session titleitem netplay)
+foreach(f net protocol session palettes titleitem netplay)
   list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/netplay/${f}.cpp)
+endforeach()
+foreach(f config keys music local practice replay tournament)
+  list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/revival/${f}.cpp)
 endforeach()
 # Agents playing in the game: on character select and in netplay (docs/agents.md).
 list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/agent/play.cpp)
@@ -151,7 +196,7 @@ if(EFZ_GAME)
   add_library(efz_game OBJECT ${EFZ_GAME_SOURCES} ${EFZ_PORT_SOURCES} ${EFZ_AGENT_SOURCES}
               ${EFZ_SDL_SOURCES})
   efz_game_target(efz_game)
-  target_link_libraries(efz_game PRIVATE SDL3::SDL3 opus efz_minih264)
+  target_link_libraries(efz_game PRIVATE SDL3::SDL3 opus efz_minih264 efz_decoders)
   # The revision and configuration the log names (port/log.cpp), from git at each build.
   add_custom_target(efz-buildinfo
     COMMAND ${CMAKE_COMMAND} -DSOURCE=${CMAKE_SOURCE_DIR} -DOUT=${CMAKE_BINARY_DIR}/efz_build.h
@@ -168,7 +213,7 @@ if(EFZ_GAME)
       set(entry ${CMAKE_SOURCE_DIR}/port/toolmain.cpp)
     endif()
     add_executable(${program} WIN32 MACOSX_BUNDLE ${entry} $<TARGET_OBJECTS:efz_game>)
-    target_link_libraries(${program} PRIVATE SDL3::SDL3 opus efz_minih264)
+    target_link_libraries(${program} PRIVATE SDL3::SDL3 opus efz_minih264 efz_decoders)
     if(EFZ_COVERAGE)
       target_link_options(${program} PRIVATE --coverage)
     endif()
@@ -268,6 +313,15 @@ if(WIN32)
   target_link_libraries(efz-netplay-test PRIVATE ws2_32 iphlpapi)
 endif()
 add_test(NAME netplay COMMAND efz-netplay-test)
+
+# EfzRevival.ini's reading and the launcher's endpoints (tests/revival_test.cpp).
+add_executable(efz-revival-test tests/revival_test.cpp port/revival/config.cpp
+               port/netplay/net.cpp)
+target_include_directories(efz-revival-test PRIVATE port)
+if(WIN32)
+  target_link_libraries(efz-revival-test PRIVATE ws2_32 iphlpapi)
+endif()
+add_test(NAME revival COMMAND efz-revival-test)
 
 # A crash or a hang must leave a report (port/crash.cpp, docs/logging.md): the game
 # crashes or hangs on purpose, which needs no game data.

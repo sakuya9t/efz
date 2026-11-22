@@ -14,6 +14,7 @@
 #include "netplay.h"
 #include "record.h"
 #include "agents.h"
+#include "revival/local.h"
 
 namespace {
 
@@ -128,6 +129,9 @@ struct Keyboard : IDirectInputDevice7 {
             return DI_OK;
         }
         memcpy(data, g_keys, n);
+        // EfzRevival's local play: the fight's function keys and Esc as its session has
+        // them (a replay's, the tournament's), before the record notes what the fight saw.
+        efz::revival::FightKeys((unsigned char*)data, n);
         efz::FilterKeyboard((unsigned char*)data, n); // recorded, or a replay's
         return DI_OK;
     }
@@ -235,6 +239,23 @@ unsigned char LocalControls()
     if ((result & 2) && (result & 1))
         result &= ~1;
     return result;
+}
+
+bool RevivalPadButtons(unsigned char buttons[32])
+{
+    if (!g_input)
+        return false;
+    // EfzRevival.cpp's setup: the device byte of P1's binding of A, else of P2's.
+    int device = (g_input->m_bindings[0][4] >> 8) & 0xf;
+    if (device == 0)
+        device = (g_input->m_bindings[1][4] >> 8) & 0xf;
+    if (device < 1 || device > 2 || !g_input->m_joysticks[device - 1])
+        return false;
+    DIJOYSTATE st;
+    memset(&st, 0, sizeof(st));
+    g_input->m_joysticks[device - 1]->GetDeviceState(sizeof(st), &st);
+    memcpy(buttons, st.rgbButtons, 32);
+    return true;
 }
 
 // Opens controllers into the free joystick slots and closes the ones unplugged.
@@ -400,8 +421,12 @@ BYTE CInput::GetInput(BYTE player)
     }
     // An agent's side (out of netplay, where the session takes this computer's input from
     // the agent itself).
-    if (!efz::g_netplay.active)
+    if (!efz::g_netplay.active) {
         efz::AgentInput(player, &result);
+        // EfzRevival's local play: the dummy's recording and replay, the input delay, an
+        // extended replay's inputs, the tournament's walk through the title.
+        efz::revival::Input(player, &result);
+    }
     efz::NoteInput(player, result);
     // A network match: the input of this frame for that player, local or remote, in
     // place of the controls (EfzRevival's hook at the end of CInput::GetInput, efz.exe
