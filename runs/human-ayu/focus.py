@@ -27,6 +27,17 @@ meant to be good at, by tactics.py's definitions, for finetune.py --focus.
     November), which learns by the game's own reward what to do next. What a combo that
     lets its victim go and a pressure that does not hold cost the agent.
 
+'press': pressure. A move of its own that the opponent guards (a guard of the opponent's
+    touched; not a recoil guard) adds PRESS_CONTACT of `coef`, and a hit of its own that
+    begins the opponent's hit reaction within PRESS_WINDOW steps of such a guard adds
+    `coef`: a string that opens the guard, or catches what leaves it. Why (the user's
+    games of 21 November against round 21's agent, "sucks under pressure"): against the
+    league's opponents the agent guards 4 to 7 times a minute and against the user 13 to
+    18; there a move pressed after a guard gets away a third of the time and is hit 14 to
+    19%, against the user it is hit 42% and a jump out 27% (2% get away), and three
+    quarters of the HP the agent loses under the user's pressure it loses by leaving its
+    guard. Nothing in the league holds it in a guard, so nothing there teaches it one.
+
 Each such event adds `coef` to the step's reward (the game's: damage dealt minus taken
 in full bars, so 0.02 is 200 HP's worth). The learner is player 1; the events are read
 from its current view (as the game is, not as it sees it late). `counts` keeps the
@@ -39,17 +50,21 @@ from stable_baselines3.common.vec_env import VecEnvWrapper
 import tactics
 
 ACT_SELF, ACT_OPP = 18, 50
+FRAME_OPP = 51
 HITSTUN_SELF, HITSTUN_OPP = 20, 52
 OBJECTS = [72 + 6 * k for k in range(8)]  # self_obj<k>_active
 SETUP_WINDOW = 30
 WAKE_WINDOW = 8       # steps after a knockdown's end in which a reversal is a wake-up one
 RG_WINDOW = 20        # ... after a recoil guard
 REVERSAL_WINDOW = 40  # steps in which a reversal must hit
-FOCUSES = ('setup', 'charge', 'reversal', 'air', 'out')
+FOCUSES = ('setup', 'charge', 'reversal', 'air', 'out', 'press')
 AIR_SELF, AIR_OPP = 39, 71  # self_airborne, opp_airborne
 DX, X_SELF, X_OPP, GUARDING_SELF = 4, 13, 45, 21
 OUT_WINDOW = 40       # steps after its air recovery begins in which it must not be caught
 RECOVERY = (0x9d, 0x9e)
+PRESS_WINDOW = 60     # steps after the opponent's guard in which a hit is the pressure's
+PRESS_CONTACT = 0.2   # a guard touched, as a share of coef
+PLAIN_GUARDS = [g for g in tactics.GUARDS if g not in tactics.RG]
 CORNER_IN, CORNER_OUT, CORNER_NEAR, CORNER_LEAST = 0.80, 0.68, 220, 20  # evaluate.corner()'s
 
 
@@ -84,8 +99,12 @@ class Focus(VecEnvWrapper):
         self.since_rg = np.full(n, 999)        # ... since a recoil guard
         self.held = np.zeros(n, int)           # steps it has been held in a corner
         self.pressed = np.zeros(n, bool)       # ... and guarded or was hit there
-        self.kinds = dict(recoveries=0, corners=0)
+        self.since_guard = np.full(n, 999)     # ... since the opponent's guard was touched
+        self.kinds = self._kinds()
         self.counts = dict(events=0, steps=0)
+
+    def _kinds(self):
+        return dict(contacts=0, opened=0) if self.focus == 'press' else dict(recoveries=0, corners=0)
 
     def _raw(self):
         return self.venv.env.obs[:, 0]  # EfzSB3VecEnv's game: player 1's current view
@@ -96,15 +115,16 @@ class Focus(VecEnvWrapper):
         self.pending[:] = -1
         self.since_down[:] = 999
         self.since_rg[:] = 999
+        self.since_guard[:] = 999
         self.held[:] = 0
         self.pressed[:] = False
         return obs
 
     def take(self):
         c = dict(self.counts)
-        if self.focus == 'out':
+        if self.focus in ('out', 'press'):
             c.update(self.kinds)
-            self.kinds = dict(recoveries=0, corners=0)
+            self.kinds = self._kinds()
         self.counts = dict(events=0, steps=0)
         return c
 
@@ -135,6 +155,20 @@ class Focus(VecEnvWrapper):
         elif self.focus == 'air':
             hit_opp = (now[:, HITSTUN_OPP] > 0) & ~(prev[:, HITSTUN_OPP] > 0)
             bonus[hit_opp & (now[:, AIR_SELF] > 0) & ~(prev[:, AIR_OPP] > 0)] = self.coef
+        elif self.focus == 'press':
+            o = np.round(now[:, ACT_OPP]).astype(int)
+            guard, guard0 = np.isin(o, PLAIN_GUARDS), np.isin(o0, PLAIN_GUARDS)
+            contact = guard & (~guard0 | (o != o0) | (now[:, FRAME_OPP] < prev[:, FRAME_OPP])) & ~done
+            # (its hit reaction, or a throw's pose: the stun column is up in a guard too)
+            react = ((o >= 0x32) & (o < 0x60)) | np.isin(o, tactics.THROWN)
+            react0 = ((o0 >= 0x32) & (o0 < 0x60)) | np.isin(o0, tactics.THROWN)
+            opened = react & ~react0 & (self.since_guard <= PRESS_WINDOW) & ~done
+            bonus[contact] += self.coef * PRESS_CONTACT
+            bonus[opened] += self.coef
+            self.kinds['contacts'] += int(contact.sum())
+            self.kinds['opened'] += int(opened.sum())
+            self.since_guard = np.where(contact, 0, np.minimum(self.since_guard + 1, 999))
+            self.since_guard[opened | done] = 999
         elif self.focus == 'out':
             react = ((a >= 0x32) & (a < 0x60)) | np.isin(a, tactics.THROWN)
             react0 = (a0 >= 0x32) & (a0 < 0x60)

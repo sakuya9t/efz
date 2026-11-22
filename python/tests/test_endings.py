@@ -491,6 +491,51 @@ class Out(unittest.TestCase):
         self.assertEqual(total, 0.0)
 
 
+@unittest.skipIf(MISSING or NO_FOCUS, f'needs runs/human-ayu and stable-baselines3: {MISSING or NO_FOCUS}')
+class Press(unittest.TestCase):
+    """focus.py's 'press': the opponent's guard touched, and a hit soon after it."""
+
+    def play(self, views):
+        venv = Venv()
+        f = focus.Focus(venv, 'press', coef=0.5)
+        venv.env.obs[0, 0] = views[0]
+        f.reset()
+        total = 0.0
+        for v in views[1:]:
+            venv.env.obs[0, 0] = v
+            total += float(f.step_wait()[1][0])
+        return round(total, 6), f.take()
+
+    def view(self, opp=0, frame=0):
+        v = np.zeros(168, np.float32)
+        v[focus.ACT_OPP], v[focus.FRAME_OPP] = opp, frame
+        return v
+
+    def test_a_guard_touched_pays_a_share_and_a_hit_after_it_in_full(self):
+        free, hit = self.view(0), self.view(0x3b)
+        guard = [self.view(0x97, k) for k in range(8)]
+        total, n = self.play([free] * 3 + guard + [free] * 10)
+        self.assertEqual((total, n['contacts'], n['opened']), (0.5 * focus.PRESS_CONTACT, 1, 0))
+        total, n = self.play([free] * 3 + guard + guard + [free] * 10)  # the guard touched again
+        self.assertEqual((total, n['contacts']), (2 * 0.5 * focus.PRESS_CONTACT, 2))
+        total, n = self.play([free] * 3 + guard + [free] * 10 + [hit] * 5)
+        self.assertEqual((total, n['opened']), (0.5 * focus.PRESS_CONTACT + 0.5, 1))
+        total, n = self.play([free] * 3 + guard + [hit] * 5)            # opened out of the guard
+        self.assertEqual((total, n['opened']), (0.5 * focus.PRESS_CONTACT + 0.5, 1))
+        total, n = self.play([free] * 3 + guard + [self.view(0x64)] * 5)  # thrown out of it
+        self.assertEqual(n['opened'], 1)
+
+    def test_a_hit_with_no_guard_before_it_or_long_after_one_is_not_the_pressure(self):
+        free, hit = self.view(0), self.view(0x3b)
+        guard = [self.view(0x97, k) for k in range(8)]
+        total, n = self.play([free] * 3 + [hit] * 5)
+        self.assertEqual((total, n['opened']), (0.0, 0))
+        total, n = self.play([free] * 3 + guard + [free] * (focus.PRESS_WINDOW + 1) + [hit] * 5)
+        self.assertEqual((total, n['opened']), (0.5 * focus.PRESS_CONTACT, 0))
+        total, n = self.play([free] * 3 + [self.view(0xa8, k) for k in range(8)] + [free] * 5)
+        self.assertEqual((total, n['contacts']), (0.0, 0))             # a recoil guard: not held
+
+
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
 class Corner(unittest.TestCase):
     def test_a_stay_in_the_corner_and_how_it_ends(self):
