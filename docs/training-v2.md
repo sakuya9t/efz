@@ -4446,3 +4446,383 @@ Queued behind round 22's benchmarks: the `planners` drill for round 21's file, f
 time. With its results beside the `combos` drill's (the same opponents without planners),
 the league of both kinds is judged by the rule above: half the community's spread in its
 okizeme (290 HP a minute) and its pressure (340).
+
+## Round 22, judged, and continued (21 November, afternoon)
+
+Round 22 as run: `agent-league22-combos-s1` and `-s2`, two seeds from round 21's average
+(`avg10.zip`), the same league (every trained opponent its file with its character's
+combos), 20.9M steps each, 05:28 to 11:36 side by side. Their own scores against the
+training opponents (two matches each, noisy): seed 1 0.59 0.57 0.57 0.56 0.59 0.60 0.62
+0.64 0.62 0.61; seed 2 0.62 0.58 0.57 0.64 0.63 0.65 0.63 0.69 0.64 0.69 (round 21 ended
+at 0.61).
+
+Their averages as files with round 21's modules (`round22s1`, `round22s2`), beside
+`round21`; opponents at 11 steps, 64 matches a pairing, z against `round21`:
+
+| | `round21` | `round22s1` | z | `round22s2` | z |
+|---|---|---|---|---|---|
+| opponents with combos: wins | 63.1 ±1.7 | 64.3 ±1.7 | +0.5 | 63.8 ±1.7 | +0.3 |
+| ... own HP lost | 71.8 ±0.7 | 71.0 ±0.8 | −0.8 | 70.8 ±0.7 | −1.0 |
+| ... HP ahead a minute | 1,087 ±125 | 1,264 ±140 | +0.9 | 1,295 ±126 | +1.2 |
+| league (no combos): wins | 96.2 ±0.6 | 96.7 ±0.7 | +0.5 | 98.0 ±0.5 | +2.3 |
+| ... own HP lost | 47.0 ±0.8 | 47.4 ±0.8 | +0.4 | 44.1 ±0.8 | −2.6 |
+| ... HP ahead a minute | 5,037 ±123 | 4,835 ±130 | −1.1 | 5,285 ±128 | +1.4 |
+| ... by air, HP a minute | 1,137 ±66 | 1,282 ±60 | +1.6 | 1,306 ±63 | +1.9 |
+| sparring: wins | 90.6 ±1.3 | 90.6 ±1.4 | 0 | 90.6 ±1.6 | 0 |
+| ... own HP lost | 52.3 ±1.3 | 52.4 ±1.2 | 0 | 51.0 ±1.1 | −0.8 |
+| recoil: wins | 88.4 ±1.7 | 91.6 ±1.1 | +1.6 | 94.7 ±1.2 | +3.0 |
+| ... hit after its recoil-guarded moves | 23.8 ±0.8 | 21.5 ±0.8 | −2.0 | 22.1 ±0.8 | −1.5 |
+| level-4 CPU with combos: wins | 42.2 ±6.3 | 35.9 ±5.6 | −0.7 | 40.6 ±5.0 | −0.2 |
+
+Against the opponents with combos the second round added nothing that can be told from
+noise: 63.1 to 64.3 and 63.8 (the two seeds together 64.0 ±1.2: +0.4 errors). Round 21
+took the seven points that were there for a policy that had never been hit that hard;
+a second round of the same did not find more, as these files measure it. (They carry the
+pressure planner, which hides it: without the planners round 22 is worth eleven points
+there. "The planners, off", below.) Seed 2 is better where the opponents have
+no combos (league 98.0%, less HP lost, and the recoil drill 88 to 95%), seed 1 is level
+with round 21 there: a seed is worth about two points of league wins and three of its
+own HP, as much as a round.
+
+By opponent, against the opponents with combos (wins; ±5-7 each):
+
+| | `round20b` | `round21` | `round22s1` | `round22s2` |
+|---|---|---|---|---|
+| Nayuki | 17 | 25 | 36 | 41 |
+| Sayuri | 36 | 39 | 36 | 36 |
+| Kaori | 42 | 56 | 58 | 61 |
+| Mishio | 31 | 58 | 63 | 67 |
+| Mayu | 72 | 59 | 63 | 67 |
+| Kano | 64 | 67 | 73 | 58 |
+| Mizuka | 53 | 69 | 75 | 67 |
+| Doppel Nanase | 69 | 72 | 75 | 67 |
+| Ikumi | 72 | 80 | 66 | 69 |
+| Makoto | 77 | 86 | 72 | 80 |
+| Nanase | 84 | 83 | 92 | 89 |
+
+Nayuki keeps coming up (17, 25, 36-41: where she came by air −3,691 HP a minute to
+−1,626), Mishio too; Sayuri has not moved in three rounds; the others move inside
+their errors. It jumps as often as ever (21 a minute).
+
+Where the HP goes, by situation (HP a minute gained − lost, the mean of the eleven
+opponents; `round22s2`, with `round20b` to `round22s1` in brackets where it moved):
+
+| situation | with combos | without |
+|---|---|---|
+| its okizeme (the opponent down) | 1,443 − 891 = +553 | +1,223 |
+| the opponent's okizeme | +225 | +407 |
+| **its pressure (the opponent guarded)** | **1,543 − 2,137 = −594** (−686, −702, −554) | +504 |
+| the opponent's pressure | +19 | +350 |
+| it came by air | 1,870 − 1,244 = +626 (+21, +434, +447) | +1,306 |
+| the opponent came by air | +374 (+163, +216, +393) | +793 |
+| both in the air | +8 | +307 |
+| on the ground | +83 | +394 |
+
+Every situation is at or above even but one: after the opponent has guarded a move of
+its own, it loses 2,100 HP a minute and gains 1,500, and two rounds against opponents
+with combos have not moved that (the air is what they moved: +21 to +626). Against
+Sayuri it is 1,122 − 3,505, against Mayu 1,170 − 2,954, Kano 1,376 − 2,539, Mishio
+1,272 − 2,478; only Nanase (+1,879) and Ikumi (+193) are above even. Without combos the
+same pressure is +504: by what a loss costs it is hit out of it about as often,
+and each time costs 2,000 HP instead of 1,000. The user's third point of 20 November
+(no more damage from pressure and okizeme when the air does not pay) from the other
+side: its pressure is where an opponent that converts gets its HP. Traced below: it is
+the pressure planner's.
+
+Pick: `agent-league22-combos-s2` (level with round 21 against the opponents with combos;
+ahead on the league, its own HP and the recoil drill). File for the game:
+`agent-league22-combos-s2-round22.efzagent`.
+
+Started 14:57: one seed more of the same league from seed 2's average, so the training
+goes on (the folder is `agent-league23-combos-s1`; it is round 22 continued, not the
+round 23 of "Playing to the opponent's weak areas" above, whose league is new); the
+second place was kept for an arm against the pressure leak, which turned out to need no
+training (below). Its score after four chunks: 0.67 0.69 0.68 0.66.
+
+### The planners, off (21 November, evening)
+
+**The trace.** 24 matches each against Sayuri's, Mayu's and Kano's files with combos
+(`round22s2`; scratch `ptrace.py`), the losses that began within 45 steps of the
+opponent's guard: 3,110, 3,243 and 2,017 HP a minute, against 1,048, 1,079 and 1,296
+gained. What it was doing when hit:
+
+- in no move on the ground (871, 1,705, 630 HP a minute): walking forward or standing
+  (not crouching: 0x1 and 0x0 are 60-80% of it), free for 8-11 steps, 39 px away,
+  hit by a move that had been out 3-6 steps: the opponent's 2A (Sayuri 1,200 HP a
+  minute, Kano 1,234, Mayu 1,085) or Mayu's invincible rising move (1,458). Nothing an
+  11-step player can see coming;
+- having jumped out of its string (Sayuri 838);
+- in the next move of its string, 2C or 2B after a guarded 5B (Kano 924).
+
+The opponents answer 38-48% of its strings with a move and get out (30-36%) more often
+than they are caught (21-28%); each time out is 2,000 HP with combos.
+
+**Whose pressure.** Training has no planner on the agent's side (`assist` none): the
+policy presses by itself there. The file has `pressplan`: after a guarded move the game
+plays a follow-up from people's library, 360 times in those 24 matches against Sayuri.
+People's follow-ups (walk in, press again after a gap) are played against people who
+guard; the league's opponents with combos press 2A in the gap.
+
+**Measured.** Round 22 seed 2's policy with both planners (`round22s2`), without the
+pressure planner (`r22np`: routes, chooser, okiplan, airthrow, rise, risk) and without
+either planner (`r22no`: no okiplan); opponents at 11 steps, 64 matches a pairing, the
+whole suite:
+
+| | both planners | no pressure planner | no planners |
+|---|---|---|---|
+| opponents with combos: wins | 63.8 ±1.7 | 76.4 ±1.7 | 79.5 ±1.5 |
+| ... own HP lost | 70.8 ±0.7 | 62.8 ±0.9 | 60.4 ±0.9 |
+| ... HP ahead a minute | 1,295 ±126 | 2,652 ±152 | 2,794 ±138 |
+| ... HP a combo of its own | 1,683 | 1,882 | 1,877 |
+| league (no combos): wins | 98.0 ±0.5 | 99.1 ±0.3 | 98.3 ±0.5 |
+| ... own HP lost | 44.1 ±0.8 | 37.0 ±0.7 | 37.9 ±0.7 |
+| ... HP ahead a minute | 5,285 ±128 | 6,353 ±128 | 5,895 ±118 |
+| ... rounds won from 3,000 HP behind | 71.1 ±4.2 | 84.3 ±2.7 | 83.6 ±2.6 |
+| sparring: wins | 90.6 ±1.6 | 93.8 ±1.4 | 97.2 ±0.9 |
+| ... own HP lost | 51.0 ±1.1 | 47.4 ±1.2 | 43.7 ±1.2 |
+| recoil: wins | 94.7 ±1.2 | 96.9 ±0.9 | 95.6 ±1.2 |
+| ... HP a minute out of its pressure | 284 ±94 | 1,049 ±100 | 1,089 ±115 |
+| level-4 CPU with combos: wins | 40.6 ±5.0 | 35.9 ±6.4 | 59.4 ±6.4 |
+| ... own HP lost | 83.7 ±1.9 | 83.8 ±1.8 | 79.5 ±2.4 |
+
+Without the pressure planner: 12.6 points of wins against the opponents with combos
+(5.2 errors), eight points less of its HP lost there and seven on the league, its
+pressure in the recoil drill 284 to 1,049 HP a minute; nothing is worse (the CPU is
+inside its error). By opponent with combos: Sayuri 36 to 75, Kano 58 to 88, Makoto 80
+to 95, Nayuki 41 to 56, Mizuka 67 to 83, Mayu 67 to 83, Kaori 61 to 73; Ikumi 69 to 55
+is the one that fell. Its pressure against the four traced: −1,634 HP a minute to +197.
+
+Without the okizeme planner as well: three points more against the opponents with
+combos (1.4 errors), sparring 93.8 to 97.2 (2.0), the CPU with combos 36 to 59 (2.6);
+the league's HP ahead a minute 6,353 to 5,895 (−2.6; its wins 99.1 and 98.3). The
+planned okizeme pays against opponents that cannot make it cost and loses against those
+that can. (On the opponents' side it is the other way about: "Step 2, measured", above:
+the okizeme planner made the league's okizeme as strong as people's.)
+
+**Round 22 again, without planners.** Round 21's policy with the same modules (`r21no`)
+beside `r22no`:
+
+| | round 21 | round 22 (seed 2) | z |
+|---|---|---|---|
+| opponents with combos: wins | 68.5 ±1.5 | 79.5 ±1.5 | +5.2 |
+| ... own HP lost | 67.6 ±0.7 | 60.4 ±0.9 | −6.3 |
+| league (no combos): wins | 97.2 ±0.5 | 98.3 ±0.5 | +1.6 |
+| ... own HP lost | 42.0 ±0.7 | 37.9 ±0.7 | −4.1 |
+
+Nayuki 25 to 66, Sayuri 47 to 78, Mishio 55 to 73, Doppel Nanase 63 to 81, Mizuka 63
+to 75; Ikumi 80 to 64. So the round was worth eleven points against the opponents with
+combos, not one: the planner's losses were what both rounds' files had in common, and
+what the policy had learnt about pressing these opponents was never played. The rounds
+of this league are still paying, and the continuation is worth its time.
+
+**The file.** `round22b`: seed 2's policy with routes, chooser, airthrow, rise and risk,
+no planners (`agent-league22-combos-s2-round22b.efzagent`); `round22` with both planners
+stays beside it for the comparison in the game. Left open, and the reason the planners
+stay in the code:
+
+- every opponent of the suite is a trained model or a script. Against a person who
+  guards a string through, people's follow-ups may be worth what they were built for;
+  the games decide.
+- the planners as a choice by the scorecard ("Playing to the opponent's weak areas",
+  step 3): planned pressure against an opponent that does not answer strings with a
+  move, planned okizeme against one whose rising is weak, the policy's own otherwise.
+  How often its strings are answered with a move is an episode count, the kind of read
+  that is fast.
+
+### Round 22 continued, judged
+
+`agent-league23-combos-s1` (seed 1, ten chunks from round 22 seed 2's average, the same
+league), its average with round 22b's modules (`r23no`) beside round 22's (`r22no`), 64
+matches a pairing:
+
+| | round 22 | continued | z |
+|---|---|---|---|
+| opponents with combos: wins | 79.5% ±1.5 | 78.8% ±1.6 | -0.3 |
+| ... own HP lost | 60.4% | 60.8% | +0.3 |
+| league without combos: wins | 98.3% ±0.5 | 99.0% ±0.4 | +1.1 |
+| ... net HP a minute | 5,895 ±118 | 6,201 ±115 | +1.9 |
+| sparring: wins | 97.2% ±0.9 | 97.2% ±0.8 | 0 |
+| recoil drill: wins | 95.6% ±1.2 | 97.2% ±1.0 | +1.0 |
+| level-4 CPU with combos: wins | 59.4% ±6.4 | 40.6% ±7.9 | -1.8 |
+
+Nothing outside noise: a third round of the same league teaches no more (Sayuri 78 to
+67%, Mizuka 75 to 61%, Mayu 80 to 86%: by opponent it moves both ways). Round 22's
+policy stays the pick, and the next round needs opponents this one has not met.
+
+## The games of 21 November: under pressure
+
+The user (21 November, round 21's file with both planners, session
+`20261121-203817-72c5`): "It relys heavily on air-to-air, and sucks under pressure and
+handle objects." Ten matches, the agent lost all ten (20 November, round 20's file: 7 of
+11): nine with round 21's file and one, the second against Nagamori, with round 20's (the
+game's selector was left on it). Opponents: Nagamori four times, Nanase twice, Kano,
+Sayuri, Ikumi, Shiori. Three of the ten did not play again from their records at first:
+the user pressed a button in a round's intro, which the game starts no move from and the
+headless match did; `from_record.py` now leaves such a press out until it is let go, and
+all ten play again exactly.
+
+One session of one file each: what follows cannot tell round 21's file from the user's
+play that evening (the one match round 20's file played was lost too, -1,393 HP a
+minute).
+
+### By the ledger
+
+HP a minute by the situation an exchange began in, the agent's side (`bench.py record`,
+the errors by jackknife; `h1120`, `h1121` in `bench/`):
+
+| | round 20, 20 Nov (11 matches) | round 21, 21 Nov (9 matches) |
+|---|---|---|
+| all | +594 | -2,330 |
+| the user's okizeme | -219 ±540 | -1,550 ±410 |
+| the user's pressure | -472 ±240 | -1,460 ±380 |
+| the user came by air | +877 ±420 | -89 ±380 |
+| both in the air | +432 ±440 | -426 ±250 |
+| it came by air | +585 ±610 | +733 ±640 |
+| its okizeme | -208 ±400 | +338 ±280 |
+| its pressure | -122 ±420 | -75 ±210 |
+| on the ground | -279 ±260 | +201 ±150 |
+
+The user's three points, counted:
+
+- **The air.** 56% of the HP it takes off the user is taken in the two air situations it
+  gains in (3,610 of 6,490 a minute). It loses 3,270 HP a minute attacking in the air
+  (2,240 the day before, 1,270 on 19 November), 2,070 of them to moves from the ground,
+  2,750 in the open field. 18.8 jumps a minute, as before.
+- **Under pressure.** Of the 1,890 HP a minute it loses there (the losses that began
+  within 45 steps of a guard of its own), 860 are lost in the air or in a jump's start
+  (it jumped out), 605 in a move of its own, 300 opened in its guard and 140 in chip:
+  three quarters by leaving the guard, and 1,300 of them 26 to 60 steps after its last
+  guard: the user lets the string go and hits what comes out. After a guard it jumps 35%
+  of the time (19% the day before): 2% get away, 27% are hit. It presses a move 26%: 27%
+  hit first, 42% are hit. Its strings: 1.8 a minute (3.3), the gap in them 18.5 steps
+  (11).
+- **Objects.** With one of the user's objects out it loses 15,300 HP a minute of that
+  time, without one 6,900; 12,600 and 7,000 on 19 November, 14,100 and 5,900 on the
+  20th: the same weakness in each session. What changed is the share of the time: 31%
+  for 19%, and half of all it lost came with an object out (36%), 2,200 a minute of it
+  in the air (1,090). The measure of 19 November (a hit by an object it started
+  something into) says little of this: 481 ±160 for 351 ±180.
+
+On its rising it loses 2,370 HP a minute (1,290): 790 rising without acting, 530 opened
+in its guard, 550 in the air; the attacker hits first at 40% of its risings (24%).
+
+### Why the league does not teach it
+
+Against the league's opponents (`r22no`, the four drills) the agent guards 4 to 7 times
+a minute; against the user 13 to 18. There a move pressed after a guard hits first 31 to
+37% of the time and is hit 14 to 19%, a jump out is hit 16 to 18%, and the agent's
+balance under their pressure is +8 to +350 HP a minute. Nothing in the league holds it
+in a guard, so what it has learnt to do after one is press or jump, and that is what the
+user punishes. The planners of step 2 above (people's pressure for the league's
+opponents) "do not make pressure" by the other session's measure, for the same reason:
+a model that does not press gives its planner nothing to plan from.
+
+### What is built
+
+**A reward for pressure** (`focus.py`'s `press`, `finetune.py --focus press`): a move of
+the learner's that the opponent guards (a guard touched, not a recoil guard) adds a
+fifth of the coefficient, and a hit that begins the opponent's hit reaction (or a throw)
+within 60 steps of such a guard adds all of it. Exploiters of round 22's agent as the
+game plays it (`round22b.efzagent`, `--vs-native`) are in training with it at 0.05
+(500 HP's worth a hit, 100 a guard), from each character's `exploiter18`, 6M steps
+each: `CHAR/exploiter19`, the eleven characters of the league, four at a time.
+
+**The guard under pressure** (`rise.py`'s `press`, the game's `rise_press`: the same
+code path as the rising's guard by sight). A string (a guard of its own on the ground
+that it sees touched, none in the 36 steps before) is drawn for once; one that is held
+is guarded on by sight, standing under an opponent in the air, from the first view of
+the guard until 36 steps after the last (a new guard starts the count again), or until
+it sees itself or the opponent hit, or the opponent further than 200 pixels for 8 steps.
+Whether a string is held is read from the match: of its exits (a move, or itself in the
+air, seen within 30 steps of a guard in a string not held) those caught (itself hit
+within 50 steps) less those that won (the opponent hit first), an exit, over a prior of
++0.1 counting as 4 exits; none held at -0.05, all at +0.15. Read over the user's three
+sessions as recorded (no string held: `pressread.py` in the scratch folder): -0.11 an
+exit on 19 November (its exits won 33% and were caught 22%: the session its balance
+under pressure was -61), -0.01 on the 20th (-472), +0.13 on the 21st (-1,460), where it
+holds the strings of six of the nine matches by their middle. A first build counted the
+caught alone (21 to 28% against the user, about 17% against the league: too close).
+
+It gives the policy nothing to do from a guard but guard: a throw and a high-low
+guess still open it, and what it should do when the string is over is the policy's.
+Whether holding costs against opponents whose pressure is weak is the league's drills
+to say, and whether it saves anything against pressure is the `exploiter19`s' and the
+user's games.
+
+### The same evening, round 22b's file (no planners)
+
+The user (21 November, session `20261121-212955-6582`, `round22b`): "Similar issue with
+pressure and objects, and it seems losing almost everything about okizeme (air, reverse)
+from r17." Fourteen matches (Mishio three times, Nagamori three, Sayuri, Doppel Nanase,
+Ikumi and Kano twice each), the agent took 6 (round 21's file an hour before: 0 of 9);
+-1,000 HP a minute (-2,330). The user's pressure -437 ±300 (-1,460), the user's okizeme
+-614 ±330 (-1,550), its own pressure +454 ±370 (-75 with the pressure planner, -122 with
+round 20's), and it guarded 21 times a minute (15). With an object out it lost 11,400 HP
+a minute of that time for 6,700 without (28% of the time).
+
+Its okizeme, by session against the user (`bench.py record`):
+
+| | 17c, 16 Nov | 18k4, 19 Nov | r20, 20 Nov | r21, 21 Nov | 22b, 21 Nov |
+|---|---|---|---|---|---|
+| the okizeme planner in the file | yes | yes | yes | yes | no |
+| HP a minute, net | +861 | +611 | -208 | +338 | -389 |
+| HP a knockdown | +234 | +120 | -112 | +24 | -304 |
+| it hits first | 38% | 32% | 25% | 32% | 7% |
+| from the air | 55% | 42% | 39% | 46% | 7% |
+| low / high | 29 / 55% | 34 / 33% | 33 / 35% | 31 / 53% | 75 / 6% |
+| cross-up | 6.8% | 2.5% | 4.5% | 3.1% | 0 |
+
+Without the planner the policy's okizeme is a 2A at seven knockdowns in ten, as round
+15's was, and a person guards it. So "The planners, off" above holds for the pressure
+planner and not for the okizeme planner: the suite's opponents answer an okizeme with a
+move (the planner loses to that) and the user with a guard (the policy's own loses to
+that), and the suite could not tell, as that section said. The next file is round 22's
+policy with the okizeme planner and without the pressure planner (the middle column of
+that section's table: 76.4% against the opponents with combos, 99.1% the league, 93.8%
+sparring): `round22c`, with `rise_hold` 30 and `rise_press` 36 beside it, which act in a
+game built with them.
+
+What the table also shows and nothing here explains yet: with the planner in, its
+okizeme was worth less against the user in each file after 17c, with fewer cross-ups and
+less of it from the air.
+
+### The guard on its rising, once it is up
+
+Of the 2,370 HP a minute round 21's file lost on its rising against the user, about
+1,250 were lost 12 to 32 steps after it was up: 670 "rising, not acting", 250 in a move
+pressed there, 330 in a jump begun there. The guard on rising ends where the agent sees
+itself up, which is its delay (11 steps) after it is: in the records the guard is let go
+exactly 11 steps after the rising at four risings in ten, and a move of the attacker's
+that is still out then (a late meaty, Nagamori's hop, a jump-in) hits what its own play
+does next. `rise.py` had the answer (`hold`: the guard goes on by sight while the
+attacker is in a move or in the air within reach, until 8 steps without) and the game's
+code did not: `Rise::hold` (`rise_hold`, steps; `rise_gap`), step for step with
+`rise.py`'s (`test_the_guard_goes_on_once_it_is_up`).
+
+### The two guards against the user's recorded okizeme and strings
+
+A check that needs no opponent: each fight of the two sessions is played again from its
+record, and at each knockdown of the agent's (351) and at each first guard of a string
+(104, none in the 60 steps before) the game is saved and an agent file plays the agent's
+side from there against the inputs the user pressed, the game then put back (`cf.py` in
+the scratch folder; a fresh agent warmed on the 80 frames before each point, so the
+files' reads are forced: every rising guarded, every string held). The user pressed
+those inputs against another agent, so only the first second means anything, and a
+person who met a guard would do something else next: it says what the guards do to the
+okizeme and the strings as they were played, not what they are worth. Round 22's policy
+without planners:
+
+| | recorded | no hold | `hold` 30 | `press` 36 | both |
+|---|---|---|---|---|---|
+| risings, round 21's session (144): hit in the 45 steps after it is up | 26% | 24% | 3% | 15% | 1% |
+| risings, round 22b's session (207) | 16% | 19% | 6% | 14% | 5% |
+| strings, round 21's session (44): hit in the 80 steps from the first guard | 23% | 27% | 27% | 11% | 11% |
+| ... HP lost / dealt a string | 237 / 84 | 289 / 94 | | 136 / 41 | |
+| strings, round 22b's session (60) | 15% | 17% | 17% | 2% | 2% |
+| ... HP lost / dealt a string | 92 / 80 | 74 / 95 | | 32 / 20 | |
+
+The rising's hold closes most of what the okizeme as played hit it with, at no cost
+measured (it deals 16 HP a rising without and 5 with). A string held every time halves
+what it loses and takes away most of what its exits win: -195 HP a string to -95 in
+round 21's session, +21 to -12 in round 22b's, where its exits paid: what the read is
+for (+0.13 an exit in the first session, held; +0.02 in the second, a third held).
