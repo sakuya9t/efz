@@ -444,10 +444,11 @@ void LogRising(const char* who, const Side& s)
                 s.player->RecoilChance(), r.recoilPunished);
     if (r.strings)
         LogInfo("agent", "%s's guard under pressure: %d strings, %d held (%d steps guarded on); "
-                         "%d exits out of the others, %d caught and %d that hit first; the next "
-                         "string held with probability %.2f",
-                who, r.strings, r.stringsHeld, r.pressSteps, r.exits, r.exitsCaught, r.exitsWon,
-                s.player->PressChance());
+                         "it was hit or thrown in %d of them; %d exits out of the others, %d "
+                         "caught and %d that hit first; the next string held with probability "
+                         "%.2f",
+                who, r.strings, r.stringsHeld, r.pressSteps, r.holdsOpened, r.exits, r.exitsCaught,
+                r.exitsWon, s.player->PressChance());
     if (!r.knockdowns)
         return;
     LogInfo("agent", "%s's risings: %d knockdowns, the attacker on it in %d, %d of those "

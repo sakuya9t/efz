@@ -1667,8 +1667,8 @@ void efz_env_agent_press_stats(const EfzAgent* a, int32_t* stats)
     if (!a || !stats)
         return;
     const agent::RiseStats& r = a->player->Rising();
-    int32_t v[7] = {r.strings, r.stringsHeld, r.pressSteps, r.exits, r.exitsCaught,
-                    (int32_t)(a->player->PressChance() * 1000 + 0.5), r.exitsWon};
+    int32_t v[8] = {r.strings, r.stringsHeld, r.pressSteps, r.exits, r.exitsCaught,
+                    (int32_t)(a->player->PressChance() * 1000 + 0.5), r.exitsWon, r.holdsOpened};
     memcpy(stats, v, sizeof(v));
 }
 

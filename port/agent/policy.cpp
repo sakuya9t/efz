@@ -825,6 +825,8 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         rise.pressLost = ToFloat(keys, "rise_press_lost", 0.1f);
         rise.pressLow = ToFloat(keys, "rise_press_low", -0.05f);
         rise.pressHigh = std::max(rise.pressLow + 1e-6f, ToFloat(keys, "rise_press_high", 0.15f));
+        rise.pressOpen = ToFloat(keys, "rise_press_open", 0.15f);
+        rise.pressFree = std::min(1.0f, std::max(0.0f, ToFloat(keys, "rise_press_free", 0.34f)));
         rise.punishNear = std::max(0.0f, ToFloat(keys, "rise_recoil_punish_near", 48));
         rise.punishAt = std::max(0, ToInt(keys, "rise_recoil_punish_at", 22));
         // rise_recoil_punish: "byte,byte,..." (control bytes, hex or decimal)
@@ -1095,7 +1097,7 @@ void Player::Reset()
     recoilWatch_ = 0;
     riseMine_ = punishOn_ = false;
     pressLeft_ = pressFar_ = pressWatch_ = 0;
-    pressHeld_ = pressExit_ = false;
+    pressHeld_ = pressExit_ = pressCounted_ = false;
     pressSince_ = 10000;
     if (risen_) { // (once a match: a fight's end and the next one's start both come here)
         riseSeen_ *= policy_->rise.decay;
@@ -1104,6 +1106,8 @@ void Player::Reset()
         recoilOn_ *= policy_->rise.decay;
         pressSeen_ *= policy_->rise.decay;
         pressOn_ *= policy_->rise.decay;
+        pressHolds_ *= policy_->rise.decay;
+        pressOpened_ *= policy_->rise.decay;
         risen_ = false;
     }
     rise_ = RiseStats();
@@ -1166,7 +1170,9 @@ double Player::PressChance() const
 {
     const Rise& r = policy_->rise;
     double rate = ((double)r.pressPrior * r.pressLost + pressOn_) / (r.pressPrior + pressSeen_);
-    return std::min(1.0, std::max(0.0, (rate - r.pressLow) / ((double)r.pressHigh - r.pressLow)));
+    rate -= ((double)r.pressPrior * r.pressOpen + pressOpened_) / (r.pressPrior + pressHolds_);
+    double chance = std::min(1.0, std::max(0.0, (rate - r.pressLow) / ((double)r.pressHigh - r.pressLow)));
+    return std::min(chance, 1.0 - (double)r.pressFree);
 }
 
 // rise.py's Rise.pressed: the strings, the held one's steps, and what came of the exits.
@@ -1192,10 +1198,16 @@ void Player::PressWatch(const float* v, int a, bool down)
             pressWatch_--;
         }
     }
+    if (hit && pressHeld_ && !pressCounted_ && pressSince_ <= r.press) {
+        pressCounted_ = true; // hit or thrown in a held string: what holding cost
+        pressOpened_ += 1;
+        rise_.holdsOpened++;
+    }
     if (guard && !over) {
-        if (pressSince_ > r.press) { // a new string: held or not, by the exits before
+        if (pressSince_ > r.press) { // a new string: held or not, by the ones before
             pressHeld_ = std::uniform_real_distribution<double>(0.0, 1.0)(rng_) < PressChance();
-            pressExit_ = false;
+            pressExit_ = pressCounted_ = false;
+            pressHolds_ += pressHeld_;
             rise_.strings++;
             rise_.stringsHeld += pressHeld_;
         }

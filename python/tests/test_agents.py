@@ -1793,7 +1793,7 @@ class RiseAsRisePy(unittest.TestCase):
                 theirs.append(m.act(0, ctx))
             return got, own, stats, theirs, dict(m.stats(), chance=m.press_chance(0))
 
-        held = dict(press_low=-1.0, press_high=0.0)   # every string held
+        held = dict(press_low=-1.0, press_high=0.0, press_free=0, press_open=0)   # every string held
         let = dict(press_low=2.0, press_high=3.0)     # none
         lead = [(8, 0, 60, False, 0, 0), (6, GUARD, 60, False, ATTACK, 0)]
         cases = dict(
@@ -1843,18 +1843,38 @@ class RiseAsRisePy(unittest.TestCase):
         # 0.44, which holds (0.44 - 0.3) / 0.5 of the next strings (none before it: no
         # draw's luck); two caught and one that won, (1.2 + 1) / 7.
         got, own, stats, theirs, counts = both(caught, press_low=0.3, press_high=0.8, press_lost=0.3,
-                                               press_prior=4)
+                                               press_prior=4, press_open=0, press_free=0)
         self.assertEqual((stats['rise_exits_caught'], counts['exits_caught']), (1, 1))
         self.assertAlmostEqual(counts['chance'], (2.2 / 5 - 0.3) / 0.5, places=6)
         self.assertEqual(stats['rise_press_chance'], round(1000 * counts['chance']))
         # Three caught and one that won, over a prior of -0.2: 0.04, -0.13, 0.03, then
         # (-0.8 + 3 - 1) / 8 = 0.15 (no string held on the way: none above press_low).
         got, own, stats, theirs, counts = both(caught + quiet + away + quiet + caught + quiet + caught,
-                                               press_lost=-0.2, press_low=0.1, press_high=0.8, press_prior=4)
+                                               press_lost=-0.2, press_low=0.1, press_high=0.8, press_prior=4,
+                                               press_open=0, press_free=0)
         self.assertEqual((stats['rise_exits'], stats['rise_exits_caught'], stats['rise_exits_won']), (4, 3, 1))
         self.assertEqual((counts['exits'], counts['exits_caught'], counts['exits_won']), (4, 3, 1))
         self.assertAlmostEqual(counts['chance'], (1.2 / 8 - 0.1) / 0.7, places=6)
         self.assertEqual(stats['rise_press_chance'], round(1000 * counts['chance']))
+        # What holding costs: a held string it is not hit in, one it is hit in, one it is
+        # thrown in after the guard; over the holds' prior (0.5, as 4): 0.5, 0.4, 0.5 as
+        # each is drawn for (every one held: 1.0 less that, between -0.5 and 0.5), then
+        # (2 + 2) / 7; then the share kept free.
+        opened = lead + [(6, HIT, 60, False, ATTACK, 700), (40, 0, 300, False, 0, 0)]
+        thrown = lead + [(8, 0, 60, False, 0, 0), (6, 0x64, 60, False, 0xdd, 600), (40, 0, 300, False, 0, 0)]
+        clean = lead + [(40, 0, 300, False, 0, 0)]
+        cost = dict(press_lost=1.0, press_open=0.5, press_low=-0.5, press_high=0.5, press_prior=4)
+        for free, chance in ((0, 1.0 - 4 / 7 + 0.5), (0.5, 0.5)):
+            got, own, stats, theirs, counts = both(clean + opened + thrown, press_free=free, **cost)
+            # (each string's draw is at a chance of 1 - press_free: all held with none kept free)
+            if free == 0:
+                self.assertEqual((stats['rise_strings_held'], stats['rise_holds_opened']), (3, 2))
+                self.assertEqual((counts['strings_held'], counts['holds_opened']), (3, 2))
+                self.assertAlmostEqual(counts['chance'], chance, places=6)
+                self.assertEqual(stats['rise_press_chance'], round(1000 * counts['chance']))
+            else:
+                self.assertLessEqual(stats['rise_press_chance'], 500)
+                self.assertLessEqual(counts['chance'], 0.5)
         with tempfile.TemporaryDirectory() as folder:  # the file's defaults
             path, _ = make_model(folder, history=self.HISTORY, delay=d, seed=3)
             out = os.path.join(folder, 'rise.efzagent')
@@ -1862,10 +1882,11 @@ class RiseAsRisePy(unittest.TestCase):
             keys = read_header(out)[1]
             self.assertEqual((keys['rise_press'], keys['rise_press_near'], keys['rise_press_gap'],
                               keys['rise_press_exit'], keys['rise_press_soon'], keys['rise_press_prior'],
-                              keys['rise_press_lost'], keys['rise_press_low'], keys['rise_press_high']),
-                             ('36', '200.0', '8', '30', '50', '4.0', '0.1', '-0.05', '0.15'))
+                              keys['rise_press_lost'], keys['rise_press_low'], keys['rise_press_high'],
+                              keys['rise_press_open'], keys['rise_press_free']),
+                             ('36', '200.0', '8', '30', '50', '4.0', '0.1', '-0.05', '0.15', '0.15', '0.34'))
             native = NativeAgent(out, deterministic=True)
-            self.assertEqual(native.stats()['rise_press_chance'], 750)
+            self.assertEqual(native.stats()['rise_press_chance'], 0)  # (none held at a match's start)
             native.close()
 
     def test_the_same_read_of_the_attacker(self):

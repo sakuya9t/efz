@@ -183,16 +183,27 @@ touched, none seen in the `press` steps before) is drawn for once: one that is h
 guarded on by sight, from the first view of the guard until `press` steps (36) after the
 last one it sees: until it sees itself hit or down, the opponent hit or down, the round
 over, or the opponent further than `press_near` pixels (200) for `press_gap` steps (8).
-Whether a string is held is read from the match, as the rising's guard is: of its exits
-(a move of its own, or itself in the air, seen within `press_exit` steps, 30, of a guard
-in a string not held), those caught (it saw itself hit within `press_soon` steps, 50)
-less those that won (it saw the opponent hit first), an exit, over a prior (`press_lost`,
-0.1, counting as `press_prior` exits, 4); none are held at `press_low` (-0.05), all at
-`press_high` (0.15), in a line between. By evaluate.py's count of the same (a move or a
-jump after a guard: hit, or hit first) the league's opponents with combos stand at -0.06
-(a move wins 32% and is caught 19%, a jump 9% and 16%) and the user's three sessions at
-+0.15 to +0.21: three strings in four are held at a match's start, none against the
-league's after a dozen exits, all against the user.
+Whether a string is held is read from the match, as the rising's guard is: what leaving
+the guard has come to against what holding it has. Of its exits (a move of its own, or
+itself in the air, seen within `press_exit` steps, 30, of a guard in a string not held),
+those caught (it saw itself hit within `press_soon` steps, 50) less those that won (it
+saw the opponent hit first), an exit, over a prior (`press_lost`, 0.1, counting as
+`press_prior` exits, 4); less the share of its held strings in which it saw itself hit
+or thrown while the hold was on, over a prior (`press_open`, 0.15, as `press_prior` held
+strings). None are held where that difference is `press_low` (-0.05), all at
+`press_high` (0.15), in a line between, and never more than 1 - `press_free` (0.34) of
+them: a string in three is its own play's whatever the read says, so that the exits go
+on being read. By evaluate.py's count (a move or a jump after a guard: hit, or hit
+first) the league's opponents with combos stand at -0.06 an exit (a move wins 32% and is
+caught 19%, a jump 9% and 16%) and the user's sessions of 19 to 21 November at +0.15 to
++0.21. No string is held at a match's start.
+
+The first build (the user's games of 22 November, `round22c`) read the exits alone, over
+a prior that held three strings in four, with no share kept free: a held string has no
+exit, so the record that should have let go never filled: 51 of 52 strings held in the
+first two matches (29% of the first in a forced guard), thrown for 627 HP a minute (130
+before), 1,300 HP a minute less dealt; where exits were sampled they came out ahead (33
+exits, 6 caught, 10 that hit first) and it stopped holding.
 
 `plain` (false): the guard alone. The module then never draws its own play's action (no
 super seen coming, no class's draw): a rising it does not guard through is the next
@@ -205,7 +216,7 @@ recoil_counter (0.6), recoil_low (0.3), recoil_high (0.6), recoil_soon (34), rec
 recoil_punish_near (48), recoil_punish_at (22), prior (4), move (150), still (-165), super (-400),
 meaty (0.56), low (0.3), high (0.6), met_prior (2), near (0), fly (200), hold (0), gap (8),
 press (0), press_near (200), press_gap (8), press_exit (30), press_soon (50), press_prior (4),
-press_lost (0.1), press_low (-0.05), press_high (0.15),
+press_lost (0.1), press_open (0.15), press_free (0.34), press_low (-0.05), press_high (0.15),
 temperature (75),
 window (240),
 carry (false: a new match is another opponent; true: the same, the accounts kept and
@@ -301,7 +312,8 @@ class Rise(modules.Module):
                  recoil_counter=0.6, recoil_low=0.3, recoil_high=0.6, recoil_soon=34,
                  recoil_punish='', recoil_punish_near=48.0, recoil_punish_at=22, press=0,
                  press_near=200.0, press_gap=8, press_exit=30, press_soon=50, press_prior=4.0,
-                 press_lost=0.1, press_low=-0.05, press_high=0.15):
+                 press_lost=0.1, press_low=-0.05, press_high=0.15, press_open=0.15,
+                 press_free=0.34):
         # moves: also guard a rising through by the class account (any wake-up move's);
         # measured without a gain, and it takes the wake-up moves that pay with it
         self.moves = moves in (True, 1, 'true', 'True', '1')
@@ -345,6 +357,10 @@ class Rise(modules.Module):
         self.press_soon = int(float(press_soon))
         # the string's read: what leaving the guard has come to (caught less won, an exit)
         self.press_prior, self.press_lost = float(press_prior), float(press_lost)
+        # ... against what holding it has (the held strings opened), and the share of
+        # strings never held
+        self.press_open = float(press_open)
+        self.press_free = min(1.0, max(0.0, float(press_free)))
         self.press_low = float(press_low)
         self.press_high = max(float(press_high), self.press_low + 1e-6)
         self.prior = float(prior)
@@ -361,7 +377,7 @@ class Rise(modules.Module):
                        met_guarded=0, stood=0, held=0, risings=0, attacked=0, landed=0,
                        recoils=0, recoil_steps=0, recoil_cleared=0, recoil_answered=0,
                        recoil_punished=0, strings=0, strings_held=0, press_steps=0, exits=0,
-                       exits_caught=0, exits_won=0)
+                       exits_caught=0, exits_won=0, holds_opened=0)
         self.all = np.zeros((len(ACCOUNTS), 2))  # every match's: [account] -> (wake-ups, swing's sum)
         self.batch(0)
 
@@ -397,6 +413,9 @@ class Rise(modules.Module):
         self.pseen = np.zeros(n)          # this match's exits it saw
         self.pon = np.zeros(n)            # ... and of them, the ones caught less the ones that won
         self.pwatch = np.zeros(n, int)    # steps left of looking for what came of one
+        self.pholds = np.zeros(n)         # this match's held strings
+        self.popen = np.zeros(n)          # ... and of them, the ones it was hit or thrown in
+        self.pcounted = np.zeros(n, bool)  # this held string was counted opened
         self.veto = np.zeros(n, bool)   # this rising is guarded through
         self.asked = np.zeros(n, bool)  # this rising's super was drawn for already
         self.dirs = [[] for _ in range(n)]  # its inputs' directions since the knockdown: (step, direction)
@@ -425,10 +444,12 @@ class Rise(modules.Module):
         self.rwatch[mask] = 0
         self.was_mine[mask] = self.punishing[mask] = False
         self.pressing[mask] = self.pfar[mask] = self.pwatch[mask] = 0
-        self.pheld[mask] = self.pexit[mask] = False
+        self.pheld[mask] = self.pexit[mask] = self.pcounted[mask] = False
         self.psince[mask] = 10000
         self.pseen[mask] *= scale
         self.pon[mask] *= scale
+        self.pholds[mask] *= scale
+        self.popen[mask] *= scale
         self.vy[mask] = np.nan
 
     def worth(self, i):
@@ -463,10 +484,14 @@ class Rise(modules.Module):
 
     def press_chance(self, i):
         """The probability that a string is held (guarded on): by what leaving its guard
-        has come to in this match (caught less won, an exit), over the prior."""
+        has come to in this match (caught less won, an exit) less what holding it has
+        (the held strings opened), each over its prior; never more than 1 - press_free."""
         rate = ((self.press_prior * self.press_lost + self.pon[i]) /
                 (self.press_prior + self.pseen[i]))
-        return float(np.clip((rate - self.press_low) / (self.press_high - self.press_low), 0.0, 1.0))
+        rate -= ((self.press_prior * self.press_open + self.popen[i]) /
+                 (self.press_prior + self.pholds[i]))
+        chance = np.clip((rate - self.press_low) / (self.press_high - self.press_low), 0.0, 1.0)
+        return float(min(chance, 1.0 - self.press_free))
 
     def pressed(self, i, v, a, down):
         """watch()'s part for the guard under pressure: the strings, the held one's
@@ -487,10 +512,15 @@ class Rise(modules.Module):
                 self.pwatch[i] = 0
             else:
                 self.pwatch[i] -= 1
+        if (hit and self.pheld[i] and not self.pcounted[i] and self.psince[i] <= self.press):
+            self.pcounted[i] = True  # hit or thrown in a held string: what holding cost
+            self.popen[i] += 1
+            self.n_['holds_opened'] += 1
         if guard and not over:
-            if self.psince[i] > self.press:  # a new string: held or not, by the exits before
+            if self.psince[i] > self.press:  # a new string: held or not, by the ones before
                 self.pheld[i] = self.rng.random() < self.press_chance(i)
-                self.pexit[i] = False
+                self.pexit[i] = self.pcounted[i] = False
+                self.pholds[i] += int(self.pheld[i])
                 self.n_['strings'] += 1
                 self.n_['strings_held'] += int(self.pheld[i])
             self.psince[i] = 0
@@ -769,7 +799,8 @@ def rise(agent, where, files, options, data):
             'plain', 'land', 'sight', 'recoil', 'recoil_near', 'recoil_gap', 'recoil_press', 'delay', 'recoil_clear', 'recoil_steady', 'recoil_let', 'recoil_prior',
             'recoil_counter', 'recoil_low', 'recoil_high', 'recoil_soon', 'recoil_punish',
             'recoil_punish_near', 'recoil_punish_at', 'press', 'press_near', 'press_gap',
-            'press_exit', 'press_soon', 'press_prior', 'press_lost', 'press_low', 'press_high')
+            'press_exit', 'press_soon', 'press_prior', 'press_lost', 'press_low', 'press_high',
+            'press_open', 'press_free')
     unknown = sorted(set(o) - set(keys))
     if unknown:
         raise ValueError(f"rise: no option {', '.join(unknown)}")

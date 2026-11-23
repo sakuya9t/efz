@@ -451,10 +451,11 @@ EFZ_ENV_API void efz_env_agent_next_match(EfzAgent* agent);
  * recoil guards followed by its punish (rise_recoil_punish); the steps guarded on
  * after it saw itself up (rise_hold). */
 EFZ_ENV_API void efz_env_agent_rise_stats(const EfzAgent* agent, int32_t* stats);
-/* Its guard under pressure (rise_press), 7 numbers: the strings it saw (a guard of its
+/* Its guard under pressure (rise_press), 8 numbers: the strings it saw (a guard of its
  * own touched), those held (guarded on), the steps guarded on, the exits it saw out of
  * strings not held, of them the ones caught, the probability the next string is held,
- * in thousandths, and the exits that won (the opponent hit first). */
+ * in thousandths, the exits that won (the opponent hit first), and the held strings it
+ * was hit or thrown in. */
 EFZ_ENV_API void efz_env_agent_press_stats(const EfzAgent* agent, int32_t* stats);
 /* The agent plays player `side` of environment `index` as it plays in the game: its
  * combos' routes and its okizeme planned on copies of that environment (what the file

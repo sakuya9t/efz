@@ -232,7 +232,7 @@ class Rise(unittest.TestCase):
         return out
 
     def test_a_held_string_is_guarded_on_until_the_opponent_is_away(self):
-        m = self.module(press=20, press_lost=1.0)   # (every string held)
+        m = self.module(press=20, press_lost=1.0, press_free=0, press_open=0)   # (every string held)
         self.assertEqual(m.press_chance(0), 1.0)
         GUARD = 0x97
         out = self.press_steps(m, [(0, 0, 60)] * 3 + [(GUARD, 0xc8, 60)] * 6 + [(0, 0, 60)] * 25)
@@ -254,7 +254,8 @@ class Rise(unittest.TestCase):
         self.assertEqual(m.stats()['strings'], 4)
 
     def test_a_string_is_held_as_often_as_leaving_the_guard_was_caught(self):
-        m = self.module(press=20)
+        self.assertAlmostEqual(self.module(press=20).press_chance(0), 0.0)  # (the defaults: none at a match's start)
+        m = self.module(press=20, press_free=0, press_open=0)
         self.assertAlmostEqual(m.press_chance(0), 0.75, delta=0.01)
         m.rng = type('R', (), dict(random=lambda self: 1.0))()  # (no string held: the exits are seen)
         GUARD, MOVE, HIT = 0x97, 0xcc, 0x3b
@@ -291,6 +292,32 @@ class Rise(unittest.TestCase):
         # a new match keeps nothing without carry
         m.reset()
         self.assertAlmostEqual(m.press_chance(0), 0.75, delta=0.01)
+
+    def test_what_holding_costs_is_counted_and_a_share_of_strings_is_never_held(self):
+        GUARD, HIT, THROWN = 0x97, 0x3b, 0x64
+        quiet = [(0, 0, 60)] * 40
+        # every string held, but for the read: one it is opened in, one it is thrown in, two it is not
+        m = self.module(press=20, press_lost=1.0, press_free=0, press_open=0, press_low=-9, press_high=-8)
+        for after in ([(HIT, 0xc8, 60)] * 5, [(0, 0, 60)] * 5 + [(THROWN, 0xdd, 60)] * 5,
+                      [(0, 0, 60)] * 30, [(0, 0, 60)] * 30 + [(HIT, 0xc8, 60)] * 5):  # (the last: hit after the hold)
+            self.press_steps(m, quiet + [(GUARD, 0xc8, 60)] * 4 + after)
+        s = m.stats()
+        self.assertEqual((s['strings'], s['strings_held'], s['holds_opened'], s['exits']), (4, 4, 2, 0))
+        # the read: the exits' (1.0 over the prior) less the holds' (2 of 4, over the prior's weight 4)
+        m.press_low, m.press_high = -0.05, 0.15
+        self.assertAlmostEqual(m.press_chance(0), 1.0)                      # 1.0 - 0.25: still far above
+        m.press_lost = 0.3
+        self.assertAlmostEqual(m.press_chance(0), (0.3 - 0.25 + 0.05) / 0.2)
+        m.press_free = 0.34
+        m.press_lost = 1.0
+        self.assertAlmostEqual(m.press_chance(0), 0.66)                     # never more than 1 - press_free
+        # the defaults: no string held at a match's start, held once its exits are caught
+        m = self.module(press=20)
+        self.assertAlmostEqual(m.press_chance(0), 0.0)
+        m.pseen[0], m.pon[0] = 6, 4                                         # six exits, four more caught than won
+        self.assertAlmostEqual(m.press_chance(0), 0.66)                     # (0.4 + 4) / 10 - 0.15 = 0.29
+        m.pholds[0], m.popen[0] = 6, 5                                      # ... and five of six held strings opened
+        self.assertEqual(m.press_chance(0), 0.0)                            # 0.44 - 0.56
 
     def test_not_drawn_without_cause_and_a_new_match(self):
         m = self.module(moves=True)

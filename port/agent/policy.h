@@ -231,9 +231,14 @@ struct Rise {
     // in the air, seen within pressExit steps of a guard in a string not held) after
     // which it saw itself hit within pressSoon steps (caught), less those after which it
     // saw the opponent hit first (won), an exit, over a prior (pressLost, counting as
-    // pressPrior exits); none held at pressLow, all at pressHigh.
+    // pressPrior exits); less the share of its held strings in which it saw itself hit
+    // or thrown, over a prior (pressOpen, as pressPrior held strings): none held where
+    // that difference is pressLow, all at pressHigh, and never more than 1 - pressFree
+    // of them (a held string has no exit to read: the first build, with no share kept
+    // free and a prior that held three in four, held 51 of 52 against the user).
     int press = 0, pressGap = 8, pressExit = 30, pressSoon = 50;
     float pressNear = 200, pressPrior = 4, pressLost = 0.1f, pressLow = -0.05f, pressHigh = 0.15f;
+    float pressOpen = 0.15f, pressFree = 0.34f;
 };
 
 // The steps until a player in the air lands, from its height and fall in a view
@@ -303,6 +308,7 @@ struct RiseStats {
     // Rise::press: the strings it saw, those held, the steps guarded on, the exits it
     // saw (out of strings not held) and of them the ones caught and the ones that won
     int strings = 0, stringsHeld = 0, pressSteps = 0, exits = 0, exitsCaught = 0, exitsWon = 0;
+    int holdsOpened = 0; // the held strings it was hit or thrown in
 };
 
 class Policy {
@@ -477,6 +483,7 @@ public:
         riseSeen_ = riseOn_ = 0;
         recoilSeen_ = recoilOn_ = 0;
         pressSeen_ = pressOn_ = 0;
+        pressHolds_ = pressOpened_ = 0;
         risen_ = false;
         std::fill(riskCount_.begin(), riskCount_.end(), 0.0);
         std::fill(riskTotal_.begin(), riskTotal_.end(), 0.0);
@@ -593,6 +600,8 @@ private:
     bool pressExit_ = false;  // this string's exit was counted
     double pressSeen_ = 0, pressOn_ = 0; // the exits it saw; of them, the ones caught less the ones that won
     int pressWatch_ = 0;      // steps left of looking for what came of one
+    double pressHolds_ = 0, pressOpened_ = 0; // its held strings; of them, the ones it was hit or thrown in
+    bool pressCounted_ = false; // this held string was counted opened
     RiseStats rise_;
 
     // Its raw specials (risk.py's Risk).
