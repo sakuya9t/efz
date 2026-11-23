@@ -23,6 +23,11 @@ bool PracticeTools(); // VS PLAYER's and PRACTICE's keys and overlay
 bool ReplayTools();   // the REPLAY menu's
 bool InputDisplay();  // the input display in those
 
+// NATIVE's RECORD CPU FIGHTS (on unless options.ini says otherwise; port/record.cpp asks
+// it): the fight records of every mode; off, only VS HUMAN's fights get theirs of the
+// game's own accord (the records asked for, a .rep's, are made either way).
+bool RecordCpuFights();
+
 } // namespace efz
 
 #endif

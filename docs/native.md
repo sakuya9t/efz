@@ -89,6 +89,7 @@ down choose, left, right or A change, B (or BACK, or Esc) leaves.
 | | PRACTICE TOOLS, REPLAY TOOLS, INPUT DISPLAY: each of those ([revival-features.md](revival-features.md)) | `options.ini` |
 | | MUSIC (`MuteBGM`), HOLE PUNCHING (`HolePunchingServer`: off writes `None`, on the server it had, else Revival's), MAX ROLLBACK, PRACTICE KEYS ONLINE (`AllowPracticeKeys`), WINS ONLINE (`DisplayScore`), SAVE EVERY REPLAY (`SaveAllReplays`), BATTLE LOG (`SaveBattleLog`) | `EfzRevival.ini` |
 | 3 NATIVE | CPU COMBO: the CPU's combos ([agents.md](agents.md)) | `options.ini` |
+| | RECORD CPU FIGHTS: the fight records of ARCADE, VS CPU, PRACTICE, the demo and the replays played; off, only VS HUMAN's fights are recorded ([logging.md](logging.md)) | `options.ini` |
 | | LANGUAGE, RESOLUTION, HD MODE: to come (shown, not changed) | |
 
 `EfzRevival.ini` is changed a line at a time (`port/revival/config.cpp`'s

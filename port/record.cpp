@@ -20,6 +20,7 @@
 #include "record.h"
 #include "agents.h"
 #include "mp4.h"
+#include "options.h"
 
 // src/scene3.cpp: one of F5-F8 is held, so that each press acts once.
 extern int g_fkeyHeld;
@@ -1105,6 +1106,13 @@ void BeginFight(CScene3* scene)
                                       : "");
     if (!g.options.record)
         return;
+    // OPTIONS' RECORD CPU FIGHTS off: of the game's own accord only VS HUMAN's fights are
+    // recorded; a .rep made a record of (kImport) was asked for.
+    if (!RecordCpuFights() && game->m_gameMode != 4 && r.task != kImport) {
+        LogInfo("record", "fight %d not recorded: %s, and RECORD CPU FIGHTS is off", g.fights,
+                ModeName(game->m_gameMode));
+        return;
+    }
 
     char file[320];
     snprintf(file, sizeof(file), "%s.jsonl", g.name);

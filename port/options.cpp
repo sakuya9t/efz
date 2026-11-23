@@ -5,7 +5,8 @@
 //   2 REVIVAL  EfzRevival's settings (docs/revival-features.md): its features offline on
 //              or off, and each of them; the music; the hole-punching server, the
 //              rollback and the rest of its netplay settings
-//   3 NATIVE   the native game's: the CPU's combos (docs/agents.md); the language, the
+//   3 NATIVE   the native game's: the CPU's combos (docs/agents.md); the fight records
+//              of the modes but VS HUMAN (docs/logging.md); the language, the
 //              resolution and HD output, to come
 //
 // Tab, or either side's C (D back), turns the page. Pages 2 and 3 are written over the
@@ -42,6 +43,7 @@ struct Settings {
     bool practice = true;
     bool replay = true;
     bool inputs = true;
+    bool cpuRecords = true; // the fight records of the modes but VS HUMAN
     std::string server; // the hole-punching server last on, while it is off
 };
 Settings g_set;
@@ -53,10 +55,10 @@ void Save()
         LogWarn("options", "cannot write options.ini");
         return;
     }
-    fprintf(f, "cpu_combos=%d\nrevival=%d\npractice_tools=%d\nreplay_tools=%d\ninput_display=%d\n"
-               "hole_punching_server=%s\n",
-            CpuCombos() ? 1 : 0, g_set.revival, g_set.practice, g_set.replay, g_set.inputs,
-            g_set.server.c_str());
+    fprintf(f, "cpu_combos=%d\nrecord_cpu_fights=%d\nrevival=%d\npractice_tools=%d\n"
+               "replay_tools=%d\ninput_display=%d\nhole_punching_server=%s\n",
+            CpuCombos() ? 1 : 0, g_set.cpuRecords, g_set.revival, g_set.practice, g_set.replay,
+            g_set.inputs, g_set.server.c_str());
     fclose(f);
 }
 
@@ -77,6 +79,8 @@ void Load()
         bool on = value == "1";
         if (key == "cpu_combos")
             SetCpuCombos(on);
+        else if (key == "record_cpu_fights")
+            g_set.cpuRecords = on;
         else if (key == "revival")
             g_set.revival = on;
         else if (key == "practice_tools")
@@ -228,6 +232,12 @@ void BuildPages()
          nullptr,
          "ARCADE and VS CPU: the CPU plays its combos from its character's file in "
          "agents/cpu, at its level's share of the best. options.ini."},
+        {"RECORD CPU FIGHTS", [] { return OnOff(g_set.cpuRecords); },
+         [](int) { Toggle(&g_set.cpuRecords, "the records of the fights but VS HUMAN's"); },
+         nullptr,
+         "The fight records (the session's folder in logs, the REPLAY menu's records) of "
+         "ARCADE, VS CPU, PRACTICE, the demo and the replays played. OFF: only VS HUMAN's "
+         "fights are recorded, a person's or an agent's. options.ini."},
         {"LANGUAGE", [] { return std::string("JAPANESE"); }, nullptr, nullptr,
          "The game's text in another language: to come.", true},
         {"RESOLUTION", [] { return std::string("640 X 480"); }, nullptr, nullptr,
@@ -404,9 +414,10 @@ void InitOptions()
     g_options.pages = Pages;
     g_options.shown = Shown;
     g_options.update = Update;
-    LogInfo("options", "options.ini: CPU COMBO %s, EfzRevival's features %s (practice %s, "
-                       "replay %s, input display %s)",
-            CpuCombos() ? "on" : "off", g_set.revival ? "on" : "off",
+    LogInfo("options", "options.ini: CPU COMBO %s, RECORD CPU FIGHTS %s, EfzRevival's "
+                       "features %s (practice %s, replay %s, input display %s)",
+            CpuCombos() ? "on" : "off", g_set.cpuRecords ? "on" : "off",
+            g_set.revival ? "on" : "off",
             g_set.practice ? "on" : "off", g_set.replay ? "on" : "off",
             g_set.inputs ? "on" : "off");
 }
@@ -440,6 +451,11 @@ bool ReplayTools()
 bool InputDisplay()
 {
     return g_set.inputs;
+}
+
+bool RecordCpuFights()
+{
+    return g_set.cpuRecords;
 }
 
 } // namespace efz
