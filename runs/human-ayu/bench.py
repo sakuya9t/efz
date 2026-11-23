@@ -195,6 +195,18 @@ MEASURES = [
      'moves pressed against its pressure that got away'),
     ('gaps: corner left', 'gaps', ('side', 'corner', 'left'), -1, 'corner stays the opponent left on its own there'),
     ('gaps: corner HP', 'gaps', ('side', 'corner', 'dealt'), +1, 'HP dealt a corner stay there'),
+    ('gaps: corner share', 'gaps', ('side', 'corner', 'share'), +1,
+     'the share of the match it has the opponent in a corner there'),
+    ('gaps: corner in a guard', 'gaps', ('side', 'corner', 'hold', 'guard'), +1,
+     'the share of a corner stay the opponent spends guarding there: pressure after the combo'),
+    ('gaps: corner air moves', 'gaps', ('side', 'corner', 'hold', 'air_moves'), -1,
+     'the share of its moves in a corner stay made in the air there'),
+    ('gaps: corner in a hit', 'gaps', ('side', 'corner', 'hold', 'hit'), +1,
+     'the share of a corner stay the opponent spends in a hit there'),
+    ('gaps: jumps out', 'gaps', ('side', 'corner', 'hold', 'jump', 'out'), -1,
+     "the opponent's jumps in a corner that took it out there"),
+    ('gaps: jumps caught', 'gaps', ('side', 'corner', 'hold', 'jump', 'caught'), +1,
+     "the opponent's jumps in a corner caught in the air there"),
     ('okizeme net', 'reversal', ('side', 'net_ledger', 'my okizeme', 'net'), +1, 'HP a minute net on its okizeme against reversals'),
     ('punishes', 'reversal', ('side', 'faced_raw', 'punished'), +1, "the opponent's missed risky moves it punished"),
 ]
@@ -287,7 +299,8 @@ def fmt(v, se=None, pct=False):
 
 def is_share(path):
     return path[0] == 'script' or path[-1] in ('win', 'self_hp_taken', 'kept', 'turned', 'left', 'recovery', 'net', 'hit', 'fought_back',
-                        'punished') and 'net_ledger' not in path and path[-2:] != ('raw', 'net')
+                        'punished') and 'net_ledger' not in path and path[-2:] != ('raw', 'net') \
+        or path[-2:] in (('jump', 'out'), ('jump', 'caught'), ('hold', 'guard'), ('hold', 'air_moves'), ('corner', 'share'))
 
 
 def z(a, b):

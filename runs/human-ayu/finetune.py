@@ -161,7 +161,8 @@ def parse():
                         "of these lengths (one drawn a set): the opponent's habits "
                         "(--vs-habits) are a set's, and the memory is kept over it "
                         "(default: every match a set)")
-    p.add_argument('--focus', choices=('setup', 'charge', 'reversal', 'air', 'out', 'press'),
+    p.add_argument('--focus', choices=('setup', 'charge', 'reversal', 'air', 'out', 'press',
+                                       'corner'),
                    help="a shaping reward (focus.py)")
     p.add_argument('--focus-coef', type=float, default=0.02)
     p.add_argument('--press-cost', type=float, default=0,

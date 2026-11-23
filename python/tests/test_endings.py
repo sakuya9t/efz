@@ -514,6 +514,27 @@ class Press(unittest.TestCase):
         v[focus.AIR_OPP] = float(air)
         return v
 
+    def test_in_a_corner_the_pressure_pays_double_and_a_jump_out_caught_pays(self):
+        """corner: press's events CORNER_TIMES as much with the opponent held in a corner,
+        and a hit on the opponent in the air there (its jump out caught)."""
+        T = focus.CORNER_TIMES
+        free, hit = self.view(0, corner=True), self.view(0x3b, corner=True)
+        guard = [self.view(0x97, k, corner=True) for k in range(8)]
+        total, n = self.play([free] * 3 + guard + [free] * 10, 'corner')
+        self.assertEqual((total, n['contacts']), (0.5 * focus.PRESS_CONTACT * T, 1))
+        total, n = self.play([free] * 3 + guard + [hit] * 5, 'corner')
+        self.assertEqual((total, n['opened'], n['caught']), (0.5 * focus.PRESS_CONTACT * T + 0.5 * T, 1, 0))
+        up = [self.view(0x9, corner=True, air=True)] * 6
+        total, n = self.play([free] * 3 + up + [self.view(0x3b, corner=True, air=True)] * 4, 'corner')
+        self.assertEqual((total, n['caught'], n['opened']), (0.5 * T, 1, 0))
+        total, n = self.play([free] * 3 + up + [self.view(0x9, air=True)] * 6 + [self.view(0x3b, air=True)] * 4,
+                             'corner')                                    # out of the corner first: nothing
+        self.assertEqual((total, n['caught']), (0.0, 0))
+        free, hit = self.view(0), self.view(0x3b)                         # midscreen: as press
+        guard = [self.view(0x97, k) for k in range(8)]
+        total, n = self.play([free] * 3 + guard + [hit] * 5, 'corner')
+        self.assertEqual((total, n['opened']), (0.5 * focus.PRESS_CONTACT + 0.5, 1))
+
     def test_a_guard_touched_pays_a_share_and_a_hit_after_it_in_full(self):
         free, hit = self.view(0), self.view(0x3b)
         guard = [self.view(0x97, k) for k in range(8)]
@@ -562,6 +583,44 @@ class Corner(unittest.TestCase):
         self.assertEqual(lost, 0)
         x[:, 1] = 0.2                                 # midscreen all along: none
         self.assertEqual(evaluate.corner(c, x), [])
+
+    def test_what_a_stay_is_made_of(self):
+        """corner_hold(): the opponent's guard and hit steps, where the player stands, the
+        player's moves, and the opponent's jumps there with what became of them."""
+        import evaluate
+        import tactics
+        T = 200
+        c = np.zeros((T, len(tactics.OBS)), np.float32)
+        c[:, 14], c[:, 15] = 1.0, 1.0
+        c[:, 18] = 100 / 640
+        x = np.zeros((T, 2), np.float32)
+        x[:, 0] = 0.5
+        x[20:140, 1] = 0.9                            # the stay: 120 steps
+        x[140:, 1], x[140:, 0] = 0.3, 0.6
+        c[30:40, 1] = 0x97                            # it guards ten steps,
+        c[50:55, 0] = 0xc8                            # (a move of the player's on the ground
+        c[95:100, 0], c[95:100, 6] = 0xd0, 1.0        #  and one in the air)
+        c[60:80, 5] = 1.0                             # is in a hit twenty,
+        c[100:110, 7] = 1.0                           # jumps and is hit in the air (caught),
+        c[104:110, 5] = 1.0
+        c[136:150, 7] = 1.0                           # jumps again and is out
+        n = dict(zip(evaluate.HOLD, evaluate.corner_hold(c, x)))
+        self.assertEqual((n['steps'], n['guard'], n['hit']), (120, 10, 26))
+        self.assertEqual((n['<60'], n['<110'], n['<170'], n['further']), (0, 76, 0, 0))
+        self.assertEqual((n['moves'], n['air moves']), (2, 1))
+        self.assertEqual((n['jumps'], n['caught'], n['out'], n['stayed in'], n['player hit']),
+                         (2, 1, 1, 0, 0))
+        c[101:103, 4] = 1.0                           # the player hit first: not a catch
+        n = dict(zip(evaluate.HOLD, evaluate.corner_hold(c, x)))
+        self.assertEqual((n['caught'], n['player hit']), (0, 1))
+        e = evaluate.Events('ayu')
+        e.n['corner_list'] = evaluate.corner(c, x)
+        e.n['corner_steps'] = T
+        e.n['corner_hold'] = evaluate.corner_hold(c, x)
+        e.n['frames'] = T
+        hold = e.report()['corner']['hold']
+        self.assertEqual((hold['jumps'], hold['jump']['out'], hold['moves'], hold['air_moves']),
+                         (2.0, 0.5, 2.0, 0.5))
 
 
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')

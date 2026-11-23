@@ -118,13 +118,9 @@ def invincible_moves(char):
     except ValueError:
         return set()
 
-def corner(c, x):
-    """The stays of the opponent in a corner under the player (tactics.OBS's columns `c`,
-    the two positions `x`: self_x, opp_x): a list of (steps, HP the opponent lost in it,
-    HP the player lost in it, how it ended: 0 the round ended or the match's record did,
-    1 the opponent left through the air (over the player or past it), 2 it left on the
-    ground or the player backed off, 3 the player was hit away)."""
-    me, op = tactics.Side(c, 0), tactics.Side(c, 1)
+def corner_stays(c, x):
+    """corner()'s stays as (first step, the step after the last), with the live steps and
+    the distance in pixels (tactics.OBS's columns `c`, the positions `x`: self_x, opp_x)."""
     live = (c[:, 16] == 0) & (c[:, 17] == 0)
     dist = np.abs(c[:, 18]) * 640
     mx, ox = np.abs(x[:, 0]), np.abs(x[:, 1])
@@ -140,13 +136,76 @@ def corner(c, x):
         while e < T and hold[e]:
             e += 1
         if e - t >= CORNER_LEAST:
-            how = (0 if e >= T or not live[e] else
-                   3 if me.hitstun[e] or me.hitstun[max(t, e - 20):e].any() else
-                   1 if op.air[e] or op.air[max(t, e - 6):e].any() else 2)
-            out.append((e - t, float(op.hp[t] - op.hp[min(e, T - 1)]),
-                        float(me.hp[t] - me.hp[min(e, T - 1)]), how))
+            out.append((t, e))
         t = e + 1
+    return out, live, dist
+
+
+def corner(c, x):
+    """The stays of the opponent in a corner under the player (tactics.OBS's columns `c`,
+    the two positions `x`: self_x, opp_x): a list of (steps, HP the opponent lost in it,
+    HP the player lost in it, how it ended: 0 the round ended or the match's record did,
+    1 the opponent left through the air (over the player or past it), 2 it left on the
+    ground or the player backed off, 3 the player was hit away)."""
+    me, op = tactics.Side(c, 0), tactics.Side(c, 1)
+    stays, live, _ = corner_stays(c, x)
+    out, T = [], len(c)
+    for t, e in stays:
+        how = (0 if e >= T or not live[e] else
+               3 if me.hitstun[e] or me.hitstun[max(t, e - 20):e].any() else
+               1 if op.air[e] or op.air[max(t, e - 6):e].any() else 2)
+        out.append((e - t, float(op.hp[t] - op.hp[min(e, T - 1)]),
+                    float(me.hp[t] - me.hp[min(e, T - 1)]), how))
     return out
+
+
+# corner_hold(): what a corner stay is made of. The distances the player stands at (pixels,
+# the last band: further), and the steps after a jump of the opponent's in which what
+# became of it is looked for.
+HOLD_BANDS, HOLD_WATCH = (60, 110, 170), 50
+HOLD = ('steps', 'guard', 'hit') + tuple(f'<{b}' for b in HOLD_BANDS) + ('further',) + (
+    'moves', 'air moves', 'jumps', 'out', 'stayed in', 'player hit', 'caught')
+
+
+def corner_hold(c, x):
+    """What corner()'s stays are made of, as counts in HOLD's order: their steps, those
+    with the opponent in a guard and in a hit; the steps the opponent was free on the
+    ground with the player not hit, by the distance between them (HOLD_BANDS); the
+    player's moves begun there and those of them in the air; and the opponent's own jumps
+    there (it left the ground out of no hit), by what became of each within HOLD_WATCH
+    steps: it was out of the corner, still in it, the player was hit first, or the
+    player's hit caught it in the air."""
+    me, op = tactics.Side(c, 0), tactics.Side(c, 1)
+    stays, _, dist = corner_stays(c, x)
+    n, T = np.zeros(len(HOLD)), len(c)
+    rise = op.air & ~_prev(op.air, False)
+    for t, e in stays:
+        s = slice(t, e)
+        n[0] += e - t
+        n[1] += op.guard[s].sum()
+        n[2] += op.hitstun[s].sum()
+        calm = ~op.guard[s] & ~op.hitstun[s] & ~op.air[s] & ~me.hitstun[s]
+        n[3:3 + len(HOLD_BANDS) + 1] += np.bincount(
+            np.searchsorted(HOLD_BANDS, dist[s][calm], side='right'), minlength=len(HOLD_BANDS) + 1)
+        k = 3 + len(HOLD_BANDS) + 1
+        n[k] += me.move[s].sum()
+        n[k + 1] += (me.move[s] & me.air[s]).sum()
+        for j in np.flatnonzero(rise[s]) + t:
+            if j == t or op.hitstun[j] or op.hitstun[j - 1]:
+                continue
+            end = min(T, j + HOLD_WATCH)
+            caught = np.flatnonzero(op.hit[j:end] & op.air[j:end])
+            took = np.flatnonzero(me.hit[j:end])
+            n[k + 2] += 1
+            if len(caught) and not (len(took) and took[0] < caught[0]):
+                n[k + 6] += 1
+            elif len(took):
+                n[k + 5] += 1
+            elif e < end:
+                n[k + 3] += 1
+            else:
+                n[k + 4] += 1
+    return n
 
 
 def jumpins(c):
@@ -264,6 +323,12 @@ class Events:
         a stay, and how the stays ended (the round over, the opponent out through the
         air, out on the ground or the player backing off, the player hit away): how well
         its pressure keeps an opponent that wants out (the user's, 18 November);
+        its `hold` (corner_hold()): what the stays are made of: the share of their steps
+        the opponent is in a guard and in a hit, where the player stands while it is
+        free, the player's moves a stay and the share of them in the air, and the
+        opponent's jumps there with what became of them (out, still in, the player hit
+        first, caught in the air): the user's, 22 November (to handle pressure it has to
+        know how to pressure, in the corners above all);
     jumpins: the opponent's airborne attacks that met it on the ground, able to guard: a
         minute, and from the front and crossing sides the share hit, guarded, recoil-guarded,
         and what it was doing just before (walking back, crouching, walking forward, other);
@@ -290,6 +355,7 @@ class Events:
         self.n['jumpin'] = np.zeros((2, 7))  # jumpins()'s
         self.n['corner_list'] = []  # corner()'s stays
         self.n['corner_steps'] = 0  # the live steps they are out of
+        self.n['corner_hold'] = np.zeros(len(HOLD))  # corner_hold()'s
         self.n['combo_list'] = []  # each combo's (hits, damage, resource group)
         self.n['proration_left'] = []  # at the end of each of 3 hits or more
         self.n['hp_lost'] = 0.0
@@ -440,6 +506,8 @@ class Events:
                     cols[:, TACTICS:TACTICS + len(tactics.OBS)], cols[:, POSITIONS:POSITIONS + 2])
                 n['corner_steps'] += int(((cols[:, TACTICS + 16] == 0) &
                                           (cols[:, TACTICS + 17] == 0)).sum())
+                n['corner_hold'] = n['corner_hold'] + corner_hold(
+                    cols[:, TACTICS:TACTICS + len(tactics.OBS)], cols[:, POSITIONS:POSITIONS + 2])
         # The guesses: a counter hit is a hit on an opponent in a move of its own.
         for g, acts in self.moves['guess'].items():
             for t in np.flatnonzero(enter & np.isin(a, acts)):
@@ -541,6 +609,21 @@ class Events:
                        enumerate(('round', 'out by air', 'out on the ground', 'hit away'))},
                 # (the stays the opponent left on its own, by air or on the ground)
                 left=share(int(((ends == 1) | (ends == 2)).sum()), len(cl)))
+            h = dict(zip(HOLD, (float(v) for v in n['corner_hold'])))
+            if h['steps']:
+                # What the stays are made of (corner_hold()): the share of their steps the
+                # opponent is in a guard and in a hit, where the player stands while it
+                # is free, the player's moves a stay and the share of them in the air,
+                # the opponent's jumps a stay and what became of them.
+                stand = [f'<{b}' for b in HOLD_BANDS] + ['further']
+                ways = ('out', 'stayed in', 'player hit', 'caught')
+                out['corner']['hold'] = dict(
+                    guard=share(h['guard'], h['steps']), hit=share(h['hit'], h['steps']),
+                    stands={k: share(h[k], sum(h[b] for b in stand)) for k in stand},
+                    moves=round(h['moves'] / max(1, len(cl)), 2),
+                    air_moves=share(h['air moves'], h['moves']),
+                    jumps=round(h['jumps'] / max(1, len(cl)), 2), jumps_n=int(h['jumps']),
+                    jump={k: share(h[k], h['jumps']) for k in ways})
         ji = n['jumpin']
         if ji.sum():  # met a minute; from the front and crossing: how many, and how they ended
             out['jumpins'] = dict(per_min=round(float(ji[:, :3].sum() * per_min), 2), **{

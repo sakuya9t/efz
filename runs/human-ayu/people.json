@@ -156,7 +156,27 @@
     "out on the ground": 0.203,
     "hit away": 0.345
    },
-   "left": 0.616
+   "left": 0.616,
+   "hold": {
+    "guard": 0.124,
+    "hit": 0.499,
+    "stands": {
+     "<60": 0.32,
+     "<110": 0.296,
+     "<170": 0.248,
+     "further": 0.136
+    },
+    "moves": 6.08,
+    "air_moves": 0.451,
+    "jumps": 0.55,
+    "jumps_n": 7162,
+    "jump": {
+     "out": 0.52,
+     "stayed in": 0.213,
+     "player hit": 0.145,
+     "caught": 0.123
+    }
+   }
   },
   "jumpins": {
    "per_min": 2.92,
@@ -1991,6 +2011,92 @@
     "lost": 743
    }
   },
+  "areas": {
+   "my okizeme": {
+    "share": 0.1245,
+    "rate": 78.1,
+    "gained": 181.5,
+    "lost": 103.4,
+    "entered": 3.31,
+    "won": 0.291,
+    "lost_first": 0.207,
+    "each": 176
+   },
+   "its okizeme": {
+    "share": 0.1487,
+    "rate": -36.6,
+    "gained": 97.3,
+    "lost": 133.9,
+    "entered": 4.11,
+    "won": 0.188,
+    "lost_first": 0.26,
+    "each": -79
+   },
+   "my pressure": {
+    "share": 0.1157,
+    "rate": 19.1,
+    "gained": 179.9,
+    "lost": 160.8,
+    "entered": 4.55,
+    "won": 0.325,
+    "lost_first": 0.18,
+    "each": 29
+   },
+   "its pressure": {
+    "share": 0.107,
+    "rate": -79.9,
+    "gained": 132.1,
+    "lost": 212.0,
+    "entered": 4.68,
+    "won": 0.13,
+    "lost_first": 0.38,
+    "each": -110
+   },
+   "I came by air": {
+    "share": 0.1373,
+    "rate": -43.9,
+    "gained": 102.4,
+    "lost": 146.3,
+    "entered": 10.48,
+    "won": 0.074,
+    "lost_first": 0.101,
+    "each": -34
+   },
+   "it came by air": {
+    "share": 0.0659,
+    "rate": 77.1,
+    "gained": 168.7,
+    "lost": 91.6,
+    "entered": 7.46,
+    "won": 0.067,
+    "lost_first": 0.052,
+    "each": 41
+   },
+   "both in the air": {
+    "share": 0.1978,
+    "rate": -11.5,
+    "gained": 45.3,
+    "lost": 56.8,
+    "entered": 10.43,
+    "won": 0.048,
+    "lost_first": 0.07,
+    "each": -13
+   },
+   "on the ground": {
+    "share": 0.1031,
+    "rate": -29.6,
+    "gained": 90.5,
+    "lost": 120.1,
+    "entered": 8.87,
+    "won": 0.056,
+    "lost_first": 0.08,
+    "each": -21
+   },
+   "opening": {
+    "dealt": 988.08,
+    "taken": 915.208
+   }
+  },
   "rounds": {
    "n": 4288,
    "won": 0.45,
@@ -3227,7 +3333,27 @@
      "out on the ground": 0.219,
      "hit away": 0.408
     },
-    "left": 0.57
+    "left": 0.57,
+    "hold": {
+     "guard": 0.12,
+     "hit": 0.424,
+     "stands": {
+      "<60": 0.346,
+      "<110": 0.311,
+      "<170": 0.24,
+      "further": 0.103
+     },
+     "moves": 4.21,
+     "air_moves": 0.465,
+     "jumps": 0.54,
+     "jumps_n": 315,
+     "jump": {
+      "out": 0.546,
+      "stayed in": 0.251,
+      "player hit": 0.108,
+      "caught": 0.095
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.68,
@@ -4218,6 +4344,92 @@
      "net": -348,
      "gained": 476,
      "lost": 824
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.0979,
+     "rate": 88.3,
+     "gained": 158.3,
+     "lost": 70.0,
+     "entered": 2.65,
+     "won": 0.309,
+     "lost_first": 0.163,
+     "each": 196
+    },
+    "its okizeme": {
+     "share": 0.1789,
+     "rate": -49.2,
+     "gained": 80.3,
+     "lost": 129.4,
+     "entered": 4.85,
+     "won": 0.161,
+     "lost_first": 0.283,
+     "each": -109
+    },
+    "my pressure": {
+     "share": 0.1285,
+     "rate": -15.4,
+     "gained": 140.5,
+     "lost": 155.9,
+     "entered": 5.2,
+     "won": 0.293,
+     "lost_first": 0.196,
+     "each": -23
+    },
+    "its pressure": {
+     "share": 0.1362,
+     "rate": -99.6,
+     "gained": 91.7,
+     "lost": 191.4,
+     "entered": 5.53,
+     "won": 0.108,
+     "lost_first": 0.419,
+     "each": -147
+    },
+    "I came by air": {
+     "share": 0.1306,
+     "rate": -18.2,
+     "gained": 83.2,
+     "lost": 101.4,
+     "entered": 12.34,
+     "won": 0.049,
+     "lost_first": 0.07,
+     "each": -12
+    },
+    "it came by air": {
+     "share": 0.0574,
+     "rate": 67.3,
+     "gained": 161.9,
+     "lost": 94.6,
+     "entered": 6.24,
+     "won": 0.066,
+     "lost_first": 0.05,
+     "each": 37
+    },
+    "both in the air": {
+     "share": 0.1792,
+     "rate": -9.2,
+     "gained": 50.6,
+     "lost": 59.8,
+     "entered": 10.62,
+     "won": 0.05,
+     "lost_first": 0.066,
+     "each": -9
+    },
+    "on the ground": {
+     "share": 0.0914,
+     "rate": -63.5,
+     "gained": 86.8,
+     "lost": 150.4,
+     "entered": 8.5,
+     "won": 0.05,
+     "lost_first": 0.092,
+     "each": -41
+    },
+    "opening": {
+     "dealt": 882.956,
+     "taken": 813.239
     }
    },
    "rounds": {
@@ -5434,7 +5646,27 @@
      "out on the ground": 0.086,
      "hit away": 0.432
     },
-    "left": 0.542
+    "left": 0.542,
+    "hold": {
+     "guard": 0.111,
+     "hit": 0.375,
+     "stands": {
+      "<60": 0.262,
+      "<110": 0.301,
+      "<170": 0.242,
+      "further": 0.195
+     },
+     "moves": 3.39,
+     "air_moves": 0.414,
+     "jumps": 0.72,
+     "jumps_n": 544,
+     "jump": {
+      "out": 0.575,
+      "stayed in": 0.112,
+      "player hit": 0.189,
+      "caught": 0.123
+     }
+    }
    },
    "jumpins": {
     "per_min": 4.18,
@@ -6317,6 +6549,92 @@
      "net": -161,
      "gained": 338,
      "lost": 498
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.105,
+     "rate": 18.1,
+     "gained": 115.9,
+     "lost": 97.8,
+     "entered": 2.74,
+     "won": 0.245,
+     "lost_first": 0.285,
+     "each": 42
+    },
+    "its okizeme": {
+     "share": 0.1651,
+     "rate": -20.4,
+     "gained": 93.1,
+     "lost": 113.5,
+     "entered": 4.5,
+     "won": 0.235,
+     "lost_first": 0.232,
+     "each": -45
+    },
+    "my pressure": {
+     "share": 0.0881,
+     "rate": -40.9,
+     "gained": 158.4,
+     "lost": 199.4,
+     "entered": 3.86,
+     "won": 0.385,
+     "lost_first": 0.169,
+     "each": -56
+    },
+    "its pressure": {
+     "share": 0.0922,
+     "rate": -120.9,
+     "gained": 96.8,
+     "lost": 217.6,
+     "entered": 4.06,
+     "won": 0.094,
+     "lost_first": 0.413,
+     "each": -165
+    },
+    "I came by air": {
+     "share": 0.1332,
+     "rate": -63.6,
+     "gained": 89.7,
+     "lost": 153.3,
+     "entered": 11.03,
+     "won": 0.074,
+     "lost_first": 0.127,
+     "each": -46
+    },
+    "it came by air": {
+     "share": 0.0783,
+     "rate": 39.6,
+     "gained": 144.2,
+     "lost": 104.5,
+     "entered": 8.08,
+     "won": 0.062,
+     "lost_first": 0.098,
+     "each": 23
+    },
+    "both in the air": {
+     "share": 0.2158,
+     "rate": -26.6,
+     "gained": 46.0,
+     "lost": 72.6,
+     "entered": 11.57,
+     "won": 0.052,
+     "lost_first": 0.08,
+     "each": -30
+    },
+    "on the ground": {
+     "share": 0.1225,
+     "rate": -21.9,
+     "gained": 45.9,
+     "lost": 67.8,
+     "entered": 10.11,
+     "won": 0.035,
+     "lost_first": 0.056,
+     "each": -16
+    },
+    "opening": {
+     "dealt": 770.514,
+     "taken": 835.266
     }
    },
    "rounds": {
@@ -7535,7 +7853,27 @@
      "out on the ground": 0.143,
      "hit away": 0.318
     },
-    "left": 0.658
+    "left": 0.658,
+    "hold": {
+     "guard": 0.094,
+     "hit": 0.481,
+     "stands": {
+      "<60": 0.309,
+      "<110": 0.306,
+      "<170": 0.275,
+      "further": 0.11
+     },
+     "moves": 5.35,
+     "air_moves": 0.408,
+     "jumps": 0.73,
+     "jumps_n": 356,
+     "jump": {
+      "out": 0.579,
+      "stayed in": 0.216,
+      "player hit": 0.062,
+      "caught": 0.143
+     }
+    }
    },
    "jumpins": {
     "per_min": 1.97,
@@ -8573,6 +8911,92 @@
      "net": 0,
      "gained": 612,
      "lost": 612
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1394,
+     "rate": 64.5,
+     "gained": 167.9,
+     "lost": 103.4,
+     "entered": 3.78,
+     "won": 0.293,
+     "lost_first": 0.22,
+     "each": 143
+    },
+    "its okizeme": {
+     "share": 0.1303,
+     "rate": -69.1,
+     "gained": 102.7,
+     "lost": 171.7,
+     "entered": 3.78,
+     "won": 0.194,
+     "lost_first": 0.297,
+     "each": -143
+    },
+    "my pressure": {
+     "share": 0.0889,
+     "rate": 19.9,
+     "gained": 184.8,
+     "lost": 164.9,
+     "entered": 4.0,
+     "won": 0.346,
+     "lost_first": 0.176,
+     "each": 27
+    },
+    "its pressure": {
+     "share": 0.0819,
+     "rate": -21.6,
+     "gained": 164.5,
+     "lost": 186.1,
+     "entered": 3.94,
+     "won": 0.145,
+     "lost_first": 0.34,
+     "each": -27
+    },
+    "I came by air": {
+     "share": 0.1072,
+     "rate": -93.7,
+     "gained": 91.9,
+     "lost": 185.7,
+     "entered": 9.89,
+     "won": 0.058,
+     "lost_first": 0.109,
+     "each": -61
+    },
+    "it came by air": {
+     "share": 0.1072,
+     "rate": 93.7,
+     "gained": 185.7,
+     "lost": 91.9,
+     "entered": 9.89,
+     "won": 0.095,
+     "lost_first": 0.072,
+     "each": 61
+    },
+    "both in the air": {
+     "share": 0.2147,
+     "rate": 0.0,
+     "gained": 53.8,
+     "lost": 53.8,
+     "entered": 10.64,
+     "won": 0.063,
+     "lost_first": 0.069,
+     "each": 0
+    },
+    "on the ground": {
+     "share": 0.1304,
+     "rate": 0.0,
+     "gained": 78.2,
+     "lost": 78.2,
+     "entered": 9.96,
+     "won": 0.069,
+     "lost_first": 0.08,
+     "each": 0
+    },
+    "opening": {
+     "dealt": 870.488,
+     "taken": 870.488
     }
    },
    "rounds": {
@@ -9791,7 +10215,27 @@
      "out on the ground": 0.269,
      "hit away": 0.385
     },
-    "left": 0.576
+    "left": 0.576,
+    "hold": {
+     "guard": 0.146,
+     "hit": 0.506,
+     "stands": {
+      "<60": 0.418,
+      "<110": 0.33,
+      "<170": 0.182,
+      "further": 0.07
+     },
+     "moves": 6.48,
+     "air_moves": 0.443,
+     "jumps": 0.32,
+     "jumps_n": 402,
+     "jump": {
+      "out": 0.495,
+      "stayed in": 0.199,
+      "player hit": 0.124,
+      "caught": 0.182
+     }
+    }
    },
    "jumpins": {
     "per_min": 1.1,
@@ -10807,6 +11251,92 @@
      "net": -561,
      "gained": 516,
      "lost": 1077
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1426,
+     "rate": 148.7,
+     "gained": 226.1,
+     "lost": 77.4,
+     "entered": 3.9,
+     "won": 0.339,
+     "lost_first": 0.14,
+     "each": 326
+    },
+    "its okizeme": {
+     "share": 0.1348,
+     "rate": -30.2,
+     "gained": 110.5,
+     "lost": 140.6,
+     "entered": 3.88,
+     "won": 0.198,
+     "lost_first": 0.213,
+     "each": -63
+    },
+    "my pressure": {
+     "share": 0.1398,
+     "rate": -13.4,
+     "gained": 164.4,
+     "lost": 177.8,
+     "entered": 5.62,
+     "won": 0.311,
+     "lost_first": 0.18,
+     "each": -20
+    },
+    "its pressure": {
+     "share": 0.0902,
+     "rate": -12.8,
+     "gained": 161.0,
+     "lost": 173.8,
+     "entered": 3.96,
+     "won": 0.187,
+     "lost_first": 0.256,
+     "each": -17
+    },
+    "I came by air": {
+     "share": 0.1872,
+     "rate": -33.9,
+     "gained": 85.8,
+     "lost": 119.7,
+     "entered": 9.3,
+     "won": 0.099,
+     "lost_first": 0.113,
+     "each": -41
+    },
+    "it came by air": {
+     "share": 0.0512,
+     "rate": 110.7,
+     "gained": 191.7,
+     "lost": 81.0,
+     "entered": 6.77,
+     "won": 0.071,
+     "lost_first": 0.03,
+     "each": 50
+    },
+    "both in the air": {
+     "share": 0.1359,
+     "rate": 33.7,
+     "gained": 64.6,
+     "lost": 30.9,
+     "entered": 6.93,
+     "won": 0.067,
+     "lost_first": 0.057,
+     "each": 40
+    },
+    "on the ground": {
+     "share": 0.1182,
+     "rate": -79.1,
+     "gained": 72.8,
+     "lost": 151.9,
+     "entered": 9.27,
+     "won": 0.058,
+     "lost_first": 0.093,
+     "each": -61
+    },
+    "opening": {
+     "dealt": 986.422,
+     "taken": 1089.635
     }
    },
    "rounds": {
@@ -12031,7 +12561,27 @@
      "out on the ground": 0.312,
      "hit away": 0.3
     },
-    "left": 0.668
+    "left": 0.668,
+    "hold": {
+     "guard": 0.149,
+     "hit": 0.527,
+     "stands": {
+      "<60": 0.286,
+      "<110": 0.35,
+      "<170": 0.25,
+      "further": 0.115
+     },
+     "moves": 6.72,
+     "air_moves": 0.451,
+     "jumps": 0.31,
+     "jumps_n": 237,
+     "jump": {
+      "out": 0.506,
+      "stayed in": 0.194,
+      "player hit": 0.16,
+      "caught": 0.139
+     }
+    }
    },
    "jumpins": {
     "per_min": 1.79,
@@ -13115,6 +13665,92 @@
      "net": 98,
      "gained": 760,
      "lost": 662
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1052,
+     "rate": 167.0,
+     "gained": 244.0,
+     "lost": 77.0,
+     "entered": 2.81,
+     "won": 0.339,
+     "lost_first": 0.137,
+     "each": 376
+    },
+    "its okizeme": {
+     "share": 0.1433,
+     "rate": -69.6,
+     "gained": 95.7,
+     "lost": 165.3,
+     "entered": 3.79,
+     "won": 0.175,
+     "lost_first": 0.319,
+     "each": -158
+    },
+    "my pressure": {
+     "share": 0.1264,
+     "rate": 22.8,
+     "gained": 129.6,
+     "lost": 106.7,
+     "entered": 4.43,
+     "won": 0.265,
+     "lost_first": 0.135,
+     "each": 39
+    },
+    "its pressure": {
+     "share": 0.1007,
+     "rate": -56.1,
+     "gained": 132.7,
+     "lost": 188.8,
+     "entered": 4.3,
+     "won": 0.126,
+     "lost_first": 0.358,
+     "each": -79
+    },
+    "I came by air": {
+     "share": 0.1413,
+     "rate": -9.4,
+     "gained": 102.6,
+     "lost": 112.0,
+     "entered": 10.84,
+     "won": 0.07,
+     "lost_first": 0.089,
+     "each": -7
+    },
+    "it came by air": {
+     "share": 0.0456,
+     "rate": 141.8,
+     "gained": 184.7,
+     "lost": 42.8,
+     "entered": 5.64,
+     "won": 0.068,
+     "lost_first": 0.022,
+     "each": 69
+    },
+    "both in the air": {
+     "share": 0.2043,
+     "rate": -38.0,
+     "gained": 23.4,
+     "lost": 61.5,
+     "entered": 9.65,
+     "won": 0.031,
+     "lost_first": 0.071,
+     "each": -48
+    },
+    "on the ground": {
+     "share": 0.1332,
+     "rate": 12.2,
+     "gained": 95.1,
+     "lost": 82.9,
+     "entered": 8.29,
+     "won": 0.083,
+     "lost_first": 0.082,
+     "each": 12
+    },
+    "opening": {
+     "dealt": 1075.618,
+     "taken": 933.262
     }
    },
    "rounds": {
@@ -14290,7 +14926,27 @@
      "out on the ground": 0.0,
      "hit away": 0.125
     },
-    "left": 0.875
+    "left": 0.875,
+    "hold": {
+     "guard": 0.0,
+     "hit": 0.331,
+     "stands": {
+      "<60": 0.131,
+      "<110": 0.0,
+      "<170": 0.048,
+      "further": 0.821
+     },
+     "moves": 0.5,
+     "air_moves": 0.0,
+     "jumps": 0.38,
+     "jumps_n": 3,
+     "jump": {
+      "out": 0.333,
+      "stayed in": 0.0,
+      "player hit": 0.667,
+      "caught": 0.0
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.67,
@@ -14822,6 +15478,92 @@
      "net": -987,
      "gained": 0,
      "lost": 987
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.0216,
+     "rate": 0.0,
+     "gained": 0.0,
+     "lost": 0.0,
+     "entered": 0.53,
+     "won": 0.0,
+     "lost_first": 0.0,
+     "each": 0
+    },
+    "its okizeme": {
+     "share": 0.0836,
+     "rate": -270.1,
+     "gained": 34.9,
+     "lost": 305.0,
+     "entered": 2.14,
+     "won": 0.0,
+     "lost_first": 0.5,
+     "each": -633
+    },
+    "my pressure": {
+     "share": 0.0574,
+     "rate": 20.1,
+     "gained": 35.6,
+     "lost": 15.5,
+     "entered": 2.14,
+     "won": 0.5,
+     "lost_first": 0.25,
+     "each": 32
+    },
+    "its pressure": {
+     "share": 0.072,
+     "rate": -809.6,
+     "gained": 40.5,
+     "lost": 850.1,
+     "entered": 2.67,
+     "won": 0.2,
+     "lost_first": 0.6,
+     "each": -1308
+    },
+    "I came by air": {
+     "share": 0.123,
+     "rate": -251.4,
+     "gained": 0.0,
+     "lost": 251.4,
+     "entered": 8.56,
+     "won": 0.0,
+     "lost_first": 0.188,
+     "each": -217
+    },
+    "it came by air": {
+     "share": 0.2132,
+     "rate": -37.0,
+     "gained": 29.2,
+     "lost": 66.2,
+     "entered": 17.11,
+     "won": 0.031,
+     "lost_first": 0.031,
+     "each": -28
+    },
+    "both in the air": {
+     "share": 0.3295,
+     "rate": -55.2,
+     "gained": 29.7,
+     "lost": 84.9,
+     "entered": 21.39,
+     "won": 0.15,
+     "lost_first": 0.1,
+     "each": -51
+    },
+    "on the ground": {
+     "share": 0.0998,
+     "rate": -164.7,
+     "gained": 0.0,
+     "lost": 164.7,
+     "entered": 9.09,
+     "won": 0.0,
+     "lost_first": 0.059,
+     "each": -109
+    },
+    "opening": {
+     "dealt": 243.672,
+     "taken": 1168.411
     }
    },
    "rounds": {
@@ -15430,7 +16172,27 @@
      "out on the ground": 0.232,
      "hit away": 0.299
     },
-    "left": 0.634
+    "left": 0.634,
+    "hold": {
+     "guard": 0.119,
+     "hit": 0.489,
+     "stands": {
+      "<60": 0.172,
+      "<110": 0.271,
+      "<170": 0.37,
+      "further": 0.186
+     },
+     "moves": 8.72,
+     "air_moves": 0.462,
+     "jumps": 0.47,
+     "jumps_n": 105,
+     "jump": {
+      "out": 0.352,
+      "stayed in": 0.362,
+      "player hit": 0.21,
+      "caught": 0.076
+     }
+    }
    },
    "jumpins": {
     "per_min": 1.83,
@@ -16250,6 +17012,92 @@
      "net": 128,
      "gained": 589,
      "lost": 461
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1244,
+     "rate": 149.6,
+     "gained": 224.8,
+     "lost": 75.2,
+     "entered": 3.12,
+     "won": 0.293,
+     "lost_first": 0.169,
+     "each": 358
+    },
+    "its okizeme": {
+     "share": 0.1201,
+     "rate": -35.0,
+     "gained": 62.3,
+     "lost": 97.3,
+     "entered": 3.52,
+     "won": 0.091,
+     "lost_first": 0.291,
+     "each": -72
+    },
+    "my pressure": {
+     "share": 0.1362,
+     "rate": 68.8,
+     "gained": 220.2,
+     "lost": 151.4,
+     "entered": 4.46,
+     "won": 0.37,
+     "lost_first": 0.177,
+     "each": 126
+    },
+    "its pressure": {
+     "share": 0.1441,
+     "rate": -44.3,
+     "gained": 97.5,
+     "lost": 141.8,
+     "entered": 5.94,
+     "won": 0.089,
+     "lost_first": 0.399,
+     "each": -64
+    },
+    "I came by air": {
+     "share": 0.1795,
+     "rate": -14.0,
+     "gained": 96.7,
+     "lost": 110.7,
+     "entered": 10.43,
+     "won": 0.074,
+     "lost_first": 0.112,
+     "each": -14
+    },
+    "it came by air": {
+     "share": 0.0641,
+     "rate": 144.3,
+     "gained": 171.3,
+     "lost": 27.0,
+     "entered": 5.28,
+     "won": 0.076,
+     "lost_first": 0.021,
+     "each": 105
+    },
+    "both in the air": {
+     "share": 0.1594,
+     "rate": -20.1,
+     "gained": 24.5,
+     "lost": 44.6,
+     "entered": 8.05,
+     "won": 0.026,
+     "lost_first": 0.102,
+     "each": -24
+    },
+    "on the ground": {
+     "share": 0.0723,
+     "rate": 29.6,
+     "gained": 135.9,
+     "lost": 106.4,
+     "entered": 7.87,
+     "won": 0.055,
+     "lost_first": 0.07,
+     "each": 16
+    },
+    "opening": {
+     "dealt": 1241.159,
+     "taken": 710.671
     }
    },
    "rounds": {
@@ -17448,7 +18296,27 @@
      "out on the ground": 0.277,
      "hit away": 0.296
     },
-    "left": 0.629
+    "left": 0.629,
+    "hold": {
+     "guard": 0.151,
+     "hit": 0.535,
+     "stands": {
+      "<60": 0.335,
+      "<110": 0.32,
+      "<170": 0.269,
+      "further": 0.077
+     },
+     "moves": 9.82,
+     "air_moves": 0.442,
+     "jumps": 0.51,
+     "jumps_n": 366,
+     "jump": {
+      "out": 0.525,
+      "stayed in": 0.281,
+      "player hit": 0.068,
+      "caught": 0.126
+     }
+    }
    },
    "jumpins": {
     "per_min": 0.74,
@@ -18445,6 +19313,92 @@
      "net": -255,
      "gained": 775,
      "lost": 1030
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1389,
+     "rate": 111.8,
+     "gained": 189.0,
+     "lost": 77.2,
+     "entered": 3.72,
+     "won": 0.299,
+     "lost_first": 0.149,
+     "each": 250
+    },
+    "its okizeme": {
+     "share": 0.1073,
+     "rate": 17.6,
+     "gained": 107.8,
+     "lost": 90.2,
+     "entered": 3.1,
+     "won": 0.203,
+     "lost_first": 0.188,
+     "each": 36
+    },
+    "my pressure": {
+     "share": 0.1581,
+     "rate": 104.5,
+     "gained": 200.7,
+     "lost": 96.2,
+     "entered": 5.87,
+     "won": 0.349,
+     "lost_first": 0.129,
+     "each": 169
+    },
+    "its pressure": {
+     "share": 0.071,
+     "rate": -43.8,
+     "gained": 170.5,
+     "lost": 214.3,
+     "entered": 3.73,
+     "won": 0.15,
+     "lost_first": 0.239,
+     "each": -50
+    },
+    "I came by air": {
+     "share": 0.1677,
+     "rate": 37.5,
+     "gained": 138.8,
+     "lost": 101.3,
+     "entered": 9.38,
+     "won": 0.133,
+     "lost_first": 0.104,
+     "each": 40
+    },
+    "it came by air": {
+     "share": 0.0575,
+     "rate": 97.1,
+     "gained": 145.1,
+     "lost": 48.1,
+     "entered": 6.77,
+     "won": 0.058,
+     "lost_first": 0.021,
+     "each": 49
+    },
+    "both in the air": {
+     "share": 0.1483,
+     "rate": 12.1,
+     "gained": 41.8,
+     "lost": 29.7,
+     "entered": 7.62,
+     "won": 0.043,
+     "lost_first": 0.034,
+     "each": 14
+    },
+    "on the ground": {
+     "share": 0.1511,
+     "rate": -28.1,
+     "gained": 85.5,
+     "lost": 113.6,
+     "entered": 9.44,
+     "won": 0.072,
+     "lost_first": 0.081,
+     "each": -27
+    },
+    "opening": {
+     "dealt": 994.154,
+     "taken": 1025.942
     }
    },
    "rounds": {
@@ -19649,7 +20603,27 @@
      "out on the ground": 0.1,
      "hit away": 0.322
     },
-    "left": 0.64
+    "left": 0.64,
+    "hold": {
+     "guard": 0.111,
+     "hit": 0.572,
+     "stands": {
+      "<60": 0.311,
+      "<110": 0.308,
+      "<170": 0.247,
+      "further": 0.134
+     },
+     "moves": 6.95,
+     "air_moves": 0.499,
+     "jumps": 0.62,
+     "jumps_n": 149,
+     "jump": {
+      "out": 0.631,
+      "stayed in": 0.128,
+      "player hit": 0.161,
+      "caught": 0.081
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.91,
@@ -20613,6 +21587,92 @@
      "net": -67,
      "gained": 494,
      "lost": 560
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1023,
+     "rate": 12.2,
+     "gained": 168.2,
+     "lost": 156.1,
+     "entered": 2.72,
+     "won": 0.257,
+     "lost_first": 0.225,
+     "each": 28
+    },
+    "its okizeme": {
+     "share": 0.1482,
+     "rate": -49.4,
+     "gained": 100.0,
+     "lost": 149.4,
+     "entered": 4.13,
+     "won": 0.148,
+     "lost_first": 0.323,
+     "each": -106
+    },
+    "my pressure": {
+     "share": 0.1021,
+     "rate": 60.2,
+     "gained": 217.6,
+     "lost": 157.4,
+     "entered": 3.91,
+     "won": 0.359,
+     "lost_first": 0.17,
+     "each": 94
+    },
+    "its pressure": {
+     "share": 0.1468,
+     "rate": -177.6,
+     "gained": 96.4,
+     "lost": 274.0,
+     "entered": 5.75,
+     "won": 0.086,
+     "lost_first": 0.461,
+     "each": -272
+    },
+    "I came by air": {
+     "share": 0.1306,
+     "rate": -82.3,
+     "gained": 96.7,
+     "lost": 178.9,
+     "entered": 12.75,
+     "won": 0.051,
+     "lost_first": 0.096,
+     "each": -51
+    },
+    "it came by air": {
+     "share": 0.0682,
+     "rate": 21.4,
+     "gained": 135.9,
+     "lost": 114.5,
+     "entered": 8.33,
+     "won": 0.057,
+     "lost_first": 0.057,
+     "each": 11
+    },
+    "both in the air": {
+     "share": 0.2053,
+     "rate": -16.1,
+     "gained": 40.3,
+     "lost": 56.4,
+     "entered": 13.47,
+     "won": 0.028,
+     "lost_first": 0.045,
+     "each": -15
+    },
+    "on the ground": {
+     "share": 0.0965,
+     "rate": -11.5,
+     "gained": 85.3,
+     "lost": 96.8,
+     "entered": 8.94,
+     "won": 0.042,
+     "lost_first": 0.074,
+     "each": -7
+    },
+    "opening": {
+     "dealt": 1110.079,
+     "taken": 948.628
     }
    },
    "rounds": {
@@ -21823,7 +22883,27 @@
      "out on the ground": 0.288,
      "hit away": 0.302
     },
-    "left": 0.644
+    "left": 0.644,
+    "hold": {
+     "guard": 0.124,
+     "hit": 0.526,
+     "stands": {
+      "<60": 0.311,
+      "<110": 0.292,
+      "<170": 0.265,
+      "further": 0.133
+     },
+     "moves": 6.71,
+     "air_moves": 0.431,
+     "jumps": 0.56,
+     "jumps_n": 196,
+     "jump": {
+      "out": 0.327,
+      "stayed in": 0.327,
+      "player hit": 0.189,
+      "caught": 0.158
+     }
+    }
    },
    "jumpins": {
     "per_min": 6.54,
@@ -22732,6 +23812,92 @@
      "net": 65,
      "gained": 833,
      "lost": 768
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1172,
+     "rate": 28.5,
+     "gained": 184.1,
+     "lost": 155.6,
+     "entered": 3.25,
+     "won": 0.26,
+     "lost_first": 0.285,
+     "each": 62
+    },
+    "its okizeme": {
+     "share": 0.1554,
+     "rate": -54.7,
+     "gained": 88.9,
+     "lost": 143.6,
+     "entered": 4.33,
+     "won": 0.201,
+     "lost_first": 0.286,
+     "each": -118
+    },
+    "my pressure": {
+     "share": 0.1198,
+     "rate": 103.3,
+     "gained": 234.9,
+     "lost": 131.7,
+     "entered": 4.31,
+     "won": 0.36,
+     "lost_first": 0.2,
+     "each": 172
+    },
+    "its pressure": {
+     "share": 0.1287,
+     "rate": -100.7,
+     "gained": 143.0,
+     "lost": 243.7,
+     "entered": 5.61,
+     "won": 0.127,
+     "lost_first": 0.408,
+     "each": -139
+    },
+    "I came by air": {
+     "share": 0.1199,
+     "rate": -16.0,
+     "gained": 101.9,
+     "lost": 117.9,
+     "entered": 11.78,
+     "won": 0.069,
+     "lost_first": 0.086,
+     "each": -10
+    },
+    "it came by air": {
+     "share": 0.0646,
+     "rate": 24.5,
+     "gained": 136.8,
+     "lost": 112.3,
+     "entered": 7.15,
+     "won": 0.045,
+     "lost_first": 0.069,
+     "each": 13
+    },
+    "both in the air": {
+     "share": 0.2128,
+     "rate": -22.5,
+     "gained": 39.6,
+     "lost": 62.0,
+     "entered": 11.78,
+     "won": 0.04,
+     "lost_first": 0.066,
+     "each": -24
+    },
+    "on the ground": {
+     "share": 0.0815,
+     "rate": 13.2,
+     "gained": 170.2,
+     "lost": 157.0,
+     "entered": 8.95,
+     "won": 0.055,
+     "lost_first": 0.09,
+     "each": 7
+    },
+    "opening": {
+     "dealt": 1075.042,
+     "taken": 852.802
     }
    },
    "rounds": {
@@ -23962,7 +25128,27 @@
      "out on the ground": 0.142,
      "hit away": 0.299
     },
-    "left": 0.687
+    "left": 0.687,
+    "hold": {
+     "guard": 0.138,
+     "hit": 0.451,
+     "stands": {
+      "<60": 0.32,
+      "<110": 0.306,
+      "<170": 0.248,
+      "further": 0.125
+     },
+     "moves": 4.05,
+     "air_moves": 0.387,
+     "jumps": 0.67,
+     "jumps_n": 843,
+     "jump": {
+      "out": 0.502,
+      "stayed in": 0.199,
+      "player hit": 0.202,
+      "caught": 0.097
+     }
+    }
    },
    "jumpins": {
     "per_min": 4.35,
@@ -25070,6 +26256,92 @@
      "net": -591,
      "gained": 370,
      "lost": 960
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1222,
+     "rate": 40.7,
+     "gained": 142.5,
+     "lost": 101.8,
+     "entered": 3.03,
+     "won": 0.235,
+     "lost_first": 0.21,
+     "each": 98
+    },
+    "its okizeme": {
+     "share": 0.163,
+     "rate": -79.7,
+     "gained": 82.1,
+     "lost": 161.8,
+     "entered": 4.15,
+     "won": 0.175,
+     "lost_first": 0.266,
+     "each": -188
+    },
+    "my pressure": {
+     "share": 0.1239,
+     "rate": -49.1,
+     "gained": 143.5,
+     "lost": 192.6,
+     "entered": 4.7,
+     "won": 0.309,
+     "lost_first": 0.166,
+     "each": -78
+    },
+    "its pressure": {
+     "share": 0.092,
+     "rate": -141.6,
+     "gained": 117.4,
+     "lost": 259.0,
+     "entered": 3.94,
+     "won": 0.12,
+     "lost_first": 0.39,
+     "each": -199
+    },
+    "I came by air": {
+     "share": 0.0942,
+     "rate": -32.5,
+     "gained": 92.7,
+     "lost": 125.2,
+     "entered": 10.66,
+     "won": 0.053,
+     "lost_first": 0.045,
+     "each": -17
+    },
+    "it came by air": {
+     "share": 0.0748,
+     "rate": 71.5,
+     "gained": 208.0,
+     "lost": 136.5,
+     "entered": 8.48,
+     "won": 0.079,
+     "lost_first": 0.068,
+     "each": 38
+    },
+    "both in the air": {
+     "share": 0.2488,
+     "rate": -13.5,
+     "gained": 41.3,
+     "lost": 54.8,
+     "entered": 13.34,
+     "won": 0.05,
+     "lost_first": 0.07,
+     "each": -15
+    },
+    "on the ground": {
+     "share": 0.0811,
+     "rate": -121.4,
+     "gained": 75.9,
+     "lost": 197.3,
+     "entered": 8.28,
+     "won": 0.044,
+     "lost_first": 0.085,
+     "each": -71
+    },
+    "opening": {
+     "dealt": 916.142,
+     "taken": 1088.031
     }
    },
    "rounds": {
@@ -26288,7 +27560,27 @@
      "out on the ground": 0.306,
      "hit away": 0.299
     },
-    "left": 0.664
+    "left": 0.664,
+    "hold": {
+     "guard": 0.115,
+     "hit": 0.474,
+     "stands": {
+      "<60": 0.32,
+      "<110": 0.289,
+      "<170": 0.224,
+      "further": 0.167
+     },
+     "moves": 7.04,
+     "air_moves": 0.484,
+     "jumps": 0.53,
+     "jumps_n": 143,
+     "jump": {
+      "out": 0.503,
+      "stayed in": 0.231,
+      "player hit": 0.105,
+      "caught": 0.161
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.85,
@@ -27285,6 +28577,92 @@
      "net": 147,
      "gained": 599,
      "lost": 451
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1241,
+     "rate": 77.8,
+     "gained": 164.1,
+     "lost": 86.3,
+     "entered": 3.41,
+     "won": 0.285,
+     "lost_first": 0.212,
+     "each": 170
+    },
+    "its okizeme": {
+     "share": 0.1351,
+     "rate": -58.6,
+     "gained": 107.1,
+     "lost": 165.7,
+     "entered": 3.79,
+     "won": 0.206,
+     "lost_first": 0.352,
+     "each": -125
+    },
+    "my pressure": {
+     "share": 0.127,
+     "rate": 60.7,
+     "gained": 191.4,
+     "lost": 130.7,
+     "entered": 4.96,
+     "won": 0.351,
+     "lost_first": 0.166,
+     "each": 93
+    },
+    "its pressure": {
+     "share": 0.1159,
+     "rate": -92.7,
+     "gained": 139.1,
+     "lost": 231.7,
+     "entered": 4.85,
+     "won": 0.121,
+     "lost_first": 0.41,
+     "each": -133
+    },
+    "I came by air": {
+     "share": 0.1278,
+     "rate": -43.1,
+     "gained": 117.9,
+     "lost": 161.0,
+     "entered": 10.15,
+     "won": 0.08,
+     "lost_first": 0.081,
+     "each": -33
+    },
+    "it came by air": {
+     "share": 0.0755,
+     "rate": 62.9,
+     "gained": 117.0,
+     "lost": 54.1,
+     "entered": 8.32,
+     "won": 0.052,
+     "lost_first": 0.045,
+     "each": 34
+    },
+    "both in the air": {
+     "share": 0.2112,
+     "rate": 36.5,
+     "gained": 64.4,
+     "lost": 28.0,
+     "entered": 10.96,
+     "won": 0.059,
+     "lost_first": 0.046,
+     "each": 42
+    },
+    "on the ground": {
+     "share": 0.0833,
+     "rate": 29.5,
+     "gained": 119.7,
+     "lost": 90.2,
+     "entered": 8.33,
+     "won": 0.057,
+     "lost_first": 0.072,
+     "each": 18
+    },
+    "opening": {
+     "dealt": 989.197,
+     "taken": 782.582
     }
    },
    "rounds": {
@@ -28495,7 +29873,27 @@
      "out on the ground": 0.207,
      "hit away": 0.403
     },
-    "left": 0.559
+    "left": 0.559,
+    "hold": {
+     "guard": 0.127,
+     "hit": 0.521,
+     "stands": {
+      "<60": 0.341,
+      "<110": 0.302,
+      "<170": 0.252,
+      "further": 0.105
+     },
+     "moves": 6.51,
+     "air_moves": 0.474,
+     "jumps": 0.44,
+     "jumps_n": 352,
+     "jump": {
+      "out": 0.548,
+      "stayed in": 0.239,
+      "player hit": 0.128,
+      "caught": 0.085
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.79,
@@ -29560,6 +30958,92 @@
      "net": -128,
      "gained": 562,
      "lost": 690
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1254,
+     "rate": 60.7,
+     "gained": 185.9,
+     "lost": 125.2,
+     "entered": 3.21,
+     "won": 0.267,
+     "lost_first": 0.238,
+     "each": 142
+    },
+    "its okizeme": {
+     "share": 0.1183,
+     "rate": 2.1,
+     "gained": 110.3,
+     "lost": 108.3,
+     "entered": 3.37,
+     "won": 0.155,
+     "lost_first": 0.226,
+     "each": 4
+    },
+    "my pressure": {
+     "share": 0.1136,
+     "rate": 0.4,
+     "gained": 180.3,
+     "lost": 179.8,
+     "entered": 4.29,
+     "won": 0.31,
+     "lost_first": 0.209,
+     "each": 1
+    },
+    "its pressure": {
+     "share": 0.1168,
+     "rate": -73.1,
+     "gained": 117.8,
+     "lost": 191.0,
+     "entered": 4.67,
+     "won": 0.112,
+     "lost_first": 0.435,
+     "each": -110
+    },
+    "I came by air": {
+     "share": 0.1365,
+     "rate": -25.2,
+     "gained": 94.6,
+     "lost": 119.9,
+     "entered": 9.5,
+     "won": 0.059,
+     "lost_first": 0.111,
+     "each": -22
+    },
+    "it came by air": {
+     "share": 0.062,
+     "rate": 121.5,
+     "gained": 197.8,
+     "lost": 76.3,
+     "entered": 7.19,
+     "won": 0.065,
+     "lost_first": 0.042,
+     "each": 63
+    },
+    "both in the air": {
+     "share": 0.218,
+     "rate": 1.2,
+     "gained": 47.7,
+     "lost": 46.5,
+     "entered": 10.41,
+     "won": 0.041,
+     "lost_first": 0.065,
+     "each": 1
+    },
+    "on the ground": {
+     "share": 0.1093,
+     "rate": -19.5,
+     "gained": 85.8,
+     "lost": 105.3,
+     "entered": 8.05,
+     "won": 0.055,
+     "lost_first": 0.093,
+     "each": -16
+    },
+    "opening": {
+     "dealt": 1169.912,
+     "taken": 844.532
     }
    },
    "rounds": {
@@ -30770,7 +32254,27 @@
      "out on the ground": 0.238,
      "hit away": 0.335
     },
-    "left": 0.615
+    "left": 0.615,
+    "hold": {
+     "guard": 0.101,
+     "hit": 0.625,
+     "stands": {
+      "<60": 0.306,
+      "<110": 0.243,
+      "<170": 0.228,
+      "further": 0.224
+     },
+     "moves": 7.31,
+     "air_moves": 0.481,
+     "jumps": 0.52,
+     "jumps_n": 124,
+     "jump": {
+      "out": 0.613,
+      "stayed in": 0.226,
+      "player hit": 0.081,
+      "caught": 0.081
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.81,
@@ -31717,6 +33221,92 @@
      "net": 1,
      "gained": 937,
      "lost": 936
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1234,
+     "rate": -1.0,
+     "gained": 145.5,
+     "lost": 146.5,
+     "entered": 3.23,
+     "won": 0.213,
+     "lost_first": 0.23,
+     "each": -2
+    },
+    "its okizeme": {
+     "share": 0.1541,
+     "rate": -18.2,
+     "gained": 153.6,
+     "lost": 171.8,
+     "entered": 4.24,
+     "won": 0.17,
+     "lost_first": 0.293,
+     "each": -40
+    },
+    "my pressure": {
+     "share": 0.1148,
+     "rate": 120.8,
+     "gained": 234.8,
+     "lost": 114.1,
+     "entered": 4.28,
+     "won": 0.343,
+     "lost_first": 0.125,
+     "each": 195
+    },
+    "its pressure": {
+     "share": 0.0997,
+     "rate": -92.4,
+     "gained": 146.0,
+     "lost": 238.4,
+     "entered": 4.29,
+     "won": 0.104,
+     "lost_first": 0.321,
+     "each": -129
+    },
+    "I came by air": {
+     "share": 0.1319,
+     "rate": -0.2,
+     "gained": 119.7,
+     "lost": 119.9,
+     "entered": 10.21,
+     "won": 0.07,
+     "lost_first": 0.083,
+     "each": 0
+    },
+    "it came by air": {
+     "share": 0.072,
+     "rate": 87.6,
+     "gained": 165.3,
+     "lost": 77.7,
+     "entered": 6.79,
+     "won": 0.067,
+     "lost_first": 0.031,
+     "each": 56
+    },
+    "both in the air": {
+     "share": 0.2081,
+     "rate": -1.1,
+     "gained": 26.9,
+     "lost": 27.9,
+     "entered": 9.58,
+     "won": 0.027,
+     "lost_first": 0.043,
+     "each": -1
+    },
+    "on the ground": {
+     "share": 0.096,
+     "rate": 0.2,
+     "gained": 162.8,
+     "lost": 162.6,
+     "entered": 8.54,
+     "won": 0.062,
+     "lost_first": 0.088,
+     "each": 0
+    },
+    "opening": {
+     "dealt": 1248.951,
+     "taken": 1073.658
     }
    },
    "rounds": {
@@ -32927,7 +34517,27 @@
      "out on the ground": 0.153,
      "hit away": 0.323
     },
-    "left": 0.629
+    "left": 0.629,
+    "hold": {
+     "guard": 0.107,
+     "hit": 0.537,
+     "stands": {
+      "<60": 0.315,
+      "<110": 0.284,
+      "<170": 0.266,
+      "further": 0.134
+     },
+     "moves": 7.55,
+     "air_moves": 0.483,
+     "jumps": 0.66,
+     "jumps_n": 473,
+     "jump": {
+      "out": 0.516,
+      "stayed in": 0.152,
+      "player hit": 0.163,
+      "caught": 0.169
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.01,
@@ -34065,6 +35675,92 @@
      "net": -75,
      "gained": 576,
      "lost": 651
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1642,
+     "rate": 89.8,
+     "gained": 186.5,
+     "lost": 96.7,
+     "entered": 4.36,
+     "won": 0.352,
+     "lost_first": 0.228,
+     "each": 203
+    },
+    "its okizeme": {
+     "share": 0.1496,
+     "rate": -7.4,
+     "gained": 100.9,
+     "lost": 108.3,
+     "entered": 4.32,
+     "won": 0.23,
+     "lost_first": 0.235,
+     "each": -15
+    },
+    "my pressure": {
+     "share": 0.1103,
+     "rate": 41.0,
+     "gained": 193.3,
+     "lost": 152.3,
+     "entered": 4.84,
+     "won": 0.367,
+     "lost_first": 0.202,
+     "each": 56
+    },
+    "its pressure": {
+     "share": 0.1143,
+     "rate": -11.0,
+     "gained": 168.5,
+     "lost": 179.5,
+     "entered": 5.42,
+     "won": 0.179,
+     "lost_first": 0.334,
+     "each": -14
+    },
+    "I came by air": {
+     "share": 0.1007,
+     "rate": -14.8,
+     "gained": 138.6,
+     "lost": 153.4,
+     "entered": 9.76,
+     "won": 0.088,
+     "lost_first": 0.091,
+     "each": -9
+    },
+    "it came by air": {
+     "share": 0.0728,
+     "rate": 88.2,
+     "gained": 179.0,
+     "lost": 90.8,
+     "entered": 8.77,
+     "won": 0.078,
+     "lost_first": 0.05,
+     "each": 44
+    },
+    "both in the air": {
+     "share": 0.205,
+     "rate": -6.4,
+     "gained": 60.6,
+     "lost": 67.1,
+     "entered": 11.17,
+     "won": 0.061,
+     "lost_first": 0.085,
+     "each": -7
+    },
+    "on the ground": {
+     "share": 0.0832,
+     "rate": -15.1,
+     "gained": 115.4,
+     "lost": 130.5,
+     "entered": 8.59,
+     "won": 0.059,
+     "lost_first": 0.096,
+     "each": -9
+    },
+    "opening": {
+     "dealt": 910.899,
+     "taken": 791.38
     }
    },
    "rounds": {
@@ -35295,7 +36991,27 @@
      "out on the ground": 0.119,
      "hit away": 0.311
     },
-    "left": 0.644
+    "left": 0.644,
+    "hold": {
+     "guard": 0.107,
+     "hit": 0.407,
+     "stands": {
+      "<60": 0.214,
+      "<110": 0.2,
+      "<170": 0.322,
+      "further": 0.264
+     },
+     "moves": 5.77,
+     "air_moves": 0.438,
+     "jumps": 0.83,
+     "jumps_n": 582,
+     "jump": {
+      "out": 0.527,
+      "stayed in": 0.206,
+      "player hit": 0.125,
+      "caught": 0.141
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.2,
@@ -36321,6 +38037,92 @@
      "net": -25,
      "gained": 511,
      "lost": 536
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1188,
+     "rate": 113.9,
+     "gained": 192.1,
+     "lost": 78.2,
+     "entered": 3.25,
+     "won": 0.289,
+     "lost_first": 0.184,
+     "each": 250
+    },
+    "its okizeme": {
+     "share": 0.1363,
+     "rate": -45.5,
+     "gained": 89.8,
+     "lost": 135.3,
+     "entered": 3.74,
+     "won": 0.165,
+     "lost_first": 0.226,
+     "each": -100
+    },
+    "my pressure": {
+     "share": 0.1083,
+     "rate": 38.8,
+     "gained": 187.3,
+     "lost": 148.5,
+     "entered": 4.2,
+     "won": 0.349,
+     "lost_first": 0.171,
+     "each": 60
+    },
+    "its pressure": {
+     "share": 0.1217,
+     "rate": -50.0,
+     "gained": 126.5,
+     "lost": 176.5,
+     "entered": 5.42,
+     "won": 0.119,
+     "lost_first": 0.346,
+     "each": -67
+    },
+    "I came by air": {
+     "share": 0.1395,
+     "rate": -21.2,
+     "gained": 75.2,
+     "lost": 96.4,
+     "entered": 10.17,
+     "won": 0.065,
+     "lost_first": 0.087,
+     "each": -17
+    },
+    "it came by air": {
+     "share": 0.0784,
+     "rate": 30.5,
+     "gained": 156.3,
+     "lost": 125.8,
+     "entered": 8.26,
+     "won": 0.068,
+     "lost_first": 0.069,
+     "each": 17
+    },
+    "both in the air": {
+     "share": 0.1813,
+     "rate": -6.0,
+     "gained": 50.4,
+     "lost": 56.4,
+     "entered": 9.87,
+     "won": 0.047,
+     "lost_first": 0.067,
+     "each": -7
+    },
+    "on the ground": {
+     "share": 0.1156,
+     "rate": -3.6,
+     "gained": 73.7,
+     "lost": 77.3,
+     "entered": 9.56,
+     "won": 0.046,
+     "lost_first": 0.067,
+     "each": -3
+    },
+    "opening": {
+     "dealt": 1022.155,
+     "taken": 847.26
     }
    },
    "rounds": {
@@ -37551,7 +39353,27 @@
      "out on the ground": 0.244,
      "hit away": 0.279
     },
-    "left": 0.672
+    "left": 0.672,
+    "hold": {
+     "guard": 0.107,
+     "hit": 0.486,
+     "stands": {
+      "<60": 0.331,
+      "<110": 0.247,
+      "<170": 0.239,
+      "further": 0.183
+     },
+     "moves": 5.55,
+     "air_moves": 0.42,
+     "jumps": 0.54,
+     "jumps_n": 293,
+     "jump": {
+      "out": 0.515,
+      "stayed in": 0.263,
+      "player hit": 0.109,
+      "caught": 0.113
+     }
+    }
    },
    "jumpins": {
     "per_min": 6.3,
@@ -38456,6 +40278,92 @@
      "net": -209,
      "gained": 383,
      "lost": 592
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1232,
+     "rate": 71.4,
+     "gained": 184.5,
+     "lost": 113.1,
+     "entered": 3.31,
+     "won": 0.293,
+     "lost_first": 0.249,
+     "each": 159
+    },
+    "its okizeme": {
+     "share": 0.1748,
+     "rate": -29.6,
+     "gained": 85.2,
+     "lost": 114.8,
+     "entered": 4.66,
+     "won": 0.157,
+     "lost_first": 0.282,
+     "each": -67
+    },
+    "my pressure": {
+     "share": 0.084,
+     "rate": 31.5,
+     "gained": 167.5,
+     "lost": 136.0,
+     "entered": 3.28,
+     "won": 0.336,
+     "lost_first": 0.173,
+     "each": 48
+    },
+    "its pressure": {
+     "share": 0.1261,
+     "rate": -52.2,
+     "gained": 147.4,
+     "lost": 199.6,
+     "entered": 5.66,
+     "won": 0.142,
+     "lost_first": 0.407,
+     "each": -70
+    },
+    "I came by air": {
+     "share": 0.102,
+     "rate": -94.0,
+     "gained": 137.3,
+     "lost": 231.3,
+     "entered": 10.16,
+     "won": 0.074,
+     "lost_first": 0.116,
+     "each": -57
+    },
+    "it came by air": {
+     "share": 0.086,
+     "rate": 17.2,
+     "gained": 104.9,
+     "lost": 87.7,
+     "entered": 8.82,
+     "won": 0.05,
+     "lost_first": 0.067,
+     "each": 10
+    },
+    "both in the air": {
+     "share": 0.2224,
+     "rate": 6.9,
+     "gained": 55.9,
+     "lost": 49.0,
+     "entered": 12.05,
+     "won": 0.057,
+     "lost_first": 0.062,
+     "each": 8
+    },
+    "on the ground": {
+     "share": 0.0815,
+     "rate": -42.7,
+     "gained": 78.3,
+     "lost": 121.0,
+     "entered": 9.09,
+     "won": 0.042,
+     "lost_first": 0.089,
+     "each": -23
+    },
+    "opening": {
+     "dealt": 997.567,
+     "taken": 761.093
     }
    },
    "rounds": {
@@ -39666,7 +41574,27 @@
      "out on the ground": 0.185,
      "hit away": 0.327
     },
-    "left": 0.649
+    "left": 0.649,
+    "hold": {
+     "guard": 0.071,
+     "hit": 0.612,
+     "stands": {
+      "<60": 0.305,
+      "<110": 0.256,
+      "<170": 0.263,
+      "further": 0.177
+     },
+     "moves": 4.93,
+     "air_moves": 0.539,
+     "jumps": 0.47,
+     "jumps_n": 159,
+     "jump": {
+      "out": 0.56,
+      "stayed in": 0.258,
+      "player hit": 0.082,
+      "caught": 0.101
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.26,
@@ -40604,6 +42532,92 @@
      "net": 175,
      "gained": 681,
      "lost": 506
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1031,
+     "rate": 8.0,
+     "gained": 172.1,
+     "lost": 164.1,
+     "entered": 2.88,
+     "won": 0.27,
+     "lost_first": 0.321,
+     "each": 17
+    },
+    "its okizeme": {
+     "share": 0.1852,
+     "rate": -60.2,
+     "gained": 122.9,
+     "lost": 183.1,
+     "entered": 4.88,
+     "won": 0.202,
+     "lost_first": 0.286,
+     "each": -137
+    },
+    "my pressure": {
+     "share": 0.0784,
+     "rate": 59.7,
+     "gained": 229.3,
+     "lost": 169.6,
+     "entered": 3.5,
+     "won": 0.302,
+     "lost_first": 0.207,
+     "each": 80
+    },
+    "its pressure": {
+     "share": 0.1185,
+     "rate": -115.7,
+     "gained": 143.6,
+     "lost": 259.3,
+     "entered": 5.47,
+     "won": 0.117,
+     "lost_first": 0.361,
+     "each": -150
+    },
+    "I came by air": {
+     "share": 0.1149,
+     "rate": -55.9,
+     "gained": 116.0,
+     "lost": 171.9,
+     "entered": 11.46,
+     "won": 0.063,
+     "lost_first": 0.098,
+     "each": -34
+    },
+    "it came by air": {
+     "share": 0.0652,
+     "rate": 170.2,
+     "gained": 225.2,
+     "lost": 55.0,
+     "entered": 7.87,
+     "won": 0.077,
+     "lost_first": 0.042,
+     "each": 85
+    },
+    "both in the air": {
+     "share": 0.2561,
+     "rate": -7.4,
+     "gained": 36.2,
+     "lost": 43.6,
+     "entered": 12.66,
+     "won": 0.048,
+     "lost_first": 0.057,
+     "each": -9
+    },
+    "on the ground": {
+     "share": 0.0786,
+     "rate": 37.1,
+     "gained": 144.3,
+     "lost": 107.2,
+     "entered": 8.32,
+     "won": 0.061,
+     "lost_first": 0.102,
+     "each": 21
+    },
+    "opening": {
+     "dealt": 1117.118,
+     "taken": 911.439
     }
    },
    "rounds": {
@@ -41816,7 +43830,27 @@
      "out on the ground": 0.231,
      "hit away": 0.329
     },
-    "left": 0.623
+    "left": 0.623,
+    "hold": {
+     "guard": 0.099,
+     "hit": 0.549,
+     "stands": {
+      "<60": 0.381,
+      "<110": 0.307,
+      "<170": 0.2,
+      "further": 0.111
+     },
+     "moves": 6.67,
+     "air_moves": 0.491,
+     "jumps": 0.47,
+     "jumps_n": 348,
+     "jump": {
+      "out": 0.405,
+      "stayed in": 0.287,
+      "player hit": 0.207,
+      "caught": 0.101
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.31,
@@ -42787,6 +44821,92 @@
      "net": -211,
      "gained": 736,
      "lost": 947
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1529,
+     "rate": 83.3,
+     "gained": 212.9,
+     "lost": 129.5,
+     "entered": 4.18,
+     "won": 0.334,
+     "lost_first": 0.231,
+     "each": 183
+    },
+    "its okizeme": {
+     "share": 0.1123,
+     "rate": 49.4,
+     "gained": 152.0,
+     "lost": 102.6,
+     "entered": 3.35,
+     "won": 0.251,
+     "lost_first": 0.222,
+     "each": 99
+    },
+    "my pressure": {
+     "share": 0.1043,
+     "rate": 38.2,
+     "gained": 180.6,
+     "lost": 142.4,
+     "entered": 4.3,
+     "won": 0.315,
+     "lost_first": 0.187,
+     "each": 56
+    },
+    "its pressure": {
+     "share": 0.0951,
+     "rate": -25.2,
+     "gained": 165.4,
+     "lost": 190.6,
+     "entered": 4.34,
+     "won": 0.179,
+     "lost_first": 0.321,
+     "each": -33
+    },
+    "I came by air": {
+     "share": 0.1765,
+     "rate": -87.5,
+     "gained": 131.0,
+     "lost": 218.6,
+     "entered": 9.73,
+     "won": 0.126,
+     "lost_first": 0.144,
+     "each": -95
+    },
+    "it came by air": {
+     "share": 0.068,
+     "rate": 95.2,
+     "gained": 195.2,
+     "lost": 100.0,
+     "entered": 8.18,
+     "won": 0.076,
+     "lost_first": 0.051,
+     "each": 48
+    },
+    "both in the air": {
+     "share": 0.1858,
+     "rate": -27.1,
+     "gained": 47.8,
+     "lost": 74.9,
+     "entered": 9.17,
+     "won": 0.049,
+     "lost_first": 0.091,
+     "each": -33
+    },
+    "on the ground": {
+     "share": 0.1051,
+     "rate": -33.5,
+     "gained": 116.8,
+     "lost": 150.3,
+     "entered": 9.18,
+     "won": 0.075,
+     "lost_first": 0.07,
+     "each": -23
+    },
+    "opening": {
+     "dealt": 1006.466,
+     "taken": 1004.188
     }
    },
    "rounds": {
@@ -44011,7 +46131,27 @@
      "out on the ground": 0.228,
      "hit away": 0.354
     },
-    "left": 0.582
+    "left": 0.582,
+    "hold": {
+     "guard": 0.121,
+     "hit": 0.531,
+     "stands": {
+      "<60": 0.306,
+      "<110": 0.248,
+      "<170": 0.262,
+      "further": 0.184
+     },
+     "moves": 7.08,
+     "air_moves": 0.431,
+     "jumps": 0.46,
+     "jumps_n": 72,
+     "jump": {
+      "out": 0.389,
+      "stayed in": 0.278,
+      "player hit": 0.139,
+      "caught": 0.194
+     }
+    }
    },
    "jumpins": {
     "per_min": 5.25,
@@ -44924,6 +47064,92 @@
      "net": -432,
      "gained": 446,
      "lost": 878
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1342,
+     "rate": 141.0,
+     "gained": 236.0,
+     "lost": 95.1,
+     "entered": 3.66,
+     "won": 0.329,
+     "lost_first": 0.224,
+     "each": 310
+    },
+    "its okizeme": {
+     "share": 0.1122,
+     "rate": -135.1,
+     "gained": 73.4,
+     "lost": 208.5,
+     "entered": 3.19,
+     "won": 0.142,
+     "lost_first": 0.284,
+     "each": -286
+    },
+    "my pressure": {
+     "share": 0.1147,
+     "rate": 35.8,
+     "gained": 197.0,
+     "lost": 161.2,
+     "entered": 4.26,
+     "won": 0.369,
+     "lost_first": 0.136,
+     "each": 58
+    },
+    "its pressure": {
+     "share": 0.0929,
+     "rate": -67.6,
+     "gained": 150.7,
+     "lost": 218.3,
+     "entered": 3.68,
+     "won": 0.222,
+     "lost_first": 0.345,
+     "each": -102
+    },
+    "I came by air": {
+     "share": 0.1004,
+     "rate": -36.7,
+     "gained": 141.9,
+     "lost": 178.6,
+     "entered": 8.74,
+     "won": 0.089,
+     "lost_first": 0.126,
+     "each": -25
+    },
+    "it came by air": {
+     "share": 0.0891,
+     "rate": 116.6,
+     "gained": 186.8,
+     "lost": 70.2,
+     "entered": 10.16,
+     "won": 0.064,
+     "lost_first": 0.042,
+     "each": 61
+    },
+    "both in the air": {
+     "share": 0.234,
+     "rate": 21.1,
+     "gained": 68.0,
+     "lost": 46.9,
+     "entered": 11.54,
+     "won": 0.052,
+     "lost_first": 0.067,
+     "each": 26
+    },
+    "on the ground": {
+     "share": 0.1224,
+     "rate": -58.8,
+     "gained": 60.8,
+     "lost": 119.5,
+     "entered": 10.29,
+     "won": 0.052,
+     "lost_first": 0.067,
+     "each": -42
+    },
+    "opening": {
+     "dealt": 1062.636,
+     "taken": 1031.714
     }
    },
    "rounds": {
@@ -46081,7 +48307,27 @@
      "out on the ground": 0.235,
      "hit away": 0.3
     },
-    "left": 0.647
+    "left": 0.647,
+    "hold": {
+     "guard": 0.133,
+     "hit": 0.51,
+     "stands": {
+      "<60": 0.36,
+      "<110": 0.308,
+      "<170": 0.215,
+      "further": 0.118
+     },
+     "moves": 6.56,
+     "air_moves": 0.452,
+     "jumps": 0.59,
+     "jumps_n": 379,
+     "jump": {
+      "out": 0.435,
+      "stayed in": 0.253,
+      "player hit": 0.166,
+      "caught": 0.145
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.98,
@@ -47007,6 +49253,92 @@
      "net": -108,
      "gained": 683,
      "lost": 792
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1281,
+     "rate": 83.1,
+     "gained": 180.5,
+     "lost": 97.5,
+     "entered": 3.26,
+     "won": 0.275,
+     "lost_first": 0.195,
+     "each": 196
+    },
+    "its okizeme": {
+     "share": 0.149,
+     "rate": -32.8,
+     "gained": 95.1,
+     "lost": 127.9,
+     "entered": 4.09,
+     "won": 0.176,
+     "lost_first": 0.247,
+     "each": -72
+    },
+    "my pressure": {
+     "share": 0.1254,
+     "rate": 34.5,
+     "gained": 216.6,
+     "lost": 182.1,
+     "entered": 4.77,
+     "won": 0.376,
+     "lost_first": 0.15,
+     "each": 54
+    },
+    "its pressure": {
+     "share": 0.0987,
+     "rate": -129.9,
+     "gained": 141.6,
+     "lost": 271.5,
+     "entered": 4.09,
+     "won": 0.136,
+     "lost_first": 0.523,
+     "each": -188
+    },
+    "I came by air": {
+     "share": 0.1151,
+     "rate": -6.7,
+     "gained": 99.9,
+     "lost": 106.7,
+     "entered": 10.75,
+     "won": 0.068,
+     "lost_first": 0.057,
+     "each": -4
+    },
+    "it came by air": {
+     "share": 0.0708,
+     "rate": 37.5,
+     "gained": 133.1,
+     "lost": 95.6,
+     "entered": 7.83,
+     "won": 0.063,
+     "lost_first": 0.041,
+     "each": 20
+    },
+    "both in the air": {
+     "share": 0.2164,
+     "rate": -29.2,
+     "gained": 47.8,
+     "lost": 76.9,
+     "entered": 10.48,
+     "won": 0.059,
+     "lost_first": 0.092,
+     "each": -36
+    },
+    "on the ground": {
+     "share": 0.0965,
+     "rate": -18.7,
+     "gained": 118.1,
+     "lost": 136.8,
+     "entered": 9.28,
+     "won": 0.054,
+     "lost_first": 0.064,
+     "each": -12
+    },
+    "opening": {
+     "dealt": 981.855,
+     "taken": 1015.149
     }
    },
    "rounds": {
@@ -48231,7 +50563,27 @@
      "out on the ground": 0.143,
      "hit away": 0.453
     },
-    "left": 0.521
+    "left": 0.521,
+    "hold": {
+     "guard": 0.126,
+     "hit": 0.436,
+     "stands": {
+      "<60": 0.312,
+      "<110": 0.313,
+      "<170": 0.235,
+      "further": 0.14
+     },
+     "moves": 4.55,
+     "air_moves": 0.446,
+     "jumps": 0.61,
+     "jumps_n": 582,
+     "jump": {
+      "out": 0.601,
+      "stayed in": 0.153,
+      "player hit": 0.158,
+      "caught": 0.088
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.65,
@@ -49238,6 +51590,92 @@
      "net": -201,
      "gained": 324,
      "lost": 524
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1,
+     "rate": -0.0,
+     "gained": 130.4,
+     "lost": 130.4,
+     "entered": 2.65,
+     "won": 0.238,
+     "lost_first": 0.233,
+     "each": 0
+    },
+    "its okizeme": {
+     "share": 0.2048,
+     "rate": -54.0,
+     "gained": 75.4,
+     "lost": 129.4,
+     "entered": 5.61,
+     "won": 0.185,
+     "lost_first": 0.276,
+     "each": -118
+    },
+    "my pressure": {
+     "share": 0.0992,
+     "rate": -74.4,
+     "gained": 164.8,
+     "lost": 239.1,
+     "entered": 4.19,
+     "won": 0.263,
+     "lost_first": 0.26,
+     "each": -106
+    },
+    "its pressure": {
+     "share": 0.1305,
+     "rate": -139.0,
+     "gained": 98.5,
+     "lost": 237.5,
+     "entered": 5.56,
+     "won": 0.095,
+     "lost_first": 0.463,
+     "each": -196
+    },
+    "I came by air": {
+     "share": 0.1644,
+     "rate": -127.4,
+     "gained": 74.2,
+     "lost": 201.5,
+     "entered": 11.76,
+     "won": 0.054,
+     "lost_first": 0.145,
+     "each": -107
+    },
+    "it came by air": {
+     "share": 0.0444,
+     "rate": 39.3,
+     "gained": 167.2,
+     "lost": 127.8,
+     "entered": 5.63,
+     "won": 0.058,
+     "lost_first": 0.068,
+     "each": 19
+    },
+    "both in the air": {
+     "share": 0.1731,
+     "rate": -39.9,
+     "gained": 37.1,
+     "lost": 76.9,
+     "entered": 10.66,
+     "won": 0.04,
+     "lost_first": 0.079,
+     "each": -39
+    },
+    "on the ground": {
+     "share": 0.0834,
+     "rate": -40.1,
+     "gained": 64.7,
+     "lost": 104.8,
+     "entered": 8.44,
+     "won": 0.041,
+     "lost_first": 0.065,
+     "each": -24
+    },
+    "opening": {
+     "dealt": 885.038,
+     "taken": 883.491
     }
    },
    "rounds": {
@@ -50455,7 +52893,27 @@
      "out on the ground": 0.218,
      "hit away": 0.368
     },
-    "left": 0.579
+    "left": 0.579,
+    "hold": {
+     "guard": 0.146,
+     "hit": 0.557,
+     "stands": {
+      "<60": 0.423,
+      "<110": 0.344,
+      "<170": 0.153,
+      "further": 0.08
+     },
+     "moves": 8.91,
+     "air_moves": 0.445,
+     "jumps": 0.49,
+     "jumps_n": 139,
+     "jump": {
+      "out": 0.612,
+      "stayed in": 0.209,
+      "player hit": 0.05,
+      "caught": 0.129
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.33,
@@ -51386,6 +53844,92 @@
      "net": 51,
      "gained": 637,
      "lost": 586
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.128,
+     "rate": 46.6,
+     "gained": 144.0,
+     "lost": 97.3,
+     "entered": 3.43,
+     "won": 0.238,
+     "lost_first": 0.221,
+     "each": 105
+    },
+    "its okizeme": {
+     "share": 0.1478,
+     "rate": 2.1,
+     "gained": 96.1,
+     "lost": 94.0,
+     "entered": 4.05,
+     "won": 0.192,
+     "lost_first": 0.284,
+     "each": 5
+    },
+    "my pressure": {
+     "share": 0.1134,
+     "rate": 107.7,
+     "gained": 281.1,
+     "lost": 173.4,
+     "entered": 4.34,
+     "won": 0.316,
+     "lost_first": 0.219,
+     "each": 169
+    },
+    "its pressure": {
+     "share": 0.1114,
+     "rate": -35.8,
+     "gained": 152.9,
+     "lost": 188.7,
+     "entered": 5.26,
+     "won": 0.1,
+     "lost_first": 0.414,
+     "each": -45
+    },
+    "I came by air": {
+     "share": 0.111,
+     "rate": -88.0,
+     "gained": 132.3,
+     "lost": 220.3,
+     "entered": 10.88,
+     "won": 0.061,
+     "lost_first": 0.123,
+     "each": -54
+    },
+    "it came by air": {
+     "share": 0.0774,
+     "rate": 93.3,
+     "gained": 134.0,
+     "lost": 40.7,
+     "entered": 7.79,
+     "won": 0.053,
+     "lost_first": 0.038,
+     "each": 56
+    },
+    "both in the air": {
+     "share": 0.2389,
+     "rate": -34.5,
+     "gained": 32.6,
+     "lost": 67.1,
+     "entered": 12.67,
+     "won": 0.038,
+     "lost_first": 0.087,
+     "each": -39
+    },
+    "on the ground": {
+     "share": 0.0721,
+     "rate": 11.8,
+     "gained": 147.4,
+     "lost": 135.5,
+     "entered": 8.33,
+     "won": 0.044,
+     "lost_first": 0.071,
+     "each": 6
+    },
+    "opening": {
+     "dealt": 1219.492,
+     "taken": 787.754
     }
    },
    "rounds": {
@@ -52600,7 +55144,27 @@
      "out on the ground": 0.22,
      "hit away": 0.309
     },
-    "left": 0.639
+    "left": 0.639,
+    "hold": {
+     "guard": 0.129,
+     "hit": 0.523,
+     "stands": {
+      "<60": 0.383,
+      "<110": 0.308,
+      "<170": 0.207,
+      "further": 0.102
+     },
+     "moves": 7.52,
+     "air_moves": 0.455,
+     "jumps": 0.56,
+     "jumps_n": 1985,
+     "jump": {
+      "out": 0.481,
+      "stayed in": 0.224,
+      "player hit": 0.139,
+      "caught": 0.156
+     }
+    }
    },
    "jumpins": {
     "per_min": 1.67,
@@ -54260,6 +56824,92 @@
      "lost": 685
     }
    },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1708,
+     "rate": 113.7,
+     "gained": 206.0,
+     "lost": 92.3,
+     "entered": 4.59,
+     "won": 0.344,
+     "lost_first": 0.196,
+     "each": 254
+    },
+    "its okizeme": {
+     "share": 0.1196,
+     "rate": 30.5,
+     "gained": 116.9,
+     "lost": 86.4,
+     "entered": 3.46,
+     "won": 0.232,
+     "lost_first": 0.197,
+     "each": 63
+    },
+    "my pressure": {
+     "share": 0.1306,
+     "rate": 62.7,
+     "gained": 191.5,
+     "lost": 128.7,
+     "entered": 5.26,
+     "won": 0.349,
+     "lost_first": 0.18,
+     "each": 94
+    },
+    "its pressure": {
+     "share": 0.0851,
+     "rate": 16.8,
+     "gained": 179.2,
+     "lost": 162.3,
+     "entered": 4.14,
+     "won": 0.184,
+     "lost_first": 0.318,
+     "each": 21
+    },
+    "I came by air": {
+     "share": 0.1326,
+     "rate": -9.7,
+     "gained": 133.3,
+     "lost": 143.0,
+     "entered": 9.3,
+     "won": 0.111,
+     "lost_first": 0.109,
+     "each": -8
+    },
+    "it came by air": {
+     "share": 0.0723,
+     "rate": 128.1,
+     "gained": 197.8,
+     "lost": 69.7,
+     "entered": 8.63,
+     "won": 0.081,
+     "lost_first": 0.045,
+     "each": 64
+    },
+    "both in the air": {
+     "share": 0.1782,
+     "rate": 10.6,
+     "gained": 59.5,
+     "lost": 48.9,
+     "entered": 9.4,
+     "won": 0.065,
+     "lost_first": 0.073,
+     "each": 12
+    },
+    "on the ground": {
+     "share": 0.1109,
+     "rate": -18.5,
+     "gained": 84.4,
+     "lost": 102.9,
+     "entered": 9.31,
+     "won": 0.063,
+     "lost_first": 0.075,
+     "each": -13
+    },
+    "opening": {
+     "dealt": 948.615,
+     "taken": 812.101
+    }
+   },
    "rounds": {
     "n": 1065,
     "won": 0.697,
@@ -55496,7 +58146,27 @@
      "out on the ground": 0.195,
      "hit away": 0.384
     },
-    "left": 0.6
+    "left": 0.6,
+    "hold": {
+     "guard": 0.097,
+     "hit": 0.266,
+     "stands": {
+      "<60": 0.259,
+      "<110": 0.323,
+      "<170": 0.268,
+      "further": 0.15
+     },
+     "moves": 2.05,
+     "air_moves": 0.336,
+     "jumps": 0.63,
+     "jumps_n": 785,
+     "jump": {
+      "out": 0.571,
+      "stayed in": 0.139,
+      "player hit": 0.172,
+      "caught": 0.118
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.68,
@@ -56923,6 +59593,92 @@
      "lost": 1117
     }
    },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1003,
+     "rate": -25.1,
+     "gained": 65.9,
+     "lost": 91.0,
+     "entered": 2.58,
+     "won": 0.26,
+     "lost_first": 0.283,
+     "each": -59
+    },
+    "its okizeme": {
+     "share": 0.2178,
+     "rate": -52.6,
+     "gained": 71.1,
+     "lost": 123.7,
+     "entered": 5.81,
+     "won": 0.234,
+     "lost_first": 0.246,
+     "each": -118
+    },
+    "my pressure": {
+     "share": 0.1038,
+     "rate": -79.7,
+     "gained": 134.8,
+     "lost": 214.5,
+     "entered": 5.11,
+     "won": 0.342,
+     "lost_first": 0.176,
+     "each": -97
+    },
+    "its pressure": {
+     "share": 0.1076,
+     "rate": -159.7,
+     "gained": 68.2,
+     "lost": 227.9,
+     "entered": 4.78,
+     "won": 0.124,
+     "lost_first": 0.402,
+     "each": -215
+    },
+    "I came by air": {
+     "share": 0.14,
+     "rate": -74.6,
+     "gained": 82.1,
+     "lost": 156.7,
+     "entered": 12.59,
+     "won": 0.082,
+     "lost_first": 0.103,
+     "each": -50
+    },
+    "it came by air": {
+     "share": 0.055,
+     "rate": -25.0,
+     "gained": 110.6,
+     "lost": 135.6,
+     "entered": 6.6,
+     "won": 0.07,
+     "lost_first": 0.07,
+     "each": -13
+    },
+    "both in the air": {
+     "share": 0.1701,
+     "rate": -26.7,
+     "gained": 51.5,
+     "lost": 78.3,
+     "entered": 11.38,
+     "won": 0.063,
+     "lost_first": 0.085,
+     "each": -24
+    },
+    "on the ground": {
+     "share": 0.1054,
+     "rate": -97.0,
+     "gained": 79.6,
+     "lost": 176.6,
+     "entered": 9.73,
+     "won": 0.064,
+     "lost_first": 0.115,
+     "each": -63
+    },
+    "opening": {
+     "dealt": 573.403,
+     "taken": 871.836
+    }
+   },
    "rounds": {
     "n": 353,
     "won": 0.062,
@@ -58146,7 +60902,27 @@
      "out on the ground": 0.207,
      "hit away": 0.323
     },
-    "left": 0.639
+    "left": 0.639,
+    "hold": {
+     "guard": 0.12,
+     "hit": 0.522,
+     "stands": {
+      "<60": 0.261,
+      "<110": 0.241,
+      "<170": 0.256,
+      "further": 0.242
+     },
+     "moves": 6.63,
+     "air_moves": 0.477,
+     "jumps": 0.51,
+     "jumps_n": 660,
+     "jump": {
+      "out": 0.585,
+      "stayed in": 0.23,
+      "player hit": 0.1,
+      "caught": 0.085
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.74,
@@ -59654,6 +62430,92 @@
      "lost": 414
     }
    },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1026,
+     "rate": 122.8,
+     "gained": 229.5,
+     "lost": 106.7,
+     "entered": 2.74,
+     "won": 0.282,
+     "lost_first": 0.18,
+     "each": 275
+    },
+    "its okizeme": {
+     "share": 0.1333,
+     "rate": -40.0,
+     "gained": 109.5,
+     "lost": 149.5,
+     "entered": 3.74,
+     "won": 0.133,
+     "lost_first": 0.272,
+     "each": -85
+    },
+    "my pressure": {
+     "share": 0.1132,
+     "rate": 80.6,
+     "gained": 237.9,
+     "lost": 157.3,
+     "entered": 3.8,
+     "won": 0.338,
+     "lost_first": 0.169,
+     "each": 144
+    },
+    "its pressure": {
+     "share": 0.12,
+     "rate": -75.0,
+     "gained": 123.2,
+     "lost": 198.1,
+     "entered": 4.88,
+     "won": 0.104,
+     "lost_first": 0.345,
+     "each": -111
+    },
+    "I came by air": {
+     "share": 0.1483,
+     "rate": -48.6,
+     "gained": 83.1,
+     "lost": 131.7,
+     "entered": 10.47,
+     "won": 0.05,
+     "lost_first": 0.097,
+     "each": -41
+    },
+    "it came by air": {
+     "share": 0.0709,
+     "rate": 81.0,
+     "gained": 168.0,
+     "lost": 86.9,
+     "entered": 7.27,
+     "won": 0.059,
+     "lost_first": 0.04,
+     "each": 47
+    },
+    "both in the air": {
+     "share": 0.2194,
+     "rate": -14.2,
+     "gained": 32.2,
+     "lost": 46.4,
+     "entered": 11.11,
+     "won": 0.029,
+     "lost_first": 0.053,
+     "each": -17
+    },
+    "on the ground": {
+     "share": 0.0924,
+     "rate": 25.5,
+     "gained": 100.2,
+     "lost": 74.7,
+     "entered": 7.75,
+     "won": 0.045,
+     "lost_first": 0.058,
+     "each": 18
+    },
+    "opening": {
+     "dealt": 1339.108,
+     "taken": 995.626
+    }
+   },
    "rounds": {
     "n": 403,
     "won": 0.509,
@@ -60890,7 +63752,27 @@
      "out on the ground": 0.142,
      "hit away": 0.321
     },
-    "left": 0.653
+    "left": 0.653,
+    "hold": {
+     "guard": 0.134,
+     "hit": 0.516,
+     "stands": {
+      "<60": 0.318,
+      "<110": 0.272,
+      "<170": 0.257,
+      "further": 0.153
+     },
+     "moves": 6.25,
+     "air_moves": 0.39,
+     "jumps": 0.68,
+     "jumps_n": 743,
+     "jump": {
+      "out": 0.466,
+      "stayed in": 0.231,
+      "player hit": 0.168,
+      "caught": 0.135
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.57,
@@ -62328,6 +65210,92 @@
      "lost": 508
     }
    },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1545,
+     "rate": 105.0,
+     "gained": 190.1,
+     "lost": 85.1,
+     "entered": 4.05,
+     "won": 0.281,
+     "lost_first": 0.19,
+     "each": 240
+    },
+    "its okizeme": {
+     "share": 0.1233,
+     "rate": -34.3,
+     "gained": 103.4,
+     "lost": 137.6,
+     "entered": 3.32,
+     "won": 0.184,
+     "lost_first": 0.25,
+     "each": -76
+    },
+    "my pressure": {
+     "share": 0.1192,
+     "rate": 54.7,
+     "gained": 211.9,
+     "lost": 157.3,
+     "entered": 4.4,
+     "won": 0.335,
+     "lost_first": 0.205,
+     "each": 89
+    },
+    "its pressure": {
+     "share": 0.0938,
+     "rate": -107.7,
+     "gained": 131.7,
+     "lost": 239.4,
+     "entered": 3.95,
+     "won": 0.108,
+     "lost_first": 0.427,
+     "each": -153
+    },
+    "I came by air": {
+     "share": 0.105,
+     "rate": -15.3,
+     "gained": 122.5,
+     "lost": 137.8,
+     "entered": 9.14,
+     "won": 0.072,
+     "lost_first": 0.09,
+     "each": -11
+    },
+    "it came by air": {
+     "share": 0.0923,
+     "rate": 123.0,
+     "gained": 211.0,
+     "lost": 88.0,
+     "entered": 8.72,
+     "won": 0.074,
+     "lost_first": 0.073,
+     "each": 78
+    },
+    "both in the air": {
+     "share": 0.2131,
+     "rate": 12.5,
+     "gained": 53.1,
+     "lost": 40.7,
+     "entered": 10.72,
+     "won": 0.048,
+     "lost_first": 0.052,
+     "each": 15
+    },
+    "on the ground": {
+     "share": 0.0989,
+     "rate": -15.0,
+     "gained": 70.6,
+     "lost": 85.6,
+     "entered": 8.57,
+     "won": 0.043,
+     "lost_first": 0.055,
+     "each": -10
+    },
+    "opening": {
+     "dealt": 1130.29,
+     "taken": 901.206
+    }
+   },
    "rounds": {
     "n": 295,
     "won": 0.617,
@@ -63545,7 +66513,27 @@
      "out on the ground": 0.171,
      "hit away": 0.379
     },
-    "left": 0.596
+    "left": 0.596,
+    "hold": {
+     "guard": 0.09,
+     "hit": 0.395,
+     "stands": {
+      "<60": 0.297,
+      "<110": 0.247,
+      "<170": 0.283,
+      "further": 0.173
+     },
+     "moves": 3.45,
+     "air_moves": 0.448,
+     "jumps": 0.52,
+     "jumps_n": 316,
+     "jump": {
+      "out": 0.589,
+      "stayed in": 0.171,
+      "player hit": 0.155,
+      "caught": 0.085
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.57,
@@ -64924,6 +67912,92 @@
      "lost": 1226
     }
    },
+   "areas": {
+    "my okizeme": {
+     "share": 0.0985,
+     "rate": 0.7,
+     "gained": 118.3,
+     "lost": 117.6,
+     "entered": 2.59,
+     "won": 0.261,
+     "lost_first": 0.238,
+     "each": 2
+    },
+    "its okizeme": {
+     "share": 0.1752,
+     "rate": -93.1,
+     "gained": 71.9,
+     "lost": 165.0,
+     "entered": 4.85,
+     "won": 0.14,
+     "lost_first": 0.319,
+     "each": -202
+    },
+    "my pressure": {
+     "share": 0.0907,
+     "rate": -59.9,
+     "gained": 155.6,
+     "lost": 215.5,
+     "entered": 3.83,
+     "won": 0.319,
+     "lost_first": 0.209,
+     "each": -85
+    },
+    "its pressure": {
+     "share": 0.1219,
+     "rate": -142.0,
+     "gained": 107.1,
+     "lost": 249.1,
+     "entered": 5.21,
+     "won": 0.125,
+     "lost_first": 0.41,
+     "each": -199
+    },
+    "I came by air": {
+     "share": 0.1512,
+     "rate": -65.8,
+     "gained": 70.5,
+     "lost": 136.3,
+     "entered": 11.17,
+     "won": 0.06,
+     "lost_first": 0.094,
+     "each": -53
+    },
+    "it came by air": {
+     "share": 0.0627,
+     "rate": 4.4,
+     "gained": 167.1,
+     "lost": 162.8,
+     "entered": 7.3,
+     "won": 0.061,
+     "lost_first": 0.077,
+     "each": 2
+    },
+    "both in the air": {
+     "share": 0.1788,
+     "rate": -28.3,
+     "gained": 40.1,
+     "lost": 68.4,
+     "entered": 10.24,
+     "won": 0.057,
+     "lost_first": 0.084,
+     "each": -30
+    },
+    "on the ground": {
+     "share": 0.1209,
+     "rate": -91.2,
+     "gained": 77.8,
+     "lost": 169.0,
+     "entered": 9.49,
+     "won": 0.055,
+     "lost_first": 0.106,
+     "each": -70
+    },
+    "opening": {
+     "dealt": 839.096,
+     "taken": 934.525
+    }
+   },
    "rounds": {
     "n": 232,
     "won": 0.177,
@@ -66153,7 +69227,27 @@
      "out on the ground": 0.127,
      "hit away": 0.568
     },
-    "left": 0.406
+    "left": 0.406,
+    "hold": {
+     "guard": 0.14,
+     "hit": 0.237,
+     "stands": {
+      "<60": 0.386,
+      "<110": 0.366,
+      "<170": 0.166,
+      "further": 0.082
+     },
+     "moves": 2.5,
+     "air_moves": 0.37,
+     "jumps": 0.64,
+     "jumps_n": 146,
+     "jump": {
+      "out": 0.541,
+      "stayed in": 0.171,
+      "player hit": 0.226,
+      "caught": 0.062
+     }
+    }
    },
    "jumpins": {
     "per_min": 5.9,
@@ -67101,6 +70195,92 @@
      "net": -354,
      "gained": 293,
      "lost": 648
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.0973,
+     "rate": -78.4,
+     "gained": 73.4,
+     "lost": 151.8,
+     "entered": 2.53,
+     "won": 0.16,
+     "lost_first": 0.283,
+     "each": -181
+    },
+    "its okizeme": {
+     "share": 0.2559,
+     "rate": -82.2,
+     "gained": 59.9,
+     "lost": 142.1,
+     "entered": 6.88,
+     "won": 0.17,
+     "lost_first": 0.289,
+     "each": -183
+    },
+    "my pressure": {
+     "share": 0.1021,
+     "rate": -118.8,
+     "gained": 134.1,
+     "lost": 252.9,
+     "entered": 4.44,
+     "won": 0.286,
+     "lost_first": 0.233,
+     "each": -164
+    },
+    "its pressure": {
+     "share": 0.1273,
+     "rate": -235.4,
+     "gained": 127.5,
+     "lost": 362.9,
+     "entered": 5.74,
+     "won": 0.152,
+     "lost_first": 0.551,
+     "each": -313
+    },
+    "I came by air": {
+     "share": 0.1418,
+     "rate": -180.6,
+     "gained": 27.8,
+     "lost": 208.4,
+     "entered": 11.74,
+     "won": 0.031,
+     "lost_first": 0.115,
+     "each": -131
+    },
+    "it came by air": {
+     "share": 0.0373,
+     "rate": -124.7,
+     "gained": 69.0,
+     "lost": 193.7,
+     "entered": 5.02,
+     "won": 0.045,
+     "lost_first": 0.09,
+     "each": -56
+    },
+    "both in the air": {
+     "share": 0.1642,
+     "rate": -76.7,
+     "gained": 28.1,
+     "lost": 104.8,
+     "entered": 10.09,
+     "won": 0.045,
+     "lost_first": 0.115,
+     "each": -75
+    },
+    "on the ground": {
+     "share": 0.074,
+     "rate": -79.8,
+     "gained": 66.0,
+     "lost": 145.8,
+     "entered": 8.47,
+     "won": 0.043,
+     "lost_first": 0.07,
+     "each": -42
+    },
+    "opening": {
+     "dealt": 660.377,
+     "taken": 959.853
     }
    },
    "rounds": {
@@ -68292,7 +71472,27 @@
      "out on the ground": 0.164,
      "hit away": 0.451
     },
-    "left": 0.531
+    "left": 0.531,
+    "hold": {
+     "guard": 0.11,
+     "hit": 0.483,
+     "stands": {
+      "<60": 0.342,
+      "<110": 0.254,
+      "<170": 0.251,
+      "further": 0.152
+     },
+     "moves": 4.87,
+     "air_moves": 0.516,
+     "jumps": 0.43,
+     "jumps_n": 144,
+     "jump": {
+      "out": 0.576,
+      "stayed in": 0.25,
+      "player hit": 0.139,
+      "caught": 0.035
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.14,
@@ -69525,6 +72725,92 @@
      "lost": 779
     }
    },
+   "areas": {
+    "my okizeme": {
+     "share": 0.078,
+     "rate": 58.9,
+     "gained": 197.6,
+     "lost": 138.7,
+     "entered": 2.07,
+     "won": 0.255,
+     "lost_first": 0.195,
+     "each": 133
+    },
+    "its okizeme": {
+     "share": 0.1879,
+     "rate": -99.4,
+     "gained": 104.3,
+     "lost": 203.6,
+     "entered": 4.9,
+     "won": 0.166,
+     "lost_first": 0.332,
+     "each": -228
+    },
+    "my pressure": {
+     "share": 0.0976,
+     "rate": -105.4,
+     "gained": 129.9,
+     "lost": 235.3,
+     "entered": 4.11,
+     "won": 0.248,
+     "lost_first": 0.171,
+     "each": -150
+    },
+    "its pressure": {
+     "share": 0.1094,
+     "rate": -173.4,
+     "gained": 130.5,
+     "lost": 304.0,
+     "entered": 5.07,
+     "won": 0.097,
+     "lost_first": 0.386,
+     "each": -224
+    },
+    "I came by air": {
+     "share": 0.1472,
+     "rate": -48.8,
+     "gained": 89.6,
+     "lost": 138.5,
+     "entered": 12.1,
+     "won": 0.048,
+     "lost_first": 0.077,
+     "each": -36
+    },
+    "it came by air": {
+     "share": 0.0444,
+     "rate": 28.1,
+     "gained": 138.9,
+     "lost": 110.8,
+     "entered": 5.97,
+     "won": 0.055,
+     "lost_first": 0.037,
+     "each": 13
+    },
+    "both in the air": {
+     "share": 0.245,
+     "rate": -29.8,
+     "gained": 21.9,
+     "lost": 51.7,
+     "entered": 11.96,
+     "won": 0.023,
+     "lost_first": 0.058,
+     "each": -37
+    },
+    "on the ground": {
+     "share": 0.0905,
+     "rate": -61.6,
+     "gained": 81.8,
+     "lost": 143.4,
+     "entered": 7.66,
+     "won": 0.039,
+     "lost_first": 0.075,
+     "each": -44
+    },
+    "opening": {
+     "dealt": 1150.978,
+     "taken": 1172.005
+    }
+   },
    "rounds": {
     "n": 138,
     "won": 0.239,
@@ -70722,7 +74008,27 @@
      "out on the ground": 0.23,
      "hit away": 0.304
     },
-    "left": 0.644
+    "left": 0.644,
+    "hold": {
+     "guard": 0.108,
+     "hit": 0.547,
+     "stands": {
+      "<60": 0.307,
+      "<110": 0.296,
+      "<170": 0.247,
+      "further": 0.15
+     },
+     "moves": 5.94,
+     "air_moves": 0.53,
+     "jumps": 0.48,
+     "jumps_n": 204,
+     "jump": {
+      "out": 0.578,
+      "stayed in": 0.206,
+      "player hit": 0.098,
+      "caught": 0.118
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.85,
@@ -72003,6 +75309,92 @@
      "lost": 553
     }
    },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1099,
+     "rate": 19.7,
+     "gained": 146.8,
+     "lost": 127.1,
+     "entered": 3.0,
+     "won": 0.237,
+     "lost_first": 0.228,
+     "each": 43
+    },
+    "its okizeme": {
+     "share": 0.1419,
+     "rate": -37.6,
+     "gained": 127.2,
+     "lost": 164.7,
+     "entered": 3.83,
+     "won": 0.181,
+     "lost_first": 0.309,
+     "each": -84
+    },
+    "my pressure": {
+     "share": 0.1106,
+     "rate": 84.2,
+     "gained": 207.8,
+     "lost": 123.5,
+     "entered": 4.24,
+     "won": 0.314,
+     "lost_first": 0.181,
+     "each": 132
+    },
+    "its pressure": {
+     "share": 0.1252,
+     "rate": -29.6,
+     "gained": 175.4,
+     "lost": 205.0,
+     "entered": 5.64,
+     "won": 0.123,
+     "lost_first": 0.37,
+     "each": -39
+    },
+    "I came by air": {
+     "share": 0.1149,
+     "rate": -17.9,
+     "gained": 157.3,
+     "lost": 175.2,
+     "entered": 9.45,
+     "won": 0.079,
+     "lost_first": 0.108,
+     "each": -13
+    },
+    "it came by air": {
+     "share": 0.0625,
+     "rate": 75.5,
+     "gained": 156.0,
+     "lost": 80.5,
+     "entered": 7.87,
+     "won": 0.045,
+     "lost_first": 0.045,
+     "each": 36
+    },
+    "both in the air": {
+     "share": 0.2274,
+     "rate": -3.5,
+     "gained": 32.9,
+     "lost": 36.4,
+     "entered": 10.36,
+     "won": 0.044,
+     "lost_first": 0.058,
+     "each": -5
+    },
+    "on the ground": {
+     "share": 0.1075,
+     "rate": 13.5,
+     "gained": 99.3,
+     "lost": 85.8,
+     "entered": 8.97,
+     "won": 0.056,
+     "lost_first": 0.063,
+     "each": 10
+    },
+    "opening": {
+     "dealt": 1146.441,
+     "taken": 869.111
+    }
+   },
    "rounds": {
     "n": 135,
     "won": 0.563,
@@ -73193,7 +76585,27 @@
      "out on the ground": 0.181,
      "hit away": 0.348
     },
-    "left": 0.595
+    "left": 0.595,
+    "hold": {
+     "guard": 0.104,
+     "hit": 0.612,
+     "stands": {
+      "<60": 0.499,
+      "<110": 0.285,
+      "<170": 0.164,
+      "further": 0.052
+     },
+     "moves": 7.98,
+     "air_moves": 0.458,
+     "jumps": 0.52,
+     "jumps_n": 181,
+     "jump": {
+      "out": 0.514,
+      "stayed in": 0.227,
+      "player hit": 0.127,
+      "caught": 0.133
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.99,
@@ -74328,6 +77740,92 @@
      "net": 44,
      "gained": 702,
      "lost": 659
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1455,
+     "rate": 97.3,
+     "gained": 222.8,
+     "lost": 125.6,
+     "entered": 3.94,
+     "won": 0.309,
+     "lost_first": 0.226,
+     "each": 215
+    },
+    "its okizeme": {
+     "share": 0.1305,
+     "rate": -29.6,
+     "gained": 157.0,
+     "lost": 186.6,
+     "entered": 3.79,
+     "won": 0.187,
+     "lost_first": 0.299,
+     "each": -61
+    },
+    "my pressure": {
+     "share": 0.1034,
+     "rate": 86.5,
+     "gained": 268.6,
+     "lost": 182.0,
+     "entered": 4.0,
+     "won": 0.384,
+     "lost_first": 0.185,
+     "each": 134
+    },
+    "its pressure": {
+     "share": 0.1031,
+     "rate": 6.4,
+     "gained": 212.3,
+     "lost": 205.9,
+     "entered": 5.18,
+     "won": 0.148,
+     "lost_first": 0.293,
+     "each": 8
+    },
+    "I came by air": {
+     "share": 0.1089,
+     "rate": -8.4,
+     "gained": 161.5,
+     "lost": 169.9,
+     "entered": 10.0,
+     "won": 0.077,
+     "lost_first": 0.069,
+     "each": -5
+    },
+    "it came by air": {
+     "share": 0.0817,
+     "rate": 53.2,
+     "gained": 116.8,
+     "lost": 63.6,
+     "entered": 7.79,
+     "won": 0.053,
+     "lost_first": 0.037,
+     "each": 33
+    },
+    "both in the air": {
+     "share": 0.2636,
+     "rate": 12.0,
+     "gained": 65.2,
+     "lost": 53.2,
+     "entered": 12.18,
+     "won": 0.05,
+     "lost_first": 0.072,
+     "each": 16
+    },
+    "on the ground": {
+     "share": 0.0632,
+     "rate": 11.6,
+     "gained": 185.2,
+     "lost": 173.6,
+     "entered": 7.05,
+     "won": 0.061,
+     "lost_first": 0.084,
+     "each": 6
+    },
+    "opening": {
+     "dealt": 1303.3,
+     "taken": 1056.024
     }
    },
    "rounds": {
@@ -75526,7 +79024,27 @@
      "out on the ground": 0.304,
      "hit away": 0.359
     },
-    "left": 0.615
+    "left": 0.615,
+    "hold": {
+     "guard": 0.107,
+     "hit": 0.544,
+     "stands": {
+      "<60": 0.352,
+      "<110": 0.252,
+      "<170": 0.208,
+      "further": 0.187
+     },
+     "moves": 4.59,
+     "air_moves": 0.56,
+     "jumps": 0.3,
+     "jumps_n": 93,
+     "jump": {
+      "out": 0.559,
+      "stayed in": 0.215,
+      "player hit": 0.183,
+      "caught": 0.043
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.39,
@@ -76668,6 +80186,92 @@
      "net": -202,
      "gained": 539,
      "lost": 741
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.0782,
+     "rate": 138.4,
+     "gained": 230.6,
+     "lost": 92.2,
+     "entered": 2.11,
+     "won": 0.232,
+     "lost_first": 0.164,
+     "each": 308
+    },
+    "its okizeme": {
+     "share": 0.1733,
+     "rate": -62.3,
+     "gained": 110.5,
+     "lost": 172.7,
+     "entered": 4.62,
+     "won": 0.155,
+     "lost_first": 0.317,
+     "each": -140
+    },
+    "my pressure": {
+     "share": 0.083,
+     "rate": -16.4,
+     "gained": 120.1,
+     "lost": 136.4,
+     "entered": 3.13,
+     "won": 0.202,
+     "lost_first": 0.126,
+     "each": -26
+    },
+    "its pressure": {
+     "share": 0.1323,
+     "rate": -136.3,
+     "gained": 103.0,
+     "lost": 239.3,
+     "entered": 5.01,
+     "won": 0.077,
+     "lost_first": 0.397,
+     "each": -216
+    },
+    "I came by air": {
+     "share": 0.1808,
+     "rate": -64.6,
+     "gained": 67.3,
+     "lost": 131.9,
+     "entered": 12.0,
+     "won": 0.042,
+     "lost_first": 0.086,
+     "each": -58
+    },
+    "it came by air": {
+     "share": 0.0469,
+     "rate": 74.5,
+     "gained": 206.4,
+     "lost": 131.9,
+     "entered": 5.94,
+     "won": 0.058,
+     "lost_first": 0.054,
+     "each": 35
+    },
+    "both in the air": {
+     "share": 0.2226,
+     "rate": -36.1,
+     "gained": 26.1,
+     "lost": 62.2,
+     "entered": 10.94,
+     "won": 0.018,
+     "lost_first": 0.079,
+     "each": -44
+    },
+    "on the ground": {
+     "share": 0.0828,
+     "rate": -40.6,
+     "gained": 108.6,
+     "lost": 149.2,
+     "entered": 7.81,
+     "won": 0.053,
+     "lost_first": 0.077,
+     "each": -26
+    },
+    "opening": {
+     "dealt": 1380.03,
+     "taken": 1085.579
     }
    },
    "rounds": {
@@ -77873,7 +81477,27 @@
      "out on the ground": 0.26,
      "hit away": 0.29
     },
-    "left": 0.651
+    "left": 0.651,
+    "hold": {
+     "guard": 0.123,
+     "hit": 0.521,
+     "stands": {
+      "<60": 0.2,
+      "<110": 0.272,
+      "<170": 0.363,
+      "further": 0.165
+     },
+     "moves": 7.43,
+     "air_moves": 0.478,
+     "jumps": 0.41,
+     "jumps_n": 137,
+     "jump": {
+      "out": 0.504,
+      "stayed in": 0.234,
+      "player hit": 0.197,
+      "caught": 0.066
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.6,
@@ -78949,6 +82573,92 @@
      "net": 85,
      "gained": 459,
      "lost": 374
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.1118,
+     "rate": 192.9,
+     "gained": 261.8,
+     "lost": 68.9,
+     "entered": 2.9,
+     "won": 0.303,
+     "lost_first": 0.12,
+     "each": 446
+    },
+    "its okizeme": {
+     "share": 0.1072,
+     "rate": -108.5,
+     "gained": 30.9,
+     "lost": 139.3,
+     "entered": 3.1,
+     "won": 0.059,
+     "lost_first": 0.303,
+     "each": -225
+    },
+    "my pressure": {
+     "share": 0.1426,
+     "rate": 68.6,
+     "gained": 192.7,
+     "lost": 124.0,
+     "entered": 4.69,
+     "won": 0.316,
+     "lost_first": 0.136,
+     "each": 125
+    },
+    "its pressure": {
+     "share": 0.1341,
+     "rate": -46.9,
+     "gained": 108.8,
+     "lost": 155.7,
+     "entered": 5.5,
+     "won": 0.094,
+     "lost_first": 0.309,
+     "each": -69
+    },
+    "I came by air": {
+     "share": 0.1507,
+     "rate": -18.6,
+     "gained": 73.9,
+     "lost": 92.5,
+     "entered": 9.65,
+     "won": 0.054,
+     "lost_first": 0.071,
+     "each": -17
+    },
+    "it came by air": {
+     "share": 0.0607,
+     "rate": 134.7,
+     "gained": 187.0,
+     "lost": 52.3,
+     "entered": 6.2,
+     "won": 0.07,
+     "lost_first": 0.023,
+     "each": 79
+    },
+    "both in the air": {
+     "share": 0.2053,
+     "rate": 6.0,
+     "gained": 50.8,
+     "lost": 44.8,
+     "entered": 9.77,
+     "won": 0.04,
+     "lost_first": 0.063,
+     "each": 8
+    },
+    "on the ground": {
+     "share": 0.0877,
+     "rate": 16.2,
+     "gained": 87.3,
+     "lost": 71.1,
+     "entered": 7.94,
+     "won": 0.043,
+     "lost_first": 0.059,
+     "each": 11
+    },
+    "opening": {
+     "dealt": 1290.893,
+     "taken": 904.702
     }
    },
    "rounds": {
@@ -80167,7 +83877,27 @@
      "out on the ground": 0.215,
      "hit away": 0.379
     },
-    "left": 0.589
+    "left": 0.589,
+    "hold": {
+     "guard": 0.095,
+     "hit": 0.56,
+     "stands": {
+      "<60": 0.347,
+      "<110": 0.298,
+      "<170": 0.232,
+      "further": 0.122
+     },
+     "moves": 7.0,
+     "air_moves": 0.545,
+     "jumps": 0.48,
+     "jumps_n": 103,
+     "jump": {
+      "out": 0.67,
+      "stayed in": 0.165,
+      "player hit": 0.087,
+      "caught": 0.078
+     }
+    }
    },
    "jumpins": {
     "per_min": 2.7,
@@ -81264,6 +84994,92 @@
      "net": -369,
      "gained": 565,
      "lost": 934
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.0872,
+     "rate": 180.7,
+     "gained": 284.5,
+     "lost": 103.7,
+     "entered": 2.31,
+     "won": 0.293,
+     "lost_first": 0.176,
+     "each": 409
+    },
+    "its okizeme": {
+     "share": 0.1351,
+     "rate": -8.2,
+     "gained": 121.1,
+     "lost": 129.3,
+     "entered": 3.72,
+     "won": 0.146,
+     "lost_first": 0.24,
+     "each": -18
+    },
+    "my pressure": {
+     "share": 0.077,
+     "rate": -84.6,
+     "gained": 114.7,
+     "lost": 199.3,
+     "entered": 3.28,
+     "won": 0.254,
+     "lost_first": 0.142,
+     "each": -119
+    },
+    "its pressure": {
+     "share": 0.142,
+     "rate": -194.1,
+     "gained": 67.0,
+     "lost": 261.1,
+     "entered": 5.46,
+     "won": 0.073,
+     "lost_first": 0.408,
+     "each": -303
+    },
+    "I came by air": {
+     "share": 0.1695,
+     "rate": -66.2,
+     "gained": 69.8,
+     "lost": 136.0,
+     "entered": 11.91,
+     "won": 0.044,
+     "lost_first": 0.095,
+     "each": -57
+    },
+    "it came by air": {
+     "share": 0.0604,
+     "rate": 74.0,
+     "gained": 152.6,
+     "lost": 78.6,
+     "entered": 6.74,
+     "won": 0.04,
+     "lost_first": 0.037,
+     "each": 40
+    },
+    "both in the air": {
+     "share": 0.2425,
+     "rate": -37.5,
+     "gained": 37.2,
+     "lost": 74.7,
+     "entered": 12.61,
+     "won": 0.029,
+     "lost_first": 0.066,
+     "each": -43
+    },
+    "on the ground": {
+     "share": 0.0864,
+     "rate": -71.1,
+     "gained": 109.1,
+     "lost": 180.2,
+     "entered": 7.82,
+     "won": 0.035,
+     "lost_first": 0.095,
+     "each": -47
+    },
+    "opening": {
+     "dealt": 1316.778,
+     "taken": 1083.95
     }
    },
    "rounds": {
@@ -82448,7 +86264,27 @@
      "out on the ground": 0.205,
      "hit away": 0.577
     },
-    "left": 0.423
+    "left": 0.423,
+    "hold": {
+     "guard": 0.126,
+     "hit": 0.339,
+     "stands": {
+      "<60": 0.271,
+      "<110": 0.302,
+      "<170": 0.188,
+      "further": 0.238
+     },
+     "moves": 3.01,
+     "air_moves": 0.352,
+     "jumps": 0.46,
+     "jumps_n": 72,
+     "jump": {
+      "out": 0.639,
+      "stayed in": 0.139,
+      "player hit": 0.167,
+      "caught": 0.056
+     }
+    }
    },
    "jumpins": {
     "per_min": 3.19,
@@ -83388,6 +87224,92 @@
      "net": -608,
      "gained": 344,
      "lost": 952
+    }
+   },
+   "areas": {
+    "my okizeme": {
+     "share": 0.0815,
+     "rate": -84.0,
+     "gained": 93.9,
+     "lost": 177.9,
+     "entered": 2.19,
+     "won": 0.189,
+     "lost_first": 0.287,
+     "each": -188
+    },
+    "its okizeme": {
+     "share": 0.2287,
+     "rate": -72.7,
+     "gained": 72.6,
+     "lost": 145.3,
+     "entered": 6.16,
+     "won": 0.208,
+     "lost_first": 0.338,
+     "each": -162
+    },
+    "my pressure": {
+     "share": 0.0989,
+     "rate": -194.1,
+     "gained": 133.0,
+     "lost": 327.1,
+     "entered": 4.45,
+     "won": 0.249,
+     "lost_first": 0.335,
+     "each": -259
+    },
+    "its pressure": {
+     "share": 0.1311,
+     "rate": -164.8,
+     "gained": 88.5,
+     "lost": 253.2,
+     "entered": 5.43,
+     "won": 0.074,
+     "lost_first": 0.565,
+     "each": -239
+    },
+    "I came by air": {
+     "share": 0.179,
+     "rate": -130.8,
+     "gained": 87.3,
+     "lost": 218.1,
+     "entered": 11.91,
+     "won": 0.064,
+     "lost_first": 0.17,
+     "each": -118
+    },
+    "it came by air": {
+     "share": 0.0295,
+     "rate": -121.2,
+     "gained": 90.6,
+     "lost": 211.8,
+     "entered": 4.68,
+     "won": 0.037,
+     "lost_first": 0.057,
+     "each": -46
+    },
+    "both in the air": {
+     "share": 0.1368,
+     "rate": -13.7,
+     "gained": 34.7,
+     "lost": 48.4,
+     "entered": 8.64,
+     "won": 0.046,
+     "lost_first": 0.049,
+     "each": -13
+    },
+    "on the ground": {
+     "share": 0.1144,
+     "rate": -88.5,
+     "gained": 50.1,
+     "lost": 138.7,
+     "entered": 10.36,
+     "won": 0.045,
+     "lost_first": 0.079,
+     "each": -59
+    },
+    "opening": {
+     "dealt": 762.719,
+     "taken": 861.408
     }
    },
    "rounds": {
