@@ -179,7 +179,7 @@ record grows by about 4 MB a minute of fighting:
 
 None are made during a network match ([netplay.md](netplay.md)): its rollback runs frames
 again, which a record can't follow, and the match keeps a replay of its own. With
-**RECORD CPU FIGHTS** off in OPTIONS (its third page, NATIVE; `record_cpu_fights=0` in
+**RECORD CPU FIGHTS** off in OPTIONS (its fourth page, NATIVE; `record_cpu_fights=0` in
 `options.ini` in the save folder), only VS HUMAN's fights are recorded, a person's or an
 agent's: not ARCADE, VS CPU, PRACTICE, the demo, nor a replay played from the REPLAY
 menu. The log still has each fight, its number counted (the records' numbers then have

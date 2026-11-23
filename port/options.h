@@ -14,7 +14,7 @@ void InitOptions();
 // video.cpp, over each frame shown: the pages after the game's own, and the page tabs.
 void DrawOptions(SDL_Renderer* renderer);
 
-// The settings of EfzRevival's page that are the native game's, not Revival's (all on
+// The settings of the REVIVAL page that are the native game's, not Revival's (all on
 // unless options.ini says otherwise; port/revival/ asks them):
 // EfzRevival's features offline (the practice and replay tools, the music); without it
 // the game offline is the original (the tournament, asked for, still runs).
