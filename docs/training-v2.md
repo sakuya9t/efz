@@ -4908,3 +4908,637 @@ measured (it deals 16 HP a rising without and 5 with). A string held every time 
 what it loses and takes away most of what its exits win: -195 HP a string to -95 in
 round 21's session, +21 to -12 in round 22b's, where its exits paid: what the read is
 for (+0.13 an exit in the first session, held; +0.02 in the second, a third held).
+
+### The guards in the user's game (22 November, round 22c)
+
+Session `20261122-001919-5d48`, the game built at the merge with both guards, `round22c`
+(round 22's policy, the okizeme planner, `rise_hold` 30, `rise_press` 36): five matches
+(Sayuri, Nagamori twice, Mishio, Ikumi), the agent took one. HP a minute, the agent's
+side (`h1122`; five matches, the errors several hundred on each row):
+
+| | round 21 | 22b | 22c |
+|---|---|---|---|
+| the user's okizeme | -1,550 ±410 | -614 ±330 | -47 ±340 |
+| the user's pressure | -1,460 ±380 | -437 ±300 | -287 ±360 |
+| it came by air | +733 ±640 | -6 ±440 | -1,080 ±540 |
+| both in the air | -426 | -391 | -710 |
+| its okizeme | +338 | -389 | +94 |
+| combo HP it deals | 6,430 | 6,480 | 5,180 ±640 |
+| lost thrown | 149 | 106 | 627 ±320 |
+| all | -2,330 | -1,000 | -2,050 |
+
+**The rising's hold does what the records said it would.** Rising without acting costs it
+57 HP a minute (727 with round 21's file, 166 with 22b's), the attacker hits first at 23%
+of its risings (40%, 28%), and by the game's log it guarded 250 to 570 steps a match
+"more once up". Against this session's recorded okizeme (`cf.py`, 81 risings) a file
+without the hold is hit in 28% of the 45 steps after it is up, with it 6%; as played, 10%.
+
+**The pressure's hold was too sticky.** The log of the first two matches: "33 strings, 32
+held (4609 steps guarded on); 1 exits out of the others", "19 strings, 19 held": 29% of
+the first match in a forced guard. The read is of the exits out of strings not held, a
+held string has none, and the prior holds three strings in four: so the record that
+should switch it off does not fill, and one caught exit over the prior makes it all of
+them. Where exits were sampled they came out even or ahead (matches three to five: 33
+exits, 6 caught, 10 that hit first) and it stopped holding (1 of 26, 5 of 18). What the
+held strings cost: thrown for 627 HP a minute, 31.6 guards a minute (21.3), 14.8 jumps
+(18.5), and 1,300 HP a minute less dealt; what they saved under pressure, 150. Against
+this session's recorded strings, which were pressed against a guard that holds, a file
+that never holds loses 88 HP a string and deals 108, one that always holds 17 and 13.
+
+So `round22d` (22 November): `rise_hold` 30 and no `rise_press`. The pressure's hold
+needs, before it is in a file again: exits sampled whatever the read says (a share of
+strings never held), and what the held strings come to (opened, thrown) counted beside
+what the exits come to.
+
+With an object of the user's out it lost 7,960 HP a minute of that time for 7,500
+without (38% of the time): the gap of the three sessions before (1.7 to 2.2 times) is
+not in this one. Five matches.
+
+**The pressure's hold, its read made again (22 November).** Two changes, in `rise.py` and
+the game's code alike (`rise_press_open`, `rise_press_free`): what holding costs is
+counted (the held strings in which it saw itself hit or thrown, over a prior of 0.15 as
+4 held strings) and taken from what leaving the guard costs (caught less won, an exit);
+and a share of the strings (0.34) is never held, whatever the read says, so that the
+exits go on being read. At the defaults no string is held at a match's start (0.1 less
+0.15 is the line's low end), six exits with four more caught than won hold two strings
+in three, and five of six held strings opened let go again. Not in a file: it is to be
+measured against the pressure exploiters first.
+
+## The league's pressure (22 November)
+
+### The two guards against the league
+
+The benchmark queue that was running (`bench/r22c`, `r22ch`, `r22cp` beside `r22np`: round
+22's policy with the okizeme planner and no guard of the two). The frozen copy of the code
+it ran on plays the two pairings repeated from the earlier copy to the step (423,995 and
+583,145 steps, every figure the same), so the tags compare.
+
+Against the opponents with their characters' combos (eleven, 64 matches each):
+
+| | no guard held | `rise_hold` 30 (`round22d`) | `rise_press` 36, the first read | both (`round22c`) |
+|---|---|---|---|---|
+| wins | 76.4 ±1.7 | 78.8 ±1.4 | 80.3 ±1.6 | 79.5 ±1.6 |
+| own HP lost a round | 62.8 ±0.9 | 61.0 ±0.9 | 62.0 ±0.8 | 60.4 ±0.9 |
+
+`round22c` over the whole suite: the league 99.1 ±0.3 to 97.4 ±0.5 (2.7 errors down; its
+net there 6,353 to 5,856 HP a minute, its raw specials 589 to 438), the level-4 CPU 35.9
+±6.4 to 45.3 ±7.6, sparring 93.8 to 95.0, the recoil drill 96.9 to 96.2. So the guards
+cost nothing that the suite sees against opponents that hit back, and the two together a
+point and a half against the plain league, where no opponent presses. Which of the two
+that is, the league drill of `round22d`'s settings says: 98.4 ±0.6 (its net 6,297, its
+raw specials 508 ±41). The hold on its rising costs half a point at the most, inside the
+error; the rest was the pressure hold's first read.
+
+### The pressure exploiters, judged
+
+Round 22's policy without planners (`round22b`, their target) against the first four
+`exploiter19`s as files with their characters' combos, beside the same characters'
+`exploiter18`s (`bench/r22no-x19`, `r22no`; 64 matches each):
+
+| | wins, `exploiter18` | `exploiter19` | own HP lost | its guards a minute |
+|---|---|---|---|---|
+| Nanase | 95.3 | 98.4 | 0.58 to 0.48 | 2.9 to 2.0 |
+| Sayuri | 78.1 ±5.5 | 50.0 ±7.6 | 0.61 to 0.77 | 2.6 to 4.2 |
+| Ikumi | 64.1 ±4.5 | 37.5 ±6.5 | 0.67 to 0.83 | 1.0 to 2.5 |
+| Kano | 89.1 | 84.4 | 0.48 to 0.67 | 4.7 to 6.0 |
+
+They are stronger opponents (three of four take more of the agent's HP, two of them half
+the matches or more), and that is a retargeting, 6M steps against this policy as the game
+plays it: the reward for pressure did little. In their training logs the guards they
+touched a minute stayed where they began at 0.05 (10, 12 to 15, 8; Kano 15.6 to 19.3),
+and at 0.2 Mishio's went 12.0 to 18.2 and Makoto's 18.2 to 20.4. Those two judged the
+same way: Mishio 73.4 ±5.3 to 46.9 ±4.5 (own HP lost 0.62 to 0.81, its guards a minute
+2.2 to 6.4), Makoto 93.8 to 68.8 ±6.2 (0.41 to 0.66, 3.2 to 5.7). The agent guards 2 to
+6 times a minute against all six; against the user 13 to 31.
+
+The last five, trained at 0.2 (their guards touched a minute from first chunk to last:
+Doppel Nanase 13.9 to 25.4, Nayuki asleep 13.6 to 24.9, Mayu 10.3 to 19.4, Mizuka b 12.9
+to 15.6, Kaori 6.6 to 6.5), judged the same way: Mayu 79.7 to 51.6 ±3.6, Kaori 79.7 to
+48.4 ±3.6, Doppel Nanase 81.2 to 57.8 ±6.7, Nayuki asleep 65.6 to 43.8 ±8.1, Mizuka b
+75.0 to 51.6 ±5.8; the agent's guards a minute 1.5 to 5.5 against them. All eleven are
+stronger opponents by 5 to 31 points of the agent's wins (Nanase's alone is not), and
+none makes it guard as a person does. The five are for the next round's league. The three not started yet train
+at 0.2. All of them go into the next round's league in the place of their characters'
+oldest exploiter of the model itself (the league has a match slot for each of its 90
+opponents and little more).
+
+### What the user's strings are made of
+
+Every contact on the agent's guard in the five sessions' records (`gtrace.py` in the
+scratch folder), a minute; a string is the contacts with no more than 45 steps between:
+
+| | 18k4 | round 20 | round 21 | 22b | 22c |
+|---|---|---|---|---|---|
+| contacts a minute | 25.8 | 24.2 | 21.3 | 29.4 | 40.2 |
+| strings a minute | 6.6 | 5.9 | 6.4 | 7.0 | 10.3 |
+| ... begun on its rising | 4.2 | 3.4 | 3.3 | 3.9 | 4.9 |
+| ... as it lands | 1.6 | 1.8 | 2.1 | 2.2 | 1.3 |
+| ... after a move of its own, or a hit | 0.7 | 0.5 | 0.9 | 0.6 | 0.7 |
+| ... on the ground, free | 0.1 | 0.2 | 0.2 | 0.3 | 3.5 |
+| contacts with an object of the user's out | 34% | 29% | 55% | 51% | 43% |
+
+A person's pressure begins where the agent has to guard: nine strings in ten on its
+rising or its landing, almost none on an agent standing free (22c's 3.5 are its own
+pressure hold keeping it there). Then it goes on: 3.3 to 4.2 contacts a string, and half
+of them with an object out. By the same count the league's opponents with combos make
+3 to 12 contacts a minute in 1.1 to 4.5 strings (Ikumi's and Kano's): about as long a
+string, a third as many. So what the league lacks is not the first guard's follow-up
+(the pressure planner's) but being on the agent again and again.
+
+### A scripted pressure: `press`
+
+`advantages.py`'s `press`, a habit like `jumpin` or `throw`, for any opponent in
+training and in evaluations: the share of its chances in which it presses. A chance:
+itself free on the ground and the agent on the ground within 260 pixels, not down, not
+in a hit reaction, not in a move; or a normal of its own play that the agent guards (its
+okizeme's, a landing caught). It goes in (a run from further than 110 pixels), presses
+its 2A from inside its reach, and as each normal is guarded presses the next the game
+cancels it into that still reaches (2A 5A 5B 2B 2C at the most, the 2C in four strings
+in ten); the string over, a crouching guard for 0 to 14 steps and the next chance at
+once. It lets go when the agent is in a move near it or in the air, when it is hit, and
+when its normal hits (the combo is its own play's and its file's routes') or is
+recoil-guarded.
+
+Two things it needed from the game, both tried there (`motions.py --add pokes`, in
+`motions.json`): from how far each normal touches a crouching guard, and which normals
+the game cancels into which on a guard. `framedata.json`'s reach is the move's own box
+and is 2 to 32 pixels more than a guard is touched from: with it the first build's 2A
+was pressed from where it does not reach (Sayuri's from 62 pixels, it touches from 55)
+and never met a guard. The cancels are the same for nearly all: 2A into 5A, 5B, 2B, 2C;
+5A into 5B, 2A, 2B, 2C; 5B into 2B (some) and 2C; 2B into 2C. Against an Ayu that only
+holds a crouching guard its strings are 1.2 (Nanase) to 3.5 (Mayu) guards long, 90 to
+140 contacts a minute.
+
+Against `round22d`'s file (16 matches each, `press=1` on an `exploiter18`):
+
+| | contacts a minute | strings | the agent's wins |
+|---|---|---|---|
+| Kano's model, no habit (64 matches) | 11.8 | 4.2 | 98% |
+| Kano's model, pressing | 22.1 | 6.5 | 94% |
+| Sayuri's model, pressing (8.0 and 2.9 without) | 14.1 | 4.9 | 100% |
+| Kano's file with combos, pressing (12.1 and 4.5 without) | 18.5 | 6.0 | 63% (94%) |
+| Ikumi's file with combos, pressing (2.9 and 1.1 without) | 11.4 | 2.9 | 44% (63%) |
+
+It reaches the lower end of what the user does (21 contacts and 6 strings a minute), and
+with combos behind the pokes the agent loses to it. What keeps it from more is the
+agent: 20 to 23 jumps a minute and a move out most of the time, so two ways in of three
+are let go, and after a guard the agent is hit next 17 to 22% of the time and guards
+again 15 to 21% (the rest it gets away or hits first), which is the thing the user
+punishes.
+
+The bench has the drill: `press` (five opponents' files with combos, `press=1,throw=0.5`:
+the throw so that a guard held for ever is not free), with its wins, own HP lost and the
+agent's net under their pressure.
+
+`round22d`'s first three pairings of it (64 matches each), beside the same files without
+the habits (`bench/r22d`, `r22ch`): Kano 93.8 to 65.6 ±6.8, Ikumi 62.5 to 42.2 ±5.0,
+Nayuki (asleep) 53.1 to 34.4 ±6.4; its HP lost a round 0.45 to 0.70, 0.71 to 0.82, 0.74
+to 0.82. Twenty to twenty-eight points to a 2A, a chain and a throw: the weakness the
+user named, now in an opponent it can train against and be measured by.
+
+All five, and the reworked pressure hold beside it (`r22e`: `round22d`'s settings with
+`rise_press` 36 on the read made again, `press_open` 0.15 and `press_free` 0.34):
+
+| | no habits | `round22d` | `r22e` |
+|---|---|---|---|
+| Kano | 93.8 | 65.6 ±6.8 | 65.6 ±6.0 |
+| Ikumi | 62.5 | 42.2 ±5.0 | 35.9 ±3.9 |
+| Nayuki (asleep) | 53.1 | 34.4 ±6.4 | 50.0 ±5.6 |
+| Sayuri | 78.1 | 37.5 ±5.6 | 50.0 ±6.9 |
+| Mizuka (b) | 68.8 | 78.1 ±5.0 | 59.4 ±5.5 |
+| all five: wins | 71.3 | 51.6 ±2.6 | 52.2 ±2.5 |
+| own HP lost a round | 0.65 | 0.763 ±0.011 | 0.747 ±0.012 |
+| HP a minute net under their pressure | | 341 ±99 | 379 ±100 |
+
+Twenty points over the five. The pressure hold does what it is for (the opponents' pokes
+guarded go from 523 to 870 against Kano, 899 to 1,389 against Sayuri, 546 to 1,010
+against Nayuki; a string 1.1 to 1.3 guards long becomes 1.1 to 1.4) and it wins nothing:
+0.6 points, one standard error of HP. Holding the guard longer is not the answer to an
+opponent that throws a held guard and pokes again; what to do after the guard is, and
+that is the policy's to learn. `round22d` stays the file, the pressure hold off.
+
+What the drill is not: the user's pressure. The agent guards 3 to 8 times a minute in
+it, a string is one guard and a little, and half of the opponent's ways in are let go
+because the agent is in the air or in a move (731 of 1,390 for Kano, 2,017 of 2,929 for
+Ikumi). It measures what leaving the guard costs against a poke with a combo behind it,
+not what staying in a long string costs.
+
+### Objects: `object`
+
+The other half of the user's sentence. With one of the user's objects out the agent
+lost 1.7 to 2.2 times as much HP a minute in three sessions of four, and 29 to 55% of
+the contacts on its guard came with one out; the league's Sayuri has an object out 1 to
+2% of her free time, Makoto 11%.
+
+`advantages.py`'s `object`: the share of its chances to put an object out in which it
+does. Its moves are those that leave it free on the ground with an object of theirs out
+(`motions.py --add objects`, tried in the game from a round's start: the steps of cover,
+the move's length; an object that was out before the move, as Kano's, is not the
+move's), the one with the most cover its gauges allow, no super. 19 of the 24 characters
+have one (of the league's eleven not Mishio, Mayu, Kaori, Doppel Nanase, Nayuki asleep).
+A chance: the agent knocked down with the move's length left to lie (once a knockdown,
+on the first step it is free), or the agent 160 pixels away or more, on the ground and
+in no move, every 45 steps; never with an object of its own out. With `press` it goes
+in behind it.
+
+Against `round22d`'s file (16 matches each, `object=1,press=1` on the files with
+combos): Sayuri puts one out 5.2 times a minute (2.3 start) and has one out 10% of her
+free time (1%), Makoto 2.8 times and 25% (11%). The agent took 38% from Sayuri so (25%
+with the press alone, 78% without either) and 88% from Makoto (97%): the pressure is
+what costs it, and sixteen matches do not show the objects adding to that. The bench's
+drill `objects`: the six of the league's characters with such a move, `object=1,press=1,
+throw=0.5` on their files with combos.
+
+`round22d`'s baseline on it (64 matches each, `bench/r22d`), beside the same files with
+no habit and, where the press drill has the character, with the press alone:
+
+| | no habits | pressing | objects and pressing | its HP lost a round |
+|---|---|---|---|---|
+| Sayuri | 78.1 | 37.5 | 60.9 ±6.8 | 0.68 to 0.73 |
+| Kano | 93.8 | 65.6 | 73.4 ±5.3 | 0.45 to 0.69 |
+| Ikumi | 62.5 | 42.2 | 46.9 ±5.0 | 0.71 to 0.79 |
+| Mizuka (b) | 68.8 | 78.1 | 56.2 ±4.8 | 0.66 to 0.78 |
+| Nanase | 98.4 | | 98.4 | 0.58 to 0.52 |
+| Makoto | 96.9 | | 90.6 ±3.9 | 0.44 to 0.51 |
+| all six | 83.1 | | 71.1 | |
+
+Twelve points over the six, and less than the press alone costs for Sayuri and Kano:
+the steps an opponent spends putting an object out (Sayuri 5 tries a minute, half of
+them start) are steps it does not press in, and the agent wins more against it. As a
+scripted habit the object is cover the opponent pays for; it does not yet do what the
+user's objects do, which is to hold the agent in its guard while the user moves.
+
+### Its okizeme since 17c: a check that cannot tell
+
+The files since 18k4 carry `okiplan:2` with `oki_sight` 14 (the planner takes the riser
+to guard by sight), 17c's `okiplan:1`; nothing else of the planner's settings differs.
+`cfoki.py` in the scratch folder plays each fight again from its record and, at each
+knockdown of the user's, lets a file's agent with its planner play the agent's side
+against the inputs the user pressed. `round22d` as it is, with the sight off, and with
+sight and thinking time at 11, over four sessions (333 knockdowns):
+
+| | as recorded | sight 14 | sight off | sight 11 |
+|---|---|---|---|---|
+| it hits first | 8 to 26% | 40 to 48% | 45 to 52% | 33 to 45% |
+| HP it deals a knockdown | 44 to 136 | 174 to 203 | 207 to 262 | 149 to 213 |
+| from the air | 30 to 63% | 58 to 73% | 63 to 78% | 61 to 70% |
+
+Every file does far better than what was played, because the user rose against another
+okizeme and could not answer this one: the check flatters whatever it is given, and most
+the file that takes the riser not to look. What it does say: the planner still comes
+from the air six times in ten and changes sides one time in ten in every file, so the
+okizeme's kinds have not gone; and the sight is not shown to be the cause. The fall the
+user saw (38% of its okizeme hitting first with 17c, 25 to 32% since) may as well be the
+user reading it better, session after session. The test that can tell is an old file
+and a new one in the same sitting.
+
+### Round 24, started
+
+Two arms from round 22's pick, 20M steps each in ten chunks, round 23's league with the
+six `exploiter19`s that had ended (Nanase, Sayuri, Ikumi, Kano, Mishio, Makoto) in the
+place of those characters' `exploiter14`/`15`:
+
+- `agent-league24-press-s1` (22 November, 04:00): the sparring profile pressing too
+  (`press=0.6` beside its other habits, in four of ten of the opponents' matches), on
+  the frozen code `snap24`.
+- `agent-league24-pressobj-s1` (04:25): the same with `object=0.6`, on `snap25`.
+
+Judged as the rounds before, with the two new drills beside the suite.
+
+A note on the machine: at 04:01 the memory watch stopped my benchmark queues at 9 GB
+available (seven evaluations, two exploiter trainers and the first arm starting at
+once); they were queued again three, then two at a time. And the object probe's first
+run died while writing and left `motions.json` cut short for a few minutes (nothing
+read it: every run uses a frozen copy); it is restored, and `motions.py` now writes the
+file whole or not at all.
+
+### On the agent's rising: `meaty`
+
+`press` begins its strings on an agent standing free; a person's begin on its rising.
+`advantages.py`'s `meaty`: the share of the agent's knockdowns in which the opponent
+goes into its 2A's reach, waits, and presses so that the 2A touches two steps after the
+agent's first free one (the knockdown's lengths and each normal's steps from press to
+contact are `motions.json`'s); guarded, the string goes on as `press`'s. Against an Ayu
+thrown and then holding a guard it lands on the step it is aimed at for the ten
+characters it could be tried with so (eight of the league's eleven, Mio and Akiko; 7 to
+15 knockdowns each, all but two guarded, 2 to 4 guards a string after it; Sayuri's and
+Mayu's throws leave the Ayu further than they walk in a knockdown, Mishio's does not
+knock down).
+
+Two things the game showed:
+
+- Sayuri's and Mayu's runs leave the ground, and no normal on the ground comes out of
+  them: a way in that began with a run was let go every time, in `press` too (some of
+  the 1,517 of Sayuri's 2,202 ways in let go in the drill above). A character whose run
+  is seen to leave the ground walks in from then on.
+- After a whole combo the agent lies as far as the screen lets it, 280 pixels, in 54 of
+  Kano's 102 knockdowns, and Kano covers 160 pixels in a knockdown (her run is a step
+  of twenty frames, then a walk). Run at regardless, 63 of the 102 ended short of her
+  reach. So a knockdown is a chance only where the reach can be had in time, at 2.5
+  pixels a step until the character has been seen to cover more; the others stay its
+  own play's.
+
+Against `round22d` (16 matches, Kano's file with combos, `press=1,throw=0.5,meaty=1`):
+39 of 111 knockdowns in reach, 35 of them poked: 23 guarded, 6 hit, 6 beaten by a move
+on rising, none missed. The agent's wins 62.5% (62.5% with the press alone, sixteen
+matches each): about one more string a minute, and no more than that from Kano, whose
+combos throw the agent out of her reach two times in three. No drill for it yet; it is
+for the next round's profile, beside `jumpin` (the far knockdowns are a jump's).
+
+### Its okizeme, counted again
+
+What the agent did on each of the user's knockdowns, as recorded (`cfoki.py` with no
+file), session by session:
+
+| | 17c | 18k4 | round 20 | round 21 | 22b | 22c |
+|---|---|---|---|---|---|---|
+| knockdowns | 140 | 193 | 75 | 53 | 60 | 27 |
+| it hits first | 36% | 26% | 19% | 25% | 8% | 22% |
+| it is hit first | 12% | 20% | 20% | 15% | 25% | 19% |
+| from the air | 66% | 59% | 61% | 55% | 30% | 63% |
+| the side changed | 17% | 10% | 7% | 17% | 0% | 7% |
+| HP dealt, lost a knockdown | 164, 66 | 114, 85 | 90, 103 | 102, 81 | 44, 151 | 136, 138 |
+
+"Losing almost everything about okizeme (air, reverse)" is `round22b` to the letter: the
+file without the planner came from the air half as often and never changed sides. With
+the planner back (22c) the air is where it was; what is still under 17c is how often it
+hits first (36% to 19-26%), how often it is hit first (12% to 15-20%) and the side
+changes (17% to 7-10%, round 21's 17% aside).
+
+The stored benchmarks have the same count for every file since 18k4 (`okitab.py` in the
+scratch folder, the agent's okizeme pooled over a drill's pairings). Against the
+sparring profile, the nearest thing to a person's rising:
+
+| | 18k4 | round 20 | round 21 | 22c | 22, no planner |
+|---|---|---|---|---|---|
+| it hits first | 44% | 46% | 49% | 53% | 47% |
+| it is hit first | 17% | 16% | 15% | 12% | 7% |
+| from the air | 40% | 42% | 44% | 46% | 1% |
+| the side changed | 12.9% | 12.9% | 15.4% | 13.5% | 2.0% |
+| low, high | 37%, 29% | 39%, 34% | 36%, 36% | 38%, 42% | 91%, 4% |
+
+By this the planned okizeme has not got worse since 18k4, and the policy alone has one
+okizeme, a low on the ground (82% of its knockdowns). Against the plain league it hits
+first less than it did (35% to 29%) and has fewer okizeme a minute (3.5 to 2.7).
+
+17c itself on today's sparring drill (`bench/round17c`; 18k4 run again beside it,
+`bench/k4today`, gives its stored figures to the digit):
+
+| | 17c | 18k4 | 22c |
+|---|---|---|---|
+| it hits first | 47% | 44% | 53% |
+| it is hit first | 17% | 17% | 12% |
+| from the air | 57% | 40% | 46% |
+| the side changed | 11.7% | 12.9% | 13.5% |
+| low, high | 21%, 53% | 37%, 29% | 38%, 42% |
+| its okizeme's net, HP a minute | 1,655 | 1,385 | 1,974 |
+| matches won there | 70.3% | 67.2% | 95.0% |
+
+17c's okizeme was another kind, not a better one: more from the air (57% of its
+knockdowns, a jump with a high 28% of them) and high where today's is half low. Against
+the same scripted riser today's hits first more often, is hit first less and is worth
+more. So the fall the user felt has two parts that can be named: `round22b` had no
+planner at all, and since 18k4 the planner comes from the air less (57% to 40-46%),
+which is what "air" in the user's sentence saw. That it hits the user less often than
+17c did (36% to 22%) the scripted riser does not show; the user's rising against it has
+got better (it is hit first 12% of the time in 17c's session and 15 to 25% since), and
+only the two files in one sitting can split that from the files.
+
+### What a jump costs: `antiair`
+
+The user's first sentence of 21 November: the agent "relys heavily on air-to-air". The
+HP the agent loses a minute while it is in the air, by what hit it (`ledger`'s `air_by`):
+
+| | from the ground | from the air | its jumps a minute |
+|---|---|---|---|
+| the league, plain | 486 | 377 | 24.0 |
+| the league with combos | 1,128 | 555 | 22.4 |
+| the user: 17c, 18k4, round 20 | 1,476, 810, 1,202 | 911, 437, 750 | 18.6, 18.1, 18.4 |
+| the user: round 21, 22b, 22c | 2,070, 1,633, 1,772 | 1,202, 604, 765 | 18.8, 18.5, 14.8 |
+
+A jump costs the agent 20 HP against the plain league, 50 against the opponents with
+combos and 45 to 120 against the user (88 to 120 in the last three sessions). Where it came by air it nets +977 HP a minute
+against the league with combos, and against the user between -1,076 and +733. Nothing
+it trained against made a jump cost what a person makes it cost, so it jumps.
+
+`advantages.py`'s `antiair`: the share of the agent's jumps at it that the opponent
+anti-airs. Which move from where is tried in the game (`motions.py --add antiair`, 20
+seconds a character): each normal on the ground and 623A/623B, pressed at every other
+step of an Ayu's jump from ten distances, the Ayu jumping empty, holding an air guard,
+pressing each air button early, in the middle and late, jumping again, dashing in the
+air, or jumping straight up; 3,300 tries a move, counted by where the jumper was as the
+move was pressed (cells of 16 pixels across and 24 up, rising or falling). A place has
+a sure move if one hit first in 70% of four tries or more from there and was hit first
+in 10% at the most. Every character has 59 to 151 such places: Kano her 2C and 5C,
+Nanase her 2B, most of the others their 623.
+
+Two limits, both from the first trials against `round22d` (Kano's file with combos,
+sixteen matches each):
+
+- The agent has been in the air for eleven steps before it is answered: what a person
+  has seen of a jump, and the agent's own delay.
+- Only on its way down. Pressed at a rising agent the sure moves hit 19% of the time
+  (19 of 101; it jumps again or dashes on, out of the place the move was sure from) and
+  64% at a falling one (44 of 69).
+
+With both: 222 anti-airs in sixteen matches (5.8 a minute of the agent's 21 jumps), 150
+hit, 24 hit back, 48 nothing. The agent's HP lost in the air to the ground 707 to 3,094
+a minute, its net where it came by air +2,720 to -32, its HP lost a round 0.45 to
+0.74, its wins 94% to 75%. At `antiair=1` that is more than the user makes a jump cost;
+at 0.6 about as much.
+
+The bench has the drill `antiair` (the five opponents' files with combos, `antiair=1`:
+wins, own HP lost, the net where it came by air). Round 24 has a third arm for it,
+`agent-league24-antiair-s1` (the sparring profile with `antiair=0.6`, no press, on the
+frozen code `snap26`; started at 09:39, when the last exploiters' judgement had ended), so that
+the three habits can be told apart: press, press and objects, anti-airs.
+
+#### The drill's baseline, and the anti-airs that lost
+
+`round22d` on the drill (`bench/r22d`, the habit as round 24's arm trains against it,
+`snapbench23`): wins 61.9 ±2.7% (71.3% against the same five files without the habit),
+own HP lost 0.74 a round (0.65). But opponent by opponent the habit was two things:
+
+| the opponent | wins without, with | its anti-airs: hit, hit back, nothing |
+|---|---|---|
+| Kano | 93.8, 70.3 | 511, 88, 190 |
+| Nayuki (awake) | 53.1, 31.2 | 239, 99, 170 |
+| Mizuka | 68.8, 53.1 | 269, 149, 239 |
+| Ikumi | 62.5, 76.6 | 280, 321, 150 |
+| Sayuri | 78.1, 78.1 | 289, 321, 173 |
+
+Ikumi's and Sayuri's "sure" moves were hit first more often than they hit, and the
+agent won more against an Ikumi that anti-airs than against one that does not. A lab
+copy that logs each anti-air (sixteen matches each) showed why: seven in ten of the
+losses are to the agent's air B (0xd0), and they come from two places the probe's Ayu
+never was. One is the top of a jump, a second jump above all (the agent in action
+0xf, 400 pixels up: Ikumi's 623A there 0 hits, 36 hit back): the agent has not chosen
+its button's step yet. The other is a late B on the way down out of a second jump: the
+probe's Ayu pressed its buttons at fixed steps of a first jump and, after a second
+jump, nothing later than eight steps past its top.
+
+Three changes, in the order they were tried:
+
+1. The table is keyed on the action the jumper is in as well (its first jump 0x9, its
+   second 0xf, an air dash, each air move out), and the probe's Ayu presses A, B or C
+   at nine steps of a first jump and a B at every sixth step after a second jump, down
+   to its landing (60 scripts for 16; 70 seconds a character). Each character has 250
+   to 460 sure places now, a handful of them against a second jump (Ikumi 12, then 1).
+2. That alone did not do it (Ikumi 72 hits to 92 hit back): the agent times its B to
+   the opponent, which no script at fixed steps does. So the habit keeps each move's
+   record in the game against each kind of jump (the jumper's action, and whether it
+   falls under 2, under 5 or more pixels a step), and after six tries a move that was
+   hit first more than half as often as it hit is left out there: the place's next
+   sure move instead, or none. Forty such chances later half the record is forgotten
+   and the move is tried again (an agent in training changes).
+3. A place keeps all its sure moves, the surest first, for that.
+
+With all three (32 matches each): Sayuri's anti-airs 217 hits to 87 hit back (before:
+82 to 90), the agent's wins against her 44% (56 to 88% in the three labs before), its
+net where it came by air -3,710 HP a minute; Ikumi's 112 to 95 (69 to 80), wins 53%
+(62 to 100%). Ikumi has one move that holds (her 5A at a first jump's fall: 71 to 8)
+and the record takes more than 32 matches to find the rest out. The arm in training
+(`snap26`) has the first table; the bench copy with the new habit is `snapbench24`
+(reference tag `r22d-n`).
+
+### Its own pressure, the corners above all (22 November)
+
+The user, while round 24 was being judged: **"I think in order to learn how to handle
+pressure, it needs to understand how to pressure properly, especially at corners."**
+The agent's own pressure, from the games already stored (evaluate.py's `pressure` and
+`corner`, the agent's side):
+
+| | strings a minute | the next thing after a guarded move is its hit | a move pressed against it gets away | corner stays ended by a jump out |
+|---|---|---|---|---|
+| people's Ayu players (1,908 matches) | 5.0 | 23% | 37% | 41% |
+| the agent against the league | 8.2 | 11% | 23% | 35% |
+| against the league with combos | 7.1 | 10% | 23% | 33% |
+| against the sparring profile (it leaves corners) | 4.5 | 18% | 18% | 76% |
+| against the user, five sessions | 3.2, 3.3, 1.8, 2.4, 1.4 | 18, 16, 14, 10, 9% | 50, 51, 54, 47, 18% | 53, 51, 45, 35, 46% |
+
+Against the user it hardly presses (1.4 strings a minute in the last session, 8.2 in
+the league), half of the user's buttons against its pressure get away, and its
+strings open a guard half as often as people's. The league never asked for more: its
+opponents hold a guard after seven in ten of the agent's guarded moves and are still
+opened only one time in ten, and against the one profile that leaves a corner three
+in four corner stays end with the jump out. And the agent's frozen copies press as
+the agent does, so its defence has met no pressure either: this morning's finding on
+the `press` drill (it loses its own turn there, not the time it is held in a guard)
+is the same thing seen from the other side.
+
+What was built for it:
+
+- **`mash`** (advantages.py): after a guard, on its first free step, the opponent's
+  fastest normal that reaches, blind. Tried first, and it is not the teacher: against
+  `round22d` Kano's button hit 6 times and was hit back 20 (sixteen matches), the
+  agent's pressure net +1,286 HP a minute. The agent's strings hold against a button
+  pressed at once.
+- **`gap`**: the same button with a read. Within 45 steps of a guard, free and in
+  reach, it presses where the agent cannot hit first: the agent between two moves (a
+  walk or run back in: a reset), in a move's start with more steps left than the
+  button takes (framedata.json's startup, counted from the step the action began), or
+  past a move's active steps. Kano's, sixteen matches: 28 chances (the agent makes her
+  guard seldom), 8 hits, 3 hit back, 17 nothing; the agent's pressure net -143.
+- Both labs: **the corner does not hold.** 78 to 81% of the agent's corner stays end
+  with Kano's jump out (`escape=1`), after 5 to 6 seconds.
+- The drill **`gaps`** (bench.py): the five opponents' files with combos and
+  `gap=0.6,mash=0.15,escape=1,rg=0.3,reversal=0.8,tech=1,techsafe=1,techhit=1`. Its
+  measures: wins, own HP lost, the net of its own pressure, its strings a minute, the
+  share of guarded moves followed by its hit, the share of moves pressed against it
+  that get away, the corner stays the opponent left on its own, HP dealt a stay.
+- The reward **`corner`** (focus.py, `finetune.py --focus corner`): press's two events
+  (the opponent's guard touched: a fifth of the coefficient; a hit within 60 steps of
+  such a guard: the coefficient), each twice as much while the opponent is held in a
+  corner, and twice the coefficient for a hit on an opponent in the air there: its
+  jump out caught.
+
+**Can the corner be held at all?** A scratch probe (`cornerprobe.py`): the opponent
+backed into its corner, Ayu at 50 to 200 pixels, the opponent jumps out as `escape`
+does, and Ayu answers 11, 15 or 19 steps after it left the ground with each normal,
+her 623A/B/C, or a jump (back, up, forward) with an air button 6 to 18 steps into it;
+seven opponents. At 11 steps: from 140 pixels and further her 623 (any strength)
+catches every one of the seven (Nayuki's and Mizuka's from 170); from 80 to 170 a
+jump straight up with C catches Kano's and Ikumi's; from 50 to 110 nothing of hers
+catches a jump on sight. So a corner is held from a step back, with the 623 or the
+jump C on the jump, or point-blank by strings that leave the jump no step to start
+in: both are there to be learned, and neither is what the agent does (it stands in
+close and lets the string end).
+
+**Round 25, first arm** (`agent-league25-corner-s1`, scratch `round25-arm.sh`, started
+13:37 on the frozen code `snap27`): round 24's league and start (round 22's seed 2
+average, the six pressure exploiters), the sparring profile with `gap=0.5,mash=0.15`
+(it already leaves corners), and the learner's reward `corner` at 0.01 (100 HP for a
+guard opened, 200 in a corner or for a jump out caught). 20 million steps in ten
+chunks. The plan after it: the `gaps` drill beside the suite; then frozen copies of
+what holds a corner go into the league as the defence's teachers. (Its opening
+evaluation took 89 minutes with the machine full; the first chunk began at 15:07.)
+
+#### What a corner stay is made of
+
+The probe says what could hold a corner; the replays say what people do there.
+`evaluate.py`'s `corner` now carries a `hold` (`corner_hold()`): of a stay's steps, the
+share the opponent spends in a guard and in a hit; where the player stands while the
+opponent is free on the ground; the player's moves a stay and the share of them made
+in the air; and the opponent's own jumps there, by what became of each within 50
+steps (out of the corner, still in it, the player hit first, caught in the air).
+`people.json` is recomputed with it (nothing else in it moved), and the user's five
+sessions are read both ways (scratch `holdrec.py`):
+
+| the corner stays of | share of the match | seconds | moves a stay | of them in the air | opponent guarding | in a hit | its jumps: out / caught |
+|---|---|---|---|---|---|---|---|
+| people's Ayu players (13,027 stays) | 22% | 4.9 | 6.1 | 45% | 12% | 50% | 52% / 12% |
+| the strongest of them | 28% | 5.6 | 7.5 | 46% | 13% | 52% | 48% / 16% |
+| the user, on the agent (five sessions) | 28, 24, 30, 31, 48% | 4.3, 4.1, 4.4, 4.8, 7.3 | 4.9, 4.7, 5.3, 6.0, 9.9 | 31, 32, 40, 29, 30% | 17, 16, 11, 17, 25% | 48, 51, 58, 53, 46% | 46/13, 49/20, 52/15, 57/15, 60/21 |
+| the agent, on the user | 15, 21, 15, 16, 9% | 3.6, 4.9, 3.3, 4.4, 3.0 | 4.5, 6.9, 4.2, 6.0, 4.0 | 56, 60, 66, 56, 62% | 5, 8, 3, 7, 3% | 59, 67, 59, 68, 67% | 57/19, 53/30, 34/14, 65/8, 62/25 |
+
+Three things in it:
+
+- **Nobody locks a corner.** Half of the opponent's jumps there take it out against
+  people, against the strongest of them, against the user; one in eight to one in six
+  is caught, and by an air B or C or a 2B already on its way (a quarter of the jumps
+  made while the player was in a move are caught, one in eight of those made while it
+  stood free), not by a 623 on sight. The probe's answer exists and people do not
+  rely on it: a corner is where the damage is done (400 HP a stay, half of it spent in
+  a hit), and it is kept by being back in it soon.
+- **The agent's corner is a combo and nothing after.** Against the user the opponent
+  spends 3 to 8% of the agent's stays in a guard (people's 12%, the user's own 11 to
+  25% on the agent): the combo that carried the opponent there ends and the stay ends
+  with it, after 3 to 5 seconds. Its jumps out are caught as often as anybody's.
+- **It is there from the air**: 56 to 66% of its moves in a stay are made in the air
+  (people's 45%, the user's 30%), the same reliance the user named first.
+
+And the share of the match: the agent has the user in a corner 9 to 21% of the time,
+the user has the agent there 24 to 48% (48% in the last session, at 9.9 moves a stay).
+So the measure of "pressure properly, in the corners" is not the jump caught; it is
+the time the opponent is kept there **guarding**, the stays a match, and what they
+are made from. The `gaps` drill gained those rows: the share of the match with the
+opponent cornered, the share of a stay it guards, the share of the agent's moves
+there made in the air, the stay spent in a hit, and the jumps out and caught.
+
+### Round 24, judged
+
+**The press arm** (`agent-league24-press-s1`, its ten chunks' average with `round22d`'s
+settings, tag `r24p`; 11-step delay on both sides, the three new drills beside the suite):
+
+| measure | `round22d` (the suite's rows: the reference tag `r22np`) | press arm | |
+|---|---|---|---|
+| press: wins | 51.6 ±2.6 | 57.8 ±2.7 | +1.7σ |
+| press: own HP lost | 76.3 ±1.1 | 74.4 ±1.1 | -1.3σ |
+| press: net under their pressure | 341 ±99 | 546 ±98 | +1.5σ |
+| objects: wins | 71.1 ±2.0 | 70.3 ±2.1 | |
+| antiair: wins | 61.9 ±2.7 | 63.4 ±2.4 | |
+| antiair: own HP lost | 74.1 ±1.1 | 70.6 ±1.2 | -2.2σ |
+| antiair: net by air | 1536 ±159 | 1884 ±157 | +1.6σ |
+| league: wins / own HP lost | 99.1 ±0.3 / 37.0 | 98.4 ±0.4 / 36.7 | |
+| combos: wins / own HP lost | 76.4 ±1.7 / 62.8 | 78.1 ±1.6 / 61.4 | |
+| sparring: wins / own HP lost | 93.8 ±1.4 / 47.4 | 94.4 ±1.2 / 46.0 | |
+| recoil: wins / pressure net | 96.9 ±0.9 / 1049 ±100 | 97.2 ±0.8 / 877 ±113 | |
+| level-4 CPU with combos: wins / own HP lost | 35.9 ±6.4 / 83.8 | 46.9 ±6.4 / 80.3 | |
+
+Twenty million steps against opponents that press moved the press drill by six points,
+inside two errors, and nothing else: Nayuki's and Sayuri's matches there went from 34
+and 38% to 55 and 50%, Kano's fell from 66 to 59%, and the agent's own strings a minute
+and guards opened did not move on any opponent (6.4 and 7% against Ikumi before and
+after). It is the baseline the user's direction of the same afternoon is measured
+against: defence trained against a scripted pressure buys little while the agent's own
+pressure stays what it was.
