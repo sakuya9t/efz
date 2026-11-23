@@ -87,6 +87,28 @@ DRILLS = {
                  "(league_combos.py files --oki --press: people's okizeme and follow-ups to a "
                  "guard for its character, the agent's own planners' settings): the areas "
                  "where the league varied a third as much as people do"),
+    'press': (FIVE, 'file=exploiter18/combos.efzagent;press=1,throw=0.5',
+              "the opponents with their characters' combos that press (advantages.py's "
+              "press: they go in on the agent, chain their normals on its guard and stay on "
+              "it) and throw: what the league's own play does a third as often as a person"),
+    'objects': (['sayuri', 'kano', 'ikumi', 'nanase', 'makoto', 'mizukab'],
+                'file=exploiter18/combos.efzagent;object=1,press=1,throw=0.5',
+                "the same of those with a move that leaves an object out (advantages.py's "
+                "object): they put one out on the agent's knockdown and from afar, and go in "
+                "behind it"),
+    'antiair': (FIVE, 'file=exploiter18/combos.efzagent;antiair=1',
+                "the opponents with their characters' combos that anti-air (advantages.py's "
+                "antiair: at each jump of the agent's at them, the move that hits a jump-in "
+                "first from where it is): what a jump costs against a person"),
+    'gaps': (FIVE, 'file=exploiter18/combos.efzagent;gap=0.6,mash=0.15,escape=1,rg=0.3,'
+                   'reversal=0.8,tech=1,techsafe=1,techhit=1',
+             "the agent's own pressure (the user's, 22 November: to handle pressure it has to "
+             "know how to pressure, in the corners above all): the opponents with their "
+             "characters' combos that press their fastest normal into the gaps of its "
+             "pressure (advantages.py's gap: a reset, a slow move's start, a recovery; and "
+             "mash, blind, now and then), jump out of a corner when they are free there, "
+             "guard by recoil and rise with an invincible move: what a string with a gap and "
+             "a corner that does not hold cost against a person"),
 }
 
 # (name, drill, path, better: +1 more is better or -1, what). The path is into the
@@ -152,6 +174,27 @@ MEASURES = [
     ('combos: net', 'combos', ('side', 'net_ledger', 'net'), +1, 'HP ahead a minute there'),
     ('combos: their combo HP', 'combos', ('other', 'combo_damage'), -1, "HP a combo of the opponents'"),
     ('combos: its combo HP', 'combos', ('side', 'combo_damage'), +1, 'HP a combo of its own there'),
+    ('press: wins', 'press', ('win',), +1, 'matches won against the opponents that press'),
+    ('press: own HP lost', 'press', ('self_hp_taken',), -1, 'the share of its HP lost a round there'),
+    ('press: under pressure', 'press', ('side', 'net_ledger', 'its pressure', 'net'), +1,
+     'HP a minute net under their pressure there'),
+    ('objects: wins', 'objects', ('win',), +1, 'matches won against the opponents that put objects out and press'),
+    ('objects: own HP lost', 'objects', ('self_hp_taken',), -1, 'the share of its HP lost a round there'),
+    ('antiair: wins', 'antiair', ('win',), +1, 'matches won against the opponents that anti-air'),
+    ('antiair: own HP lost', 'antiair', ('self_hp_taken',), -1, 'the share of its HP lost a round there'),
+    ('antiair: by air', 'antiair', ('side', 'net_ledger', 'I came by air', 'net'), +1,
+     'HP a minute net where it came by air there'),
+    ('gaps: wins', 'gaps', ('win',), +1, 'matches won against the opponents that press back in a gap and leave a corner'),
+    ('gaps: own HP lost', 'gaps', ('self_hp_taken',), -1, 'the share of its HP lost a round there'),
+    ('gaps: its pressure', 'gaps', ('side', 'net_ledger', 'my pressure', 'net'), +1,
+     'HP a minute net out of its own pressure there'),
+    ('gaps: strings', 'gaps', ('side', 'pressure', 'strings_per_min'), +1, 'its strings a minute there'),
+    ('gaps: opened', 'gaps', ('side', 'pressure', 'next', 'hit'), +1,
+     'after a move of its that was guarded, the share in which the next thing is its hit'),
+    ('gaps: got away', 'gaps', ('side', 'pressure', 'escapes', 'move', 'escaped'), -1,
+     'moves pressed against its pressure that got away'),
+    ('gaps: corner left', 'gaps', ('side', 'corner', 'left'), -1, 'corner stays the opponent left on its own there'),
+    ('gaps: corner HP', 'gaps', ('side', 'corner', 'dealt'), +1, 'HP dealt a corner stay there'),
     ('okizeme net', 'reversal', ('side', 'net_ledger', 'my okizeme', 'net'), +1, 'HP a minute net on its okizeme against reversals'),
     ('punishes', 'reversal', ('side', 'faced_raw', 'punished'), +1, "the opponent's missed risky moves it punished"),
 ]
@@ -279,7 +322,9 @@ def jobs(args):
                 if adv and adv.startswith('cpu-combos='):  # the CPU, the file's own combos
                     rest = f'--p2 {args.file} --p2-cpu-combos {adv.split("=")[1]} --chars ayu {o}'
                 elif adv and adv.startswith('file='):  # the opponent as an agent file of its own
-                    rest = f'--p2 {HERE}/{o}/{adv.split("=")[1]} --chars ayu {o}'
+                    name, _, habits = adv.partition('=')[2].partition(';')  # (;its habits on top)
+                    rest = (f'--p2 {HERE}/{o}/{name} --chars ayu {o}' +
+                            (f' --p2-advantage {habits}' if habits else ''))
                 else:
                     rest = (f'--p2 {HERE}/{o}/{EXPLOITER} --chars ayu {o}' +
                             (f' --p2-advantage {adv}' if adv else '') +

@@ -495,9 +495,9 @@ class Out(unittest.TestCase):
 class Press(unittest.TestCase):
     """focus.py's 'press': the opponent's guard touched, and a hit soon after it."""
 
-    def play(self, views):
+    def play(self, views, name='press'):
         venv = Venv()
-        f = focus.Focus(venv, 'press', coef=0.5)
+        f = focus.Focus(venv, name, coef=0.5)
         venv.env.obs[0, 0] = views[0]
         f.reset()
         total = 0.0
@@ -506,9 +506,12 @@ class Press(unittest.TestCase):
             total += float(f.step_wait()[1][0])
         return round(total, 6), f.take()
 
-    def view(self, opp=0, frame=0):
+    def view(self, opp=0, frame=0, corner=False, air=False):
         v = np.zeros(168, np.float32)
         v[focus.ACT_OPP], v[focus.FRAME_OPP] = opp, frame
+        if corner:  # the opponent at a wall, the learner 100 pixels in front of it
+            v[focus.X_OPP], v[focus.X_SELF], v[focus.DX] = 0.9, 0.6, 100 / 640
+        v[focus.AIR_OPP] = float(air)
         return v
 
     def test_a_guard_touched_pays_a_share_and_a_hit_after_it_in_full(self):
@@ -654,6 +657,301 @@ class Tech(unittest.TestCase):
                 air = logic.jump['prejump'] + logic.jump['air']
                 self.assertFalse(any(a[1] for a in played[:air]))
                 self.assertEqual(played[air:air + 6], [(2, 'B'), (2, '')] * 3)
+
+    POKES = ('2A', {'2A': (55, 0xcc, 4), '5A': (63, 0xc8, 4), '5B': (65, 0xc9, 6),
+                    '2B': (101, 0xcd, 7)},
+             {'2A': ['5A', '5B', '2B'], '5A': ['5B', '2A', '2B'], '5B': ['2B'], '2B': []})
+
+    def pressing(self, **more):
+        with mock.patch.object(advantages, 'pokes', return_value=self.POKES):
+            logic = advantages.Advantages('mai', 1, press=1.0, **more)
+        logic.clear(0)
+        return logic
+
+    def near(self, dx, act=0, opp=0, frame=0):
+        v = self.view(act)
+        v[advantages.DX] = dx / 640
+        v[advantages.OPP_ACT], v[advantages.OPP_ACT_FRAME] = opp, frame
+        v[advantages.OPP_GUARDING] = float(opp in advantages.GUARDS)
+        return v
+
+    def test_it_goes_in_and_chains_its_normals_on_a_guard(self):
+        """press: a run in, its 2A from inside its reach, and on each guard the next normal
+        the game cancels into that still reaches, pressed every other step."""
+        self.assertEqual(advantages.parse('press=0.6')['press'], 0.6)
+        logic = self.pressing()
+        got = [logic.step(0, self.near(200)) for _ in range(4)]
+        self.assertEqual(got, [(6, ''), (5, ''), (6, ''), (6, '')])     # 66: the run
+        self.assertEqual(logic.step(0, self.near(52)), (6, ''))          # not inside its reach yet
+        self.assertEqual(logic.step(0, self.near(40)), (2, 'A'))
+        self.assertEqual(logic.step(0, self.near(40, 0xcc)), (1, ''))    # out, nothing touched
+        self.assertEqual(logic.step(0, self.near(40, 0xcc, 0x99, 0)), (5, 'A'))   # guarded: its 5A
+        self.assertEqual(logic.step(0, self.near(40, 0xcc, 0x99, 1)), (5, ''))
+        self.assertEqual(logic.step(0, self.near(40, 0xcc, 0x99, 2)), (5, 'A'))
+        self.assertEqual(logic.step(0, self.near(42, 0xc8, 0x99, 3)), (1, ''))    # it started
+        # the guard touched again (its frame back): the 5B is out of reach by then (65 less
+        # the push), the 2B is not
+        self.assertEqual(logic.step(0, self.near(50, 0xc8, 0x99, 0)), (2, 'B'))
+        self.assertEqual(logic.step(0, self.near(60, 0xcd, 0x99, 1)), (1, ''))
+        self.assertEqual(logic.step(0, self.near(70, 0xcd, 0x99, 0)), (1, ''))    # nothing left to chain
+        counts = logic.counts
+        self.assertEqual((counts['presses'], counts['press_pokes'], counts['press_guarded']), (1, 1, 3))
+        # its string over: a crouching guard at the most, and it goes in again
+        got = [logic.step(0, self.near(70)) for _ in range(40)]
+        self.assertIn((6, ''), got)
+        self.assertTrue(set(got[:got.index((6, ''))]) <= {(1, ''), None})
+        self.assertEqual(logic.counts['presses'], 2)
+
+    def test_it_lets_go_into_a_move_and_when_it_hits(self):
+        logic = self.pressing()
+        logic.step(0, self.near(200))
+        self.assertEqual(logic.step(0, self.near(200, opp=advantages.FIRST_OWN + 3)), (5, ''))  # far: on it goes
+        self.assertIsNone(logic.step(0, self.near(120, opp=advantages.FIRST_OWN + 3)))
+        self.assertEqual(logic.counts['press_let_go'], 1)
+        self.assertIsNone(logic.step(0, self.near(120)))                 # no chance for a while
+        logic = self.pressing()
+        self.assertEqual(logic.step(0, self.near(40)), (2, 'A'))
+        logic.step(0, self.near(40, 0xcc))
+        hit = self.near(40, 0xcc, 0x32)
+        hit[advantages.OPP_HITSTUN] = 1.0
+        self.assertIsNone(logic.step(0, hit))                            # the combo is its own play's
+        self.assertEqual(logic.counts['press_hit'], 1)
+        logic = self.pressing()
+        up = self.near(40)
+        up[advantages.OPP_AIRBORNE] = 1.0
+        self.assertIsNone(logic.step(0, up))                             # the agent in the air: no chance
+        self.assertEqual(logic.counts['press_chances'], 0)
+
+    def test_a_guarded_normal_of_its_own_play_is_gone_on_from(self):
+        logic = self.pressing()
+        self.assertIsNone(logic.step(0, self.near(40, 0xc9)))            # its own play's 5B
+        self.assertEqual(logic.step(0, self.near(40, 0xc9, 0x99, 0)), (2, 'B'))
+        self.assertEqual(logic.counts['press_joined'], 1)
+        logic = advantages.Advantages('mai', 1)                          # none of it at zero
+        logic.clear(0)
+        self.assertIsNone(logic.step(0, self.near(40, 0xc9, 0x99, 0)))
+
+    def meaty(self, **more):
+        lying = {0x63: [40 - k for k in range(40)]}
+        with mock.patch.object(advantages, 'pokes', return_value=self.POKES), \
+                mock.patch.object(advantages, 'knockdown_left', return_value=lying):
+            logic = advantages.Advantages('mai', 1, meaty=1.0, **more)
+        logic.clear(0)
+        return logic
+
+    def test_a_meaty_on_the_agents_knockdown(self):
+        """meaty: by the agent lying, into its reach, and its 2A pressed so that it touches
+        MEATY_LATE steps after the agent's first free one; a guard, and the string goes on."""
+        self.assertEqual(advantages.parse('meaty=0.5')['meaty'], 0.5)
+        logic = self.meaty()
+        # 40 steps to lie, the 2A touches 4 steps after its press: pressed with 2 left
+        got = [logic.step(0, self.near(90, opp=0x63)) for _ in range(3)]
+        self.assertEqual(got, [(6, '')] * 3)                             # a walk into its reach
+        got = [logic.step(0, self.near(45, opp=0x63)) for _ in range(35)]
+        self.assertEqual(set(got), {(5, '')})                            # there: it waits
+        self.assertEqual(logic.step(0, self.near(45, opp=0x63)), (2, 'A'))
+        self.assertEqual(logic.step(0, self.near(45, 0xcc, 0x60)), (1, ''))
+        self.assertEqual(logic.step(0, self.near(45, 0xcc, 0x99, 0)), (5, 'A'))   # guarded: its 5A
+        counts = logic.counts
+        self.assertEqual((counts['meaty_chances'], counts['meaties'], counts['meaty_pokes'],
+                          counts['meaty_guarded']), (1, 1, 1, 1))
+        # once a knockdown; from too far it runs (forward let go first) and lets go in time
+        logic = self.meaty()
+        got = [logic.step(0, self.near(140, opp=0x63)) for _ in range(38)]
+        self.assertEqual(got[:5], [(5, ''), (6, ''), (5, ''), (6, ''), (6, '')])
+        self.assertIsNone(logic.step(0, self.near(120, opp=0x63)))
+        self.assertIsNone(logic.step(0, self.near(40, opp=0x63)))
+        self.assertEqual((logic.counts['meaty_far'], logic.counts['meaty_chances']), (1, 1))
+        # further than it covers in the time left (2.5 pixels a step until it has covered
+        # more): no chance, the knockdown is its own play's
+        logic = self.meaty()
+        self.assertIsNone(logic.step(0, self.near(200, opp=0x63)))
+        self.assertEqual((logic.counts['meaty_apart'], logic.counts['meaty_chances']), (1, 0))
+        logic.pace = 5.0
+        logic.step(0, self.near(200))
+        self.assertEqual(logic.step(0, self.near(200, opp=0x63)), (5, ''))
+        # the agent up before its time: let go; and in the open nothing without press
+        logic = self.meaty()
+        logic.step(0, self.near(45, opp=0x63))
+        self.assertIsNone(logic.step(0, self.near(45)))
+        self.assertEqual(logic.counts['meaty_late'], 1)
+        self.assertTrue(all(logic.step(0, self.near(45)) is None for _ in range(40)))
+        with mock.patch.object(advantages, 'pokes', return_value=(None, {}, {})):
+            none = advantages.Advantages('mai', 1, meaty=1.0)            # a character with no normal for it
+        self.assertEqual((none.meaty, 'meaty' in none.off), (0.0, True))
+
+    def antiair(self, **more):
+        # 80-95 pixels away, 96-119 up, falling: with nothing out its 623A, at an air B out its 5A
+        table = {(5, 4, 1, 0): [([6, 2, 3], 'A', 0xcc), ([2], 'C', 0xce)],
+                 (5, 4, 1, 0xd0): [([5], 'A', 0xc8)]}
+        with mock.patch.object(advantages, 'antiairs', return_value=((16, 24), table)):
+            logic = advantages.Advantages('mai', 1, antiair=1.0, **more)
+        logic.clear(0)
+        return logic
+
+    def up(self, dx, height, act=0, opp=0):
+        v = self.near(dx, act, opp)
+        v[advantages.OPP_AIRBORNE], v[advantages.OPP_Y] = 1.0, -height / 480
+        return v
+
+    def test_an_anti_air_at_a_jump_from_a_sure_place(self):
+        """antiair: once a jump, the move that is sure from where the agent is, after the
+        steps a person needs to see a jump and by the move the agent has out; none at an
+        agent moving away."""
+        self.assertEqual(advantages.parse('antiair=0.7')['antiair'], 0.7)
+        logic = self.antiair()
+        rising = [logic.step(0, self.up(150 - 2 * k, 20 + 10 * k)) for k in range(12)]
+        self.assertEqual(set(rising), {None})
+        got = [logic.step(0, self.up(90, 100)), logic.step(0, self.up(88, 90)),
+               logic.step(0, self.up(86, 80))]
+        self.assertEqual(got, [(6, ''), (2, ''), (3, 'A')])              # its 623A
+        self.assertIsNone(logic.step(0, self.up(90, 100)))               # once a jump
+        hit = self.up(84, 70)
+        hit[advantages.OPP_HITSTUN] = 1.0
+        logic.step(0, hit)
+        counts = logic.counts
+        self.assertEqual((counts['antiair_chances'], counts['antiairs'], counts['antiair_hit']), (1, 1, 1))
+        # seen for 5 steps only: not yet; and not at an agent going away
+        logic = self.antiair()
+        for k in range(5):
+            logic.step(0, self.up(150 - 2 * k, 120 + 5 * k))
+        self.assertIsNone(logic.step(0, self.up(90, 100)))
+        logic = self.antiair()
+        for k in range(12):
+            logic.step(0, self.up(60 + 2 * k, 20 + 10 * k))
+        self.assertIsNone(logic.step(0, self.up(90, 100)))
+        self.assertEqual(logic.counts['antiair_chances'], 0)
+        # with an air move out: the move that is sure against that one, or none
+        for act, want in ((0xd0, (5, 'A')), (0xd1, None)):
+            logic = self.antiair()
+            for k in range(12):
+                logic.step(0, self.up(150 - 2 * k, 20 + 10 * k))
+            self.assertEqual(logic.step(0, self.up(90, 100, opp=act)), want)
+
+    def test_a_button_after_a_guard(self):
+        """mash: on the first step it is free after a guard, its fastest normal that
+        reaches, three presses every other step, whatever the agent does; none from too
+        far; and who was hit first is counted."""
+        self.assertEqual(advantages.parse('mash=0.4')['mash'], 0.4)
+        with mock.patch.object(advantages, 'pokes', return_value=self.POKES):
+            logic = advantages.Advantages('mai', 1, mash=1.0)
+        logic.clear(0)
+        for k in range(6):
+            self.assertIsNone(logic.step(0, self.near(60, 0x97, 0xc9)))    # guarding the agent's 5B
+        got = [logic.step(0, self.near(60, 0, 0xca)) for _ in range(7)]   # free: the agent's 5C starting
+        self.assertEqual(got, [(5, 'A'), (5, ''), (5, 'A'), (5, ''), (5, 'A'), (5, ''), None])  # 5A reaches 63; 2A 55 does not
+        hit = self.near(60, 0xc8)
+        hit[advantages.OPP_HITSTUN] = 1.0
+        logic.step(0, hit)
+        counts = logic.counts
+        self.assertEqual((counts['mash_chances'], counts['mashes'], counts['mash_hit']), (1, 1, 1))
+        for k in range(6):
+            logic.step(0, self.near(120, 0x97, 0xc9))
+        self.assertIsNone(logic.step(0, self.near(120, 0, 0)))             # nothing reaches
+        self.assertEqual((counts['mash_chances'], counts['mashes'], counts['mash_far']), (2, 1, 1))
+
+    def gapping(self):
+        with mock.patch.object(advantages, 'pokes', return_value=self.POKES), \
+                mock.patch.object(advantages, 'startups',
+                                  return_value={0xc8: (4, 12), 0xc9: (5, 19), 0xce: (14, 34)}):
+            logic = advantages.Advantages('mai', 1, gap=1.0)
+        logic.clear(0)
+        for k in range(6):
+            self.assertIsNone(logic.step(0, self.near(60, 0x97, 0xc9)))    # guarding the agent's 5B
+        return logic
+
+    def test_a_button_into_a_gap_of_the_agents_pressure(self):
+        """gap: after a guard, its fastest normal that reaches where the agent cannot hit
+        it first: into a slow move's start, a move's recovery and a walk back in; not into
+        a move that comes out first or is out; once a move."""
+        self.assertEqual(advantages.parse('gap=0.5')['gap'], 0.5)
+        logic = self.gapping()                                             # the agent's 2C next: 14 steps to come out
+        got = [logic.step(0, self.near(60, 0, 0xce)) for _ in range(5)]
+        self.assertEqual(got, [(5, 'A'), (5, ''), (5, 'A'), (5, ''), None])
+        self.assertEqual((logic.counts['gap_chances'], logic.counts['gaps']), (1, 1))
+        logic = self.gapping()                                             # its 5A next: out in 4, as fast as the button
+        got = [logic.step(0, self.near(60, 0, 0xc8)) for _ in range(7)]    # ... and then out
+        self.assertEqual(set(got), {None})
+        self.assertEqual(logic.step(0, self.near(60, 0, 0xc8)), (5, 'A'))  # its recovery
+        logic = self.gapping()                                             # the agent walks back in
+        self.assertEqual(logic.step(0, self.near(60, 0, 0x1)), (5, 'A'))
+        logic = self.gapping()                                             # out of reach: nothing
+        self.assertIsNone(logic.step(0, self.near(120, 0, 0x1)))
+        self.assertEqual(logic.counts['gap_chances'], 0)
+        logic = self.gapping()                                             # long after the guard: its own play's
+        for k in range(advantages.GAP_AFTER):
+            logic.step(0, self.near(120, 0, 0x1))
+        self.assertIsNone(logic.step(0, self.near(60, 0, 0xce)))
+
+    def test_an_anti_air_that_loses_in_the_game_is_left_out(self):
+        """antiair: a move hit first more than half as often as it hits against a kind of
+        jump is left out there after ANTIAIR_PROVE tries (the place's next sure move
+        instead), and tried again once ANTIAIR_AGAIN such chances have gone by."""
+        logic = self.antiair()
+
+        def jump(came):  # one jump at it: the first step of its answer, then who is hit
+            for k in range(12):
+                logic.step(0, self.up(150 - 2 * k, 20 + 10 * k))
+            first = logic.step(0, self.up(90, 100))
+            for k in range(1, 4):
+                logic.step(0, self.up(90 - k, 100 - 3 * k))
+            v = self.up(84, 60)
+            v[advantages.OPP_HITSTUN if came == 'hit' else advantages.SELF_HITSTUN] = 1.0
+            logic.step(0, v)
+            logic.step(0, self.near(84))  # the agent landed
+            return first
+
+        firsts = [jump('back') for _ in range(advantages.ANTIAIR_PROVE)]
+        self.assertEqual(set(firsts), {(6, '')})                          # its 623A, hit back each time
+        self.assertEqual(jump('hit'), (2, 'C'))                           # then the next sure move, its 2C
+        self.assertEqual(logic.counts['antiair_left_out'], 1)
+        self.assertEqual(logic.counts['antiair_hit_back'], advantages.ANTIAIR_PROVE)
+        for _ in range(advantages.ANTIAIR_AGAIN - 2):
+            self.assertEqual(jump('hit'), (2, 'C'))
+        jump('hit')                                                       # the 40th: half the record forgotten
+        self.assertEqual(jump('hit'), (6, ''))                            # the 623A again
+        with mock.patch.object(advantages, 'antiairs', return_value=((16, 24), {})):
+            none = advantages.Advantages('mai', 1, antiair=1.0)
+        self.assertEqual((none.antiair, 'antiair' in none.off), (0.0, True))
+
+    def objects(self, **more):
+        moves = [([2, 3, 6], 'C', 'rf', 0xfc, 45), ([2, 3, 6], 'B', None, 0xfb, 38),
+                 ([2, 1, 4], 'A', None, 0x101, 90)]
+        with mock.patch.object(advantages, 'object_moves', return_value=moves), \
+                mock.patch.object(advantages, 'knockdown_left', return_value={0x62: [60 - k for k in range(60)]}):
+            logic = advantages.Advantages('mai', 1, object=1.0, **more)
+        logic.clear(0)
+        return logic
+
+    def test_an_object_put_out_in_the_open_and_on_a_knockdown(self):
+        """object: the move with the most cover its gauges allow, the agent far and in no
+        move, or lying for long enough; none with an object of its own out."""
+        self.assertEqual(advantages.parse('object=0.5')['object'], 0.5)
+        logic = self.objects()
+        self.assertIsNone(logic.step(0, self.near(120)))                 # too near
+        got = [logic.step(0, self.near(200)) for _ in range(4)]          # no RF: the 236B
+        self.assertEqual(got, [(2, ''), (3, ''), (6, 'B'), (6, '')])
+        logic.step(0, self.near(200, 0xfb))
+        self.assertEqual((logic.counts['objects'], logic.counts['objects_started']), (1, 1))
+        out = self.near(200)
+        out[advantages.SELF_OBJECTS[2]] = 1.0                            # its object out: none
+        self.assertTrue(all(logic.step(0, out) is None for _ in range(60)))
+        rf = self.near(200)
+        rf[advantages.SELF_RF] = 1.0
+        self.assertEqual([logic.step(0, rf) for _ in range(3)][-1], (6, 'C'))   # with RF: the 236C
+        # the agent knocked down beside it, lying for 60 steps: the 236B again (38 steps),
+        # once; with 20 left, nothing fits
+        logic = self.objects()
+        logic.step(0, self.near(60, act=0xd0, opp=0x62))                 # (in a move of its own)
+        self.assertEqual(logic.step(0, self.near(60, opp=0x62)), (2, ''))
+        logic = self.objects()
+        for _ in range(42):
+            logic.step(0, self.near(60, act=0xd0, opp=0x62))
+        self.assertIsNone(logic.step(0, self.near(60, opp=0x62)))
+        self.assertEqual(logic.counts['objects'], 0)
+        with mock.patch.object(advantages, 'object_moves', return_value=[]):
+            none = advantages.Advantages('mai', 1, object=1.0)           # a character with no such move
+        self.assertEqual((none.object, 'object' in none.off), (0.0, True))
 
     def test_none_of_it_at_zero(self):
         logic = advantages.Advantages('mai', 1)
