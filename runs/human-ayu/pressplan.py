@@ -7,7 +7,7 @@ instead of a knockdown.
 
     pressplan:library=~/data/efz-replays/pressure-library.npz[,per_plan=10,doubt=0.3,carry]
 
-Why (docs/training-v2.md, "The games of 15 November, evening"): the agent's pressure is a
+Why (docs/training-v2-log.md, "The games of 15 November, evening"): the agent's pressure is a
 low or nothing after each guard, with no throw and no overhead, so a guard held costs
 nothing and a jump gets out; people's Ayu opens a guard with a throw (3.6% of its
 follow-ups, 88% of them land) and an overhead after a dash (4.3%, 39%). PPO never kept
@@ -78,7 +78,7 @@ GUARDS = np.array(sorted(tactics.GUARDS))
 GUARDS_CROUCH = (0x99, 0x9a, 0x9b, 0xa9)
 ROUND_OVER = okiplan.ROUND_OVER
 FREE = np.array(sorted(tactics.FREE))
-# What a guarding player does next, the community's (docs/training-v2.md, "What people's
+# What a guarding player does next, the community's (docs/training-v2-log.md, "What people's
 # habits look like": a move out of pressure on 0.27-0.48 of the guards by player, few of
 # them invincible; the jumps from pressure_library's and five.py's counts).
 PRIOR = dict(reversal=0.05, mash=0.22, jump=0.15, crouch=0.8)

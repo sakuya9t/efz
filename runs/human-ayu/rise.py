@@ -4,7 +4,7 @@
     rise[:prior=4,move=150,still=-165,super=-400,temperature=75,window=240,carry=false]
 
 Why (the user's, 17 November: "risk management ... It should pay more attention when the
-other side hit back"; docs/training-v2.md, "The league by the three measures"). Against
+other side hit back"; docs/training-v2-log.md, "The league by the three measures"). Against
 the user most of the agent's raw risky moves were wake-up reversals (23 of its 27 raw
 236236A, 12 of 15 raw 641236A, 10 of 15 raw 623B), four in five whiffed or were guarded
 and three in four of those were punished: about 1,100 HP a match. The league teaches the
@@ -53,7 +53,7 @@ risings through and took the wake-up moves that pay (641236A halved) with it. So
 class's draw is off unless asked for (`moves=true`); the super's is what the module does.
 
 The guard by sight (`guard=true`). The league's opponents leave the agent's rising
-alone and a person does not (docs/training-v2.md, "The agent's own rising against an
+alone and a person does not (docs/training-v2-log.md, "The agent's own rising against an
 attacker who is on it"): a move of the attacker's is out as the agent rises on 16-36% of
 its knockdowns against eight of the eleven `exploiter18`s, 75% against the user, 56-58%
 in the community's replays. Against the user's it lost 427 HP a knockdown (-65 where the

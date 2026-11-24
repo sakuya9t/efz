@@ -5,7 +5,7 @@ that move has paid in this match.
     risk[:prior=4,temperature=75,window=180,carry=false,623B=-326,...]
 
 Why (the user's, 17 and 18 November: "risk management", "When doing something, it seems
-it's not calculating what'd be the outcome if that doesn't work"; docs/training-v2.md,
+it's not calculating what'd be the outcome if that doesn't work"; docs/training-v2-log.md,
 "The raw moves: the whole of the deficit"). Against the user round 18's agent lost about
 1,450 HP a minute on five raw moves, which is all it was behind by: 623B (0.64 a minute,
 644 lost each), the level-one 236236 super (1.13, 367), 236B thrown in the open (0.78,

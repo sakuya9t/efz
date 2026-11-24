@@ -5,7 +5,7 @@ riser answers, and one is chosen by what the match has shown of this opponent.
 
     okiplan:library=~/data/efz-replays/oki-library.npz[,per_plan=10,temperature=200,carry]
 
-Why (docs/training-v2.md, "The whole result" of the told-habits experiment and "The
+Why (docs/training-v2-log.md, "The whole result" of the told-habits experiment and "The
 okizeme module, measured"): the agent's okizeme is one move whoever it plays, a policy
 told its opponent's habits plays no differently, and people's clone has the mix but not
 the timing. A set-up's timing is a planner's problem, and the choice between set-ups is a
@@ -86,7 +86,7 @@ ROUND_OVER = 3
 DOWN = np.array(sorted(tactics.DOWN))
 THROWN = np.arange(0x64, 0x79)
 ANSWERS = ('crouch', 'stand', 'reversal', 'jump', 'mash')
-# The community's players, the median (docs/training-v2.md, "What people's habits look
+# The community's players, the median (docs/training-v2-log.md, "What people's habits look
 # like"): a wake-up's invincible move, another move, a jump or backdash; the crouching
 # share of a guard is the profiles' (my estimate).
 PRIOR = dict(reversal=0.10, mash=0.19, jump=0.04, crouch=0.8)

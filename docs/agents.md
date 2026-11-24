@@ -215,7 +215,7 @@ count such a route short.
 
 An agent file with the module `okiplan:1` plans what it does at its opponent's knockdowns
 as `runs/human-ayu/okiplan.py` does in evaluations (`port/agent/mix.h`; the reasons and
-the measures: docs/training-v2.md, "The planned okizeme"). Without it an agent's okizeme
+the measures: docs/training-v2-log.md, "The planned okizeme"). Without it an agent's okizeme
 is its network's, which is one low attack whoever it plays.
 
     python runs/human-ayu/oki_library.py --answers ~/data/efz-replays/oki-library.npz
@@ -282,7 +282,7 @@ module it doesn't play.
 
 An agent file with the module `pressplan:1` plans what follows each of its guarded moves
 as `runs/human-ayu/pressplan.py`'s live plan does (`mix.h`'s `Press`, the okizeme's
-planner from a guard instead of a knockdown; docs/training-v2.md, "The planned
+planner from a guard instead of a knockdown; docs/training-v2-log.md, "The planned
 pressure"). Without it an agent's pressure is a low or nothing after each guard, with no
 throw.
 
@@ -323,7 +323,7 @@ okizeme's.
 
 An agent file with the module `airthrow:1` air-throws an opponent that recovers in the air
 out of its combo, when a throw catches before the recovery is over (`mix.h`'s `Catch`,
-`runs/human-ayu/airplan.py`'s sure throw; docs/training-v2.md, "The air"). An opponent
+`runs/human-ayu/airplan.py`'s sure throw; docs/training-v2-log.md, "The air"). An opponent
 that presses out of a combo in the air is free again beside the agent, and nothing
 touches it until its recovery ends, except an air throw (`src/ayu.cpp`: C with forward
 held, in the air within 100 pixels of an opponent in the air that is in no hit reaction
@@ -544,7 +544,7 @@ included); in real time at level 4, 51 plans in a minute's fight, a route played
   `--okizeme`, `--pressure` and `--air-throw`, the planned okizeme and pressure and the
   catch; not `oki` (people's okizeme played by a second network), routes chosen by the
   chooser alone (`by: chooser`), or `airplan`'s and `jumpplan`'s options tried against
-  answers (measured in evaluations only: docs/training-v2.md, "The air").
+  answers (measured in evaluations only: docs/training-v2-log.md, "The air").
 - **A real EfzRevival 1.02h peer**: the network matches above are this game against
   itself.
 - **A controller's button** for F5 and F6: the keyboard only.

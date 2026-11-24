@@ -10,7 +10,7 @@ with how much is behind it.
 A policy sees the game as it is (late) and its own last inputs: nothing of what the
 opponent did on its last three wake-ups, or how the policy's own last four low attacks
 went. A person remembers that, and plays the fortieth match of a set differently from
-the first (docs/training-v2.md, "Adapting during a match"). This is that memory as
+the first (docs/training-v2-log.md, "Adapting during a match"). This is that memory as
 inputs, for a policy trained with them (EfzSB3VecEnv's memory=, Agent's).
 
 The counts are made from the view they are given, a step at a time. Given the view a

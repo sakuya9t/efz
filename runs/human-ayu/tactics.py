@@ -913,7 +913,7 @@ def exchanges_report(recs, per_min):
 def areas_report(recs, times, dealt, taken, eps=(), per_min=None):
     """The scorecard by area (the user's, 21 November: score the opponent on pressure,
     anti-pressure, the air, okizeme and its defence, combo damage, and fight where it is
-    weak; docs/training-v2.md, "Playing to the opponent's weak areas"): for each of
+    weak; docs/training-v2-log.md, "Playing to the opponent's weak areas"): for each of
     SITUATIONS (exchanges()' records `recs`, situation_time()'s `times`), `share`, of the
     live time spent in it; `rate`, the HP a second ahead on net while in it (+: the
     player's; per second in the situation, so that how often it comes up does not enter:

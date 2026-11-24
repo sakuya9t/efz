@@ -1,4 +1,4 @@
-"""The scorecard by area (docs/training-v2.md, "Playing to the opponent's weak areas"):
+"""The scorecard by area (docs/training-v2-log.md, "Playing to the opponent's weak areas"):
 what a player makes in each situation of tactics.SITUATIONS, by the time spent in it,
 against each opponent; how far opponents differ in each (the community's and the
 league's); and how many matches it takes to read an opponent's area.

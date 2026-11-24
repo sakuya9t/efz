@@ -110,7 +110,7 @@ def parse():
                         "bait=..,damage=..,patient=..,wake=..,jumpin=..) that "
                         "--vs-profile2-share of the matches with the advantages play instead "
                         "of --vs-rg ... --vs-jumpin's, drawn anew each chunk: opponents that "
-                        "defend as more than one kind of player (docs/training-v2.md, crowd)")
+                        "defend as more than one kind of player (docs/training-v2-log.md, crowd)")
     p.add_argument('--vs-profile2-share', type=float, default=0.5)
     p.add_argument('--vs-bait', type=float, nargs='*', default=[],
                    help="and the share of the learner's knockdowns on which they guard its wake-up "
@@ -118,7 +118,7 @@ def parse():
     p.add_argument('--vs-patient', type=float, nargs='*', default=[],
                    help="and the share of their guards' ends and their risings after which they hold "
                         "a guard (crouching or standing, drawn) for 20 steps, pressing nothing "
-                        "(advantages.py patient: a person's defence, docs/training-v2.md)")
+                        "(advantages.py patient: a person's defence, docs/training-v2-log.md)")
     p.add_argument('--vs-wake', type=float, nargs='*', default=[],
                    help="and the share of their risings on which they put out an invincible move "
                         "as soon as the game takes it (advantages.py wake)")
@@ -267,7 +267,7 @@ def parse():
     p.add_argument('--lr', type=float, default=1e-4)
     p.add_argument('--lr-end', type=float, default=None,
                    help='the learning rate falls linearly from --lr to this over the run, from '
-                        "its start's steps to --budget (docs/training-v2.md: the spread of the "
+                        "its start's steps to --budget (docs/training-v2-log.md: the spread of the "
                         "chunks' wandering shrinks with the step)")
     p.add_argument('--average', action='store_true',
                    help="keep a running mean of the chunks' weights (avg.zip): it is what is "

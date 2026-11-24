@@ -1,4 +1,4 @@
-"""A run's checkpoints averaged: the mean of their policies' weights (docs/training-v2.md:
+"""A run's checkpoints averaged: the mean of their policies' weights (docs/training-v2-log.md:
 rounds 8-13 wandered around a point and best.zip was the luckiest chunk; the mean of
 agent-league11-r7's ten chunks wins 90% over the 39 where its best.zip wins 86%).
 

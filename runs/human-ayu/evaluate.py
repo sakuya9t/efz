@@ -302,7 +302,7 @@ class Events:
         situation an exchange began in, whoever was hit (its okizeme, the opponent's,
         its pressure, the opponent's, it came by air, the opponent did, both in the
         air, on the ground: net, gained, lost). What a round is judged by, beside the
-        strongest players' (people-ledger.json; docs/training-v2.md); areas
+        strongest players' (people-ledger.json; docs/training-v2-log.md); areas
         (tactics.areas_report): the same situations as a scorecard, by the time spent
         in each: its share of the match and the HP a second ahead while in it, and the
         HP of a hit either way (areas.py tabulates them by opponent);

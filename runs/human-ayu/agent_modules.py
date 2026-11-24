@@ -11,7 +11,7 @@ what play.py --module and evaluate.py --p1-module know.
               combo, tried and chosen the same way
     jumpplan  airplan.py: people's answers to a jump at the agent, tried and chosen the same way
     endplan   airplan.py: the end of a combo on an opponent that can recover in the air (off
-              unless named; measured without a gain, docs/training-v2.md)
+              unless named; measured without a gain, docs/training-v2-log.md)
     cancel    cancel.py: a risky move it sees guarded, cancelled with an Instant Charge
     rise      rise.py: its own wake-up guarded through once its wake-up moves have cost it
               in this match

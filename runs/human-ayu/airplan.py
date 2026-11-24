@@ -5,7 +5,7 @@ game, each against the ways a recovering player goes on, and one is chosen.
 
     airplan:library=~/data/efz-replays/air-library.npz[,per_plan=8,temperature=200,carry]
 
-Why (docs/training-v2.md, "The air"): an opponent that presses out of a combo in the air
+Why (docs/training-v2-log.md, "The air"): an opponent that presses out of a combo in the air
 is free again beside the agent, and the agent then does what it does anywhere: it caught
 the user again after 28% of the user's recoveries and was hit back after 28%; the user
 caught it after 67% of its own, with air throws (0.29 a minute; the agent none). In the community's
@@ -742,7 +742,7 @@ class EndPlanner(AirPlanner):
         # sure (default): an air throw timed into the recovery of a victim that presses
         # out at its first chance is looked for (sure_end) and played if there is one.
         # matrix (default off): without one, the options against the answers; measured,
-        # the copies' answers did not tell which end catches (docs/training-v2.md).
+        # the copies' answers did not tell which end catches (docs/training-v2-log.md).
         kwargs.setdefault('sure', True)
         kwargs.setdefault('matrix', False)
         super().__init__(*args, **kwargs)

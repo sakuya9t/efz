@@ -194,8 +194,10 @@ the community's in-sync Ayu matches) and is trained in rounds: a league of explo
 each character trained against it, scripted habits on top of them, its combos from
 people's routes planned on copies of the fight. Each round is judged by a benchmark
 suite of drills with error bars, beside the strongest Ayu player of the replays, and by
-people's games against it in the native game. [docs/training-v2.md](docs/training-v2.md) is the
-plan and the record of every round; [docs/training.md](docs/training.md) the research
+people's games against it in the native game. [docs/training-v2.md](docs/training-v2.md) says
+where the training stands and how it is done,
+[docs/training-v2-log.md](docs/training-v2-log.md) is the record of every round;
+[docs/training.md](docs/training.md) the research
 before it (the training frameworks, how other fighting games' AIs and EFZ's own CPU are
 built). The models are on Hugging Face (https://huggingface.co/sakuya9t/efz):
 `python runs/hub.py download` fetches them into `runs/`.
@@ -248,7 +250,8 @@ that need no game data, and runs the suite from the encrypted compatibility pack
 | [agents.md](docs/agents.md) | Agents in the game: the agent file, how the game plays it, its planners, over the network |
 | [headless.md](docs/headless.md) | `efz_env`: observations, actions, rewards, save states, speed, the GPU, the API |
 | [training.md](docs/training.md) | Research before training: the frameworks, Hisoutensoku's AIs, EFZ's CPU, human-like agents |
-| [training-v2.md](docs/training-v2.md) | The training plan since 11 November 2026 and the record of every round |
+| [training-v2.md](docs/training-v2.md) | The agent's training: the goal and its rules, where it stands, the agent, the loop, the measures, the rounds |
+| [training-v2-log.md](docs/training-v2-log.md) | The closed record of rounds 14 to 25 as they were measured |
 | [progress.md](docs/progress.md) | Where the agent work stood on 7 November 2026, what lives outside the repository |
 | [decomp.md](docs/decomp.md) | The decompilation: rebuilding the original `efz.exe` and EfzRevival, the matching workflow and its tools |
 | [readability.md](docs/readability.md), [naming/](docs/naming/README.md) | How the source got its names, and the research behind them: each character's moves and mechanics |

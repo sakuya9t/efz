@@ -18,7 +18,8 @@ its combos ([below](#the-games-cpu-with-combos-cpu)).
 
 They learnt from the community's replays (a clone of people's play, reacting as late as a
 person does), then from a league of trained opponents. How each round was trained and
-judged: [docs/training-v2.md](https://github.com/sakuya9t/efz/blob/release/next/docs/training-v2.md);
+judged: [docs/training-v2.md](https://github.com/sakuya9t/efz/blob/release/next/docs/training-v2.md)
+(the record of each round: [docs/training-v2-log.md](https://github.com/sakuya9t/efz/blob/release/next/docs/training-v2-log.md));
 the file format and the modules: [docs/agents.md](https://github.com/sakuya9t/efz/blob/release/next/docs/agents.md).
 
 ## The files

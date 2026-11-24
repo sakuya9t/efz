@@ -1004,7 +1004,7 @@ passed its start (0.914). In the league of 39, four arms of 20M steps never did,
 `agent-league11-r7/best.zip` stays the best agent.
 
 **Round 14** (the user, 11 November: "Document the plan and execute the full plan
-autonomously"; the plan, its reasons and the calibration are in `docs/training-v2.md`).
+autonomously"; the plan, its reasons and the calibration are in `docs/training-v2-log.md`).
 Three changes, from what rounds 11-13 and the user's 10 November games showed:
 
 - **The loop.** A chunk's checkpoint is a noisy sample of where PPO is; the mean of a run's
@@ -1021,7 +1021,7 @@ Three changes, from what rounds 11-13 and the user's 10 November games showed:
   rise guarding for 40. They put out a wake-up reversal buffered in the rising animation,
   when the agent is committed to a meaty. And they jump in on the agent's rise, timed to
   land 4 steps after its first free one. Against the start, its measures under `person`
-  land near the user's games (`docs/training-v2.md`, "Phase 1 as built"): 47% wins
+  land near the user's games (`docs/training-v2-log.md`, "Phase 1 as built"): 47% wins
   against the person set, 83% in the plain game.
 - **A weaker pull** (0.01), the one change rounds 4 and 11 found to help.
 
@@ -1127,7 +1127,7 @@ people 1.19), as the old ones did (Nanase's 2.33). The next league takes them in
 **Round 15** (12-13 November; the user: the combo's percentage "is basically a free
 resource the agents fail to use", and then "do all" of three steps: the routes when the
 user plays, a round trained with them, the combos in a network of their own;
-`docs/training-v2.md`, "Round 15"). It found a bug that every league round had trained
+`docs/training-v2-log.md`, "Round 15"). It found a bug that every league round had trained
 under.
 
 *The copies' bug.* `efz_env.sb3.frozen()` makes every frozen opponent of
@@ -1182,7 +1182,7 @@ The person set one by one, own combos / played with the routes:
 | Mizuka 7 | 62% (78%) / 70% (70%) | 83% (73%) / 92% (64%) | 77% (75%) / 89% (64%) |
 | Shiori | 41% (85%) / 50% (79%) | 58% (83%) / 83% (70%) | 73% (77%) / 89% (66%) |
 
-The rules, fixed before the runs ended (`docs/training-v2.md`): an arm beats another if
+The rules, fixed before the runs ended (`docs/training-v2-log.md`): an arm beats another if
 both its seeds beat both of the other's on the person set and neither loses more than two
 points over the 46; the routes arm against the fixed one with both played with the routes.
 
@@ -1605,7 +1605,7 @@ files (202, and the 6 of `curriculum/`, `pbt/` and `vs-cpu/`: 2.9 GB) are now in
 | `combo_victims.py` | combos by the character they land on: conversion, hits, damage, and how they ended (knockdown, air recovery, neither), for people's Ayu or an agent against each CPU character |
 | `kanna_study.py` | where an agent's HP goes against the level-4 CPU's Kanna (her attacks out of her combos, by move, and the damage of the combos each started), its reversals and how they went, and her RF gauge (236C) |
 | `tactics.py` | pressure (frame advantage, punishable or safe, ways out, RG), wake-up (the riser's choice, the attacker's okizeme and mix-up) and free time, both ways |
-| `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time, reversals that hit, jump-ins that land (`air`: round 17's exploiters, docs/training-v2.md); `Calm`: a cost on the agent's presses while it is hit or guarding (`--press-cost`, round 16) |
+| `focus.py` | an opponent's focus as a shaping reward (`finetune.py --focus`): setups and charges in free time, reversals that hit, jump-ins that land (`air`: round 17's exploiters, docs/training-v2-log.md); `Calm`: a cost on the agent's presses while it is hit or guarding (`--press-cost`, round 16) |
 | `advantages.py` | a red team's advantages for any opponent: recoil guards, reversals after them, throws, damage, the wake-up bait, and a person's defence: guarding a string out, rising guarded or with a buffered reversal into a meaty, jump-ins on the rise, of them a share empty with the fastest low from the landing (`low`), recoveries in the air and escapes from a corner (`finetune.py --vs-rg/--vs-reversal/--vs-throw/--vs-damage/--vs-patient/--vs-wake/--vs-jumpin`, any of them as a whole profile with `--vs-profile2`, `evaluate.py --p2-advantage`) |
 | `motions.py` | the motion that starts each character's moves, tried from a saved state; which invincible ones come out of a recoil guard and win; with `--add wake jump meaty`, each character's rise, the reversals that beat a meaty 2A when buffered while rising, and the jump-ins that land on a rise (`motions.json`, made on each machine as `framedata.json` is: not in the repository) |
 | `framedata.py` | the characters' frame data from the game's `.pat` files: startup, reach, invulnerable frames, guard height (`framedata.json`) |
@@ -1614,7 +1614,7 @@ files (202, and the 6 of `curriculum/`, `pbt/` and `vs-cpu/`: 2.9 GB) are now in
 | `team_check.py` | whether players' clones predict their players better than the clone of everyone |
 | `combo_support.py` | the built-in routes: an agent's combos from people's library combos tried on copies of the game once it sees its hit, and again at each new move's hit (`FairAssist`; `evaluate.py --p1-assist [--assist-replan]`, `finetune.py --assist`), against a person in real time with the planner in a process of its own (`LiveRoutes`, `play.py --assist`) or with the chooser (`play.py --assist --chooser`); the module `routes` of `python/efz_env/modules.py` |
 | `agent_modules.py` | the kinds of module an agent here can be made of (an `agent.json`'s `"code"`): importing it registers them |
-| `okizeme.py` | the module `oki`: while the agent sees its opponent knocked down, another player (people's clone) plays in its place; people's mix, fewer wins (docs/training-v2.md, "The okizeme module, measured"), so no shipped agent has it |
+| `okizeme.py` | the module `oki`: while the agent sees its opponent knocked down, another player (people's clone) plays in its place; people's mix, fewer wins (docs/training-v2-log.md, "The okizeme module, measured"), so no shipped agent has it |
 | `from_record.py` | the native game's fight records (a match against an agent in the game; docs/logging.md) played again in the headless game and written as play.py's recordings, checked frame by frame: what the measures here read |
 | `combo_net.py` | the routes without the copies: `collect` an agent's plans (and steps) with the routes, `train-chooser` a network that says from the agent's view what each library combo would deal (`evaluate.py --assist-chooser`, `play.py --chooser`); `train`, `train-clock`, `play`: the two step-by-step networks that didn't work |
 | `combo_starts.py` | where people's combos started, kept as a replay and a step |

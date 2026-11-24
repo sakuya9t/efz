@@ -25,7 +25,7 @@ character they were landed on, with the join points (--marks), as the agent's ow
 (pressure_library.py) instead, with the answers beside it: for the planners of files'
 --oki and --press.
 
-Planners for the league (docs/training-v2.md, "Playing to the opponent's weak areas": the
+Planners for the league (docs/training-v2-log.md, "Playing to the opponent's weak areas": the
 league varied a third as much as people do in the okizeme on the agent and in the
 opponent's pressure, where people differ most): files --oki DIR and --press DIR give each
 file its character's planned okizeme and pressure (the modules okiplan and pressplan,

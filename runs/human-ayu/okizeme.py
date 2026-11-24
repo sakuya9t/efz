@@ -6,7 +6,7 @@ down, another player's play in its place.
 
 Why: the agent's okizeme is one move (round 15's: a low in 72-84% of its okizeme, a high
 in 3-12%, an object out in 1-7%; people's Ayu 40% / 38% / 30%), and against opponents who
-reverse as they rise it loses HP (docs/training-v2.md, "Round 16"). People's clone
+reverse as they rise it loses HP (docs/training-v2-log.md, "Round 16"). People's clone
 (bc-d14.zip), in the same situations, has people's mix. The module is efz_env.modules's
 Switch: from the step the agent sees the opponent down (its action one of tactics.DOWN:
 lying, the knockdowns, rising; seen `delay` steps late, so it lasts until `delay` steps

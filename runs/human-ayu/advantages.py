@@ -26,7 +26,7 @@ it won't keep guarding under pressure"), for any opponent, in training (finetune
   was hit back on half. Waiting on every wake-up instead gave up the opponent's okizeme
   for little: the agent rises with one on a fifth.
 
-Three more (docs/training-v2.md: a person's defence, from the user's games of 10 November,
+Three more (docs/training-v2-log.md: a person's defence, from the user's games of 10 November,
 which no exploiter played):
 
 - patient: after each of its guards ends, and as it rises from a knockdown (of the
@@ -57,7 +57,7 @@ which no exploiter played):
   7 times in 10 ("often hit by lower hit, especially when opponent approach in air but
   hit low").
 
-Habits (docs/training-v2.md, "Adapting during a match": an opponent a read pays against):
+Habits (docs/training-v2-log.md, "Adapting during a match": an opponent a read pays against):
 
 - blind: of its wake-up reversals (wake), the share that come out whether or not the
   agent is committed: a habit, which an agent that waits guards and punishes (without
@@ -71,7 +71,7 @@ Habits (docs/training-v2.md, "Adapting during a match": an opponent a read pays 
   that is told them (finetune.py --tell: can PPO use a read at all?). In an environment
   with sets (EfzSB3VecEnv's sets) they are drawn a set, not a match. wide: the share of
   those drawn from HABITS (1 unless given); the rest from PEOPLE, ranges about as wide
-  as the community's players are apart (docs/training-v2.md, "What people's habits look
+  as the community's players are apart (docs/training-v2-log.md, "What people's habits look
   like": by player, a wake-up reversal on 0.00-0.27 of wake-ups, a move out of pressure
   on 0.27-0.48), where HABITS reaches further than people do, for a read that pays;
 - adapt: its habits change within a set by how its own choices went (an opponent that
@@ -99,7 +99,7 @@ Habits (docs/training-v2.md, "Adapting during a match": an opponent a read pays 
 - weak: the share of matches (of sets, in an environment with sets) in which one area of
   the profile is drawn to be its weak one, its knobs (WEAK_AREAS) at WEAK of the profile's
   values, the others as they are: an opponent strong everywhere but in one area, which
-  area drawn afresh (docs/training-v2.md, "Playing to the opponent's weak areas": the
+  area drawn afresh (docs/training-v2-log.md, "Playing to the opponent's weak areas": the
   best players are about 10/10 everywhere with a relative 8/10 somewhere). The area is
   drawn among those the profile has a knob above 0 in; with habits, after them.
 - escape: the share of the times it is free on the ground in a corner, the agent on the
@@ -125,7 +125,7 @@ Habits (docs/training-v2.md, "Adapting during a match": an opponent a read pays 
   began); once a move or a stretch between two. Blind (mash) the button loses to the
   agent's strings three times in four; a person presses where the string has a hole
   (the user's buttons get away half the time). What a reset and a loose string cost.
-- press: the share of its chances to press in which it does (docs/training-v2.md, "The
+- press: the share of its chances to press in which it does (docs/training-v2-log.md, "The
   league's pressure": the league's opponents make the agent guard 1-6 times a minute and
   1.2 times a string, a person 21-40 and 3-4, and nothing trained held it in a guard). A
   chance: itself free on the ground, the agent on the ground within PRESS_FAR pixels,

@@ -1,4 +1,4 @@
-"""A checkpoint's 64-match comparisons in one table, beside others' (docs/training-v2.md's
+"""A checkpoint's 64-match comparisons in one table, beside others' (docs/training-v2-log.md's
 judging): the league of 39 in the plain game (the twenty, the two reversal exploiters,
 the seventeen helpers, Kano's seven), the level-4 CPU's tiers, Kanna's HP, each advantage
 profile's set, the human limits, and against a profile's opponents what a person's
@@ -32,7 +32,7 @@ X14 = ['x14-' + c for c in ('exnanase', 'nanase', 'nagamori', 'mishio', 'sayuri'
                             'mizukab')]  # round 14's exploiters (CHAR/exploiter14)
 KANO = [o for o in TWENTY if o.startswith('kano')]
 # Each profile's opponents: rounds 12-13's advantaged seven (the awake Nayuki is nayukib),
-# and docs/training-v2.md's person set (the exploiters of the characters the user played,
+# and docs/training-v2-log.md's person set (the exploiters of the characters the user played,
 # and Shiori's).
 SETS = {'adv': ['mayu', 'sayuri', 'exnanase', 'nayukib', 'shiori', 'kano7', 'mishio3'],
         'person': ['exnanase', 'nanase', 'nagamori', 'mishio3', 'sayuri', 'kano7', 'mizukab7',

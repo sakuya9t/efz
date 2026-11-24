@@ -15,7 +15,7 @@ meant to be good at, by tactics.py's definitions, for finetune.py --focus.
     that presses the same thing at every wake-up and in every string ("a wake-up
     invincible, or an RG and an invincible during it");
 'air': a hit of its own, made in the air, that begins the hit reaction of an opponent on
-    the ground: a jump-in that lands (docs/training-v2.md, "Round 17": people's opponents
+    the ground: a jump-in that lands (docs/training-v2-log.md, "Round 17": people's opponents
     jump in on Ayu 2.9 times a minute, the league's 1.1, and the agent walks into them).
 
 'out': getting away: an air recovery of its own (out of a hit reaction, src/player.cpp's
