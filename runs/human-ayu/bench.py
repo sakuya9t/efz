@@ -109,6 +109,13 @@ DRILLS = {
              "mash, blind, now and then), jump out of a corner when they are free there, "
              "guard by recoil and rise with an invincible move: what a string with a gap and "
              "a corner that does not hold cost against a person"),
+    'stays': (FIVE, 'file=exploiter18/combos.efzagent;gap=0.6,mash=0.15,escape=0.1,rg=0.3,'
+                    'reversal=0.8,tech=1,techsafe=1,techhit=1',
+              "gaps' opponents that leave a corner as often as people do: a cornered player "
+              "who comes free out of a guard jumps 8% of the time and guards on 70%, at a "
+              "rise 11% and 54% (people's replays, 22 November), where gaps' jump out "
+              "every time and its corner rows measure the script; here the opponent stays, "
+              "and what the agent's pressure does with a guard that holds is counted"),
 }
 
 # (name, drill, path, better: +1 more is better or -1, what). The path is into the
@@ -207,6 +214,22 @@ MEASURES = [
      "the opponent's jumps in a corner that took it out there"),
     ('gaps: jumps caught', 'gaps', ('side', 'corner', 'hold', 'jump', 'caught'), +1,
      "the opponent's jumps in a corner caught in the air there"),
+    ('stays: wins', 'stays', ('win',), +1, 'matches won against the opponents that press back in a gap and stay in a corner as people do'),
+    ('stays: own HP lost', 'stays', ('self_hp_taken',), -1, 'the share of its HP lost a round there'),
+    ('stays: its pressure', 'stays', ('side', 'net_ledger', 'my pressure', 'net'), +1,
+     'HP a minute net out of its own pressure there'),
+    ('stays: strings', 'stays', ('side', 'pressure', 'strings_per_min'), +1, 'its strings a minute there'),
+    ('stays: opened', 'stays', ('side', 'pressure', 'next', 'hit'), +1,
+     'after a move of its that was guarded, the share in which the next thing is its hit'),
+    ('stays: corner in a guard', 'stays', ('side', 'corner', 'hold', 'guard'), +1,
+     'the share of a corner stay the opponent spends guarding there: pressure after the combo'),
+    ('stays: corner HP', 'stays', ('side', 'corner', 'dealt'), +1, 'HP dealt a corner stay there'),
+    ('stays: corner seconds', 'stays', ('side', 'corner', 'seconds'), +1, 'seconds a corner stay lasts there'),
+    ('stays: corner left', 'stays', ('side', 'corner', 'left'), -1, 'corner stays the opponent left on its own there'),
+    ('stays: corner share', 'stays', ('side', 'corner', 'share'), +1,
+     'the share of the match it has the opponent in a corner there'),
+    ('stays: corner air moves', 'stays', ('side', 'corner', 'hold', 'air_moves'), -1,
+     'the share of its moves in a corner stay made in the air there'),
     ('okizeme net', 'reversal', ('side', 'net_ledger', 'my okizeme', 'net'), +1, 'HP a minute net on its okizeme against reversals'),
     ('punishes', 'reversal', ('side', 'faced_raw', 'punished'), +1, "the opponent's missed risky moves it punished"),
 ]
