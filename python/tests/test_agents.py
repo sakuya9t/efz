@@ -910,6 +910,37 @@ class OkizemeAsOkiplan(unittest.TestCase):
             native.close()
             env.close()
 
+    def test_settings_on_a_carried_okizeme(self):
+        # The planner's settings alone, for the planned okizeme another file carries: the
+        # library as it is, the keys set (and the module's version by what the file uses).
+        from efz_env.export import read_agent
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
+            first, second, third = (os.path.join(folder, f'{k}.efzagent') for k in 'abc')
+            lib = self.library(False, np.random.default_rng(0))
+            export_agent(path, first, check=False,
+                         okiplan=dict(library=lib, answers=self.answers, per_plan=5))
+            _, keys, tensors = read_agent(first)
+            self.assertIn('okiplan:1', keys['modules'])
+            self.assertNotIn('oki_out', keys)
+            export_agent(path, second, check=False, parts_from=first, okiplan=dict(out=1, window=33))
+            _, again, carried = read_agent(second)
+            self.assertIn('okiplan:3', again['modules'])
+            self.assertEqual((int(again['oki_out']), int(again['oki_window'])), (1, 33))
+            self.assertEqual(again['oki_per_plan'], keys['oki_per_plan'])
+            for name in tensors:
+                if name.startswith('oki.'):
+                    np.testing.assert_array_equal(tensors[name], carried[name], err_msg=name)
+            export_agent(path, third, check=False, parts_from=second, okiplan=dict(out=0))
+            _, back, _ = read_agent(third)
+            self.assertIn('okiplan:1', back['modules'])
+            self.assertNotIn('oki_out', back)
+            self.assertEqual(int(back['oki_window']), 33)
+            with self.assertRaises(ValueError):  # (no okizeme to set them on)
+                export_agent(path, third, check=False, okiplan=dict(out=1))
+            with self.assertRaises(ValueError):
+                export_agent(path, third, check=False, parts_from=second, okiplan=dict(nope=1))
+
     def test_the_same_plans(self):
         from efz_env.modules import sampler
         okiplan = self.okiplan
@@ -929,10 +960,12 @@ class OkizemeAsOkiplan(unittest.TestCase):
         from efz_env.memory import K
         # (doubt, skip, and okiplan:2's: sight, the riser's guard by what it saw that many
         # steps ago; bait, a reversal that came out and missed counted as its punish)
-        for doubt, skip, sight, bait in ((0.0, 0.0, 0, 0.0), (0.3, 0.0, 0, 0.0),
-                                         (0.3, 0.12, 0, 0.0), (0.0, 0.12, 0, 0.0),
-                                         (0.0, 0.0, 6, 0.0), (0.0, 0.0, 0, 500.0),
-                                         (0.3, 0.12, 3, 700.0)):
+        # okiplan:3's: out, a cornered riser's jump answer forward (over the agent)
+        for doubt, skip, sight, bait, way in ((0.0, 0.0, 0, 0.0, 0), (0.3, 0.0, 0, 0.0, 0),
+                                              (0.3, 0.12, 0, 0.0, 0), (0.0, 0.12, 0, 0.0, 0),
+                                              (0.0, 0.0, 6, 0.0, 0), (0.0, 0.0, 0, 500.0, 0),
+                                              (0.3, 0.12, 3, 700.0, 0), (0.0, 0.0, 0, 0.0, 1),
+                                              (0.3, 0.12, 3, 700.0, 1)):
             with tempfile.TemporaryDirectory() as folder:
                 path, model = make_model(folder, history=self.HISTORY, delay=self.DELAY, seed=3)
                 out = os.path.join(folder, 'agent.efzagent')
@@ -941,12 +974,13 @@ class OkizemeAsOkiplan(unittest.TestCase):
                     air = bool(view[okiplan.SELF_AIR] > 0)
                     lib = self.library(air, np.random.default_rng(compared))
                     options = dict(per_plan=5, per_class=2, window=40, wait=30, tolerance=400,
-                                   doubt=doubt, skip=skip, sight=sight, bait=bait)
+                                   doubt=doubt, skip=skip, sight=sight, bait=bait, out=way)
                     export_agent(path, out, check=False,
                                  okiplan=dict(library=lib, answers=self.answers, **options))
                     native = NativeAgent(out, deterministic=True)
                     # (a file that uses neither is one the first version's game loads)
-                    self.assertIn('okiplan:2' if sight or bait else 'okiplan:1', native.modules)
+                    self.assertIn('okiplan:3' if way else 'okiplan:2' if sight or bait
+                                  else 'okiplan:1', native.modules)
                     np.testing.assert_allclose(
                         native.counts(mode=1)[1],
                         okiplan.belief(np.zeros(len(K)), 6.0, 6.0, sight=bool(sight)), rtol=1e-12)

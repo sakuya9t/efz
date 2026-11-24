@@ -81,7 +81,7 @@ TABLE = ActionTable()
 INDEX = {a: k for k, a in enumerate(TABLE.actions)}
 NEUTRAL, CROUCH_GUARD = INDEX[(5, '')], INDEX[(1, '')]
 SELF_ACT, OPP_ACT, SELF_HITSTUN, OPP_HITSTUN = 18, 50, 20, 52
-SELF_AIR, OPP_CHAR, DX, OPP_X = 39, 66, 4, 45
+SELF_AIR, OPP_CHAR, DX, SELF_X, OPP_X = 39, 66, 4, 13, 45
 ROUND_OVER = 3
 DOWN = np.array(sorted(tactics.DOWN))
 THROWN = np.arange(0x64, 0x79)
@@ -95,6 +95,7 @@ FIRST_OWN = 0xc8  # kFirstCharacterAction: a character's own moves from here
 MIN_LEAD = 24   # steps to the rising below which nothing is planned (the rising itself is 20)
 MOTION = 8      # an entry's move is pressed at most this many steps before it starts
 LOOK = 110      # the most steps the rising is looked for
+OUT_AGAIN = 14  # `out`: the step after its rising of a riser's second jump out of a corner
 
 
 def load_library(path):
@@ -206,7 +207,7 @@ class OkiPlanner:
     def __init__(self, data_dir, library, width, delay, history=16, per_plan=10, per_class=2,
                  window=70, wait=40, tolerance=24, temperature=200.0, hit_worth=1300.0,
                  hurt_worth=1200.0, doubt=0.0, learner='ayu', seed=0, entries=True,
-                 scheduled=True, after='own', skip=0.0, think=0, bait=0.0, sight=0):
+                 scheduled=True, after='own', skip=0.0, think=0, bait=0.0, sight=0, out=0):
         # skip: an answer whose share is under this isn't counted (the game's planner
         # doesn't play it at all: a fifth of a plan's frames for an answer seen one time in
         # thirty). think: the plan is for `think` steps from now, a crouching guard held
@@ -217,6 +218,11 @@ class OkiPlanner:
         # sight: the riser's 'crouch' answer guards by what it saw of the agent `sight`
         # steps ago (standing against one in the air); 0: it crouches whatever comes
         self.sight, self.seen_air = int(sight), None
+        # out: a riser with its back to a wall, the agent on the open side, jumps forward
+        # over the agent in its 'jump' answer (without: up-back, which in a corner goes
+        # nowhere, and a jump-in okizeme scores against a riser that would have left),
+        # with a second jump at the top and forward held after (advantages.py's escape)
+        self.out, self.cornered = bool(out), False
         # after: what follows an option's inputs on the copies: 'own', the agent's own play
         # (the network on every copy, every step); 'guard', a crouching guard (what a
         # planner with a frame's spare time can afford: the game's). Its own play as an
@@ -327,6 +333,8 @@ class OkiPlanner:
         lead, now = self.lead(state, side)
         if lead is None or lead < MIN_LEAD:
             return None
+        self.cornered = bool(abs(float(now[OPP_X])) > 0.8 and
+                             abs(float(now[SELF_X])) < abs(float(now[OPP_X])))
         cands = self.candidates(lead, now)
         options = [a for _, a in cands] + [np.full(lead + self.wait, CROUCH_GUARD), np.zeros(0, int)]
         kinds = [str(self.entries.cls[k]) for k, _ in cands] + ['wait', 'own']
@@ -351,6 +359,10 @@ class OkiPlanner:
         """The opponent's control bytes on step t of the copies, by each copy's answer
         (answer: its index in ANSWERS, a copy each)."""
         guard, stand, jump = encode(1), encode(4), encode(7)
+        if self.out and self.cornered:  # out of the corner: a second jump at the top, then forward
+            k = t - lead
+            jump = encode(9 if k < OUT_AGAIN else 5 if k == OUT_AGAIN else
+                          9 if k < OUT_AGAIN + 4 else 6)
         theirs = np.full(len(answer), guard, np.uint8)
         theirs[answer == 1] = stand
         if self.sight and self.seen_air is not None:  # the guard by sight, late
@@ -585,7 +597,7 @@ def okiplan(agent, where, files, options, data):
                          'plans made beside the game, as the live routes are)')
     o = dict(options)
     keys = ('per_plan', 'per_class', 'window', 'wait', 'tolerance', 'temperature', 'hit_worth',
-            'hurt_worth', 'doubt', 'seed', 'after', 'skip', 'think', 'bait', 'sight')
+            'hurt_worth', 'doubt', 'seed', 'after', 'skip', 'think', 'bait', 'sight', 'out')
     unknown = sorted(set(o) - set(keys) - {'carry', 'prior', 'fixed'})
     if unknown:
         raise ValueError(f"okiplan: no option {', '.join(unknown)}")

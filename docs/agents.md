@@ -242,7 +242,10 @@ their start. The file is about 5 MB larger for them.
   it is guarded, the side; a throw) and `per_plan` in all; a wait (a crouching guard
   through the rising: the bait); and its own play. Each against a riser that guards
   crouching, guards standing, reverses, jumps away, or presses a button; an answer this
-  opponent is expected to give less than `skip` of the time isn't played.
+  opponent is expected to give less than `skip` of the time isn't played. With `out`
+  (`okiplan:3`; off unless set) a riser with its back to a wall and the agent on the
+  open side jumps forward over the agent in its jump answer, with a second jump at the
+  top, instead of up-back.
 - **What it draws.** Each answer's share comes from what it has seen this opponent do on
   its wake-ups and how it guards (counted from its own late view; kept from one match to
   the next of the same seat, older matches counting 0.7 each), over a prior of the
@@ -270,8 +273,9 @@ drawn by kind, plans dropped and why, the time a plan took and the game waited, 
 it now expects of this opponent's wake-ups.
 
 A file's okizeme is carried into a file of a model trained further by `--parts-from`
-(`--keep routes chooser okiplan pressplan airthrow`, the default); `unpack_agent.py` doesn't write the
-library back as a file. A game older than the module refuses the file and says which
+(`--keep routes chooser okiplan pressplan airthrow`, the default), where
+`--okizeme-option KEY=VALUE` sets the carried planner's settings; `unpack_agent.py` doesn't
+write the library back as a file. A game older than the module refuses the file and says which
 module it doesn't play.
 
 ## Its pressure: planned from people's

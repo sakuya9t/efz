@@ -50,7 +50,7 @@ enum { kAnswers = 5 }; // okiplan.ANSWERS: crouch, stand, reversal, jump, mash
 // The library and the planner's settings (the module okiplan:1). Keys oki_entries (their
 // count), oki_per_plan, oki_per_class, oki_window, oki_wait, oki_tolerance,
 // oki_temperature, oki_doubt, oki_hit_worth, oki_hurt_worth, oki_prior, oki_decay,
-// oki_skip, oki_think, oki_sight, oki_bait (okiplan:2; without them 0),
+// oki_skip, oki_think, oki_sight, oki_bait (okiplan:2; without them 0), oki_out (okiplan:3),
 // oki_kinds (the kinds' names, '|' between them), oki_source; tensors oki.offset (int32,
 // count + 1: where each entry's steps begin), oki.actions (uint8: the agent's actions),
 // oki.dist (int32: the player's distance from the riser in pixels at each step), oki.air
@@ -88,6 +88,9 @@ struct Mix {
                      // the agent this many frames ago, standing against one in the air (0:
                      // it crouches whatever comes); its 'stand' answer is then kSightStand
                      // of its guards
+    bool out = false; // okiplan's out (okiplan:3): a riser with its back to a wall, the agent
+                      // on the open side, jumps forward over the agent in its 'jump' answer
+                      // (without: up-back, which in a corner goes nowhere)
     double bait = 0; // okiplan's bait: the HP a riser's reversal that came out is worth to
                      // the agent on the plays where neither hit first (the punish, which
                      // the copies do not play)
@@ -331,6 +334,7 @@ private:
     double skip_ = 0, doubt_ = 0, temperature_ = 200, hitWorth_ = 1300, hurtWorth_ = 1200;
     int sight_ = 0;   // Mix::sight or Press::sight
     double bait_ = 0; // Mix::bait (the okizeme's alone)
+    bool out_ = false, cornered_ = false; // Mix::out; the riser cornered at the plan's start
     std::vector<int> waits_; // the pressure's: the guard frames before the follow-up
     std::vector<float> in_, probs_;
 };

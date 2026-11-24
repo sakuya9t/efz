@@ -21,7 +21,7 @@ namespace agent {
 namespace {
 
 // The view's columns (efz_env_obs_name).
-const int kIntro = 2, kRoundOver = 3, kDx = 4, kOppX = 45;
+const int kIntro = 2, kRoundOver = 3, kDx = 4, kSelfX = 13, kOppX = 45;
 const int kOwnGauge = 9, kOwnRf = 10, kOwnBlue = 11;
 const int kSelfAct = 18, kSelfFrame = 19, kSelfStun = 20, kSelfInv = 25, kSelfChar = 34, kSelfAir = 39;
 const int kOppAct = 50, kOppFrame = 51, kOppStun = 52, kOppInv = 57, kOppChar = 66, kOppAir = 71;
@@ -31,6 +31,10 @@ const int kInputFeatures = 6;
 const uint8_t kBack = 0x02;        // 4
 const uint8_t kCrouchGuard = 0x06; // 1
 const uint8_t kUpBack = 0x0a;      // 7
+const uint8_t kUpForward = 0x09;   // 9
+const uint8_t kForward = 0x01;     // 6
+const uint8_t kNeutral = 0x00;     // 5
+const int kOutAgain = 14;          // okiplan.OUT_AGAIN: the second jump's step
 const uint8_t kDown = 0x04;        // 2
 const uint8_t kDownA = 0x14;       // 2 + A
 
@@ -289,6 +293,7 @@ void MixPlanner::Begin(int side, const std::vector<int>& actions, const float* h
     hurtWorth_ = lib.hurtWorth;
     sight_ = lib.sight;
     bait_ = lib.bait;
+    out_ = lib.out;
     side_ = side;
     actions_ = actions;
     history_.assign(history, history + (size_t)policy_->history * kInputFeatures);
@@ -439,6 +444,8 @@ bool MixPlanner::Prelude()
         return true;
     }
     Candidates(view);
+    // A riser with its back to a wall, the agent on the open side: its jump is the way out.
+    cornered_ = fabs((double)view[kOppX]) > 0.8 && fabs((double)view[kSelfX]) < fabs((double)view[kOppX]);
     // The riser's reversal: its first wake move its gauges allow.
     schedule_.clear();
     int victim = Rint(view[kOppChar]);
@@ -496,6 +503,7 @@ void MixPlanner::BeginPress(int side, const std::vector<int>& actions, const flo
     hurtWorth_ = lib.hurtWorth;
     sight_ = lib.sight;
     bait_ = 0;
+    out_ = false;
 }
 
 // pressplan.Followups.pick.
@@ -856,8 +864,15 @@ bool MixPlanner::Run(Play& p, Clock::time_point deadline)
             theirs = kBack; // the guard by sight, `sight` frames late
         else if (p.answer == 2 && p.t < (int)schedule_.size())
             theirs = schedule_[p.t];
-        else if (p.answer == 3 && p.t >= lead - 2)
-            theirs = kUpBack;
+        else if (p.answer == 3 && p.t >= lead - 2) {
+            // Out of a corner: over the agent, a second jump at the top of the first, then
+            // forward held (as people leave, and advantages.py's escape).
+            int k = p.t - lead;
+            theirs = !(out_ && cornered_) ? kUpBack
+                     : k < kOutAgain ? kUpForward
+                     : k == kOutAgain ? kNeutral
+                     : k < kOutAgain + 4 ? kUpForward : kForward;
+        }
         else if (p.answer == 4 && p.t >= lead - 1)
             theirs = p.t % 2 == 0 ? kDownA : kDown;
         int facing[2] = {world_->Facing(0), world_->Facing(1)};

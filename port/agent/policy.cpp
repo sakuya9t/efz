@@ -29,7 +29,7 @@ const int kOppCharacter = 66; // opp_character
 const struct {
     const char* name;
     int version;
-} kModules[] = {{"policy", 1}, {"routes", 1}, {"chooser", 1}, {"okiplan", 2},
+} kModules[] = {{"policy", 1}, {"routes", 1}, {"chooser", 1}, {"okiplan", 3},
                {"pressplan", 2}, {"airthrow", 1}, {"rise", 1}, {"risk", 1}};
 
 int Hits(const float* view)
@@ -662,6 +662,7 @@ bool Policy::Parse(const unsigned char* data, size_t size, std::string* error)
         mix.think = std::min(60, std::max(0, ToInt(keys, "oki_think", 0)));
         mix.sight = std::min(60, std::max(0, ToInt(keys, "oki_sight", 0)));
         mix.bait = std::max(0.0f, ToFloat(keys, "oki_bait", 0));
+        mix.out = ToInt(keys, "oki_out", 0) != 0;
         mix.source = keys["oki_source"];
     }
 

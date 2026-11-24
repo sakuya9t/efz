@@ -77,17 +77,19 @@ MODULES = {'policy': 1, 'routes': 1, 'chooser': 1, 'okiplan': 1, 'pressplan': 1,
            'airthrow': 1, 'rise': 1, 'risk': 1}
 # A module's later version, written only for a file that uses what it added (so a file
 # without is one every game that plays the first version still loads): the keys that
-# make it so. okiplan:2: the riser's guard by sight, the bait's worth; pressplan:2: the
-# guard by sight.
-LATER = {'okiplan': (2, ('oki_sight', 'oki_bait')), 'pressplan': (2, ('press_sight',))}
+# make it so, version by version. okiplan:2: the riser's guard by sight, the bait's worth;
+# okiplan:3: a cornered riser's jump out; pressplan:2: the guard by sight.
+LATER = {'okiplan': ((2, ('oki_sight', 'oki_bait')), (3, ('oki_out',))),
+         'pressplan': ((2, ('press_sight',)),)}
 
 
 def _versions(modules, keys):
     """The header's modules with each's version: LATER's where the file has its keys."""
     out = []
     for m in modules:
-        version, added = LATER.get(m, (MODULES[m], ()))
-        out.append(f'{m}:{version if any(k in keys for k in added) else MODULES[m]}')
+        version = max([v for v, added in LATER.get(m, ()) if any(k in keys for k in added)],
+                      default=MODULES[m])
+        out.append(f'{m}:{version}')
     return ','.join(out)
 TRAIN = 1  # the training part's version (key train)
 # PPO's settings a file keeps (train.sb3) and unpack_agent makes the model with.
@@ -136,8 +138,8 @@ def load_routes(path):
 # spare time affords.
 OKI_OPTIONS = dict(per_plan=6, per_class=2, window=45, wait=40, tolerance=24,
                    temperature=200.0, doubt=0.0, hit_worth=1300.0, hurt_worth=1200.0,
-                   prior=6.0, decay=0.7, skip=0.0, think=0, sight=0, bait=0.0)
-OKI_LATER = ('sight', 'bait')  # (okiplan:2's: written only where they are not 0)
+                   prior=6.0, decay=0.7, skip=0.0, think=0, sight=0, bait=0.0, out=0)
+OKI_LATER = ('sight', 'bait', 'out')  # (okiplan:2's and 3's: written only where they are not 0)
 WAKE_HOLD = 3  # runs/human-ayu/advantages.py's: the steps a riser's reversal button is held
 
 
@@ -796,7 +798,9 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
     that file's.
     okiplan: its planned okizeme (the module okiplan:1, port/agent/mix.h): {'library': an
     okizeme library (oki_library.py's .npz, its .answers.json beside it) or its entries,
-    'answers': those answers if not from the file, and OKI_OPTIONS' keys}. pressplan: its
+    'answers': those answers if not from the file, and OKI_OPTIONS' keys}; without
+    'library': OKI_OPTIONS' keys alone, set on the planned okizeme parts_from carries.
+    pressplan: its
     planned pressure (pressplan:1), the same with a pressure library
     (pressure_library.py's) and PRESS_OPTIONS' keys. airthrow: its air throw of an opponent's
     air recovery (airthrow:1: no library), AIR_OPTIONS' keys ({} for the defaults). rise:
@@ -841,6 +845,16 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
             raise ValueError('parts_from: the routes and chooser of that file, or a library '
                              'and chooser given, not both')
         carried = _carried(parts_from, keep)
+    oki_over = None  # (settings alone: for the planned okizeme parts_from carries)
+    if okiplan is not None and 'library' not in okiplan:
+        if 'okiplan' not in carried[0]:
+            raise ValueError("okiplan: settings without a library are for the planned "
+                             "okizeme parts_from carries")
+        unknown = sorted(set(okiplan) - set(OKI_OPTIONS))
+        if unknown:
+            raise ValueError(f"okiplan: no option {', '.join(unknown)} "
+                             f"({', '.join(OKI_OPTIONS)})")
+        oki_over, okiplan = okiplan, None
     features, feature_tensors, activation, layers, out = _actor(policy)
     from .policy import OPP_ACTION, OPP_CHAR, SELF_ACTION, SELF_CHAR, ACTIONS, CHARACTERS
     for part, given in (('okiplan', okiplan), ('pressplan', pressplan), ('airthrow', airthrow),
@@ -961,6 +975,11 @@ def export_agent(model_path, out_path, name=None, character=None, check=True, li
             raise ValueError('parts_from: routes are for an agent deciding every frame, with '
                              'a delay and its input history')
         keys.update(carried[1])
+        for k, v in (oki_over or {}).items():
+            if k in OKI_LATER and float(v) == 0:
+                keys.pop(f'oki_{k}', None)
+            else:
+                keys[f'oki_{k}'] = int(v) if isinstance(OKI_OPTIONS[k], int) else repr(float(v))
         if ending is not None and 'routes' in carried[0]:
             keys['route_ending'] = int(ending)  # (a planner's setting, not a part)
         route_tensors = carried[2]

@@ -41,6 +41,8 @@
 //   tensors). okiplan:2: with oki_sight (the riser guards by sight) or oki_bait (a
 //   reversal waited out is worth its punish), which a game of the first version would
 //   read past: a file that uses either says 2.
+//   okiplan:3: with oki_out (a cornered riser's jump answer goes forward, over the
+//   agent: the way out of a corner), read past the same way: a file that uses it says 3.
 // pressplan:1, its pressure after a guarded move planned from another (mix.h's Press).
 //   pressplan:2: with press_sight.
 // airthrow:1, an air throw of an opponent that recovers in the air out of its combo, when

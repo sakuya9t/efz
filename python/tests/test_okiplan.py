@@ -287,6 +287,21 @@ class OnTheGame(unittest.TestCase):
             self.assertEqual(len(sighted.seen_air), sighted.last['lead'] + sighted.window + 1)
             sighted.one.close()
             sighted.sim.close()
+            # out: a cornered riser's 'jump' answer goes forward, over the agent (the way
+            # out of a corner); anywhere else, and without the option, up-back as before.
+            outer = okiplan.OkiPlanner(DATA, library, 264, 14, per_plan=3, tolerance=1000, out=1)
+            answer = np.array([0, 3, 3])
+            self.assertEqual(outer.their_controls(40, 30, answer, 0, None, None)[1], encode(7))
+            outer.cornered = True
+            np.testing.assert_array_equal(outer.their_controls(40, 30, answer, 0, None, None),
+                                          [encode(1), encode(9), encode(9)])
+            self.assertEqual(outer.their_controls(20, 30, answer, 0, None, None)[1], encode(1))
+            for t, stick in ((43, 9), (44, 5), (45, 9), (47, 9), (48, 6), (60, 6)):  # the second jump
+                self.assertEqual(outer.their_controls(t, 30, answer, 0, None, None)[2], encode(stick), t)
+            outer.out = False
+            self.assertEqual(outer.their_controls(40, 30, answer, 0, None, None)[1], encode(7))
+            outer.one.close()
+            outer.sim.close()
         env.close()
         planner.one.close()
         planner.sim.close()

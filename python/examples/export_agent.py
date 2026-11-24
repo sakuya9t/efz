@@ -213,7 +213,16 @@ def main():
                     sys.exit(f"--okizeme-option {k}: one of {', '.join(OKI_OPTIONS)}")
                 okiplan[k] = type(OKI_OPTIONS[k])(v)
         elif args.okizeme_option:
-            sys.exit('--okizeme-option: the planner of an --okizeme library')
+            if not (args.parts_from and 'okiplan' in args.keep):
+                sys.exit('--okizeme-option: the planner of an --okizeme library, or of the '
+                         'okizeme --parts-from carries')
+            from efz_env.export import OKI_OPTIONS
+            okiplan = {}
+            for kv in args.okizeme_option:
+                k, _, v = kv.partition('=')
+                if k not in OKI_OPTIONS:
+                    sys.exit(f"--okizeme-option {k}: one of {', '.join(OKI_OPTIONS)}")
+                okiplan[k] = type(OKI_OPTIONS[k])(v)
         pressplan = None
         if args.pressure:
             from efz_env.export import PRESS_OPTIONS
