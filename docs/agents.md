@@ -450,8 +450,8 @@ match has no CPU, and a record being watched or converted runs none of this.
 **The setting** is in `options.ini` in the save folder (`cpu_combos=1`), not in
 `key.ini`: that file is the original's, which config.exe and EfzRevival also read and
 write. `--cpu-combos on` or `off` sets it for one run. In OPTIONS it is CPU COMBO on the
-third page, NATIVE (Tab or C turns the pages: the game's own first, then EfzRevival's,
-then the native game's; [native.md](native.md), "OPTIONS").
+fourth page, NATIVE (Tab or C turns the pages: the game's own first, then EfzRevival's
+two, then the native game's; [native.md](native.md), "OPTIONS").
 
 Measured on 20 November (this Linux machine; VS CPU, Akane's file against an idle
 Nagamori): with no time limit on the plans (`--fast`), the combos' damage rose with the

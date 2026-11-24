@@ -148,7 +148,7 @@ python python/examples/export_agent.py --show FILE.efzagent
 python python/examples/unpack_agent.py FILE.efzagent  # back to a model, to train it further
 ```
 
-With **CPU COMBO** on in OPTIONS (its third page), the game's own CPU in ARCADE and VS CPU plays its combos
+With **CPU COMBO** on in OPTIONS (its fourth page), the game's own CPU in ARCADE and VS CPU plays its combos
 from such files too, one for each character in `agents/cpu`. They are on the Hub
 (`hf download sakuya9t/efz --include "cpu/*" --local-dir agents`, or `python runs/hub.py
 download cpu`); `python runs/human-ayu/league_combos.py cpu --out DIR` gathers them again

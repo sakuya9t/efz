@@ -77,18 +77,24 @@ macOS (arm64, x64).
 
 ### OPTIONS
 
-The title's CONFIG has three pages; Tab, or either side's C, turns to the next, D to the
+The title's CONFIG has four pages; Tab, or either side's C, turns to the next, D to the
 one before, and the tabs at the top right say which is shown. The first is the game's own,
-as the original has it (its settings in `key.ini`). The other two are written over the
-page's background in SDL's font, a row a setting, with a line on the one chosen: up and
-down choose, left, right or A change, B (or BACK, or Esc) leaves.
+as the original has it (its settings in `key.ini`). The others look as it does: over its
+background and title, a black band a row where its rows are, the label in its grey and
+white on the row chosen, the setting's choices side by side with the one in force white
+(`OFF ON`, `0 1 ... 9`); in SDL's font, since the game's pictures have no letters for
+them. A page has seven rows at most, BACK the last, and the eighth band says what the
+row chosen does: EfzRevival's settings, which don't fit one page, take two (offline, and
+netplay). Up and down choose, left, right or A change, B (or BACK, or Esc) leaves.
 
 | Page | Row | Saved in |
 |---|---|---|
 | 2 REVIVAL | REVIVAL FEATURES: EfzRevival's tools and music offline; off, the game offline is the original's (netplay is Revival's either way; the tournament, asked for, still runs) | `options.ini` |
 | | PRACTICE TOOLS, REPLAY TOOLS, INPUT DISPLAY: each of those ([revival-features.md](revival-features.md)) | `options.ini` |
-| | MUSIC (`MuteBGM`), HOLE PUNCHING (`HolePunchingServer`: off writes `None`, on the server it had, else Revival's), MAX ROLLBACK, PRACTICE KEYS ONLINE (`AllowPracticeKeys`), WINS ONLINE (`DisplayScore`), SAVE EVERY REPLAY (`SaveAllReplays`), BATTLE LOG (`SaveBattleLog`) | `EfzRevival.ini` |
-| 3 NATIVE | CPU COMBO: the CPU's combos ([agents.md](agents.md)) | `options.ini` |
+| | MUSIC (`MuteBGM`) | `EfzRevival.ini` |
+| 3 NETPLAY | HOLE PUNCHING (`HolePunchingServer`: off writes `None`, on the server it had, else Revival's), MAX ROLLBACK, PRACTICE KEYS ONLINE (`AllowPracticeKeys`), WINS ONLINE (`DisplayScore`), SAVE EVERY REPLAY (`SaveAllReplays`), BATTLE LOG (`SaveBattleLog`) | `EfzRevival.ini` |
+| 4 NATIVE | CPU COMBO: the CPU's combos ([agents.md](agents.md)) | `options.ini` |
+| | RECORD CPU FIGHTS: the fight records of ARCADE, VS CPU, PRACTICE, the demo and the replays played; off, only VS HUMAN's fights are recorded ([logging.md](logging.md)) | `options.ini` |
 | | LANGUAGE, RESOLUTION, HD MODE: to come (shown, not changed) | |
 
 `EfzRevival.ini` is changed a line at a time (`port/revival/config.cpp`'s
