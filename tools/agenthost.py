@@ -91,7 +91,7 @@ open_port() {
         echo "iptables: INPUT lets UDP $1 in already"
         return
     fi
-    sudo iptables -C INPUT $(rule $1) 2>/dev/null || sudo iptables -I INPUT "$n" $(rule $1)
+    sudo iptables -C INPUT $(rule $1) >/dev/null 2>&1 || sudo iptables -I INPUT "$n" $(rule $1)
     f=/etc/iptables/rules.v4
     if sudo test -f $f && ! sudo grep -q -- "^-A INPUT $(rule $1)$" $f; then
         sudo sed -i "0,/^-A INPUT .*-j \(REJECT\|DROP\)/s//-A INPUT $(rule $1)\n&/" $f
@@ -102,7 +102,7 @@ close_port() {
     if ufw_on; then
         sudo ufw delete allow "$1/udp" >/dev/null 2>&1 && echo "ufw: UDP $1 closed"
     fi
-    while sudo iptables -C INPUT $(rule $1) 2>/dev/null; do sudo iptables -D INPUT $(rule $1); done
+    while sudo iptables -C INPUT $(rule $1) >/dev/null 2>&1; do sudo iptables -D INPUT $(rule $1); done
     f=/etc/iptables/rules.v4
     if sudo test -f $f && sudo grep -q -- "^-A INPUT $(rule $1)$" $f; then
         sudo sed -i "\|^-A INPUT $(rule $1)$|d" $f
