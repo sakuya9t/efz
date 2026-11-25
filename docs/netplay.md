@@ -91,13 +91,21 @@ In a match:
 From the command line, without the menus (the game quits when the match ends):
 
 ```sh
-efz --data DIR --host [--port 10800] [--name NAME] [--delay N] [--agent FILE]
+efz --data DIR --host [--port 10800] [--name NAME] [--delay N] [--agent FILE] [--idle-timeout S]
 efz --data DIR --join HOST[:PORT] [--name NAME] [--delay N] [--agent FILE]
 ```
 
 An agent playing this side (PLAYED BY, `--agent`) gives the session this side's input
 each frame in place of the controls, and nothing else: the other side, EfzRevival 1.02h
 or this game, sees a player ([agents.md](agents.md), "Over the network").
+
+`--idle-timeout S` ends the match when the other player has given no new input for S
+seconds (nothing pressed or let go, its inputs as they came, so a game that stops sending
+them counts too), or hasn't got to the match S seconds after connecting (a delay never
+confirmed); this side's own input doesn't count. The other side gets the quit message, as
+when a player leaves: "Host quit or the connection was lost", or before the match "Host
+left". Without it there is no limit. It is for a public host, which nobody should keep to
+themselves by connecting and leaving the game idle.
 
 ## How it works
 
@@ -227,6 +235,10 @@ match's replay stands in for them.
   lag, random presses of P1's controls through character select into a fight, Esc on the
   host's end out of it and a second fight; both ends' sync records must agree and their
   replays be the same. CI runs it, on the compatibility pack.
+- `tools/nettest.py idle`: the host's `--idle-timeout` (8 s): a joiner that plays into a
+  fight and then stops pressing is ended about 8 s after, not before, and one that
+  connects from NET PLAY's screen and never confirms the delay 8 s after it connected;
+  both ends must say so. CI runs it, on the compatibility pack.
 - `tools/nettest.py revival`: the same against `efz.exe` 4.02 with EfzRevival 1.02h
   under wine (below).
 - `tools/nettest.py internet --remote USER@HOST`: over the internet with another machine

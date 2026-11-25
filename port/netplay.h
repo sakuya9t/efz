@@ -22,6 +22,10 @@ struct NetplayOptions {
     const char* name = nullptr;
     int delay = -1;             // -1: the recommended
     const char* agent = nullptr; // an agent file playing this computer's side (agents.h)
+    // Seconds the other player may go without new input (none pressed or let go) before
+    // the match ends, and may take from connecting to the match; 0: no limit. For a
+    // public host that nobody can keep to themselves.
+    int idleTimeout = 0;
 };
 void InitNetplay(const NetplayOptions& options);
 // Whether netplay's screens or a match have this frame instead of the game's own loop,

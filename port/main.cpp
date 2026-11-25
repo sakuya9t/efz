@@ -52,6 +52,9 @@
 //   --delay N         the input delay (default: the recommended one)
 //   --agent FILE      this computer's side is played by the agent file FILE (NET PLAY's
 //                     PLAYED BY)
+//   --idle-timeout S  the match ends when the other player has given no new input for
+//                     S seconds, or hasn't got to the match S seconds after connecting
+//                     (a public host that nobody can keep; default: no limit)
 //
 // The REPLAY menu's Tab shows the fight records in the logs folder, each played as the
 // game plays a replay (Esc: back to the menu, F8: pause).
@@ -356,6 +359,7 @@ static void Usage(const char* name)
             "[--tool [FILE...]] [--seed N] [--crash-test KIND] [--frames N] [--fast] "
             "[--keys SCRIPT] [--dump DIR] [--dump-every N] "
             "[--host | --join ADDRESS] [--port N] [--name NAME] [--delay N] [--agent FILE] "
+            "[--idle-timeout S] "
             "[--agent-p1 FILE] [--agent-p2 FILE] [--cpu-combos on|off] [--tournament]\n",
             name);
 }
@@ -452,6 +456,8 @@ int EfzMain(int argc, char** argv)
             netOptions.delay = atoi(argv[++i]);
         else if (a == "--agent" && more)
             netOptions.agent = argv[++i];
+        else if (a == "--idle-timeout" && more)
+            netOptions.idleTimeout = atoi(argv[++i]);
         else if (a == "--agent-p1" && more)
             agentOptions.p1 = argv[++i];
         else if (a == "--agent-p2" && more)

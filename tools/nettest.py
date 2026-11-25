@@ -25,6 +25,15 @@ machine's loopback, each checked from both ends.
         --revival DIR                   Revival's files (default $REVIVAL_DIR, else
                                         ~/.local/share/efz-decomp/revival/1.02h); they
                                         must be 1.02h's, unchanged
+    tools/nettest.py idle               the host's --idle-timeout (8 s here), two native
+                                        games: (play) the joiner presses keys at random
+                                        into a fight, then nothing, and the host must end
+                                        the match 8 s after, not before; (delay) the
+                                        joiner connects from NET PLAY's screen and never
+                                        confirms the input delay, and the host must end it
+                                        8 s after it connected; both ends must say so
+        --case play|delay               that one only
+        --native PATH                   the build (default build/native/efz)
     tools/nettest.py internet           over the internet, with another machine (a
                                         server with a public address, reached by ssh):
                                         (public) it hosts and this one joins; (punch)
@@ -406,6 +415,126 @@ def native_match(args, efz, exe, work, lag, seed):
     return report(name, problems, lines, folder, args.keep)
 
 
+
+# --- The idle timeout (--idle-timeout)
+
+IDLE = 8
+# The joiner's random keys stop at this frame of its own: in the first fight (it connects
+# in about 300 frames, and character select takes 300-400 of random keys).
+IDLE_STOP = 2400
+# On the title, down to NET PLAY and A (the test key.ini's X), then A on its screen's
+# START: netplay.ini has it join, where and as whom.
+NET_PLAY_KEYS = ('200:+Down,204:-Down,215:+Down,219:-Down,230:+Down,234:-Down,'
+                 '260:+X,264:-X,330:+X,334:-X')
+LOG_LINE = re.compile(r'^\S+ \S+ \+([\d.]+) f=(-?\d+) s=-?\d+ \w+\s+net: (.*)$')
+
+
+def net_lines(log):
+    """(seconds since the start, frame, message) of each of a log's net lines."""
+    return [(float(m.group(1)), int(m.group(2)), m.group(3))
+            for m in map(LOG_LINE.match, log.splitlines()) if m]
+
+
+def first(lines, text):
+    return next((line for line in lines if text in line[2]), None)
+
+
+def idle_match(args, efz, exe, work, case, seed):
+    name = f'idle-{case}'
+    folder = os.path.join(work, name)
+    shutil.rmtree(folder, ignore_errors=True)
+    for who in ('host', 'join'):
+        for sub in ('save', 'logs'):
+            os.makedirs(os.path.join(folder, who, sub))
+        key_ini(efz, os.path.join(folder, who, 'save', 'key.ini'))
+        native_ini(os.path.join(folder, who, 'save'))
+    env = dict(os.environ, SDL_VIDEO_DRIVER='offscreen', SDL_AUDIO_DRIVER='dummy')
+    env.pop('EFZ_NET_LAG', None)
+    rng = random.Random(seed)
+    port = free_udp_port()
+    # Long after the host should have ended the match: an end that waits for these is
+    # the timeout not working.
+    frames = IDLE_STOP + (IDLE + 30) * 64
+    if case == 'play':
+        join_keys = key_script(rng, IDLE_STOP)
+        join_args = ['--join', f'127.0.0.1:{port}', '--name', 'Join']
+    else:
+        with open(os.path.join(folder, 'join', 'save', 'netplay.ini'), 'w') as f:
+            f.write(f'mode=join\naddress=127.0.0.1\nport={port}\nname=Join\nagent=\n')
+        join_keys = NET_PLAY_KEYS
+        join_args = []
+    procs = {}
+    for who in ('host', 'join'):
+        # The host presses keys too: its own input doesn't keep the match.
+        keys = key_script(rng, frames) if who == 'host' else join_keys
+        cmd = [exe, '--data', efz, '--save', os.path.join(folder, who, 'save'),
+               '--log-dir', os.path.join(folder, who, 'logs'), '--frames', str(frames),
+               '--keys', keys]
+        cmd += (['--host', '--port', str(port), '--name', 'Host', '--idle-timeout', str(IDLE)]
+                if who == 'host' else join_args)
+        out = open(os.path.join(folder, who, 'out.txt'), 'w')
+        procs[who] = subprocess.Popen(cmd, stdout=out, stderr=subprocess.STDOUT, env=env)
+        if who == 'host':
+            deadline = time.time() + 20
+            while time.time() < deadline and 'hosting on UDP port' not in native_log(
+                    os.path.join(folder, 'host', 'logs')):
+                time.sleep(0.2)
+    problems = []
+    limit = time.time() + frames / 64 * 2 + 60
+    for who, p in procs.items():
+        try:
+            p.wait(timeout=max(1, limit - time.time()))
+        except subprocess.TimeoutExpired:
+            p.kill()
+            problems.append(f'{who}: still running after {int(limit)} s: killed')
+    h = net_lines(native_log(os.path.join(folder, 'host', 'logs')))
+    j = net_lines(native_log(os.path.join(folder, 'join', 'logs')))
+    lines = [f'seed {seed}']
+    end = first(h, 'the session ends: ')
+    want = 'Join gave no input for' if case == 'play' else "Join didn't start the match in"
+    if not end or want not in end[2]:
+        problems.append(f'host: the match did not end as idle ({end[2] if end else "no end"})')
+    jend = first(j, 'the session ends: ')
+    if not jend or 'The game was closed' in jend[2]:
+        problems.append(f'joiner: the host did not end its match '
+                        f'({jend[2] if jend else "no end"})')
+    if end:
+        lines.append(f'host: {end[2]}')
+    if jend:
+        lines.append(f'joiner: {jend[2]}')
+    if case == 'play':
+        # It played into a fight, longer than the timeout, and the end came about IDLE
+        # seconds after its last key (released at most 12 frames after the last press).
+        start = first(j, 'the match starts: ')
+        ran = first(h, 'the match ran ')
+        if not first(h, 'fight at frame'):
+            problems.append('host: no fight')
+        if start and ran:
+            stopped = IDLE_STOP + 12 - start[1]
+            n = int(re.match(r'the match ran (\d+)', ran[2]).group(1))
+            lines.append(f'the joiner stopped at match frame {stopped} at the latest, the host '
+                         f'ended it at {n}')
+            # (the timeout counts seconds; a slow machine runs fewer frames in them)
+            if not IDLE * 64 * 0.5 <= n - stopped <= IDLE * 64 + 128:
+                problems.append(f'host: ended {n - stopped} frames after the joiner stopped, '
+                                f'not about {IDLE * 64}')
+        else:
+            problems.append('no match start or end in the logs')
+    else:
+        connected = first(h, 'hosting -> measuring')
+        if first(h, '-> playing'):
+            problems.append('host: the match started')
+        if connected and end:
+            waited = end[0] - connected[0]
+            lines.append(f'host: ended {waited:.1f} s after the joiner connected')
+            if not IDLE - 0.5 <= waited <= IDLE + 2:
+                problems.append(f'host: ended {waited:.1f} s after the joiner connected, '
+                                f'not {IDLE}')
+        else:
+            problems.append('host: no connection or end in the log')
+    return report(name, problems, lines, folder, args.keep)
+
+
 # --- Against EfzRevival 1.02h
 
 def revival_ini(src, out, port):
@@ -710,7 +839,7 @@ def internet(args, efz, exe, work, seed):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     sub = ap.add_subparsers(dest='cmd', required=True)
-    for name in ('native', 'revival', 'internet'):
+    for name in ('native', 'revival', 'internet', 'idle'):
         p = sub.add_parser(name)
         p.add_argument('--native', default=os.path.join(REPO, 'build', 'native', 'efz'))
         p.add_argument('--lag')
@@ -725,6 +854,8 @@ def main():
             p.add_argument('--port', type=int, default=10900)
             p.add_argument('--punch-port', type=int, default=10901)
             p.add_argument('--local-port', type=int, default=10800)
+        elif name == 'idle':
+            p.add_argument('--case', choices=('play', 'delay'))
         elif name == 'revival':
             p.add_argument('--host', choices=('revival', 'native'))
             p.add_argument('--fight', type=int, default=20)
@@ -745,6 +876,9 @@ def main():
     results = []
     if args.cmd == 'internet':
         results = internet(args, efz, exe, work, seed)
+    elif args.cmd == 'idle':
+        for i, case in enumerate([args.case] if args.case else ['play', 'delay']):
+            results.append(idle_match(args, efz, exe, work, case, seed + i))
     elif args.cmd == 'native':
         lags = [args.lag if args.lag != '0' else None] if args.lag is not None else [None, '60:20']
         for i, lag in enumerate(lags):

@@ -82,6 +82,11 @@ struct Menu {
     int titleX = 0, titleY = 0; // where the row goes, on the title's 320x240
     int replayNote = 0; // frames left to show the saved replay's name
     std::string replayShown;
+    // --idle-timeout: the limit (0 none), since when the other player has been quiet (0:
+    // not connected) and how many of its inputs have been looked at.
+    Uint64 idleMs = 0;
+    Uint64 idleSince = 0;
+    size_t idleSeen = 0;
 };
 
 Menu g_menu;
@@ -384,6 +389,40 @@ void PadActions()
         Act(kBack);
 }
 
+// --idle-timeout: why the match ends, if the other player has gone quiet. Before the
+// match the time counts from its connecting; in the match, from the last change in its
+// input (a control or a function key pressed or let go), its inputs as they came, so
+// that a game that stops sending them is quiet too.
+std::string OtherSideIdle()
+{
+    Protocol::Phase phase = g_protocol.phase;
+    if (g_menu.idleMs == 0 || phase == Protocol::kIdle || phase == Protocol::kHosting ||
+        phase == Protocol::kJoining || phase == Protocol::kEnded) {
+        g_menu.idleSince = 0;
+        return std::string();
+    }
+    Uint64 now = SDL_GetTicks();
+    if (g_menu.idleSince == 0) {
+        g_menu.idleSince = now;
+        g_menu.idleSeen = 0;
+    }
+    const std::vector<netplay::FrameInput>& inputs = g_protocol.inputs[g_protocol.remotePlayer];
+    if (phase == Protocol::kPlaying) {
+        if (g_menu.idleSeen > inputs.size())
+            g_menu.idleSeen = 0;
+        for (size_t i = std::max<size_t>(g_menu.idleSeen, 1); i < inputs.size(); i++)
+            if (inputs[i].first != inputs[i - 1].first || inputs[i].second != inputs[i - 1].second)
+                g_menu.idleSince = now;
+        g_menu.idleSeen = inputs.size();
+    }
+    if (now - g_menu.idleSince < g_menu.idleMs)
+        return std::string();
+    const std::string& name = g_protocol.names[g_protocol.remotePlayer];
+    std::string seconds = std::to_string(g_menu.idleMs / 1000) + " seconds";
+    return phase == Protocol::kPlaying ? name + " gave no input for " + seconds
+                                       : name + " didn't start the match in " + seconds;
+}
+
 // --- The match, each real frame
 
 void MatchFrame()
@@ -409,6 +448,11 @@ void MatchFrame()
     g_session.Update();
     if (g_session.Frame() > 64 && *Objects().scene == 0) {
         EndMatch("The match went back to the title");
+        return;
+    }
+    std::string idle = OtherSideIdle();
+    if (!idle.empty()) {
+        EndMatch(idle);
         return;
     }
     if (!g_session.savedReplay.empty() && g_session.savedReplay != g_menu.replayShown) {
@@ -736,6 +780,11 @@ void InitNetplay(const NetplayOptions& options)
         LogInfo("net", "EFZ_NET_LAG: datagrams wait %d ms, plus up to %d", g_menu.lagMs,
                 g_menu.jitterMs);
     }
+    if (options.idleTimeout > 0) {
+        g_menu.idleMs = (Uint64)options.idleTimeout * 1000;
+        LogInfo("net", "--idle-timeout: a match ends after %d seconds without the other "
+                "player's input", options.idleTimeout);
+    }
     if (options.host || options.join) {
         g_menu.automatic = true;
         g_menu.autoDelay = options.delay;
@@ -796,6 +845,11 @@ void NetplayFrame()
         }
         if (g_protocol.phase == Protocol::kEnded) {
             EndMatch(g_protocol.message);
+            DrawTitle();
+            break;
+        }
+        if (std::string idle = OtherSideIdle(); !idle.empty()) {
+            EndMatch(idle);
             DrawTitle();
             break;
         }
