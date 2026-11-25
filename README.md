@@ -119,7 +119,8 @@ efz --data DIR --join 192.168.1.5          # join it
 Two native games are checked against each other frame by frame, against `efz.exe`
 with EfzRevival 1.02h, which it is built to play, under wine, and over the internet,
 through a hole-punching server (`tools/nettest.py`; [docs/netplay.md](docs/netplay.md),
-"Checking it").
+"Checking it"). A Linux server can host an agent for anyone to play, one match after
+another (`tools/agenthost.py`; [docs/netplay.md](docs/netplay.md), "A public host").
 
 ### EfzRevival's practice tools, replays and tournament
 

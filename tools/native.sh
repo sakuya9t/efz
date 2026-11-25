@@ -7,6 +7,10 @@
 #   tools/native.sh linux -DEFZ_HOST_X87=ON ...   with CMake options
 # then run the tests (ctest) for the Linux build.
 #
+# DOCKER is the docker command (default docker; "sudo docker" where the user isn't in the
+# docker group), EFZ_CTEST_ARGS more arguments for ctest ("--label-exclude headless": not
+# the headless library's, whose Python tests need numpy, which the image hasn't).
+#
 # With CMake and SDL3's build dependencies on the machine, plain CMake works as well:
 #   cmake -B build/native && cmake --build build/native
 # SDL3's release tarball, libopus's and minih264's encoder header (the videos, port/mp4.cpp)
@@ -50,16 +54,17 @@ stbvorbis=stb_vorbis-033efa1b.c
     curl -sSL -o "$cache/$stbvorbis" \
         "https://raw.githubusercontent.com/nothings/stb/033efa1bcb750136ac98e997d53833b758e0089b/stb_vorbis.c"
 
-docker image inspect efz-native >/dev/null 2>&1 ||
-    docker build -q -t efz-native --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" \
+docker=${DOCKER:-docker}
+$docker image inspect efz-native >/dev/null 2>&1 ||
+    $docker build -q -t efz-native --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" \
         -f "$repo/toolchain/native.Dockerfile" "$repo/toolchain" >/dev/null
 
-docker run --rm -u "$(id -u):$(id -g)" -v "$repo:/work" -v "$cache:/cache" -w /work efz-native \
+$docker run --rm -u "$(id -u):$(id -g)" -v "$repo:/work" -v "$cache:/cache" -w /work efz-native \
     bash -c "cmake -S . -B $dir -G Ninja -Wno-dev -DEFZ_SDL3_ARCHIVE=/cache/$sdl \
                    -DEFZ_OPUS_ARCHIVE=/cache/$opus -DEFZ_MINIH264_HEADER=/cache/$minih264 \
                    -DEFZ_DRMP3_HEADER=/cache/$drmp3 -DEFZ_DRFLAC_HEADER=/cache/$drflac \
                    -DEFZ_STBVORBIS_SOURCE=/cache/$stbvorbis \
                    $toolchain $* >/dev/null &&
              cmake --build $dir &&
-             if [ $target = linux ]; then ctest --test-dir $dir --output-on-failure; fi"
+             if [ $target = linux ]; then ctest --test-dir $dir --output-on-failure ${EFZ_CTEST_ARGS:-}; fi"
 echo "built $dir"

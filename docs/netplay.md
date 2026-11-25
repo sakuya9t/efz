@@ -107,6 +107,44 @@ when a player leaves: "Host quit or the connection was lost", or before the matc
 left". Without it there is no limit. It is for a public host, which nobody should keep to
 themselves by connecting and leaving the game idle.
 
+### A public host
+
+`tools/agenthost.py` makes a Linux server (reached by ssh, with systemd, docker, curl and
+sudo without a password) a host that anyone can join, with EfzRevival 1.02h or this
+game, to play an agent:
+
+```sh
+tools/agenthost.py deploy ubuntu@SERVER --agent agent.efzagent --name "EFZ agent r25" \
+    [--port 10800 [--port 10801 ...]] [--idle-timeout 90] [--ssh-key KEY]
+tools/agenthost.py status ubuntu@SERVER        # each host: waiting, or playing whom
+tools/agenthost.py fetch ubuntu@SERVER DIR     # the replays, battle log and match logs
+tools/agenthost.py oci ubuntu@SERVER           # Oracle Cloud: its firewall opened too
+tools/agenthost.py remove ubuntu@SERVER [--purge]
+```
+
+`deploy` builds the game on the server (this repository's HEAD, in docker with
+`tools/native.sh`, so for its own processor: x86-64 or arm64), sends the game's data
+once and the agent file, and runs a host on each port as the systemd unit
+`efz-agent-host@PORT`: `efz --host --agent ... --idle-timeout 90`, started again 3 s after
+each match ends, at most 1 GB of memory. It opens the ports in the server's firewall
+(ufw, or iptables with `/etc/iptables/rules.v4`, as Oracle Cloud's Ubuntu has it); a
+cloud's own firewall in front of the server must let UDP in on them too (`oci` for Oracle
+Cloud: a network security group `efz-netplay`). Run again, it updates the game and the
+agent and restarts the hosts (cutting a match being played). One match a host: a second
+player is told "The host is already playing a match"; more ports, more hosts, each about
+one processor core while it plays.
+
+The matches' data is in the server's folder (`~/efz-host`): the replays
+(`save/replay/netplay/*.rep`, Revival's format, both players' inputs), the battle log
+(`save/BattleLog.txt`) and a log of each match (`logs/*/efz.log`, with the agent's
+account of its plans, okizeme and risings). Netplay writes no fight records (below);
+`efz --rep-to-record` makes them from the replays.
+
+The first host ran on Oracle Cloud's free Ampere A1 (4 arm64 cores) from 25 November
+2026, agent round 25: from a home connection 47 ms away a match ran with the input delay
+at 0, the sync records the same; the agent's route plans took 110 ms, 32% of them not
+done when due (on a desktop's x86-64 against a person, 100 ms and 28%).
+
 ## How it works
 
 ### The protocol
