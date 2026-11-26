@@ -137,6 +137,11 @@ def parse():
                    help="the --vs opponents with the advantages change their habits within "
                         "a set by how their choices went (advantages.py's adapt: the share "
                         "of the way a habit moves each time)")
+    p.add_argument('--vs-extra', metavar='SPEC', default='',
+                   help="more of advantages.parse's habits for the first profile (--vs-rg ... "
+                        "--vs-jumpin's opponents), written as --vs-profile2 writes its own: "
+                        "antiair=1 here and in --vs-profile2 puts an opponent that anti-airs in "
+                        "every match with the advantages")
     p.add_argument('--vs-tech', type=float, default=0.0,
                    help="the --vs opponents with the advantages recover in the air as soon as "
                         "the game lets them, from this share of the combos they take there "
@@ -337,12 +342,17 @@ def parse():
 def vs_advantage(args, j):
     """The --vs opponent j's advantages (advantages.parse's keys)."""
     get = lambda v, default: v[j] if v else default
-    return dict(rg=get(args.vs_rg, 0.0), reversal=get(args.vs_reversal, 0.0),
-                throw=get(args.vs_throw, 0.0), damage=get(args.vs_damage, 1.0),
-                bait=get(args.vs_bait, 0.0), patient=get(args.vs_patient, 0.0),
-                wake=get(args.vs_wake, 0.0), jumpin=get(args.vs_jumpin, 0.0),
-                habits=args.vs_habits, adapt=args.vs_adapt, wide=args.vs_habits_wide,
-                tech=args.vs_tech)
+    out = dict(rg=get(args.vs_rg, 0.0), reversal=get(args.vs_reversal, 0.0),
+               throw=get(args.vs_throw, 0.0), damage=get(args.vs_damage, 1.0),
+               bait=get(args.vs_bait, 0.0), patient=get(args.vs_patient, 0.0),
+               wake=get(args.vs_wake, 0.0), jumpin=get(args.vs_jumpin, 0.0),
+               habits=args.vs_habits, adapt=args.vs_adapt, wide=args.vs_habits_wide,
+               tech=args.vs_tech)
+    if args.vs_extra:  # (--vs-extra's habits, over the ones above)
+        import advantages
+        advantages.parse(args.vs_extra)  # (an unknown habit: an error here)
+        out.update((k, float(v)) for k, v in (x.split('=') for x in args.vs_extra.split(',') if x))
+    return out
 
 
 def told_width(args):
@@ -934,6 +944,7 @@ def main():
                        vs_throw=args.vs_throw, vs_bait=args.vs_bait, vs_patient=args.vs_patient,
                        vs_wake=args.vs_wake, vs_jumpin=args.vs_jumpin, tell=args.tell, vs_habits=args.vs_habits, vs_adapt=args.vs_adapt,
                        vs_habits_wide=args.vs_habits_wide, vs_tech=args.vs_tech,
+                       vs_extra=args.vs_extra,
                        **({'memory': memory_config(args)} if args.memory else {}), sets=args.sets,
                        vs_adv_share=args.vs_adv_share,
                        vs_profile2=args.vs_profile2, vs_profile2_share=args.vs_profile2_share,
@@ -1117,7 +1128,8 @@ def main():
             trials = dict(env.take_trials(), pool=len(pool.starts), kinds=pool.kinds())
         if results and args.vs:  # the best evaluated so far (best.zip; the 64-match check is after)
             worth = score(results, len(args.vs), cpu_hp)
-            best = max((h.get('score', -1) for h in history), default=-1)
+            best = max((h['score'] for h in history if h.get('score') is not None),
+                       default=-1)  # (a chunk --eval-every left out has none)
             if worth > best:
                 import shutil
                 shutil.copyfile(eval_path, os.path.join(args.out, 'best.zip'))
