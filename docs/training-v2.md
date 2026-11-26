@@ -102,18 +102,23 @@ it won between none and half ("Play-tests"). What the records and the drills agr
   Sayuri twice), the largest difference between the two. An opponent that anti-airs
   with a record of what worked took six matches in ten from `round22d` and takes under
   half from `round25`, whose jumps there still lose HP on net: the anti-airs take
-  1,700 HP a minute more from its jumps and it jumps as before (see "Running").
+  1,700 HP a minute more from its jumps and it jumps as before (see "Paused").
 - **Its okizeme is worth nothing against the tester** (+65 ±220 HP a minute: 640 gained,
   570 lost), as with the files before it.
 
-### Running
+### Paused
 
-**Round 27**, one trainer, from round 25's policy with its league, its defenders that
-stay in a corner as people do and its corner reward. What is new is how often the
-opponent anti-airs: in every match with advantages, in both profiles and on every chance
-(`antiair=1`, `--vs-extra`), and the advantages are in 85% of the league's matches. That
-is about 89 of the 104 league matches; round 26's first arm had the habit in about 42, on
-six chances in ten, and did not move.
+Nothing is training. `round25` is being played in the community and the games are being
+collected; they decide the next direction. Four arms since round 25 changed the opponents
+or a reward within the same league and none beat it: more of the same is not expected to
+pay ("Next").
+
+**Round 27**, the last trained: one trainer, from round 25's policy with its league, its
+defenders that stay in a corner as people do and its corner reward. What is new is how
+often the opponent anti-airs: in every match with advantages, in both profiles and on
+every chance (`antiair=1`, `--vs-extra`), and the advantages are in 85% of the league's
+matches. That is about 89 of the 104 league matches; round 26's first arm had the habit in
+about 42, on six chances in ten, and did not move.
 
 The reason is one comparison. The same five opponents, with the habit off and on, take
 `round25` from 77.5% of the matches to 52.8% and from 58 to 78% of its HP lost. Where it
@@ -122,9 +127,56 @@ and 2,900 with them; its okizeme falls from +1,050 to +220 and its pressure from
 -140, because both begin from a jump. On the ground it gains 630 HP a minute in both. The
 agent has one way in, and it does not change when that way is answered.
 
-Its ten chunks are trained and it is being judged against `round25` on the whole bench; what
-it has to move is the `antiair` drill (52.8% won, -248 HP a minute by air) without a loss
-against combos, the plain league, `stays` or `press`.
+On the `antiair` drill, the one it was built to move, nothing is outside noise: 46.6 ±2.4%
+won (52.8), 78.7 ±1.0% of its HP lost (77.7), its net by air -248 to +2 ±137 HP a minute.
+The rest of the bench is not judged (five of the eleven opponents with combos: 80.9 to
+78.8% won).
+
+### Picking it up again
+
+**What is kept.** The checkout holds the code and this page; nearly everything a round
+makes is ignored by git and lives beside it.
+
+| what | where |
+|---|---|
+| the file in play | `agent-league25-stay-s1-round25.efzagent`; its policy is `runs/human-ayu/agent-league25-stay-s1/avg.zip` |
+| every run (checkpoints, `config.json` with each option it trained with), the league's exploiters, the generated data | `runs/human-ayu/` |
+| the bench results | `runs/human-ayu/bench/TAG/DRILL-CHARACTER.json`; `round25` is `r25s` (`press`, `objects`, `combos`, `league`, `sparring`, `recoil`, `cpu`) and `r25s-n` (`gaps`, `stays`, `antiair`); round 27 is `r27a`, `r27a-n`, with 10 of its 59 results |
+| a copy of all of `runs/human-ayu` outside the checkout | `~/data/efz-agent-state-688f174f` (hard links; its README says how to put it back) |
+| the rounds' and the judging's shell scripts, the readings of play-test records, the frozen copies of the code the bench ran, every exported file | `~/data/efz-scratch-688f174f` (`restore.sh` puts them back where they ran) |
+
+**A round** is three steps, one trainer and one or two evaluations at a time on the shared
+machine ("Cost").
+
+1. Train `finetune.py` from the pick's `avg.zip`. The latest recipe in full is
+   `runs/human-ayu/agent-league27-aa-s1/config.json`; a new round changes what its row in
+   "Rounds" names and nothing else.
+2. Export the run's `avg.zip` with the parts and settings of the file in play, and scan
+   the file for names and paths:
+
+   ```
+   python python/examples/export_agent.py RUN/avg.zip --parts-from FILE_IN_PLAY \
+     --keep routes chooser okiplan airthrow --rise --rise-option land=1 \
+     --rise-option sight=11 --rise-option recoil=60 \
+     --rise-option recoil_punish=0x1,0x4,0x5,0x25 --rise-option hold=30 \
+     --risk --risk-option ahead=1 --version NAME --out NAME.efzagent
+   ```
+3. Judge it with `bench.py jobs` and `bench.py table` against `round25`'s tags
+   ("Protocol"). Two results compare only if the same copy of the code measured both:
+   with a newer build, measure `round25` again first.
+
+**The community's games** are read as the tester's were: the game's session records
+through `from_record.py`, then HP a minute by situation, the agent's and the opponent's
+pressure strings, the time with an object out, and what each jump earned and lost. The
+questions to put to them first:
+
+- Do many players beat it the way the tester does (its jumps answered, objects, Sayuri's
+  throws), or by something the tester does not do?
+- Which characters and which players win, and by how much more than the tester?
+- Within a set, does a player who has found something keep winning with it? That is the
+  measure of adapting, and no drill has it.
+- Where does the agent do what the strongest players do not, when it is ahead and when it
+  is behind?
 
 ### Open
 
@@ -217,12 +269,12 @@ a share of its chances. A profile is a set of them.
 | `gap`, `mash` | presses its fastest normal into the gaps of the agent's pressure, by a read or blind |
 | `adapt`, `weak`, `habits` | repeats what worked; keeps a quarter of one area's values; draws its habits afresh for a set |
 
-The profile in training is `sparring`
-(`rg=0.3,reversal=0.8,damage=1.5,tech=1,techsafe=1,techhit=1,escape=1,jumpin=0.5,low=0.6,throw=0.5,bait=0.5`
-plus the round's own habits), in two of three matches with advantages; `person` has the
-rest, with the habits `--vs-extra` names on top (round 27: `antiair`). It is the first opponent written for the purpose, whose guard can be opened and
-which punishes what a person punishes, and it gave the first gain outside noise since
-round 18.
+The profile in training is `sparring` (`rg=0.3,reversal=0.8,damage=1.5,tech=1,techsafe=1,t
+echhit=1,escape=1,jumpin=0.5,low=0.6,throw=0.5,bait=0.5` plus the round's own habits), in
+two of three matches with advantages; `person` has the rest, with the habits `--vs-extra`
+names on top (round 27: `antiair`). It is the first opponent written for the purpose,
+whose guard can be opened and which punishes what a person punishes, and it gave the first
+gain outside noise since round 18.
 
 `escape=1` is ten times people's rate (people leave a corner by a jump 8% of the time out
 of a guard and 11% at a rise). Round 25's second arm and the `stays` drill use 0.1.
@@ -377,7 +429,7 @@ Each round starts from the pick before it. Rounds 8-13 are in
 | 24 | six `exploiter19`s; three arms from round 22: opponents that `press`, that press behind an `object`, that `antiair` | press arm +6 points on the press drill only; object arm +5 on the objects drill only; the anti-air arm does not move its own drill (`antiair` 40.3 to 43.8 ±2.8) and gains on the others: `gaps` 75.6 to 82.8 ±1.8, `press` 51.6 to 59.1 ±2.6, `stays` 59.7 to 63.4 ±2.4 (inside noise), every habit at once 93.8 to 97.5 ±1.0 with own HP lost 47.4 to 42.8 ±1.4, own HP lost against combos 62.8 to 60.0 ±0.9; plain league flat (99.1 to 98.6), its raw specials worth less (589 to 436 ±41 HP a minute) | none: round 25's stay arm, from the same start, is ahead of the anti-air arm where it matters (below) |
 | 25 | from round 22: the `corner` reward, opponents that press into gaps; an arm with defenders that always leave a corner and an arm with defenders that leave as people do (one free moment in ten) | the arm whose defenders always leave: nothing outside noise on `gaps` (79.1 ±2.1) or `stays` (60.3 ±2.7). The arm whose defenders stay: `stays` 59.7 to 69.1 ±2.7 with its pressure's net -362 to +31 ±123 HP a minute, `antiair` 40.3 to 52.8 ±2.4, against combos 76.4 to 81.8 ±1.4, `press` 51.6 to 57.8 ±2.7, league own HP lost 37.0 to 34.9 ±0.6; every habit at once flat (93.1 ±1.6, where round 24's anti-air arm has 97.5). Neither arm keeps the opponent in a guard longer (6.6-6.8% of a corner stay) or moves to the ground in the corner | `agent-league25-stay-s1` |
 | 26 | from round 25: its stay defenders and opponents that anti-air (four league matches in ten, six chances in ten); arms with opponents that also press from the agent's rising, and with the corner reward five times as large (0.05) | the first arm: nothing outside noise (`antiair` 52.8 to 47.8 ±2.8 with its net by air there -248 to +150 ±134, combos 81.8 to 84.1 ±1.3, `press` 57.8 to 61.3 ±2.6, `stays` 69.1 to 66.9 ±2.1). The arm with opponents that press from its rising: worse (`antiair` 39.4 ±2.7, own HP lost with every habit at once 45.3 to 49.4 ±1.1, plain league 99.6 to 98.2 ±0.6), nothing gained. The arm with the larger reward moves what the reward names and pays for it: in the corner 57.9 ±0.4% of its moves are in the air (60.9), the opponent leaves 53.5 ±1.0% of its stays (58.5), a guarded move is followed by its hit 25.2 ±0.7% of the time on `gaps` (21.3), and the opponent still guards 6.7% of a stay; its pressure's net falls from +31 to -359 ±123 HP a minute on `stays` and from -179 to -441 ±96 on `gaps`, against combos 81.8 to 77.3 ±1.6 with 1,901 to 1,822 ±15 HP a combo, own HP lost with every habit at once 45.3 to 51.3 ±1.3 and in the plain league 34.9 to 37.6 ±0.7; `press` 57.8 to 52.5 ±2.6 with its net under their pressure +178 to +461 ±85 | none |
-| 27 | from round 25, one trainer: opponents that anti-air on every chance in 85% of the league's matches | being judged | |
+| 27 | from round 25, one trainer: opponents that anti-air on every chance in 85% of the league's matches | `antiair` 52.8 to 46.6 ±2.4 with its net by air there -248 to +2 ±137: not moved; the rest of the bench not judged | none |
 
 ## Play-tests
 
@@ -444,7 +496,9 @@ guard by sight did (frontal jump-ins that hit, 36% to 13% against the tester), a
 air throw catches recoveries. Against anti-airs that keep score it has nothing else to
 win with: its jumps gain the same and lose 2.4 times as much, its okizeme and pressure
 fall with them because both begin from a jump, and what it earns on the ground does not
-grow.
+grow. Training against those anti-airs does not change that, at any share of the matches
+(rounds 24, 26 and 27): its jumps stop losing HP there and it wins no more, because it
+learns to jump more safely, not to come in another way.
 
 **Raw specials.** An account with priors from its own results removed the losing ones.
 The wake-up super was a symptom: the guard that replaced it lost as much until the rising
@@ -459,27 +513,30 @@ is the planners' counts of this opponent (the riser's answers, the attacker on i
 rising, the recoil guard), kept through a set. Choosing an area to play in pays only once
 the agent can play there.
 
-**Training.** Judge averages, not peaks. An opponent written for the purpose beats a
-third round on the same league, and one that behaves as people do beats one that does the
-thing every time: the two broad gains since round 22 came from a defender that stays in
-the corner and an opponent that anti-airs, each also on drills made of neither. Training at the delay played matters. Meeting an exploiter
-in training is worth about a point; what the modules already cover, training the bare
-policy does not add.
+**Training.** Judge averages, not peaks. An opponent written for the purpose beats a third
+round on the same league, and one that behaves as people do beats one that does the thing
+every time: the two broad gains since round 22 came from a defender that stays in the
+corner and an opponent that anti-airs, each also on drills made of neither. Training at
+the delay played matters. Meeting an exploiter in training is worth about a point; what
+the modules already cover, training the bare policy does not add.
 
 ## Next
 
-1. Judge round 27 against `round25` on the whole bench.
-2. A defender that holds its guard after guarding, as people do seven times in ten
+1. The community's games with `round25`: the records of many players, read as the
+   tester's were (where the HP goes by situation, under whose pressure, with objects out,
+   by air), to choose the next direction. More arms of the same kind are not expected to
+   pay.
+2. A way in on the ground. The agent's offence is its jump; a second way in is what the
+   anti-air rounds did not produce and what "playing to an opponent's hole" needs.
+3. A defender that holds its guard after guarding, as people do seven times in ten
    (`patient`, guarding low): against one opponent it cut `round25`'s wins from 93.8 to
    89.1% and what its pressure earns from 1,360 to 820 HP a minute, and what follows a
    guarded move of the agent's came close to the tester's (the next move guarded 40%,
    a hit 20%; the tester 43% and 16%). A drill first, then an arm.
-3. Frozen copies of the agent into the league as the defence's teachers, once a copy
+4. Frozen copies of the agent into the league as the defence's teachers, once a copy
    keeps an opponent in a guard; until then they would teach what the league already
    does.
-4. Objects: an opponent whose object holds the agent in its guard, which the scripted one
+5. Objects: an opponent whose object holds the agent in its guard, which the scripted one
    does not.
-5. Playing to an opponent's hole (the levers exist: the raw specials' priors, the planners
+6. Playing to an opponent's hole (the levers exist: the raw specials' priors, the planners
    as a choice), once there is a second area the agent can play in.
-6. The community's games: `round25` is the first file above half against the tester and
-   three arms since have not beaten it.
