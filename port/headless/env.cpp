@@ -1577,6 +1577,12 @@ uint8_t efz_env_agent_step(EfzAgent* a, const float* view, int32_t actionable, i
     return a->player->Step(view, actionable != 0, deterministic != 0);
 }
 
+void efz_env_agent_played(EfzAgent* a, uint8_t controls)
+{
+    if (a)
+        a->player->Played(controls);
+}
+
 int32_t efz_env_agent_attach(EfzAgent* a, EfzEnv* env, int32_t index, int32_t side, uint64_t seed)
 {
     if (!a)

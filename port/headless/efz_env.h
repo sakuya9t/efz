@@ -319,6 +319,8 @@ EFZ_ENV_API void efz_env_agent_log_probs(const EfzAgent* agent, const float* vie
 EFZ_ENV_API void efz_env_agent_reset(EfzAgent* agent, uint64_t seed);
 EFZ_ENV_API uint8_t efz_env_agent_step(EfzAgent* agent, const float* view, int32_t actionable,
                                    int32_t deterministic);
+/* After step, record the relative control byte actually played by an external controller. */
+EFZ_ENV_API void efz_env_agent_played(EfzAgent* agent, uint8_t controls);
 /* The action of its last decision; -1 before the first. */
 EFZ_ENV_API int32_t efz_env_agent_last_action(const EfzAgent* agent);
 

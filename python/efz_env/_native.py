@@ -216,6 +216,7 @@ def _bind(lib):
     }
     # (a library built before the planned okizeme has none of these)
     newer = {
+        'efz_env_agent_played': (None, [P, ctypes.c_uint8]),
         'efz_env_agent_oki_entries': (ctypes.c_int32, [P]),
         'efz_env_agent_oki_plan': (ctypes.c_int32, [P, P, ctypes.c_int32, ctypes.c_int32, P,
                                                     ctypes.c_int32, P, ctypes.c_uint8,

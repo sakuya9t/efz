@@ -51,6 +51,20 @@ def combo(c, at, steps, then, damage=0.2, air=True):
 
 @unittest.skipIf(MISSING, f'needs runs/human-ayu and its imports: {MISSING}')
 class Endings(unittest.TestCase):
+    def test_sayuri_thrown_poses_are_attributed_to_the_opponents_move(self):
+        from sayuri_throws import entries, opening_points
+        v = np.zeros((160,168), np.float32)
+        v[20:25,18], v[20:25,50] = 0x6b, 0xdd  # normal ground throw
+        v[30:35,18], v[30:35,50] = 0x65, 0x12b  # parry counter
+        v[60:80,20] = 1
+        v[70:150,50] = 0x12d                    # one ongoing super
+        v[90:100,18] = 0x68
+        v[125:135,18] = 0x68
+        self.assertEqual(list(entries(v)), [(20,'ground'),(30,'parry'),(90,'super'),(125,'super')])
+        openings = [label for labels in opening_points(v).values() for label in labels]
+        self.assertEqual({label['target'] for label in openings}, {90})
+        self.assertEqual({label['hit'] for label in openings}, {60})
+
     def sides(self, c):
         live = np.ones(len(c), bool)
         return tactics.Side(c, 0), tactics.Side(c, 1), live
@@ -947,21 +961,24 @@ class Tech(unittest.TestCase):
         jump is left out there after ANTIAIR_PROVE tries (the place's next sure move
         instead), and tried again once ANTIAIR_AGAIN such chances have gone by."""
         logic = self.antiair()
+        logic.resize(2)
 
-        def jump(came):  # one jump at it: the first step of its answer, then who is hit
+        def jump(came, slot=0):  # one jump at it: the first step of its answer, then who is hit
             for k in range(12):
-                logic.step(0, self.up(150 - 2 * k, 20 + 10 * k))
-            first = logic.step(0, self.up(90, 100))
+                logic.step(slot, self.up(150 - 2 * k, 20 + 10 * k))
+            first = logic.step(slot, self.up(90, 100))
             for k in range(1, 4):
-                logic.step(0, self.up(90 - k, 100 - 3 * k))
+                logic.step(slot, self.up(90 - k, 100 - 3 * k))
             v = self.up(84, 60)
             v[advantages.OPP_HITSTUN if came == 'hit' else advantages.SELF_HITSTUN] = 1.0
-            logic.step(0, v)
-            logic.step(0, self.near(84))  # the agent landed
+            logic.step(slot, v)
+            logic.step(slot, self.near(84))  # the agent landed
             return first
 
         firsts = [jump('back') for _ in range(advantages.ANTIAIR_PROVE)]
         self.assertEqual(set(firsts), {(6, '')})                          # its 623A, hit back each time
+        self.assertEqual(jump('hit', slot=1), (6, ''))                    # another set starts fresh
+        logic.clear(0)                                                    # next match of the same set
         self.assertEqual(jump('hit'), (2, 'C'))                           # then the next sure move, its 2C
         self.assertEqual(logic.counts['antiair_left_out'], 1)
         self.assertEqual(logic.counts['antiair_hit_back'], advantages.ANTIAIR_PROVE)
@@ -969,6 +986,13 @@ class Tech(unittest.TestCase):
             self.assertEqual(jump('hit'), (2, 'C'))
         jump('hit')                                                       # the 40th: half the record forgotten
         self.assertEqual(jump('hit'), (6, ''))                            # the 623A again
+        wrapper = mock.Mock()
+        wrapper.venv.new_set = [True, False]
+        wrapper.venv.extra = wrapper.mine = None
+        wrapper.of.return_value = logic
+        advantages.AdvantagedOpponent.new_match(wrapper, np.array([True, True]))
+        self.assertFalse(logic.aa_record[0])
+        self.assertTrue(logic.aa_record[1])
         with mock.patch.object(advantages, 'antiairs', return_value=((16, 24), {})):
             none = advantages.Advantages('mai', 1, antiair=1.0)
         self.assertEqual((none.antiair, 'antiair' in none.off), (0.0, True))

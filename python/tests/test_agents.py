@@ -410,6 +410,25 @@ class PlaysAsTheModel(unittest.TestCase):
             env.close()
             native.close()
 
+    def test_external_inputs_update_what_the_agent_remembers(self):
+        from efz_env.agent import Agent
+        with tempfile.TemporaryDirectory() as folder:
+            path, _ = make_model(folder, history=4, delay=5, frame_skip=1, seed=2)
+            out = os.path.join(folder, 'agent.efzagent')
+            export_agent(path, out, check=False)
+            native = NativeAgent(out, deterministic=True)
+            reference = Agent(path, deterministic=True)
+            rng = np.random.default_rng(19)
+            for _ in range(200):
+                obs = rng.normal(size=168).astype(np.float32)
+                obs[[18, 50, 34, 66]] = 0
+                native.step(obs)
+                self.assertEqual(native.last_action, reference.decide(obs[None])[0])
+                actual = rng.choice(reference.table.table)
+                reference.observe([actual])
+                native.played(actual)
+            native.close()
+
     def test_every_frame(self):
         self.play(1)
 
