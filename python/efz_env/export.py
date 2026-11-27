@@ -1767,6 +1767,14 @@ class NativeAgent:
         return int(self._lib.efz_env_agent_step(self._h, v.ctypes.data, int(bool(actionable)),
                                             int(self.deterministic)))
 
+    def played(self, controls):
+        """Replace the most recent decision in the player's input history with the
+        relative control byte actually sent to the game."""
+        record = getattr(self._lib, 'efz_env_agent_played', None)
+        if record is None:
+            raise RuntimeError('Rebuild the headless library to record externally supplied inputs')
+        record(self._h, int(controls))
+
     @property
     def last_action(self):
         return int(self._lib.efz_env_agent_last_action(self._h))
