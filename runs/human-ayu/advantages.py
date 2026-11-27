@@ -678,7 +678,8 @@ class Advantages:
         self.gap_drawn = np.zeros(n, bool)   # this action's (or this free stretch's) chance drawn
         self.aa_kind = [None] * n            # ... and the move and kind of jump it was pressed at
         self.aa_left = [set() for _ in range(n)]  # the moves left out in this jump for their record
-        self.aa_record = {}                  # (move, jumper's action, fall): [hit, hit back, nothing, left out]
+        # Each simultaneous opponent learns from its own set of matches.
+        self.aa_record = [{} for _ in range(n)]
         self.meaty_drawn = np.zeros(n, bool)  # meaty: this knockdown's chance drawn
         self.meaty_from = np.zeros(n)         # the distance its way to the agent lying began at
         self.press_meaty = np.zeros(n, bool)  # the normal out is a meaty's, its outcome not seen yet
@@ -1165,11 +1166,11 @@ class Advantages:
             self.aa_watch[i] -= 1
             if rose[0] or rose[1]:
                 self.counts['antiair_hit' if rose[0] else 'antiair_hit_back'] += 1
-                self.aa_record[self.aa_kind[i]][0 if rose[0] else 1] += 1
+                self.aa_record[i][self.aa_kind[i]][0 if rose[0] else 1] += 1
                 self.aa_watch[i] = 0
             elif self.aa_watch[i] == 0:
                 self.counts['antiair_nothing'] += 1
-                self.aa_record[self.aa_kind[i]][2] += 1
+                self.aa_record[i][self.aa_kind[i]][2] += 1
         if v[OPP_AIRBORNE] < 0.5 or v[OPP_HITSTUN] > 0.5 or o in THROWN:
             self.aa_air[i], self.aa_drawn[i] = 0, False
             self.aa_left[i].clear()
@@ -1184,7 +1185,7 @@ class Advantages:
         for found in self.aa_table.get((int(d // self.aa_cell[0]),
                                         int(-y * 480 // self.aa_cell[1]), int(falling), o), ()):
             kind = (found[2], o, fall)
-            rec = self.aa_record.setdefault(kind, [0, 0, 0, 0])
+            rec = self.aa_record[i].setdefault(kind, [0, 0, 0, 0])
             if sum(rec[:3]) >= ANTIAIR_PROVE and 2 * rec[1] > rec[0]:
                 if kind not in self.aa_left[i]:  # (its record against this kind of jump: left out, counted once a jump)
                     self.aa_left[i].add(kind)
@@ -1583,9 +1584,10 @@ class AdvantagedOpponent:
             if self.mine is not None and not self.mine[i]:
                 continue
             logic = self.of(i)
-            if logic is not None and (logic.habits > 0 or logic.adapt > 0 or logic.weak > 0) and \
-                    (fresh is None or fresh[i]):
-                logic.draw(i)
+            if logic is not None and (fresh is None or fresh[i]):
+                logic.aa_record[i].clear()
+                if logic.habits > 0 or logic.adapt > 0 or logic.weak > 0:
+                    logic.draw(i)
             if v.extra is not None:
                 v.extra[i, 0] = logic.told(i) if logic is not None else 0.0
 

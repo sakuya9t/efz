@@ -42,6 +42,8 @@ the modules `policy:1, routes:1, okiplan:2, airthrow:1, rise:1, risk:1` and the 
 of the file before it, `round22d`. It has no pressure planner, no pressure hold and no
 jump account (each was measured and left out; see "The agent").
 
+Round 28 is a playable candidate for a human test against Sayuri. It learns when to jump back from a close walk-in using the same 11-frame observation delay. Round 25 is the public reference. [Round 28 results and test instructions](round28.md)
+
 ### Where it stands
 
 Opponents see 11 frames late as it does; 64 matches an opponent; ± is one standard error.
@@ -113,7 +115,23 @@ collected; they decide the next direction. Four arms since round 25 changed the 
 or a reward within the same league and none beat it: more of the same is not expected to
 pay ("Next").
 
-**Round 27**, the last trained: one trainer, from round 25's policy with its league, its
+A subsequent replay experiment compared round 25 with an older policy, short ground
+entries, and human input sequences at the same pre-contact positions. On the three
+held-out defenders, round 25 won 16 of 36 complete matches, the chooser won 13, and the
+chooser learning within each set won 12. Testing an alternative at the first planned
+jump tied round 25 at 15 of 36 on fresh seeds. The experiment also isolated the simulated
+opponents' anti-air records per set. Earlier batched anti-air scores used pooled records.
+The paired results, follow-up experiments and reproduction commands are in
+[Round 25 neutral decisions](neutral-trials.md).
+
+Against three simulated Sayuri policies, jumping back when she walked into close range
+won 64 of 96 matches against 58 for round 25 on the same seeds. The cue preceded four
+ordinary ground throws in the original tester session and none in eight separate replays.
+The eight-frame intervention ran in the headless evaluator. Round 28 distills it into
+a native policy and tests it on additional human replays and live defenders.
+[Sayuri throw study](sayuri-throws.md) and [Round 28](round28.md)
+
+**Round 27**, the last league training run: one trainer, from round 25's policy with its league, its
 defenders that stay in a corner as people do and its corner reward. What is new is how
 often the opponent anti-airs: in every match with advantages, in both profiles and on
 every chance (`antiair=1`, `--vs-extra`), and the advantages are in 85% of the league's
@@ -447,7 +465,7 @@ The tester's games, read from the game's records.
 | `round21` | 0 of 10 | "sucks under pressure and handle objects" |
 | `round22b` (no planners) | 6 of 14 | its okizeme gone: a 2A at seven knockdowns in ten |
 | `round22c` (rising hold, pressure hold) | 1 of 5 | the rising hold works; the pressure hold is thrown |
-| `round25` (trained against defenders that stay) | 7 of 12 | ahead under the tester's pressure for the first time (+524 ±390 HP a minute); HP lost 6,270 a minute for 7,300-9,000; the five losses (Mishio twice, Kano, Sayuri twice) are the games its jumps lose in; Sayuri throws it 21 times in two games, 17 of them out of its own moves or standing free, and nobody else does |
+| `round25` (trained against defenders that stay) | 7 of 12 | ahead under the tester's pressure for the first time (+524 ±390 HP a minute); HP lost 6,270 a minute for 7,300-9,000; the five losses (Mishio twice, Kano, Sayuri twice) are the games its jumps lose in; Sayuri puts it in a thrown pose 21 times across two games, including six normal ground throws, two air throws, six parry counters, four running grabs and three entries during two supers. [Replay checks and defense trials](sayuri-throws.md) |
 
 ## What was learned
 
